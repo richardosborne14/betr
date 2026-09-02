@@ -17,7 +17,7 @@ const vm = require('node:vm');
 
 const WEB = path.join(__dirname, '..');
 const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js',
-               'content/fears.js', 'content/whats-going-on.js', 'app.js'];
+               'content/worries.js', 'content/whats-going-on.js', 'app.js'];
 
 /* ------------------------------------------------------- the smallest possible DOM */
 
@@ -140,7 +140,7 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
   a.shows('>1<');
 });
 
-test('the second door opens onto fears, never onto a test of its own', () => {
+test('the second door opens onto worries, never onto a test of its own', () => {
   const a = boot();
   a.tap('#doors').shows('What’s going on?').shows('Drinking more than I mean to');
   a.tap('[data-door]', 0).shows('Which one?').shows('Not drinking at a social thing');
@@ -153,7 +153,7 @@ test('a person’s own entry is refused by both guards before it is accepted', (
   a.type('#t', 'I am a waste of space').tap('#next').shows('verdict, not a prediction');
   a.type('#t', 'If I ask for Friday off, my boss will think I am not committed').tap('#next');
   a.shows('What will you do?');
-  a.type('#t', 'Go for a pint with them and ask then').tap('#next').shows('the fear underneath');
+  a.type('#t', 'Go for a pint with them and ask then').tap('#next').shows('the worry underneath');
   a.type('#t', 'Ask for Friday off in one sentence').tap('#next').shows('What will you leave out?');
   a.type('#t', 'Don’t explain why.').tap('#next');
   a.shows('Here’s your test').shows('Ask for Friday off');
@@ -193,6 +193,12 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   seen += a.html();
   a.tap('#own');
   seen += a.html();
+  /* and the two screens the ladder lives on, which is where a score would creep in */
+  const b = boot();
+  b.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
+  seen += b.html();
+  seen += b.tap('#mine').html();
   for (const phrase of ['digital CBT', 'improve your mental health', 'irrational',
                         'streak', 'you missed', 'tracks your anxiety']) {
     assert.ok(seen.toLowerCase().indexOf(phrase.toLowerCase()) === -1, 'found "' + phrase + '"');
@@ -209,7 +215,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   assert.strictEqual(dump.app, 'Betr');
   assert.strictEqual(dump.results.length, 1);
   assert.strictEqual(dump.results[0].happened, 'He said fair enough.');
-  assert.strictEqual(dump.results[0].fear, 'Saying no without an excuse');
+  assert.strictEqual(dump.results[0].worry, 'Saying no without an excuse');
   a.tap('#wipe').shows('There is no copy anywhere else');
   a.tap('#yes').shows('Sure it’ll go badly?');
   a.hides('He said fair enough');
@@ -234,4 +240,75 @@ test('a locked expectation cannot be edited after the test is done', () => {
   a.hides('not quite? change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
   a.hides('not quite? change it');
+});
+
+/* ------------------------------------------------------- the ladder, and getting back to a worry */
+
+/* One whole loop, ending on the given re-rate. 0 still / 1 a bit / 2 a lot / 3 not at all / 4 more. */
+function loop(a, item, said, key) {
+  a.tap('#go').tap('[data-id]', item).tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
+  return a;
+}
+
+test('the same worry three days running comes down the ladder, one rung at a time', () => {
+  const a = boot();
+  loop(a, 0, 'He said fair enough.', 1);
+  a.shows('How sure you are it goes badly').shows('>10<').shows('>9<');
+
+  a.tap('#again').tap('#lock').tap('#done').type('#o', 'Nobody minded.').tap('#next').tap('[data-key]', 1);
+  a.shows('>8<');
+  a.tap('#again').tap('#lock').tap('#done').type('#o', 'She said no problem.').tap('#next').tap('[data-key]', 1);
+  a.shows('>7<').shows('Down 3 since you started');
+
+  /* three taps of the same words, three different rungs: the thing that used to be impossible */
+  a.tap('#mine').shows('Your worries').shows('3 tests across 1 worry');
+  a.shows('He said fair enough.').shows('She said no problem.');
+});
+
+test('a bad day can go back up, and it is not a red day', () => {
+  const a = boot();
+  loop(a, 0, 'He went quiet.', 2);          /* a lot less sure: 10 → 7 */
+  a.shows('>7<');
+  a.tap('#again').tap('#lock').tap('#done').type('#o', 'He brought it up again.').tap('#next');
+  a.tap('[data-key]', 4);                    /* more sure than before: 7 → 8 */
+  a.shows('>8<');
+  a.hides('missed').hides('streak').hides('failed');
+});
+
+test('an earlier worry is one tap away, and picks up where its ladder left off', () => {
+  const a = boot();
+  loop(a, 0, 'He said fair enough.', 2);     /* worry one: 10 → 7 */
+  a.tap('#other').tap('[data-id]', 1).tap('#lock').tap('#done');
+  a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
+
+  a.tap('#mine').shows('2 tests across 2 worries');
+  a.shows('Asking for help').shows('Saying no without an excuse');
+
+  /* the older one is the second card, and going again keeps its rung rather than starting over */
+  a.tap('[data-again]', 1).shows('No, I can’t this time');
+  a.tap('#lock').tap('#done').type('#o', 'Nothing happened.').tap('#next');
+  a.shows('Last time').shows('>7<');
+  a.tap('[data-key]', 1).shows('>6<');
+});
+
+test('your worries is reachable from the front screen, and only once there is one', () => {
+  const a = boot();
+  a.hides('your worries');
+  loop(a, 0, 'He said fair enough.', 1);
+  a.tap('#home').shows('your worries');
+  a.tap('#hist').shows('Your worries');
+  a.tap('#back').shows('Sure it’ll go badly?');
+});
+
+test('a result saved by the version before the ladder still opens, and still counts', () => {
+  const old = {
+    id: 'no', source: 'stock', label: 'Saying no without an excuse',
+    belief: 'If I say no without an excuse, people will think I am selfish.',
+    x: 'They will be annoyed.', test: 'Say no once.', drop: 'Do not explain.',
+    o: 'He said fair enough.', rate: 55, rateLabel: 'A bit less sure', when: '2026-09-01T10:00:00.000Z'
+  };
+  const a = boot({ 'betr.v1': JSON.stringify({ stage: 'start', done: [old] }) });
+  a.tap('#hist').shows('Your worries').shows('>6<').shows('He said fair enough.');
 });

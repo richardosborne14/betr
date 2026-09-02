@@ -15,23 +15,23 @@
   var FIELDS = ['id', 'label', 'belief', 'expect', 'test', 'drop', 'lane'];
   var MAX_VISIBLE = 12;
 
-  function byId(fears, id) {
-    for (var i = 0; i < fears.length; i++) if (fears[i].id === id) return fears[i];
+  function byId(worries, id) {
+    for (var i = 0; i < worries.length; i++) if (worries[i].id === id) return worries[i];
     return null;
   }
 
   /* Returns a list of plain-English problems. Empty means the list is shippable. */
-  function validateFears(fears) {
+  function validateWorries(worries) {
     var problems = [];
     var seen = {};
 
-    if (!Array.isArray(fears) || !fears.length) return ['fears.js is empty'];
+    if (!Array.isArray(worries) || !worries.length) return ['worries.js is empty'];
 
-    if (fears.length > MAX_VISIBLE) {
-      problems.push(fears.length + ' items: more than ' + MAX_VISIBLE + ' visible needs a "more" screen (scope §5.3b)');
+    if (worries.length > MAX_VISIBLE) {
+      problems.push(worries.length + ' items: more than ' + MAX_VISIBLE + ' visible needs a "more" screen (scope §5.3b)');
     }
 
-    fears.forEach(function (f, i) {
+    worries.forEach(function (f, i) {
       var where = 'item ' + i + ' (' + (f && f.id ? f.id : 'no id') + ')';
 
       FIELDS.forEach(function (field) {
@@ -63,7 +63,7 @@
     return problems;
   }
 
-  function validateDoors(doors, fears) {
+  function validateDoors(doors, worries) {
     var problems = [];
     if (!doors || !Array.isArray(doors.items) || !doors.items.length) {
       return ['whats-going-on.js is empty'];
@@ -74,11 +74,11 @@
         if (!d || typeof d[field] !== 'string' || !d[field].trim()) problems.push(where + ' is missing ' + field);
       });
       if (!d) return;
-      if (!Array.isArray(d.fears) || d.fears.length < 2) {
-        problems.push(where + ' should open onto at least two fears');
+      if (!Array.isArray(d.worries) || d.worries.length < 2) {
+        problems.push(where + ' should open onto at least two worries');
       } else {
-        d.fears.forEach(function (id) {
-          if (!byId(fears, id)) problems.push(where + ' points at unknown fear "' + id + '"');
+        d.worries.forEach(function (id) {
+          if (!byId(worries, id)) problems.push(where + ' points at unknown worry "' + id + '"');
         });
       }
       /* A door names a behaviour. It must never itself read as a test. */
@@ -94,7 +94,7 @@
     FIELDS: FIELDS,
     MAX_VISIBLE: MAX_VISIBLE,
     byId: byId,
-    validateFears: validateFears,
+    validateWorries: validateWorries,
     validateDoors: validateDoors
   };
 });

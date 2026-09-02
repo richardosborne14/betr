@@ -2,13 +2,14 @@
   Betr v1 — the whole app.
 
   Seven screens for the loop (start, pick, test, locked, happened, sure, result), plus the
-  second door, the three screens for a person's own entry, and "what this is". Four taps and
-  one sentence gets you all the way round.
+  second door, the three screens for a person's own entry, "your worries", and "what this is".
+  Four taps and one sentence gets you all the way round.
 
   Things that are deliberate and should not be "fixed":
-    - no streak, no red day, no "you missed", no cap on rest. The only number is completed tests
-    - no verdict anywhere. A bad outcome is data, and the re-rate is optional in spirit
-    - no 0-100 slider. Four words, mapped to numbers the person never sees
+    - no streak, no red day, no "you missed", no cap on rest. Completed tests is still the
+      metric; the ladder is one belief's grip, never a score of the person and never a total
+    - no verdict anywhere. A bad outcome is data, and "more sure than before" is a real answer
+    - no 0-100 slider. Five words, each of which moves the belief along a ten-rung ladder
     - the expectation is locked when the person taps "I'll do it today", and is read-only after
     - no console.log, no analytics, no crash reporter, no request of any kind after load
 */
@@ -19,7 +20,7 @@
   var rate = Betr.rate;
   var storeLib = Betr.store;
   var content = Betr.content;
-  var FEARS = Betr.fears;
+  var WORRIES = Betr.worries;
   var DOORS = Betr.doors;
 
   /*
@@ -28,7 +29,7 @@
     site and another on social). If you change it here, change it in index.html's <meta
     name="description">, manifest.webmanifest, and everywhere it has ever been published.
   */
-  var PURPOSE = 'Betr helps you test unhelpful beliefs in everyday life. You pick a fear ' +
+  var PURPOSE = 'Betr helps you test unhelpful beliefs in everyday life. You pick a worry ' +
     'about how people will react, it gives you one small thing to try today, and you record ' +
     'what actually happened.';
 
@@ -90,12 +91,12 @@
   function qa(sel) { return Array.prototype.slice.call(app.querySelectorAll(sel)); }
   function on(sel, fn) { var el = q(sel); if (el) el.onclick = fn; return el; }
 
-  function fearsFor(doorId) {
-    if (!doorId) return FEARS;
+  function worriesFor(doorId) {
+    if (!doorId) return WORRIES;
     var door = null;
     for (var i = 0; i < DOORS.items.length; i++) if (DOORS.items[i].id === doorId) door = DOORS.items[i];
-    if (!door) return FEARS;
-    return door.fears.map(function (id) { return content.byId(FEARS, id); }).filter(Boolean);
+    if (!door) return WORRIES;
+    return door.worries.map(function (id) { return content.byId(WORRIES, id); }).filter(Boolean);
   }
 
   function startFrom(f) {
@@ -111,6 +112,59 @@
   }
   function wireBack(target) { on('#back', function () { go(target); }); }
 
+  /* ---------------------------------------------------------------- the ladder */
+
+  /*
+    Ten dots and the number, one row per test. Founder's call, 2026-09-02: their own CBT used
+    1-10, and the thing that kept them going was watching it come down. It is the only number
+    in Betr besides completed tests, and it belongs to one belief. It is never a score of the
+    person, never added up, never averaged across worries, and never a line with a target on it.
+  */
+  function rung(when, level, said) {
+    var dots = '';
+    for (var i = 1; i <= rate.TOP; i++) dots += '<i' + (i <= level ? ' class="on"' : '') + '></i>';
+    return '<div class="rung">' +
+        '<span class="when">' + esc(when) + '</span>' +
+        '<span class="dots" aria-hidden="true">' + dots + '</span>' +
+        '<span class="num">' + level + '</span>' +
+        '<span class="sr">out of 10</span>' +
+      '</div>' +
+      (said ? '<p class="said">' + esc(said) + '</p>' : '');
+  }
+
+  var ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
+  function ordinal(n) { return ORDINALS[n - 1] || (n + 'th'); }
+
+  /* Where it started, then one row per test, newest last. A long ladder keeps its ends. */
+  function ladder(g, opts) {
+    var said = !!(opts && opts.said);
+    var shown = g.results;
+    var skipped = '';
+    if (shown.length > 6) {
+      skipped = '<p class="said elided">' + (shown.length - 6) + ' earlier tests</p>';
+      shown = shown.slice(-6);
+    }
+    var first = g.results.length - shown.length;
+    return '<div class="ladder">' +
+      rung('Started', rate.TOP, '') +
+      skipped +
+      shown.map(function (r, i) {
+        var last = i === shown.length - 1;
+        return rung(last ? 'Now' : ordinal(first + i + 1), rate.clamp(r.level), said ? r.o : '');
+      }).join('') +
+    '</div>';
+  }
+
+  /* Set up a repeat of something already tested. Stock wording is looked up fresh. */
+  function again(d, from) {
+    S.cur = {
+      source: d.source, id: d.id, label: d.label, belief: d.belief,
+      x: d.x, test: testFor(d), drop: dropFor(d),
+      from: from || 'mine', editing: false, locked: null, missed: false
+    };
+    go('plan');
+  }
+
   /* ---------------------------------------------------------------- screens */
 
   function render() {
@@ -118,7 +172,7 @@
       start: start, doors: doors, pick: pick,
       'own-belief': ownBelief, 'own-test': ownTest, 'own-drop': ownDrop,
       plan: plan, locked: locked, happened: happened, sure: sure,
-      result: result, about: about
+      result: result, mine: mine, about: about
     };
     /* Any half-finished loop that lost its item drops back to the start rather than crashing. */
     var needsCur = ['plan', 'locked', 'happened', 'sure'];
@@ -132,11 +186,11 @@
       '<div class="stage">' +
         '<div class="kicker">Betr</div>' +
         '<h1>Sure it’ll go badly?</h1>' +
-        '<p class="sub">Pick a fear. Get one tiny thing to do today. Come back and say what happened.</p>' +
-        '<button class="big pulse" id="go">Pick a fear <span aria-hidden="true">→</span></button>' +
+        '<p class="sub">Pick a worry. Get one tiny thing to do today. Come back and say what happened.</p>' +
+        '<button class="big pulse" id="go">Pick a worry <span aria-hidden="true">→</span></button>' +
         '<p class="tiny"><button id="doors">Not sure which? Start from what’s going on</button></p>' +
         '<p class="tiny">No account. No AI. Nothing leaves your phone.' +
-          (n ? ' · <button id="hist">' + n + ' result' + (n === 1 ? '' : 's') + '</button>' : '') +
+          (n ? ' · <button id="hist">your worries</button>' : '') +
           ' · <button id="about">what this is</button></p>' +
         (storageOk ? '' :
           '<p class="tiny">This browser won’t let Betr remember anything — a private window usually does that. ' +
@@ -145,7 +199,7 @@
     on('#go', function () { S.filter = null; go('pick'); });
     on('#doors', function () { go('doors'); });
     on('#about', function () { go('about'); });
-    on('#hist', function () { go('result'); });
+    on('#hist', function () { go('mine'); });
   }
 
   function doors() {
@@ -169,7 +223,7 @@
   }
 
   function pick() {
-    var list = fearsFor(S.filter);
+    var list = worriesFor(S.filter);
     app.innerHTML = backButton() +
       '<div class="stage">' +
         '<h2>Which one?</h2>' +
@@ -181,13 +235,13 @@
           }).join('') +
           '<button class="own" id="own"><span>Something else</span><span class="go" aria-hidden="true">→</span></button>' +
         '</div>' +
-        (S.filter ? '<p class="tiny"><button id="all">Show all ' + FEARS.length + '</button></p>' : '') +
+        (S.filter ? '<p class="tiny"><button id="all">Show all ' + WORRIES.length + '</button></p>' : '') +
         '<p class="tiny">Not here on purpose: anything that tests the drink, the screen or the habit ' +
-        'itself. Those aren’t tests. We test the fear underneath.</p>' +
+        'itself. Those aren’t tests. We test the worry underneath.</p>' +
       '</div>';
     wireBack(S.filter ? 'doors' : 'start');
     qa('[data-id]').forEach(function (b) {
-      b.onclick = function () { startFrom(content.byId(FEARS, b.getAttribute('data-id'))); go('plan'); };
+      b.onclick = function () { startFrom(content.byId(WORRIES, b.getAttribute('data-id'))); go('plan'); };
     });
     on('#all', function () { S.filter = null; go('pick'); });
     on('#own', function () { draft = { belief: 'If I ', test: '', drop: '' }; go('own-belief'); });
@@ -346,17 +400,28 @@
     });
   }
 
+  /*
+    The re-rate. The four words sit in the grid; "more sure than before" sits small underneath,
+    in the same place "didn't get to it" sits on the locked screen. It has to be there — a test
+    can go badly and leave someone more convinced, and a ladder that can only fall is a nicer
+    story than the person's week — and it has to be quiet, because it is not the point.
+  */
   function sure() {
     var c = S.cur;
+    var at = rate.levelFor(S.done, c);
+    var tested = 0;
+    S.done.forEach(function (d) { if (rate.keyOf(d) === rate.keyOf(c)) tested++; });
     app.innerHTML = backButton() +
       '<div class="stage">' +
         '<h2>Still think that’s what happens?</h2>' +
-        '<p class="sub">“' + esc(c.belief) + '”</p>' +
+        '<p class="sub tight">“' + esc(c.belief) + '”</p>' +
+        '<div class="ladder one">' + rung(tested ? 'Last time' : 'Started', at, '') + '</div>' +
         '<div class="choices">' +
-          rate.CHOICES.map(function (ch) {
+          rate.CHOICES.filter(function (ch) { return !ch.quiet; }).map(function (ch) {
             return '<button data-key="' + esc(ch.key) + '">' + esc(ch.label) + '</button>';
           }).join('') +
         '</div>' +
+        '<p class="tiny"><button data-key="more">More sure than before</button></p>' +
       '</div>';
     wireBack('happened');
     qa('[data-key]').forEach(function (b) {
@@ -365,7 +430,7 @@
         S.done.push({
           id: c.id, source: c.source, label: c.label, belief: c.belief,
           x: c.x, test: c.test, drop: c.drop, o: c.o,
-          rate: ch.value, rateLabel: ch.label,
+          level: rate.next(at, ch.key), rateLabel: ch.label,
           when: new Date().toISOString()
         });
         S.cur = null;
@@ -378,13 +443,8 @@
     var last = S.done[S.done.length - 1];
     if (!last) { go('start'); return; }
     var n = S.done.length;
-    var earlier = S.done.slice(0, -1).reverse().map(function (d) {
-      return '<div class="h">' +
-        '<div class="e">' + esc(d.x) + '</div>' +
-        '<div class="r">' + esc(d.o) + '</div>' +
-        '<div class="meta">' + esc(d.label) + ' · ' + esc(String(d.rateLabel || '').toLowerCase()) + '</div>' +
-      '</div>';
-    }).join('');
+    /* series() puts the most recently tested first, which is always the one just recorded. */
+    var g = rate.series(S.done)[0];
 
     app.innerHTML =
       '<div class="stage">' +
@@ -395,42 +455,78 @@
           '<p class="lbl">What actually happened</p>' +
           '<p class="real">' + esc(last.o) + '</p>' +
         '</div>' +
+        '<div class="board">' +
+          '<p class="lbl">How sure you are it goes badly</p>' +
+          ladder(g) +
+          (g.tests > 1 && g.level < rate.TOP
+            ? '<p class="moved">Down ' + (rate.TOP - g.level) + ' since you started.</p>' : '') +
+        '</div>' +
         '<div class="count">' + n + '</div>' +
         '<p class="sub">' + (n === 1
           ? 'One test done. The second one is where it starts to stick.'
-          : n + ' tests done. Same fear, different day, keeps working.') + '</p>' +
+          : n + ' tests done. Same worry, different day, keeps working.') + '</p>' +
         '<div class="row">' +
           '<button class="big" id="again">Do it again tomorrow</button>' +
-          '<button class="ghost" id="other">Different fear</button>' +
+          '<button class="ghost" id="other">Different worry</button>' +
         '</div>' +
-        (earlier ? '<div class="history"><p class="tiny head">Earlier</p>' + earlier + '</div>' : '') +
-        '<p class="tiny"><button id="home">home</button> · <button id="about">what this is</button></p>' +
+        '<p class="tiny"><button id="mine">your worries</button> · ' +
+        '<button id="home">home</button> · <button id="about">what this is</button></p>' +
       '</div>';
 
-    on('#again', function () {
-      S.cur = {
-        source: last.source, id: last.id, label: last.label, belief: last.belief,
-        x: last.x, test: testFor(last), drop: dropFor(last),
-        from: 'result', editing: false, locked: null, missed: false
-      };
-      go('plan');
-    });
+    on('#again', function () { again(last, 'result'); });
     on('#other', function () { S.filter = null; go('pick'); });
+    on('#mine', function () { go('mine'); });
     on('#home', function () { go('start'); });
     on('#about', function () { go('about'); });
   }
 
   /*
-    Repeating a test. A stock item is looked up fresh, so a corrected wording in fears.js
+    Your worries. Founder, 2026-09-02: after two or three, you could not get back to an earlier
+    one without hunting for it in the list, and the one thing you would want to see — the belief
+    losing its grip test by test — was buried in a flat log. One card per belief, its ladder,
+    what you wrote each time, and a way straight back into it.
+
+    Nothing is combined across cards. Two worries are two separate things, and comparing them
+    would be the beginning of a score.
+  */
+  function mine() {
+    var groups = rate.series(S.done);
+    if (!groups.length) { go('start'); return; }
+    var n = S.done.length;
+
+    app.innerHTML = backButton() +
+      '<div class="stage">' +
+        '<h2>Your worries</h2>' +
+        '<p class="sub">' + n + ' test' + (n === 1 ? '' : 's') + ' across ' +
+          groups.length + ' worr' + (groups.length === 1 ? 'y' : 'ies') + '. Tap one to test it again.</p>' +
+        groups.map(function (g, i) {
+          return '<div class="card">' +
+            '<div class="kicker">' + esc(g.label) + '</div>' +
+            '<p class="belief">“' + esc(g.belief) + '”</p>' +
+            ladder(g, { said: true }) +
+            '<button class="ghost" data-again="' + i + '">Test this again</button>' +
+          '</div>';
+        }).join('') +
+        '<p class="tiny">Each one is its own. Nothing here is added up, and there is no target.</p>' +
+      '</div>';
+
+    wireBack('start');
+    qa('[data-again]').forEach(function (b) {
+      b.onclick = function () { again(groups[Number(b.getAttribute('data-again'))].last, 'mine'); };
+    });
+  }
+
+  /*
+    Repeating a test. A stock item is looked up fresh, so a corrected wording in worries.js
     reaches everyone who repeats it, including anyone whose old result still quotes the
     wording it had before. A person's own test falls back to what they wrote.
   */
   function testFor(d) {
-    var f = d.id ? content.byId(FEARS, d.id) : null;
+    var f = d.id ? content.byId(WORRIES, d.id) : null;
     return f ? f.test : (d.test || '');
   }
   function dropFor(d) {
-    var f = d.id ? content.byId(FEARS, d.id) : null;
+    var f = d.id ? content.byId(WORRIES, d.id) : null;
     return f ? f.drop : (d.drop || '');
   }
 

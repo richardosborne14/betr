@@ -36,7 +36,7 @@ test('a test mentioning the habit is refused with the reason', () => {
     const r = guards.checkTest(s);
     assert.strictEqual(r.ok, false, s);
     assert.strictEqual(r.kind, 'habit', s);
-    assert.match(r.reason, /the fear underneath/);
+    assert.match(r.reason, /the worry underneath/);
   }
 });
 

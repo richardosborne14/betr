@@ -24,8 +24,8 @@ understand or when a decision was reversed.
 
 - **A page opened off the filesystem cannot fetch JSON and cannot load an ES module.** Both are
   blocked as cross-origin from a `file://` page. Since the founder sees Betr by opening
-  `web/index.html` directly, the content had to be `content/fears.js` rather than
-  `fears.json`, and the library files had to be classic scripts with a small export shim
+  `web/index.html` directly, the content had to be `content/worries.js` rather than
+  `worries.json`, and the library files had to be classic scripts with a small export shim
   rather than ES modules. Both the scope and B4's plan had assumed otherwise. It is still one
   plain array with no logic in it, and it is edited exactly as JSON would be.
 - **A CSP that says `script-src 'self'` blocks the page's own scripts when it is opened off
@@ -48,3 +48,18 @@ understand or when a decision was reversed.
   screens. No unit test could see that, and it would otherwise have been found by a person on
   a phone in the middle of their second loop. It is not a browser and does not replace the
   phone walk in `docs/journeys.md`.
+- **Relative words stored as absolute numbers cannot show progress, and nobody notices until
+  someone uses it twice.** The re-rate said "a bit less sure" — which only means anything next
+  to where you already were — and stored a fixed 55 every time. Three days of honest re-rating
+  wrote the same number three days running, so the one thing the product exists to show could
+  not appear on any screen, and no test caught it because every test did one loop. Fixed by
+  making each word *move* a 1–10 ladder rather than set a value. The general lesson: if the
+  label on a control is comparative, what it stores has to be a change, not a state — and at
+  least one test has to run the same loop three times.
+- **A picture of the same screen twice is worth more than a passing test.** Headless Chrome
+  against a seeded copy of the app showed the ladder in light and dark in about a minute
+  (`--headless=new`, a `seed.js` that writes `localStorage` before `app.js` runs, served over
+  a local http server because `file://` storage is opaque). Note that `--window-size` is not
+  the CSS viewport in headless: the layout came out about 110px wider than asked, which looked
+  exactly like a CSS overflow bug until the untouched start screen did it too. Check an
+  unchanged screen before believing a layout finding from a headless screenshot.

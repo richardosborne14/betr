@@ -48,7 +48,7 @@
 
   var REASON = {
     habit:
-      'That test involves the thing itself. Those aren’t tests — the fear underneath is. ' +
+      'That test involves the thing itself. Those aren’t tests — the worry underneath is. ' +
       'Try one about what people will think, or about going without the crutch.',
     body:
       'Betr doesn’t do tests about food, weight or what your body is doing. Those need a ' +

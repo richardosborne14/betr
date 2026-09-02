@@ -1,11 +1,22 @@
 /*
-  The re-rate, after the test.
+  The re-rate, and the ladder it moves along.
 
-  Four buttons, not a 0–100 slider. The slider was the single most "learn this first" element
-  of every rejected prototype; four words are the same re-rating with nothing to learn. The
-  numbers exist so a result can be compared with the one before it, and are never shown.
+  Five words, not a 0–100 slider. The slider was the single most "learn this first" element of
+  every rejected prototype; five words are the same re-rating with nothing to learn.
 
-  Nothing here is a score, and nothing is added up. There is no total, no average, no trend.
+  What changed on 2026-09-02, and why. The words are relative — "a bit less sure" only means
+  anything next to where you were — but they used to be stored as fixed values (80/55/30/10).
+  So tapping "a bit less sure" three days running recorded the same number three times, and
+  the one thing a person is actually doing this for, watching the belief lose its grip, could
+  not show up anywhere. Now each tap MOVES the belief down a ten-rung ladder from where it
+  already was, which is what the words were always saying.
+
+  Everything starts at 10, because that is the premise on the front screen: you are sure it
+  will go badly. Nothing ever goes below 1; a belief you have stopped buying is not a zero.
+
+  What this must never become (founder, 2026-09-02): a score of the person, an average across
+  worries, a total, a trend line, a target, or anything that reads as a grade. It is one
+  belief's grip, shown next to the days you tested it, and nothing else.
 */
 (function (root, factory) {
   var api = factory();
@@ -13,11 +24,21 @@
   else (root.Betr = root.Betr || {}).rate = api;
 })(typeof self !== 'undefined' ? self : this, function () {
 
+  var TOP = 10;    /* where every belief starts: completely sure it goes badly */
+  var FLOOR = 1;   /* "not sure at all" still leaves a rung. Nobody is at zero */
+
+  /*
+    quiet: true is the honest option that must be available and must not be prominent. A test
+    can go badly and leave someone more convinced; refusing to record that would make the
+    ladder a nicer story than the person's week. It sits small, under the four, in the same
+    place "didn't get to it" sits on the locked screen.
+  */
   var CHOICES = [
-    { key: 'still', label: 'Still sure', value: 80 },
-    { key: 'bit', label: 'A bit less sure', value: 55 },
-    { key: 'lot', label: 'A lot less sure', value: 30 },
-    { key: 'none', label: 'Not sure at all', value: 10 }
+    { key: 'still', label: 'Still sure', step: 0 },
+    { key: 'bit', label: 'A bit less sure', step: -1 },
+    { key: 'lot', label: 'A lot less sure', step: -3 },
+    { key: 'none', label: 'Not sure at all', to: FLOOR },
+    { key: 'more', label: 'More sure than before', step: 1, quiet: true }
   ];
 
   function byKey(key) {
@@ -25,10 +46,70 @@
     return null;
   }
 
-  function valueOf(key) {
-    var c = byKey(key);
-    return c ? c.value : null;
+  function clamp(n) {
+    if (typeof n !== 'number' || n !== n) return TOP;
+    n = Math.round(n);
+    return n < FLOOR ? FLOOR : (n > TOP ? TOP : n);
   }
 
-  return { CHOICES: CHOICES, byKey: byKey, valueOf: valueOf };
+  /* Where the belief sits after this tap. An unknown key moves nothing. */
+  function next(level, key) {
+    var from = clamp(level);
+    var c = byKey(key);
+    if (!c) return from;
+    if (typeof c.to === 'number') return clamp(c.to);
+    return clamp(from + c.step);
+  }
+
+  /*
+    Which results belong to the same belief. A stock item is its id, so a corrected wording in
+    the list keeps the person's ladder. A person's own belief is its own text, so editing it
+    starts a new one — which is right: a different sentence is a different belief.
+  */
+  function keyOf(d) {
+    if (!d) return 'stock:';
+    if (d.source === 'own') return 'own:' + (d.belief || '');
+    return 'stock:' + (d.id || d.label || '');
+  }
+
+  /*
+    The results, grouped into one ladder per belief, oldest tap first inside each group and
+    most recently tested group first. Nothing is added up across groups, on purpose.
+  */
+  function series(done) {
+    var out = [];
+    var index = {};
+    (done || []).forEach(function (d, i) {
+      var k = keyOf(d);
+      var g = index[k];
+      if (!g) { g = index[k] = { key: k, id: d.id, source: d.source, results: [] }; out.push(g); }
+      /* The newest wording wins, so a rewritten stock item is not quoted two ways at once. */
+      g.label = d.label;
+      g.belief = d.belief;
+      g.newest = i;
+      g.results.push(d);
+    });
+    out.forEach(function (g) {
+      g.last = g.results[g.results.length - 1];
+      g.level = clamp(g.last.level);
+      g.tests = g.results.length;
+      g.rungs = g.results.map(function (r) { return clamp(r.level); });
+    });
+    /* Most recently tested first, not first started: the one you are working on is at the top. */
+    return out.sort(function (a, b) { return b.newest - a.newest; });
+  }
+
+  /* Where a belief already sits, before this test is rated. Unknown means the top. */
+  function levelFor(done, item) {
+    var k = keyOf(item);
+    var level = TOP;
+    (done || []).forEach(function (d) { if (keyOf(d) === k) level = clamp(d.level); });
+    return level;
+  }
+
+  return {
+    TOP: TOP, FLOOR: FLOOR, CHOICES: CHOICES,
+    byKey: byKey, clamp: clamp, next: next,
+    keyOf: keyOf, series: series, levelFor: levelFor
+  };
 });

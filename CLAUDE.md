@@ -28,12 +28,15 @@ rules at once, and every one of them has failed in some other product.
 2. **No AI.** Not for suggestions, not for wording, not for anything. Fixed content the person
    chooses from is a chapter in a book. A system that chooses for them is a medical device.
 3. **Conditional beliefs only.** Every item is "If I ___, then ___". "I am ___" is reframed,
-   never accepted.
+   never accepted. The word for one of these, everywhere a person can see it, is **worry**.
+   Not "fear" (founder, 2026-09-02: it sounds scary), not "thought", not "belief" on a button.
 4. **Never the habit itself.** No test involves the drink, the screen, the substance, food
    restriction, body sensations, checking rituals, or anyone's safety. In v1 this is
    structural: there is no free-text test field.
 5. **No streaks, no red days, no "you missed", no cap on rest.** The metric is completed
-   tests. "Didn't get to it" keeps the test for tomorrow.
+   tests. "Didn't get to it" keeps the test for tomorrow. The one other number is the belief
+   ladder: 1-10, per belief, moved by the person's own re-rate. It is never a score of the
+   person, never totalled or averaged across worries, and never carries a target.
 6. **No verdicts.** Never "irrational". Outcomes are observations. A bad outcome is data and
    the re-rate is optional.
 7. **The wording is fixed.** The eight sentences and the crisis lines in scope §10 / research
@@ -55,7 +58,7 @@ rules at once, and every one of them has failed in some other product.
   `package.json` dependencies. Tests run with `node --test` from the repo root (not
   `node --test web/tests/`; Node 22 rejects a directory there). Keep it readable by a
   stranger in an evening; that is part of the trust story.
-- **Content lives in `web/content/fears.js`**, not in code. B1 owns it. It is a `.js` file and
+- **Content lives in `web/content/worries.js`**, not in code. B1 owns it. It is a `.js` file and
   not `.json` because a browser will not fetch JSON from a page opened off the filesystem, and
   the founder opens `web/index.html` directly. It is still one plain array with no logic in it.
 - **The prototype in `prototype/` is frozen.** It is the reference, not the shipping code.

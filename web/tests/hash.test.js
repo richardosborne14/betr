@@ -31,7 +31,7 @@ test('it matches the same sum computed independently of the script', () => {
 test('every file the browser can load is hashed, and the tests are not', () => {
   const files = tool.shippedFiles(WEB);
   for (const must of ['index.html', 'app.js', 'app.css', 'lib/guards.js', 'lib/store.js',
-                      'lib/rate.js', 'lib/content.js', 'content/fears.js',
+                      'lib/rate.js', 'lib/content.js', 'content/worries.js',
                       'content/whats-going-on.js', 'manifest.webmanifest']) {
     assert.ok(files.includes(must), 'not hashed: ' + must);
   }

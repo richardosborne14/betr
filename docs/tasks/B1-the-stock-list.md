@@ -8,8 +8,11 @@ twelve, not a written-and-reviewed list
 
 ## What to build
 
-The final list of fears, each with its six parts, as a single content file the app reads:
-`web/content/fears.js`. Nothing else in the app is opinionated; this file is.
+The final list of worries, each with its six parts, as a single content file the app reads:
+`web/content/worries.js`. Nothing else in the app is opinionated; this file is.
+
+**Note, 2026-09-02:** the user-facing word is **worry**, never "fear" (founder's call; it
+sounds scary). The file, the array `BETR_WORRIES` and the door key `worries` follow it.
 
 **It is `.js`, not `.json`.** A browser will not fetch a JSON file from a page opened off the
 filesystem, and that is how this gets looked at before B3. It is still one plain array with no
@@ -46,7 +49,7 @@ Starting material: the twelve in scope §5.1 and the fifteen candidates in resea
 3. One CBT-trained reviewer reads once for lane and wording. Paid, brief, and **never described
    as an endorsement** anywhere.
 4. ~~If B0 Q2a chose the second door~~ **It did.** `content/whats-going-on.js` exists with six
-   surface problems, each mapping to three or four fear ids, written against research §5.4:
+   surface problems, each mapping to three or four worry ids, written against research §5.4:
    first person, a behaviour and never a condition, and nothing that claims to fix anything.
    **These six labels need Misha's sign-off before release.** They are the closest thing in
    Betr to the regulatory line.
@@ -56,7 +59,7 @@ Starting material: the twelve in scope §5.1 and the fifteen candidates in resea
 `web/tests/content.test.js` asserts every item has all six fields, `belief` starts with "If",
 `lane` is in the allowed set, ids are unique, neither `test` nor `drop` matches the habit-word
 list, the visible count is twelve or fewer, the first three are the easiest ones, the second
-door points only at fears that exist, and none of the phrases we never use appears anywhere.
+door points only at worries that exist, and none of the phrases we never use appears anywhere.
 
 ## Done when
 

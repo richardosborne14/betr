@@ -18,7 +18,14 @@
 })(typeof self !== 'undefined' ? self : this, function () {
 
   var KEY = 'betr.v1';
-  var VERSION = 1;
+
+  /*
+    2 added `level`, the rung a belief sits on after that test (rate.js). Version 1 stored
+    `rate`, one of 80/55/30/10, which could not show movement. An old record is carried over
+    onto the nearest rung rather than dropped, so nobody loses a result to the change.
+  */
+  var VERSION = 2;
+  var OLD_RATES = { 80: 8, 55: 6, 30: 3, 10: 1 };
 
   function blank() {
     return { v: VERSION, stage: 'start', cur: null, done: [], seenInstall: false };
@@ -33,10 +40,20 @@
     if (Array.isArray(raw.done)) {
       s.done = raw.done.filter(function (d) {
         return d && typeof d === 'object' && typeof d.o === 'string';
-      });
+      }).map(withLevel);
     }
     s.seenInstall = raw.seenInstall === true;
     return s;
+  }
+
+  /* A rung between 1 and 10, from this record, from the version before it, or the top. */
+  function withLevel(d) {
+    var n = d.level;
+    if (typeof n !== 'number' || n !== n) n = OLD_RATES[d.rate];
+    if (typeof n !== 'number') n = 10;
+    n = Math.round(n);
+    d.level = n < 1 ? 1 : (n > 10 ? 10 : n);
+    return d;
   }
 
   /* Nothing a person would miss: no results, no test in flight, nothing they have dismissed. */
@@ -105,14 +122,14 @@
       results: (s.done || []).map(function (d) {
         return {
           when: d.when || null,
-          fear: d.label || d.id || null,
+          worry: d.label || d.id || null,
           belief: d.belief || null,
           expected: d.x || null,
           test: d.test || null,
           leftOut: d.drop || null,
           happened: d.o || null,
           stillSure: d.rateLabel || null,
-          stillSureValue: typeof d.rate === 'number' ? d.rate : null
+          sureOutOfTen: typeof d.level === 'number' ? d.level : null
         };
       })
     }, null, 2);
@@ -124,6 +141,7 @@
     blank: blank,
     isEmpty: isEmpty,
     normalise: normalise,
+    withLevel: withLevel,
     create: create,
     exportJSON: exportJSON
   };

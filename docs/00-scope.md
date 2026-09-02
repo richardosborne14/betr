@@ -18,13 +18,14 @@ answer. Nothing in §9 is a build blocker for a prototype; several are blockers 
 
 ## 1. What it is, in one paragraph
 
-A free thing on your phone. One big button: *Pick a fear.* You pick one of a short list of
-fears about how people will react ("saying no without an excuse", "asking for help"). It hands
+A free thing on your phone. One big button: *Pick a worry.* You pick one of a short list of
+worries about how people will react ("saying no without an excuse", "asking for help"). It hands
 you a one-line test to do today, already written, and what you probably expect to happen,
 already written. You tap *I'll do it today.* You go and do it. You come back, type one sentence
-about what happened, and tap one of four buttons for how sure you still are. It shows you your
-expectation with a line through it and what actually happened underneath, and offers the same
-test again tomorrow. No account. No server. No AI. Nothing leaves the phone.
+about what happened, and tap one of four words for how sure you still are. It shows you your
+expectation with a line through it, what actually happened underneath, and that belief coming
+down a ten-rung ladder test by test — and offers the same test again tomorrow. No account. No
+server. No AI. Nothing leaves the phone.
 
 **What it is, clinically:** the CBT behavioural experiment, and only that, run against
 conditional assumptions in the social-anxiety, assertiveness and perfectionism lanes. The
@@ -55,13 +56,14 @@ Six screens. Four taps and one sentence for a full loop.
 
 | # | Screen | What's on it | Taps |
 | --- | --- | --- | --- |
-| 1 | **Start** | Headline *Sure it'll go badly?*, one big button *Pick a fear*, one small line: no account, no AI, nothing leaves your phone. Small links: results count, *what this is*. | 1 |
+| 1 | **Start** | Headline *Sure it'll go badly?*, one big button *Pick a worry*, one small line: no account, no AI, nothing leaves your phone. Small links: *your worries*, *what this is*. | 1 |
 | 2 | **Pick** | The stock list as big buttons, plain words. One line at the bottom saying what is deliberately absent. | 1 |
 | 3 | **Test** | *Today:* the one-line test. The safety behaviour to drop, in bold. *What you expect:* pre-written, with *not quite? change it*. One big button *I'll do it today*. | 1 |
 | 4 | **Locked** | *Go and do it.* The test repeated. One big button *Done it. Here's what happened.* Small: *Didn't get to it* · *Pick a different one*. | 1 |
 | 5 | **Happened** | One text box. *Just what they said or did. No verdict.* | typing |
-| 6 | **Sure?** | The belief, quoted. Four buttons: still sure / a bit less / a lot less / not at all. | 1 |
-| 7 | **Result** | Expectation struck through. What happened in marker. Big number of tests done. *Do it again tomorrow* · *Different fear*. Earlier results below. | — |
+| 6 | **Sure?** | The belief, quoted, and the rung it is on now. Four buttons: still sure / a bit less / a lot less / not at all. Small, underneath: *more sure than before*. | 1 |
+| 7 | **Result** | Expectation struck through. What happened in marker. **The ladder for this belief**, started → now. Big number of tests done. *Do it again tomorrow* · *Different worry*. | — |
+| 8 | **Your worries** | One card per belief tested: its ladder, what you wrote each time, *Test this again*. Nothing combined across cards. | 1 |
 
 **Why these choices hold (each is from the research):**
 
@@ -69,11 +71,20 @@ Six screens. Four taps and one sentence for a full loop.
   beside the outcome afterwards. Pre-writing it removes the one step people stall on, and
   *change it* keeps it theirs.
 - **The safety behaviour in bold.** Clark and Wells: without dropping it, the person learns the
-  crutch saved them, not that the fear was wrong. It is the sentence that makes the test count.
+  crutch saved them, not that the worry was wrong. It is the sentence that makes the test count.
 - **"No verdict" on the outcome box.** Observations, not judgements; never "irrational".
-- **Four buttons instead of a 0–100 slider.** Same re-rating, mapped to 80 / 55 / 30 / 10
-  underneath. The 0–100 scale was the single most "learn this first" element of every earlier
-  prototype.
+- **Four words instead of a 0–100 slider, moving a 1–10 ladder.** The 0–100 scale was the
+  single most "learn this first" element of every earlier prototype, so the tap stays four
+  words. *Amended 2026-09-02:* the words are relative ("a bit less sure"), so each one now
+  moves the belief along a ten-rung ladder from where it already was, instead of writing a
+  fixed number. Everything starts at 10 — that is what the front screen says — and nothing
+  goes below 1. Founder's own CBT used 1–10 and watching it fall is what kept them going.
+  Research §11.6: "show the new belief's evidence growing" is the mechanism and the ad.
+- **A fifth, quiet option: *more sure than before*.** A test can go badly and leave someone
+  more convinced. A ladder that can only fall is a nicer story than the person's week. It is
+  available and deliberately not prominent, in the place *didn't get to it* sits.
+- **The word is *worry*, never *fear*.** Founder, 2026-09-02: fear sounds scary. "Worry" is
+  already the word in the nine sentences ("manage everyday worry").
 - **"Do it again tomorrow" as the primary action.** Mindable found the number of completed
   experiments predicted improvement; CCI says one run "might convince yourself it was luck".
   The product metric is completed tests, never days or streaks.
@@ -140,15 +151,15 @@ panic and body sensations, reassurance loops, OCD, trauma, eating, self-harm (re
 
 ### 5.3 What the list has to decide — Q2
 
-**Q2a. Route by fear, or route by what's going on?** Today the list is fears. The founder's
+**Q2a. Route by worry, or route by what's going on?** Today the list is worries. The founder's
 thesis is that the surface problem (drinking, porn, anger at home, taking advantage of friends)
-sits on top of these fears. An alternative entry screen: *What's going on?* with six or seven
-surface problems, each opening the three or four fears that most often sit under it. Pros:
+sits on top of these worries. An alternative entry screen: *What's going on?* with six or seven
+surface problems, each opening the three or four worries that most often sit under it. Pros:
 meets the person where they think they are; the ad can say "drinking more than you want to?".
 Cons: naming a surface problem on the first screen is closer to the regulatory line ("for people
-with…") and may feel like a diagnosis at the door. **Recommendation:** fears on the first screen,
+with…") and may feel like a diagnosis at the door. **Recommendation:** worries on the first screen,
 and a second, optional entry point *Not sure which? Start from what's going on* that maps
-surface problems to fears. Wording of the surface problems needs the safe/unsafe table applied.
+surface problems to worries. Wording of the surface problems needs the safe/unsafe table applied.
 
 **Q2b. How many?** Twelve is a screen and a half on a phone. Twenty is a scroll. Research says
 "simple" beats everything; more choice is not more value. Proposal: ten to twelve visible,
@@ -159,7 +170,7 @@ taps. Proposal: easiest and most universal first (saying no, asking for help, ad
 struggling), so the first test succeeds.
 
 **Q2d. Which items are wrong for the audience?** "Not drinking at a social thing" is on the
-list because the fear is about *other people noticing*, not about the drink; the test involves
+list because the worry is about *other people noticing*, not about the drink; the test involves
 attending sober, which is the standard CBT experiment for it. Misha should say whether it reads
 as a substance test to a person in early recovery. If in doubt, it comes out.
 
@@ -198,7 +209,7 @@ as a permanent small link. Recommendation: once, after five, with the exact word
 want to do this with people who don't know you*, and never again if dismissed.
 
 **Q4b. What moves across?** The export is a JSON file. TrybeUP could import it into a
-"work on" habit with the history intact. Whether a person even wants their fears in a cloud
+"work on" habit with the history intact. Whether a person even wants their worries in a cloud
 account is not obvious; the research says what they want from a group is anonymity. Proposal:
 the import exists, is one tap from the export screen, and is described as *copy* not *move*.
 Betr keeps working after.
@@ -281,7 +292,7 @@ domain, no cookie, no dependency. The TrybeUP repo keeps a one-file pointer at
 | # | Question | Blocks |
 | --- | --- | --- |
 | Q1 | **The name, Betr.** Needs a trademark and domain search (betr.app, getbetr.com). And a Misha read on one thing: "bet" lands differently for someone whose habit is gambling, and the prototype's habit-word guard currently blocks the word "bet" in tests. Decide whether the pun is used in copy ("Bet it goes badly?") or only in the name. | Release |
-| Q2 | **The stock list.** *Answered 2026-09-02:* both doors (fears first, plus "start from what's going on"); twelve visible plus *Something else*; order as §5.1; "Not drinking at a social thing" stays, with its test reworded to contain no habit word. Who writes and reviews is unchanged and still open. The six surface-problem labels need Misha's sign-off before release. | Build — cleared |
+| Q2 | **The stock list.** *Answered 2026-09-02:* both doors (worries first, plus "start from what's going on"); twelve visible plus *Something else*; order as §5.1; "Not drinking at a social thing" stays, with its test reworded to contain no habit word. Who writes and reviews is unchanged and still open. The six surface-problem labels need Misha's sign-off before release. | Build — cleared |
 | Q3 | **Custom entries.** *Answered 2026-09-02:* in v1, as the last button, three screens of one box each, with both guards. | Build — cleared |
 | Q4 | **The TrybeUP bridge**: when it's mentioned, what moves across, whether the free tier is fixed first, one brand or two. | Release of the bridge only |
 | Q5 | **Trust**: hosting and logs, web and store or store only, data controller. | Release |

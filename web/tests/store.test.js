@@ -27,7 +27,7 @@ const RESULT = {
   id: 'no', source: 'stock', label: 'Saying no without an excuse',
   belief: 'If I say no without an excuse, people will think I am selfish.',
   x: 'They will be annoyed.', test: 'Say no once.', drop: 'Do not explain.',
-  o: 'He said fair enough.', rate: 30, rateLabel: 'A lot less sure',
+  o: 'He said fair enough.', level: 3, rateLabel: 'A lot less sure',
   when: '2026-09-02T10:00:00.000Z'
 };
 
@@ -88,6 +88,22 @@ test('half-written results are dropped, whole ones kept', () => {
   assert.deepStrictEqual(s.done, [RESULT]);
 });
 
+/*
+  Version 1 stored one of 80/55/30/10 in `rate`. Those results are somebody's real week, so
+  they come across onto the nearest rung rather than being thrown away or left blank.
+*/
+test('a result saved before the ladder existed lands on the nearest rung', () => {
+  const old = { o: 'She said fine.', rate: 55, rateLabel: 'A bit less sure' };
+  const s = store.create(stub({ 'betr.v1': JSON.stringify({ done: [old] }) })).load();
+  assert.strictEqual(s.done[0].level, 6);
+  assert.strictEqual(s.done[0].o, 'She said fine.');
+});
+
+test('a result with no rating at all sits at the top rather than at nothing', () => {
+  const s = store.create(stub({ 'betr.v1': JSON.stringify({ done: [{ o: 'Nothing happened.' }] }) })).load();
+  assert.strictEqual(s.done[0].level, 10);
+});
+
 test('a storage that throws leaves the app in the start state and says so', () => {
   const st = store.create(throwing);
   assert.deepStrictEqual(st.load(), store.blank());
@@ -114,10 +130,10 @@ test('the export is readable, stable, and holds every result', () => {
   assert.strictEqual(out.version, store.VERSION);
   assert.strictEqual(out.results.length, 1);
   assert.deepStrictEqual(Object.keys(out.results[0]), [
-    'when', 'fear', 'belief', 'expected', 'test', 'leftOut', 'happened', 'stillSure', 'stillSureValue'
+    'when', 'worry', 'belief', 'expected', 'test', 'leftOut', 'happened', 'stillSure', 'sureOutOfTen'
   ]);
   assert.strictEqual(out.results[0].happened, 'He said fair enough.');
-  assert.strictEqual(out.results[0].stillSureValue, 30);
+  assert.strictEqual(out.results[0].sureOutOfTen, 3);
 });
 
 test('exporting nothing is still valid, readable JSON', () => {

@@ -19,12 +19,12 @@
   Every phrase here is written fresh. Nothing is adapted from CCI, Getselfhelp, Therapist Aid,
   Psychology Tools or Beck Institute material; all of them restrict reuse in a product.
 
-  Why this is a .js file and not fears.json: the founder opens web/index.html straight from
+  Why this is a .js file and not worries.json: the founder opens web/index.html straight from
   the filesystem, and browsers refuse to fetch a .json (or load an ES module) from a file://
   page. A classic script tag is the only thing that works both there and on the dev host.
   It is still plain data — one array, no logic.
 */
-var BETR_FEARS = [
+var BETR_WORRIES = [
   {
     id: 'no',
     label: 'Saying no without an excuse',
@@ -135,5 +135,5 @@ var BETR_FEARS = [
   }
 ];
 
-if (typeof module === 'object' && module.exports) module.exports = BETR_FEARS;
-else (self.Betr = self.Betr || {}).fears = BETR_FEARS;
+if (typeof module === 'object' && module.exports) module.exports = BETR_WORRIES;
+else (self.Betr = self.Betr || {}).worries = BETR_WORRIES;

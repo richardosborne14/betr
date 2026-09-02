@@ -23,7 +23,7 @@ at before B3. Each library file ends in a four-line shim that exports to whichev
 
 | Test | Asserts |
 | --- | --- |
-| `content.test.js` | Every item in `fears.js` has the six fields; `belief` starts "If"; `lane` allowed; ids unique; neither `test` nor `drop` matches the habit-word list; visible count ≤ 12; the second door points only at fears that exist; none of the phrases we never use appears |
+| `content.test.js` | Every item in `worries.js` has the six fields; `belief` starts "If"; `lane` allowed; ids unique; neither `test` nor `drop` matches the habit-word list; visible count ≤ 12; the second door points only at worries that exist; none of the phrases we never use appears |
 | `guards.test.js` | "I am a bad person" is rejected with the reframe; "If I say no, people will…" accepted; a test mentioning "beer" is refused with the reason |
 | `rate.test.js` | The four labels map to 80/55/30/10 and nothing else |
 | `store.test.js` | Round-trip through a stubbed `localStorage`; a throwing storage leaves the app in the start state; export shape is stable |
