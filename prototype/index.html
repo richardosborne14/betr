@@ -1,0 +1,227 @@
+<!--
+  Betr prototype, 2026-09-01. The fourth of four in one session; the founder rejected the
+  first three (an app with tabs, an index card, a scripted chat) and approved this one.
+  It is the reference for B2, not the shipping code: it loads Google Fonts (v1 must not make
+  any request after load), keeps content inline (v1 reads web/content/fears.json), and has
+  no install prompt, export-to-share, or build hash. Open it in a browser; it works offline
+  and stores entries only in that browser.
+-->
+<title>Betr</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Karla:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#FAFAF6;--ink:#14161C;--ink-2:#565A66;--ink-3:#8A8E99;
+  --btn:#1F3FE8;--btn-ink:#FFFFFF;--btn-hover:#1734CF;--soft:#EDF0FF;--soft-ink:#1B33B8;
+  --card:#FFFFFF;--edge:#E4E5EA;--mark:#FFE873;--mark-ink:#3A3000;--warn:#B23A2E;--warn-soft:#FBE9E6;
+  --display:"Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:0 20px 50px rgba(31,63,232,.22),0 2px 6px rgba(20,22,28,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--ground:#0F1117;--ink:#F1F1EC;--ink-2:#B4B7C2;--ink-3:#7C808C;--btn:#6B85FF;--btn-ink:#0B1030;--btn-hover:#8399FF;--soft:#1C2340;--soft-ink:#C7D0FF;--card:#181B24;--edge:#2A2E3B;--mark:#E7CF4A;--mark-ink:#241E00;--warn:#F08A7E;--warn-soft:#3A1F1B;--shadow:0 20px 50px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.4);}
+}
+:root[data-theme="dark"]{--ground:#0F1117;--ink:#F1F1EC;--ink-2:#B4B7C2;--ink-3:#7C808C;--btn:#6B85FF;--btn-ink:#0B1030;--btn-hover:#8399FF;--soft:#1C2340;--soft-ink:#C7D0FF;--card:#181B24;--edge:#2A2E3B;--mark:#E7CF4A;--mark-ink:#241E00;--warn:#F08A7E;--warn-soft:#3A1F1B;--shadow:0 20px 50px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.4);}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--btn);outline-offset:3px}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 20px 40px;max-width:720px;margin:0 auto}
+.kicker{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--btn);margin-bottom:14px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(38px,8vw,64px);line-height:1.02;letter-spacing:-.025em;margin:0 0 16px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,46px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+.sub{font-size:20px;color:var(--ink-2);margin:0 auto 34px;max-width:34ch;text-wrap:balance}
+.big{display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--btn);color:var(--btn-ink);border:0;border-radius:22px;padding:26px 44px;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);letter-spacing:-.01em;box-shadow:var(--shadow);transition:transform .12s ease,background .12s ease;max-width:100%}
+.big:hover{background:var(--btn-hover);transform:translateY(-2px)}
+.big:active{transform:translateY(1px)}
+.big.wide{width:100%;max-width:560px}
+.tiny{font-size:14px;color:var(--ink-3);margin-top:22px}
+.tiny button{background:none;border:0;padding:0;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;font-size:14px}
+.back{position:fixed;left:18px;top:16px;background:none;border:0;font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink-3);padding:6px 8px}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:560px;margin:0 auto}
+.list button{background:var(--card);border:2px solid var(--edge);border-radius:18px;padding:18px 22px;font-family:var(--display);font-weight:700;font-size:clamp(18px,3.6vw,22px);text-align:left;line-height:1.2;display:flex;justify-content:space-between;align-items:center;gap:14px;transition:border-color .12s,transform .12s}
+.list button:hover{border-color:var(--btn);transform:translateY(-1px)}
+.list button span.go{color:var(--btn);font-size:24px;flex:0 0 auto}
+.plan{background:var(--card);border:2px solid var(--edge);border-radius:24px;padding:30px 28px;width:100%;max-width:560px;text-align:left;margin:0 auto 22px}
+.plan .lbl{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px}
+.plan .do{font-family:var(--display);font-weight:800;font-size:clamp(24px,5vw,32px);line-height:1.12;letter-spacing:-.015em;margin:0 0 18px}
+.plan .line{font-size:18px;color:var(--ink-2);margin:0 0 14px}
+.plan .line b{color:var(--ink);font-weight:700}
+.plan .expect{background:var(--soft);color:var(--soft-ink);border-radius:12px;padding:12px 14px;font-size:17px;margin:0 0 6px}
+.plan .edit{background:none;border:0;padding:0;font-size:14px;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px}
+textarea{width:100%;font-family:var(--body);font-size:19px;line-height:1.4;padding:16px 18px;border:2px solid var(--edge);border-radius:18px;background:var(--card);color:var(--ink);resize:none;min-height:130px;margin:0 0 18px;max-width:560px}
+textarea::placeholder{color:var(--ink-3)}
+.result{background:var(--card);border:2px solid var(--edge);border-radius:24px;padding:28px;width:100%;max-width:560px;text-align:left;margin:0 auto 22px}
+.result .lbl{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px}
+.result .you{font-size:19px;color:var(--ink-2);margin:0 0 18px;text-decoration:line-through;text-decoration-color:var(--warn);text-decoration-thickness:2px}
+.result .real{font-family:var(--display);font-weight:700;font-size:clamp(22px,4.4vw,28px);line-height:1.15;margin:0;background:var(--mark);color:var(--mark-ink);padding:6px 10px;border-radius:8px;box-decoration-break:clone;-webkit-box-decoration-break:clone;display:inline}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:560px;margin:0 auto 22px}
+.choices button{background:var(--card);border:2px solid var(--edge);border-radius:16px;padding:18px 12px;font-family:var(--display);font-weight:700;font-size:18px;transition:border-color .12s}
+.choices button:hover{border-color:var(--btn)}
+.choices button.on{border-color:var(--btn);background:var(--soft);color:var(--soft-ink)}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.ghost{background:none;border:2px solid var(--edge);border-radius:18px;padding:14px 22px;font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink-2)}
+.warn{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:12px 14px;font-size:16px;text-align:left;max-width:560px;margin:0 auto 16px}
+.count{font-family:var(--display);font-weight:800;font-size:clamp(56px,14vw,96px);line-height:1;letter-spacing:-.03em;color:var(--btn);margin:0 0 6px}
+.history{width:100%;max-width:560px;margin:20px auto 0;text-align:left}
+.history .h{background:var(--card);border:2px solid var(--edge);border-radius:16px;padding:14px 16px;margin-bottom:10px;font-size:15px}
+.history .h .r{font-weight:700}
+.history .h .e{color:var(--ink-3);text-decoration:line-through}
+.sheet{background:var(--card);border:2px solid var(--edge);border-radius:20px;padding:22px 24px;max-width:600px;margin:0 auto;text-align:left;font-size:15.5px;color:var(--ink)}
+.sheet h3{font-family:var(--display);font-weight:700;font-size:15px;margin:16px 0 6px}
+.sheet h3:first-child{margin-top:0}
+.sheet ol{padding-left:18px;margin:0}
+.sheet li{margin-bottom:5px}
+.sheet .proof{display:flex;gap:26px;margin:6px 0 10px;flex-wrap:wrap}
+.sheet .proof b{display:block;font-family:var(--display);font-weight:800;font-size:26px;line-height:1}
+.sheet .proof small{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.sheet .plain{background:none;border:0;padding:0;font-size:14px;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;margin-right:14px}
+.sheet textarea{font-size:12px;min-height:100px;margin-top:8px}
+@media (prefers-reduced-motion:no-preference){
+  .stage{animation:in .25s ease-out both}@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .big.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 26px 60px rgba(31,63,232,.34),0 2px 6px rgba(20,22,28,.10)}}
+}
+</style>
+<div id="app"></div>
+<script>
+(function(){
+  var KEY='betr.v1';
+  /* fixed content: each fear comes with its test and its usual prediction, already written */
+  var FEARS=[
+    {id:'no',   t:'Saying no without an excuse',       b:'If I say no without an excuse, people will think I\'m selfish.',      x:'They\'ll be annoyed, and it\'ll be awkward afterwards.',            do:'Say "No, I can\'t this time" to one small request today.',   skip:'Don\'t explain. Don\'t apologise.'},
+    {id:'help', t:'Asking for help',                   b:'If I ask for help, I\'ll be a burden.',                                x:'They\'ll sigh, do it, and think less of me.',                        do:'Ask one person for one small, specific favour today.',        skip:'Don\'t say "sorry to bother you."'},
+    {id:'strug',t:'Admitting I\'m struggling',         b:'If I show I\'m struggling, people will think less of me.',             x:'They\'ll go quiet and keep their distance.',                         do:'Tell one person you trust one true, small thing that\'s hard right now.', skip:'Don\'t follow it with "but I\'m fine."'},
+    {id:'funny',t:'Not being the funny one',           b:'If I\'m not the funny one, nobody will want me around.',              x:'The conversation will die and people will drift off.',              do:'One evening: listen and ask questions. No jokes.',            skip:'Don\'t fill the silences.'},
+    {id:'drink',t:'Not drinking at a social thing',    b:'If I don\'t drink, people will notice and ask.',                       x:'Someone will make a comment and everyone will look.',               do:'Go with a soft drink and count how many people say anything.', skip:'Don\'t hold a drink as a prop.'},
+    {id:'angry',t:'Saying I\'m annoyed, calmly',       b:'If I tell my partner I\'m annoyed calmly, it\'ll turn into a fight.', x:'They\'ll get defensive and it\'ll blow up.',                         do:'Say one annoyance in one sentence, calmly. Then stop.',       skip:'Don\'t raise your voice. Don\'t bring up a second thing.'},
+    {id:'mist', t:'Owning a mistake at work',          b:'If I admit a mistake, it\'ll be held against me.',                    x:'They\'ll remember it and trust me less.',                            do:'Tell someone about one small mistake before they find it.',   skip:'Don\'t bury it in excuses.'},
+    {id:'rest', t:'Resting when there\'s stuff to do', b:'If I rest instead of being productive, I\'m worthless.',              x:'I\'ll feel guilty the whole time and regret it.',                    do:'Take a planned two-hour rest today. Notice how you feel after.', skip:'Don\'t "just quickly" do one task.'},
+    {id:'sit',  t:'Sitting with a bad feeling',        b:'If I feel bored or anxious, I can\'t sit with it.',                    x:'It\'ll get worse and worse until I do something.',                  do:'Set a 10-minute timer and do nothing. Notice when it peaks.',  skip:'Don\'t pick up your phone.'},
+    {id:'phone',t:'An evening off my phone',           b:'If I don\'t check my phone tonight, I\'ll miss something that matters.', x:'There\'ll be something urgent and I\'ll have let someone down.', do:'Phone in a drawer from 8pm. In the morning, list what you missed.', skip:'Don\'t check "just once."'},
+    {id:'favour',t:'Skipping a favour I always do',    b:'If I stop doing favours, my friends will drift.',                      x:'They\'ll notice, and be cooler with me.',                           do:'Skip one favour you always do. See if anyone mentions it.',    skip:'Don\'t offer before you\'re asked.'},
+    {id:'cut',  t:'Saying I\'m cutting back',          b:'If I say I\'m cutting back, people will lecture or pity me.',         x:'They\'ll make a face and start asking questions.',                  do:'Tell one person, in one sentence. Then change the subject.',   skip:'Don\'t explain why.'}
+  ];
+  var HABIT=/\b(drink|drinks|drinking|beer|wine|vodka|whisky|pint|porn|wank|smoke|smoking|vape|weed|cannabis|joint|bet|betting|gamble|casino|pills|coke|cocaine)\b/i;
+  var SURE=[{t:'Still sure',v:80},{t:'A bit less sure',v:55},{t:'A lot less sure',v:30},{t:'Not sure at all',v:10}];
+
+  var S=load()||{stage:'start',cur:null,done:[]};
+  var app=document.getElementById('app');
+  function load(){try{var r=localStorage.getItem(KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function fear(id){for(var i=0;i<FEARS.length;i++)if(FEARS[i].id===id)return FEARS[i];return null;}
+  function go(stage){S.stage=stage;save();render();window.scrollTo(0,0);}
+  function q(s){return app.querySelector(s);}
+  function qa(s){return Array.prototype.slice.call(app.querySelectorAll(s));}
+
+  function render(){
+    var st=S.stage;
+    if(st==='start')return start();
+    if(st==='pick')return pick();
+    if(st==='plan')return plan();
+    if(st==='locked')return locked();
+    if(st==='happened')return happened();
+    if(st==='sure')return sure();
+    if(st==='result')return result();
+    if(st==='about')return about();
+    start();
+  }
+
+  function start(){
+    var n=S.done.length;
+    app.innerHTML='<div class="stage"><div class="kicker">Betr</div><h1>Sure it\'ll go badly?</h1><p class="sub">Pick a fear. Get one tiny thing to do today. Come back and say what happened.</p>'+
+      '<button class="big pulse" id="go">Pick a fear <span aria-hidden="true">→</span></button>'+
+      '<p class="tiny">No account. No AI. Nothing leaves your phone.'+(n?' · <button id="hist">'+n+' result'+(n===1?'':'s')+'</button>':'')+' · <button id="about">what this is</button></p></div>';
+    q('#go').onclick=function(){go('pick');};
+    q('#about').onclick=function(){go('about');};
+    var h=q('#hist');if(h)h.onclick=function(){S.cur=null;go('result');};
+  }
+
+  function pick(){
+    app.innerHTML='<button class="back" id="back">← back</button><div class="stage"><h2>Which one?</h2><p class="sub">Tap the one that\'s closest.</p><div class="list">'+
+      FEARS.map(function(f){return '<button data-id="'+f.id+'"><span>'+esc(f.t)+'</span><span class="go">→</span></button>';}).join('')+'</div>'+
+      '<p class="tiny">Not here on purpose: anything that tests the drink, the screen or the habit itself. Those aren\'t tests. We test the fear underneath.</p></div>';
+    q('#back').onclick=function(){go('start');};
+    qa('[data-id]').forEach(function(b){b.onclick=function(){var f=fear(b.getAttribute('data-id'));S.cur={id:f.id,x:f.x,editing:false};go('plan');};});
+  }
+
+  function plan(){
+    var f=fear(S.cur.id);
+    app.innerHTML='<button class="back" id="back">← back</button><div class="stage"><div class="kicker">Here\'s your test</div>'+
+      '<div class="plan"><p class="lbl">Today</p><p class="do">'+esc(f.do)+'</p><p class="line"><b>'+esc(f.skip)+'</b> That\'s the bit that makes it count.</p>'+
+      '<p class="lbl">What you expect</p>'+(S.cur.editing?'<textarea id="x" style="margin-bottom:8px">'+esc(S.cur.x)+'</textarea><button class="edit" id="xdone">done</button>':'<p class="expect">'+esc(S.cur.x)+'</p><button class="edit" id="xedit">not quite? change it</button>')+'</div>'+
+      '<button class="big wide" id="lock">I\'ll do it today</button>'+
+      '<p class="tiny">That locks in what you expect, so later you can\'t talk yourself out of what actually happened.</p></div>';
+    q('#back').onclick=function(){go('pick');};
+    var xe=q('#xedit');if(xe)xe.onclick=function(){S.cur.editing=true;save();render();q('#x').focus();};
+    var xd=q('#xdone');if(xd)xd.onclick=function(){S.cur.x=q('#x').value.trim()||f.x;S.cur.editing=false;save();render();};
+    q('#lock').onclick=function(){if(S.cur.editing){S.cur.x=q('#x').value.trim()||f.x;S.cur.editing=false;}S.cur.locked=new Date().toISOString();go('locked');};
+  }
+
+  function locked(){
+    var f=fear(S.cur.id);
+    app.innerHTML='<div class="stage"><div class="kicker">Locked in</div><h2>Go and do it.</h2><p class="sub">'+esc(f.do)+'<br><b>'+esc(f.skip)+'</b></p>'+
+      '<button class="big wide" id="done">Done it. Here\'s what happened</button>'+
+      '<p class="tiny"><button id="miss">Didn\'t get to it</button> · <button id="drop">Pick a different one</button></p></div>';
+    q('#done').onclick=function(){go('happened');};
+    q('#miss').onclick=function(){S.cur.locked=new Date().toISOString();go('locked');alert('No problem. It\'s still here for tomorrow. Smaller counts, too.');};
+    q('#drop').onclick=function(){S.cur=null;go('pick');};
+  }
+
+  function happened(){
+    app.innerHTML='<button class="back" id="back">← back</button><div class="stage"><h2>What happened?</h2><p class="sub">Just what they said or did. No verdict.</p>'+
+      '<textarea id="o" placeholder="He said “fair enough” and got his own coffee."></textarea><div id="w"></div>'+
+      '<button class="big wide" id="next">Next</button></div>';
+    q('#back').onclick=function(){go('locked');};
+    var o=q('#o');o.focus();
+    q('#next').onclick=function(){var v=o.value.trim();if(!v){o.focus();return;}S.cur.o=v;go('sure');};
+  }
+
+  function sure(){
+    var f=fear(S.cur.id);
+    app.innerHTML='<div class="stage"><h2>Still think that\'s what happens?</h2><p class="sub">“'+esc(f.b)+'”</p><div class="choices">'+
+      SURE.map(function(s,i){return '<button data-i="'+i+'">'+esc(s.t)+'</button>';}).join('')+'</div></div>';
+    qa('[data-i]').forEach(function(b){b.onclick=function(){var s=SURE[+b.getAttribute('data-i')];
+      S.done.push({id:S.cur.id,x:S.cur.x,o:S.cur.o,after:s.v,label:s.t,when:new Date().toISOString()});S.cur=null;go('result');};});
+  }
+
+  function result(){
+    var last=S.done[S.done.length-1];
+    if(!last){go('start');return;}
+    var f=fear(last.id);var n=S.done.length;
+    var hist=S.done.slice(0,-1).reverse().map(function(d){var ff=fear(d.id);return '<div class="h"><div class="e">'+esc(d.x)+'</div><div class="r">'+esc(d.o)+'</div><div style="color:var(--ink-3);font-size:13px;margin-top:4px">'+esc(ff.t)+' · '+esc(d.label.toLowerCase())+'</div></div>';}).join('');
+    app.innerHTML='<div class="stage"><div class="kicker">'+esc(f.t)+'</div>'+
+      '<div class="result"><p class="lbl">You expected</p><p class="you">'+esc(last.x)+'</p><p class="lbl">What actually happened</p><p class="real">'+esc(last.o)+'</p></div>'+
+      '<div class="count">'+n+'</div><p class="sub" style="margin-bottom:22px">'+(n===1?'One test done. The second one is where it starts to stick.':n+' tests done. Same fear, different day, keeps working.')+'</p>'+
+      '<div class="row"><button class="big" id="again">Do it again tomorrow</button><button class="ghost" id="other">Different fear</button></div>'+
+      (hist?'<div class="history"><p class="tiny" style="margin:26px 0 8px">Earlier</p>'+hist+'</div>':'')+
+      '<p class="tiny"><button id="home">home</button></p></div>';
+    q('#again').onclick=function(){S.cur={id:last.id,x:last.x,editing:false};go('plan');};
+    q('#other').onclick=function(){go('pick');};
+    q('#home').onclick=function(){go('start');};
+  }
+
+  function about(){
+    app.innerHTML='<button class="back" id="back">← back</button><div class="stage"><div class="sheet">'+
+      '<h3>Don\'t take our word for it</h3><p style="margin:0 0 6px">Turn on airplane mode. Everything still works, because nothing here ever needed the internet.</p>'+
+      '<div class="proof"><span><b>'+S.done.length+'</b><small>results on this phone</small></span><span><b>0</b><small>accounts</small></span><span><b>0 B</b><small>sent to us, ever</small></span></div>'+
+      '<p style="margin:0"><button class="plain" id="export">export everything</button><button class="plain" id="wipe">delete everything</button></p><div id="exp"></div>'+
+      '<h3>What this is</h3><ol>'+[
+      'A self-help worksheet, not therapy, and not a medical device. It does not diagnose, treat, cure or prevent any condition.',
+      'One technique from cognitive behavioural therapy (CBT), the behavioural experiment: say what you think will happen, try it, say what did, and see whether you still believe it.',
+      'It can help you manage everyday worry and unhelpful beliefs. It will not solve them, and it is not a substitute for working with a qualified CBT therapist. If you can see one, please do.',
+      'It is not for you right now if you are having thoughts of suicide or self-harm, have been told you have psychosis or bipolar disorder, have an eating disorder, PTSD or OCD, or are dependent on alcohol or drugs. Those need a person, not this.',
+      'If you are already in therapy, follow your therapist\'s plan. Use this only if they agree.',
+      'Every test here is fixed and the same for everyone. None involves the habit you\'re trying to change, self-harm, restricting food, or putting yourself or anyone else at risk.',
+      'Everything you write stays on this device. There is no account, no server, and nothing is sent to us or anyone else.',
+      'Made by the people behind TrybeUP, not by a clinician or a health service. Nothing here is medical advice.'].map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ol>'+
+      '<h3>If you are in danger or in crisis</h3><p style="margin:0">Call your local emergency number. In the US, call or text 988. In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, findahelpline.com lists free helplines in over 175 countries.</p>'+
+      '<h3>When you want to do this with people who don\'t know you</h3><p style="margin:0">This is for doing it alone. The people who made it also make TrybeUP, where the same thing is done in small private groups. Only if and when you want that.</p></div></div>';
+    q('#back').onclick=function(){go('start');};
+    q('#export').onclick=function(){q('#exp').innerHTML='<textarea readonly>'+esc(JSON.stringify(S.done,null,2))+'</textarea>';};
+    q('#wipe').onclick=function(){if(confirm('Delete everything on this phone? There is no copy anywhere else.')){S={stage:'start',cur:null,done:[]};save();go('start');}};
+  }
+
+  render();
+})();
+</script>

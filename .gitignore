@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/
+web/hash.txt
+mobile/ios/Pods/
+mobile/android/build/
