@@ -1,14 +1,24 @@
 # B1: The stock list — the content is the product
 
-**Status:** Not started (blocked on B0 Q2)
-**Confidence:** —
-**Date opened:** 2026-09-01
-**Depends on:** B0
+**Status:** Shape done, words not. The file exists and is enforced; it holds the prototype's
+twelve, not a written-and-reviewed list
+**Confidence:** 5/10 — this is the unvalidated part of the product and it is the part that matters
+**Date opened:** 2026-09-01 · **File created:** 2026-09-02
+**Depends on:** B0 (Q2 answered 2026-09-02)
 
 ## What to build
 
 The final list of fears, each with its six parts, as a single content file the app reads:
-`web/content/fears.json`. Nothing else in the app is opinionated; this file is.
+`web/content/fears.js`. Nothing else in the app is opinionated; this file is.
+
+**It is `.js`, not `.json`.** A browser will not fetch a JSON file from a page opened off the
+filesystem, and that is how this gets looked at before B3. It is still one plain array with no
+logic in it, and it is edited exactly as a JSON file would be. B2's notes have the reasoning.
+
+**What exists now (2026-09-02):** the file, the six-field shape, the lane list, and the tests
+that enforce all of it, holding the prototype's twelve items with one change — the drink item's
+test was reworded to "order something soft" so it contains no habit word. Steps 1 to 3 below
+have not happened. The words are a placeholder that happens to work.
 
 Each item, per scope §5.2:
 
@@ -35,16 +45,24 @@ Starting material: the twelve in scope §5.1 and the fifteen candidates in resea
    diagnosis, which a person in early recovery would tap first.
 3. One CBT-trained reviewer reads once for lane and wording. Paid, brief, and **never described
    as an endorsement** anywhere.
-4. If B0 Q2a chose the second door, add `content/whats-going-on.json`: six or seven surface
-   problems in the safe wording of research §5.4, each mapping to three or four fear ids.
+4. ~~If B0 Q2a chose the second door~~ **It did.** `content/whats-going-on.js` exists with six
+   surface problems, each mapping to three or four fear ids, written against research §5.4:
+   first person, a behaviour and never a condition, and nothing that claims to fix anything.
+   **These six labels need Misha's sign-off before release.** They are the closest thing in
+   Betr to the regulatory line.
 
-## Test plan
+## Test plan — done
 
-- A unit test (B4) asserts every item has all six fields, `belief` starts with "If", `lane` is
-  in the allowed set, and no `test` matches the habit-word list.
-- A second test asserts the list is twelve visible or fewer unless a `more` flag is set.
+`web/tests/content.test.js` asserts every item has all six fields, `belief` starts with "If",
+`lane` is in the allowed set, ids are unique, neither `test` nor `drop` matches the habit-word
+list, the visible count is twelve or fewer, the first three are the easiest ones, the second
+door points only at fears that exist, and none of the phrases we never use appears anywhere.
 
 ## Done when
 
-`fears.json` is committed, the two tests pass, and Misha and the reviewer have each signed off
-in this file with a date.
+Richard has written every item fresh (step 1), and Misha and the CBT reviewer have each signed
+off in this file with a date. The file and its tests are already committed.
+
+- [ ] Richard: every item written fresh —
+- [ ] Misha: read for the audience, including the six surface-problem labels —
+- [ ] CBT reviewer: read once for lane and wording —

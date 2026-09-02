@@ -52,16 +52,19 @@ rules at once, and every one of them has failed in some other product.
 
 - **Branch:** `main`. Commit directly, push directly. There is no deploy yet (B3 builds it).
 - **Stack:** `web/` is plain HTML, CSS and JavaScript. No framework, no build step, no
-  `package.json` dependencies. Tests run with `node --test web/tests/`. Keep it readable by a
+  `package.json` dependencies. Tests run with `node --test` from the repo root (not
+  `node --test web/tests/`; Node 22 rejects a directory there). Keep it readable by a
   stranger in an evening; that is part of the trust story.
-- **Content lives in `web/content/fears.json`**, not in code. B1 owns it.
+- **Content lives in `web/content/fears.js`**, not in code. B1 owns it. It is a `.js` file and
+  not `.json` because a browser will not fetch JSON from a page opened off the filesystem, and
+  the founder opens `web/index.html` directly. It is still one plain array with no logic in it.
 - **The prototype in `prototype/` is frozen.** It is the reference, not the shipping code.
 - **Storage** is `localStorage` behind try/catch, versioned key, and the app must render
   correctly with nothing stored. Export and delete are always one tap away.
 
 ## When you finish a task
 
-- [ ] Tests pass (`node --test web/tests/`) and the loop has been walked on a phone
+- [ ] Tests pass (`node --test` from the repo root) and the loop has been walked on a phone
 - [ ] Confidence score 8/10 or higher, recorded in the task file
 - [ ] The task file in `docs/tasks/` updated: status, what was built, decisions, gaps
 - [ ] `docs/learnings.md` updated if anything took more than thirty minutes to understand

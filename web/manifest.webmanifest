@@ -1,0 +1,15 @@
+{
+  "name": "Betr",
+  "short_name": "Betr",
+  "description": "Betr helps you test unhelpful beliefs in everyday life. You pick a fear about how people will react, it gives you one small thing to try today, and you record what actually happened.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAFAF6",
+  "theme_color": "#1F3FE8",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

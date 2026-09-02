@@ -1,53 +1,94 @@
 # B2: Betr v1 — the web build
 
-**Status:** Not started (blocked on B0 Q1–Q3; can start on the prototype content while B1 runs)
-**Confidence:** —
-**Date opened:** 2026-09-01
-**Depends on:** B0. B1 content lands into it.
+**Status:** Built. Not yet walked on a phone (the one thing left)
+**Confidence:** 8/10
+**Date opened:** 2026-09-01 · **Built:** 2026-09-02
+**Depends on:** B0 (answered for Q2 and Q3). B1's real list lands into `web/content/fears.js`.
 **Where:** `web/` — plain HTML/CSS/JS, no framework, no build step, no dependencies.
 
-## What to build
+## What was built
 
-The 2026-09-01 prototype ([`../../prototype/index.html`](../../prototype/index.html), the "one big button" artifact), made real. Seven screens, four taps
-and one sentence per loop, exactly as scope §3. Start from the prototype file; it already does
-the loop in one file, with content inline. v1 separates content (`content/fears.json`) from
-the app and adds the things a prototype skips.
+The prototype made real, plus the two things B0 added. Ten screens: the seven from scope §3,
+the second door, the three one-box screens for a person's own entry, and *what this is*.
 
-### Must-haves, each traceable to the scope
+```
+web/index.html               the shell: CSP, manifest, icons, the script tags, nothing else
+web/app.css                  the whole stylesheet. System fonts only
+web/app.js                   every screen and the state machine
+web/lib/guards.js            the if/then reframe and the habit / body / harm refusals
+web/lib/rate.js              four words → 80 / 55 / 30 / 10
+web/lib/store.js             one versioned key, try/catch everywhere, export, delete
+web/lib/content.js           the rules the content has to pass, shared by the app and the tests
+web/content/fears.js         the twelve. B1 rewrites the words, not the shape
+web/content/whats-going-on.js the six surface problems behind the second door
+web/manifest.webmanifest     home-screen install
+web/icon-192.png             a struck line over a marked one. Drawn in the repo, 486 bytes
+web/icon-512.png             the same, larger
+tools/build-hash.js          the published build hash. B3 calls it in the deploy
+web/tests/*.test.js          47 tests, no dependencies
+docs/journeys.md             J1, the phone walk
+```
 
-| # | Item | Why |
+## The must-haves, and where each one went
+
+| # | Item | Where |
 | --- | --- | --- |
-| 1 | **Seven screens** as scope §3, copy as in the prototype | Validated by the founder over four iterations |
-| 2 | **Content from `fears.json`**; the app never hard-codes an item | B1 owns the content |
-| 3 | **Expectation locked** at "I'll do it today", shown read-only beside the outcome | Research §2.3 |
-| 4 | **Four-button re-rate** mapped to 80/55/30/10; stored as numbers | Research §2.3, scope §3 |
-| 5 | **No streaks, no red days.** "Didn't get to it" keeps the test for tomorrow | Product principle |
-| 6 | **Persistence** in `localStorage` with a versioned key; every read and write in try/catch; the app renders correctly with nothing stored | Artifact storage rules; Quirk's first principle |
-| 7 | **Install prompt** after the first locked test: "Add to Home Screen so this never gets wiped", and `navigator.storage.persist()` requested | iPhone Safari's 7-day eviction, research §9.1 |
-| 8 | **Export and delete** on the "what this is" screen; export is a readable JSON in a textarea with a copy button plus a Share-sheet path on mobile | Trust, scope §7 |
-| 9 | **The eight sentences and crisis lines** verbatim from scope/research §10 | Store rules and the legal line |
-| 10 | **Lineage line**: "Made by the people behind TrybeUP" | Scope §4 item 7 |
-| 11 | **Zero network after load.** No fonts, images, scripts or requests from anywhere. System font stack only. A `<meta http-equiv="Content-Security-Policy">` mirroring the B3 header as belt and braces | Scope §7 |
-| 12 | **Build hash** printed on "what this is": the SHA-256 of `index.html`, written by a tiny script in CI (B3) | Scope §7 |
-| 13 | **Custom entry** only if B0 Q3 says v1: last button, "Something else", with the if/then reframe and the habit-word refusal | Scope §5.4 |
-| 14 | **No `console.log`**, no analytics, no crash reporter, no third-party anything | CLAUDE.md and scope §7 |
+| 1 | Seven screens, copy as the prototype | `app.js`, plus four more screens B0 added |
+| 2 | Content from a content file | `content/fears.js`; the app hard-codes no item |
+| 3 | Expectation locked at "I'll do it today" | `plan()` sets `locked`; nothing can edit it after |
+| 4 | Four-button re-rate → 80/55/30/10 | `lib/rate.js`, stored as numbers, never shown |
+| 5 | No streaks, no red days | The only number is completed tests. "Didn't get to it" costs nothing |
+| 6 | Persistence, versioned, try/catch, blank-safe | `lib/store.js`; renders from nothing, from rubbish, and from a storage that throws |
+| 7 | Install prompt + `navigator.storage.persist()` | On the locked screen, once, dismissible. `askToPersist()` on lock |
+| 8 | Export and delete | *what this is*: readable JSON, copy, share sheet on mobile, two-step delete |
+| 9 | The sentences and crisis lines verbatim | `SENTENCES` in `app.js`, all nine from research §10, unedited |
+| 10 | Lineage line | Sentence 9, plus its own section |
+| 11 | Zero network after load, system fonts, CSP meta | No fonts, no CDN, no requests. `connect-src 'none'` |
+| 12 | Build hash on *what this is* | `tools/build-hash.js` stamps `<meta name="betr-build">`; shows "dev build — not published" until B3 |
+| 13 | Custom entry (B0 Q3 said v1) | Three screens, one box each, both guards |
+| 14 | No console.log, no analytics, nothing third-party | None anywhere in `web/` |
 
-### Must-nots
+## Decisions taken while building
 
-- Nothing from the TrybeUP codebase. No shared cookie or domain. No React, no Tailwind, no Vite,
-  no `package.json` dependencies: the folder must be readable as-is.
-- No 0–100 slider anywhere. No streak. No "you missed". No "irrational". No "improve your
-  mental health".
-- No mention of TrybeUP outside the "what this is" screen until B6 decides otherwise.
+1. **Content is `.js`, not `.json`.** A browser will not `fetch()` a JSON file, or load an ES
+   module, from a page opened off the filesystem — and opening `web/index.html` directly is
+   how the founder sees this before B3 exists. A classic script tag is the only thing that
+   works both there and on the dev host. The file is still one plain array with no logic.
+   Same reason the library files are classic scripts with a four-line export shim rather than
+   ES modules, which B4's plan had assumed.
+2. **`file:` is in the CSP source lists.** Without it the page opened off disk blocks its own
+   scripts. Over https a `file:` URL cannot be loaded at all, so it grants nothing on the real
+   site. `connect-src 'none'` is the line that matters and it has no exception.
+3. **A person's own entry is three screens of one box, never a form.** CLAUDE.md rule 10.
+4. **The habit guard also runs on the "leave out" line**, not just the test. Otherwise the
+   habit walks in through the back door: test "go to the party", leave out "don't drink".
+5. **The expectation for a custom entry is taken from the second half of their own sentence**,
+   so nobody types the same thing twice. Editable like any other.
+6. **An empty Betr stores nothing at all.** Saving a state with no results removes the key
+   instead of writing an empty record, so "delete everything" leaves the browser's storage
+   genuinely empty, and so does an app that has never been used.
+7. **The drink item's test was reworded** to "order something soft" so it contains no habit
+   word, which is what the guard and the content test check. The item itself stays (B0 Q2d).
 
-## Test plan
+## Tests
 
-- B4's unit tests for the guards, the mapping, persistence round-trip and export shape.
-- Manual: airplane mode on, full loop works; browser network tab shows one request (the page);
-  Safari "Add to Home Screen" then a full loop; delete everything; reload shows the start screen.
-- The USER_JOURNEYS.md entry from B4, walked on `betr.dev.trybeup.com`.
+47, `node --test` from the repo root, nothing to install. Six files: the five B4 asked for,
+plus `loop.test.js`, which walks every screen against about eighty lines of the smallest
+possible fake DOM. It is not a browser and cannot see anything a person would look at, but it
+caught a real bug: after "do it again tomorrow" on a custom test, *back* dropped you into the
+half-finished entry screens.
+
+## Gaps
+
+- **Not walked on a phone.** The one done-when condition still open. J1 in `docs/journeys.md`.
+- **The six surface-problem labels need Misha's sign-off** before this ships to anyone (B0 Q2a).
+- **The words are the prototype's, not B1's.** The shape is finished; the content is not.
+- **No CBT reviewer has read it** (B0 Q2e).
+- **The icon is a placeholder** drawn in the repo — legible, but B5 should commission a real one.
+- **`web/tests/` should not be deployed** by B3: the build hash deliberately excludes it, so a
+  stranger hashing the served folder would get a different number if the tests were served.
 
 ## Done when
 
-The seven screens work on an iPhone and an Android phone from the dev URL with wifi off after
-load, the tests pass, and the confidence score is 8 or above.
+Walked on an iPhone and an Android phone from the dev URL with wifi off after load. Everything
+else is done.

@@ -3,7 +3,23 @@
 **Status:** Not started
 **Confidence:** —
 **Date opened:** 2026-09-01
-**Depends on:** B2 (a folder to deploy). Production domain waits on B0 Q1.
+**Depends on:** B2 (**done 2026-09-02** — `web/` is ready to deploy). Production domain waits on B0 Q1.
+
+**Four things B2 changed about this plan. Read them before writing the workflow:**
+
+1. **The branch is `main`, not `first-100`.** That is this repo, not TrybeUP's.
+2. **The hash is not `web/hash.txt` and is not the SHA-256 of `index.html` alone.** It is
+   `node tools/build-hash.js --write`, which hashes every file the site serves in a fixed
+   order and stamps the result into `<meta name="betr-build">` in `index.html`. Run it after
+   the checkout and before the rsync. `web/tests/` is deliberately not part of the hash.
+3. **Do not deploy `web/tests/`.** Exclude it in the rsync. It is not in the hash, so serving
+   it would make the published number unverifiable by anyone who hashed the served folder.
+4. **The CSP header must not carry `'unsafe-inline'` for scripts.** B2 has no inline script at
+   all, so the header below is stricter than the one drafted here. The one it should serve,
+   matching the meta tag in `index.html` minus the `file:` entries, which exist only so the
+   page works when opened off disk:
+
+   `default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; manifest-src 'self'; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`
 
 ## What to build
 

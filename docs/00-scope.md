@@ -281,8 +281,8 @@ domain, no cookie, no dependency. The TrybeUP repo keeps a one-file pointer at
 | # | Question | Blocks |
 | --- | --- | --- |
 | Q1 | **The name, Betr.** Needs a trademark and domain search (betr.app, getbetr.com). And a Misha read on one thing: "bet" lands differently for someone whose habit is gambling, and the prototype's habit-word guard currently blocks the word "bet" in tests. Decide whether the pun is used in copy ("Bet it goes badly?") or only in the name. | Release |
-| Q2 | **The stock list**: route by fear or by surface problem; how many; order; which items are wrong for the audience; who writes and who reviews. | Build |
-| Q3 | **Custom entries** in v1 or v1.1, and where they sit. | Build |
+| Q2 | **The stock list.** *Answered 2026-09-02:* both doors (fears first, plus "start from what's going on"); twelve visible plus *Something else*; order as §5.1; "Not drinking at a social thing" stays, with its test reworded to contain no habit word. Who writes and reviews is unchanged and still open. The six surface-problem labels need Misha's sign-off before release. | Build — cleared |
+| Q3 | **Custom entries.** *Answered 2026-09-02:* in v1, as the last button, three screens of one box each, with both guards. | Build — cleared |
 | Q4 | **The TrybeUP bridge**: when it's mentioned, what moves across, whether the free tier is fixed first, one brand or two. | Release of the bridge only |
 | Q5 | **Trust**: hosting and logs, web and store or store only, data controller. | Release |
 | Q6 | **Own-cloud backup** offered or not. | v1.1 |

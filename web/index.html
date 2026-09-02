@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Betr</title>
+
+<!--
+  Betr v1. Plain HTML, CSS and JavaScript. No framework, no build step, no dependencies,
+  nothing minified. If you are reading this to check what it does: every file it loads is
+  listed below, they are all in this folder, and there is no other code anywhere.
+
+  The one thing worth checking yourself: turn on airplane mode and use it. It works, because
+  after this page has loaded nothing here ever makes a request.
+-->
+
+<!--
+  Belt and braces. B3 serves the same policy as a real header, which is the one that counts;
+  a meta tag can be stripped by anything that rewrites HTML, a header cannot.
+
+  connect-src 'none' is the important line: fetch, XHR, WebSocket, beacon and EventSource are
+  all blocked outright, so an accidental request fails loudly in the console instead of
+  quietly succeeding. font-src 'none' means no web font can ever be loaded, by anyone.
+
+  'file:' is here so the page still works when it is opened straight off disk, which is how
+  it gets looked at before it is deployed. Over https a file: URL cannot be loaded at all, so
+  it grants nothing on the real site.
+-->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'none';
+  script-src 'self' file:;
+  style-src 'self' file:;
+  img-src 'self' file: data:;
+  manifest-src 'self' file:;
+  font-src 'none';
+  connect-src 'none';
+  base-uri 'none';
+  form-action 'none';
+  frame-ancestors 'none'">
+
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Betr helps you test unhelpful beliefs in everyday life. You pick a fear about how people will react, it gives you one small thing to try today, and you record what actually happened.">
+<meta name="theme-color" content="#1F3FE8">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Betr">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<!-- B3's deploy rewrites this to the SHA-256 of the files it served. "dev" means unpublished. -->
+<meta name="betr-build" content="dev">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div id="app"></div>
+
+<noscript>
+  <div class="stage">
+    <h1>Betr needs JavaScript</h1>
+    <p class="sub">All of it runs on this device. None of it talks to a server.</p>
+  </div>
+</noscript>
+
+<!-- Order matters: content.js reads guards.js, and app.js reads all of them. -->
+<script src="lib/guards.js"></script>
+<script src="lib/rate.js"></script>
+<script src="lib/store.js"></script>
+<script src="lib/content.js"></script>
+<script src="content/fears.js"></script>
+<script src="content/whats-going-on.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
