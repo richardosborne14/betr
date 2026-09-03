@@ -30,21 +30,29 @@ and blocks release, not build.
 
 **B8, `docs/tasks/B8-the-menu-and-help.md`.** A permanent row of three at the bottom of every
 screen — *Your worries · New worry · Help* — and a Help screen that absorbs *What this is* and
-adds crisis lines first, then places to go that we don't run. The founder took all four design
-decisions on 2026-09-03; they are in the task file, along with the two CLAUDE.md rules this
-amends (rule 10's no-tab-bar, rule 9's TrybeUP gate) and the conditions on each.
+adds crisis lines first, then places to go that we don't run. The founder took five decisions on
+2026-09-03: the menu's shape, the second-person voice, TrybeUP's place in Help, that a locked-in
+test waits rather than being replaced, and — after asking what the research said — that there is
+**no cap** on how many worries are on the go. All five are in the task file, with the two
+CLAUDE.md rules this amends (rule 10's no-tab-bar, rule 9's TrybeUP gate) and their conditions.
 
 A session can start on it with this:
 
-> Read `CLAUDE.md`, then `docs/NEXT-SESSION.md`, then `docs/tasks/B8-the-menu-and-help.md`,
-> and build B8. The four design decisions are taken — don't reopen them. The parts that need
-> care, in order: the menu must not cover the big button on a short phone; a locked-in test
-> must survive *New worry* and reappear on the front screen and in Your worries, with no cap on
-> how many are open and no count or badge anywhere; Help must open
-> with wifi off with the crisis block above everything else; and every external link has to be
-> plain https with no parameters and no runtime checking of any kind. Don't write the link list
-> itself beyond a placeholder shape — Misha signs that off. Tests, then the phone walk (add J3),
-> then update the task file, `docs/learnings.md` and this file, then commit and push `main`.
+> Read `CLAUDE.md`, then `docs/NEXT-SESSION.md`, then `docs/tasks/B8-the-menu-and-help.md`, and
+> build B8. The five decisions in the task file are taken; don't reopen them for taste. If the
+> research contradicts one, bring it to the founder with the source — that is how the cap on
+> open tests came out.
+>
+> The parts that need care, in order: the menu must not cover the big button on a short phone;
+> a locked-in test must survive *New worry* and reappear on the front screen and in Your
+> worries, with **no cap** on how many are open and no count, badge or "overdue" anywhere; Help
+> must open with wifi off, with the crisis block above everything else; and every external link
+> must be plain https, no parameters, with nothing fetched at runtime to support it — no
+> favicons, no previews, no link checking.
+>
+> Don't write the link list itself beyond a placeholder shape: Misha signs that off, and the
+> "doing it with other people" group is the one that most needs him. Then tests, the phone walk
+> (add J3), update the task file, `docs/learnings.md` and this file, and commit and push `main`.
 
 **Two things that are not for a coding session and are still open:**
 
@@ -105,3 +113,10 @@ conditions. Q2, Q3, Q8. The nine sentences from research §10, verbatim, in `app
 persistence survived a reload). BETR became the wordmark; every tapped label was capitalised;
 two guard tests added, 63 in all. `docs/tasks/B8-the-menu-and-help.md` written and the two
 CLAUDE.md rules it amends updated in place.
+
+Then the founder asked what the research said about running more than one experiment at a time,
+and **the cap of three open tests came out of B8**. It was invented, not sourced, and the
+evidence points the other way: completed experiments moderated improvement (Mindable, §3.3), and
+self-guided dropout runs 5–45% with 38% never finishing session one in one trial (Cuijpers 2011,
+§3.1). The risk is stopping, not doing too much. What replaced the cap is a rule about display,
+marked INFERRED in the task file: no count, no badge, no "overdue", no tally on the front screen.
