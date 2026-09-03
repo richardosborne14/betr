@@ -188,6 +188,26 @@ textarea.short { min-height:96px; }
 .sheet textarea { font-size:12px; min-height:150px; margin-top:10px; }
 .sheet .build { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; color:var(--ink-3); word-break:break-all; }
 
+/*
+  B17. The crisis block sits at the top of Help and inside a self-harm refusal, so its parts
+  have to read correctly in both: on the card, and on the coloured warning panel where the
+  text is already the warning colour and a link must not fight it.
+*/
+.quiet { font-size:13px; color:var(--ink-3); line-height:1.45; }
+/* The way out of a wrong guess. On a crisis block it has to be findable, not tucked away. */
+.sheet #where { font-size:15px; color:var(--btn); }
+.warn p { margin:0 0 8px; }
+.warn p:last-child { margin-bottom:0; }
+.warn ul.places { list-style:none; padding:0; margin:0 0 8px; }
+.warn ul.places li { margin-bottom:6px; }
+.warn .plain { background:none; border:0; padding:0; font:inherit; font-size:15px; color:inherit; text-decoration:underline; text-underline-offset:3px; }
+
+/* Every country, so it is long on purpose. Two columns where there is room for two. */
+.sheet ul.countries { columns:2; column-gap:26px; margin-top:8px; }
+.sheet ul.countries li { margin-bottom:5px; break-inside:avoid; }
+.sheet ul.countries .plain { font-size:15px; color:var(--ink); text-decoration:none; text-align:left; }
+@media (max-width: 380px) { .sheet ul.countries { columns:1; } }
+
 @media (prefers-reduced-motion: no-preference) {
   .stage { animation: in .25s ease-out both; }
   @keyframes in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }

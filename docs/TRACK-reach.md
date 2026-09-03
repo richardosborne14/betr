@@ -27,7 +27,7 @@ needs paid native reviewers, and the recommendation is that it waits for real us
 ## The order, and the one hard block
 
 ```
-   B8 landed ✓  ──▶  B17  ──▶  B15  ──▶  B9  ──▶  B10  ──▶  B11  ──▶  stop, ask the founder
+   B8 ✓  ──▶  B17 ✓  ──▶  B15  ──▶  B9  ──▶  B10  ──▶  B11  ──▶  stop, ask the founder
 ```
 
 **B8 landed on 2026-09-03** (`7e8754e`), 78 tests green, so the block is clear. It is kept here
@@ -48,12 +48,16 @@ causing anyone a problem.*
 
 | Task | File | Status | Confidence |
 | --- | --- | --- | --- |
-| B17 | `tasks/B17-the-right-helpline.md` | **Not started — next** | — |
-| B15 | `tasks/B15-words-out-of-the-code.md` | Not started | — |
+| B17 | `tasks/B17-the-right-helpline.md` | **Built 2026-09-03** | 8/10 |
+| B15 | `tasks/B15-words-out-of-the-code.md` | **Not started — next** | — |
 | B9 | `tasks/B9-the-mergeable-record.md` | Not started | — |
-| B10 | `tasks/B10-the-lock.md` | Not started | — |
+| B10 | `tasks/B10-the-lock.md` | Not started — blocked, see below | — |
 | B11 | `tasks/B11-own-cloud-sync.md` | Not started | — |
-| B16 | `tasks/B16-shipping-a-language.md` | Not started — needs B17, then waits for real users | — |
+| B16 | `tasks/B16-shipping-a-language.md` | Not started — waits for real users | — |
+
+**B17 landed.** Thirteen countries have a helpline somebody read off the provider's own site
+that day; every other country says so and shows no number at all. 89 tests green. The country
+layer B16 was going to need is now there, in English, before a word was translated.
 
 ## Start the next session with this
 
@@ -74,18 +78,30 @@ causing anyone a problem.*
 
 ## Carried between sessions — *live, rewrite this*
 
-Things a session found that the next one needs. Empty until the first session runs.
+Things a session found that the next one needs.
 
 - **B15, unresolved and needs the founder:** i18next, or a ~60-line `web/lib/i18n.js`? The task
   file recommends the small module and gives the reasons. Don't decide it in a session.
+- **B15 inherits B17's shape.** `web/lib/where.js` is the pattern for anything a screen has to
+  work out about a person's phone: it is handed its data, reads the browser in one place, and
+  the app passes it in. Country and language stay two separate questions and must not be
+  joined; `helpline.test.js` already asserts that in both directions, and B15 must not weaken
+  it. `content/zones.js` is generated data, so never hand-edit it.
+- **B17's list is thirteen countries and wants to be thirty.** Adding one is four lines in
+  `content/helplines.js` plus reading the provider's page that day. France, India, Singapore
+  and Kenya failed to load on 2026-09-03 and are named in `notShipped` with the reason.
+  Nigeria, the Philippines, Malaysia, Poland, Sweden, Portugal, Japan and Mexico are next.
+- **B17, absolute, and it held:** no helpline number is ever written from a model's memory,
+  including a session's own. Read it off the provider's own site that day, or leave the country
+  out — the app handles the absence honestly and that is the safe answer, every time.
+- **Nobody owns re-checking the helplines.** `helplines.js` carries `owner: null` and the test
+  prints a line about it on every run until somebody's name is in there.
 - **B10, unresolved and blocks estimating anything after it:** passkeys inside the Capacitor
   webview fail WebAuthn's origin check from `capacitor://localhost`, and B5's rule is no plugins
   beyond Filesystem and Share. Settle this before B10 is scheduled, not during it.
 - **B11 depends on a fact nobody has checked:** Apple's current wording on whether data in a
   user's private CloudKit database counts as collected by the developer. If it has changed, B11
   changes with it.
-- **B17, absolute:** no helpline number is ever written from a model's memory, including a
-  session's own. Read it off the provider's site that day, or do not ship it.
 - **Accessibility, already right, do not undo it:** `app.css:191` wraps every animation in
   `@media (prefers-reduced-motion: no-preference)` — motion is opt-in. Keep that pattern.
 

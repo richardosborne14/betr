@@ -53,11 +53,15 @@
     body:
       'BETR doesn’t do tests about food, weight or what your body is doing. Those need a ' +
       'person, not this.',
+    /*
+      No phone number lives in this file any more (B17). It used to end with 988 and 116 123,
+      which meant somebody in Lagos who had just typed the worst sentence of their week was
+      handed two numbers that do not ring there. The app puts the crisis block underneath
+      this, with the line for the country they are actually in, and where nobody has checked
+      one it says so instead of guessing. See crisisBlock() in app.js.
+    */
     harm:
-      'BETR can’t help with that one, and it would be wrong to pretend otherwise. If you are ' +
-      'in danger or in crisis, call your local emergency number. In the US, call or text 988. ' +
-      'In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, findahelpline.com ' +
-      'lists free helplines in over 175 countries.'
+      'BETR can’t help with that one, and it would be wrong to pretend otherwise.'
   };
 
   /* Word-boundary match, so "Betr" never trips "bet" and "fastest" never trips "fasting". */

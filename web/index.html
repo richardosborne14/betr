@@ -65,14 +65,22 @@
   </div>
 </noscript>
 
-<!-- Order matters: content.js reads guards.js, and app.js reads all of them. -->
+<!--
+  Order matters: content.js reads guards.js, and app.js reads all of them. The two files
+  under content/ that B17 added are plain data — zones.js says which country a time zone is
+  in, helplines.js says which number that country's own provider publishes — and lib/where.js
+  is handed both by app.js. None of them fetches anything; that is the whole point.
+-->
 <script src="lib/guards.js"></script>
 <script src="lib/rate.js"></script>
 <script src="lib/store.js"></script>
 <script src="lib/content.js"></script>
+<script src="lib/where.js"></script>
 <script src="content/worries.js"></script>
 <script src="content/whats-going-on.js"></script>
 <script src="content/places.js"></script>
+<script src="content/zones.js"></script>
+<script src="content/helplines.js"></script>
 <script src="app.js"></script>
 
 </body>

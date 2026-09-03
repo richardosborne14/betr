@@ -186,10 +186,18 @@ const ALLOWED = [
 ];
 
 /*
-  The three tappable crisis numbers. These are the only links allowed outside Help, because
-  the refusal a person meets after typing a test about hurting themselves carries them too.
+  The tappable crisis numbers. These are the only links allowed outside Help, because the
+  refusal a person meets after typing a test about hurting themselves carries them too.
+
+  Since B17 the numbers are not written here: they are every line in content/helplines.js,
+  which is the file that carries a source URL and the date a person read it there. Adding a
+  country still shows up in a diff, and it shows up in the file where it can be checked.
 */
-const DIALLABLE = ['tel:988', 'tel:116123', 'https://findahelpline.com'];
+const HELPLINES = require('../content/helplines.js');
+const DIALLABLE = ['https://findahelpline.com'].concat(
+  Object.keys(HELPLINES.countries).reduce((all, code) =>
+    all.concat(HELPLINES.countries[code].lines.map((l) => l.tel)), [])
+);
 
 test('every link is plain https or tel, has nothing attached, and is on the allow-list', () => {
   const a = boot();
@@ -217,28 +225,36 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
   }
 });
 
-test('the crisis numbers dial, and the sentence around them is still word for word', () => {
+/*
+  Sentence 7 is frozen (research §10) and names the US and UK lines inside itself. B17 took
+  it off the top of Help and put the live crisis block there instead — but the sentence is
+  still in the list of nine, still word for word, still with its numbers tappable. The tags
+  are stripped back off and compared character for character.
+*/
+test('sentence 7 is still word for word, and its numbers still dial', () => {
   const a = boot();
   const h = a.tap('#m-help').html();
-  const block = h.slice(h.indexOf('</h3>', h.indexOf('If you are in danger or in crisis')));
-  const words = block.slice(0, block.indexOf('</p>')).replace(/<[^>]+>/g, '');
-  assert.strictEqual(words,
+  const list = h.slice(h.indexOf('<ol>'), h.indexOf('</ol>'));
+  const items = [...list.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
+  assert.strictEqual(items.length, 9, 'there are not nine sentences');
+  assert.strictEqual(items[6].replace(/<[^>]+>/g, ''),
     'If you are in danger or in crisis, call your local emergency number. In the US, call ' +
     'or text 988. In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, ' +
     'findahelpline.com lists free helplines in over 175 countries.',
-    'sentence 7 was reworded to make the numbers tappable');
-  assert.ok(block.indexOf('href="tel:988"') !== -1, '988 does not dial');
-  assert.ok(block.indexOf('href="tel:116123"') !== -1, '116 123 does not dial');
-  assert.ok(block.indexOf('href="https://findahelpline.com"') !== -1, 'findahelpline.com is not a link');
+    'sentence 7 was reworded');
+  assert.ok(items[6].indexOf('href="tel:988"') !== -1, '988 does not dial');
+  assert.ok(items[6].indexOf('href="tel:116123"') !== -1, '116 123 does not dial');
+  assert.ok(items[6].indexOf('href="https://findahelpline.com"') !== -1, 'findahelpline.com is not a link');
 });
 
-test('a refusal about self-harm carries numbers that dial, not numbers to copy out', () => {
-  const a = boot();
+test('a refusal about self-harm carries a number that dials, for the right country', () => {
+  const a = boot(null, { timeZone: 'Europe/London' });
   a.tap('#go').tap('#own');
   a.type('#t', 'If I say no, people will think I am selfish').tap('#next');
   a.type('#t', 'Cut myself where nobody will see it').tap('#next');
-  a.shows('href="tel:988"').shows('href="tel:116123"');
+  a.shows('href="tel:116123"').shows('Samaritans');
   a.shows('call your local emergency number');
+  a.hides('href="tel:988"');
 });
 
 test('ours is on the Help list, never first, and says who made it and what it costs', () => {

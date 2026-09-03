@@ -27,6 +27,7 @@
   var WORRIES = Betr.worries;
   var DOORS = Betr.doors;
   var PLACES = Betr.places;
+  var W = Betr.where.create(Betr.zones, Betr.helplines);
 
   /*
     The purpose statement. Rule: identical in the app, the manifest, the store listing and
@@ -55,7 +56,11 @@
     'Everything you write stays on this device. There is no account, no server, and nothing is sent to us or anyone else. If you delete the app without exporting, your entries are gone.',
     'This was made by the people behind TrybeUP, not by a clinician or a health service. Nothing in it is medical advice, and using it does not create a therapist–client relationship.'
   ];
-  var CRISIS = SENTENCES[6];
+  /*
+    Sentence 7 used to be pulled out here and shown on its own at the top of Help. B17
+    replaced that with the live crisis block, which names one country's line instead of two.
+    The sentence itself is untouched and still appears, word for word, in the list of nine.
+  */
 
   var app = document.getElementById('app');
   var store = storeLib.create(safeStorage());
@@ -67,6 +72,7 @@
   var installEvent = null; /* Android's beforeinstallprompt, if the browser offers one */
   var storageOk = true;
   var deleteArmed = false;
+  var whereBack = 'help';  /* the screen the country list was opened from */
 
   /* localStorage itself can throw on access in a locked-down browser, not just on write. */
   function safeStorage() {
@@ -88,16 +94,21 @@
   var IN_LOOP = ['plan', 'locked', 'happened', 'sure'];
 
   /*
-    The crisis numbers, tappable. Founder's ask, 2026-09-03: somebody reading that line is the
-    least able person in the app to copy a number out by hand.
+    The three numbers written into sentence 7 itself, made tappable. Founder's ask,
+    2026-09-03: somebody reading that line is the least able person in the app to copy a
+    number out by hand.
 
-    The words do not change. This wraps three of them and nothing else, so sentence 7 still
-    reads exactly as it is written in research §10 — `menu.test.js` strips the tags back off
-    and compares, so it stays that way.
+    Sentence 7 is frozen (research §10) and names the US and UK lines, so these three stay
+    exactly where they are. This wraps them and nothing else, so the sentence still reads
+    word for word as it is written — `menu.test.js` strips the tags back off and compares.
+
+    The *live* crisis block, the one at the top of Help and under a self-harm refusal, is
+    not this. It is crisisBlock() below, and it shows the line for the country the person is
+    actually in. This one is the small print; that one is the part somebody needs.
 
     A tel: link is inert until it is tapped, and then it is the phone's dialler, not us. It
-    makes no request, sends nothing, and cannot tell us it was tapped. The airplane-mode proof
-    is untouched, and 988 and 116 123 both work with no signal on any phone that can call at
+    makes no request, sends nothing, and cannot tell us it was tapped. The airplane-mode
+    proof is untouched, and a short code works with no signal on any phone that can call at
     all. findahelpline.com is the one that needs the internet, which is why it is last.
 
     In the native wrap (B5) these must hand off to the system dialler and the system browser,
@@ -116,6 +127,107 @@
       html = html.replace(n.text, '<a href="' + n.href + '">' + n.text + '</a>');
     });
     return html;
+  }
+
+  /*
+    ------------------------------------------------------------------ the crisis block
+
+    The four layers, always in this order (B17):
+
+      1. the line that is true everywhere and needs no country, no data and no signal
+      2. the helpline for the country the person is in — or, where we have not checked one,
+         the plain admission that we have not. Never a neighbour's number. Never 988 because
+         it happens to be the one we have. A wrong number is worse than no number, because a
+         person tries it, and they may only be going to try once
+      3. one tap to say where they actually are, because the guess can be wrong
+      4. findahelpline.com last, labelled honestly as the part that needs the internet
+
+    Where the country comes from is in web/lib/where.js: a choice they made, else the time
+    zone, else a language tag's region, else nothing. No request, no permission, no sensor.
+  */
+  function whereEnv() {
+    var env = { timeZone: null, languages: null };
+    try { env.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { /* no Intl */ }
+    try { env.languages = navigator.languages || (navigator.language ? [navigator.language] : null); } catch (e) { /* no navigator */ }
+    return env;
+  }
+
+  function myCountry() { return W.resolve(S.country, whereEnv()); }
+
+  /* "Call 116 123 — Samaritans. Free, 24 hours." Anything the provider did not say is left out. */
+  function lineWords(l) {
+    var after = [];
+    if (l.free) after.push('Free');
+    if (l.allHours) after.push('24 hours');
+    if (l.note) after.push(l.note);
+    return (l.text ? 'Call or text ' : 'Call ') +
+      '<a href="' + esc(l.tel) + '">' + esc(l.number) + '</a> — ' + esc(l.name) +
+      (after.length ? '. ' + esc(after.join(', ')) : '') + '.';
+  }
+
+  function crisisBlock() {
+    var code = myCountry();
+    var lines = W.linesFor(code);
+    var html = '<p>If you are in danger right now, call your local emergency number.</p>';
+
+    if (lines.length === 1) {
+      html += '<p>In ' + esc(W.inWords(code)) + ': ' + lineWords(lines[0]) + '</p>';
+    } else if (lines.length) {
+      html += '<p>In ' + esc(W.inWords(code)) + ':</p><ul class="places">' +
+        lines.map(function (l) { return '<li>' + lineWords(l) + '</li>'; }).join('') + '</ul>';
+    } else if (code) {
+      html += '<p>Your country here is <b>' + esc(W.nameFor(code)) + '</b>. Nobody has ' +
+        'checked a helpline number for it, so we are not going to show you one from ' +
+        'somewhere else and hope.</p>';
+    } else {
+      html += '<p>We can’t tell which country you’re in, and we would rather show you no ' +
+        'number than the wrong one.</p>';
+    }
+
+    html += '<p><button class="plain" id="where">' +
+      (code ? 'Not where you are?' : 'Say where you are') + '</button></p>' +
+      '<p><a href="https://findahelpline.com">findahelpline.com</a> lists free helplines in ' +
+      'over 175 countries, and works out your country itself. It is the one thing on this ' +
+      'screen that needs the internet.</p>';
+    return html;
+  }
+
+  /* Both Help and a refusal can carry the block, so the one link in it is wired centrally. */
+  function wireCrisis() {
+    on('#where', function () { whereBack = S.stage; go('where'); });
+  }
+
+  /*
+    The country list. A plain alphabetical list of every country, and one way back out of it.
+    It is not a settings screen and must not grow into one (CLAUDE.md rule 10): nothing else
+    in BETR varies by country, and nothing else ever will. Not the worries, not the tests,
+    not a word of the wording. Only which helpline number is on the crisis block.
+  */
+  function whereScreen() {
+    var code = myCountry();
+    var chosen = W.known(S.country) ? S.country : null;
+
+    paint( backButton() +
+      '<div class="stage"><div class="sheet">' +
+        '<h3>Where are you?</h3>' +
+        '<p>Only so the right helpline number is on the screen when it matters. It stays on ' +
+        'this phone, like everything else, and there is nowhere for it to go.</p>' +
+        (chosen
+          ? '<p><button class="plain" id="unset">Go back to guessing from my time zone</button></p>'
+          : '<p>Right now we are guessing from your phone’s time zone' +
+            (code ? ', which says <b>' + esc(W.nameFor(code)) + '</b>' : ', and it did not say') +
+            '.</p>') +
+        '<ul class="places countries">' + W.list().map(function (c) {
+          return '<li><button class="plain" data-cc="' + esc(c.code) + '">' + esc(c.name) +
+            (c.code === chosen ? ' ✓' : '') + '</button></li>';
+        }).join('') + '</ul>' +
+      '</div></div>');
+
+    wireBack(whereBack);
+    qa('[data-cc]').forEach(function (b) {
+      b.onclick = function () { S.country = b.getAttribute('data-cc'); save(); go(whereBack); };
+    });
+    on('#unset', function () { S.country = null; save(); render(); window.scrollTo(0, 0); });
   }
 
   function go(stage) {
@@ -277,12 +389,13 @@
       start: start, doors: doors, pick: pick,
       'own-belief': ownBelief, 'own-test': ownTest, 'own-drop': ownDrop,
       plan: plan, locked: locked, happened: happened, sure: sure,
-      result: result, mine: mine, help: help,
+      result: result, mine: mine, help: help, where: whereScreen,
       about: help   /* what a phone that saw the old "what this is" screen has stored */
     };
     /* Any half-finished loop that lost its item drops back to the start rather than crashing. */
     if (IN_LOOP.indexOf(S.stage) !== -1 && !S.cur) S.stage = 'start';
     (map[S.stage] || start)();
+    wireCrisis();
     wireMenu();
   }
 
@@ -377,12 +490,16 @@
   /* -------- a person's own entry: three screens, one box each. Never a form. -------- */
 
   /*
-    A refusal is the one place in the loop where the crisis lines can appear, and it is the
-    place they matter most: somebody has just typed a test about hurting themselves. The
-    numbers in it are tappable for the same reason they are on Help.
+    A refusal is the one place in the loop where the crisis block can appear, and it is the
+    place it matters most: somebody has just typed a test about hurting themselves. It is the
+    same block as the top of Help, so it names the country's own line — the person who has
+    just typed that sentence is the last person who should be handed a number for somewhere
+    they do not live (B17).
   */
   function warnBlock() {
-    return refusal ? '<div class="warn">' + callable(refusal) + '</div>' : '';
+    if (!refusal) return '';
+    return '<div class="warn">' + esc(refusal.reason) +
+      (refusal.kind === 'harm' ? crisisBlock() : '') + '</div>';
   }
 
   function ownScreen(opts) {
@@ -411,7 +528,7 @@
       next: function (v) {
         draft.belief = v;
         var check = guards.checkBelief(v);
-        if (!check.ok) { refusal = check.reason; render(); return; }
+        if (!check.ok) { refusal = check; render(); return; }
         go('own-test');
       }
     });
@@ -427,7 +544,7 @@
       next: function (v) {
         draft.test = v;
         var check = guards.checkTest(v);
-        if (!check.ok) { refusal = check.reason; render(); return; }
+        if (!check.ok) { refusal = check; render(); return; }
         go('own-drop');
       }
     });
@@ -443,7 +560,7 @@
       next: function (v) {
         draft.drop = v;
         var check = guards.checkTest(v);
-        if (!check.ok) { refusal = check.reason; render(); return; }
+        if (!check.ok) { refusal = check; render(); return; }
         S.cur = {
           source: 'own', id: null, label: 'Your own',
           belief: draft.belief.trim(),
@@ -774,7 +891,11 @@
       '<div class="stage"><div class="sheet">' +
 
         '<h3>If you are in danger or in crisis</h3>' +
-        '<p>' + callable(CRISIS) + '</p>' +
+        crisisBlock() +
+        '<p class="quiet">How we work out the country: your phone’s time zone, read on this ' +
+        'device when this screen is drawn. It is not stored, not sent, and it is the only ' +
+        'thing here that has anything to do with where you are. BETR never asks your phone ' +
+        'for your location and never will.</p>' +
 
         /*
           The primer. Founder, 2026-09-03: there should be one clear thing to read about CBT,

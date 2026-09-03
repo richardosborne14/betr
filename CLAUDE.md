@@ -70,11 +70,19 @@ rules at once, and every one of them has failed in some other product.
   stranger in an evening; that is part of the trust story.
 - **Content lives in `web/content/`**, not in code: `worries.js` (B1 owns it), `whats-going-on.js`
   and, from B8, `places.js` — every link on the Help screen, and the only place a link may be
-  added. They are `.js` files and not `.json` because a browser will not fetch JSON from a page
-  opened off the filesystem, and the founder opens `web/index.html` directly. Still plain data,
-  no logic. A link is plain `https`, with no query string, no campaign parameter and no
-  shortener, ever; nothing is fetched at runtime to support one — no favicon, no preview, no
-  link check. `web/tests/menu.test.js` holds the allow-list, so a new link shows up in a diff.
+  added. From B17 there are two more: `zones.js`, which is **generated from the IANA time zone
+  database and never hand-edited**, and `helplines.js`. They are `.js` files and not `.json`
+  because a browser will not fetch JSON from a page opened off the filesystem, and the founder
+  opens `web/index.html` directly. Still plain data, no logic. A link is plain `https`, with no
+  query string, no campaign parameter and no shortener, ever; nothing is fetched at runtime to
+  support one — no favicon, no preview, no link check. `web/tests/menu.test.js` holds the
+  allow-list, so a new link shows up in a diff.
+- **A crisis phone number is never written from memory — a person's or a model's.** Every line
+  in `helplines.js` was read off the provider's own website on the day recorded next to it, and
+  carries that page's URL. A country with no checked line shows **no number at all** and says
+  so; never a neighbour's, never 988 because it is the one we have. A wrong number is worse
+  than no number, because a person tries it and may only try once. If you are about to type a
+  number you have not read on the provider's site today, stop and leave the country out.
 - **The prototype in `prototype/` is frozen.** It is the reference, not the shipping code.
 - **Storage** is `localStorage` behind try/catch, versioned key, and the app must render
   correctly with nothing stored. Export and delete are always one tap away.

@@ -38,9 +38,15 @@
 
     It needs no version bump: a state saved before B8 simply has no `open`, and normalise
     gives it an empty one.
+
+    `country` is the one B17 added, and it is the only thing BETR has ever stored about where
+    a person is. Two letters, chosen by them off a list, used for one thing: which helpline
+    number is on the crisis block. Null means we are guessing from the phone's time zone,
+    which is read fresh every time it is needed and never written down. It is not sent
+    anywhere — there is nowhere to send it — and it changes nothing else in the app.
   */
   function blank() {
-    return { v: VERSION, stage: 'start', cur: null, open: [], done: [], seenInstall: false };
+    return { v: VERSION, stage: 'start', cur: null, country: null, open: [], done: [], seenInstall: false };
   }
 
   /* Anything we cannot vouch for is replaced, never repaired halfway. */
@@ -59,6 +65,7 @@
         return d && typeof d === 'object' && typeof d.o === 'string';
       }).map(withLevel);
     }
+    if (typeof raw.country === 'string' && /^[A-Z]{2}$/.test(raw.country)) s.country = raw.country;
     s.seenInstall = raw.seenInstall === true;
     return s;
   }
@@ -77,7 +84,7 @@
   function isEmpty(state) {
     if (!state) return true;
     return (!state.done || !state.done.length) && (!state.open || !state.open.length) &&
-      !state.cur && state.seenInstall !== true;
+      !state.cur && state.seenInstall !== true && !state.country;
   }
 
   function create(storage) {
@@ -137,6 +144,8 @@
       version: VERSION,
       exported: new Date().toISOString(),
       note: 'Everything BETR has ever stored on this device. There is no copy anywhere else.',
+      /* Null unless they picked one themselves. A guess from the time zone is never stored. */
+      country: s.country || null,
       waiting: (s.open || []).map(function (t) {
         return {
           lockedIn: t.locked || null,

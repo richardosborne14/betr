@@ -106,8 +106,12 @@ menu covering the big button is the failure this journey is looking for.
 | 9 | Close the app, wait, open it again | Both are still waiting. Nothing expired, nothing marked late |
 | 10 | Tap **Done it** on one | Straight to *What happened?*. Finish it, and it records one result |
 | 11 | Tap **Help** | The crisis lines, above everything. You should not have to scroll to reach them |
-| 11a | Tap **988**, then **116 123** | Your phone's dialler opens with the number already in it. Cancel it. Nothing in BETR changed while you were gone |
-| 11b | Type a test about hurting yourself, on **Something else** | The refusal, with the same numbers, tappable there too |
+| 11a | Read the first block | Your local emergency number, then **the helpline for the country you are in**, named. On a UK phone: *In the United Kingdom: Call 116 123 - Samaritans. Free, 24 hours.* |
+| 11b | Tap the number | Your phone's dialler opens with it already in. Cancel it. Nothing in BETR changed while you were gone |
+| 11c | Tap **Not where you are?** | Every country, alphabetical. Pick **Kenya** |
+| 11d | Look at the crisis block again | It says nobody has checked a number for Kenya, and **shows no phone number at all**. If a number appears, stop: that is the bug B17 exists to prevent |
+| 11e | Tap **Not where you are?**, then **Go back to guessing from my time zone** | Your own country's line is back |
+| 11f | Type a test about hurting yourself, on **Something else** | The refusal, with the same country's number under it, tappable there too |
 | 12 | Read *What CBT is, and which bit of it this is* | Three short paragraphs and two links, above all the small print |
 | 13 | Scroll to *Other places* | Three groups. TrybeUP is in the third, second in it, in the same plain type as the rest, saying we made it and what it costs |
 | 14 | **With wifi off**, open Help again | The whole screen reads correctly. Nothing missing, nothing loading |

@@ -106,3 +106,26 @@ understand or when a decision was reversed.
   people at their worst moment and are the least likely to be in a test. When adding a rule
   about wording, walk it into a refusal.
 
+- **"Is this state empty enough to delete the key?" is a question that has to be revisited every
+  time a field is added.** `store.isEmpty()` decides whether to write the record or remove it,
+  so that a BETR nobody has used leaves nothing behind. B17 added a country, and because
+  `isEmpty` had not heard of it, somebody who picked their country and did nothing else had the
+  choice silently thrown away on the next save. Nothing crashed and no test failed until one was
+  written that reloaded. Any new field on the state has to be added in three places, not one:
+  `blank()`, `normalise()` and `isEmpty()`.
+- **Generate data from the source on the machine rather than typing it.** The time zone to
+  country map came out of `/usr/share/zoneinfo` — `zone.tab` plus byte-comparing the compiled
+  zone files to catch the legacy aliases a browser can still return. 550 zones, forty lines of
+  generator, and no possibility of a remembered mapping being wrong. The same instinct is what
+  `helplines.js` bans: a number that was not read off the provider's page that day is a number
+  somebody made up, however confident they were.
+- **The absence of an answer is a feature and needs its own test.** `EST`, `CET` and `UTC` are
+  real time zone strings a browser can hand you, and none of them names a country. The
+  temptation is to map them to the US. The test that matters most in B17 is the one asserting a
+  country with no checked line contains no phone number at all, because the well-meaning change
+  that breaks it — "surely showing 988 is better than nothing" — will look like an improvement
+  to whoever makes it.
+- **A fake DOM that only indexes `[data-x]` as a list makes tests count.** The harness parsed
+  data attributes into one array per attribute name, so picking one country out of 247 meant
+  knowing its index. Two lines to also index each element under `[data-cc="AU"]` turned a
+  brittle test into a readable one. Worth doing the moment a list gets longer than a handful.

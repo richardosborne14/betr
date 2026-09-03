@@ -18,8 +18,9 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const WEB = path.join(__dirname, '..');
-const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js',
-               'content/worries.js', 'content/whats-going-on.js', 'content/places.js', 'app.js'];
+const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
+               'content/worries.js', 'content/whats-going-on.js', 'content/places.js',
+               'content/zones.js', 'content/helplines.js', 'app.js'];
 
 
 function makeEl() {
@@ -34,7 +35,12 @@ function makeEl() {
   };
 }
 
-/* The app only ever reaches for elements by id or by a data- attribute, so that is all we index. */
+/*
+  The app only ever reaches for elements by id or by a data- attribute, so that is all we
+  index. A data- attribute goes in twice: once in the list the app walks, `[data-id]`, and
+  once under its own value, `[data-cc="AU"]`, which is how a test picks one country out of
+  two hundred and forty-seven without counting down the list.
+*/
 function parse(html) {
   const kids = {};
   for (const m of html.matchAll(/id="([^"]+)"/g)) kids['#' + m[1]] = makeEl();
@@ -43,6 +49,7 @@ function parse(html) {
     el._attrs = { ['data-' + m[1]]: m[2] };
     const key = '[data-' + m[1] + ']';
     (kids[key] = kids[key] || []).push(el);
+    kids['[data-' + m[1] + '="' + m[2] + '"]'] = el;
   }
   return kids;
 }
@@ -61,7 +68,18 @@ function find(el, sel) { return findAll(el, sel)[0] || null; }
 
 /* ------------------------------------------------------- a running copy of the app */
 
-function boot(seed) {
+/*
+  boot(seed, env) — `env` is the phone this copy of the app thinks it is running on:
+
+    { timeZone: 'Africa/Nairobi', languages: ['en-KE'] }
+
+  Both are optional. Left out, the time zone is London and there is no language region, so a
+  test that says nothing about where it is gets the UK. A test that cares says so (B17).
+*/
+function boot(seed, env) {
+  env = env || {};
+  const timeZone = 'timeZone' in env ? env.timeZone : 'Europe/London';
+  const languages = 'languages' in env ? env.languages : ['en'];
   const root = makeEl();
   const mem = seed ? Object.assign({}, seed) : {};
   const box = {
@@ -70,7 +88,16 @@ function boot(seed) {
       setItem: (k, v) => { mem[k] = String(v); },
       removeItem: (k) => { delete mem[k]; }
     },
-    navigator: { storage: { persist() {} } },
+    navigator: { storage: { persist() {} }, languages },
+    /*
+      Real Intl.DisplayNames, so the country list carries the names a browser would print,
+      and a stubbed time zone, because that is the signal B17 turns on. A test can pass
+      timeZone: null to be a phone whose browser will not say.
+    */
+    Intl: {
+      DateTimeFormat: () => ({ resolvedOptions: () => ({ timeZone }) }),
+      DisplayNames: Intl.DisplayNames
+    },
     document: {
       getElementById: () => root,
       querySelector: (s) => (s.indexOf('betr-build') !== -1 ? { getAttribute: () => 'dev' } : null)

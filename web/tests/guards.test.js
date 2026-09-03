@@ -45,12 +45,22 @@ test('food, weight and body sensations are refused, with their own reason', () =
   assert.strictEqual(r.kind, 'body');
 });
 
-test('anything about safety is refused and answered with the crisis lines', () => {
+/*
+  B17 moved the numbers out of here. A refusal has to be answerable with the line for the
+  country the person is actually in, and this file has no idea where anybody is — so it says
+  why the test is refused and nothing else. The crisis block is put underneath it by
+  crisisBlock() in app.js, and menu.test.js checks that it arrives.
+
+  This test is the guard against them creeping back: a number in this file is a number shown
+  to everybody on earth, which is the bug B17 existed to fix.
+*/
+test('a refusal about safety says why, and carries no phone number of its own', () => {
   const r = guards.checkTest('See how long I can go without wanting to hurt myself');
   assert.strictEqual(r.kind, 'harm');
-  assert.match(r.reason, /116 123/);
-  assert.match(r.reason, /988/);
-  assert.match(r.reason, /findahelpline\.com/);
+  assert.match(r.reason, /can’t help with that one/);
+  for (const reason of Object.values(guards.REASON)) {
+    assert.ok(!/[0-9]{3}/.test(reason), 'a phone number is back in guards.js: ' + reason);
+  }
 });
 
 test('the name of the app does not trip the word "bet"', () => {
