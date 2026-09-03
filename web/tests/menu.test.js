@@ -14,10 +14,16 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { boot } = require('./harness.js');
+const worries = require('../content/worries.js');
+const allDoors = require('../content/whats-going-on.js');
+const content = require('../lib/content.js');
+/* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
+const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
 
 /* Lock a stock worry in and walk away from it, leaving it waiting. */
 function lockOne(a, item) {
-  if (a.html().indexOf('id="go"') !== -1) a.tap('#go');   /* already on the pick list, or not */
+  if (a.html().indexOf('id="go"') !== -1) a.tap('#go');   /* already past the front screen, or not */
+  if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', 0);
   a.tap('[data-id]', item).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   return a;
@@ -28,7 +34,8 @@ function lockOne(a, item) {
 test('the menu is on every screen, and it is exactly three plain words', () => {
   const a = boot();
   const stops = [
-    () => a.tap('#go'),                       /* pick */
+    () => a.tap('#go'),                       /* what's going on */
+    () => a.tap('[data-door]', 0),            /* pick */
     () => a.tap('[data-id]', 0),              /* plan */
     () => a.tap('#lock'),                     /* locked */
     () => a.tap('#nothanks').tap('#done'),    /* happened */
@@ -36,7 +43,7 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
     () => a.tap('[data-key]', 1),             /* result */
     () => a.tap('#m-mine'),                   /* your worries */
     () => a.tap('#m-help'),                   /* help */
-    () => a.tap('#back').tap('#doors')        /* what's going on */
+    () => a.tap('#back').tap('#m-new')        /* back to what's going on */
   ];
   const check = () => {
     const items = a.html().match(/<nav class="menu"[^>]*>(.*?)<\/nav>/);
@@ -51,19 +58,19 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
 test('every door on the menu works from every screen', () => {
   const from = [
     (a) => a,                                                     /* the start screen */
-    (a) => a.tap('#go'),                                          /* pick */
-    (a) => a.tap('#go').tap('[data-id]', 0),                      /* plan */
+    (a) => a.tap('#go'),                                          /* what's going on */
+    (a) => a.tap('#go').tap('[data-door]', 0),                    /* pick */
+    (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0),  /* plan */
     (a) => lockOne(a, 0),                                         /* locked */
     (a) => lockOne(a, 0).tap('#done'),                            /* happened */
-    (a) => a.tap('#doors'),                                       /* what's going on */
     (a) => a.tap('#go').tap('#own')                               /* a person's own entry */
   ];
   for (const at of from) {
-    at(boot()).tap('#m-new').shows('Which one?');
+    at(boot()).tap('#m-new').shows('What’s going on?');
     at(boot()).tap('#m-help').shows('If you are in danger or in crisis');
     /* nothing recorded and nothing waiting lands on the pick list, never on a dead end */
     const mine = at(boot()).tap('#m-mine').html();
-    assert.ok(mine.indexOf('Your worries') !== -1 || mine.indexOf('Which one?') !== -1, mine.slice(0, 120));
+    assert.ok(mine.indexOf('Your worries') !== -1 || mine.indexOf('What’s going on?') !== -1, mine.slice(0, 120));
   }
 });
 
@@ -72,10 +79,10 @@ test('every door on the menu works from every screen', () => {
 test('starting a new worry keeps the test you locked in, and it is waiting afterwards', () => {
   const a = boot();
   lockOne(a, 0).shows('Go and do it.');
-  a.tap('#m-new').shows('Which one?');
+  a.tap('#m-new').shows('What’s going on?');
 
   /* on the front screen, as one line with a way back in — not a list and not a number */
-  a.tap('#back').shows('On the go').shows('to one small request today');
+  a.tap('#back').shows('On the go').shows(firstBehind().test);
   a.hides('1 waiting').hides('overdue');
 
   /* and on Your worries, on its own card, with both ways out of it */
@@ -109,7 +116,7 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
   a.tap('#back').shows('On the go');
 
   const again = boot(a.mem);            /* the same phone, opened again tomorrow */
-  again.shows('On the go').shows('to one small request today');
+  again.shows('On the go').shows(firstBehind().test);
   again.tap('#m-mine').tap('[data-notyet]', 0).shows('still here for tomorrow');
   again.shows('On the go');
   again.hides('missed').hides('streak').hides('failed');
@@ -117,7 +124,7 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
 
 test('an unfinished test that was never locked in is simply let go', () => {
   const a = boot();
-  a.tap('#go').tap('[data-id]', 0).shows('Here’s your test');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).shows('Here’s your test');
   a.tap('#m-new').tap('#back');
   a.hides('On the go');
 });
@@ -217,6 +224,7 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
   const b = boot();
   let rest = b.html();
   rest += b.tap('#go').html();
+  rest += b.tap('[data-door]', 0).html();
   rest += b.tap('[data-id]', 0).html();
   rest += b.tap('#lock').html();
   rest += b.tap('#nothanks').tap('#done').html();
@@ -272,7 +280,7 @@ test('ours is on the Help list, never first, and says who made it and what it co
   /* and it is not on the front screen, in the loop, in the result, or on the menu */
   const b = boot();
   let rest = b.html();
-  rest += b.tap('#go').tap('[data-id]', 0).html();
+  rest += b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).html();
   rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
   rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');

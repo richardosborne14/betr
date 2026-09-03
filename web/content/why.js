@@ -2,7 +2,11 @@
   "Why this one sticks" — one short explanation per worry, shown after a person has a result.
 
   B18, 2026-09-03. The app tells somebody what to do and what to leave out, and never says
-  why leaving it out is the whole point. This is that, twelve times, in two short paragraphs.
+  why leaving it out is the whole point. This is that, in two short paragraphs each.
+
+  B19, 2026-09-03: twenty-one of them. Ten were written when the list grew, and `cut` was
+  deleted with its worry — an explanation may never outlive the worry it explains, or somebody
+  reads about something that is no longer on the list. validateWhy() fails the build on it.
 
   TWO FIELDS AND NO THIRD, and the missing third is the point. An entry is keyed by a worry
   id and by nothing else: everybody who taps that worry reads exactly the same words, forever.
@@ -31,7 +35,7 @@
   reuse. Nothing here is adapted from any of it.
 
   The closing line is not in this file: it is one frozen sentence in strings-en.js
-  (`why.foot`), identical under all twelve, so it is written once and translated once.
+  (`why.foot`), identical under all of them, so it is written once and translated once.
 
   It is a .js file for the reason worries.js is: a browser will not fetch JSON off the
   filesystem. Still plain data, no logic.
@@ -139,14 +143,94 @@ var BETR_WHY = {
       'and count what is actually said. Whatever the number is, it is a real one.'
   },
 
-  cut: {
-    what: 'Two different dreads sit inside this one: being lectured, and being pitied. The ' +
-      'second is usually the heavier, and it is the one people plan hardest to avoid.',
-    why: 'Explaining why, or turning it into a joke, is that plan. Both hand the other ' +
-      'person a script, so what comes back is a response to the script. One sentence, then ' +
-      'change the subject, leaves them to react as themselves.'
-  }
+  feed: {
+    what: 'Keeping up starts as interest and turns into insurance. Once it is insurance, an hour ' +
+      'without looking is not an hour off. It is a gap, and something could be happening in it ' +
+      'that you would be the last to hear about.',
+    why: 'Every look closes the gap, and closing it is why the question never gets asked. What you ' +
+      'learn is that you are up to date right now, which says nothing about what a day away ' +
+      'actually costs. A day away, and a list at the end of it, is the first real number there ' +
+      'has been.'
+  },
 
+  enough: {
+    what: 'The standard in this one is rarely about the work. It is about what handing something in ' +
+      'seems to say about how much you care — so the last hour of polish is doing a job that has ' +
+      'nothing to do with the thing being polished.',
+    why: 'And the polish always takes the credit. Nothing goes wrong, so the extra hour looks ' +
+      'necessary, and there is no version of the job where you find out what good enough lands ' +
+      'like on its own. Stopping once, and writing down the time you stopped, is the only way to ' +
+      'see the difference between the two.'
+  },
+
+  praise: {
+    what: 'Saying something good about somebody puts you slightly in the open. The worry is not ' +
+      'usually the compliment. It is the silence after it, and what that silence would seem to ' +
+      'say about why you said it.',
+    why: 'Which is what the follow-up is for. One about yourself, or a wait for one back, turns a ' +
+      'gift into a trade — and a trade cannot land badly, because nothing has been given. Say it, ' +
+      'stop, and let the quiet be whatever it is.'
+  },
+
+  care: {
+    what: 'This one is rarely about the other person at all. It is about being the one who said it: ' +
+      'the one who cares more, out loud, with nothing coming the other way.',
+    why: 'The joke is the way out, and it is a good one — turn it into a laugh and nothing was ' +
+      'risked, so nothing can be lost. It also means what comes back is a response to the joke. ' +
+      'Say the plain version, then stop talking, and whatever happens is a response to you.'
+  },
+
+  low: {
+    what: 'There is a difference between having a hard week and being low, and most people can say ' +
+      'the first and not the second. Underneath the second is usually a rule about weight — that ' +
+      'a mood is something other people have to carry, and that handing it over costs them.',
+    why: '“It’s nothing really” is how that weight gets lifted back off them before anybody has had ' +
+      'to hold it. It is quick, it is kind, and it means the sentence is never actually tested. ' +
+      'One sentence, no taking it back, and then let them answer.'
+  },
+
+  right: {
+    what: 'Being right and being any good get welded together somewhere, and after that a conceded ' +
+      'point is not a point. It is evidence, going into somebody’s file on whether you know what ' +
+      'you are doing.',
+    why: 'The “but” is what stops the filing, and it works every time, so the weld holds. Add a ' +
+      'counterpoint and the exchange ends level, which teaches nothing about what conceding ' +
+      'actually costs. Say the plain agreement, stop there, and find out.'
+  },
+
+  hear: {
+    what: 'Interrupting gets read as rudeness. Underneath it is more often a worry about being passed ' +
+      'over — that a conversation is a queue, and a turn not taken quickly is a turn given away.',
+    why: 'Getting in early settles that, and settling it is the problem: whether waiting costs you ' +
+      'the turn is not something you can know, because you have never waited. Let one person ' +
+      'finish, ask one question first, and the answer arrives on its own.'
+  },
+
+  joke: {
+    what: 'A joke is a real skill, and it also makes a very good door. Get one in early enough and ' +
+      'nobody gets close — which is a fine trade, right up until it stops being a choice and ' +
+      'becomes the only way you know how to be in a room.',
+    why: 'It works, and that is the trouble. The laugh comes back immediately, the plain version ' +
+      'never gets tried, and what people are actually there for stays a guess. One conversation, ' +
+      'said straight, is the only way to find out.'
+  },
+
+  sorry: {
+    what: 'The dread here is about a record rather than a moment. An apology feels like a signed ' +
+      'admission, filed somewhere, ready to be produced the next time there is an argument.',
+    why: 'So the explanation arrives alongside it — the day you were having, the reason it happened. ' +
+      'That softens the admission into something conditional, and what comes back is a response ' +
+      'to the conditions. Say the plain one, one sentence, and let it stand.'
+  },
+
+  early: {
+    what: 'Leaving early feels like a verdict on the evening, and by extension on everybody still in ' +
+      'it. The worry is not about being tired. It is about what going home seems to say about how ' +
+      'much you wanted to be there.',
+    why: 'A reason at the door, or a promise about next time, is what keeps that from being tested. ' +
+      'Both work, both end the conversation, and both mean you go home knowing nothing. Decide ' +
+      'the time first, say one sentence, and go.'
+  }
 };
 
 if (typeof module === 'object' && module.exports) module.exports = BETR_WHY;

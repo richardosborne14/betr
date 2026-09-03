@@ -27,19 +27,19 @@ const en = require('../content/strings-en.js');
 /* Every screen there is, and the taps that get to it from a fresh start. */
 const SCREENS = {
   start: (a) => a,
-  doors: (a) => a.tap('#doors'),
-  pick: (a) => a.tap('#go'),
+  doors: (a) => a.tap('#go'),
+  pick: (a) => a.tap('#go').tap('[data-door]', 0),
   'own-belief': (a) => a.tap('#go').tap('#own'),
-  plan: (a) => a.tap('#go').tap('[data-id]', 0),
-  locked: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock'),
-  happened: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done'),
-  sure: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
+  plan: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0),
+  locked: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock'),
+  happened: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done'),
+  sure: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
     .type('#o', 'He said fair enough.').tap('#next'),
-  result: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
+  result: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
     .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1),
-  mine: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
+  mine: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
     .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1).tap('#m-mine'),
-  why: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
+  why: (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
     .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1).tap('[data-why]'),
   help: (a) => a.tap('#m-help'),
   where: (a) => a.tap('#m-help').tap('#where')
@@ -127,7 +127,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
     if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
     a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   };
-  a.tap('#go').tap('[data-id]', 0);
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0);
   loop('He said fair enough.', 1);          /* 10 -> 9 */
   a.tap('#again');
   loop('Nobody minded.', 2);                 /* 9 -> 6 */
@@ -154,7 +154,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
 
 test('a bad day is said as a rise, not as a failure', () => {
   const a = boot();
-  a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He went quiet.').tap('#next').tap('[data-key]', 2);       /* 10 -> 7 */
   a.tap('#again').tap('#lock').tap('#done').type('#o', 'He brought it up again.').tap('#next');
   a.tap('[data-key]', 4);                                                 /* 7 -> 8 */
@@ -188,6 +188,7 @@ test('the one accessible name in the app says BETR, and the arrows say nothing',
   const a = boot();
   let h = a.html();
   h += a.tap('#go').html();
+  h += a.tap('[data-door]', 0).html();
   h += a.tap('[data-id]', 0).html();
   h += a.tap('#m-help').html();
 
@@ -204,7 +205,7 @@ test('every box a person types into has a name', () => {
   const a = boot();
   let h = SCREENS['own-belief'](boot()).html();
   h += SCREENS.happened(boot()).html();
-  h += a.tap('#go').tap('[data-id]', 0).tap('#xedit').html();
+  h += a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#xedit').html();
   h += boot().tap('#m-help').tap('#export').html();
 
   const boxes = [...h.matchAll(/<textarea([^>]*)>/g)].map((m) => m[1]);

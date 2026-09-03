@@ -94,8 +94,13 @@ var BETR_STRINGS_EN = {
     start: {
       title: 'Sure it’ll go badly?',
       sub: 'Pick a worry. Get one tiny thing to do today. Come back and say what happened.',
-      go: 'Pick a worry',
-      doors: 'Not sure which? Start from what’s going on',
+      /*
+        B19. It used to say "Pick a worry" and lead straight to the list. It leads to the
+        doors now, and "Not sure which? Start from what's going on" is gone with the change:
+        it was the second way in, and the second way in turned out to be the only one two
+        test users could read.
+      */
+      go: 'Find your worry',
       promise: 'No account. No AI. Nothing leaves your phone.',
       noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +
         'does that. The loop still works; nothing will be here tomorrow.'
@@ -112,6 +117,8 @@ var BETR_STRINGS_EN = {
 
     doors: {
       title: 'What’s going on?',
+      /* Nobody is in all six, and the way out of the screen is the way out of a door. */
+      own: 'None of these — I’ll write my own',
       foot: 'None of these is a diagnosis, and BETR never decides which one you are.'
     },
 
@@ -121,7 +128,6 @@ var BETR_STRINGS_EN = {
       title: 'Which one?',
       sub: 'Tap the one that’s closest.',
       own: 'Something else',
-      showAll: 'Show all {n}',
       notHere: 'Not here on purpose: anything that tests the drink, the screen or the habit ' +
         'itself. Those aren’t tests. We test the worry underneath.'
     },

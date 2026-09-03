@@ -69,8 +69,26 @@ test('no explanation predicts the outcome of a test', () => {
   }
 });
 
-test('no more than twelve are visible without a "more" screen', () => {
-  assert.ok(worries.length <= content.MAX_VISIBLE, worries.length + ' items');
+/*
+  B19. The cap moved off the list and onto the door, because the door is the way in now. What
+  has to fit on a phone is the four to six worries behind whichever one was tapped — and each
+  of those now carries its own sentence, so six is already a screenful. The whole list is only
+  ever seen by somebody who reached the pick screen without going through a door.
+*/
+test('no door opens onto more than a phone screen of worries', () => {
+  for (const d of doors.items) {
+    assert.ok(d.worries.length <= content.MAX_PER_DOOR,
+      d.id + ' opens onto ' + d.worries.length + ', and ' + content.MAX_PER_DOOR + ' is the cap');
+  }
+});
+
+/*
+  A worry behind no door is a worry almost nobody reaches. This is not a crash; it is an item
+  quietly falling out of the product the next time a door is reworded, which is exactly the
+  kind of thing that goes unnoticed until somebody asks where it went.
+*/
+test('every worry is behind at least one door, so something leads to all of them', () => {
+  assert.deepStrictEqual(content.validateDoors(doors, worries), []);
 });
 
 test('no test and no drop line touches the habit itself', () => {
@@ -80,8 +98,37 @@ test('no test and no drop line touches the habit itself', () => {
   }
 });
 
-test('the easiest and most universal three come first (scope §5.3c)', () => {
-  assert.deepStrictEqual(worries.slice(0, 3).map((f) => f.id), ['no', 'help', 'reply']);
+/*
+  Scope §5.3c, as B19 leaves it. The rule has not changed and the shape it applies to has: it
+  used to be "the easiest three come first" on one flat list, and a flat list is no longer what
+  anybody sees. So it is now per door — the first worry behind every one of them has to be
+  startable on the day it is tapped.
+
+  Why it matters more than it sounds: most worries here wait on the world. Somebody has to ask
+  you for something, a mistake has to exist, an evening has to be happening. If the first item
+  behind a door is one of those, a person's first loop ends in "Didn't get to it" and they
+  learn nothing on the one day they were certain to open this.
+
+  The list below is held by hand, and deliberately: it is a judgement about each test, not
+  something derivable from the file, so a reordering that breaks the rule shows up in a diff
+  rather than passing quietly. A worry belongs here only if it can be started today by
+  somebody who has nobody free and nothing in the diary.
+*/
+const STARTS_TODAY = ['sit', 'phone', 'feed', 'check', 'enough', 'rest', 'reply', 'praise', 'care'];
+
+test('the first worry behind every door can be started on the day it is tapped', () => {
+  for (const d of doors.items) {
+    assert.ok(STARTS_TODAY.indexOf(d.worries[0]) !== -1,
+      d.id + ' opens on "' + d.worries[0] + '", which waits on somebody else or on the day ' +
+      '(scope §5.3c). Put one of these first: ' + STARTS_TODAY.join(', '));
+  }
+});
+
+/* Every id on that list has to still be a worry, or the rule above is checking nothing. */
+test('the starts-today list has not outlived the worries in it', () => {
+  for (const id of STARTS_TODAY) {
+    assert.ok(content.byId(worries, id), '"' + id + '" is on the starts-today list and is not a worry');
+  }
 });
 
 test('ids are stable: stored results point at them and they are never reused', () => {

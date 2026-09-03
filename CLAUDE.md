@@ -54,12 +54,18 @@ rules at once, and every one of them has failed in some other product.
    never a button, never styled apart; it says we made it and what it costs, right there in the
    entry; no deep link, no campaign parameter, no referral code, ever. Not on the front screen,
    not in the loop, not in the result, not on the menu.
-10. **The interface is one big button.** Four taps and one sentence per loop. Anything that
-    looks like a form, a wizard, a slider or a chat has already been rejected by the founder.
-    Do not bring it back. **Amended 2026-09-03 (B8):** there is now a permanent row of three
-    at the bottom of every screen — *Your worries · New worry · Help*. The founder overruled
-    their own no-tab-bar rule knowingly. It stays three plain words: no icons, no selected
-    state, no badges, no counts, no fourth item. It is three doors, not a place you live in.
+10. **The interface is one big button.** One sentence per loop. Anything that looks like a
+    form, a wizard, a slider or a chat has already been rejected by the founder. Do not bring
+    it back. **Amended 2026-09-03 (B8):** there is now a permanent row of three at the bottom
+    of every screen — *Your worries · New worry · Help*. The founder overruled their own
+    no-tab-bar rule knowingly. It stays three plain words: no icons, no selected state, no
+    badges, no counts, no fourth item. It is three doors, not a place you live in.
+    **Amended again 2026-09-03 (B19), and this one cost a tap:** the big button leads to
+    *What's going on?*, and the worries sit behind a door. The founder accepted the extra
+    screen after watching two people fail to choose from the flat list. With it: **a worry's
+    `belief` — its "If I ___, then ___" — is drawn under its label wherever a person picks
+    one.** That sentence is the only part of a worry that explains itself, and it used to be
+    invisible until the re-rate. A pick list without it is the bug, not the tidy version.
 
 ## How the repo works
 
@@ -68,7 +74,10 @@ rules at once, and every one of them has failed in some other product.
   `package.json` dependencies. Tests run with `node --test` from the repo root (not
   `node --test web/tests/`; Node 22 rejects a directory there). Keep it readable by a
   stranger in an evening; that is part of the trust story.
-- **Content lives in `web/content/`**, not in code: `worries.js` (B1 owns it), `whats-going-on.js`
+- **Content lives in `web/content/`**, not in code: `worries.js` (B1 and B19 own it, and
+  since B19 a label must be comprehensible on its own — no pronoun with nothing to point at,
+  no open channel, and never the `drop` smuggled onto the button), `whats-going-on.js`
+  (B19: the way in, four to six worries a door, and every worry behind at least one)
   and, from B8, `places.js` — every link on the Help screen, and the only place a link may be
   added. From B17 there are two more: `zones.js`, which is **generated from the IANA time zone
   database and never hand-edited**, and `helplines.js`. They are `.js` files and not `.json`

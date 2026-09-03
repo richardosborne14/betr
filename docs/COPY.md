@@ -4,7 +4,7 @@
 rewritten from the source every time that command runs, so anything typed here is lost.
 Mark it up, send it back, and the change gets made in the file named next to each section.
 
-There are 12 worries, 6 doors and 12 explanations in this build.
+There are 21 worries, 6 doors and 21 explanations in this build.
 
 | Part | What it is | Which file |
 | --- | --- | --- |
@@ -110,11 +110,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`start.go`**
 
-> Pick a worry
-
-**`start.doors`**
-
-> Not sure which? Start from what’s going on
+> Find your worry
 
 **`start.promise`**
 
@@ -142,11 +138,15 @@ keep it, and put it wherever the sentence needs it.
 
 ### Screen 2 — "What’s going on?"
 
-*The wording around the list. The list itself is further down, under THE DOORS.*
+*Since B19 this is the way in, not a side door. The wording around the list; the list itself is further down, under THE DOORS.*
 
 **`doors.title`**
 
 > What’s going on?
+
+**`doors.own`**
+
+> None of these — I’ll write my own
 
 **`doors.foot`**
 
@@ -167,10 +167,6 @@ keep it, and put it wherever the sentence needs it.
 **`pick.own`**
 
 > Something else
-
-**`pick.showAll`**
-
-> Show all {n}
 
 **`pick.notHere`**
 
@@ -786,115 +782,79 @@ points at it. **belief** is always "If I ___, then ___"; a worry that is not con
 not testable. No **test** and no **drop** may touch the habit itself; the build fails if one
 does.
 
-### 1. Saying no without an excuse
-
-| | |
-| --- | --- |
-| **id** | `no` |
-| **lane** | assertiveness |
-| **label** — the button | Saying no without an excuse |
-| **belief** — the worry itself | If I say no and don’t explain myself, then people will think I’m selfish. |
-| **expect** — what you are braced for | There’ll be a pause, and they’ll be a bit off with me afterwards. |
-| **test** — the one thing, today | Say “No, I can’t this time” to one small request today. |
-| **drop** — what you leave out | No reason, no apology, no softening it. |
-
-### 2. Asking for help
-
-| | |
-| --- | --- |
-| **id** | `help` |
-| **lane** | assertiveness |
-| **label** — the button | Asking for help |
-| **belief** — the worry itself | If I ask someone for help, then I become a burden to them. |
-| **expect** — what you are braced for | They’ll do it, and quietly file me under people who can’t cope. |
-| **test** — the one thing, today | Ask one person for one small, specific favour today. |
-| **drop** — what you leave out | No “sorry to bother you”, and no offering something back. |
-
-### 3. Not replying straight away
-
-| | |
-| --- | --- |
-| **id** | `reply` |
-| **lane** | social |
-| **label** — the button | Not replying straight away |
-| **belief** — the worry itself | If I leave a message a few hours, then they’ll think I don’t care. |
-| **expect** — what you are braced for | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
-| **test** — the one thing, today | Pick one message today and leave it a few hours before you answer. Notice whether they chase you. |
-| **drop** — what you leave out | Don’t open with “sorry, only just seen this”, and don’t explain the delay. |
-
-### 4. Sending it without checking it again
-
-| | |
-| --- | --- |
-| **id** | `check` |
-| **lane** | perfectionism |
-| **label** — the button | Sending it without checking it again |
-| **belief** — the worry itself | If I send something without going over it again, then there’ll be a mistake in it and I’ll look sloppy. |
-| **expect** — what you are braced for | Someone will spot something, and they’ll think I rushed it. |
-| **test** — the one thing, today | Write one email or message today, read it through once, and send it. |
-| **drop** — what you leave out | No second read-through, and don’t go back to edit it after it’s gone. |
-
-### 5. Sitting with a bad feeling
+### 1. Sitting still when I feel restless
 
 | | |
 | --- | --- |
 | **id** | `sit` |
 | **lane** | urge-timing |
-| **label** — the button | Sitting with a bad feeling |
+| **label** — the button | Sitting still when I feel restless |
 | **belief** — the worry itself | If I feel restless or bored, then I can’t just sit there with it. |
 | **expect** — what you are braced for | It’ll build and build until I have to do something about it. |
 | **test** — the one thing, today | Set a ten-minute timer and do nothing at all. Notice when it peaks, and whether it drops. |
 | **drop** — what you leave out | Don’t reach for your phone, and don’t get up to do a task. |
 
-### 6. An evening off my phone
+### 2. Going an evening without my phone
 
 | | |
 | --- | --- |
 | **id** | `phone` |
 | **lane** | urge-timing |
-| **label** — the button | An evening off my phone |
+| **label** — the button | Going an evening without my phone |
 | **belief** — the worry itself | If I don’t check tonight, then I’ll miss something that matters. |
 | **expect** — what you are braced for | Something urgent will come in and I’ll have let someone down. |
 | **test** — the one thing, today | Put it in a drawer from eight o’clock. In the morning, write down what you actually missed. |
 | **drop** — what you leave out | No checking it “just once” before bed. |
 
-### 7. Admitting I’m struggling
+### 3. A day without checking social media
 
 | | |
 | --- | --- |
-| **id** | `strug` |
+| **id** | `feed` |
+| **lane** | urge-timing |
+| **label** — the button | A day without checking social media |
+| **belief** — the worry itself | If I stop keeping up with everyone, then I’ll fall out of things without noticing. |
+| **expect** — what you are braced for | I’ll be the only one who hasn’t heard something, and it’ll be obvious. |
+| **test** — the one thing, today | Go one day without opening the apps you scroll. At the end, write down what you actually missed. |
+| **drop** — what you leave out | No opening one “just to see if anyone’s messaged me”. |
+
+### 4. Not answering a message straight away
+
+| | |
+| --- | --- |
+| **id** | `reply` |
 | **lane** | social |
-| **label** — the button | Admitting I’m struggling |
-| **belief** — the worry itself | If I let someone see I’m struggling, then they’ll think less of me. |
-| **expect** — what you are braced for | They’ll go quiet, change the subject, and keep a bit of distance after. |
-| **test** — the one thing, today | Today, tell one person you trust one small, true thing you’re finding hard. |
-| **drop** — what you leave out | Don’t finish it with “but I’m fine”. |
+| **label** — the button | Not answering a message straight away |
+| **belief** — the worry itself | If I leave a message a few hours, then they’ll think I don’t care. |
+| **expect** — what you are braced for | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
+| **test** — the one thing, today | Pick one message today and leave it a few hours before you answer. Notice whether they chase you. |
+| **drop** — what you leave out | Don’t open with “sorry, only just seen this”, and don’t explain the delay. |
 
-### 8. Owning a mistake at work
+### 5. Sending something without checking it again
 
 | | |
 | --- | --- |
-| **id** | `mist` |
+| **id** | `check` |
 | **lane** | perfectionism |
-| **label** — the button | Owning a mistake at work |
-| **belief** — the worry itself | If I admit I got something wrong, then it’ll be held against me later. |
-| **expect** — what you are braced for | They’ll remember this one, and trust me with less next time. |
-| **test** — the one thing, today | Tell someone about one small mistake of yours today, before they find it. |
-| **drop** — what you leave out | Don’t bury it in excuses, and don’t wait until you’ve already fixed it. |
+| **label** — the button | Sending something without checking it again |
+| **belief** — the worry itself | If I send something without going over it again, then there’ll be a mistake in it and I’ll look sloppy. |
+| **expect** — what you are braced for | Someone will spot something, and they’ll think I rushed it. |
+| **test** — the one thing, today | Write one email or message today, read it through once, and send it. |
+| **drop** — what you leave out | No second read-through, and don’t go back to edit it after it’s gone. |
 
-### 9. Saying I’m annoyed, calmly
+### 6. Handing something over before it’s perfect
 
 | | |
 | --- | --- |
-| **id** | `angry` |
-| **lane** | assertiveness |
-| **label** — the button | Saying I’m annoyed, calmly |
-| **belief** — the worry itself | If I tell someone I’m annoyed, even calmly, then it’ll turn into an argument. |
-| **expect** — what you are braced for | They’ll get defensive, and it’ll turn into a much bigger thing. |
-| **test** — the one thing, today | Say one thing that annoyed you, in one sentence, calmly. Then stop talking. |
-| **drop** — what you leave out | Don’t raise your voice, and don’t bring up a second thing. |
+| **id** | `enough` |
+| **lane** | perfectionism |
+| **label** — the button | Handing something over before it’s perfect |
+| **belief** — the worry itself | If I hand something in that’s only good enough, then they’ll think I don’t care about it. |
+| **expect** — what you are braced for | They’ll spot the rough edges and quietly decide I’ve dropped off. |
+| **test** — the one thing, today | Finish one thing today at good enough and hand it over. Write down the time you stopped. |
+| **drop** — what you leave out | No last look through, and no message saying what you’d have done with more time. |
 
-### 10. Resting when there’s stuff to do
+### 7. Resting when there’s stuff to do
 
 | | |
 | --- | --- |
@@ -906,29 +866,173 @@ does.
 | **test** — the one thing, today | Plan two hours of rest today and actually take them. Notice how you feel after. |
 | **drop** — what you leave out | No “I’ll just quickly do this one thing” first. |
 
-### 11. Being the only one not joining in
+### 8. Paying someone a compliment
+
+| | |
+| --- | --- |
+| **id** | `praise` |
+| **lane** | social |
+| **label** — the button | Paying someone a compliment |
+| **belief** — the worry itself | If I say something good about someone and nothing comes back, then it’ll look like I was fishing for one. |
+| **expect** — what you are braced for | There’ll be an odd beat, and I’ll wish I’d kept it to myself. |
+| **test** — the one thing, today | Say one specific good thing about somebody today, to their face. |
+| **drop** — what you leave out | Don’t follow it with one about yourself, and don’t wait around for one back. |
+
+### 9. Telling someone they matter to me
+
+| | |
+| --- | --- |
+| **id** | `care` |
+| **lane** | social |
+| **label** — the button | Telling someone they matter to me |
+| **belief** — the worry itself | If I tell someone what they mean to me, then it’ll be awkward and they won’t say it back. |
+| **expect** — what you are braced for | They’ll laugh it off, and I’ll wish I hadn’t said it. |
+| **test** — the one thing, today | Tell one person, today, one specific thing you’re glad about them. |
+| **drop** — what you leave out | Don’t turn it into a joke, and don’t move straight on to something else. |
+
+### 10. Saying no without giving a reason
+
+| | |
+| --- | --- |
+| **id** | `no` |
+| **lane** | assertiveness |
+| **label** — the button | Saying no without giving a reason |
+| **belief** — the worry itself | If I say no and don’t explain myself, then people will think I’m selfish. |
+| **expect** — what you are braced for | There’ll be a pause, and they’ll be a bit off with me afterwards. |
+| **test** — the one thing, today | Say “No, I can’t this time” to one small request today. |
+| **drop** — what you leave out | No reason, no apology, no softening it. |
+
+### 11. Asking someone for help
+
+| | |
+| --- | --- |
+| **id** | `help` |
+| **lane** | assertiveness |
+| **label** — the button | Asking someone for help |
+| **belief** — the worry itself | If I ask someone for help, then I become a burden to them. |
+| **expect** — what you are braced for | They’ll do it, and quietly file me under people who can’t cope. |
+| **test** — the one thing, today | Ask one person for one small, specific favour today. |
+| **drop** — what you leave out | No “sorry to bother you”, and no offering something back. |
+
+### 12. Telling someone I’ve been feeling low
+
+| | |
+| --- | --- |
+| **id** | `low` |
+| **lane** | social |
+| **label** — the button | Telling someone I’ve been feeling low |
+| **belief** — the worry itself | If I tell someone I’ve been feeling low, then they won’t know what to do with it and they’ll keep their distance. |
+| **expect** — what you are braced for | They’ll say something kind, change the subject, and be careful around me after. |
+| **test** — the one thing, today | Tell one person you trust, today, in one sentence, that you’ve been feeling low lately. |
+| **drop** — what you leave out | Don’t add that it’s nothing really, and don’t ask whether that was too much. |
+
+### 13. Telling someone I’m struggling
+
+| | |
+| --- | --- |
+| **id** | `strug` |
+| **lane** | social |
+| **label** — the button | Telling someone I’m struggling |
+| **belief** — the worry itself | If I let someone see I’m struggling, then they’ll think less of me. |
+| **expect** — what you are braced for | They’ll go quiet, change the subject, and keep a bit of distance after. |
+| **test** — the one thing, today | Today, tell one person you trust one small, true thing you’re finding hard. |
+| **drop** — what you leave out | Don’t finish it with “but I’m fine”. |
+
+### 14. Owning up to a mistake before anyone finds it
+
+| | |
+| --- | --- |
+| **id** | `mist` |
+| **lane** | perfectionism |
+| **label** — the button | Owning up to a mistake before anyone finds it |
+| **belief** — the worry itself | If I admit I got something wrong, then it’ll be held against me later. |
+| **expect** — what you are braced for | They’ll remember this one, and trust me with less next time. |
+| **test** — the one thing, today | Tell someone about one small mistake of yours today, before they find it. |
+| **drop** — what you leave out | Don’t bury it in excuses, and don’t wait until you’ve already fixed it. |
+
+### 15. Telling someone they’ve annoyed me
+
+| | |
+| --- | --- |
+| **id** | `angry` |
+| **lane** | assertiveness |
+| **label** — the button | Telling someone they’ve annoyed me |
+| **belief** — the worry itself | If I tell someone they’ve annoyed me, then it’ll turn into an argument. |
+| **expect** — what you are braced for | They’ll get defensive, and it’ll turn into a much bigger thing. |
+| **test** — the one thing, today | Say one thing that annoyed you, in one sentence, calmly. Then stop talking. |
+| **drop** — what you leave out | Don’t raise your voice, and don’t bring up a second thing. |
+
+### 16. Letting someone else be right
+
+| | |
+| --- | --- |
+| **id** | `right` |
+| **lane** | social |
+| **label** — the button | Letting someone else be right |
+| **belief** — the worry itself | If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about. |
+| **expect** — what you are braced for | They’ll take it as a win, and I’ll go down in their estimation. |
+| **test** — the one thing, today | Once today, say “you’re right, I hadn’t thought of that” — and then stop. |
+| **drop** — what you leave out | No “but”, and don’t add a point of your own to level it back up. |
+
+### 17. Letting someone finish without interrupting
+
+| | |
+| --- | --- |
+| **id** | `hear` |
+| **lane** | social |
+| **label** — the button | Letting someone finish without interrupting |
+| **belief** — the worry itself | If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying. |
+| **expect** — what you are braced for | The conversation will move on without me and I’ll have missed my go. |
+| **test** — the one thing, today | In one conversation today, let them finish, then ask one question before you say your bit. |
+| **drop** — what you leave out | Don’t plan your answer while they’re still talking, and don’t finish their sentence. |
+
+### 18. Getting through a conversation without a joke
+
+| | |
+| --- | --- |
+| **id** | `joke` |
+| **lane** | social |
+| **label** — the button | Getting through a conversation without a joke |
+| **belief** — the worry itself | If I don’t have something funny ready, then I’ll be dull and people will drift off. |
+| **expect** — what you are braced for | The conversation will go flat, and they’ll find someone else to talk to. |
+| **test** — the one thing, today | In one conversation today, say the plain thing where you’d normally reach for the joke. |
+| **drop** — what you leave out | No laughing it off when it gets serious, and no making anyone else the punchline. |
+
+### 19. Apologising without explaining myself
+
+| | |
+| --- | --- |
+| **id** | `sorry` |
+| **lane** | social |
+| **label** — the button | Apologising without explaining myself |
+| **belief** — the worry itself | If I properly apologise for how I acted, then they’ll hold it over me from now on. |
+| **expect** — what you are braced for | They’ll accept it, and then bring it up the next time we disagree. |
+| **test** — the one thing, today | Say sorry to one person today, for one specific thing you did. One sentence. |
+| **drop** — what you leave out | Don’t explain what kind of day you were having, and don’t ask whether you’re all right now. |
+
+### 20. Turning up and not joining in
 
 | | |
 | --- | --- |
 | **id** | `drink` |
 | **lane** | social |
-| **label** — the button | Being the only one not joining in |
+| **label** — the button | Turning up and not joining in |
 | **belief** — the worry itself | If I turn up and don’t join in, then everyone will notice and ask me why. |
 | **expect** — what you are braced for | Someone will say something, and then the whole table will be looking at me. |
 | **test** — the one thing, today | Turn up, order something soft, and count how many people actually say anything. |
 | **drop** — what you leave out | Don’t arrive with a reason ready, and don’t hold a glass as cover. |
 
-### 12. Saying I’m cutting back
+### 21. Leaving before everyone else does
 
 | | |
 | --- | --- |
-| **id** | `cut` |
+| **id** | `early` |
 | **lane** | social |
-| **label** — the button | Saying I’m cutting back |
-| **belief** — the worry itself | If I tell someone I’m cutting back, then they’ll lecture me or feel sorry for me. |
-| **expect** — what you are braced for | They’ll pull a face, and start asking questions I don’t want to answer. |
-| **test** — the one thing, today | Tell one person, in one sentence, and then change the subject. |
-| **drop** — what you leave out | Don’t explain why, and don’t make a joke of it. |
+| **label** — the button | Leaving before everyone else does |
+| **belief** — the worry itself | If I leave while it’s still going, then they’ll think I’m boring and stop asking me. |
+| **expect** — what you are braced for | Someone will try to talk me into staying, and I’ll feel like I’ve let them down. |
+| **test** — the one thing, today | Decide before you go what time you’re leaving. At that time, say one sentence and go. |
+| **drop** — what you leave out | Don’t apologise for going, and don’t promise to stay longer next time. |
 
 ---
 
@@ -936,9 +1040,14 @@ does.
 
 ## The doors — "What’s going on?"
 
-`web/content/whats-going-on.js`. The one screen in BETR that names a behaviour rather than
-a worry. Every label is what a person would say about themselves, in the first person, and
-never a diagnosis. Nothing here is ever tested: a door only points at worries.
+`web/content/whats-going-on.js`. Since B19 this is the way in: the one big button on the
+front screen leads here, and a door opens onto four to six worries. It is the one screen in
+BETR that names a behaviour rather than a worry. Every label is what a person would say
+about themselves, in the first person, and never a diagnosis. Nothing here is ever tested:
+a door only points at worries.
+
+One door carries a **note** — a safety line, shown under that door and no other. It says
+what frozen sentence 4 already says, at the one moment it is relevant.
 
 **`intro`**
 
@@ -948,14 +1057,15 @@ never a diagnosis. Nothing here is ever tested: a door only points at worries.
 
 > None of these gets tested. The worry underneath does.
 
-### 1. Drinking more than I mean to
+### 1. Something I keep doing more than I mean to
 
 | | |
 | --- | --- |
-| **id** | `drinking` |
-| **label** | Drinking more than I mean to |
-| **under** | Usually underneath: what people will say if you don’t join in, if you tell them you’re cutting back, or if you let anyone see it’s hard. |
-| **opens onto** | Being the only one not joining in · Saying I’m cutting back · Admitting I’m struggling · Saying no without an excuse |
+| **id** | `habit` |
+| **label** | Something I keep doing more than I mean to |
+| **under** | The one you’ve quietly decided to stop more than once, and haven’t — drink, weed, porn, betting. BETR never goes near the thing itself. Only what you think happens if people see you without it. |
+| **note** — the safety line | If you’re dependent on alcohol or drugs, this isn’t the right thing. Help has places that are. |
+| **opens onto** | Sitting still when I feel restless · Turning up and not joining in · Leaving before everyone else does · Telling someone I’m struggling · Saying no without giving a reason |
 
 ### 2. On my phone more than I want to be
 
@@ -963,44 +1073,44 @@ never a diagnosis. Nothing here is ever tested: a door only points at worries.
 | --- | --- |
 | **id** | `phone` |
 | **label** | On my phone more than I want to be |
-| **under** | Usually underneath: missing something that matters, what people think when you don’t answer, and not being able to sit still without it. |
-| **opens onto** | An evening off my phone · Sitting with a bad feeling · Not replying straight away |
+| **under** | Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it. |
+| **opens onto** | Going an evening without my phone · A day without checking social media · Sitting still when I feel restless · Not answering a message straight away |
 
-### 3. Snapping at people at home
+### 3. Taking it out on the people closest to me
 
 | | |
 | --- | --- |
 | **id** | `temper` |
-| **label** | Snapping at people at home |
-| **under** | Usually underneath: that saying something calmly won’t work, so it stays in until it doesn’t. |
-| **opens onto** | Saying I’m annoyed, calmly · Admitting I’m struggling · Asking for help |
+| **label** | Taking it out on the people closest to me |
+| **under** | Snapping, going quiet, talking down to people, not really listening — and knowing it while you’re doing it. |
+| **opens onto** | Paying someone a compliment · Letting someone finish without interrupting · Telling someone they’ve annoyed me · Apologising without explaining myself · Letting someone else be right · Getting through a conversation without a joke |
 
-### 4. Saying yes when I mean no
-
-| | |
-| --- | --- |
-| **id** | `yes` |
-| **label** | Saying yes when I mean no |
-| **under** | Usually underneath: that saying no, or saying you’re annoyed, costs you the person. |
-| **opens onto** | Saying no without an excuse · Saying I’m annoyed, calmly · Asking for help |
-
-### 5. Never switching off from work
-
-| | |
-| --- | --- |
-| **id** | `work` |
-| **label** | Never switching off from work |
-| **under** | Usually underneath: that resting makes you lazy, and one mistake gets held against you. |
-| **opens onto** | Resting when there’s stuff to do · Owning a mistake at work · Saying no without an excuse |
-
-### 6. Something I’m keeping to myself
+### 4. Keeping it all to myself
 
 | | |
 | --- | --- |
 | **id** | `secret` |
-| **label** | Something I’m keeping to myself |
-| **under** | Usually underneath: that anyone who found out would think less of you. |
-| **opens onto** | Admitting I’m struggling · Saying I’m cutting back · Asking for help |
+| **label** | Keeping it all to myself |
+| **under** | Nobody around you knows the half of it. Not hiding it exactly; it just never seems like the moment. |
+| **opens onto** | Telling someone they matter to me · Telling someone I’m struggling · Telling someone I’ve been feeling low · Owning up to a mistake before anyone finds it · Asking someone for help |
+
+### 5. Going along with things I don’t want to do
+
+| | |
+| --- | --- |
+| **id** | `yes` |
+| **label** | Going along with things I don’t want to do |
+| **under** | Yes when you meant no. Nothing said when something’s annoyed you. An answer sent the second the message lands. |
+| **opens onto** | Not answering a message straight away · Saying no without giving a reason · Telling someone they’ve annoyed me · Asking someone for help |
+
+### 6. Never letting myself stop
+
+| | |
+| --- | --- |
+| **id** | `work` |
+| **label** | Never letting myself stop |
+| **under** | There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either. |
+| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Sending something without checking it again · Owning up to a mistake before anyone finds it |
 
 ---
 
@@ -1015,47 +1125,7 @@ reader, and never claims to fix anything.
 
 The closing line is the same under all twelve and lives with the interface, as `why.foot`.
 
-### Saying no without an excuse — `no`
-
-**what** — what the worry is, underneath the situation
-
-> The worry here isn’t really about the no. It’s about what the no seems to say about you — that you’re difficult, or that you don’t care. The excuse is what makes it feel allowed.
-
-**why** — which safety behaviour keeps it from being tested
-
-> Which is why it never settles. Every time you explain yourself and it goes fine, the explanation gets the credit. The plain no stays untested, so the worry keeps its shape. That’s what dropping the excuse is for: do it once without, and whatever happens is about the no.
-
-### Asking for help — `help`
-
-**what** — what the worry is, underneath the situation
-
-> Underneath this one is usually a rule about what you’re allowed to cost people. Asking feels like spending something you haven’t got, so you either don’t ask, or you ask and immediately pay it back.
-
-**why** — which safety behaviour keeps it from being tested
-
-> Paying it back is the part that keeps it going. Offer something in return and you never find out how the asking landed on its own — only how the trade landed. Ask without the balancing act and whatever comes back is about you asking.
-
-### Not replying straight away — `reply`
-
-**what** — what the worry is, underneath the situation
-
-> Answering fast can start as being considerate and quietly turn into a rule. Once it’s a rule, a message sitting unanswered stops being a message and starts being evidence of something about you.
-
-**why** — which safety behaviour keeps it from being tested
-
-> The apology at the top of the late reply is what holds it in place. It repairs the silence before anybody has reacted to it, so you never learn whether the silence needed repairing. Leave one, answer plainly, and read what actually comes back.
-
-### Sending it without checking it again — `check`
-
-**what** — what the worry is, underneath the situation
-
-> Checking again is rarely about catching mistakes. It’s about the feeling that turns up when you imagine not checking, and the second read is what makes that feeling go away.
-
-**why** — which safety behaviour keeps it from being tested
-
-> So the relief teaches the wrong thing. Nothing went wrong, and the checking gets the credit for it, which is why one more read never feels optional. The only way to find out what it is actually worth is to send one without it.
-
-### Sitting with a bad feeling — `sit`
+### Sitting still when I feel restless — `sit`
 
 **what** — what the worry is, underneath the situation
 
@@ -1065,7 +1135,7 @@ The closing line is the same under all twelve and lives with the interface, as `
 
 > Doing something works within seconds, every time — and that is the problem. Fast relief is a very good teacher, and what it teaches is that the feeling was on its way somewhere. Ten minutes of nothing is not endurance. It is the only way to see what the feeling does when it is left alone.
 
-### An evening off my phone — `phone`
+### Going an evening without my phone — `phone`
 
 **what** — what the worry is, underneath the situation
 
@@ -1075,35 +1145,45 @@ The closing line is the same under all twelve and lives with the interface, as `
 
 > Checking once settles it, and settling it is why the question never gets answered. You find out that nothing happened this time, which is not the same as finding out what happens. A whole evening, and a list in the morning of what actually came in, is a real answer either way.
 
-### Admitting I’m struggling — `strug`
+### A day without checking social media — `feed`
 
 **what** — what the worry is, underneath the situation
 
-> Of everything on this list, this is the one people tend to be surest about: that being seen having a hard time changes what somebody thinks you are. So it stays in, and what stays in gets heavier.
+> Keeping up starts as interest and turns into insurance. Once it is insurance, an hour without looking is not an hour off. It is a gap, and something could be happening in it that you would be the last to hear about.
 
 **why** — which safety behaviour keeps it from being tested
 
-> “But I’m fine” at the end is the crutch, and it is a good one — it takes the weight out before anybody has to respond to it. Which means what comes back is a response to the lighter version. Say the true thing, keep it small, and then stop.
+> Every look closes the gap, and closing it is why the question never gets asked. What you learn is that you are up to date right now, which says nothing about what a day away actually costs. A day away, and a list at the end of it, is the first real number there has been.
 
-### Owning a mistake at work — `mist`
+### Not answering a message straight away — `reply`
 
 **what** — what the worry is, underneath the situation
 
-> The dread here is usually about a record rather than a moment. Not that today goes badly, but that it gets written down somewhere and comes back later.
+> Answering fast can start as being considerate and quietly turn into a rule. Once it’s a rule, a message sitting unanswered stops being a message and starts being evidence of something about you.
 
 **why** — which safety behaviour keeps it from being tested
 
-> Which is why the fixing and the explaining arrive first. Turn up with it already solved and you find out how people take a solved problem; you learn nothing about how they take you getting something wrong. Say it before it is tidy.
+> The apology at the top of the late reply is what holds it in place. It repairs the silence before anybody has reacted to it, so you never learn whether the silence needed repairing. Leave one, answer plainly, and read what actually comes back.
 
-### Saying I’m annoyed, calmly — `angry`
+### Sending something without checking it again — `check`
 
 **what** — what the worry is, underneath the situation
 
-> This worry is usually built out of real evidence — arguments that genuinely did go badly. What the evidence doesn’t separate is the annoyance itself from how it arrived: often loud, often late, often carrying four other things with it.
+> Checking again is rarely about catching mistakes. It’s about the feeling that turns up when you imagine not checking, and the second read is what makes that feeling go away.
 
 **why** — which safety behaviour keeps it from being tested
 
-> So the belief has never had a clean test. One thing, one sentence, calmly, then stop talking is not a technique for winning. It is the version that finds out whether saying it was the problem, or whether the way it was said was.
+> So the relief teaches the wrong thing. Nothing went wrong, and the checking gets the credit for it, which is why one more read never feels optional. The only way to find out what it is actually worth is to send one without it.
+
+### Handing something over before it’s perfect — `enough`
+
+**what** — what the worry is, underneath the situation
+
+> The standard in this one is rarely about the work. It is about what handing something in seems to say about how much you care — so the last hour of polish is doing a job that has nothing to do with the thing being polished.
+
+**why** — which safety behaviour keeps it from being tested
+
+> And the polish always takes the credit. Nothing goes wrong, so the extra hour looks necessary, and there is no version of the job where you find out what good enough lands like on its own. Stopping once, and writing down the time you stopped, is the only way to see the difference between the two.
 
 ### Resting when there’s stuff to do — `rest`
 
@@ -1115,7 +1195,127 @@ The closing line is the same under all twelve and lives with the interface, as `
 
 > “I’ll just quickly do this one thing” is what keeps it from ever being checked. The rest never happens on its own terms, so the guilt is never met with two real hours of it. Take the hours first, and notice what the guilt does across them.
 
-### Being the only one not joining in — `drink`
+### Paying someone a compliment — `praise`
+
+**what** — what the worry is, underneath the situation
+
+> Saying something good about somebody puts you slightly in the open. The worry is not usually the compliment. It is the silence after it, and what that silence would seem to say about why you said it.
+
+**why** — which safety behaviour keeps it from being tested
+
+> Which is what the follow-up is for. One about yourself, or a wait for one back, turns a gift into a trade — and a trade cannot land badly, because nothing has been given. Say it, stop, and let the quiet be whatever it is.
+
+### Telling someone they matter to me — `care`
+
+**what** — what the worry is, underneath the situation
+
+> This one is rarely about the other person at all. It is about being the one who said it: the one who cares more, out loud, with nothing coming the other way.
+
+**why** — which safety behaviour keeps it from being tested
+
+> The joke is the way out, and it is a good one — turn it into a laugh and nothing was risked, so nothing can be lost. It also means what comes back is a response to the joke. Say the plain version, then stop talking, and whatever happens is a response to you.
+
+### Saying no without giving a reason — `no`
+
+**what** — what the worry is, underneath the situation
+
+> The worry here isn’t really about the no. It’s about what the no seems to say about you — that you’re difficult, or that you don’t care. The excuse is what makes it feel allowed.
+
+**why** — which safety behaviour keeps it from being tested
+
+> Which is why it never settles. Every time you explain yourself and it goes fine, the explanation gets the credit. The plain no stays untested, so the worry keeps its shape. That’s what dropping the excuse is for: do it once without, and whatever happens is about the no.
+
+### Asking someone for help — `help`
+
+**what** — what the worry is, underneath the situation
+
+> Underneath this one is usually a rule about what you’re allowed to cost people. Asking feels like spending something you haven’t got, so you either don’t ask, or you ask and immediately pay it back.
+
+**why** — which safety behaviour keeps it from being tested
+
+> Paying it back is the part that keeps it going. Offer something in return and you never find out how the asking landed on its own — only how the trade landed. Ask without the balancing act and whatever comes back is about you asking.
+
+### Telling someone I’ve been feeling low — `low`
+
+**what** — what the worry is, underneath the situation
+
+> There is a difference between having a hard week and being low, and most people can say the first and not the second. Underneath the second is usually a rule about weight — that a mood is something other people have to carry, and that handing it over costs them.
+
+**why** — which safety behaviour keeps it from being tested
+
+> “It’s nothing really” is how that weight gets lifted back off them before anybody has had to hold it. It is quick, it is kind, and it means the sentence is never actually tested. One sentence, no taking it back, and then let them answer.
+
+### Telling someone I’m struggling — `strug`
+
+**what** — what the worry is, underneath the situation
+
+> Of everything on this list, this is the one people tend to be surest about: that being seen having a hard time changes what somebody thinks you are. So it stays in, and what stays in gets heavier.
+
+**why** — which safety behaviour keeps it from being tested
+
+> “But I’m fine” at the end is the crutch, and it is a good one — it takes the weight out before anybody has to respond to it. Which means what comes back is a response to the lighter version. Say the true thing, keep it small, and then stop.
+
+### Owning up to a mistake before anyone finds it — `mist`
+
+**what** — what the worry is, underneath the situation
+
+> The dread here is usually about a record rather than a moment. Not that today goes badly, but that it gets written down somewhere and comes back later.
+
+**why** — which safety behaviour keeps it from being tested
+
+> Which is why the fixing and the explaining arrive first. Turn up with it already solved and you find out how people take a solved problem; you learn nothing about how they take you getting something wrong. Say it before it is tidy.
+
+### Telling someone they’ve annoyed me — `angry`
+
+**what** — what the worry is, underneath the situation
+
+> This worry is usually built out of real evidence — arguments that genuinely did go badly. What the evidence doesn’t separate is the annoyance itself from how it arrived: often loud, often late, often carrying four other things with it.
+
+**why** — which safety behaviour keeps it from being tested
+
+> So the belief has never had a clean test. One thing, one sentence, calmly, then stop talking is not a technique for winning. It is the version that finds out whether saying it was the problem, or whether the way it was said was.
+
+### Letting someone else be right — `right`
+
+**what** — what the worry is, underneath the situation
+
+> Being right and being any good get welded together somewhere, and after that a conceded point is not a point. It is evidence, going into somebody’s file on whether you know what you are doing.
+
+**why** — which safety behaviour keeps it from being tested
+
+> The “but” is what stops the filing, and it works every time, so the weld holds. Add a counterpoint and the exchange ends level, which teaches nothing about what conceding actually costs. Say the plain agreement, stop there, and find out.
+
+### Letting someone finish without interrupting — `hear`
+
+**what** — what the worry is, underneath the situation
+
+> Interrupting gets read as rudeness. Underneath it is more often a worry about being passed over — that a conversation is a queue, and a turn not taken quickly is a turn given away.
+
+**why** — which safety behaviour keeps it from being tested
+
+> Getting in early settles that, and settling it is the problem: whether waiting costs you the turn is not something you can know, because you have never waited. Let one person finish, ask one question first, and the answer arrives on its own.
+
+### Getting through a conversation without a joke — `joke`
+
+**what** — what the worry is, underneath the situation
+
+> A joke is a real skill, and it also makes a very good door. Get one in early enough and nobody gets close — which is a fine trade, right up until it stops being a choice and becomes the only way you know how to be in a room.
+
+**why** — which safety behaviour keeps it from being tested
+
+> It works, and that is the trouble. The laugh comes back immediately, the plain version never gets tried, and what people are actually there for stays a guess. One conversation, said straight, is the only way to find out.
+
+### Apologising without explaining myself — `sorry`
+
+**what** — what the worry is, underneath the situation
+
+> The dread here is about a record rather than a moment. An apology feels like a signed admission, filed somewhere, ready to be produced the next time there is an argument.
+
+**why** — which safety behaviour keeps it from being tested
+
+> So the explanation arrives alongside it — the day you were having, the reason it happened. That softens the admission into something conditional, and what comes back is a response to the conditions. Say the plain one, one sentence, and let it stand.
+
+### Turning up and not joining in — `drink`
 
 **what** — what the worry is, underneath the situation
 
@@ -1125,15 +1325,15 @@ The closing line is the same under all twelve and lives with the interface, as `
 
 > A reason ready at the door, or a glass held as cover, means you never find out. Both work — nobody asks — and both keep the prediction alive. Turn up without either and count what is actually said. Whatever the number is, it is a real one.
 
-### Saying I’m cutting back — `cut`
+### Leaving before everyone else does — `early`
 
 **what** — what the worry is, underneath the situation
 
-> Two different dreads sit inside this one: being lectured, and being pitied. The second is usually the heavier, and it is the one people plan hardest to avoid.
+> Leaving early feels like a verdict on the evening, and by extension on everybody still in it. The worry is not about being tired. It is about what going home seems to say about how much you wanted to be there.
 
 **why** — which safety behaviour keeps it from being tested
 
-> Explaining why, or turning it into a joke, is that plan. Both hand the other person a script, so what comes back is a response to the script. One sentence, then change the subject, leaves them to react as themselves.
+> A reason at the door, or a promise about next time, is what keeps that from being tested. Both work, both end the conversation, and both mean you go home knowing nothing. Decide the time first, say one sentence, and go.
 
 ---
 

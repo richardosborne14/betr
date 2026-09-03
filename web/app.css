@@ -145,6 +145,13 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 .list button:hover { border-color:var(--btn); }
 .list button .go { color:var(--btn); font-size:1.4375rem; flex:0 0 auto; }
 .list button.own { border-style:dashed; }
+/*
+  B19. The safety line under the first door — the one that names drink and drugs. It is not a
+  warning and must not look like one: a person reading it has done nothing wrong, and the red
+  a refusal wears would say they had. Same soft blue as a note anywhere else, quieter.
+*/
+.list .doornote { background:var(--soft); color:var(--soft-ink); border-radius:14px; padding:12px 16px; font-size:.9375rem; line-height:1.4; margin:-4px 0 2px; }
+
 .list .under { display:block; font-family:var(--body); font-weight:400; font-size:.90625rem; color:var(--ink-3); margin-top:6px; line-height:1.35; }
 
 .plan { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:start; margin:0 auto 22px; }

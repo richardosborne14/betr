@@ -13,7 +13,27 @@
 
   var LANES = ['social', 'assertiveness', 'perfectionism', 'urge-timing', 'rest', 'sleep'];
   var FIELDS = ['id', 'label', 'belief', 'expect', 'test', 'drop', 'lane'];
-  var MAX_VISIBLE = 12;
+
+  /*
+    B19. The cap moved off the list and onto the door. It used to be twelve, because twelve
+    was what a person could read on the front screen without scrolling — and the whole list
+    was the front screen. Now a door is, and what has to fit on a phone is the four to six
+    worries behind whichever one was tapped. Twenty-one unfiltered is a scroll, and the scroll
+    is what stalled two test users; it is only ever seen by somebody who reached the pick
+    screen without going through a door.
+  */
+  var MAX_PER_DOOR = 6;
+
+  /*
+    A door has four fields and no fifth. `note` is optional and exists for one thing: the
+    first door names drink and drugs, so it carries the line that frozen sentence 4 already
+    says — that somebody dependent on either needs a person, not this. Everything the
+    three-field rule on a Help place is for applies here (research §5.2). There is nowhere to
+    put a lane, a tag or a second version, so a door can route a person and can never say
+    something different to one person than to another.
+  */
+  var DOOR_FIELDS = ['id', 'label', 'under', 'worries', 'note'];
+  var DOOR_REQUIRED = ['id', 'label', 'under'];
 
   /*
     A place on the Help screen has three fields and no fourth. The missing fourth is the
@@ -42,10 +62,6 @@
     var seen = {};
 
     if (!Array.isArray(worries) || !worries.length) return ['worries.js is empty'];
-
-    if (worries.length > MAX_VISIBLE) {
-      problems.push(worries.length + ' items: more than ' + MAX_VISIBLE + ' visible needs a "more" screen (scope §5.3b)');
-    }
 
     worries.forEach(function (f, i) {
       var where = 'item ' + i + ' (' + (f && f.id ? f.id : 'no id') + ')';
@@ -84,17 +100,40 @@
     if (!doors || !Array.isArray(doors.items) || !doors.items.length) {
       return ['whats-going-on.js is empty'];
     }
+    var behind = {};
     doors.items.forEach(function (d, i) {
       var where = 'door ' + i + ' (' + (d && d.id ? d.id : 'no id') + ')';
-      ['id', 'label', 'under'].forEach(function (field) {
+      DOOR_REQUIRED.forEach(function (field) {
         if (!d || typeof d[field] !== 'string' || !d[field].trim()) problems.push(where + ' is missing ' + field);
       });
       if (!d) return;
+
+      /* Four fields and no fifth: nowhere to put a rule that varies what a person reads. */
+      Object.keys(d).forEach(function (field) {
+        if (DOOR_FIELDS.indexOf(field) === -1) {
+          problems.push(where + ' has an extra field "' + field + '": a door is four fields, so ' +
+            'that nothing behind one can ever be chosen for the person');
+        }
+      });
+      if ('note' in d && (typeof d.note !== 'string' || !d.note.trim())) {
+        problems.push(where + ' has an empty note; leave it out instead');
+      }
+
       if (!Array.isArray(d.worries) || d.worries.length < 2) {
         problems.push(where + ' should open onto at least two worries');
       } else {
+        if (d.worries.length > MAX_PER_DOOR) {
+          problems.push(where + ' opens onto ' + d.worries.length + ' worries: more than ' +
+            MAX_PER_DOOR + ' is a scroll on a phone (B19)');
+        }
         d.worries.forEach(function (id) {
           if (!byId(worries, id)) problems.push(where + ' points at unknown worry "' + id + '"');
+          behind[id] = true;
+        });
+        var dupes = {};
+        d.worries.forEach(function (id) {
+          if (dupes[id]) problems.push(where + ' lists "' + id + '" twice');
+          dupes[id] = true;
         });
       }
       /* A door names a behaviour. It must never itself read as a test. */
@@ -102,6 +141,16 @@
         problems.push(where + ' label reads like an instruction, not something a person would say about themselves');
       }
     });
+
+    /*
+      B19. A door is now the way in, so a worry behind no door is a worry almost nobody will
+      ever reach. That is the failure this catches: not a crash, just an item quietly falling
+      out of the product when a door is reworded.
+    */
+    (worries || []).forEach(function (f) {
+      if (!behind[f.id]) problems.push('"' + f.id + '" is behind no door, so nothing leads to it');
+    });
+
     return problems;
   }
 
@@ -219,7 +268,8 @@
     LANES: LANES,
     FIELDS: FIELDS,
     PLACE_FIELDS: PLACE_FIELDS,
-    MAX_VISIBLE: MAX_VISIBLE,
+    DOOR_FIELDS: DOOR_FIELDS,
+    MAX_PER_DOOR: MAX_PER_DOOR,
     byId: byId,
     validateWorries: validateWorries,
     validateDoors: validateDoors,

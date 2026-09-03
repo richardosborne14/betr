@@ -42,7 +42,8 @@ const SCREENS = [
   ['start', 'Screen 1 — the front screen', 'The first thing anybody sees.'],
   ['waiting', 'Screen 1 — a test already on the go', 'Only drawn if something is unfinished.'],
   ['doors', 'Screen 2 — "What’s going on?"',
-    'The wording around the list. The list itself is further down, under THE DOORS.'],
+    'Since B19 this is the way in, not a side door. The wording around the list; the list ' +
+    'itself is further down, under THE DOORS.'],
   ['pick', 'Screen 3 — "Which one?"',
     'The wording around the worry list. The worries themselves are under THE WORRY LIST.'],
   ['own', 'Screen 3a — writing your own worry', 'Three screens, one box each.'],
@@ -234,9 +235,14 @@ w('<a id="the-doors"></a>');
 w();
 w('## The doors — "What’s going on?"');
 w();
-w('`web/content/whats-going-on.js`. The one screen in BETR that names a behaviour rather than');
-w('a worry. Every label is what a person would say about themselves, in the first person, and');
-w('never a diagnosis. Nothing here is ever tested: a door only points at worries.');
+w('`web/content/whats-going-on.js`. Since B19 this is the way in: the one big button on the');
+w('front screen leads here, and a door opens onto four to six worries. It is the one screen in');
+w('BETR that names a behaviour rather than a worry. Every label is what a person would say');
+w('about themselves, in the first person, and never a diagnosis. Nothing here is ever tested:');
+w('a door only points at worries.');
+w();
+w('One door carries a **note** — a safety line, shown under that door and no other. It says');
+w('what frozen sentence 4 already says, at the one moment it is relevant.');
 w();
 w('**`intro`**');
 w();
@@ -254,6 +260,7 @@ doors.items.forEach((d, i) => {
   w('| **id** | `' + d.id + '` |');
   w('| **label** | ' + d.label + ' |');
   w('| **under** | ' + d.under + ' |');
+  if (d.note) w('| **note** — the safety line | ' + d.note + ' |');
   w('| **opens onto** | ' + d.worries.map((id) => {
     const f = worries.filter((x) => x.id === id)[0];
     return f ? f.label : '**missing: ' + id + '**';

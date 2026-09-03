@@ -18,15 +18,19 @@ const path = require('node:path');
 const worries = require('../content/worries.js');
 const doors = require('../content/whats-going-on.js');
 const content = require('../lib/content.js');
+const why = require('../content/why.js');
 const labelOf = (id) => content.byId(worries, id).label;
+/* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
+const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0]);
 
 /* ------------------------------------------------------- the walks */
 
 test('a full loop, from the start screen to a result', () => {
   const a = boot();
   a.shows('Sure it’ll go badly?');
-  a.tap('#go').shows('Which one?');
-  a.tap('[data-id]', 0).shows('Here’s your test').shows('No, I can’t this time');
+  a.tap('#go').shows('What’s going on?');
+  a.tap('[data-door]', 0).shows('Which one?');
+  a.tap('[data-id]', 0).shows('Here’s your test').shows(firstBehind(0).test);
   a.shows('That’s the bit that makes it count');
   a.tap('#lock').shows('Go and do it.');
   a.tap('#nothanks').tap('#done').shows('What happened?');
@@ -47,7 +51,7 @@ test('a full loop, from the start screen to a result', () => {
 test('what happened keeps the line breaks a person typed, on the result and on the card', () => {
   const written = 'He said fair enough.\n\nThen he made me one as well.';
   const a = boot();
-  a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', written).tap('#next').tap('[data-key]', 2);
 
   /* One paragraph per paragraph, and the class that lets a browser draw a line break. */
@@ -62,7 +66,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
   /* A single line break inside one paragraph is the stylesheet's job, and stays in the text. */
   const b = boot();
-  b.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'One line.\nAnd the next.').tap('#next').tap('[data-key]', 2);
   assert.ok(b.html().indexOf('One line.\nAnd the next.') !== -1,
     'a single line break inside a paragraph must survive into the markup');
@@ -74,7 +78,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
 test('the count is completed tests, and "didn’t get to it" costs nothing', () => {
   const a = boot();
-  a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks');
   a.tap('#miss').shows('still here for tomorrow');
   a.hides('missed').hides('streak');
   a.tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 0);
@@ -83,9 +87,11 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
 
 test('the second door opens onto worries, never onto a test of its own', () => {
   const a = boot();
-  a.tap('#doors').shows('What’s going on?').shows('Drinking more than I mean to');
+  a.tap('#go').shows('What’s going on?').shows(doors.items[0].label);
   a.tap('[data-door]', 0).shows('Which one?').shows(labelOf(doors.items[0].worries[0]));
-  a.tap('#all').shows('Something else');
+  /* B19: and the worry's own sentence is on the button, which is the whole point of it. */
+  a.shows(content.byId(worries, doors.items[0].worries[0]).belief);
+  a.shows('Something else');
 });
 
 test('a person’s own entry is refused by both guards before it is accepted', () => {
@@ -130,13 +136,13 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   const screens = ['#m-help'];
   a.tap('#m-help');
   let seen = a.html();
-  a.tap('#back').tap('#go');
+  a.tap('#back').tap('#go').tap('[data-door]', 0);
   seen += a.html();
   a.tap('#own');
   seen += a.html();
   /* and the two screens the ladder lives on, which is where a score would creep in */
   const b = boot();
-  b.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   seen += b.html();
   seen += b.tap('#m-mine').html();
@@ -149,7 +155,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
 
 test('export holds every result, and delete leaves nothing behind', () => {
   const a = boot();
-  a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
@@ -177,7 +183,7 @@ test('it starts cleanly from nothing, from rubbish, and from a half-finished loo
 
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
-  a.tap('#go').tap('[data-id]', 1).tap('#lock');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 1).tap('#lock');
   a.hides('Not quite? Change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
   a.hides('Not quite? Change it');
@@ -187,7 +193,7 @@ test('a locked expectation cannot be edited after the test is done', () => {
 
 /* One whole loop, ending on the given re-rate. 0 still / 1 a bit / 2 a lot / 3 not at all / 4 more. */
 function loop(a, item, said, key) {
-  a.tap('#go').tap('[data-id]', item).tap('#lock');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', item).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   return a;
@@ -221,14 +227,14 @@ test('a bad day can go back up, and it is not a red day', () => {
 test('an earlier worry is one tap away, and picks up where its ladder left off', () => {
   const a = boot();
   loop(a, 0, 'He said fair enough.', 2);     /* worry one: 10 → 7 */
-  a.tap('#other').tap('[data-id]', 1).tap('#lock').tap('#done');
+  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('#lock').tap('#done');
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
   a.tap('#m-mine').shows('2 tests across 2 worries');
-  a.shows(worries[1].label).shows(worries[0].label);
+  a.shows(labelOf(doors.items[0].worries[1])).shows(labelOf(doors.items[0].worries[0]));
 
   /* the older one is the second card, and going again keeps its rung rather than starting over */
-  a.tap('[data-again]', 1).shows('No, I can’t this time');
+  a.tap('[data-again]', 1).shows(firstBehind(0).test);
   a.tap('#lock').tap('#done').type('#o', 'Nothing happened.').tap('#next');
   a.shows('Last time').shows('>7<');
   a.tap('[data-key]', 1).shows('>6<');
@@ -237,7 +243,7 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
 test('your worries opens the pick list until there is one, and the worry after that', () => {
   const a = boot();
   /* nothing recorded: the door still works, and lands somewhere with something to do */
-  a.tap('#m-mine').shows('Which one?');
+  a.tap('#m-mine').shows('What’s going on?');
   a.tap('#back').shows('Sure it’ll go badly?');
   loop(a, 0, 'He said fair enough.', 1);
   a.tap('#m-mine').shows('Your worries').shows('He said fair enough.');
@@ -270,8 +276,8 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   };
 
   sweep();                                             /* start */
-  a.tap('#doors'); sweep();
-  a.tap('#back').tap('#go'); sweep();                  /* pick */
+  a.tap('#go'); sweep();                               /* what's going on */
+  a.tap('[data-door]', 0); sweep();                    /* pick */
   a.tap('[data-id]', 0); sweep();                      /* plan */
   a.tap('#lock'); sweep();                             /* locked, with the install card */
   a.tap('#nothanks').tap('#done'); sweep();            /* happened */
@@ -317,8 +323,9 @@ test('the brand is BETR everywhere a person reads it, refusals included', () => 
 test('why a worry sticks is offered after a result, on both screens, and never before', () => {
   const a = boot();
 
-  /* Not on the pick list, and not while a test is locked in and waiting. */
+  /* Not on the doors, not on the pick list, and not while a test is waiting. */
   a.tap('#go').hides('Why this one sticks');
+  a.tap('[data-door]', 0).hides('Why this one sticks');
   a.tap('[data-id]', 0).hides('Why this one sticks');
   a.tap('#lock').hides('Why this one sticks');
 
@@ -327,14 +334,14 @@ test('why a worry sticks is offered after a result, on both screens, and never b
 
   /* From the result: it opens, it names the worry, and Back comes back to the result. */
   a.tap('[data-key]', 1).shows('Why this one sticks');
-  a.tap('[data-why]').shows('Why “Saying no without an excuse” sticks');
-  a.shows('what makes it feel allowed');
+  a.tap('[data-why]').shows('Why “' + firstBehind(0).label + '” sticks');
+  a.shows(why[firstBehind(0).id].what);
   a.shows('that is what a CBT therapist is for');
   a.tap('#back').shows('You expected');
 
   /* And from the card in Your worries, where Back comes back to Your worries. */
   a.tap('#m-mine').shows('Why this one sticks');
-  a.tap('[data-why]').shows('Why “Saying no without an excuse” sticks');
+  a.tap('[data-why]').shows('Why “' + firstBehind(0).label + '” sticks');
   a.tap('#back').shows('Your worries');
 });
 

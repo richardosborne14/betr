@@ -1,7 +1,7 @@
 /*
   Betr v1 — the whole app.
 
-  Seven screens for the loop (start, pick, test, locked, happened, sure, result), plus the
+  Seven screens for the loop (start, doors, pick, test, locked, happened, sure, result), plus the
   second door, the three screens for a person's own entry, "your worries", and Help.
   Four taps and one sentence gets you all the way round.
 
@@ -391,7 +391,7 @@
 
   function wireMenu() {
     on('#m-mine', function () { go('mine'); });
-    on('#m-new', function () { S.filter = null; go('pick'); });
+    on('#m-new', function () { S.filter = null; go('doors'); });
     on('#m-help', function () { go('help'); });
   }
 
@@ -582,12 +582,16 @@
         '<button class="big pulse" id="go">' + esc(t('start.go')) +
           ' <span class="arrow" aria-hidden="true">→</span></button>' +
         waitingBlock() +
-        '<p class="tiny"><button id="doors">' + esc(t('start.doors')) + '</button></p>' +
         '<p class="tiny">' + esc(t('start.promise')) + '</p>' +
         (storageOk ? '' : '<p class="tiny">' + esc(t('start.noStorage')) + '</p>') +
       '</div>');
-    on('#go', function () { S.filter = null; go('pick'); });
-    on('#doors', function () { go('doors'); });
+    /*
+      B19. The one big button leads to the doors, not to the whole list. Two people were
+      watched choosing from twenty-one two-word labels' worth of ambiguity and neither could;
+      both read a door on sight. `start.doors` — "Not sure which?" — is gone with it, because
+      it is no longer a second way in, it is the way in.
+    */
+    on('#go', function () { S.filter = null; go('doors'); });
     wireWaiting();
   }
 
@@ -598,10 +602,18 @@
         '<p class="sub">' + esc(DOORS.intro) + '</p>' +
         '<div class="list">' +
           DOORS.items.map(function (d) {
+            /*
+              A door's `note` is a safety line, not a description, and it sits outside the
+              button on purpose: inside, a screen reader would read it as part of the button's
+              name, and it is not what the button does. One door has one (B19).
+            */
             return '<button data-door="' + esc(d.id) + '">' +
               '<span>' + esc(d.label) + '<span class="under">' + esc(d.under) + '</span></span>' +
-              '<span class="go arrow" aria-hidden="true">→</span></button>';
+              '<span class="go arrow" aria-hidden="true">→</span></button>' +
+              (d.note ? '<p class="doornote">' + esc(d.note) + '</p>' : '');
           }).join('') +
+          '<button class="own" id="own"><span>' + esc(t('doors.own')) + '</span>' +
+          '<span class="go arrow" aria-hidden="true">→</span></button>' +
         '</div>' +
         '<p class="tiny">' + esc(DOORS.foot) + ' ' + esc(t('doors.foot')) + '</p>' +
       '</div>');
@@ -609,6 +621,8 @@
     qa('[data-door]').forEach(function (b) {
       b.onclick = function () { S.filter = b.getAttribute('data-door'); go('pick'); };
     });
+    /* Nobody is in all six. The way out of the screen is the same one as inside a door. */
+    on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
   }
 
   function pick() {
@@ -619,23 +633,31 @@
         '<p class="sub">' + esc(t('pick.sub')) + '</p>' +
         '<div class="list">' +
           list.map(function (f) {
-            return '<button data-id="' + esc(f.id) + '"><span>' + esc(f.label) + '</span>' +
+            /*
+              B19, and the change the whole task exists for. The `belief` is the only part of
+              a worry that explains itself, and until now the first place a person saw it was
+              the re-rate — four screens after they had chosen. It is drawn here, under the
+              label, in the shape a door already used and that two test users read on sight.
+              Nothing new is written for it: it is the sentence being tested.
+            */
+            return '<button data-id="' + esc(f.id) + '"><span>' + esc(f.label) +
+              '<span class="under">' + esc(f.belief) + '</span></span>' +
               '<span class="go arrow" aria-hidden="true">→</span></button>';
           }).join('') +
           '<button class="own" id="own"><span>' + esc(t('pick.own')) + '</span>' +
           '<span class="go arrow" aria-hidden="true">→</span></button>' +
         '</div>' +
-        (S.filter
-          ? '<p class="tiny"><button id="all">' + esc(t('pick.showAll', { n: WORRIES.length })) + '</button></p>'
-          : '<p class="tiny"><button id="doors">' + esc(t('start.doors')) + '</button></p>') +
         '<p class="tiny">' + esc(t('pick.notHere')) + '</p>' +
       '</div>');
-    wireBack(S.filter ? 'doors' : 'start');
+    /*
+      Back is always the doors now. "Show all" is gone with it: twenty-one worries carrying a
+      sentence each is the scroll this task was opened to remove, and a person who is in none
+      of the six has "Something else" on the doors screen itself.
+    */
+    wireBack('doors');
     qa('[data-id]').forEach(function (b) {
       b.onclick = function () { startFrom(content.byId(WORRIES, b.getAttribute('data-id'))); go('plan'); };
     });
-    on('#all', function () { S.filter = null; go('pick'); });
-    on('#doors', function () { go('doors'); });
     /* The box starts with the opening of a conditional already in it, in their language. */
     on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
   }
@@ -902,7 +924,7 @@
       '</div>');
 
     on('#again', function () { again(last, 'result'); });
-    on('#other', function () { S.filter = null; go('pick'); });
+    on('#other', function () { S.filter = null; go('doors'); });
     wireWhy('result');
   }
 
@@ -917,7 +939,7 @@
   */
   function mine() {
     var groups = rate.series(S.done);
-    if (!groups.length && !S.open.length) { go('pick'); return; }
+    if (!groups.length && !S.open.length) { go('doors'); return; }
     var n = S.done.length;
 
     /*

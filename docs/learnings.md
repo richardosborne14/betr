@@ -328,3 +328,24 @@ made a missing change look like a working one.
 **Check the machine, not the note**, before building on a step recorded as finished — especially
 one on somebody else's system, where the write may have been planned, written up, and then not
 made. `grep` the live config, not the task file.
+
+## The sentence that explains the product was in the file and not on the screen (B19, 2026-09-03)
+
+Two people were watched using BETR and both stalled in the same place: the list of worries.
+Twelve two-word labels, and what each of them was holding in their head was a problem.
+
+The thing worth writing down is that **nothing was missing**. Every worry already carried its
+`belief` — "If I turn up and don't join in, then everyone will notice and ask me why" — and
+that sentence is the only part of a worry that explains itself. It is the thing being tested
+and the thing a person re-rates at the end. It was simply not drawn on any screen a person
+reaches before the re-rate, which is four screens after they choose.
+
+**The lesson: a field that is the product has to be visible at the moment of the decision it
+governs.** It took an hour to fix once it was seen, and it survived a full rewrite of the list
+(B1) without anybody noticing, because everyone reading the code already knew what the labels
+meant. The two test users are the only reason it was found.
+
+The second half is smaller and worth the same care. A label with `drop` folded into it —
+*"Saying I'm annoyed, calmly"* — silently narrows the worry to the people who are already
+willing to say something, which is not the audience. The safety behaviour belongs in `test`,
+never on the button.

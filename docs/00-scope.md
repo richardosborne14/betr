@@ -118,6 +118,17 @@ This is the product. The interface is four taps; the list is what those taps lan
 
 ### 5.1 The twelve
 
+**Superseded twice on 2026-09-03: by B1, and then by B19.** There are now **twenty-one**
+worries and they are reached **through a door**, not from a flat list — `docs/tasks/B19-doors-first.md`
+has the reasoning and the whole list. `cut` (*Saying I'm cutting back*) was deleted; nine were
+added; ten labels were rewritten so that a label stands up on its own. **§5.3a's recommendation
+below is the part B19 overturned**, and it was overturned on evidence: two people were watched
+choosing from the flat list and neither could. §5.3b's "ten to twelve visible" is now a cap of
+**six per door**, and §5.3c's "easiest three first" is now the same rule applied per door.
+
+The table below is the prototype's wording, kept only as the record of where this started.
+**The live words are `web/content/worries.js` and nowhere else.**
+
 **Superseded 2026-09-03 by B1.** The table below is the prototype's wording and is kept
 here only as the record of what the twelve *are* — the situations, the lanes and the order,
 which have not changed. **The live words are `web/content/worries.js` and nowhere else.**
@@ -169,6 +180,14 @@ Cons: naming a surface problem on the first screen is closer to the regulatory l
 with…") and may feel like a diagnosis at the door. **Recommendation:** worries on the first screen,
 and a second, optional entry point *Not sure which? Start from what's going on* that maps
 surface problems to worries. Wording of the surface problems needs the safe/unsafe table applied.
+
+> **Reversed 2026-09-03 by B19, on evidence.** It was built the way this paragraph recommends
+> and two test users stalled on the worry list; both read the door screen on sight. Doors are
+> now the way in and the optional second entrance is gone. The "cons" above still stand and are
+> not dismissed — a door is still the closest thing here to the regulatory line — which is why
+> nothing about a door changed except its wording: first person, no diagnosis, never tested,
+> and it still only ever points at worries in `worries.js`. The one door that names drink and
+> drugs carries the line frozen sentence 4 already says (founder's call, option c).
 
 **Q2b. How many?** Twelve is a screen and a half on a phone. Twenty is a scroll. Research says
 "simple" beats everything; more choice is not more value. Proposal: ten to twelve visible,
