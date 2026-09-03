@@ -1,0 +1,78 @@
+{
+  "v": 2,
+  "stage": "mine",
+  "cur": null,
+  "country": "GB",
+  "lang": null,
+  "open": [
+    {
+      "source": "stock",
+      "id": "angry",
+      "label": "Saying I’m annoyed, calmly",
+      "belief": "If I tell someone I’m annoyed, even calmly, then it’ll turn into an argument.",
+      "x": "They’ll get defensive, and it’ll turn into a much bigger thing.",
+      "test": "Say one thing that annoyed you, in one sentence, calmly. Then stop talking.",
+      "drop": "Don’t raise your voice, and don’t bring up a second thing.",
+      "from": "pick",
+      "editing": false,
+      "locked": "2026-08-25T18:12:04.000Z",
+      "missed": false
+    }
+  ],
+  "done": [
+    {
+      "id": "no",
+      "source": "stock",
+      "label": "Saying no without an excuse",
+      "belief": "If I say no and don’t explain myself, then people will think I’m selfish.",
+      "x": "There’ll be a pause, and they’ll be a bit off with me afterwards.",
+      "test": "Say “No, I can’t this time” to one small request today.",
+      "drop": "No reason, no apology, no softening it.",
+      "o": "He said fair enough and got his own coffee.",
+      "level": 10,
+      "rateLabel": "Still sure",
+      "when": "2026-08-24T21:12:04.000Z"
+    },
+    {
+      "id": "no",
+      "source": "stock",
+      "label": "Saying no without an excuse",
+      "belief": "If I say no and don’t explain myself, then people will think I’m selfish.",
+      "x": "There’ll be a pause, and they’ll be a bit off with me afterwards.",
+      "test": "Say “No, I can’t this time” to one small request today.",
+      "drop": "No reason, no apology, no softening it.",
+      "o": "Nobody said anything at all.\n\nI kept waiting for it.",
+      "level": 9,
+      "rateLabel": "A bit less sure",
+      "when": "2026-08-25T03:12:04.000Z"
+    },
+    {
+      "id": "no",
+      "source": "stock",
+      "label": "Saying no without an excuse",
+      "belief": "If I say no and don’t explain myself, then people will think I’m selfish.",
+      "x": "There’ll be a pause, and they’ll be a bit off with me afterwards.",
+      "test": "Say “No, I can’t this time” to one small request today.",
+      "drop": "No reason, no apology, no softening it.",
+      "o": "She said she was glad I asked.",
+      "level": 6,
+      "rateLabel": "A lot less sure",
+      "when": "2026-08-25T09:12:04.000Z"
+    },
+    {
+      "id": "funny",
+      "source": "stock",
+      "label": "Not being the funny one",
+      "belief": "If I stop being the entertaining one, then people won’t want me around.",
+      "x": "The conversation will flatten out and they’ll drift off to someone else.",
+      "test": "For one conversation today, just listen and ask questions. No jokes.",
+      "drop": "Don’t fill the quiet bits.",
+      "o": "They just nodded.",
+      "level": 9,
+      "rateLabel": "A bit less sure",
+      "when": "2026-08-25T15:12:04.000Z"
+    }
+  ],
+  "seenInstall": false,
+  "filter": null
+}

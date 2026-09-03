@@ -23,9 +23,104 @@
     2 added `level`, the rung a belief sits on after that test (rate.js). Version 1 stored
     `rate`, one of 80/55/30/10, which could not show movement. An old record is carried over
     onto the nearest rung rather than dropped, so nobody loses a result to the change.
+
+    3 gave every result and every waiting test an id of its own, `rid`, and every result the
+    word that was tapped, `move`, next to the rung it landed on (B9). Neither changes a
+    single thing a person sees. What they change is what the record can survive: two devices
+    each adding results without knowing about the other, and then the two histories being put
+    together — by whatever sync eventually is, or by two exported files being joined by hand.
+
+    Before this, a result carried the WORRY's id, shared by every test of that worry, so
+    there was no way to tell "the same result, seen twice" from "two results that happen to
+    look alike". And it carried the rung it landed on but not the word that took it there, so
+    interleaving two histories left two rungs each claiming to be the latest and no way to
+    work out what the person actually did. `move` makes the ladder the taps replayed in time
+    order, which comes out the same however the results arrive.
+
+    An old record loses nothing: `level` is still written, it is still the fallback for any
+    ladder where a single result predates `move`, and normalise() gives an old record an id
+    derived from itself, so the same file normalised twice gets the same ids.
   */
-  var VERSION = 2;
+  var VERSION = 3;
   var OLD_RATES = { 80: 8, 55: 6, 30: 3, 10: 1 };
+
+  /*
+    An id for one result, or for one test locked in and waiting. Random, made once, never
+    shown to anybody and never sent anywhere — there is nowhere to send it (rule 1). It says
+    only "this record and that record are the same record", which is the whole of what a
+    merge needs and no more than that.
+
+    crypto.randomUUID is in every browser Betr supports. The fallback is there because it
+    costs four lines and because the app must not depend on it being there.
+  */
+  function rid() {
+    if (typeof crypto !== 'undefined' && crypto && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    var out = '';
+    for (var i = 0; i < 8; i++) {
+      out += Math.floor(Math.random() * 0x10000 + 0x10000).toString(16).slice(1);
+    }
+    return out;
+  }
+
+  /*
+    An id for a record made before there were ids, worked out from the record itself so that
+    normalising the same file twice, on two devices or on two days, gets the same answer.
+    FNV-1a twice over, for sixteen hex characters: no dependency, and nothing here is a
+    secret, so a fast little hash is the right tool.
+  */
+  function fnv(s, h) {
+    for (var i = 0; i < s.length; i++) {
+      h = (h ^ s.charCodeAt(i)) >>> 0;
+      h = (h + (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24)) >>> 0;
+    }
+    return ('0000000' + h.toString(16)).slice(-8);
+  }
+  function stableId(seed) {
+    return fnv(seed, 0x811c9dc5) + fnv(seed, 0x9dc5811c);
+  }
+
+  /*
+    What makes one old record different from another: when it was made, and which worry it
+    belongs to. The worry is spelled out here rather than borrowed from rate.keyOf(), because
+    this file has no business knowing how the ladder groups things and rate.js has no business
+    knowing how a record is stored.
+
+    `n` counts records that come out identical on both counts — two taps in the same
+    millisecond on the same worry, which the app cannot produce but a joined file could. They
+    get different ids, because dropping one of two real results would be worse than carrying
+    a duplicate.
+  */
+  function withId(d, stamp, counts) {
+    if (typeof d.rid === 'string' && d.rid) return d;
+    var seed = (stamp || '') + '|' + (d.source || '') + '|' + (d.id || '') + '|' + (d.belief || '');
+    var slot = '#' + seed;
+    counts[slot] = (counts[slot] || 0) + 1;
+    d.rid = stableId(seed + '|' + counts[slot]);
+    return d;
+  }
+
+  /*
+    The same record twice is one record. This is the only thing in v1 that a join needs and
+    cannot do for itself, and it is two lines, so it lives here: concatenate two exports'
+    results into one `done` and loading the file settles it.
+
+    Records made before v3 are the exception, and honestly so: their ids are derived from
+    what they contain, so a file joined to itself gives the second copy a different `n` and
+    both are kept. There is no identity in an old record to recover. That is why B9 exists.
+  */
+  function dedupe(list) {
+    var seen = {};
+    var out = [];
+    for (var i = 0; i < list.length; i++) {
+      var slot = '#' + list[i].rid;
+      if (seen[slot]) continue;
+      seen[slot] = true;
+      out.push(list[i]);
+    }
+    return out;
+  }
 
   /*
     `open` is every test that has been locked in and not yet finished. It was added by B8,
@@ -64,14 +159,16 @@
     if (typeof raw.stage === 'string') s.stage = raw.stage;
     if (raw.cur && typeof raw.cur === 'object' && !Array.isArray(raw.cur)) s.cur = raw.cur;
     if (Array.isArray(raw.open)) {
-      s.open = raw.open.filter(function (t) {
+      var openCounts = {};
+      s.open = dedupe(raw.open.filter(function (t) {
         return t && typeof t === 'object' && !Array.isArray(t) && typeof t.test === 'string' && t.locked;
-      });
+      }).map(function (t) { return withId(t, t.locked, openCounts); }));
     }
     if (Array.isArray(raw.done)) {
-      s.done = raw.done.filter(function (d) {
+      var doneCounts = {};
+      s.done = dedupe(raw.done.filter(function (d) {
         return d && typeof d === 'object' && typeof d.o === 'string';
-      }).map(withLevel);
+      }).map(withLevel).map(function (d) { return withId(d, d.when, doneCounts); }));
     }
     if (typeof raw.country === 'string' && /^[A-Z]{2}$/.test(raw.country)) s.country = raw.country;
     if (typeof raw.lang === 'string' && /^[a-zA-Z-]{2,12}$/.test(raw.lang)) s.lang = raw.lang;
@@ -79,7 +176,15 @@
     return s;
   }
 
-  /* A rung between 1 and 10, from this record, from the version before it, or the top. */
+  /*
+    A rung between 1 and 10, from this record, from the version before it, or the top.
+
+    Still written, still read. `move` is the better answer (B9) but it can only be the answer
+    where every result in a ladder has one, and a phone that has been used since before v3
+    has ladders where some do and some do not. Those draw from `level`, exactly as they did
+    the day before the change. Nobody loses a result to a version bump; that is the whole
+    point of there being a version.
+  */
   function withLevel(d) {
     var n = d.level;
     if (typeof n !== 'number' || n !== n) n = OLD_RATES[d.rate];
@@ -161,6 +266,7 @@
       country: s.country || null,
       waiting: (s.open || []).map(function (t) {
         return {
+          id: t.rid || null,
           lockedIn: t.locked || null,
           worry: t.label || t.id || null,
           belief: t.belief || null,
@@ -171,6 +277,14 @@
       }),
       results: (s.done || []).map(function (d) {
         return {
+          /*
+            The id and the tapped word are here so that two of these files can be JOINED and
+            not merely read: without the id there is no telling one result from another that
+            looks like it, and without the word there is no working out what the person did
+            when two devices' rungs disagree. `stillSure` stays, because it is the sentence
+            they actually tapped and this file is meant to be readable by whoever opens it.
+          */
+          id: d.rid || null,
           when: d.when || null,
           worry: d.label || d.id || null,
           belief: d.belief || null,
@@ -179,6 +293,7 @@
           leftOut: d.drop || null,
           happened: d.o || null,
           stillSure: d.rateLabel || null,
+          stillSureKey: d.move || null,
           sureOutOfTen: typeof d.level === 'number' ? d.level : null
         };
       })
@@ -192,6 +307,7 @@
     isEmpty: isEmpty,
     normalise: normalise,
     withLevel: withLevel,
+    rid: rid,
     create: create,
     exportJSON: exportJSON
   };

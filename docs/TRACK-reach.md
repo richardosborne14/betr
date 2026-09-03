@@ -27,7 +27,7 @@ needs paid native reviewers, and the recommendation is that it waits for real us
 ## The order, and the one hard block
 
 ```
-   B8 ✓  ──▶  B17 ✓  ──▶  B15 ✓  ──▶  B9  ──▶  B10  ──▶  B11  ──▶  stop, ask the founder
+   B8 ✓  ──▶  B17 ✓  ──▶  B15 ✓  ──▶  B9 ✓  ──▶  B10  ──▶  B11  ──▶  stop, ask the founder
 ```
 
 **B8 landed on 2026-09-03** (`7e8754e`), 78 tests green, so the block is clear. It is kept here
@@ -50,15 +50,26 @@ causing anyone a problem.*
 | --- | --- | --- | --- |
 | B17 | `tasks/B17-the-right-helpline.md` | **Built 2026-09-03** | 8/10 |
 | B15 | `tasks/B15-words-out-of-the-code.md` | **Built 2026-09-03** | 8/10 |
-| B9 | `tasks/B9-the-mergeable-record.md` | Not started | — |
+| B9 | `tasks/B9-the-mergeable-record.md` | **Built 2026-09-03** | 9/10 |
 | B10 | `tasks/B10-the-lock.md` | Not started — blocked, see below | — |
 | B11 | `tasks/B11-own-cloud-sync.md` | Not started | — |
 | B16 | `tasks/B16-shipping-a-language.md` | Not started — waits for real users | — |
 
+**B9 landed.** Every result has an id of its own, says which word was tapped, and is read in
+clock order rather than array order, so two devices' histories can be joined without losing or
+duplicating a result. 146 tests green. Nothing a person sees changed, proved by rendering every
+screen through the code before and after and diffing it.
+
+**B10 is next on this track, and it should not be started yet.** Carried below: passkeys inside
+the Capacitor webview fail WebAuthn's origin check from `capacitor://localhost`, and that has to
+be settled before B10 is scheduled rather than during it. B11 rests on an unchecked fact about
+Apple's current wording. So *there is nothing left on this track that a coding session can pick
+up on its own*, and everything outstanding on Betr now needs a person — Misha and a paid
+reviewer on the twelve worries, somebody who uses a screen reader every day on a real phone,
+one DNS record, and Q1.
+
 **B15 landed.** Every word a person reads is in one file, the app tells a screen reader what
-just happened, and the stylesheet mirrors correctly and scales with a person's text size. 125
-tests green. **B9 is next on this track**, and it must not start while another session has
-`store.js` open.
+just happened, and the stylesheet mirrors correctly and scales with a person's text size.
 
 **B17 landed.** Thirteen countries have a helpline somebody read off the provider's own site
 that day; every other country says so and shows no number at all. The country layer B16 was
@@ -90,7 +101,16 @@ Things a session found that the next one needs.
   and in `rem`. 125 tests green. **Two things it did not do and that nobody should assume:** no
   second language ships (that is B16), and **nobody who uses a screen reader has touched it** —
   that pass is a release condition at the bottom of the B15 task file.
-- **Two guards now sit across the whole repo, and B9 has to live with them.** No English prose
+- **B9 landed on 2026-09-03.** Storage is **v3**: `rid` on every result and on every waiting
+  test, `move` (the word that was tapped) on every result, and `series()`/`levelFor()` read in
+  clock order and replay the taps rather than trusting the stored rung. `level` is still
+  written and is still the fallback for any ladder holding a pre-v3 result. **The export is now
+  joinable**, not only readable: `id` and `stillSureKey` are in it. **B10 inherits three things
+  it no longer has to build**, and one thing it must decide: one waiting test finished on two
+  devices is two results with two ids, and whether that is right is B10's question.
+  `web/tests/fixtures/v2-phone.json` is a genuine pre-B9 file and is how any future storage
+  change proves it did not redraw somebody's history.
+- **Two guards now sit across the whole repo.** No English prose
   may go into `app.js` (`i18n.test.js` sweeps its string literals), and no physical CSS
   property or `px` font size may go into `app.css`. Both fail the build. A new screen means a
   new block of keys in `strings-en.js`, a heading with `id="top"`, and a line in `SCREENS` at

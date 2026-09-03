@@ -77,13 +77,53 @@
   }
 
   /*
+    Oldest first by the clock, not by where a result happens to sit in the array (B9).
+
+    They are the same thing today, because the only thing that ever appends to `done` is a
+    person finishing a test. They stop being the same thing the moment two devices' histories
+    are put together, or a file is re-imported, and then the ladder would quietly draw itself
+    wrong. Array position is the tie-break, so two results in the same millisecond stay in the
+    order they were made, and a record with no clock at all keeps its place at the end.
+  */
+  function inTimeOrder(done) {
+    var held = (done || []).map(function (d, i) { return { d: d, i: i }; });
+    held.sort(function (a, b) {
+      var x = a.d && a.d.when ? String(a.d.when) : '';
+      var y = b.d && b.d.when ? String(b.d.when) : '';
+      if (x === y) return a.i - b.i;
+      if (!x) return 1;
+      if (!y) return -1;
+      return x < y ? -1 : 1;
+    });
+    return held.map(function (h) { return h.d; });
+  }
+
+  /*
+    The rungs of one belief, in order.
+
+    Where every result says which word was tapped, the ladder IS those taps replayed from the
+    top — so it comes out the same however the results arrived, which is what makes two
+    histories joinable at all (B9). Where any result in the ladder was made before the word
+    was written down, the whole ladder falls back to the rung each result stored at the time,
+    and draws exactly what it drew the day before. Half replayed and half stored would be a
+    ladder that is neither.
+  */
+  function rungsFor(results) {
+    var replay = true;
+    for (var i = 0; i < results.length; i++) if (!byKey(results[i].move)) replay = false;
+    if (!replay) return results.map(function (r) { return clamp(r.level); });
+    var here = TOP;
+    return results.map(function (r) { here = next(here, r.move); return here; });
+  }
+
+  /*
     The results, grouped into one ladder per belief, oldest tap first inside each group and
     most recently tested group first. Nothing is added up across groups, on purpose.
   */
   function series(done) {
     var out = [];
     var index = {};
-    (done || []).forEach(function (d, i) {
+    inTimeOrder(done).forEach(function (d, i) {
       var k = keyOf(d);
       var g = index[k];
       if (!g) { g = index[k] = { key: k, id: d.id, source: d.source, results: [] }; out.push(g); }
@@ -95,9 +135,9 @@
     });
     out.forEach(function (g) {
       g.last = g.results[g.results.length - 1];
-      g.level = clamp(g.last.level);
       g.tests = g.results.length;
-      g.rungs = g.results.map(function (r) { return clamp(r.level); });
+      g.rungs = rungsFor(g.results);
+      g.level = g.rungs[g.rungs.length - 1];
     });
     /* Most recently tested first, not first started: the one you are working on is at the top. */
     return out.sort(function (a, b) { return b.newest - a.newest; });
@@ -106,14 +146,16 @@
   /* Where a belief already sits, before this test is rated. Unknown means the top. */
   function levelFor(done, item) {
     var k = keyOf(item);
-    var level = TOP;
-    (done || []).forEach(function (d) { if (keyOf(d) === k) level = clamp(d.level); });
-    return level;
+    var mine = inTimeOrder(done).filter(function (d) { return keyOf(d) === k; });
+    if (!mine.length) return TOP;
+    var rungs = rungsFor(mine);
+    return rungs[rungs.length - 1];
   }
 
   return {
     TOP: TOP, FLOOR: FLOOR, CHOICES: CHOICES,
     byKey: byKey, clamp: clamp, next: next,
-    keyOf: keyOf, series: series, levelFor: levelFor
+    keyOf: keyOf, series: series, levelFor: levelFor,
+    inTimeOrder: inTimeOrder, rungsFor: rungsFor
   };
 });

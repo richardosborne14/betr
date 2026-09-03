@@ -424,8 +424,14 @@
     return door.worries.map(function (id) { return content.byId(WORRIES, id); }).filter(Boolean);
   }
 
+  /*
+    Every test in hand gets its own id the moment it exists, and keeps it through locking in,
+    waiting on Your worries, and becoming a result (B9). B8 made several waiting at once
+    possible, and two devices' waiting lists cannot be put together without one.
+  */
   function startFrom(f) {
     S.cur = {
+      rid: storeLib.rid(),
       source: 'stock', id: f.id, label: f.label, belief: f.belief,
       x: f.expect, test: f.test, drop: f.drop,
       from: 'pick', editing: false, locked: null, missed: false
@@ -488,12 +494,18 @@
         esc(g.belief ? t('a11y.ladder', { belief: unstop(g.belief) }) : t('a11y.ladderPlain')) + '">' +
       rung(t('ladder.started'), rate.TOP, {}) +
       skipped +
+      /*
+        The rungs come off the group, not off each result: since B9 a ladder is the taps
+        replayed in time order where every result says which word was tapped, and only falls
+        back to the stored rung where one of them predates that. Reading r.level here would
+        draw a different ladder from the one series() worked out.
+      */
       shown.map(function (r, i) {
         var last = i === shown.length - 1;
         var at = first + i;
-        return rung(last ? t('ladder.now') : I.ordinal(at + 1), rate.clamp(r.level), {
+        return rung(last ? t('ladder.now') : I.ordinal(at + 1), g.rungs[at], {
           said: said ? r.o : '',
-          prev: at === 0 ? rate.TOP : rate.clamp(g.results[at - 1].level)
+          prev: at === 0 ? rate.TOP : g.rungs[at - 1]
         });
       }).join('') +
     '</div>';
@@ -501,7 +513,9 @@
 
   /* Set up a repeat of something already tested. Stock wording is looked up fresh. */
   function again(d, from) {
+    /* A new id, not the old result's: this is another test of that worry, not that result. */
     S.cur = {
+      rid: storeLib.rid(),
       source: d.source, id: d.id, label: d.label, belief: d.belief,
       x: d.x, test: testFor(d), drop: dropFor(d),
       from: from || 'mine', editing: false, locked: null, missed: false
@@ -698,6 +712,7 @@
         var check = guards.checkTest(v);
         if (!check.ok) { refuse(check); return; }
         S.cur = {
+          rid: storeLib.rid(),
           source: 'own', id: null, label: t('own.label'),
           belief: draft.belief.trim(),
           x: guards.expectationFrom(draft.belief),
@@ -813,10 +828,20 @@
     qa('[data-key]').forEach(function (b) {
       b.onclick = function () {
         var ch = rate.byKey(b.getAttribute('data-key'));
+        /*
+          `rid` is this result's own id, not the worry's — `id` is the worry's and every test
+          of that worry shares it. It comes off the test in hand, which has carried it since
+          the worry was picked, so a test locked in on Monday and finished on Thursday is one
+          thing with one id from end to end (B9).
+
+          `move` is the word that was tapped. `level` is where that landed, still written,
+          because a ladder with one older result in it draws from those (rate.rungsFor).
+        */
         S.done.push({
+          rid: c.rid || storeLib.rid(),
           id: c.id, source: c.source, label: c.label, belief: c.belief,
           x: c.x, test: c.test, drop: c.drop, o: c.o,
-          level: rate.next(at, ch.key), rateLabel: t('rate.' + ch.key),
+          move: ch.key, level: rate.next(at, ch.key), rateLabel: t('rate.' + ch.key),
           when: new Date().toISOString()
         });
         S.cur = null;

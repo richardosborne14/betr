@@ -247,3 +247,41 @@ understand or when a decision was reversed.
 - **Assert the class, then look at the screen.** `node --test` can prove the markup carries
   the class that makes line breaks visible; only a screenshot can prove the result is not
   three yellow boxes with holes in them. Both were needed here, and neither was sufficient.
+
+## 2026-09-03 — B9, the mergeable record
+
+- **The strongest proof that nothing a person sees changed is not a screenshot — it is a diff
+  of two renderings.** `git archive <last commit> web` into a scratch directory gives a
+  complete second copy of the app, harness and all; a twenty-line script then walks both
+  copies through the same taps and diffs `a.html()` at every screen. Byte-identical from a
+  real stored history *and* from a clean start, in under a minute. **Any change whose promise
+  is "the screens are unchanged" should be checked this way**, because the fake DOM is a
+  string and a string can be compared exactly. It also found the bug below.
+- **A record can be given a better field and the renderer can still read the old one.**
+  `series()` was changed to recompute each ladder's rungs from the word that was tapped, and
+  `ladder()` in `app.js` carried on drawing `r.level` off each individual result. Every phone
+  in existence would have looked correct, because for them the two agree — and the first
+  joined history would have drawn a ladder that disagreed with itself. **When a derived value
+  moves into the thing that derives it, grep for every reader of the old field**; two of the
+  three were in one line of a `map()`.
+- **"Real-shaped test data" means data written by the code that shipped, not data typed out to
+  look like it.** The v2 fixture was produced by driving the previous commit's own harness
+  with a pinned clock (`web/tests/fixtures/make-v2-phone.js`). Hand-typing it would only have
+  proved the migration works on the fields somebody remembered to type — and the fixture
+  turned out to contain things nobody would have thought to include, like a paragraph break
+  inside "what happened" and a `from: 'pick'` on a waiting test.
+- **A derived id cannot deduplicate what it was derived from.** An old record's id has to come
+  from its own contents, so a pre-v3 file joined to itself gives the second copy a different
+  counter and both copies are kept. That is the honest answer — there is no identity in an old
+  record to recover — but it is also the whole argument for adding ids to an empty file rather
+  than to somebody's six months of history. **A migration can invent a stable name for a
+  record; it cannot invent the fact that two records are the same one.**
+- **A fallback has to be all-or-nothing per ladder, not per record.** A ladder holding one
+  pre-v3 result and three new ones cannot replay three rungs and read one: it would match
+  neither yesterday's screen nor the taps. One `for` loop over the group decides which of the
+  two ways the whole ladder is drawn.
+- **The browser's own `localStorage` is not what the app is holding.** A CDP walk that read
+  `localStorage.getItem('betr.v1')` straight after a reload appeared to show deduplication
+  failing — the app had deduplicated on load and had no reason to write anything back yet.
+  **Read the app's state through the app** (here, the export screen), not through the store
+  underneath it.

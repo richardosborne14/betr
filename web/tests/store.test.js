@@ -23,11 +23,17 @@ const throwing = {
   removeItem() { throw new Error('denied'); }
 };
 
+/*
+  A result as the app writes one since B9: `rid` is this result's own id and `id` is the
+  worry's, shared by every test of that worry. `move` is the word that was tapped and `level`
+  is where that landed — a lot less sure, from the top, is seven.
+*/
 const RESULT = {
+  rid: 'a0d6f1c2-0e40-4a2b-9d1e-6f0b5c7a3311',
   id: 'no', source: 'stock', label: 'Saying no without an excuse',
   belief: 'If I say no without an excuse, people will think I am selfish.',
   x: 'They will be annoyed.', test: 'Say no once.', drop: 'Do not explain.',
-  o: 'He said fair enough.', level: 3, rateLabel: 'A lot less sure',
+  o: 'He said fair enough.', move: 'lot', level: 7, rateLabel: 'A lot less sure',
   when: '2026-09-02T10:00:00.000Z'
 };
 
@@ -130,10 +136,11 @@ test('the export is readable, stable, and holds every result', () => {
   assert.strictEqual(out.version, store.VERSION);
   assert.strictEqual(out.results.length, 1);
   assert.deepStrictEqual(Object.keys(out.results[0]), [
-    'when', 'worry', 'belief', 'expected', 'test', 'leftOut', 'happened', 'stillSure', 'sureOutOfTen'
+    'id', 'when', 'worry', 'belief', 'expected', 'test', 'leftOut',
+    'happened', 'stillSure', 'stillSureKey', 'sureOutOfTen'
   ]);
   assert.strictEqual(out.results[0].happened, 'He said fair enough.');
-  assert.strictEqual(out.results[0].sureOutOfTen, 3);
+  assert.strictEqual(out.results[0].sureOutOfTen, 7);
 });
 
 test('exporting nothing is still valid, readable JSON', () => {
