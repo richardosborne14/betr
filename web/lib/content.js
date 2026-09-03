@@ -21,6 +21,13 @@
     can ever be chosen for the person by anything they entered (research §5.2, B8).
   */
   var PLACE_FIELDS = ['name', 'url', 'what'];
+
+  /*
+    "Why this one sticks" has two fields and no third, for the same reason a place has three
+    and no fourth: there is nowhere to put a lane, a condition or a second version, so the
+    text can never be chosen for the person by anything they did (research §5.2, B18).
+  */
+  var WHY_FIELDS = ['what', 'why'];
   var OURS = 'trybeup.com';
   var SHORTENERS = ['bit.ly', 't.co', 'tinyurl.com', 'goo.gl', 'ow.ly', 'buff.ly', 'rebrand.ly', 'lnkd.in'];
 
@@ -169,6 +176,45 @@
     });
   }
 
+  /*
+    Every stock worry has an explanation, nothing has one that is not a stock worry, and an
+    entry has exactly the two fields. The middle rule is what stops a stale entry surviving a
+    worry being removed, which is how a person would end up reading about something that is
+    no longer on the list.
+  */
+  function validateWhy(why, worries) {
+    var problems = [];
+    if (!why || typeof why !== 'object') return ['why.js is empty'];
+
+    var ids = {};
+    (worries || []).forEach(function (f) {
+      ids[f.id] = true;
+      if (!why[f.id]) problems.push('"' + f.id + '" has no explanation in why.js');
+    });
+
+    Object.keys(why).forEach(function (id) {
+      var at = 'why.js "' + id + '"';
+      if (!ids[id]) problems.push(at + ' is not a worry on the list');
+
+      var entry = why[id];
+      if (!entry || typeof entry !== 'object') { problems.push(at + ' is not an entry'); return; }
+
+      WHY_FIELDS.forEach(function (field) {
+        if (typeof entry[field] !== 'string' || !entry[field].trim()) {
+          problems.push(at + ' is missing ' + field);
+        }
+      });
+      Object.keys(entry).forEach(function (field) {
+        if (WHY_FIELDS.indexOf(field) === -1) {
+          problems.push(at + ' has a field called "' + field + '". Two fields and no third: ' +
+            'a third is somewhere to aim this text at a person');
+        }
+      });
+    });
+
+    return problems;
+  }
+
   return {
     LANES: LANES,
     FIELDS: FIELDS,
@@ -177,6 +223,8 @@
     byId: byId,
     validateWorries: validateWorries,
     validateDoors: validateDoors,
-    validatePlaces: validatePlaces
+    validatePlaces: validatePlaces,
+    WHY_FIELDS: WHY_FIELDS,
+    validateWhy: validateWhy
   };
 });

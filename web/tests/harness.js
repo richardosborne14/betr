@@ -24,7 +24,7 @@ const vm = require('node:vm');
 const WEB = path.join(__dirname, '..');
 const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
                'lib/i18n.js', 'content/strings-en.js',
-               'content/worries.js', 'content/whats-going-on.js', 'content/places.js',
+               'content/worries.js', 'content/why.js', 'content/whats-going-on.js', 'content/places.js',
                'content/zones.js', 'content/helplines.js', 'app.js'];
 
 

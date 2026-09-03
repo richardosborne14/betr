@@ -32,6 +32,7 @@
   var WORRIES = Betr.worries;
   var DOORS = Betr.doors;
   var PLACES = Betr.places;
+  var WHY = Betr.why;
   var W = Betr.where.create(Betr.zones, Betr.helplines);
 
   var app = document.getElementById('app');
@@ -114,6 +115,14 @@
   var storageOk = true;
   var deleteArmed = false;
   var whereBack = 'help';  /* the screen the country list was opened from */
+  /*
+    Which worry "Why this one sticks" is open on, and what Back goes to. Deliberately not
+    stored, the same way whereBack is not: reloading on this screen drops to Your worries
+    rather than adding a field to a person's saved state for a screen they can only reach
+    from two places anyway (B18).
+  */
+  var whyId = null;
+  var whyBack = 'mine';
   var toSay = null;        /* what the next paint() should read out. Cleared as it is used */
 
   /* localStorage itself can throw on access in a locked-down browser, not just on write. */
@@ -530,11 +539,13 @@
       start: start, doors: doors, pick: pick,
       'own-belief': ownBelief, 'own-test': ownTest, 'own-drop': ownDrop,
       plan: plan, locked: locked, happened: happened, sure: sure,
-      result: result, mine: mine, help: help, where: whereScreen,
+      result: result, mine: mine, help: help, where: whereScreen, why: whyScreen,
       about: help   /* what a phone that saw the old "what this is" screen has stored */
     };
     /* Any half-finished loop that lost its item drops back to the start rather than crashing. */
     if (IN_LOOP.indexOf(S.stage) !== -1 && !S.cur) S.stage = 'start';
+    /* Same for a reload on "Why this one sticks", which knows its worry only in memory. */
+    if (S.stage === 'why' && !whyFor(whyId)) S.stage = 'mine';
     (map[S.stage] || start)();
     wireCrisis();
     wireMenu();
@@ -885,10 +896,14 @@
           '<button class="big" id="again">' + esc(t('result.again')) + '</button>' +
           '<button class="ghost" id="other">' + esc(t('result.other')) + '</button>' +
         '</div>' +
+        /* Last, and quiet. The result screen's run — expected, happened, ladder, count, do
+           it again — is the product; this is an optional extra at the end of it, not a step. */
+        whyLink(last.id, 'data-why') +
       '</div>');
 
     on('#again', function () { again(last, 'result'); });
     on('#other', function () { S.filter = null; go('pick'); });
+    wireWhy('result');
   }
 
   /*
@@ -956,12 +971,14 @@
             }).join('') +
             (c.g ? '<button class="ghost" data-again="' + groups.indexOf(c.g) + '">' +
               esc(t('mine.again')) + '</button>' : '') +
+            (c.g ? whyLink(c.g.id, 'data-why') : '') +
           '</div>';
         }).join('') +
         '<p class="tiny">' + esc(t('mine.foot')) + '</p>' +
       '</div>');
 
     wireBack('start');
+    wireWhy('mine');
     qa('[data-again]').forEach(function (b) {
       b.onclick = function () { again(groups[Number(b.getAttribute('data-again'))].last, 'mine'); };
     });
@@ -975,6 +992,75 @@
         if (tst) { tst.missed = true; save(); say(t('locked.missed')); render(); }
       };
     });
+  }
+
+  /*
+    ------------------------------------------------------------- why this one sticks
+
+    B18, 2026-09-03. Two short paragraphs on what the worry actually is and what keeps it
+    from being tested. It exists because the loop tells a person what to leave out and never
+    says why leaving it out is the point of the whole thing.
+
+    Three things decide its shape, and none is cosmetic:
+
+      1. It is only offered once somebody has a result of their own. Read first, it is a
+         lesson and it gets skimmed; read after their own evidence, it answers a question
+         they have actually got. So it hangs off the result screen and off a card that has a
+         ladder on it, and off nothing else. Never on Pick, never inside the loop.
+      2. It is a screen, not an overlay (CLAUDE.md rule 10). Everything here goes through
+         paint(), which moves focus to the heading and gets it read out; a modal would mean a
+         focus trap, an escape key, an inert background and a scroll lock, all written by hand,
+         in an app that has not yet been in front of anybody who uses a screen reader.
+      3. The words come from content/why.js keyed by the worry id and by nothing else. It
+         never reads S.done, a rung, a re-rate or a missed test. Everybody who taps this on
+         the same worry reads the same two paragraphs forever, which is what keeps it a
+         chapter in a book rather than something the app decided about a person (research
+         §5.2). A person's own worry has no entry, so no link appears — which is also the
+         answer for custom worries if Q3 ever lets them in.
+
+    The closing line is frozen and identical under all twelve, and it points at Help rather
+    than carrying a link: every link in BETR is in content/places.js and nowhere else.
+  */
+  function whyFor(id) {
+    return (id && WHY && Object.prototype.hasOwnProperty.call(WHY, id)) ? WHY[id] : null;
+  }
+
+  /* The small link under a ladder. Draws nothing where there is nothing to read. */
+  function whyLink(id, attr) {
+    if (!whyFor(id)) return '';
+    return '<p class="tiny"><button class="plain" ' + attr + '="' + esc(id) + '">' +
+      esc(t('why.link')) + '</button></p>';
+  }
+
+  function wireWhy(from) {
+    qa('[data-why]').forEach(function (b) {
+      b.onclick = function () {
+        var id = b.getAttribute('data-why');
+        if (!whyFor(id)) return;
+        whyId = id;
+        whyBack = from;
+        go('why');
+      };
+    });
+  }
+
+  function whyScreen() {
+    var entry = whyFor(whyId);
+    if (!entry) { go('mine'); return; }
+    var f = content.byId(WORRIES, whyId);
+
+    paint( backButton() +
+      '<div class="stage"><div class="sheet">' +
+        head('h2', t('why.title', { label: f ? f.label : '' })) +
+        (f ? '<p class="belief wrote">\u201C' + esc(f.belief) + '\u201D</p>' : '') +
+        '<div class="primer">' +
+          '<p>' + esc(entry.what) + '</p>' +
+          '<p>' + esc(entry.why) + '</p>' +
+        '</div>' +
+        '<p class="quiet">' + esc(t('why.foot')) + '</p>' +
+      '</div></div>');
+
+    wireBack(whyBack);
   }
 
   /*

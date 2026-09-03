@@ -244,6 +244,27 @@ var BETR_STRINGS_EN = {
 
     /* ------------------------------------------------------------------ your worries */
 
+    /* ------------------------------------------------------------------ why this sticks */
+
+    /*
+      B18. The screen behind "Why this one sticks", offered only once a person has a result
+      of their own — their evidence first, the explanation second. The twelve explanations
+      are in content/why.js; these are the words around them.
+
+      `foot` is the frozen one. It says three things and they are all load-bearing: the text
+      is general (so it is a book, not a device), BETR cannot see anything, and a therapist is
+      the real version of this. It is identical under all twelve, written once and translated
+      once, and it points at Help rather than carrying a link of its own — every link in BETR
+      lives in content/places.js and nowhere else (rule 1).
+    */
+    why: {
+      link: 'Why this one sticks',
+      title: 'Why \u201C{label}\u201D sticks',
+      foot: 'This is general \u2014 it is not about you, and BETR cannot see anything you have ' +
+        'written. If you want to understand it properly, that is what a CBT therapist is ' +
+        'for, and Help has places to find one.'
+    },
+
     mine: {
       title: 'Your worries',
       summary: '{tests} across {worries}. Tap one to test it again.',

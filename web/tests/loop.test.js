@@ -303,3 +303,49 @@ test('the brand is BETR everywhere a person reads it, refusals included', () => 
   b.type('#t', 'Cut myself where nobody will see it').tap('#next').shows('BETR can’t help');
   assert.ok(b.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in a refusal');
 });
+
+/*
+  B18, "Why this one sticks". Three things about it are the design, not decoration, and each
+  one is a line below:
+
+    - it is offered after a person has evidence of their own, never before. A worry sitting
+      on the pick list, or locked in and waiting, has nothing to explain yet
+    - it is a screen, so Back works and it goes to whichever of the two places opened it
+    - a person's own worry has no explanation and gets no link. That is also the answer for
+      custom worries if Q3 ever admits them: no entry, no link, no code to write
+*/
+test('why a worry sticks is offered after a result, on both screens, and never before', () => {
+  const a = boot();
+
+  /* Not on the pick list, and not while a test is locked in and waiting. */
+  a.tap('#go').hides('Why this one sticks');
+  a.tap('[data-id]', 0).hides('Why this one sticks');
+  a.tap('#lock').hides('Why this one sticks');
+
+  a.tap('#nothanks').tap('#done').type('#o', 'He said fair enough.').tap('#next');
+  a.hides('Why this one sticks');
+
+  /* From the result: it opens, it names the worry, and Back comes back to the result. */
+  a.tap('[data-key]', 1).shows('Why this one sticks');
+  a.tap('[data-why]').shows('Why “Saying no without an excuse” sticks');
+  a.shows('what makes it feel allowed');
+  a.shows('that is what a CBT therapist is for');
+  a.tap('#back').shows('You expected');
+
+  /* And from the card in Your worries, where Back comes back to Your worries. */
+  a.tap('#m-mine').shows('Why this one sticks');
+  a.tap('[data-why]').shows('Why “Saying no without an excuse” sticks');
+  a.tap('#back').shows('Your worries');
+});
+
+test('a person’s own worry has nothing to explain, so it offers nothing', () => {
+  const a = boot();
+  a.tap('#go').tap('#own');
+  a.type('#t', 'If I ask for Friday off, my boss will think I am not committed').tap('#next');
+  a.type('#t', 'Ask for Friday off in one sentence').tap('#next');
+  a.type('#t', 'Don’t explain why.').tap('#next');
+  a.tap('#lock').tap('#nothanks').tap('#done');
+  a.type('#o', 'She said fine and went back to her screen.').tap('#next').tap('[data-key]', 3);
+  a.shows('You expected').hides('Why this one sticks');
+  a.tap('#m-mine').hides('Why this one sticks');
+});

@@ -39,6 +39,8 @@ const SCREENS = {
     .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1),
   mine: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
     .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1).tap('#m-mine'),
+  why: (a) => a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done')
+    .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1).tap('[data-why]'),
   help: (a) => a.tap('#m-help'),
   where: (a) => a.tap('#m-help').tap('#where')
 };
