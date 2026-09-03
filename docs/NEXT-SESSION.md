@@ -80,16 +80,14 @@ B2 forced. B8 before B3 unless a URL is suddenly needed.
 
 - **`node --test web/tests/` does not work on Node 22.** Use `node --test` from the repo root.
 - **Content is `web/content/worries.js`, not `.json`.** A browser will not fetch JSON, or load
-  an ES module, from a page opened off the filesystem. Same reason `web/lib/*.js` are classic
-  scripts with a small export shim.
+  an ES module, from a page opened off disk — same reason `web/lib/*.js` are classic scripts.
 - **The ladder is one belief's grip.** No total, no average across worries, no line, no target.
-  `rate.test.js` fails the build if "average", "total", "score", "streak" or "target" appears
-  in `rate.js`.
+  `rate.test.js` fails the build if those words appear in `rate.js`.
 - **Storage is at version 2.** Version 1 results carry `rate` (80/55/30/10) and are moved onto
   the nearest rung on load. Don't delete that migration.
-- **Headless Chrome lies about two things.** `.kicker` is `text-transform: uppercase`, so
-  `innerText` returns "HERE'S YOUR TEST"; and `--window-size` is not the CSS viewport — layout
-  came out ~110px wider than asked, which looks exactly like an overflow bug until you check an
+- **Headless Chrome lies twice.** `.kicker` is `text-transform: uppercase`, so `innerText`
+  returns "HERE'S YOUR TEST"; and `--window-size` is not the CSS viewport — layout came out
+  ~110px wider than asked, which looks exactly like an overflow bug until you check an
   unchanged screen.
 - **`file:` is in the CSP source lists** so the page works off disk. B3's header drops it, and
   must not carry `'unsafe-inline'` for scripts.
