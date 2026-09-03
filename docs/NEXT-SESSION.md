@@ -29,10 +29,10 @@ of storing a fixed number; **Your worries** was added. **2026-09-03, morning:** 
   on Help and in the refusal after a self-harm test. The words are untouched; a test strips the
   tags off and compares sentence 7 character for character.
 - **`web/content/places.js`** is new and holds every link. TrybeUP is in it, second in its
-  group, saying we made it and what it costs. It is a **placeholder until Misha signs it off**.
+  group, saying we made it and what it costs. **Placeholder until Misha signs it off.**
 
-**Still true:** both doors ship in v1 (**Misha must sign off the six surface-problem labels**);
-a person's own entry ships in v1; **Q1 (name, trademark, domain) is open** and blocks release.
+**Still true:** both doors and a person's own entry ship in v1; **Q1 (name, trademark, domain)
+is open** and blocks release.
 
 ## 2. The next action
 
