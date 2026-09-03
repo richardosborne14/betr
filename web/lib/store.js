@@ -27,8 +27,20 @@
   var VERSION = 2;
   var OLD_RATES = { 80: 8, 55: 6, 30: 3, 10: 1 };
 
+  /*
+    `open` is every test that has been locked in and not yet finished. It was added by B8,
+    when "New worry" became one tap away from every screen: before that, starting another
+    worry silently overwrote whatever you had promised yourself you would do today.
+
+    There is no cap on how many are in here, on purpose (B8; research §3.1 and §3.3 — the
+    risk in self-help is stopping, not doing too much). Nothing counts them, and nothing here
+    is ever ordered by how long it has been waiting.
+
+    It needs no version bump: a state saved before B8 simply has no `open`, and normalise
+    gives it an empty one.
+  */
   function blank() {
-    return { v: VERSION, stage: 'start', cur: null, done: [], seenInstall: false };
+    return { v: VERSION, stage: 'start', cur: null, open: [], done: [], seenInstall: false };
   }
 
   /* Anything we cannot vouch for is replaced, never repaired halfway. */
@@ -37,6 +49,11 @@
     var s = blank();
     if (typeof raw.stage === 'string') s.stage = raw.stage;
     if (raw.cur && typeof raw.cur === 'object' && !Array.isArray(raw.cur)) s.cur = raw.cur;
+    if (Array.isArray(raw.open)) {
+      s.open = raw.open.filter(function (t) {
+        return t && typeof t === 'object' && !Array.isArray(t) && typeof t.test === 'string' && t.locked;
+      });
+    }
     if (Array.isArray(raw.done)) {
       s.done = raw.done.filter(function (d) {
         return d && typeof d === 'object' && typeof d.o === 'string';
@@ -59,7 +76,8 @@
   /* Nothing a person would miss: no results, no test in flight, nothing they have dismissed. */
   function isEmpty(state) {
     if (!state) return true;
-    return (!state.done || !state.done.length) && !state.cur && state.seenInstall !== true;
+    return (!state.done || !state.done.length) && (!state.open || !state.open.length) &&
+      !state.cur && state.seenInstall !== true;
   }
 
   function create(storage) {
@@ -119,6 +137,16 @@
       version: VERSION,
       exported: new Date().toISOString(),
       note: 'Everything BETR has ever stored on this device. There is no copy anywhere else.',
+      waiting: (s.open || []).map(function (t) {
+        return {
+          lockedIn: t.locked || null,
+          worry: t.label || t.id || null,
+          belief: t.belief || null,
+          expected: t.x || null,
+          test: t.test || null,
+          leftOut: t.drop || null
+        };
+      }),
       results: (s.done || []).map(function (d) {
         return {
           when: d.when || null,

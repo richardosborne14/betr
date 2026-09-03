@@ -1,7 +1,8 @@
 # B8: The menu, and Help — three doors from every screen
 
-**Status:** Not started. Written 2026-09-03 from the founder's notes after testing v1
-**Confidence:** —
+**Status:** Built 2026-09-03. Not yet walked on a phone (J3). The Help link list is a
+placeholder until Misha signs it off.
+**Confidence:** 8/10 — what the two points are is at the bottom of this file.
 **Date opened:** 2026-09-03
 **Depends on:** B2 (done). B1's real words land in the same files. Misha signs off the Help
 list before release, the way he signs off the six surface-problem labels (B0 Q2a).
@@ -196,3 +197,66 @@ rule: **Your worries · New worry · Help**, not `your worries · new · help`.
 - Misha has signed off the "other places" list.
 - J1 and J2 still walk clean on a phone, and a new J3 walks the menu from every screen.
 - `node --test` green from the repo root, and the confidence score recorded here.
+
+---
+
+## What was built, 2026-09-03
+
+**Files.** `web/content/places.js` is new and holds every link. `web/lib/content.js` gained
+`validatePlaces`. `web/lib/store.js` gained `S.open`. `web/app.js` gained the menu, parking,
+and Help in place of `about`. `web/tests/harness.js` is the fake DOM lifted out of
+`loop.test.js` so more than one file can use it; `web/tests/menu.test.js` is new. **76 tests,
+all green**, up from 63.
+
+**The menu.** Three plain words fixed to the bottom of every screen. Every screen paints it,
+which is why every screen now goes through `paint()` instead of setting `innerHTML` itself:
+setting `innerHTML` a second time would wipe the handlers the screen had just wired.
+`.stage` reserves the menu's height in its bottom padding, so nothing sits underneath it.
+
+**Checked in a real browser at 320×568**, the shortest phone anyone still uses: on all ten
+screens, scrolled to the bottom, the big button and the last element clear the menu by 37px
+or more, and nothing overflows sideways. Nothing is fetched after load on any of them.
+
+**A test that waits.** `S.open` is every test locked in and not finished. Leaving the loop
+parks whatever is in hand — `go()` does it, so it holds for the menu, the back button and
+every other way out, not only for *New worry*. An unlocked draft is let go; a locked one
+waits. There is no cap and nothing counts them: one waiting test gets a line on the front
+screen with a way back in, several get one line that opens Your worries. On Your worries each
+sits on its own worry's card with **Done it** and **Didn't get to it**. Export carries them.
+
+**Help**, in this order: the crisis lines; *What CBT is, and which bit of it this is*; what
+this is (the old screen, word for word); the airplane-mode proof, export and delete; other
+places; who made this and the code.
+
+**Two changes to what this file specified, both deliberate:**
+
+1. **The CBT primer was added, second, above the small print.** The founder asked for it
+   mid-build: *"a very clear primary thing to read in the help section about CBT ... either
+   from the official CBT website stuff, or our own explanation of why this app exists and why
+   it uses CBT, or both."* It is both — three short paragraphs written fresh, then the NHS's
+   and BABCP's own pages on CBT. It claims nothing the nine sentences do not already say, and
+   it repeats *if you can see one, please do* from sentence 3. The crisis block is still first,
+   which is the part of this task's order that was load-bearing.
+2. **"Pick a different one" came off the locked screen**, and *your worries / home / what this
+   is* came off the start and result screens. All of them are the menu's job now, and leaving
+   them would be the two-menus problem this task set out to fix. The second door kept its line
+   on the front screen and gained one on the pick list, because *New worry* lands on the pick
+   list and the second door would otherwise be reachable only by going back.
+
+## What is still open
+
+- **The link list itself is a placeholder. Misha signs it off before release.** `signedOff:
+  false` sits at the top of `places.js`. Groups one and two are the examples this task named;
+  group three is *Side by Side* and TrybeUP, and it is the one that most needs him — it must
+  not read as "this app is for addicts", which is why no recovery fellowship is named.
+- **The NHS CBT link is the longest URL on the list** and the likeliest to rot. Nothing in
+  BETR can check it at runtime, by design. The manual check at each release still needs a
+  named owner.
+- **J3 has not been walked on a phone.** Neither have J1 and J2.
+- **Age gate (Q9)** is still open, and Help is where it would be explained.
+
+## Confidence: 8/10
+
+The two points off: the link list is not signed off and one of its URLs is long enough to
+worry about; and nothing here has been walked on a real phone — the layout clearance was
+measured in headless Chrome at a phone's size, which is not a thumb on glass.

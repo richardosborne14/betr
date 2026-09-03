@@ -15,6 +15,15 @@
   var FIELDS = ['id', 'label', 'belief', 'expect', 'test', 'drop', 'lane'];
   var MAX_VISIBLE = 12;
 
+  /*
+    A place on the Help screen has three fields and no fourth. The missing fourth is the
+    point: there is nowhere to put a lane, a door, a tag or a score, so nothing on that list
+    can ever be chosen for the person by anything they entered (research §5.2, B8).
+  */
+  var PLACE_FIELDS = ['name', 'url', 'what'];
+  var OURS = 'trybeup.com';
+  var SHORTENERS = ['bit.ly', 't.co', 'tinyurl.com', 'goo.gl', 'ow.ly', 'buff.ly', 'rebrand.ly', 'lnkd.in'];
+
   function byId(worries, id) {
     for (var i = 0; i < worries.length; i++) if (worries[i].id === id) return worries[i];
     return null;
@@ -89,12 +98,85 @@
     return problems;
   }
 
+  /*
+    The Help list. Plain https, no parameters, no shorteners, and ours is never first.
+    Returns plain-English problems; empty means the list is shippable, once Misha has read it.
+  */
+  function validatePlaces(places) {
+    var problems = [];
+    if (!places || !Array.isArray(places.groups) || !places.groups.length) {
+      return ['places.js is empty'];
+    }
+    if (typeof places.intro !== 'string' || !places.intro.trim()) {
+      problems.push('places.js has no intro line');
+    }
+    if (!Array.isArray(places.reading) || !places.reading.length) {
+      problems.push('places.js has nothing to read about CBT');
+    } else {
+      checkItems('reading', places.reading, problems);
+    }
+
+    places.groups.forEach(function (grp, gi) {
+      var where = 'group ' + gi + ' (' + ((grp && grp.title) || 'no title') + ')';
+      if (!grp || typeof grp.title !== 'string' || !grp.title.trim()) {
+        problems.push(where + ' is missing a title');
+        return;
+      }
+      if (!Array.isArray(grp.items) || grp.items.length < 2) {
+        problems.push(where + ' needs at least two places in it');
+        return;
+      }
+      checkItems(where, grp.items, problems);
+    });
+
+    return problems;
+  }
+
+  /* Every link on the Help screen goes through this, wherever on the screen it sits. */
+  function checkItems(where, items, problems) {
+    items.forEach(function (p, i) {
+      var at = where + ' item ' + i + ' (' + ((p && p.name) || 'no name') + ')';
+      if (!p || typeof p !== 'object') { problems.push(at + ' is not a place'); return; }
+
+      PLACE_FIELDS.forEach(function (field) {
+        if (typeof p[field] !== 'string' || !p[field].trim()) problems.push(at + ' is missing ' + field);
+      });
+      Object.keys(p).forEach(function (field) {
+        if (PLACE_FIELDS.indexOf(field) === -1) {
+          problems.push(at + ' has an extra field "' + field + '": a place is three fields, so that nothing here can be picked for the person');
+        }
+      });
+      if (typeof p.url !== 'string') return;
+
+      if (!/^https:\/\/[a-z0-9.-]+(\/[A-Za-z0-9\/._-]*)?$/.test(p.url)) {
+        problems.push(at + ' url "' + p.url + '" must be plain https with no query string, no fragment and no odd characters');
+      }
+      SHORTENERS.forEach(function (short) {
+        if (p.url.indexOf('//' + short) !== -1) problems.push(at + ' uses a link shortener');
+      });
+
+      /* Rule 9, as amended by B8. Ours is listed, never led with, and never disguised. */
+      if (p.url.indexOf(OURS) !== -1) {
+        if (i === 0) problems.push(at + ' is ours and is first in its group; it may never be first');
+        if (!/made by us/i.test(p.what || '')) {
+          problems.push(at + ' is ours and does not say so in the entry itself');
+        }
+        if (!/\bfree\b/i.test(p.what || '') || !/\bpaid\b|\bcosts?\b/i.test(p.what || '')) {
+          problems.push(at + ' is ours and does not say plainly what it costs');
+        }
+        if (/[?#]/.test(p.url)) problems.push(at + ' is ours and carries a parameter');
+      }
+    });
+  }
+
   return {
     LANES: LANES,
     FIELDS: FIELDS,
+    PLACE_FIELDS: PLACE_FIELDS,
     MAX_VISIBLE: MAX_VISIBLE,
     byId: byId,
     validateWorries: validateWorries,
-    validateDoors: validateDoors
+    validateDoors: validateDoors,
+    validatePlaces: validatePlaces
   };
 });

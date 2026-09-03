@@ -74,3 +74,30 @@ understand or when a decision was reversed.
   proof was driving Chrome over CDP — plain `fetch` and `WebSocket` in Node 22, no dependencies
   — clicking through four loops on a real page and reading `localStorage` back. Worth the
   fifteen minutes for anything where the value only appears on the second use.
+
+## 2026-09-03 — the menu (B8)
+
+- **`Emulation.setDeviceMetricsOverride` is the only way to get a real phone viewport out of
+  headless Chrome.** `--window-size=320,568` produced a 500×481 CSS viewport, which would have
+  made the "does the menu cover the big button" check meaningless in the direction that hides
+  the bug. One CDP call before the walk gives an honest 320×568, and the answer arrives in
+  seconds: scroll to the bottom of every screen and measure `button.bottom - menu.top`. This
+  is the second time `--window-size` has lied; stop reaching for it.
+- **A fixed element on every screen forces every screen through one painter.** `innerHTML +=`
+  after a screen has wired its handlers silently kills every one of them, because the browser
+  re-parses the whole subtree. The fix was a two-line `paint(html)` that appends the menu
+  before the assignment, and one call to `wireMenu()` at the end of `render()`. Rewriting the
+  eleven `app.innerHTML = …` statements by hand would have been a regex; the statements span
+  many lines and contain `;` inside `map()` callbacks, so it took a small paren-depth scanner
+  instead. Worth knowing before trying to "just sed it".
+- **The safest place for a rule about content is a shape the content cannot break.** The Help
+  list may never be chosen for a person by anything they entered. That is enforced not by a
+  test looking for suspicious code, but by a place having exactly three fields — `name`, `url`,
+  `what` — with a test that fails on a fourth. There is nowhere to hang a lane, a door or a
+  score off, so the wiring cannot be added by accident later.
+- **Parking the in-flight test belongs in `go()`, not in the button that prompted it.** B8 asked
+  that *New worry* not bin a locked-in test. Doing it in that one handler would have left the
+  same hole behind Help, behind Your worries and behind the back button. One line at the top of
+  `go()` — if the destination is outside the loop, put down what you are holding — closes all
+  of them, and makes the rule true by construction rather than by remembering.
+

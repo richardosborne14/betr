@@ -2,8 +2,12 @@
   Betr v1 — the whole app.
 
   Seven screens for the loop (start, pick, test, locked, happened, sure, result), plus the
-  second door, the three screens for a person's own entry, "your worries", and "what this is".
+  second door, the three screens for a person's own entry, "your worries", and Help.
   Four taps and one sentence gets you all the way round.
+
+  Under all of them, on every screen, three plain words: Your worries · New worry · Help.
+  That row is not a tab bar and must not grow into one (B8, CLAUDE.md rule 10 as amended
+  2026-09-03): no icons, no selected state, no badge, no count, no fourth item.
 
   Things that are deliberate and should not be "fixed":
     - no streak, no red day, no "you missed", no cap on rest. Completed tests is still the
@@ -22,6 +26,7 @@
   var content = Betr.content;
   var WORRIES = Betr.worries;
   var DOORS = Betr.doors;
+  var PLACES = Betr.places;
 
   /*
     The purpose statement. Rule: identical in the app, the manifest, the store listing and
@@ -79,8 +84,17 @@
     });
   }
 
+  /* The four screens that belong to a test in hand. Everywhere else is outside the loop. */
+  var IN_LOOP = ['plan', 'locked', 'happened', 'sure'];
+
   function go(stage) {
     refusal = null;
+    /*
+      Leaving the loop puts whatever is in hand down safely: a locked-in test goes to Your
+      worries and waits, an unlocked draft is let go. Nothing you promised yourself is ever
+      quietly replaced by the next thing you tap (B8).
+    */
+    if (IN_LOOP.indexOf(stage) === -1) park();
     S.stage = stage;
     save();
     render();
@@ -90,6 +104,66 @@
   function q(sel) { return app.querySelector(sel); }
   function qa(sel) { return Array.prototype.slice.call(app.querySelectorAll(sel)); }
   function on(sel, fn) { var el = q(sel); if (el) el.onclick = fn; return el; }
+
+  /* ---------------------------------------------------------------- the three doors */
+
+  /*
+    The menu the founder asked for on 2026-09-03, and the rule it lives under.
+
+    It is three doors, not a place you live in. Plain words, no icons, no selected state, no
+    badge, no dot, no count, no fourth item. A count here would turn "tests you have on the
+    go" into a tally of things you said you would do and didn't, and that is a shame surface
+    (B8; research §4.3). If someone proposes a fifth item, the answer is no.
+
+    Every screen paints it, which is why every screen goes through paint() rather than
+    setting innerHTML itself: setting innerHTML a second time would wipe the handlers the
+    screen had just wired.
+  */
+  function menu() {
+    return '<nav class="menu" aria-label="Betr">' +
+      '<button id="m-mine">Your worries</button>' +
+      '<button id="m-new">New worry</button>' +
+      '<button id="m-help">Help</button>' +
+    '</nav>';
+  }
+
+  function paint(html) { app.innerHTML = html + menu(); }
+
+  function wireMenu() {
+    on('#m-mine', function () { go('mine'); });
+    on('#m-new', function () { S.filter = null; go('pick'); });
+    on('#m-help', function () { go('help'); });
+  }
+
+  /*
+    A test you have locked in is a promise you made to yourself, not a slot. With "New worry"
+    one tap from everywhere, it would otherwise be overwritten without a word — so instead it
+    waits for you, on Your worries, until you say what happened.
+
+    There is no cap on how many wait (B8). The research points the other way: completed
+    experiments are what moved the needle (§3.3), and the risk in unguided self-help is
+    stopping, not doing too much (§3.1). What is protected is the day, not the number: nothing
+    counts these, nothing calls them overdue, and nothing orders them by age.
+
+    An unlocked draft is not a commitment, so it is simply let go.
+  */
+  function park() {
+    var c = S.cur;
+    S.cur = null;
+    if (!c || !c.locked) return;
+    if (S.open.indexOf(c) !== -1) return;
+    S.open.push(c);
+    save();
+  }
+
+  /* Pick a waiting test back up. Whatever was in hand waits its own turn. */
+  function resume(t, stage) {
+    park();
+    var i = S.open.indexOf(t);
+    if (i !== -1) S.open.splice(i, 1);
+    S.cur = t;
+    go(stage || 'locked');
+  }
 
   function worriesFor(doorId) {
     if (!doorId) return WORRIES;
@@ -172,38 +246,57 @@
       start: start, doors: doors, pick: pick,
       'own-belief': ownBelief, 'own-test': ownTest, 'own-drop': ownDrop,
       plan: plan, locked: locked, happened: happened, sure: sure,
-      result: result, mine: mine, about: about
+      result: result, mine: mine, help: help,
+      about: help   /* what a phone that saw the old "what this is" screen has stored */
     };
     /* Any half-finished loop that lost its item drops back to the start rather than crashing. */
-    var needsCur = ['plan', 'locked', 'happened', 'sure'];
-    if (needsCur.indexOf(S.stage) !== -1 && !S.cur) S.stage = 'start';
+    if (IN_LOOP.indexOf(S.stage) !== -1 && !S.cur) S.stage = 'start';
     (map[S.stage] || start)();
+    wireMenu();
+  }
+
+  /*
+    What is on the go, on the front screen, without becoming a tally (B8). One waiting test
+    gets its own line and a way straight back into it. Several get one line that opens Your
+    worries — never a stacked list of everything you said you would do, and never a number.
+  */
+  function waitingBlock() {
+    if (!S.open.length) return '';
+    if (S.open.length === 1) {
+      return '<div class="note"><b>On the go.</b> ' + esc(S.open[0].test) +
+        '<div class="row"><button class="ghost" id="pickup">Pick it up</button></div></div>';
+    }
+    return '<p class="tiny"><button id="pickup">Tests you’ve got on the go</button></p>';
+  }
+
+  function wireWaiting() {
+    on('#pickup', function () {
+      if (S.open.length === 1) resume(S.open[0], 'locked');
+      else go('mine');
+    });
   }
 
   function start() {
-    var n = S.done.length;
-    app.innerHTML =
+    paint(
       '<div class="stage">' +
         '<div class="kicker">BETR</div>' +
         '<h1>Sure it’ll go badly?</h1>' +
         '<p class="sub">Pick a worry. Get one tiny thing to do today. Come back and say what happened.</p>' +
         '<button class="big pulse" id="go">Pick a worry <span aria-hidden="true">→</span></button>' +
+        waitingBlock() +
         '<p class="tiny"><button id="doors">Not sure which? Start from what’s going on</button></p>' +
-        '<p class="tiny">No account. No AI. Nothing leaves your phone.' +
-          (n ? ' · <button id="hist">Your worries</button>' : '') +
-          ' · <button id="about">What this is</button></p>' +
+        '<p class="tiny">No account. No AI. Nothing leaves your phone.</p>' +
         (storageOk ? '' :
-          '<p class="tiny">This browser won’t let Betr remember anything — a private window usually does that. ' +
+          '<p class="tiny">This browser won’t let BETR remember anything — a private window usually does that. ' +
           'The loop still works; nothing will be here tomorrow.</p>') +
-      '</div>';
+      '</div>');
     on('#go', function () { S.filter = null; go('pick'); });
     on('#doors', function () { go('doors'); });
-    on('#about', function () { go('about'); });
-    on('#hist', function () { go('mine'); });
+    wireWaiting();
   }
 
   function doors() {
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage">' +
         '<h2>What’s going on?</h2>' +
         '<p class="sub">' + esc(DOORS.intro) + '</p>' +
@@ -215,7 +308,7 @@
           }).join('') +
         '</div>' +
         '<p class="tiny">' + esc(DOORS.foot) + ' None of these is a diagnosis, and Betr never decides which one you are.</p>' +
-      '</div>';
+      '</div>');
     wireBack('start');
     qa('[data-door]').forEach(function (b) {
       b.onclick = function () { S.filter = b.getAttribute('data-door'); go('pick'); };
@@ -224,7 +317,7 @@
 
   function pick() {
     var list = worriesFor(S.filter);
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage">' +
         '<h2>Which one?</h2>' +
         '<p class="sub">Tap the one that’s closest.</p>' +
@@ -235,15 +328,18 @@
           }).join('') +
           '<button class="own" id="own"><span>Something else</span><span class="go" aria-hidden="true">→</span></button>' +
         '</div>' +
-        (S.filter ? '<p class="tiny"><button id="all">Show all ' + WORRIES.length + '</button></p>' : '') +
+        (S.filter
+          ? '<p class="tiny"><button id="all">Show all ' + WORRIES.length + '</button></p>'
+          : '<p class="tiny"><button id="doors">Not sure which? Start from what’s going on</button></p>') +
         '<p class="tiny">Not here on purpose: anything that tests the drink, the screen or the habit ' +
         'itself. Those aren’t tests. We test the worry underneath.</p>' +
-      '</div>';
+      '</div>');
     wireBack(S.filter ? 'doors' : 'start');
     qa('[data-id]').forEach(function (b) {
       b.onclick = function () { startFrom(content.byId(WORRIES, b.getAttribute('data-id'))); go('plan'); };
     });
     on('#all', function () { S.filter = null; go('pick'); });
+    on('#doors', function () { go('doors'); });
     on('#own', function () { draft = { belief: 'If I ', test: '', drop: '' }; go('own-belief'); });
   }
 
@@ -254,14 +350,14 @@
   }
 
   function ownScreen(opts) {
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage">' +
         '<h2>' + opts.title + '</h2>' +
         '<p class="sub tight">' + opts.sub + '</p>' +
         warnBlock() +
         '<textarea id="t" class="short" placeholder="' + esc(opts.placeholder) + '">' + esc(opts.value) + '</textarea>' +
         '<button class="big wide" id="next">Next</button>' +
-      '</div>';
+      '</div>');
     wireBack(opts.back);
     var t = q('#t');
     t.focus();
@@ -329,7 +425,7 @@
 
   function plan() {
     var c = S.cur;
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage">' +
         '<div class="kicker">Here’s your test</div>' +
         '<div class="plan">' +
@@ -344,7 +440,7 @@
         '<button class="big wide" id="lock">I’ll do it today</button>' +
         '<p class="tiny">That locks in what you expect, so later you can’t talk yourself out of ' +
         'what actually happened.</p>' +
-      '</div>';
+      '</div>');
     /* Back goes where they actually came from, not back into a half-finished entry. */
     wireBack(c.from || 'pick');
     on('#xedit', function () { c.editing = true; save(); render(); q('#x').focus(); });
@@ -360,7 +456,7 @@
   function locked() {
     var c = S.cur;
     var offerInstall = !S.seenInstall && !isInstalled();
-    app.innerHTML =
+    paint(
       '<div class="stage">' +
         '<div class="kicker">Locked in</div>' +
         '<h2>Go and do it.</h2>' +
@@ -370,23 +466,21 @@
           : '') +
         (offerInstall ? installBlock() : '') +
         '<button class="big wide" id="done">Done it. Here’s what happened</button>' +
-        '<p class="tiny"><button id="miss">Didn’t get to it</button> · ' +
-        '<button id="drop">Pick a different one</button></p>' +
-      '</div>';
+        '<p class="tiny"><button id="miss">Didn’t get to it</button></p>' +
+      '</div>');
     on('#done', function () { go('happened'); });
     on('#miss', function () { S.cur.missed = true; save(); render(); });
-    on('#drop', function () { S.cur = null; go('pick'); });
     wireInstall();
   }
 
   function happened() {
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage">' +
         '<h2>What happened?</h2>' +
         '<p class="sub">Just what they said or did. No verdict.</p>' +
         '<textarea id="o" placeholder="He said “fair enough” and got his own coffee."></textarea>' +
         '<button class="big wide" id="next">Next</button>' +
-      '</div>';
+      '</div>');
     wireBack('locked');
     var o = q('#o');
     o.value = S.cur.o || '';
@@ -411,7 +505,7 @@
     var at = rate.levelFor(S.done, c);
     var tested = 0;
     S.done.forEach(function (d) { if (rate.keyOf(d) === rate.keyOf(c)) tested++; });
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage">' +
         '<h2>Still think that’s what happens?</h2>' +
         '<p class="sub tight">“' + esc(c.belief) + '”</p>' +
@@ -422,7 +516,7 @@
           }).join('') +
         '</div>' +
         '<p class="tiny"><button data-key="more">More sure than before</button></p>' +
-      '</div>';
+      '</div>');
     wireBack('happened');
     qa('[data-key]').forEach(function (b) {
       b.onclick = function () {
@@ -446,7 +540,7 @@
     /* series() puts the most recently tested first, which is always the one just recorded. */
     var g = rate.series(S.done)[0];
 
-    app.innerHTML =
+    paint(
       '<div class="stage">' +
         '<div class="kicker">' + esc(last.label) + '</div>' +
         '<div class="result">' +
@@ -469,15 +563,10 @@
           '<button class="big" id="again">Do it again tomorrow</button>' +
           '<button class="ghost" id="other">Different worry</button>' +
         '</div>' +
-        '<p class="tiny"><button id="mine">Your worries</button> · ' +
-        '<button id="home">Home</button> · <button id="about">What this is</button></p>' +
-      '</div>';
+      '</div>');
 
     on('#again', function () { again(last, 'result'); });
     on('#other', function () { S.filter = null; go('pick'); });
-    on('#mine', function () { go('mine'); });
-    on('#home', function () { go('start'); });
-    on('#about', function () { go('about'); });
   }
 
   /*
@@ -491,28 +580,73 @@
   */
   function mine() {
     var groups = rate.series(S.done);
-    if (!groups.length) { go('start'); return; }
+    if (!groups.length && !S.open.length) { go('pick'); return; }
     var n = S.done.length;
 
-    app.innerHTML = backButton() +
+    /*
+      One card per belief. A test that is waiting sits on the card for its own belief, and a
+      belief you have started but never finished gets a card of its own, at the top. Nothing
+      is combined across cards, and nothing is ordered by how long it has been waiting.
+    */
+    var cards = groups.map(function (g) {
+      return { key: g.key, g: g, label: g.label, belief: g.belief, open: [] };
+    });
+    S.open.forEach(function (t) {
+      var k = rate.keyOf(t);
+      var card = null;
+      cards.forEach(function (c) { if (c.key === k) card = c; });
+      if (!card) {
+        card = { key: k, g: null, label: t.label, belief: t.belief, open: [] };
+        cards.unshift(card);
+      }
+      card.open.push(t);
+    });
+
+    paint( backButton() +
       '<div class="stage">' +
         '<h2>Your worries</h2>' +
-        '<p class="sub">' + n + ' test' + (n === 1 ? '' : 's') + ' across ' +
-          groups.length + ' worr' + (groups.length === 1 ? 'y' : 'ies') + '. Tap one to test it again.</p>' +
-        groups.map(function (g, i) {
+        '<p class="sub">' + (n
+          ? n + ' test' + (n === 1 ? '' : 's') + ' across ' +
+            groups.length + ' worr' + (groups.length === 1 ? 'y' : 'ies') + '. Tap one to test it again.'
+          : 'What you’ve got on the go. Nothing recorded yet.') + '</p>' +
+        cards.map(function (c) {
           return '<div class="card">' +
-            '<div class="kicker">' + esc(g.label) + '</div>' +
-            '<p class="belief">“' + esc(g.belief) + '”</p>' +
-            ladder(g, { said: true }) +
-            '<button class="ghost" data-again="' + i + '">Test this again</button>' +
+            '<div class="kicker">' + esc(c.label) + '</div>' +
+            '<p class="belief">“' + esc(c.belief) + '”</p>' +
+            (c.g
+              ? ladder(c.g, { said: true })
+              : '<div class="ladder">' + rung('Started', rate.TOP, '') + '</div>') +
+            c.open.map(function (t) {
+              var i = S.open.indexOf(t);
+              return '<div class="waiting">' +
+                '<p class="lbl">On the go</p>' +
+                '<p class="do">' + esc(t.test) + '</p>' +
+                (t.missed ? '<p class="soft">No problem. It’s still here for tomorrow. Smaller counts, too.</p>' : '') +
+                '<div class="row">' +
+                  '<button class="ghost" data-did="' + i + '">Done it</button>' +
+                  '<button class="ghost" data-notyet="' + i + '">Didn’t get to it</button>' +
+                '</div>' +
+              '</div>';
+            }).join('') +
+            (c.g ? '<button class="ghost" data-again="' + groups.indexOf(c.g) + '">Test this again</button>' : '') +
           '</div>';
         }).join('') +
         '<p class="tiny">Each one is its own. Nothing here is added up, and there is no target.</p>' +
-      '</div>';
+      '</div>');
 
     wireBack('start');
     qa('[data-again]').forEach(function (b) {
       b.onclick = function () { again(groups[Number(b.getAttribute('data-again'))].last, 'mine'); };
+    });
+    qa('[data-did]').forEach(function (b) {
+      b.onclick = function () { resume(S.open[Number(b.getAttribute('data-did'))], 'happened'); };
+    });
+    /* Not getting to it costs nothing and changes nothing. It stays exactly where it is. */
+    qa('[data-notyet]').forEach(function (b) {
+      b.onclick = function () {
+        var t = S.open[Number(b.getAttribute('data-notyet'))];
+        if (t) { t.missed = true; save(); render(); }
+      };
     });
   }
 
@@ -577,14 +711,65 @@
     installEvent = e;
   });
 
-  /* ---------------------------------------------------------------- what this is */
+  /* ---------------------------------------------------------------- help */
 
-  function about() {
+  /*
+    Help. Three doors down from every screen, and the order on it is the whole point: the
+    person who needs the first block most is the least able to go looking for it (B8).
+
+      1. the crisis lines, above everything, scrolled past by nobody
+      2. what CBT is and which bit of it this is — the one clear thing to read, asked for by
+         the founder on 2026-09-03. B8's order had this screen going straight from the crisis
+         lines into the small print; this is the deliberate change to it
+      3. what this is: the purpose statement, the nine sentences, the airplane-mode proof,
+         export and delete. This is the old "what this is" screen, word for word
+      4. other places to go, none of them run by us, from content/places.js
+      5. who made this, and the code
+
+    Nothing on this screen is fetched. A link is inert until a person taps it, and then it is
+    their browser going there — no favicon, no preview, no availability check, nothing counted.
+    Turn wifi off and this screen still reads correctly, which is the proof that holds.
+  */
+  function help() {
     var build = document.querySelector('meta[name="betr-build"]');
     var hash = build ? build.getAttribute('content') : 'dev';
 
-    app.innerHTML = backButton() +
+    paint( backButton() +
       '<div class="stage"><div class="sheet">' +
+
+        '<h3>If you are in danger or in crisis</h3>' +
+        '<p>' + esc(CRISIS) + '</p>' +
+
+        /*
+          The primer. Founder, 2026-09-03: there should be one clear thing to read about CBT,
+          before the small print. It sits second, under the crisis lines and above everything
+          else, and it is written fresh — not a word of it comes from CCI, Getselfhelp,
+          Therapist Aid, Psychology Tools or the Beck Institute (rule 8). It explains and it
+          points; it claims nothing the nine sentences below do not already say.
+        */
+        '<h3>What CBT is, and which bit of it this is</h3>' +
+        '<div class="primer">' +
+          '<p>CBT is a talking therapy. Its plainest idea is this: what you expect to happen ' +
+          'decides what you do, and staying away from the thing keeps the expectation safe. ' +
+          'You never find out you were wrong, so you stay sure.</p>' +
+          '<p>The <b>behavioural experiment</b> is the part of CBT that finds out. You write ' +
+          'down what you think will happen. You do one small thing. Then you write down what ' +
+          'actually happened — not what it meant, just what was said or done. Beliefs move ' +
+          'when the evidence is yours and you collected it yourself.</p>' +
+          '<p>BETR is that one part, and nothing else. It doesn’t ask how your week has been, ' +
+          'doesn’t score you, doesn’t decide anything about you, and can’t see any of it. ' +
+          'A therapist does far more than this, and if you can see one, please do. This is ' +
+          'the piece you can do on your own, today, in about a minute.</p>' +
+          '<p>Written by us. If you want it from people who aren’t us:</p>' +
+          '<ul class="places">' + PLACES.reading.map(function (r) {
+            return '<li><a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' +
+              esc(r.name) + '</a> — ' + esc(r.what) + '</li>';
+          }).join('') + '</ul>' +
+        '</div>' +
+
+        '<h3>What this is</h3>' +
+        '<p>' + esc(PURPOSE) + '</p>' +
+        '<ol>' + SENTENCES.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol>' +
 
         '<h3>Don’t take our word for it</h3>' +
         '<p>Turn on airplane mode. Everything still works, because nothing here ever needed ' +
@@ -599,14 +784,17 @@
         '<button class="plain" id="wipe">Delete everything</button></p>' +
         '<div id="io"></div>' +
 
-        '<h3>What this is</h3>' +
-        '<p>' + esc(PURPOSE) + '</p>' +
-        '<ol>' + SENTENCES.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' +
+        '<h3>Other places, none of them run by us</h3>' +
+        '<p>' + esc(PLACES.intro) + '</p>' +
+        PLACES.groups.map(function (grp) {
+          return '<h4>' + esc(grp.title) + '</h4>' +
+            '<ul class="places">' + grp.items.map(function (place) {
+              return '<li><a href="' + esc(place.url) + '" target="_blank" rel="noopener noreferrer">' +
+                esc(place.name) + '</a> — ' + esc(place.what) + '</li>';
+            }).join('') + '</ul>';
+        }).join('') +
 
-        '<h3>If you are in danger or in crisis</h3>' +
-        '<p>' + esc(CRISIS) + '</p>' +
-
-        '<h3>When you want to do this with people who don’t know you</h3>' +
+        '<h3>Who made this</h3>' +
         '<p>This is for doing it alone. The people who made it also make TrybeUP, where the ' +
         'same thing is done in small private groups. Only if and when you want that.</p>' +
 
@@ -615,7 +803,7 @@
         'an evening. This build:</p>' +
         '<p class="build">' + (hash === 'dev' ? 'Dev build — not published' : esc(hash)) + '</p>' +
 
-      '</div></div>';
+      '</div></div>');
 
     wireBack('start');
     on('#export', showExport);

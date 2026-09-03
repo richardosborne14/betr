@@ -1,118 +1,12 @@
 /*
-  The loop itself, walked end to end.
+  The loop itself, walked end to end, on the fake DOM in harness.js.
 
-  Betr has no framework and no test browser, so this file carries about eighty lines of the
-  smallest possible fake DOM: enough to hold an innerHTML string, find the elements the app
-  wires handlers to, and click them. It is not a browser and does not pretend to be one — it
-  cannot see layout, CSS, or anything a person would look at. What it can do is catch a
-  crashing screen, a dead button and a broken guard, which is worth having between phone walks.
-
-  The real walk is docs/journeys.md, on a phone, and this does not replace it.
+  It cannot see layout or CSS. What it catches is a crashing screen, a dead button and a
+  broken guard. The real walk is docs/journeys.md, on a phone.
 */
 const { test } = require('node:test');
 const assert = require('node:assert');
-const fs = require('node:fs');
-const path = require('node:path');
-const vm = require('node:vm');
-
-const WEB = path.join(__dirname, '..');
-const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js',
-               'content/worries.js', 'content/whats-going-on.js', 'app.js'];
-
-/* ------------------------------------------------------- the smallest possible DOM */
-
-function makeEl() {
-  return {
-    _html: '', _attrs: null, value: '', textContent: '', onclick: null, children: {},
-    get innerHTML() { return this._html; },
-    set innerHTML(h) { this._html = h; this.children = parse(h); },
-    focus() {}, select() {}, setSelectionRange() {},
-    getAttribute(n) { return this._attrs ? this._attrs[n] : null; },
-    querySelector(sel) { return find(this, sel); },
-    querySelectorAll(sel) { return findAll(this, sel); }
-  };
-}
-
-/* The app only ever reaches for elements by id or by a data- attribute, so that is all we index. */
-function parse(html) {
-  const kids = {};
-  for (const m of html.matchAll(/id="([^"]+)"/g)) kids['#' + m[1]] = makeEl();
-  for (const m of html.matchAll(/data-([a-z]+)="([^"]+)"/g)) {
-    const el = makeEl();
-    el._attrs = { ['data-' + m[1]]: m[2] };
-    const key = '[data-' + m[1] + ']';
-    (kids[key] = kids[key] || []).push(el);
-  }
-  return kids;
-}
-
-function findAll(el, sel) {
-  let out = [];
-  const direct = el.children[sel];
-  if (direct) out = out.concat(direct);
-  for (const key of Object.keys(el.children)) {
-    const kids = Array.isArray(el.children[key]) ? el.children[key] : [el.children[key]];
-    for (const kid of kids) if (kid && kid.children) out = out.concat(findAll(kid, sel));
-  }
-  return out;
-}
-function find(el, sel) { return findAll(el, sel)[0] || null; }
-
-/* ------------------------------------------------------- a running copy of the app */
-
-function boot(seed) {
-  const root = makeEl();
-  const mem = seed ? Object.assign({}, seed) : {};
-  const box = {
-    localStorage: {
-      getItem: (k) => (k in mem ? mem[k] : null),
-      setItem: (k, v) => { mem[k] = String(v); },
-      removeItem: (k) => { delete mem[k]; }
-    },
-    navigator: { storage: { persist() {} } },
-    document: {
-      getElementById: () => root,
-      querySelector: (s) => (s.indexOf('betr-build') !== -1 ? { getAttribute: () => 'dev' } : null)
-    },
-    Date, JSON, Math, String, Array, Object, RegExp, Error
-  };
-  box.self = box;
-  box.window = box;
-  box.window.scrollTo = () => {};
-  box.window.addEventListener = () => {};
-  box.window.matchMedia = () => ({ matches: false });
-  vm.createContext(box);
-  for (const f of FILES) {
-    vm.runInContext(fs.readFileSync(path.join(WEB, f), 'utf8'), box, { filename: f });
-  }
-
-  const api = {
-    mem,
-    /* Everything currently on screen, including anything written into a child element. */
-    html() {
-      let h = root._html;
-      for (const key of Object.keys(root.children)) {
-        const kids = Array.isArray(root.children[key]) ? root.children[key] : [root.children[key]];
-        for (const kid of kids) if (kid && kid._html) h += kid._html;
-      }
-      return h;
-    },
-    tap(sel, i) {
-      const els = findAll(root, sel);
-      const el = els[i || 0];
-      assert.ok(el, 'no such control: ' + sel + '\non: ' + api.html().slice(0, 200));
-      assert.ok(el.onclick, 'dead control: ' + sel + '\non: ' + api.html().slice(0, 200));
-      el.onclick();
-      return api;
-    },
-    type(sel, text) { find(root, sel).value = text; return api; },
-    /* Read a box back. The export lands in a textarea's value, not in the markup. */
-    valueOf(sel) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); return el.value; },
-    shows(s) { assert.ok(api.html().indexOf(s) !== -1, 'not on screen: ' + s + '\non: ' + api.html().slice(0, 300)); return api; },
-    hides(s) { assert.ok(api.html().indexOf(s) === -1, 'still on screen: ' + s); return api; }
-  };
-  return api;
-}
+const { boot } = require('./harness.js');
 
 /* ------------------------------------------------------- the walks */
 
@@ -173,9 +67,9 @@ test('a person’s own test can be repeated tomorrow, and back goes to the resul
   a.tap('#back').shows('You expected');
 });
 
-test('"what this is" carries the sentences, the crisis lines and the lineage', () => {
+test('Help carries the sentences, the crisis lines and the lineage', () => {
   const a = boot();
-  a.tap('#about');
+  a.tap('#m-help');
   a.shows('Turn on airplane mode');
   a.shows('not a medical device');
   a.shows('It does not diagnose, treat, cure or prevent any condition');
@@ -186,8 +80,8 @@ test('"what this is" carries the sentences, the crisis lines and the lineage', (
 
 test('none of the phrases that are never used appears anywhere in the app', () => {
   const a = boot();
-  const screens = ['#about'];
-  a.tap('#about');
+  const screens = ['#m-help'];
+  a.tap('#m-help');
   let seen = a.html();
   a.tap('#back').tap('#go');
   seen += a.html();
@@ -198,7 +92,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   b.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   seen += b.html();
-  seen += b.tap('#mine').html();
+  seen += b.tap('#m-mine').html();
   for (const phrase of ['digital CBT', 'improve your mental health', 'irrational',
                         'streak', 'you missed', 'tracks your anxiety']) {
     assert.ok(seen.toLowerCase().indexOf(phrase.toLowerCase()) === -1, 'found "' + phrase + '"');
@@ -210,7 +104,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   const a = boot();
   a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
-  a.tap('#about').tap('#export');
+  a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
   assert.strictEqual(dump.app, 'BETR');
   assert.strictEqual(dump.results.length, 1);
@@ -219,7 +113,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   a.tap('#wipe').shows('There is no copy anywhere else');
   a.tap('#yes').shows('Sure it’ll go badly?');
   a.hides('He said fair enough');
-  a.tap('#about');
+  a.tap('#m-help');
   assert.strictEqual(JSON.parse(a.tap('#export').valueOf('#dump')).results.length, 0);
   assert.deepStrictEqual(Object.keys(a.mem), [], 'the storage key survived the delete');
 });
@@ -263,7 +157,7 @@ test('the same worry three days running comes down the ladder, one rung at a tim
   a.shows('>7<').shows('Down 3 since you started');
 
   /* three taps of the same words, three different rungs: the thing that used to be impossible */
-  a.tap('#mine').shows('Your worries').shows('3 tests across 1 worry');
+  a.tap('#m-mine').shows('Your worries').shows('3 tests across 1 worry');
   a.shows('He said fair enough.').shows('She said no problem.');
 });
 
@@ -283,7 +177,7 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
   a.tap('#other').tap('[data-id]', 1).tap('#lock').tap('#done');
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
-  a.tap('#mine').shows('2 tests across 2 worries');
+  a.tap('#m-mine').shows('2 tests across 2 worries');
   a.shows('Asking for help').shows('Saying no without an excuse');
 
   /* the older one is the second card, and going again keeps its rung rather than starting over */
@@ -293,12 +187,13 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
   a.tap('[data-key]', 1).shows('>6<');
 });
 
-test('your worries is reachable from the front screen, and only once there is one', () => {
+test('your worries opens the pick list until there is one, and the worry after that', () => {
   const a = boot();
-  a.hides('Your worries');
+  /* nothing recorded: the door still works, and lands somewhere with something to do */
+  a.tap('#m-mine').shows('Which one?');
+  a.tap('#back').shows('Sure it’ll go badly?');
   loop(a, 0, 'He said fair enough.', 1);
-  a.tap('#home').shows('Your worries');
-  a.tap('#hist').shows('Your worries');
+  a.tap('#m-mine').shows('Your worries').shows('He said fair enough.');
   a.tap('#back').shows('Sure it’ll go badly?');
 });
 
@@ -310,7 +205,7 @@ test('a result saved by the version before the ladder still opens, and still cou
     o: 'He said fair enough.', rate: 55, rateLabel: 'A bit less sure', when: '2026-09-01T10:00:00.000Z'
   };
   const a = boot({ 'betr.v1': JSON.stringify({ stage: 'start', done: [old] }) });
-  a.tap('#hist').shows('Your worries').shows('>6<').shows('He said fair enough.');
+  a.tap('#m-mine').shows('Your worries').shows('>6<').shows('He said fair enough.');
 });
 
 /*
@@ -335,8 +230,8 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   a.tap('#nothanks').tap('#done'); sweep();            /* happened */
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();   /* sure */
   a.tap('[data-key]', 1); sweep();                     /* result */
-  a.tap('#mine'); sweep();                             /* your worries */
-  a.tap('#back').tap('#about'); sweep();               /* what this is */
+  a.tap('#m-mine'); sweep();                             /* your worries */
+  a.tap('#back').tap('#m-help'); sweep();               /* what this is */
   a.tap('#export'); sweep();
 
   assert.ok(seen.length > 20, 'only found ' + seen.length + ' labels to check');
@@ -349,7 +244,7 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
 test('the brand is BETR everywhere a person reads it', () => {
   const a = boot();
   a.shows('BETR');
-  a.tap('#about').shows('BETR helps you test unhelpful beliefs');
+  a.tap('#m-help').shows('BETR helps you test unhelpful beliefs');
   a.shows('BETR is plain HTML');
   assert.ok(a.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in prose');
 });

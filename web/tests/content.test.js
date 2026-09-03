@@ -7,6 +7,7 @@ const assert = require('node:assert');
 
 const worries = require('../content/worries.js');
 const doors = require('../content/whats-going-on.js');
+const places = require('../content/places.js');
 const content = require('../lib/content.js');
 const guards = require('../lib/guards.js');
 
@@ -16,6 +17,23 @@ test('every worry has its six parts, a lane, and a conditional belief', () => {
 
 test('the second door points only at worries that exist', () => {
   assert.deepStrictEqual(content.validateDoors(doors, worries), []);
+});
+
+test('every place on the Help screen is a plain https link with nothing attached', () => {
+  assert.deepStrictEqual(content.validatePlaces(places), []);
+});
+
+/*
+  A place has three fields and no fourth. That is what makes it impossible for the Help list
+  to be chosen, ordered or filtered by anything the person entered — there is nowhere to hang
+  the wiring off (research §5.2, B8).
+*/
+test('nothing on the Help list can ever be aimed at a person', () => {
+  const fields = new Set();
+  const every = places.reading.concat(...places.groups.map((g) => g.items));
+  for (const place of every) Object.keys(place).forEach((k) => fields.add(k));
+  assert.deepStrictEqual([...fields].sort(), ['name', 'url', 'what']);
+  assert.ok(!/\blane\b|\bdoor\b|\bworr/i.test(Object.keys(places).join(' ')));
 });
 
 test('no more than twelve are visible without a "more" screen', () => {
@@ -43,7 +61,7 @@ test('nothing in the content says any of the phrases that are never used', () =>
     'digital cbt', 'improve your mental health', 'treats', 'reduces symptoms',
     'tracks your anxiety', 'irrational', 'streak'
   ];
-  const all = JSON.stringify(worries) + JSON.stringify(doors);
+  const all = JSON.stringify(worries) + JSON.stringify(doors) + JSON.stringify(places);
   for (const phrase of banned) {
     assert.ok(all.toLowerCase().indexOf(phrase) === -1, 'content contains "' + phrase + '"');
   }

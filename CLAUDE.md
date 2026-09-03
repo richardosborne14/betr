@@ -68,9 +68,13 @@ rules at once, and every one of them has failed in some other product.
   `package.json` dependencies. Tests run with `node --test` from the repo root (not
   `node --test web/tests/`; Node 22 rejects a directory there). Keep it readable by a
   stranger in an evening; that is part of the trust story.
-- **Content lives in `web/content/worries.js`**, not in code. B1 owns it. It is a `.js` file and
-  not `.json` because a browser will not fetch JSON from a page opened off the filesystem, and
-  the founder opens `web/index.html` directly. It is still one plain array with no logic in it.
+- **Content lives in `web/content/`**, not in code: `worries.js` (B1 owns it), `whats-going-on.js`
+  and, from B8, `places.js` — every link on the Help screen, and the only place a link may be
+  added. They are `.js` files and not `.json` because a browser will not fetch JSON from a page
+  opened off the filesystem, and the founder opens `web/index.html` directly. Still plain data,
+  no logic. A link is plain `https`, with no query string, no campaign parameter and no
+  shortener, ever; nothing is fetched at runtime to support one — no favicon, no preview, no
+  link check. `web/tests/menu.test.js` holds the allow-list, so a new link shows up in a diff.
 - **The prototype in `prototype/` is frozen.** It is the reference, not the shipping code.
 - **Storage** is `localStorage` behind try/catch, versioned key, and the app must render
   correctly with nothing stored. Export and delete are always one tap away.
