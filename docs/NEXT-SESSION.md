@@ -1,12 +1,12 @@
 # Start here
 
-**Last refreshed:** 2026-09-03, after B15 took every word out of the code.
+**Last refreshed:** 2026-09-03, after B15 and one founder-reported bug.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
 **v1 is built, amended seven times, and now speaks to a screen reader and can be translated.**
-Twelve screens, **125 tests**, no dependencies, no build step, no requests after the page
+Twelve screens, **126 tests**, no dependencies, no build step, no requests after the page
 loads. Earlier amendments: *worry* everywhere and the **1–10 ladder** (09-02); the **BETR**
 wordmark and nothing all-lowercase that a person taps; **B8** — three plain words on every
 screen, a locked-in test that waits for you, and Help; **B17** — the crisis block names the
@@ -15,19 +15,17 @@ country you are actually in; **B1** — all twelve worries rewritten in the audi
 
 **2026-09-03, B15 — built this session.** Every sentence a person can read is now in
 `web/content/strings-en.js` behind a ~90-line `web/lib/i18n.js`. **Not one line of prose is
-left in `app.js`**, and a test sweeps its string literals to keep it that way. `guards.js`
-returns a key instead of a sentence, `rate.js` keeps the distances and not the words.
+left in `app.js`**, and a test sweeps its string literals to keep it that way.
 
 **And the app is no longer silent.** Focus lands on the new screen's heading on every change,
 so tapping the big button now says something out loud instead of nothing at all. The ladder
 reads as *"Now: 9 out of 10. Down one rung."* — no total, no average, because rule 5 applies to
-what is said as much as to what is shown. `lang` and `dir` follow the language. Every layout
-property is logical and every font size is in `rem`: forced to `dir="rtl"` in a real browser
-the whole app mirrors correctly, and at 200% text nothing clips.
+what is said as much as to what is shown. Every layout property is logical and every font size
+is in `rem`: forced to `dir="rtl"` the whole app mirrors, and at 200% text nothing clips.
 
-**Still true:** both doors and a person's own entry ship in v1; **Q1 (name, trademark, domain)
-is open** and blocks release. **Nobody outside this building has read the twelve worries**, and
-**nobody who uses a screen reader has touched the app.** Those are the two live risks.
+**Still true:** **Q1 (name, trademark, domain) is open** and blocks release. **Nobody outside
+this building has read the twelve worries**, and **nobody who uses a screen reader has touched
+the app.** Those two are the live risks.
 
 ## 2. The next action
 
@@ -71,9 +69,9 @@ else. Everything else outstanding needs a person, not a session.
 - **`node --test web/tests/` does not work on Node 22.** Use `node --test` from the repo root.
   `web/tests/harness.js` is the fake DOM; `boot(seed, { timeZone, languages })` is the phone it
   pretends to be, defaulting to London and English.
-- **Every word a person reads is in `web/content/strings-en.js`.** Putting a sentence back into
-  `app.js` fails `i18n.test.js`. Same for a `left:` or a `px` font size in `app.css`.
-- **`instanceof Array` is unreliable here** — the tests run the app inside node's `vm`, so use
+- **Every word a person reads is in `web/content/strings-en.js`**; a sentence back in `app.js`
+  fails `i18n.test.js`, as does a `left:` or a `px` font size in `app.css`.
+- **`instanceof Array` is unreliable here** — the tests run inside node's `vm`; use
   `Object.prototype.toString.call(v) === '[object Array]'`.
 - **Focus IS the announcement.** `paint()` moves focus to `#top`, which reads the heading out.
   The live region is only for what that does not say, and there is a test that it stays empty
@@ -86,22 +84,23 @@ else. Everything else outstanding needs a person, not a session.
   anything `say()` left. Setting `app.innerHTML` directly loses all three.
 - **A new field on the stored state goes in three places**: `blank()`, `normalise()` and
   `isEmpty()`. B17 missed the third and a person's chosen country was thrown away.
-- **`content/zones.js` is generated, never hand-edited.** The recipe is in the B17 task file.
-- **No helpline number is ever written from memory.** Read it off the provider's own site that
-  day and record the URL and the date, or leave the country out.
+- **`content/zones.js` is generated, never hand-edited** (recipe in the B17 task file), and
+  **no helpline number is written from memory** — off the provider's site that day, with the
+  URL and the date, or leave the country out.
 - **Sentence 7 still names 988 and 116 123 inside itself.** Frozen (research §10), and the one
   place a country-wrong number appears. Flagged in the B17 task file; not a session's call.
 - **Language and country are two separate questions** and no file couples them; both test
   files assert it. **The ladder is one belief's grip** — no total, no average across worries,
   no line, no target, on the screen and in what a screen reader says.
-- **Storage is at version 2**; `S.open`, `S.country` and `S.lang` were added without a bump.
-  Don't delete the v1 `rate` migration. **`.kicker` is uppercase in CSS**, so `innerText` shouts.
-- **`file:` is in the CSP source lists** so the page works off disk; `deploy/nginx.conf` drops
-  it. **The habit-word guard blocks "bet"** — relevant to Q1.
+- **Storage is v2** (`open`, `country`, `lang` came without a bump); keep the v1 `rate`
+  migration. **`.kicker` is uppercase in CSS**, so `innerText` shouts. **`file:` is in the CSP
+  source lists** so it works off disk; nginx drops it. **The guard blocks "bet"** — see Q1.
 - **iPhone Safari deletes a web page's storage after seven days unused.** The install card and
   `navigator.storage.persist()` are in; the real fix is B5's native wrap. Research §9.1.
 - **A link is allowed; a request is not.** `menu.test.js` holds the allow-list.
   **"Improve your mental health"** is inside Illinois's definition of therapy services. Never.
+- **A person's own words go through `paras()` and wear `.wrote`.** They type into a textarea, so
+  anything they wrote can have line breaks in it. `esc()` alone draws them on one line.
 
 ## 5. Decisions locked
 
@@ -114,7 +113,8 @@ number belongs to a country and not to a language.
 
 ## 6. What changed last session
 
-2026-09-03: **B15 built** — `content/strings-en.js` and `lib/i18n.js` added, every sentence
-moved out of `app.js`, `guards.js` and `rate.js`; screen-change announcement, focus management,
-the ladder in words, `lang`/`dir`, logical CSS, `rem` sizes; `i18n.test.js` and `a11y.test.js`
-added; 96 → 125 tests. B1, B17 and B3 all landed the same day.
+2026-09-03: **B15 built** — every sentence moved into `content/strings-en.js` behind
+`lib/i18n.js`, the screen-change announcement, the ladder in words, `lang`/`dir`, logical CSS
+and `rem` sizes; 96 → 125 tests. B1, B17 and B3 landed the same day. **Then one bug, founder-
+reported:** what happened, typed as paragraphs, came back out on one line — `paras()` in
+`app.js`, `.wrote` in `app.css`, 126 tests, walked in a real browser.

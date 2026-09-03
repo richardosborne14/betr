@@ -7,6 +7,8 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { boot } = require('./harness.js');
+const fs = require('node:fs');
+const path = require('node:path');
 
 /*
   Labels and tests come from web/content/, never from a literal here. B1 rewrote every one of
@@ -33,6 +35,41 @@ test('a full loop, from the start screen to a result', () => {
   a.tap('[data-key]', 2);
   a.shows('You expected').shows('What actually happened');
   a.shows('He said fair enough').shows('>1<');
+});
+
+/*
+  Founder, 2026-09-03: what happened, typed as two paragraphs, came back out as one line —
+  in the highlighted text on the result screen, and again on the card in Your worries. The
+  breaks were never lost from the stored text; nothing was telling the browser to draw them.
+  The class is the fix, so the class is what this asserts, on both screens, plus the one line
+  of CSS that gives it its meaning.
+*/
+test('what happened keeps the line breaks a person typed, on the result and on the card', () => {
+  const written = 'He said fair enough.\n\nThen he made me one as well.';
+  const a = boot();
+  a.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.type('#o', written).tap('#next').tap('[data-key]', 2);
+
+  /* One paragraph per paragraph, and the class that lets a browser draw a line break. */
+  const onResult = a.html();
+  assert.match(onResult, /<p class="real"><span class="wrote">He said fair enough\.<\/span>/);
+  assert.match(onResult, /<p class="real"><span class="wrote">Then he made me one as well\.<\/span>/);
+
+  a.tap('#m-mine');
+  const onCard = a.html();
+  assert.match(onCard, /<p class="said"><span class="wrote">He said fair enough\.<\/span>/);
+  assert.match(onCard, /<p class="said"><span class="wrote">Then he made me one as well\.<\/span>/);
+
+  /* A single line break inside one paragraph is the stylesheet's job, and stays in the text. */
+  const b = boot();
+  b.tap('#go').tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.type('#o', 'One line.\nAnd the next.').tap('#next').tap('[data-key]', 2);
+  assert.ok(b.html().indexOf('One line.\nAnd the next.') !== -1,
+    'a single line break inside a paragraph must survive into the markup');
+
+  const css = fs.readFileSync(path.join(__dirname, '..', 'app.css'), 'utf8');
+  assert.match(css, /\.wrote\s*\{[^}]*white-space\s*:\s*pre-wrap/,
+    'the wrote class is what draws the line breaks; without pre-wrap it does nothing');
 });
 
 test('the count is completed tests, and "didn’t get to it" costs nothing', () => {

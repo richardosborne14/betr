@@ -132,6 +132,27 @@
     });
   }
 
+  /*
+    A person's own words, put back on the screen the way they typed them.
+
+    Founder, 2026-09-03: what happened, typed as two paragraphs, came back out as one line —
+    on the result screen and again on the card. A blank line means a new paragraph, so each
+    paragraph gets its own element rather than one element with empty lines inside it: the
+    yellow on the result screen is drawn around the text line by line, and an empty line drawn
+    that way is a stray yellow stub. Single line breaks inside a paragraph are kept by the
+    `wrote` class in the stylesheet, which is the only thing that tells a browser to draw them.
+
+    The words are never altered, only split: nothing is reflowed, shortened or tidied.
+  */
+  function paras(text, cls) {
+    var blocks = String(text == null ? '' : text).replace(/\r\n?/g, '\n').split(/\n{2,}/)
+      .map(function (p) { return p.replace(/\s+$/, ''); })
+      .filter(function (p) { return p !== ''; });
+    return blocks.map(function (p) {
+      return '<p class="' + cls + '"><span class="wrote">' + esc(p) + '</span></p>';
+    }).join('');
+  }
+
   /* The four screens that belong to a test in hand. Everywhere else is outside the loop. */
   var IN_LOOP = ['plan', 'locked', 'happened', 'sure'];
 
@@ -450,7 +471,7 @@
         '<span class="num" aria-hidden="true">' + level + '</span>' +
         '<span class="sr">' + esc(spoken) + '</span>' +
       '</div>' +
-      (opts.said ? '<p class="said">' + esc(opts.said) + '</p>' : '');
+      (opts.said ? paras(opts.said, 'said') : '');
   }
 
   /* Where it started, then one row per test, newest last. A long ladder keeps its ends. */
@@ -698,13 +719,13 @@
         head('h2', t('plan.kicker'), 'kicker') +
         '<div class="plan">' +
           '<p class="lbl">' + esc(t('plan.today')) + '</p>' +
-          '<p class="do">' + esc(c.test) + '</p>' +
-          '<p class="line">' + tHtml('plan.line', { drop: '<b>' + esc(c.drop) + '</b>' }) + '</p>' +
+          '<p class="do wrote">' + esc(c.test) + '</p>' +
+          '<p class="line wrote">' + tHtml('plan.line', { drop: '<b>' + esc(c.drop) + '</b>' }) + '</p>' +
           '<p class="lbl">' + esc(t('plan.expectLabel')) + '</p>' +
           (c.editing
             ? '<textarea id="x" class="short" aria-label="' + esc(t('plan.expectLabel')) + '">' +
               esc(c.x) + '</textarea><button class="edit" id="xdone">' + esc(t('plan.editDone')) + '</button>'
-            : '<p class="expect">' + esc(c.x) + '</p><button class="edit" id="xedit">' +
+            : '<p class="expect wrote">' + esc(c.x) + '</p><button class="edit" id="xedit">' +
               esc(t('plan.edit')) + '</button>') +
         '</div>' +
         '<button class="big wide" id="lock">' + esc(t('plan.lock')) + '</button>' +
@@ -729,7 +750,7 @@
       '<div class="stage">' +
         '<div class="kicker">' + esc(t('locked.kicker')) + '</div>' +
         head('h2', t('locked.title')) +
-        '<p class="sub">' + esc(c.test) + '<br><b>' + esc(c.drop) + '</b></p>' +
+        '<p class="sub wrote">' + esc(c.test) + '<br><b>' + esc(c.drop) + '</b></p>' +
         (c.missed ? '<div class="note">' + esc(t('locked.missed')) + '</div>' : '') +
         (offerInstall ? installBlock() : '') +
         '<button class="big wide" id="done">' + esc(t('locked.done')) + '</button>' +
@@ -776,7 +797,7 @@
     paint( backButton() +
       '<div class="stage">' +
         head('h2', t('sure.title')) +
-        '<p class="sub tight">“' + esc(c.belief) + '”</p>' +
+        '<p class="sub tight wrote">“' + esc(c.belief) + '”</p>' +
         '<div class="ladder one" role="group" aria-label="' +
           esc(t('a11y.ladder', { belief: unstop(c.belief) })) + '">' +
           rung(t(tested ? 'ladder.lastTime' : 'ladder.started'), at, {}) +
@@ -823,9 +844,9 @@
         head('h2', last.label, 'kicker') +
         '<div class="result">' +
           '<p class="lbl">' + esc(t('result.expected')) + '</p>' +
-          '<p class="you">' + esc(last.x) + '</p>' +
+          paras(last.x, 'you') +
           '<p class="lbl">' + esc(t('result.happened')) + '</p>' +
-          '<p class="real">' + esc(last.o) + '</p>' +
+          paras(last.o, 'real') +
         '</div>' +
         '<div class="board">' +
           '<p class="lbl">' + esc(t('result.ladderLabel')) + '</p>' +
@@ -890,7 +911,7 @@
         cards.map(function (c) {
           return '<div class="card">' +
             '<h3 class="kicker">' + esc(c.label) + '</h3>' +
-            '<p class="belief">“' + esc(c.belief) + '”</p>' +
+            '<p class="belief wrote">“' + esc(c.belief) + '”</p>' +
             (c.g
               ? ladder(c.g, { said: true })
               : '<div class="ladder" role="group" aria-label="' +
@@ -900,7 +921,7 @@
               var i = S.open.indexOf(tst);
               return '<div class="waiting">' +
                 '<p class="lbl">' + esc(t('mine.onTheGo')) + '</p>' +
-                '<p class="do">' + esc(tst.test) + '</p>' +
+                '<p class="do wrote">' + esc(tst.test) + '</p>' +
                 (tst.missed ? '<p class="soft">' + esc(t('locked.missed')) + '</p>' : '') +
                 '<div class="row">' +
                   '<button class="ghost" data-did="' + i + '">' + esc(t('mine.did')) + '</button>' +

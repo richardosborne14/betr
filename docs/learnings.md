@@ -227,3 +227,23 @@ understand or when a decision was reversed.
   "coffee.. How sure you are" and "selfish.”. Ten is completely sure" — are invisible to an
   assertion and obvious the moment the string is read out. Forcing `dir="rtl"` in the browser
   is also the only honest proof that logical CSS actually flips.
+
+## 2026-09-03 — a person's own words (founder-reported bug)
+
+- **`esc()` is not enough to put a person's own words back on the screen.** Every box in BETR
+  is a `<textarea>`, so anything a person writes can contain line breaks and blank lines —
+  and HTML collapses every one of them. "What happened", typed as three paragraphs, came out
+  as a single run-on line on the result screen and again on the card. Escaping is about
+  safety; drawing what they actually typed is a separate job, and nothing in the test suite
+  could see it, because the fake DOM has no layout and the newlines were in the markup all
+  along. The fix is `paras()` (a block per paragraph) plus `.wrote` in the stylesheet
+  (`white-space:pre-wrap` for the single breaks inside one), applied at all six places a
+  typed sentence is redrawn: the expectation, the test, the drop, the belief, the outcome.
+- **A highlight that hugs the words cannot be a block.** The yellow marker on the result
+  screen is `display:inline` with `box-decoration-break:clone`, which is what makes it wrap
+  around the text line by line — and it therefore also draws a stray yellow stub on an empty
+  line. So the paragraph is the block and the highlight is a `<span>` inside it. Anything
+  drawn per line of text needs its blank lines removed rather than styled.
+- **Assert the class, then look at the screen.** `node --test` can prove the markup carries
+  the class that makes line breaks visible; only a screenshot can prove the result is not
+  three yellow boxes with holes in them. Both were needed here, and neither was sufficient.

@@ -93,6 +93,17 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 .sub { font-size:1.25rem; color:var(--ink-2); margin:0 auto 34px; max-width:34ch; text-wrap:balance; }
 .sub.tight { margin-bottom:18px; }
 
+/*
+  Words a person typed themselves — a worry, a test, what they expected, what happened. They
+  wrote it in a textarea, so it can have line breaks and blank lines in it, and every one of
+  those was being flattened into a single line by the time it came back out on the result
+  screen and on the cards. `pre-wrap` and not `pre-line`, so a list they indented survives too;
+  `break-word` so one long unbroken string cannot push a card wider than the phone, and
+  `text-wrap:wrap` because `.sub` balances its lines — which looks wrong the moment the person
+  has chosen the breaks themselves.
+*/
+.wrote { white-space:pre-wrap; overflow-wrap:break-word; text-wrap:wrap; }
+
 .big {
   display:inline-flex; align-items:center; justify-content:center; gap:12px;
   background:var(--btn); color:var(--btn-ink); border:0; border-radius:22px;
@@ -153,8 +164,16 @@ textarea::placeholder { color:var(--ink-3); }
 textarea.short { min-height:96px; }
 
 .result { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:start; margin:0 auto 22px; }
-.result .you { font-size:1.1875rem; color:var(--ink-2); margin:0 0 18px; text-decoration:line-through; text-decoration-color:var(--warn); text-decoration-thickness:2px; }
-.result .real { font-family:var(--display); font-weight:700; font-size:clamp(1.3125rem,4.4vw,1.6875rem); line-height:1.2; margin:0; background:var(--mark); color:var(--mark-ink); padding:6px 10px; border-radius:8px; box-decoration-break:clone; -webkit-box-decoration-break:clone; display:inline; }
+.result .you { font-size:1.1875rem; color:var(--ink-2); margin:0 0 6px; text-decoration:line-through; text-decoration-color:var(--warn); text-decoration-thickness:2px; }
+.result .you + .lbl { margin-block-start:18px; }
+/*
+  What actually happened, one paragraph per paragraph the person typed. The block is the
+  paragraph and the highlight is the inline span inside it, so the yellow hugs the words line
+  by line the way a marker pen would, and the gap between two paragraphs stays unmarked.
+*/
+.result .real { font-family:var(--display); font-weight:700; font-size:clamp(1.3125rem,4.4vw,1.6875rem); line-height:1.2; margin:0 0 12px; }
+.result .real:last-child { margin-block-end:0; }
+.result .real .wrote { background:var(--mark); color:var(--mark-ink); padding:6px 10px; border-radius:8px; box-decoration-break:clone; -webkit-box-decoration-break:clone; display:inline; }
 
 .choices { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:560px; margin:0 auto 22px; }
 .choices button { background:var(--card); border:2px solid var(--edge); border-radius:16px; padding:18px 12px; font-family:var(--display); font-weight:700; font-size:1.0625rem; }
