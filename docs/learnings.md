@@ -192,3 +192,38 @@ understand or when a decision was reversed.
   places and a capped Docker log driver in a third. It is asserted in `tests/deploy.test.js` for
   the same reason the wordmark is: the sentence and the setting have to fail together, or one
   day the sentence will be alone.
+
+## 2026-09-03 — words out of the code, and out loud (B15)
+
+- **`x instanceof Array` is a lie across realms, and BETR has two.** The tests run the app
+  inside node's `vm`, and the native wrap (B5) will run it inside a webview. An array made in
+  one realm fails `instanceof` against the other realm's `Array`, so `i18n.list()` handed back
+  an empty list and the nine sentences silently vanished from Help — no error anywhere, just a
+  missing block. `Object.prototype.toString.call(v) === '[object Array]'` asks what the value
+  *is* rather than where it came from. **Anywhere a value crosses from a content file into
+  library code, test what it is, not where it is from.**
+- **Focusing the heading AND announcing it makes a screen reader say everything twice.** The
+  standard advice is "move focus to the new heading" and "announce the change in a live
+  region", and doing both is a common, invisible mistake: focusing a `tabindex="-1"` heading
+  already reads it aloud. Focus is the announcement. The live region is for what focus does not
+  say — a refusal, a note that appeared in place, a screen that is a shape rather than a
+  sentence. There is now a test that the live region is *empty* on an ordinary screen change.
+- **A px reserve for a fixed bar breaks at 200% text and nothing else does.** Converting every
+  font size to `rem` made the whole app scale properly and hid one bug: `.stage`'s bottom
+  padding reserved the menu's height in px, so at 200% the last line of every screen sat
+  behind the menu. **If a fixed element's height comes from text, everything reserving space
+  for it has to be in the same unit as that text.**
+- **A test that keeps its own copy of BETR's words breaks on the next content edit.** It
+  happened to three assertions in B1 and to five more in B15 (`rate.test.js` held the five
+  re-rate words, `guards.test.js` held the refusals). Both now read the words out of
+  `content/strings-en.js` and assert the *behaviour* — that the key resolves, that no refusal
+  contains a digit. **A test may read content out of `web/content/`; it may never restate it.**
+- **The check that keeps words out of the code is a sweep of the code's own string literals,
+  and it needs two exclusions to be usable:** strip HTML (including a tag split across a
+  concatenation, which is most of them), and require a *space* between the two words, or every
+  dotted key and hyphenated id in the file is a false positive. One allowed exception is
+  listed by hand in `i18n.test.js` with the reason, the same way the link allow-list works.
+- **Driving the app for real found what the fake DOM could not.** Two spoken-sentence bugs —
+  "coffee.. How sure you are" and "selfish.”. Ten is completely sure" — are invisible to an
+  assertion and obvious the moment the string is read out. Forcing `dir="rtl"` in the browser
+  is also the only honest proof that logical CSS actually flips.

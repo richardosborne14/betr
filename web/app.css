@@ -4,6 +4,26 @@
   System fonts only. The prototype loaded Outfit and Karla from Google; v1 may not, because a
   font request is a request, and "nothing is sent to us or anyone else" has to survive someone
   opening the network tab.
+
+  Two rules B15 added, and both of them are cheap now and expensive later:
+
+  1. EVERY LAYOUT PROPERTY IS LOGICAL, not physical. `margin-inline-start`, not `margin-left`;
+     `inset-inline-start`, not `left`; `text-align: start`, not `left`. The browser flips all
+     of them when <html dir> is rtl, so Arabic, Hebrew, Farsi and Urdu are a translation job
+     rather than a rebuild. No right-to-left language ships yet — that is B16 — and this is
+     only so that shipping one costs a day instead of a month. If you add a `left:` here, you
+     have quietly put a month back on it.
+
+  2. EVERY FONT SIZE IS IN REM, not px. A person who has turned their text size up in Android
+     Chrome or their browser settings gets nothing at all from a px, and this is an app for
+     people who will not ask anyone for help — including help reading it. 1rem is 16px unless
+     they changed it, so nothing looks different by default. Keep the `clamp()` minimums and
+     maximums in rem too: only the middle value is allowed to be `vw`, because vw does not
+     answer to a person's text size.
+
+  And one that was already right before B15 and must not be undone: every animation lives
+  inside `@media (prefers-reduced-motion: no-preference)` at the bottom, so motion is opt-in
+  rather than opt-out. Nothing moves for somebody who asked for nothing to move.
 */
 
 :root {
@@ -29,44 +49,64 @@
 html, body { height: 100%; }
 body {
   margin:0; background: var(--ground); color: var(--ink);
-  font-family: var(--body); font-size:18px; line-height:1.45;
+  font-family: var(--body); font-size:1.125rem; line-height:1.45;
   -webkit-font-smoothing: antialiased; -webkit-text-size-adjust:100%;
 }
 button { font: inherit; cursor: pointer; color: inherit; }
 button:focus-visible, textarea:focus-visible { outline: 3px solid var(--btn); outline-offset: 3px; }
 
+/*
+  The heading focus lands on when the screen changes (B15). It is not in the tab order and it
+  is not something a person clicked, so it gets no ring — a box drawn round the title would
+  read as an error to a sighted person and says nothing to anybody else. The screen reader
+  announcement is the whole point of it; the outline was never part of that.
+*/
+[tabindex="-1"]:focus { outline: none; }
+
+/* Decoration, and the one thing on the page that has to turn round in a right-to-left language. */
+.arrow { display:inline-block; }
+[dir="rtl"] .arrow { transform: scaleX(-1); }
+
 .stage {
   min-height:100vh; min-height:100dvh;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center;
-  /* The bottom padding reserves the menu's height, so the big button is never underneath it. */
-  padding: calc(48px + env(safe-area-inset-top)) 20px calc(96px + env(safe-area-inset-bottom));
+  /*
+    The bottom padding reserves the menu's height, so the big button is never underneath it —
+    and it is in rem, not px, because the menu is three words that grow with a person's text
+    size. At 200% a px reserve leaves the last line of every screen behind the menu.
+  */
+  padding: calc(3rem + env(safe-area-inset-top)) 20px calc(6rem + env(safe-area-inset-bottom));
   max-width:720px; margin:0 auto;
 }
+/*
+  The kicker is a heading element on the screens where it is the only title there is (plan,
+  result, and each card on Your worries), so a screen reader has something to land on. These
+  rules have to beat the h1/h2/h3 ones below, which is why line-height is spelled out.
+*/
 .kicker {
-  font-family: var(--display); font-weight:700; font-size:13px; letter-spacing:.14em;
-  text-transform:uppercase; color: var(--btn); margin-bottom:14px;
+  font-family: var(--display); font-weight:700; font-size:.8125rem; letter-spacing:.14em;
+  text-transform:uppercase; color: var(--btn); margin:0 0 14px; line-height:1.45;
 }
-h1 { font-family:var(--display); font-weight:800; font-size:clamp(36px,8vw,60px); line-height:1.04; letter-spacing:-.025em; margin:0 0 16px; text-wrap:balance; }
-h2 { font-family:var(--display); font-weight:800; font-size:clamp(28px,6vw,44px); line-height:1.06; letter-spacing:-.02em; margin:0 0 14px; text-wrap:balance; }
-.sub { font-size:20px; color:var(--ink-2); margin:0 auto 34px; max-width:34ch; text-wrap:balance; }
+h1 { font-family:var(--display); font-weight:800; font-size:clamp(2.25rem,8vw,3.75rem); line-height:1.04; letter-spacing:-.025em; margin:0 0 16px; text-wrap:balance; }
+h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.75rem); line-height:1.06; letter-spacing:-.02em; margin:0 0 14px; text-wrap:balance; }
+.sub { font-size:1.25rem; color:var(--ink-2); margin:0 auto 34px; max-width:34ch; text-wrap:balance; }
 .sub.tight { margin-bottom:18px; }
 
 .big {
   display:inline-flex; align-items:center; justify-content:center; gap:12px;
   background:var(--btn); color:var(--btn-ink); border:0; border-radius:22px;
   padding:26px 40px; font-family:var(--display); font-weight:800;
-  font-size:clamp(21px,4.4vw,29px); letter-spacing:-.01em;
-  box-shadow:var(--shadow); transition:transform .12s ease, background .12s ease; max-width:100%;
+  font-size:clamp(1.3125rem,4.4vw,1.8125rem); letter-spacing:-.01em;
+  box-shadow:var(--shadow); max-width:100%;
 }
-.big:hover { background:var(--btn-hover); transform:translateY(-2px); }
-.big:active { transform:translateY(1px); }
+.big:hover { background:var(--btn-hover); }
 .big.wide { width:100%; max-width:560px; }
 
-.tiny { font-size:14px; color:var(--ink-3); margin-top:22px; max-width:44ch; }
-.tiny button { background:none; border:0; padding:0; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; font-size:14px; }
+.tiny { font-size:.875rem; color:var(--ink-3); margin-top:22px; max-width:44ch; }
+.tiny button { background:none; border:0; padding:0; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; font-size:.875rem; }
 /* A solid chip, not a floating word: Help is long, and it scrolls underneath this. */
-.back { position:fixed; left:14px; top:calc(12px + env(safe-area-inset-top)); background:var(--ground); box-shadow:0 0 0 1px var(--edge); border:0; border-radius:14px; font-family:var(--display); font-weight:700; font-size:15px; color:var(--ink-3); padding:8px 10px; z-index:2; }
+.back { position:fixed; inset-inline-start:14px; top:calc(12px + env(safe-area-inset-top)); background:var(--ground); box-shadow:0 0 0 1px var(--edge); border:0; border-radius:14px; font-family:var(--display); font-weight:700; font-size:.9375rem; color:var(--ink-3); padding:8px 10px; z-index:2; }
 
 /*
   The three doors, on every screen. Not a tab bar and must not become one: plain words, no
@@ -74,143 +114,162 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(28px,6vw,44px)
   2026-09-03). If you are adding an .is-active rule here, that is the thing that was rejected.
 */
 .menu {
-  position:fixed; left:0; right:0; bottom:0; z-index:3;
+  position:fixed; inset-inline:0; bottom:0; z-index:3;
   display:flex; justify-content:center; gap:2px;
   padding:8px 8px calc(8px + env(safe-area-inset-bottom));
   background:var(--ground); border-top:1px solid var(--edge);
 }
 .menu button {
   background:none; border:0; border-radius:12px; padding:10px 14px;
-  font-family:var(--display); font-weight:700; font-size:15px; color:var(--ink-2);
+  font-family:var(--display); font-weight:700; font-size:.9375rem; color:var(--ink-2);
 }
 .menu button:hover { color:var(--btn); }
 
 .list { display:flex; flex-direction:column; gap:12px; width:100%; max-width:560px; margin:0 auto; }
 .list button {
   background:var(--card); border:2px solid var(--edge); border-radius:18px; padding:18px 22px;
-  font-family:var(--display); font-weight:700; font-size:clamp(17px,3.6vw,21px); text-align:left;
+  font-family:var(--display); font-weight:700; font-size:clamp(1.0625rem,3.6vw,1.3125rem); text-align:start;
   line-height:1.2; display:flex; justify-content:space-between; align-items:center; gap:14px;
-  transition:border-color .12s, transform .12s;
 }
-.list button:hover { border-color:var(--btn); transform:translateY(-1px); }
-.list button .go { color:var(--btn); font-size:23px; flex:0 0 auto; }
+.list button:hover { border-color:var(--btn); }
+.list button .go { color:var(--btn); font-size:1.4375rem; flex:0 0 auto; }
 .list button.own { border-style:dashed; }
-.list .under { display:block; font-family:var(--body); font-weight:400; font-size:14.5px; color:var(--ink-3); margin-top:6px; line-height:1.35; }
+.list .under { display:block; font-family:var(--body); font-weight:400; font-size:.90625rem; color:var(--ink-3); margin-top:6px; line-height:1.35; }
 
-.plan { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:left; margin:0 auto 22px; }
-.lbl { font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0 0 6px; }
-.plan .do { font-family:var(--display); font-weight:800; font-size:clamp(23px,5vw,31px); line-height:1.12; letter-spacing:-.015em; margin:0 0 18px; }
-.plan .line { font-size:18px; color:var(--ink-2); margin:0 0 14px; }
+.plan { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:start; margin:0 auto 22px; }
+.lbl { font-family:var(--display); font-weight:700; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0 0 6px; }
+.plan .do { font-family:var(--display); font-weight:800; font-size:clamp(1.4375rem,5vw,1.9375rem); line-height:1.12; letter-spacing:-.015em; margin:0 0 18px; }
+.plan .line { font-size:1.125rem; color:var(--ink-2); margin:0 0 14px; }
 .plan .line b { color:var(--ink); font-weight:700; }
-.plan .expect { background:var(--soft); color:var(--soft-ink); border-radius:12px; padding:12px 14px; font-size:17px; margin:0 0 6px; }
-.edit { background:none; border:0; padding:0; font-size:14px; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; }
+.plan .expect { background:var(--soft); color:var(--soft-ink); border-radius:12px; padding:12px 14px; font-size:1.0625rem; margin:0 0 6px; }
+.edit { background:none; border:0; padding:0; font-size:.875rem; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; }
 
 textarea {
-  width:100%; max-width:560px; font-family:var(--body); font-size:19px; line-height:1.4;
+  width:100%; max-width:560px; font-family:var(--body); font-size:1.1875rem; line-height:1.4;
   padding:16px 18px; border:2px solid var(--edge); border-radius:18px;
   background:var(--card); color:var(--ink); resize:none; min-height:130px; margin:0 0 18px;
 }
 textarea::placeholder { color:var(--ink-3); }
 textarea.short { min-height:96px; }
 
-.result { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:left; margin:0 auto 22px; }
-.result .you { font-size:19px; color:var(--ink-2); margin:0 0 18px; text-decoration:line-through; text-decoration-color:var(--warn); text-decoration-thickness:2px; }
-.result .real { font-family:var(--display); font-weight:700; font-size:clamp(21px,4.4vw,27px); line-height:1.2; margin:0; background:var(--mark); color:var(--mark-ink); padding:6px 10px; border-radius:8px; box-decoration-break:clone; -webkit-box-decoration-break:clone; display:inline; }
+.result { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:start; margin:0 auto 22px; }
+.result .you { font-size:1.1875rem; color:var(--ink-2); margin:0 0 18px; text-decoration:line-through; text-decoration-color:var(--warn); text-decoration-thickness:2px; }
+.result .real { font-family:var(--display); font-weight:700; font-size:clamp(1.3125rem,4.4vw,1.6875rem); line-height:1.2; margin:0; background:var(--mark); color:var(--mark-ink); padding:6px 10px; border-radius:8px; box-decoration-break:clone; -webkit-box-decoration-break:clone; display:inline; }
 
 .choices { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:560px; margin:0 auto 22px; }
-.choices button { background:var(--card); border:2px solid var(--edge); border-radius:16px; padding:18px 12px; font-family:var(--display); font-weight:700; font-size:17px; transition:border-color .12s; }
+.choices button { background:var(--card); border:2px solid var(--edge); border-radius:16px; padding:18px 12px; font-family:var(--display); font-weight:700; font-size:1.0625rem; }
 .choices button:hover { border-color:var(--btn); }
 
 .row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-.ghost { background:none; border:2px solid var(--edge); border-radius:18px; padding:14px 22px; font-family:var(--display); font-weight:700; font-size:17px; color:var(--ink-2); }
+.ghost { background:none; border:2px solid var(--edge); border-radius:18px; padding:14px 22px; font-family:var(--display); font-weight:700; font-size:1.0625rem; color:var(--ink-2); }
 
 /* Links inside a refusal are the crisis numbers. Same colour as the warning, clearly tappable. */
 .warn a { color:inherit; text-decoration:underline; text-underline-offset:3px; font-weight:700; }
-.warn { background:var(--warn-soft); color:var(--warn); border-radius:14px; padding:14px 16px; font-size:16px; line-height:1.4; text-align:left; width:100%; max-width:560px; margin:0 auto 16px; }
-.note { background:var(--soft); color:var(--soft-ink); border-radius:14px; padding:14px 16px; font-size:16px; line-height:1.4; text-align:left; width:100%; max-width:560px; margin:0 auto 16px; }
+.warn { background:var(--warn-soft); color:var(--warn); border-radius:14px; padding:14px 16px; font-size:1rem; line-height:1.4; text-align:start; width:100%; max-width:560px; margin:0 auto 16px; }
+.note { background:var(--soft); color:var(--soft-ink); border-radius:14px; padding:14px 16px; font-size:1rem; line-height:1.4; text-align:start; width:100%; max-width:560px; margin:0 auto 16px; }
 .note .row { justify-content:flex-start; margin-top:10px; }
-.note .ghost { font-size:15px; padding:10px 16px; }
+.note .ghost { font-size:.9375rem; padding:10px 16px; }
 
-.count { font-family:var(--display); font-weight:800; font-size:clamp(54px,14vw,92px); line-height:1; letter-spacing:-.03em; color:var(--btn); margin:0 0 6px; }
+.count { font-family:var(--display); font-weight:800; font-size:clamp(3.375rem,14vw,5.75rem); line-height:1; letter-spacing:-.03em; color:var(--btn); margin:0 0 6px; }
 
 /*
   The ladder. Ten dots and the number, one row per test, one belief per ladder. It is not a
   chart and must never grow into one: no axis, no line between two beliefs, no target mark.
+
+  The dots and the number are aria-hidden and a .sr sentence replaces them, because ten
+  circles say nothing out loud. Rule 5 applies to that sentence too: no total, no average.
 */
-.ladder { width:100%; max-width:560px; margin:0 auto; text-align:left; }
+.ladder { width:100%; max-width:560px; margin:0 auto; text-align:start; }
 .ladder.one { margin:0 auto 22px; }
 .ladder.one .rung { justify-content:center; }
 .rung { display:flex; align-items:center; gap:12px; padding:5px 0; }
-.rung .when { flex:0 0 68px; font-family:var(--display); font-weight:700; font-size:13px; color:var(--ink-3); }
+.rung .when { flex:0 0 68px; font-family:var(--display); font-weight:700; font-size:.8125rem; color:var(--ink-3); }
 .rung .dots { display:flex; gap:5px; flex:0 0 auto; }
 .rung .dots i { display:block; flex:0 0 auto; width:12px; height:12px; border-radius:50%; background:var(--edge); }
 .rung .dots i.on { background:var(--btn); }
-.rung .num { font-family:var(--display); font-weight:800; font-size:18px; color:var(--ink-3); }
+.rung .num { font-family:var(--display); font-weight:800; font-size:1.125rem; color:var(--ink-3); }
 .ladder .rung:last-of-type .num { color:var(--ink); }
-.said { font-size:14px; color:var(--ink-3); margin:2px 0 10px 80px; line-height:1.35; }
+.said { font-size:.875rem; color:var(--ink-3); margin:2px 0 10px; margin-inline-start:80px; line-height:1.35; }
 .said.elided { font-style:italic; }
 /* Read out by a screen reader, seen by nobody: the dots on their own say nothing aloud. */
 .sr { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
-.board { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:22px 26px; width:100%; max-width:560px; margin:0 auto 22px; text-align:left; }
-.board .moved { font-size:15px; color:var(--ink-2); margin:14px 0 0; }
+.board { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:22px 26px; width:100%; max-width:560px; margin:0 auto 22px; text-align:start; }
+.board .moved { font-size:.9375rem; color:var(--ink-2); margin:14px 0 0; }
 
-.card { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:22px 24px; width:100%; max-width:560px; margin:0 auto 14px; text-align:left; }
+.card { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:22px 24px; width:100%; max-width:560px; margin:0 auto 14px; text-align:start; }
 .card .kicker { margin-bottom:8px; }
-.card .belief { font-size:17px; color:var(--ink-2); margin:0 0 16px; }
-.card .ghost { margin-top:16px; font-size:15px; padding:10px 18px; }
+.card .belief { font-size:1.0625rem; color:var(--ink-2); margin:0 0 16px; }
+.card .ghost { margin-top:16px; font-size:.9375rem; padding:10px 18px; }
 
 /* A test that is waiting for you, on its own worry's card. No red, no age, no number. */
 .card .waiting { background:var(--soft); color:var(--soft-ink); border-radius:16px; padding:14px 16px; margin:16px 0 0; }
 .card .waiting .lbl { color:inherit; opacity:.75; }
-.card .waiting .do { font-family:var(--display); font-weight:700; font-size:17px; line-height:1.25; margin:0; }
-.card .waiting .soft { font-size:14px; margin:8px 0 0; }
+.card .waiting .do { font-family:var(--display); font-weight:700; font-size:1.0625rem; line-height:1.25; margin:0; }
+.card .waiting .soft { font-size:.875rem; margin:8px 0 0; }
 .card .waiting .row { justify-content:flex-start; margin-top:12px; }
-.card .waiting .ghost { font-size:15px; padding:9px 16px; border-color:currentColor; color:inherit; }
+.card .waiting .ghost { font-size:.9375rem; padding:9px 16px; border-color:currentColor; color:inherit; }
 
-.sheet { background:var(--card); border:2px solid var(--edge); border-radius:20px; padding:22px 24px; max-width:600px; margin:0 auto; text-align:left; font-size:15.5px; }
-.sheet h3 { font-family:var(--display); font-weight:700; font-size:15px; margin:18px 0 6px; }
-.sheet h3:first-child { margin-top:0; }
+/*
+  Help. Its sections are h2 and its groups are h3 (B15) — before that the whole screen started
+  at h3 with nothing above it, which is a heading list a screen reader cannot make sense of.
+  The sizes are the ones they always were; only the elements changed.
+*/
+.sheet { background:var(--card); border:2px solid var(--edge); border-radius:20px; padding:22px 24px; max-width:600px; margin:0 auto; text-align:start; font-size:.96875rem; }
+.sheet h2 { font-family:var(--display); font-weight:700; font-size:.9375rem; line-height:1.35; letter-spacing:0; margin:18px 0 6px; }
+.sheet h2:first-child { margin-top:0; }
 .sheet p { margin:0 0 6px; }
-.sheet ol { padding-left:18px; margin:0; }
+.sheet ol { padding-inline-start:18px; margin:0; }
 .sheet li { margin-bottom:6px; }
 .sheet .proof { display:flex; gap:26px; margin:8px 0 12px; flex-wrap:wrap; }
-.sheet .proof b { display:block; font-family:var(--display); font-weight:800; font-size:25px; line-height:1; }
-.sheet .proof small { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); }
+.sheet .proof b { display:block; font-family:var(--display); font-weight:800; font-size:1.5625rem; line-height:1; }
+.sheet .proof small { font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); }
 /* The one thing to read, marked as such: a rule down its side and a little more room. */
-.sheet .primer { border-left:3px solid var(--btn); padding-left:15px; margin:8px 0 4px; }
+.sheet .primer { border-inline-start:3px solid var(--btn); padding-inline-start:15px; margin:8px 0 4px; }
 .sheet .primer p { margin:0 0 9px; }
-.sheet h4 { font-family:var(--display); font-weight:700; font-size:14px; color:var(--ink-2); margin:14px 0 4px; }
+.sheet h3 { font-family:var(--display); font-weight:700; font-size:.875rem; color:var(--ink-2); margin:14px 0 4px; }
 .sheet a { color:var(--btn); text-underline-offset:3px; }
 .sheet ul.places { list-style:none; padding:0; margin:0; }
 .sheet ul.places li { margin-bottom:9px; line-height:1.4; }
-.sheet .plain { background:none; border:0; padding:0; font-size:14px; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; margin-right:14px; }
-.sheet textarea { font-size:12px; min-height:150px; margin-top:10px; }
-.sheet .build { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; color:var(--ink-3); word-break:break-all; }
+.sheet .plain { background:none; border:0; padding:0; font-size:.875rem; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; margin-inline-end:14px; }
+.sheet textarea { font-size:.75rem; min-height:150px; margin-top:10px; }
+.sheet .build { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.75rem; color:var(--ink-3); word-break:break-all; }
 
 /*
   B17. The crisis block sits at the top of Help and inside a self-harm refusal, so its parts
   have to read correctly in both: on the card, and on the coloured warning panel where the
   text is already the warning colour and a link must not fight it.
 */
-.quiet { font-size:13px; color:var(--ink-3); line-height:1.45; }
+.quiet { font-size:.8125rem; color:var(--ink-3); line-height:1.45; }
 /* The way out of a wrong guess. On a crisis block it has to be findable, not tucked away. */
-.sheet #where { font-size:15px; color:var(--btn); }
+.sheet #where { font-size:.9375rem; color:var(--btn); }
 .warn p { margin:0 0 8px; }
 .warn p:last-child { margin-bottom:0; }
 .warn ul.places { list-style:none; padding:0; margin:0 0 8px; }
 .warn ul.places li { margin-bottom:6px; }
-.warn .plain { background:none; border:0; padding:0; font:inherit; font-size:15px; color:inherit; text-decoration:underline; text-underline-offset:3px; }
+.warn .plain { background:none; border:0; padding:0; font:inherit; font-size:.9375rem; color:inherit; text-decoration:underline; text-underline-offset:3px; }
 
 /* Every country, so it is long on purpose. Two columns where there is room for two. */
 .sheet ul.countries { columns:2; column-gap:26px; margin-top:8px; }
 .sheet ul.countries li { margin-bottom:5px; break-inside:avoid; }
-.sheet ul.countries .plain { font-size:15px; color:var(--ink); text-decoration:none; text-align:left; }
+.sheet ul.countries .plain, .sheet ul.languages .plain { font-size:.9375rem; color:var(--ink); text-decoration:none; text-align:start; }
 @media (max-width: 380px) { .sheet ul.countries { columns:1; } }
 
+/*
+  Motion is opt-in, not opt-out: nothing in here happens for somebody whose phone says they
+  do not want it. That includes the hover and press transitions, which are small but are
+  still movement, and the one infinite animation in the app. Anything added later belongs
+  in this block too — a `transition:` outside it is the bug this arrangement exists to stop.
+*/
 @media (prefers-reduced-motion: no-preference) {
   .stage { animation: in .25s ease-out both; }
   @keyframes in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  .big { transition:transform .12s ease, background .12s ease; }
+  .big:hover { transform:translateY(-2px); }
+  .big:active { transform:translateY(1px); }
   .big.pulse { animation: pulse 2.4s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { box-shadow:var(--shadow); } 50% { box-shadow:0 26px 60px rgba(31,63,232,.34), 0 2px 6px rgba(20,22,28,.10); } }
+  .list button { transition:border-color .12s, transform .12s; }
+  .list button:hover { transform:translateY(-1px); }
+  .choices button { transition:border-color .12s; }
 }

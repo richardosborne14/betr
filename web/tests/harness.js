@@ -11,6 +11,10 @@
 
   This is not itself a test file: node --test only picks up *.test.js, so nothing here runs
   on its own. It is required by loop.test.js and menu.test.js.
+
+  B15 added three things to it, all of them things the app now does that could silently stop
+  working: a real Intl.PluralRules, a <html> element to write lang and dir onto, and a record
+  of what focus() was last called on. A second language is one more line in FILES.
 */
 const assert = require('node:assert');
 const fs = require('node:fs');
@@ -19,17 +23,27 @@ const vm = require('node:vm');
 
 const WEB = path.join(__dirname, '..');
 const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
+               'lib/i18n.js', 'content/strings-en.js',
                'content/worries.js', 'content/whats-going-on.js', 'content/places.js',
                'content/zones.js', 'content/helplines.js', 'app.js'];
 
 
-function makeEl() {
+/*
+  `focused` is the last element anything called focus() on. B15 moves focus to the new
+  screen's heading on every repaint, because without it a screen reader is told nothing at
+  all when the screen changes — so where focus went is now a thing worth asserting.
+*/
+let focused = null;
+
+function makeEl(id) {
   return {
-    _html: '', _attrs: null, value: '', textContent: '', onclick: null, children: {},
+    _html: '', _id: id || null, _attrs: id ? { id } : null,
+    value: '', textContent: '', onclick: null, children: {},
     get innerHTML() { return this._html; },
     set innerHTML(h) { this._html = h; this.children = parse(h); },
-    focus() {}, select() {}, setSelectionRange() {},
+    focus() { focused = this; }, select() {}, setSelectionRange() {},
     getAttribute(n) { return this._attrs ? this._attrs[n] : null; },
+    setAttribute(n, v) { (this._attrs = this._attrs || {})[n] = v; },
     querySelector(sel) { return find(this, sel); },
     querySelectorAll(sel) { return findAll(this, sel); }
   };
@@ -43,7 +57,7 @@ function makeEl() {
 */
 function parse(html) {
   const kids = {};
-  for (const m of html.matchAll(/id="([^"]+)"/g)) kids['#' + m[1]] = makeEl();
+  for (const m of html.matchAll(/id="([^"]+)"/g)) kids['#' + m[1]] = makeEl(m[1]);
   for (const m of html.matchAll(/data-([a-z]+)="([^"]+)"/g)) {
     const el = makeEl();
     el._attrs = { ['data-' + m[1]]: m[2] };
@@ -80,7 +94,11 @@ function boot(seed, env) {
   env = env || {};
   const timeZone = 'timeZone' in env ? env.timeZone : 'Europe/London';
   const languages = 'languages' in env ? env.languages : ['en'];
-  const root = makeEl();
+  const root = makeEl('app');
+  /* The live region. It is outside #app in index.html so it survives every repaint. */
+  const live = makeEl('say');
+  const html = makeEl('html');
+  focused = null;
   const mem = seed ? Object.assign({}, seed) : {};
   const box = {
     localStorage: {
@@ -88,7 +106,7 @@ function boot(seed, env) {
       setItem: (k, v) => { mem[k] = String(v); },
       removeItem: (k) => { delete mem[k]; }
     },
-    navigator: { storage: { persist() {} }, languages },
+    navigator: { storage: { persist() {} }, languages, language: languages && languages[0] },
     /*
       Real Intl.DisplayNames, so the country list carries the names a browser would print,
       and a stubbed time zone, because that is the signal B17 turns on. A test can pass
@@ -96,10 +114,13 @@ function boot(seed, env) {
     */
     Intl: {
       DateTimeFormat: () => ({ resolvedOptions: () => ({ timeZone }) }),
-      DisplayNames: Intl.DisplayNames
+      DisplayNames: Intl.DisplayNames,
+      /* Real plural rules: lib/i18n.js picks "1 test" / "3 tests" and "1st" / "2nd" with them. */
+      PluralRules: Intl.PluralRules
     },
     document: {
-      getElementById: () => root,
+      documentElement: html,
+      getElementById: (id) => (id === 'say' ? live : root),
       querySelector: (s) => (s.indexOf('betr-build') !== -1 ? { getAttribute: () => 'dev' } : null)
     },
     Date, JSON, Math, String, Array, Object, RegExp, Error
@@ -134,6 +155,11 @@ function boot(seed, env) {
       return api;
     },
     type(sel, text) { find(root, sel).value = text; return api; },
+    /* What a screen reader was told, and where the keyboard is (B15). */
+    said() { return live.textContent; },
+    focusedId() { return focused ? focused._id : null; },
+    lang() { return html.getAttribute('lang'); },
+    dir() { return html.getAttribute('dir'); },
     /* Read a box back. The export lands in a textarea's value, not in the markup. */
     valueOf(sel) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); return el.value; },
     shows(s) { assert.ok(api.html().indexOf(s) !== -1, 'not on screen: ' + s + '\non: ' + api.html().slice(0, 300)); return api; },

@@ -9,9 +9,16 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const rate = require('../lib/rate.js');
 
+/*
+  B15 took the five words out of rate.js so they can be translated. This file still holds the
+  founder's five to the order and the distance they move — that is the part that has to be the
+  same in every language — and reads the words themselves out of the string file.
+*/
+const strings = require('../content/strings-en.js');
+
 test('the words are the ones the founder approved, and "more sure" is the quiet one', () => {
   assert.deepStrictEqual(
-    rate.CHOICES.map((c) => c.label),
+    rate.CHOICES.map((c) => strings.s.rate[c.key]),
     ['Still sure', 'A bit less sure', 'A lot less sure', 'Not sure at all', 'More sure than before']
   );
   assert.deepStrictEqual(rate.CHOICES.filter((c) => c.quiet).map((c) => c.key), ['more']);
@@ -19,7 +26,12 @@ test('the words are the ones the founder approved, and "more sure" is the quiet 
 
 test('there are five words and no slider anywhere', () => {
   assert.strictEqual(rate.CHOICES.length, 5);
-  assert.ok(rate.CHOICES.every((c) => typeof c.label === 'string'));
+  assert.ok(rate.CHOICES.every((c) => typeof strings.s.rate[c.key] === 'string'),
+    'a re-rate word has no entry in strings-en.js');
+  /* and nothing a person reads is left in the file that decides how far each one moves */
+  const src = require('node:fs').readFileSync(require.resolve('../lib/rate.js'), 'utf8');
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  assert.ok(code.indexOf('label:') === -1, 'the words are back in rate.js');
 });
 
 test('every belief starts at 10 and nothing ever leaves the ladder', () => {

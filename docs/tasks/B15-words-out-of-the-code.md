@@ -1,9 +1,11 @@
 # B15: Words out of the code — every string translatable, every screen usable by anyone
 
-**Status:** Not started. Written 2026-09-03 at the founder's request. **First in the reach
-track — before B9.** See `docs/TRACK-reach.md`.
-**Confidence:** —
-**Date opened:** 2026-09-03
+**Status: BUILT, 2026-09-03.** 125 tests green from the repo root, the whole loop driven in a
+real browser at 390×844, and the layout checked mirrored and at 200% text. **Two release
+conditions are still open and are at the bottom of this file: a real screen-reader pass on a
+real phone, and B16 before any second language ships.**
+**Confidence:** 8/10 (reasoning at the bottom)
+**Date opened:** 2026-09-03 · **Built:** 2026-09-03
 **B8 landed 2026-09-03 (`7e8754e`), 78 tests green — the block is clear.** This task rewrites
 nearly every line of `app.js` that renders text, so it must not run while another session has
 that file open. Confirm `git status` is clean before starting.
@@ -179,15 +181,143 @@ of one and can be hidden until there are two.
 
 ## Open, and for the founder
 
-- **i18next or the small module** (above). Recommendation is the small module; the founder's call.
-- Whether B1's fresh words land before this. Translating placeholder wording twice is the waste.
-- Who checks the accessibility work. A real screen-reader pass on a real phone by someone who
-  uses one is worth more than every automated check, and it is a few hundred pounds.
+- ~~i18next or the small module.~~ **Answered 2026-09-03: the small module.** Built as
+  `web/lib/i18n.js`, 170 lines including its comments, about 90 of code.
+- ~~Whether B1's fresh words land before this.~~ **B1 landed first**, so nothing was
+  translated twice: the words in `strings-en.js` are B1's words, moved, not rewritten.
+- **Still open, and it is the one that matters: who does the real screen-reader pass.** See the
+  release conditions below.
 
-## Done when
+---
 
-- No sentence a person can read lives in `app.js`.
-- The full loop walks with VoiceOver on an iPhone and TalkBack on Android, hands-free of sight.
-- The whole loop is keyboard-only walkable, and readable at 200% text.
-- `node --test` green from the repo root, with the sweep above.
-- Confidence score recorded here.
+# BUILT — 2026-09-03
+
+## What was built
+
+**Two new files, and every word in the app moved into one of them.**
+
+| File | What it is |
+| --- | --- |
+| `web/content/strings-en.js` | Every word a person can read. ~180 keys, one plain nested object, no logic. Its head carries the rules that travel with it: what is frozen, what is banned, and how to add a language. |
+| `web/lib/i18n.js` | Pick a language, look a key up, fall back to English **per key**, plurals and ordinals over `Intl.PluralRules`. No dependency, nothing fetched, ~90 lines of code. |
+
+**Where the words came from, and what is left behind:**
+
+- `app.js` — every sentence. The file is now 1,090 lines and **not one of them is prose a
+  person reads**; `i18n.test.js` sweeps its string literals and fails the build on any that are.
+- `lib/guards.js` — a refusal now carries a **key** (`refusal.harm`), not a sentence. The word
+  lists, the matching and the decision all stay. It says nothing a person reads, which also
+  means a phone number can never creep back into it (the B17 bug).
+- `lib/rate.js` — the five re-rate words are gone; how far each one moves the belief stays.
+- `lib/store.js` — the note written into the exported file is handed in by the caller.
+- **The twelve worries, the six doors and the Help links did not move.** They are already
+  content, and B16 gives them a locale sibling rather than pulling them into this file.
+
+**A language switch** sits in Help, named in its own language, one line, no picker anywhere
+else. It **draws nothing at all while English is the only language**, which is today. `S.lang`
+went into `store.js` in all three places — `blank()`, `normalise()` **and `isEmpty()`** — which
+is the mistake B17 made with `country`.
+
+## The accessibility work, against the audit above
+
+1. **The screen change is announced.** Every screen's first heading is
+   `id="top" tabindex="-1"` and `paint()` puts focus on it, so a screen reader reads the new
+   screen. Two screens take a box instead — "what do you think will happen?" and "what
+   happened?" — and pay for it with `aria-labelledby="top"`, so the box still reads the
+   question. This is the one that made BETR unusable rather than awkward, and it is fixed.
+   `a11y.test.js` walks all twelve screens and asserts where focus landed on each.
+2. **The ladder is words.** The dots and the number are `aria-hidden`; a `.sr` sentence replaces
+   them — *"Now: 9 out of 10. Down one rung."* The belief sits on the ladder as a whole
+   (`role="group"` with a name), once, rather than on every rung. **No total, no average, no
+   trend, no target** — rule 5 applies to the accessible name exactly as it does to the screen,
+   and there is a test that says so in those words.
+3. **`lang` and `dir` follow the language**, written onto `<html>` at boot and again if the
+   language changes.
+4. **Every layout property is logical** and there is a test that keeps it that way. Forced to
+   `dir="rtl"` in a real browser the whole app mirrors correctly — the Back chip crosses to the
+   other side, its arrow turns round, the menu reverses, every panel aligns to the other edge.
+5. **`text-transform: uppercase` was left as it is**, deliberately. It is uppercase in CSS over
+   sentence-case markup, which is the correct way round. Whether VoiceOver spells it out is a
+   question for the real pass below, not for a guess.
+6. **The menu's accessible name says BETR**, not "Betr" (rule 7).
+7. **The three stray `transition` rules are inside the reduced-motion block** with everything
+   else, and the comment above it says any new one belongs there too.
+8. **Text scaling: every font size is in `rem`**, including the minimum and maximum of every
+   `clamp()`, and there is a test that fails on a px one. At 200% the whole loop reflows and
+   nothing clips. One real bug fell out of checking it: **`.stage`'s bottom padding reserved the
+   menu's height in px**, so at 200% text the last line of every screen sat behind the menu.
+   It is `6rem` now.
+
+## Decisions taken in the build
+
+- **A screen change focuses the heading and says nothing in the live region.** The task asked
+  for both. Doing both makes a real screen reader say every heading twice, so the live region
+  is used only for what focusing a heading does *not* say: a refusal, a note that appeared in
+  place, and the result screen read as a sentence. `a11y.test.js` asserts the live region is
+  **empty** on an ordinary screen change, so this stays a decision rather than an oversight.
+- **A key that exists in no language comes back blank, not as the key.** The task said "never
+  blank and never a raw key". Both cannot be true, and `result.ladder.title` on a screen is
+  worse than nothing — so it is blank, it is recorded by `unknownKeys()`, and `i18n.test.js`
+  walks every screen and fails the build if the list is not empty. "Visible in tests" is where
+  that requirement is kept.
+- **Help's headings became `h2` and `h3`** (they were `h3` and `h4`, so the screen began at h3
+  with nothing above it — a heading list a screen reader cannot make sense of). Only the
+  elements changed; the sizes are the ones they always were.
+- **The kicker is a heading element** on `plan`, `result` and each card on Your worries, because
+  those screens had no heading at all for focus to land on.
+- **One word was fixed in passing:** the second door's footnote said *"and Betr never decides
+  which one you are"*. Rule 7 says BETR. It does now.
+
+## Tests
+
+**125 green, up from 96.** Two new files:
+
+- `web/tests/i18n.test.js` — the sweep that stops English coming back into `app.js`; every key
+  the app asks for exists; a person never reads a key or an unfilled `{placeholder}`; fallback
+  is per key and is recorded; `pick()` in six cases; plurals and ordinals; every language has
+  every key; the frozen nine are still nine; the banned phrases per language; the wordmark;
+  **choosing a language never changes which helpline is shown**; nothing is fetched; and the
+  two stylesheet guards (logical properties, rem font sizes).
+- `web/tests/a11y.test.js` — focus on every one of the twelve screens and back out through
+  every door; the refusal, the in-place note and the result read aloud; the live region empty
+  otherwise; the ladder's words in both directions with no total; `lang`/`dir` surviving a
+  reload; the menu's name; every decorative arrow hidden; every box named; Help's heading order.
+
+`guards.test.js` and `rate.test.js` now read the words out of `strings-en.js` instead of
+keeping their own copies — the trap in `learnings.md`. `harness.js` gained a real
+`Intl.PluralRules`, an `<html>` element to write `lang` and `dir` onto, and a record of what
+`focus()` was last called on.
+
+## What is NOT in this task, and must not be assumed done
+
+- **No second language.** That is B16, and it is mostly not a coding task. `LOCALES` in
+  `i18n.test.js` has one entry; adding a file there turns the whole suite on for it.
+- **The crisis block is unchanged and stays in English in every locale.** A number belongs to a
+  country, not to a language (B17). B16 is where per-country lines meet per-language words, and
+  no language ships without that being settled.
+- **The frozen sentences are frozen in English only.** A translation of one of them is approved
+  once, by a named person, in B16, and then frozen the same way.
+
+## Still open — release conditions
+
+- [ ] **A real screen-reader pass on a real phone, by somebody who uses one every day.**
+      VoiceOver on an iPhone and TalkBack on Android, the whole loop, hands-free of sight. A
+      fake DOM cannot see what a screen reader actually does, and neither can an automated
+      checker. A few hundred pounds, and it is worth more than everything above.
+- [ ] **A keyboard-only walk**, on a desktop browser, all the way round.
+- [ ] The uppercase question in audit item 5, answered on a real device rather than guessed.
+- [ ] Whoever owns the string file when a second language exists: a key added to English and
+      not to the others shows English, and the test prints the list. Nobody owns that list yet.
+
+## Confidence: 8/10
+
+**What earns it:** 125 tests, and the two that matter most are the ones that stop the problem
+coming back — the sweep of `app.js`'s own source, and the stylesheet guard. The whole loop was
+driven in a real browser at 390×844, mirrored to `dir="rtl"`, and at 200% text, and it found a
+real bug (the menu reserve) that no unit test would have. Nothing was fetched, no dependency
+was added, and the airplane-mode proof is untouched.
+
+**What holds it back from 9:** nobody who actually uses a screen reader has touched it. Focus
+management and live regions are the two things in accessibility that most often work in theory
+and behave differently in VoiceOver, and that is exactly what this task changed. Until that
+pass happens this is careful work, not verified work.

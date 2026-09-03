@@ -56,6 +56,14 @@
 </head>
 <body>
 
+<!--
+  What a screen reader says when the screen changes but focus does not (B15). It lives outside
+  #app so it survives every repaint — a live region that is replaced along with the markup is
+  never announced at all. It is empty, and stays empty until the app has something to say that
+  the new screen's heading does not already say for itself.
+-->
+<p id="say" class="sr" role="status" aria-live="polite" aria-atomic="true"></p>
+
 <div id="app"></div>
 
 <noscript>
@@ -70,12 +78,18 @@
   under content/ that B17 added are plain data — zones.js says which country a time zone is
   in, helplines.js says which number that country's own provider publishes — and lib/where.js
   is handed both by app.js. None of them fetches anything; that is the whole point.
+
+  strings-en.js is every word a person can read (B15). A second language is one more
+  strings-<code>.js line here and nothing else — never a fetch, so the airplane-mode proof
+  holds in every language BETR ever ships.
 -->
 <script src="lib/guards.js"></script>
 <script src="lib/rate.js"></script>
 <script src="lib/store.js"></script>
 <script src="lib/content.js"></script>
 <script src="lib/where.js"></script>
+<script src="lib/i18n.js"></script>
+<script src="content/strings-en.js"></script>
 <script src="content/worries.js"></script>
 <script src="content/whats-going-on.js"></script>
 <script src="content/places.js"></script>

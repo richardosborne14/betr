@@ -27,7 +27,7 @@ needs paid native reviewers, and the recommendation is that it waits for real us
 ## The order, and the one hard block
 
 ```
-   B8 ✓  ──▶  B17 ✓  ──▶  B15  ──▶  B9  ──▶  B10  ──▶  B11  ──▶  stop, ask the founder
+   B8 ✓  ──▶  B17 ✓  ──▶  B15 ✓  ──▶  B9  ──▶  B10  ──▶  B11  ──▶  stop, ask the founder
 ```
 
 **B8 landed on 2026-09-03** (`7e8754e`), 78 tests green, so the block is clear. It is kept here
@@ -49,15 +49,20 @@ causing anyone a problem.*
 | Task | File | Status | Confidence |
 | --- | --- | --- | --- |
 | B17 | `tasks/B17-the-right-helpline.md` | **Built 2026-09-03** | 8/10 |
-| B15 | `tasks/B15-words-out-of-the-code.md` | **Not started — next** | — |
+| B15 | `tasks/B15-words-out-of-the-code.md` | **Built 2026-09-03** | 8/10 |
 | B9 | `tasks/B9-the-mergeable-record.md` | Not started | — |
 | B10 | `tasks/B10-the-lock.md` | Not started — blocked, see below | — |
 | B11 | `tasks/B11-own-cloud-sync.md` | Not started | — |
 | B16 | `tasks/B16-shipping-a-language.md` | Not started — waits for real users | — |
 
+**B15 landed.** Every word a person reads is in one file, the app tells a screen reader what
+just happened, and the stylesheet mirrors correctly and scales with a person's text size. 125
+tests green. **B9 is next on this track**, and it must not start while another session has
+`store.js` open.
+
 **B17 landed.** Thirteen countries have a helpline somebody read off the provider's own site
-that day; every other country says so and shows no number at all. 89 tests green. The country
-layer B16 was going to need is now there, in English, before a word was translated.
+that day; every other country says so and shows no number at all. The country layer B16 was
+going to need is now there, in English, before a word was translated.
 
 ## Start the next session with this
 
@@ -80,8 +85,18 @@ layer B16 was going to need is now there, in English, before a word was translat
 
 Things a session found that the next one needs.
 
-- **B15's one open question is closed.** The founder answered on 2026-09-03: **no i18next, write
-  the ~60-line `web/lib/i18n.js`.** Recorded at the top of the B15 task file. B15 can start.
+- **B15 landed on 2026-09-03.** Every word is in `web/content/strings-en.js` behind
+  `web/lib/i18n.js`; the app announces itself to a screen reader and the stylesheet is logical
+  and in `rem`. 125 tests green. **Two things it did not do and that nobody should assume:** no
+  second language ships (that is B16), and **nobody who uses a screen reader has touched it** —
+  that pass is a release condition at the bottom of the B15 task file.
+- **Two guards now sit across the whole repo, and B9 has to live with them.** No English prose
+  may go into `app.js` (`i18n.test.js` sweeps its string literals), and no physical CSS
+  property or `px` font size may go into `app.css`. Both fail the build. A new screen means a
+  new block of keys in `strings-en.js`, a heading with `id="top"`, and a line in `SCREENS` at
+  the top of `a11y.test.js`.
+- **B15's one open question is closed.** The founder answered on 2026-09-03: **no i18next,
+  write the ~60-line `web/lib/i18n.js`.** Built at about 90 lines of code.
 - **B1 landed on the main line on 2026-09-03**, so B15 no longer has to translate twice: the
   words in `content/worries.js` are the written ones. Misha's pass will change some of them
   again, which is an argument for the string file B15 builds, not against it.

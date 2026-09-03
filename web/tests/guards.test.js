@@ -6,11 +6,21 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const guards = require('../lib/guards.js');
 
+/*
+  Since B15 a refusal carries a KEY, not a sentence: the words are in the string file so they
+  can be translated. So these read the words out of content/strings-en.js rather than
+  restating them here — the trap in learnings.md is a test that keeps its own copy of BETR's
+  words, and B1 broke three of those in one afternoon.
+*/
+const strings = require('../content/strings-en.js');
+const words = (key) => key.split('.').reduce((node, part) => node[part], strings.s);
+
 test('"I am a bad person" is refused with the reframe, not accepted', () => {
   const r = guards.checkBelief('I am a bad person');
   assert.strictEqual(r.ok, false);
   assert.strictEqual(r.kind, 'verdict');
-  assert.match(r.reason, /verdict, not a prediction/);
+  assert.strictEqual(r.reason, 'refusal.verdict');
+  assert.match(words(r.reason), /verdict, not a prediction/);
 });
 
 test('other verdict openings are caught too', () => {
@@ -36,7 +46,7 @@ test('a test mentioning the habit is refused with the reason', () => {
     const r = guards.checkTest(s);
     assert.strictEqual(r.ok, false, s);
     assert.strictEqual(r.kind, 'habit', s);
-    assert.match(r.reason, /the worry underneath/);
+    assert.match(words(r.reason), /the worry underneath/);
   }
 });
 
@@ -57,14 +67,24 @@ test('food, weight and body sensations are refused, with their own reason', () =
 test('a refusal about safety says why, and carries no phone number of its own', () => {
   const r = guards.checkTest('See how long I can go without wanting to hurt myself');
   assert.strictEqual(r.kind, 'harm');
-  assert.match(r.reason, /can’t help with that one/);
-  for (const reason of Object.values(guards.REASON)) {
-    assert.ok(!/[0-9]{3}/.test(reason), 'a phone number is back in guards.js: ' + reason);
+  assert.match(words(r.reason), /can’t help with that one/);
+
+  /* not in the guard, which has no words in it at all any more... */
+  const src = require('node:fs').readFileSync(require.resolve('../lib/guards.js'), 'utf8');
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.ok(!/[0-9]{3}/.test(code), 'a phone number is back in guards.js');
+
+  /* ...and not in the words either, in any language. A number belongs to a country, and
+     content/helplines.js is the only file allowed to hold one (B17). */
+  for (const key of Object.keys(guards.REASON)) {
+    const said = words(guards.REASON[key]);
+    assert.ok(typeof said === 'string' && said.trim(), key + ' has no words in strings-en.js');
+    assert.ok(!/[0-9]{3}/.test(said), 'a phone number is in the ' + key + ' refusal: ' + said);
   }
 });
 
 test('the name of the app does not trip the word "bet"', () => {
-  assert.strictEqual(guards.checkTest('Open Betr and do the test before work').ok, true);
+  assert.strictEqual(guards.checkTest('Open BETR and do the test before work').ok, true);
 });
 
 test('ordinary words that contain a banned word are not tripped', () => {

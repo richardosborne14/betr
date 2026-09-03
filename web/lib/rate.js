@@ -32,13 +32,17 @@
     can go badly and leave someone more convinced; refusing to record that would make the
     ladder a nicer story than the person's week. It sits small, under the four, in the same
     place "didn't get to it" sits on the locked screen.
+
+    The words themselves are not here since B15 — they are `rate.<key>` in
+    web/content/strings-en.js, so they can be translated. This file holds how far each one
+    moves the belief, which is the part that must be the same in every language.
   */
   var CHOICES = [
-    { key: 'still', label: 'Still sure', step: 0 },
-    { key: 'bit', label: 'A bit less sure', step: -1 },
-    { key: 'lot', label: 'A lot less sure', step: -3 },
-    { key: 'none', label: 'Not sure at all', to: FLOOR },
-    { key: 'more', label: 'More sure than before', step: 1, quiet: true }
+    { key: 'still', step: 0 },
+    { key: 'bit', step: -1 },
+    { key: 'lot', step: -3 },
+    { key: 'none', to: FLOOR },
+    { key: 'more', step: 1, quiet: true }
   ];
 
   function byKey(key) {

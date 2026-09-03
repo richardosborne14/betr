@@ -44,9 +44,17 @@
     number is on the crisis block. Null means we are guessing from the phone's time zone,
     which is read fresh every time it is needed and never written down. It is not sent
     anywhere — there is nowhere to send it — and it changes nothing else in the app.
+
+    `lang` is B15's, and it is a different question from `country` on purpose (lib/i18n.js
+    and lib/where.js never touch each other). Null means "whatever the browser asks for".
+    Every language is already in the page, so choosing one fetches nothing.
+
+    A NEW FIELD GOES IN THREE PLACES, not one: blank(), normalise() and isEmpty(). B17 put
+    `country` in the first two, and a person's chosen country was thrown away on the next
+    save because isEmpty() still thought the record was empty. Both of these are in all three.
   */
   function blank() {
-    return { v: VERSION, stage: 'start', cur: null, country: null, open: [], done: [], seenInstall: false };
+    return { v: VERSION, stage: 'start', cur: null, country: null, lang: null, open: [], done: [], seenInstall: false };
   }
 
   /* Anything we cannot vouch for is replaced, never repaired halfway. */
@@ -66,6 +74,7 @@
       }).map(withLevel);
     }
     if (typeof raw.country === 'string' && /^[A-Z]{2}$/.test(raw.country)) s.country = raw.country;
+    if (typeof raw.lang === 'string' && /^[a-zA-Z-]{2,12}$/.test(raw.lang)) s.lang = raw.lang;
     s.seenInstall = raw.seenInstall === true;
     return s;
   }
@@ -84,7 +93,7 @@
   function isEmpty(state) {
     if (!state) return true;
     return (!state.done || !state.done.length) && (!state.open || !state.open.length) &&
-      !state.cur && state.seenInstall !== true && !state.country;
+      !state.cur && state.seenInstall !== true && !state.country && !state.lang;
   }
 
   function create(storage) {
@@ -136,14 +145,18 @@
   /*
     What leaves the phone only when the person taps export, and only to where they send it.
     Kept boring on purpose: a person who opens this file should understand it at a glance.
+
+    The one sentence in it is handed in by the caller (B15), because it is a sentence a person
+    reads and every one of those lives in web/content/strings-en.js. Left out, the file simply
+    has no note in it; nothing else changes.
   */
-  function exportJSON(state) {
+  function exportJSON(state, note) {
     var s = state || blank();
     return JSON.stringify({
       app: 'BETR',
       version: VERSION,
       exported: new Date().toISOString(),
-      note: 'Everything BETR has ever stored on this device. There is no copy anywhere else.',
+      note: note || undefined,
       /* Null unless they picked one themselves. A guess from the time zone is never stored. */
       country: s.country || null,
       waiting: (s.open || []).map(function (t) {

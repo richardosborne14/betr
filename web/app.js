@@ -9,6 +9,11 @@
   That row is not a tab bar and must not grow into one (B8, CLAUDE.md rule 10 as amended
   2026-09-03): no icons, no selected state, no badge, no count, no fourth item.
 
+  NOT ONE SENTENCE A PERSON READS LIVES IN THIS FILE (B15, 2026-09-03). Every word is a key
+  in web/content/strings-en.js, looked up through lib/i18n.js, which falls back to English
+  one key at a time. web/tests/i18n.test.js reads this file and fails the build if English
+  prose comes back into it, because that is how it got here in the first place.
+
   Things that are deliberate and should not be "fixed":
     - no streak, no red day, no "you missed", no cap on rest. Completed tests is still the
       metric; the ladder is one belief's grip, never a score of the person and never a total
@@ -29,42 +34,78 @@
   var PLACES = Betr.places;
   var W = Betr.where.create(Betr.zones, Betr.helplines);
 
-  /*
-    The purpose statement. Rule: identical in the app, the manifest, the store listing and
-    every post (research §5.4 — MHRA's worked example is a product that said one thing on its
-    site and another on social). If you change it here, change it in index.html's <meta
-    name="description">, manifest.webmanifest, and everywhere it has ever been published.
-  */
-  var PURPOSE = 'BETR helps you test unhelpful beliefs in everyday life. You pick a worry ' +
-    'about how people will react, it gives you one small thing to try today, and you record ' +
-    'what actually happened.';
-
-  /*
-    The nine sentences, verbatim from docs/research/10-cbt-gateway-approach.md §10.
-    Do not reword them. Google Play requires the "not a medical device" one, Apple requires
-    the "check with a doctor" one, and the rest are what keeps this a worksheet rather than a
-    regulated device. Sentence 7 is repeated on its own below, on purpose.
-  */
-  var SENTENCES = [
-    'This is a self-help worksheet, not therapy, and it is not a medical device. It does not diagnose, treat, cure or prevent any condition.',
-    'It uses one technique from cognitive behavioural therapy (CBT), the behavioural experiment: write down a belief, predict what will happen, try it, record what actually happened, and rate the belief again.',
-    'It can help you manage everyday worry and unhelpful beliefs. It will not solve them, and it is not a substitute for working with a qualified CBT therapist. If you can see one, please do.',
-    'It is not for you right now if you are having thoughts of suicide or self-harm, have been told you have psychosis or bipolar disorder, have an eating disorder, PTSD or OCD, or are dependent on alcohol or drugs. Those need a person, not an app.',
-    'If you are already in therapy, follow your therapist’s plan. Use this only if they agree.',
-    'Choose experiments that are safe and legal. Never design one that involves the habit you’re trying to change, self-harm, restricting food, or putting yourself or anyone else at risk.',
-    'If you are in danger or in crisis, call your local emergency number. In the US, call or text 988. In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, findahelpline.com lists free helplines in over 175 countries.',
-    'Everything you write stays on this device. There is no account, no server, and nothing is sent to us or anyone else. If you delete the app without exporting, your entries are gone.',
-    'This was made by the people behind TrybeUP, not by a clinician or a health service. Nothing in it is medical advice, and using it does not create a therapist–client relationship.'
-  ];
-  /*
-    Sentence 7 used to be pulled out here and shown on its own at the top of Help. B17
-    replaced that with the live crisis block, which names one country's line instead of two.
-    The sentence itself is untouched and still appears, word for word, in the list of nine.
-  */
-
   var app = document.getElementById('app');
   var store = storeLib.create(safeStorage());
   var S = store.load();
+
+  /*
+    ------------------------------------------------------------------ words
+
+    The person's own choice first, then whatever the browser asks for, then English. Nothing
+    is fetched to do it: every language is inside the page already (rule 1), which is why
+    turning wifi off changes nothing in any of them.
+
+    This never looks at where the person is, and lib/where.js never looks at their language.
+    They are two questions and coupling them is the harm B17 exists to prevent.
+  */
+  var I = Betr.i18n.create(Betr.strings, { chosen: S.lang, prefer: myLanguages() });
+
+  function myLanguages() {
+    try { return navigator.languages || (navigator.language ? [navigator.language] : []); }
+    catch (e) { return []; }
+  }
+
+  function t(key, vars) { return I.t(key, vars); }
+
+  /*
+    A sentence with something of the person's own set inside it — their words in bold, a
+    country's name, a link. The sentence is escaped; the pieces are already-built HTML that
+    the caller escaped itself. A translator sees {drop} and can move it wherever their own
+    language needs it, which is the whole reason it is a placeholder and not a concatenation.
+  */
+  function tHtml(key, parts) {
+    return esc(t(key)).replace(/\{([a-zA-Z]+)\}/g, function (whole, name) {
+      return Object.prototype.hasOwnProperty.call(parts, name) ? parts[name] : whole;
+    });
+  }
+
+  /*
+    Something the person wrote, set inside a sentence that is read out. Their words may or may
+    not end in a full stop, and a screen reader that says "coffee dot dot How sure" has made a
+    mess of the one screen that matters.
+  */
+  function stop(s) {
+    var v = String(s || '').trim();
+    return (!v || /[.!?…]$/.test(v)) ? v : v + '.';
+  }
+
+  /* The other way round: a belief quoted inside a longer sentence brings its own full stop. */
+  function unstop(s) { return String(s || '').trim().replace(/\.$/, ''); }
+
+  /* Bold one phrase inside an already-escaped sentence, the first time it appears. */
+  function bold(html, phrase) {
+    var p = esc(phrase);
+    if (!p) return html;
+    return html.replace(p, '<b>' + p + '</b>');
+  }
+
+  function applyLanguage() {
+    try {
+      var el = document.documentElement;
+      if (el && el.setAttribute) {
+        el.setAttribute('lang', I.lang());
+        el.setAttribute('dir', I.dir());
+      }
+    } catch (e) { /* a page with no <html> to write on is still a working app */ }
+  }
+
+  /*
+    The purpose statement and the nine sentences are frozen (research §10, CLAUDE.md rule 7).
+    They live in the string file marked as frozen, and a translation of one of them is
+    approved once, by a named person, in B16 — never edited casually in a normal session.
+  */
+  function purpose() { return t('frozen.purpose'); }
+  function sentences() { return I.list('frozen.sentences'); }
 
   /* Scratch state: never persisted, because none of it should survive a reload. */
   var draft = { belief: '', test: '', drop: '' };
@@ -73,6 +114,7 @@
   var storageOk = true;
   var deleteArmed = false;
   var whereBack = 'help';  /* the screen the country list was opened from */
+  var toSay = null;        /* what the next paint() should read out. Cleared as it is used */
 
   /* localStorage itself can throw on access in a locked-down browser, not just on write. */
   function safeStorage() {
@@ -94,6 +136,52 @@
   var IN_LOOP = ['plan', 'locked', 'happened', 'sure'];
 
   /*
+    ------------------------------------------------------------------ heard, not seen
+
+    Two things, and between them they are the difference between BETR being awkward with a
+    screen reader and being unusable with one (B15).
+
+    1. Every screen's first heading is `id="top" tabindex="-1"`, and paint() puts focus on it.
+       Without this, replacing #app's markup leaves the focus ring on a button that no longer
+       exists: tapping the big button did nothing at all, out loud. A screen that wants focus
+       somewhere else — a box to type in — takes it after paint(), which is why ownScreen()
+       and happened() still get their textarea.
+
+    2. A live region, #say, which is outside #app and therefore survives every repaint. It is
+       for what focusing a heading does NOT say: a refusal, a note that appeared in place, the
+       result screen read as a sentence. It is deliberately not used to repeat the heading a
+       screen reader has just read, because hearing everything twice is its own kind of unusable.
+  */
+  var live = document.getElementById('say');
+
+  function say(text) { toSay = text || null; }
+
+  function announce(text) {
+    if (!live) return;
+    try {
+      live.textContent = '';
+      live.textContent = text;
+    } catch (e) { /* nothing to do, and nothing to report */ }
+  }
+
+  /* The one thing every screen goes through. Setting app.innerHTML anywhere else loses the menu. */
+  function paint(html) {
+    app.innerHTML = html + menu();
+    var top = q('#top');
+    if (top && top.focus) { try { top.focus(); } catch (e) { /* older browser */ } }
+    announce(toSay || '');
+    toSay = null;
+  }
+
+  /* The heading a screen is announced by, and the thing focus lands on. */
+  function head(tag, text, cls) {
+    return '<' + tag + (cls ? ' class="' + cls + '"' : '') + ' id="top" tabindex="-1">' +
+      esc(text) + '</' + tag + '>';
+  }
+
+  /*
+    ------------------------------------------------------------------ the crisis block
+
     The three numbers written into sentence 7 itself, made tappable. Founder's ask,
     2026-09-03: somebody reading that line is the least able person in the app to copy a
     number out by hand.
@@ -130,8 +218,6 @@
   }
 
   /*
-    ------------------------------------------------------------------ the crisis block
-
     The four layers, always in this order (B17):
 
       1. the line that is true everywhere and needs no country, no data and no signal
@@ -157,10 +243,10 @@
   /* "Call 116 123 — Samaritans. Free, 24 hours." Anything the provider did not say is left out. */
   function lineWords(l) {
     var after = [];
-    if (l.free) after.push('Free');
-    if (l.allHours) after.push('24 hours');
+    if (l.free) after.push(t('crisis.free'));
+    if (l.allHours) after.push(t('crisis.allHours'));
     if (l.note) after.push(l.note);
-    return (l.text ? 'Call or text ' : 'Call ') +
+    return esc(t(l.text ? 'crisis.callOrText' : 'crisis.call')) + ' ' +
       '<a href="' + esc(l.tel) + '">' + esc(l.number) + '</a> — ' + esc(l.name) +
       (after.length ? '. ' + esc(after.join(', ')) : '') + '.';
   }
@@ -168,27 +254,24 @@
   function crisisBlock() {
     var code = myCountry();
     var lines = W.linesFor(code);
-    var html = '<p>If you are in danger right now, call your local emergency number.</p>';
+    var html = '<p>' + esc(t('crisis.emergency')) + '</p>';
 
     if (lines.length === 1) {
-      html += '<p>In ' + esc(W.inWords(code)) + ': ' + lineWords(lines[0]) + '</p>';
+      html += '<p>' + esc(t('crisis.in', { country: W.inWords(code) })) + ' ' + lineWords(lines[0]) + '</p>';
     } else if (lines.length) {
-      html += '<p>In ' + esc(W.inWords(code)) + ':</p><ul class="places">' +
+      html += '<p>' + esc(t('crisis.in', { country: W.inWords(code) })) + '</p><ul class="places">' +
         lines.map(function (l) { return '<li>' + lineWords(l) + '</li>'; }).join('') + '</ul>';
     } else if (code) {
-      html += '<p>Your country here is <b>' + esc(W.nameFor(code)) + '</b>. Nobody has ' +
-        'checked a helpline number for it, so we are not going to show you one from ' +
-        'somewhere else and hope.</p>';
+      html += '<p>' + tHtml('crisis.unchecked', { country: '<b>' + esc(W.nameFor(code)) + '</b>' }) + '</p>';
     } else {
-      html += '<p>We can’t tell which country you’re in, and we would rather show you no ' +
-        'number than the wrong one.</p>';
+      html += '<p>' + esc(t('crisis.noCountry')) + '</p>';
     }
 
     html += '<p><button class="plain" id="where">' +
-      (code ? 'Not where you are?' : 'Say where you are') + '</button></p>' +
-      '<p><a href="https://findahelpline.com">findahelpline.com</a> lists free helplines in ' +
-      'over 175 countries, and works out your country itself. It is the one thing on this ' +
-      'screen that needs the internet.</p>';
+      esc(t(code ? 'crisis.notWhereYouAre' : 'crisis.sayWhere')) + '</button></p>' +
+      '<p>' + tHtml('crisis.directory', {
+        link: '<a href="https://findahelpline.com">findahelpline.com</a>'
+      }) + '</p>';
     return html;
   }
 
@@ -209,23 +292,29 @@
 
     paint( backButton() +
       '<div class="stage"><div class="sheet">' +
-        '<h3>Where are you?</h3>' +
-        '<p>Only so the right helpline number is on the screen when it matters. It stays on ' +
-        'this phone, like everything else, and there is nowhere for it to go.</p>' +
+        head('h2', t('where.title')) +
+        '<p>' + esc(t('where.sub')) + '</p>' +
         (chosen
-          ? '<p><button class="plain" id="unset">Go back to guessing from my time zone</button></p>'
-          : '<p>Right now we are guessing from your phone’s time zone' +
-            (code ? ', which says <b>' + esc(W.nameFor(code)) + '</b>' : ', and it did not say') +
-            '.</p>') +
+          ? '<p><button class="plain" id="unset">' + esc(t('where.unset')) + '</button></p>'
+          : '<p>' + esc(code
+              ? t('where.guessing', { country: W.nameFor(code) })
+              : t('where.guessingUnknown')) + '</p>') +
         '<ul class="places countries">' + W.list().map(function (c) {
           return '<li><button class="plain" data-cc="' + esc(c.code) + '">' + esc(c.name) +
-            (c.code === chosen ? ' ✓' : '') + '</button></li>';
+            (c.code === chosen
+              ? ' <span aria-hidden="true">✓</span><span class="sr">' + esc(t('where.chosen')) + '</span>'
+              : '') + '</button></li>';
         }).join('') + '</ul>' +
       '</div></div>');
 
     wireBack(whereBack);
     qa('[data-cc]').forEach(function (b) {
-      b.onclick = function () { S.country = b.getAttribute('data-cc'); save(); go(whereBack); };
+      b.onclick = function () {
+        S.country = b.getAttribute('data-cc');
+        save();
+        say(t('a11y.countryChanged', { country: W.nameFor(S.country) }));
+        go(whereBack);
+      };
     });
     on('#unset', function () { S.country = null; save(); render(); window.scrollTo(0, 0); });
   }
@@ -263,14 +352,12 @@
     screen had just wired.
   */
   function menu() {
-    return '<nav class="menu" aria-label="Betr">' +
-      '<button id="m-mine">Your worries</button>' +
-      '<button id="m-new">New worry</button>' +
-      '<button id="m-help">Help</button>' +
+    return '<nav class="menu" aria-label="' + esc(t('nav.label')) + '">' +
+      '<button id="m-mine">' + esc(t('nav.mine')) + '</button>' +
+      '<button id="m-new">' + esc(t('nav.new')) + '</button>' +
+      '<button id="m-help">' + esc(t('nav.help')) + '</button>' +
     '</nav>';
   }
-
-  function paint(html) { app.innerHTML = html + menu(); }
 
   function wireMenu() {
     on('#m-mine', function () { go('mine'); });
@@ -300,11 +387,11 @@
   }
 
   /* Pick a waiting test back up. Whatever was in hand waits its own turn. */
-  function resume(t, stage) {
+  function resume(tst, stage) {
     park();
-    var i = S.open.indexOf(t);
+    var i = S.open.indexOf(tst);
     if (i !== -1) S.open.splice(i, 1);
-    S.cur = t;
+    S.cur = tst;
     go(stage || 'locked');
   }
 
@@ -324,8 +411,10 @@
     };
   }
 
+  /* The arrow is decoration and is flipped by the stylesheet in a right-to-left language. */
   function backButton() {
-    return '<button class="back" id="back">← Back</button>';
+    return '<button class="back" id="back"><span class="arrow" aria-hidden="true">←</span> ' +
+      esc(t('back')) + '</button>';
   }
   function wireBack(target) { on('#back', function () { go(target); }); }
 
@@ -336,21 +425,33 @@
     1-10, and the thing that kept them going was watching it come down. It is the only number
     in Betr besides completed tests, and it belongs to one belief. It is never a score of the
     person, never added up, never averaged across worries, and never a line with a target on it.
+
+    Out loud (B15) it is the same thing and no more of it. The dots and the number are hidden
+    from a screen reader, because ten circles say nothing, and one sentence replaces them:
+    "Now: 7 out of 10. Down one rung." The belief it belongs to is on the ladder as a whole,
+    once, rather than repeated on every rung. There is no total here and there must never be.
   */
-  function rung(when, level, said) {
+  function rung(when, level, opts) {
+    opts = opts || {};
     var dots = '';
     for (var i = 1; i <= rate.TOP; i++) dots += '<i' + (i <= level ? ' class="on"' : '') + '></i>';
-    return '<div class="rung">' +
-        '<span class="when">' + esc(when) + '</span>' +
-        '<span class="dots" aria-hidden="true">' + dots + '</span>' +
-        '<span class="num">' + level + '</span>' +
-        '<span class="sr">out of 10</span>' +
-      '</div>' +
-      (said ? '<p class="said">' + esc(said) + '</p>' : '');
-  }
 
-  var ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
-  function ordinal(n) { return ORDINALS[n - 1] || (n + 'th'); }
+    var spoken = t('a11y.rung', { when: when, level: level });
+    if (typeof opts.prev === 'number') {
+      var moved = opts.prev - level;
+      if (moved > 0) spoken += ' ' + I.plural('a11y.down', moved);
+      else if (moved < 0) spoken += ' ' + I.plural('a11y.up', -moved);
+      else spoken += ' ' + t('a11y.same');
+    }
+
+    return '<div class="rung">' +
+        '<span class="when" aria-hidden="true">' + esc(when) + '</span>' +
+        '<span class="dots" aria-hidden="true">' + dots + '</span>' +
+        '<span class="num" aria-hidden="true">' + level + '</span>' +
+        '<span class="sr">' + esc(spoken) + '</span>' +
+      '</div>' +
+      (opts.said ? '<p class="said">' + esc(opts.said) + '</p>' : '');
+  }
 
   /* Where it started, then one row per test, newest last. A long ladder keeps its ends. */
   function ladder(g, opts) {
@@ -358,16 +459,21 @@
     var shown = g.results;
     var skipped = '';
     if (shown.length > 6) {
-      skipped = '<p class="said elided">' + (shown.length - 6) + ' earlier tests</p>';
+      skipped = '<p class="said elided">' + esc(I.plural('ladder.earlier', shown.length - 6)) + '</p>';
       shown = shown.slice(-6);
     }
     var first = g.results.length - shown.length;
-    return '<div class="ladder">' +
-      rung('Started', rate.TOP, '') +
+    return '<div class="ladder" role="group" aria-label="' +
+        esc(g.belief ? t('a11y.ladder', { belief: unstop(g.belief) }) : t('a11y.ladderPlain')) + '">' +
+      rung(t('ladder.started'), rate.TOP, {}) +
       skipped +
       shown.map(function (r, i) {
         var last = i === shown.length - 1;
-        return rung(last ? 'Now' : ordinal(first + i + 1), rate.clamp(r.level), said ? r.o : '');
+        var at = first + i;
+        return rung(last ? t('ladder.now') : I.ordinal(at + 1), rate.clamp(r.level), {
+          said: said ? r.o : '',
+          prev: at === 0 ? rate.TOP : rate.clamp(g.results[at - 1].level)
+        });
       }).join('') +
     '</div>';
   }
@@ -407,10 +513,11 @@
   function waitingBlock() {
     if (!S.open.length) return '';
     if (S.open.length === 1) {
-      return '<div class="note"><b>On the go.</b> ' + esc(S.open[0].test) +
-        '<div class="row"><button class="ghost" id="pickup">Pick it up</button></div></div>';
+      return '<div class="note"><b>' + esc(t('waiting.onTheGo')) + '</b> ' + esc(S.open[0].test) +
+        '<div class="row"><button class="ghost" id="pickup">' + esc(t('waiting.pickUp')) +
+        '</button></div></div>';
     }
-    return '<p class="tiny"><button id="pickup">Tests you’ve got on the go</button></p>';
+    return '<p class="tiny"><button id="pickup">' + esc(t('waiting.many')) + '</button></p>';
   }
 
   function wireWaiting() {
@@ -423,16 +530,15 @@
   function start() {
     paint(
       '<div class="stage">' +
-        '<div class="kicker">BETR</div>' +
-        '<h1>Sure it’ll go badly?</h1>' +
-        '<p class="sub">Pick a worry. Get one tiny thing to do today. Come back and say what happened.</p>' +
-        '<button class="big pulse" id="go">Pick a worry <span aria-hidden="true">→</span></button>' +
+        '<div class="kicker">' + esc(t('brand')) + '</div>' +
+        head('h1', t('start.title')) +
+        '<p class="sub">' + esc(t('start.sub')) + '</p>' +
+        '<button class="big pulse" id="go">' + esc(t('start.go')) +
+          ' <span class="arrow" aria-hidden="true">→</span></button>' +
         waitingBlock() +
-        '<p class="tiny"><button id="doors">Not sure which? Start from what’s going on</button></p>' +
-        '<p class="tiny">No account. No AI. Nothing leaves your phone.</p>' +
-        (storageOk ? '' :
-          '<p class="tiny">This browser won’t let BETR remember anything — a private window usually does that. ' +
-          'The loop still works; nothing will be here tomorrow.</p>') +
+        '<p class="tiny"><button id="doors">' + esc(t('start.doors')) + '</button></p>' +
+        '<p class="tiny">' + esc(t('start.promise')) + '</p>' +
+        (storageOk ? '' : '<p class="tiny">' + esc(t('start.noStorage')) + '</p>') +
       '</div>');
     on('#go', function () { S.filter = null; go('pick'); });
     on('#doors', function () { go('doors'); });
@@ -442,16 +548,16 @@
   function doors() {
     paint( backButton() +
       '<div class="stage">' +
-        '<h2>What’s going on?</h2>' +
+        head('h2', t('doors.title')) +
         '<p class="sub">' + esc(DOORS.intro) + '</p>' +
         '<div class="list">' +
           DOORS.items.map(function (d) {
             return '<button data-door="' + esc(d.id) + '">' +
               '<span>' + esc(d.label) + '<span class="under">' + esc(d.under) + '</span></span>' +
-              '<span class="go" aria-hidden="true">→</span></button>';
+              '<span class="go arrow" aria-hidden="true">→</span></button>';
           }).join('') +
         '</div>' +
-        '<p class="tiny">' + esc(DOORS.foot) + ' None of these is a diagnosis, and Betr never decides which one you are.</p>' +
+        '<p class="tiny">' + esc(DOORS.foot) + ' ' + esc(t('doors.foot')) + '</p>' +
       '</div>');
     wireBack('start');
     qa('[data-door]').forEach(function (b) {
@@ -463,20 +569,20 @@
     var list = worriesFor(S.filter);
     paint( backButton() +
       '<div class="stage">' +
-        '<h2>Which one?</h2>' +
-        '<p class="sub">Tap the one that’s closest.</p>' +
+        head('h2', t('pick.title')) +
+        '<p class="sub">' + esc(t('pick.sub')) + '</p>' +
         '<div class="list">' +
           list.map(function (f) {
             return '<button data-id="' + esc(f.id) + '"><span>' + esc(f.label) + '</span>' +
-              '<span class="go" aria-hidden="true">→</span></button>';
+              '<span class="go arrow" aria-hidden="true">→</span></button>';
           }).join('') +
-          '<button class="own" id="own"><span>Something else</span><span class="go" aria-hidden="true">→</span></button>' +
+          '<button class="own" id="own"><span>' + esc(t('pick.own')) + '</span>' +
+          '<span class="go arrow" aria-hidden="true">→</span></button>' +
         '</div>' +
         (S.filter
-          ? '<p class="tiny"><button id="all">Show all ' + WORRIES.length + '</button></p>'
-          : '<p class="tiny"><button id="doors">Not sure which? Start from what’s going on</button></p>') +
-        '<p class="tiny">Not here on purpose: anything that tests the drink, the screen or the habit ' +
-        'itself. Those aren’t tests. We test the worry underneath.</p>' +
+          ? '<p class="tiny"><button id="all">' + esc(t('pick.showAll', { n: WORRIES.length })) + '</button></p>'
+          : '<p class="tiny"><button id="doors">' + esc(t('start.doors')) + '</button></p>') +
+        '<p class="tiny">' + esc(t('pick.notHere')) + '</p>' +
       '</div>');
     wireBack(S.filter ? 'doors' : 'start');
     qa('[data-id]').forEach(function (b) {
@@ -484,7 +590,8 @@
     });
     on('#all', function () { S.filter = null; go('pick'); });
     on('#doors', function () { go('doors'); });
-    on('#own', function () { draft = { belief: 'If I ', test: '', drop: '' }; go('own-belief'); });
+    /* The box starts with the opening of a conditional already in it, in their language. */
+    on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
   }
 
   /* -------- a person's own entry: three screens, one box each. Never a form. -------- */
@@ -498,37 +605,45 @@
   */
   function warnBlock() {
     if (!refusal) return '';
-    return '<div class="warn">' + esc(refusal.reason) +
+    return '<div class="warn">' + esc(t(refusal.reason)) +
       (refusal.kind === 'harm' ? crisisBlock() : '') + '</div>';
+  }
+
+  /* A refusal is read out, because focus goes to the heading and the heading has not changed. */
+  function refuse(check) {
+    refusal = check;
+    say(t(check.reason));
+    render();
   }
 
   function ownScreen(opts) {
     paint( backButton() +
       '<div class="stage">' +
-        '<h2>' + opts.title + '</h2>' +
-        '<p class="sub tight">' + opts.sub + '</p>' +
+        head('h2', opts.title) +
+        '<p class="sub tight">' + esc(opts.sub) + '</p>' +
         warnBlock() +
-        '<textarea id="t" class="short" placeholder="' + esc(opts.placeholder) + '">' + esc(opts.value) + '</textarea>' +
-        '<button class="big wide" id="next">Next</button>' +
+        '<textarea id="t" class="short" aria-labelledby="top" placeholder="' +
+          esc(opts.placeholder) + '">' + esc(opts.value) + '</textarea>' +
+        '<button class="big wide" id="next">' + esc(t('own.next')) + '</button>' +
       '</div>');
     wireBack(opts.back);
-    var t = q('#t');
-    t.focus();
-    t.setSelectionRange(t.value.length, t.value.length);
-    on('#next', function () { opts.next(t.value); });
+    var box = q('#t');
+    box.focus();
+    box.setSelectionRange(box.value.length, box.value.length);
+    on('#next', function () { opts.next(box.value); });
   }
 
   function ownBelief() {
     ownScreen({
       back: 'pick',
-      title: 'What do you think will happen?',
-      sub: 'One sentence, starting “If I…”. It has to be something that could turn out to be wrong.',
-      placeholder: 'If I ask for a day off, my boss will think I’m not committed.',
+      title: t('own.belief.title'),
+      sub: t('own.belief.sub'),
+      placeholder: t('own.belief.placeholder'),
       value: draft.belief,
       next: function (v) {
         draft.belief = v;
         var check = guards.checkBelief(v);
-        if (!check.ok) { refusal = check; render(); return; }
+        if (!check.ok) { refuse(check); return; }
         go('own-test');
       }
     });
@@ -537,14 +652,14 @@
   function ownTest() {
     ownScreen({
       back: 'own-belief',
-      title: 'What will you do?',
-      sub: 'One thing, today. Small, cheap, and entirely up to you.',
-      placeholder: 'Ask for Friday off, in one sentence, with no reason given.',
+      title: t('own.test.title'),
+      sub: t('own.test.sub'),
+      placeholder: t('own.test.placeholder'),
       value: draft.test,
       next: function (v) {
         draft.test = v;
         var check = guards.checkTest(v);
-        if (!check.ok) { refusal = check; render(); return; }
+        if (!check.ok) { refuse(check); return; }
         go('own-drop');
       }
     });
@@ -553,16 +668,16 @@
   function ownDrop() {
     ownScreen({
       back: 'own-test',
-      title: 'What will you leave out?',
-      sub: 'The thing you’d normally do to take the edge off it. Leaving it out is what makes it a test.',
-      placeholder: 'Don’t explain why. Don’t offer to make the time up.',
+      title: t('own.drop.title'),
+      sub: t('own.drop.sub'),
+      placeholder: t('own.drop.placeholder'),
       value: draft.drop,
       next: function (v) {
         draft.drop = v;
         var check = guards.checkTest(v);
-        if (!check.ok) { refusal = check; render(); return; }
+        if (!check.ok) { refuse(check); return; }
         S.cur = {
-          source: 'own', id: null, label: 'Your own',
+          source: 'own', id: null, label: t('own.label'),
           belief: draft.belief.trim(),
           x: guards.expectationFrom(draft.belief),
           test: draft.test.trim(),
@@ -580,19 +695,20 @@
     var c = S.cur;
     paint( backButton() +
       '<div class="stage">' +
-        '<div class="kicker">Here’s your test</div>' +
+        head('h2', t('plan.kicker'), 'kicker') +
         '<div class="plan">' +
-          '<p class="lbl">Today</p>' +
+          '<p class="lbl">' + esc(t('plan.today')) + '</p>' +
           '<p class="do">' + esc(c.test) + '</p>' +
-          '<p class="line"><b>' + esc(c.drop) + '</b> That’s the bit that makes it count.</p>' +
-          '<p class="lbl">What you expect</p>' +
+          '<p class="line">' + tHtml('plan.line', { drop: '<b>' + esc(c.drop) + '</b>' }) + '</p>' +
+          '<p class="lbl">' + esc(t('plan.expectLabel')) + '</p>' +
           (c.editing
-            ? '<textarea id="x" class="short">' + esc(c.x) + '</textarea><button class="edit" id="xdone">Done</button>'
-            : '<p class="expect">' + esc(c.x) + '</p><button class="edit" id="xedit">Not quite? Change it</button>') +
+            ? '<textarea id="x" class="short" aria-label="' + esc(t('plan.expectLabel')) + '">' +
+              esc(c.x) + '</textarea><button class="edit" id="xdone">' + esc(t('plan.editDone')) + '</button>'
+            : '<p class="expect">' + esc(c.x) + '</p><button class="edit" id="xedit">' +
+              esc(t('plan.edit')) + '</button>') +
         '</div>' +
-        '<button class="big wide" id="lock">I’ll do it today</button>' +
-        '<p class="tiny">That locks in what you expect, so later you can’t talk yourself out of ' +
-        'what actually happened.</p>' +
+        '<button class="big wide" id="lock">' + esc(t('plan.lock')) + '</button>' +
+        '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
       '</div>');
     /* Back goes where they actually came from, not back into a half-finished entry. */
     wireBack(c.from || 'pick');
@@ -611,28 +727,27 @@
     var offerInstall = !S.seenInstall && !isInstalled();
     paint(
       '<div class="stage">' +
-        '<div class="kicker">Locked in</div>' +
-        '<h2>Go and do it.</h2>' +
+        '<div class="kicker">' + esc(t('locked.kicker')) + '</div>' +
+        head('h2', t('locked.title')) +
         '<p class="sub">' + esc(c.test) + '<br><b>' + esc(c.drop) + '</b></p>' +
-        (c.missed
-          ? '<div class="note">No problem. It’s still here for tomorrow. Smaller counts, too.</div>'
-          : '') +
+        (c.missed ? '<div class="note">' + esc(t('locked.missed')) + '</div>' : '') +
         (offerInstall ? installBlock() : '') +
-        '<button class="big wide" id="done">Done it. Here’s what happened</button>' +
-        '<p class="tiny"><button id="miss">Didn’t get to it</button></p>' +
+        '<button class="big wide" id="done">' + esc(t('locked.done')) + '</button>' +
+        '<p class="tiny"><button id="miss">' + esc(t('locked.miss')) + '</button></p>' +
       '</div>');
     on('#done', function () { go('happened'); });
-    on('#miss', function () { S.cur.missed = true; save(); render(); });
+    /* Nothing happens visually below the fold, so the note is read out as well as drawn. */
+    on('#miss', function () { S.cur.missed = true; save(); say(t('locked.missed')); render(); });
     wireInstall();
   }
 
   function happened() {
     paint( backButton() +
       '<div class="stage">' +
-        '<h2>What happened?</h2>' +
-        '<p class="sub">Just what they said or did. No verdict.</p>' +
-        '<textarea id="o" placeholder="He said “fair enough” and got his own coffee."></textarea>' +
-        '<button class="big wide" id="next">Next</button>' +
+        head('h2', t('happened.title')) +
+        '<p class="sub">' + esc(t('happened.sub')) + '</p>' +
+        '<textarea id="o" aria-labelledby="top" placeholder="' + esc(t('happened.placeholder')) + '"></textarea>' +
+        '<button class="big wide" id="next">' + esc(t('happened.next')) + '</button>' +
       '</div>');
     wireBack('locked');
     var o = q('#o');
@@ -660,15 +775,18 @@
     S.done.forEach(function (d) { if (rate.keyOf(d) === rate.keyOf(c)) tested++; });
     paint( backButton() +
       '<div class="stage">' +
-        '<h2>Still think that’s what happens?</h2>' +
+        head('h2', t('sure.title')) +
         '<p class="sub tight">“' + esc(c.belief) + '”</p>' +
-        '<div class="ladder one">' + rung(tested ? 'Last time' : 'Started', at, '') + '</div>' +
+        '<div class="ladder one" role="group" aria-label="' +
+          esc(t('a11y.ladder', { belief: unstop(c.belief) })) + '">' +
+          rung(t(tested ? 'ladder.lastTime' : 'ladder.started'), at, {}) +
+        '</div>' +
         '<div class="choices">' +
           rate.CHOICES.filter(function (ch) { return !ch.quiet; }).map(function (ch) {
-            return '<button data-key="' + esc(ch.key) + '">' + esc(ch.label) + '</button>';
+            return '<button data-key="' + esc(ch.key) + '">' + esc(t('rate.' + ch.key)) + '</button>';
           }).join('') +
         '</div>' +
-        '<p class="tiny"><button data-key="more">More sure than before</button></p>' +
+        '<p class="tiny"><button data-key="more">' + esc(t('rate.more')) + '</button></p>' +
       '</div>');
     wireBack('happened');
     qa('[data-key]').forEach(function (b) {
@@ -677,7 +795,7 @@
         S.done.push({
           id: c.id, source: c.source, label: c.label, belief: c.belief,
           x: c.x, test: c.test, drop: c.drop, o: c.o,
-          level: rate.next(at, ch.key), rateLabel: ch.label,
+          level: rate.next(at, ch.key), rateLabel: t('rate.' + ch.key),
           when: new Date().toISOString()
         });
         S.cur = null;
@@ -693,28 +811,33 @@
     /* series() puts the most recently tested first, which is always the one just recorded. */
     var g = rate.series(S.done)[0];
 
+    /*
+      This screen is the product: what you were braced for, struck through, next to what
+      actually happened. A shape does not survive being read aloud, so it is also one
+      sentence in the live region — the one place the heading genuinely is not enough.
+    */
+    say(t('a11y.result', { expected: stop(last.x), happened: stop(last.o), level: g.level }));
+
     paint(
       '<div class="stage">' +
-        '<div class="kicker">' + esc(last.label) + '</div>' +
+        head('h2', last.label, 'kicker') +
         '<div class="result">' +
-          '<p class="lbl">You expected</p>' +
+          '<p class="lbl">' + esc(t('result.expected')) + '</p>' +
           '<p class="you">' + esc(last.x) + '</p>' +
-          '<p class="lbl">What actually happened</p>' +
+          '<p class="lbl">' + esc(t('result.happened')) + '</p>' +
           '<p class="real">' + esc(last.o) + '</p>' +
         '</div>' +
         '<div class="board">' +
-          '<p class="lbl">How sure you are it goes badly</p>' +
+          '<p class="lbl">' + esc(t('result.ladderLabel')) + '</p>' +
           ladder(g) +
           (g.tests > 1 && g.level < rate.TOP
-            ? '<p class="moved">Down ' + (rate.TOP - g.level) + ' since you started.</p>' : '') +
+            ? '<p class="moved">' + esc(t('result.moved', { n: rate.TOP - g.level })) + '</p>' : '') +
         '</div>' +
-        '<div class="count">' + n + '</div>' +
-        '<p class="sub">' + (n === 1
-          ? 'One test done. The second one is where it starts to stick.'
-          : n + ' tests done. Same worry, different day, keeps working.') + '</p>' +
+        '<div class="count" aria-hidden="true">' + n + '</div>' +
+        '<p class="sub">' + esc(I.plural('result.count', n)) + '</p>' +
         '<div class="row">' +
-          '<button class="big" id="again">Do it again tomorrow</button>' +
-          '<button class="ghost" id="other">Different worry</button>' +
+          '<button class="big" id="again">' + esc(t('result.again')) + '</button>' +
+          '<button class="ghost" id="other">' + esc(t('result.other')) + '</button>' +
         '</div>' +
       '</div>');
 
@@ -744,47 +867,52 @@
     var cards = groups.map(function (g) {
       return { key: g.key, g: g, label: g.label, belief: g.belief, open: [] };
     });
-    S.open.forEach(function (t) {
-      var k = rate.keyOf(t);
+    S.open.forEach(function (tst) {
+      var k = rate.keyOf(tst);
       var card = null;
       cards.forEach(function (c) { if (c.key === k) card = c; });
       if (!card) {
-        card = { key: k, g: null, label: t.label, belief: t.belief, open: [] };
+        card = { key: k, g: null, label: tst.label, belief: tst.belief, open: [] };
         cards.unshift(card);
       }
-      card.open.push(t);
+      card.open.push(tst);
     });
 
     paint( backButton() +
       '<div class="stage">' +
-        '<h2>Your worries</h2>' +
-        '<p class="sub">' + (n
-          ? n + ' test' + (n === 1 ? '' : 's') + ' across ' +
-            groups.length + ' worr' + (groups.length === 1 ? 'y' : 'ies') + '. Tap one to test it again.'
-          : 'What you’ve got on the go. Nothing recorded yet.') + '</p>' +
+        head('h2', t('mine.title')) +
+        '<p class="sub">' + esc(n
+          ? t('mine.summary', {
+              tests: I.plural('mine.tests', n),
+              worries: I.plural('mine.worries', groups.length)
+            })
+          : t('mine.nothing')) + '</p>' +
         cards.map(function (c) {
           return '<div class="card">' +
-            '<div class="kicker">' + esc(c.label) + '</div>' +
+            '<h3 class="kicker">' + esc(c.label) + '</h3>' +
             '<p class="belief">“' + esc(c.belief) + '”</p>' +
             (c.g
               ? ladder(c.g, { said: true })
-              : '<div class="ladder">' + rung('Started', rate.TOP, '') + '</div>') +
-            c.open.map(function (t) {
-              var i = S.open.indexOf(t);
+              : '<div class="ladder" role="group" aria-label="' +
+                esc(t('a11y.ladder', { belief: unstop(c.belief) })) + '">' +
+                rung(t('ladder.started'), rate.TOP, {}) + '</div>') +
+            c.open.map(function (tst) {
+              var i = S.open.indexOf(tst);
               return '<div class="waiting">' +
-                '<p class="lbl">On the go</p>' +
-                '<p class="do">' + esc(t.test) + '</p>' +
-                (t.missed ? '<p class="soft">No problem. It’s still here for tomorrow. Smaller counts, too.</p>' : '') +
+                '<p class="lbl">' + esc(t('mine.onTheGo')) + '</p>' +
+                '<p class="do">' + esc(tst.test) + '</p>' +
+                (tst.missed ? '<p class="soft">' + esc(t('locked.missed')) + '</p>' : '') +
                 '<div class="row">' +
-                  '<button class="ghost" data-did="' + i + '">Done it</button>' +
-                  '<button class="ghost" data-notyet="' + i + '">Didn’t get to it</button>' +
+                  '<button class="ghost" data-did="' + i + '">' + esc(t('mine.did')) + '</button>' +
+                  '<button class="ghost" data-notyet="' + i + '">' + esc(t('mine.notYet')) + '</button>' +
                 '</div>' +
               '</div>';
             }).join('') +
-            (c.g ? '<button class="ghost" data-again="' + groups.indexOf(c.g) + '">Test this again</button>' : '') +
+            (c.g ? '<button class="ghost" data-again="' + groups.indexOf(c.g) + '">' +
+              esc(t('mine.again')) + '</button>' : '') +
           '</div>';
         }).join('') +
-        '<p class="tiny">Each one is its own. Nothing here is added up, and there is no target.</p>' +
+        '<p class="tiny">' + esc(t('mine.foot')) + '</p>' +
       '</div>');
 
     wireBack('start');
@@ -797,8 +925,8 @@
     /* Not getting to it costs nothing and changes nothing. It stays exactly where it is. */
     qa('[data-notyet]').forEach(function (b) {
       b.onclick = function () {
-        var t = S.open[Number(b.getAttribute('data-notyet'))];
-        if (t) { t.missed = true; save(); render(); }
+        var tst = S.open[Number(b.getAttribute('data-notyet'))];
+        if (tst) { tst.missed = true; save(); say(t('locked.missed')); render(); }
       };
     });
   }
@@ -833,13 +961,12 @@
   */
   function installBlock() {
     return '<div class="note">' +
-      '<b>Add this to your home screen.</b> Safari wipes a web page’s saved answers after a ' +
-      'week or so of not opening it. On the home screen it stays.' +
+      '<b>' + esc(t('install.title')) + '</b> ' + esc(t('install.body')) +
       (installEvent
-        ? '<div class="row"><button class="ghost" id="install">Add it</button>' +
-          '<button class="ghost" id="nothanks">Not now</button></div>'
-        : '<div class="row"><span class="tiny">Share → Add to Home Screen.</span>' +
-          '<button class="ghost" id="nothanks">Got it</button></div>') +
+        ? '<div class="row"><button class="ghost" id="install">' + esc(t('install.add')) + '</button>' +
+          '<button class="ghost" id="nothanks">' + esc(t('install.notNow')) + '</button></div>'
+        : '<div class="row"><span class="tiny">' + esc(t('install.how')) + '</span>' +
+          '<button class="ghost" id="nothanks">' + esc(t('install.gotIt')) + '</button></div>') +
     '</div>';
   }
 
@@ -877,7 +1004,7 @@
       3. what this is: the purpose statement, the nine sentences, the airplane-mode proof,
          export and delete. This is the old "what this is" screen, word for word
       4. other places to go, none of them run by us, from content/places.js
-      5. who made this, and the code
+      5. who made this, the language, and the code
 
     Nothing on this screen is fetched. A link is inert until a person taps it, and then it is
     their browser going there — no favicon, no preview, no availability check, nothing counted.
@@ -886,16 +1013,14 @@
   function help() {
     var build = document.querySelector('meta[name="betr-build"]');
     var hash = build ? build.getAttribute('content') : 'dev';
+    var primer = I.list('help.primer');
 
     paint( backButton() +
       '<div class="stage"><div class="sheet">' +
 
-        '<h3>If you are in danger or in crisis</h3>' +
+        head('h2', t('crisis.title')) +
         crisisBlock() +
-        '<p class="quiet">How we work out the country: your phone’s time zone, read on this ' +
-        'device when this screen is drawn. It is not stored, not sent, and it is the only ' +
-        'thing here that has anything to do with where you are. BETR never asks your phone ' +
-        'for your location and never will.</p>' +
+        '<p class="quiet">' + esc(t('crisis.howWeKnow')) + '</p>' +
 
         /*
           The primer. Founder, 2026-09-03: there should be one clear thing to read about CBT,
@@ -904,90 +1029,117 @@
           Therapist Aid, Psychology Tools or the Beck Institute (rule 8). It explains and it
           points; it claims nothing the nine sentences below do not already say.
         */
-        '<h3>What CBT is, and which bit of it this is</h3>' +
+        '<h2>' + esc(t('help.cbtTitle')) + '</h2>' +
         '<div class="primer">' +
-          '<p>CBT is a talking therapy. Its plainest idea is this: what you expect to happen ' +
-          'decides what you do, and staying away from the thing keeps the expectation safe. ' +
-          'You never find out you were wrong, so you stay sure.</p>' +
-          '<p>The <b>behavioural experiment</b> is the part of CBT that finds out. You write ' +
-          'down what you think will happen. You do one small thing. Then you write down what ' +
-          'actually happened — not what it meant, just what was said or done. Beliefs move ' +
-          'when the evidence is yours and you collected it yourself.</p>' +
-          '<p>BETR is that one part, and nothing else. It doesn’t ask how your week has been, ' +
-          'doesn’t score you, doesn’t decide anything about you, and can’t see any of it. ' +
-          'A therapist does far more than this, and if you can see one, please do. This is ' +
-          'the piece you can do on your own, today, in about a minute.</p>' +
-          '<p>Written by us. If you want it from people who aren’t us:</p>' +
+          primer.map(function (p) {
+            return '<p>' + bold(esc(p), t('help.experiment')) + '</p>';
+          }).join('') +
+          '<p>' + esc(t('help.readingIntro')) + '</p>' +
           '<ul class="places">' + PLACES.reading.map(function (r) {
             return '<li><a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' +
               esc(r.name) + '</a> — ' + esc(r.what) + '</li>';
           }).join('') + '</ul>' +
         '</div>' +
 
-        '<h3>What this is</h3>' +
-        '<p>' + esc(PURPOSE) + '</p>' +
-        '<ol>' + SENTENCES.map(function (t) { return '<li>' + callable(t) + '</li>'; }).join('') + '</ol>' +
+        '<h2>' + esc(t('help.whatThisTitle')) + '</h2>' +
+        '<p>' + esc(purpose()) + '</p>' +
+        '<ol>' + sentences().map(function (s) { return '<li>' + callable(s) + '</li>'; }).join('') + '</ol>' +
 
-        '<h3>Don’t take our word for it</h3>' +
-        '<p>Turn on airplane mode. Everything still works, because nothing here ever needed ' +
-        'the internet. Loading this page is the only thing any server ever sees, and we keep ' +
-        'no record of it.</p>' +
+        '<h2>' + esc(t('help.proofTitle')) + '</h2>' +
+        '<p>' + esc(t('help.airplane')) + '</p>' +
         '<div class="proof">' +
-          '<span><b>' + S.done.length + '</b><small>results on this phone</small></span>' +
-          '<span><b>0</b><small>accounts</small></span>' +
-          '<span><b>0 B</b><small>sent to us, ever</small></span>' +
+          '<span><b>' + S.done.length + '</b><small>' + esc(t('help.proofResults')) + '</small></span>' +
+          '<span><b>0</b><small>' + esc(t('help.proofAccounts')) + '</small></span>' +
+          '<span><b>' + esc(t('help.zeroBytes')) + '</b><small>' + esc(t('help.proofSent')) + '</small></span>' +
         '</div>' +
-        '<p><button class="plain" id="export">Export everything</button>' +
-        '<button class="plain" id="wipe">Delete everything</button></p>' +
+        '<p><button class="plain" id="export">' + esc(t('io.export')) + '</button>' +
+        '<button class="plain" id="wipe">' + esc(t('io.wipe')) + '</button></p>' +
         '<div id="io"></div>' +
 
-        '<h3>Other places, none of them run by us</h3>' +
+        '<h2>' + esc(t('help.placesTitle')) + '</h2>' +
         '<p>' + esc(PLACES.intro) + '</p>' +
         PLACES.groups.map(function (grp) {
-          return '<h4>' + esc(grp.title) + '</h4>' +
+          return '<h3>' + esc(grp.title) + '</h3>' +
             '<ul class="places">' + grp.items.map(function (place) {
               return '<li><a href="' + esc(place.url) + '" target="_blank" rel="noopener noreferrer">' +
                 esc(place.name) + '</a> — ' + esc(place.what) + '</li>';
             }).join('') + '</ul>';
         }).join('') +
 
-        '<h3>Who made this</h3>' +
-        '<p>This is for doing it alone. The people who made it also make TrybeUP, where the ' +
-        'same thing is done in small private groups. Only if and when you want that.</p>' +
+        '<h2>' + esc(t('help.whoTitle')) + '</h2>' +
+        '<p>' + esc(t('help.who')) + '</p>' +
 
-        '<h3>The code</h3>' +
-        '<p>BETR is plain HTML, CSS and JavaScript with no libraries, small enough to read in ' +
-        'an evening. This build:</p>' +
-        '<p class="build">' + (hash === 'dev' ? 'Dev build — not published' : esc(hash)) + '</p>' +
+        languageBlock() +
+
+        '<h2>' + esc(t('help.codeTitle')) + '</h2>' +
+        '<p>' + esc(t('help.code')) + '</p>' +
+        '<p class="build">' + (hash === 'dev' ? esc(t('help.devBuild')) : esc(hash)) + '</p>' +
 
       '</div></div>');
 
     wireBack('start');
     on('#export', showExport);
     on('#wipe', armDelete);
+    wireLanguage();
+  }
+
+  /*
+    The language switch: one line in Help and nothing else (CLAUDE.md rule 10 — not a flag,
+    not a picker on the front screen, not a first-run question). Each language is named in
+    its own words, because a person looking for Français is not looking for "French".
+
+    While English is the only language in the build there is nothing to choose between, so
+    this draws nothing at all. B16 adds a second file and this appears on its own.
+  */
+  function languageBlock() {
+    var all = I.locales();
+    if (all.length < 2) return '';
+    return '<h2>' + esc(t('help.langTitle')) + '</h2>' +
+      '<p>' + esc(t('help.langNote')) + '</p>' +
+      '<ul class="places languages">' + all.map(function (l) {
+        return '<li><button class="plain" data-lang="' + esc(l.code) + '" lang="' + esc(l.code) + '">' +
+          esc(l.name) +
+          (l.code === I.code
+            ? ' <span aria-hidden="true">✓</span><span class="sr">' + esc(t('where.chosen')) + '</span>'
+            : '') + '</button></li>';
+      }).join('') + '</ul>';
+  }
+
+  function wireLanguage() {
+    qa('[data-lang]').forEach(function (b) {
+      b.onclick = function () {
+        S.lang = b.getAttribute('data-lang');
+        save();
+        I = Betr.i18n.create(Betr.strings, { chosen: S.lang, prefer: myLanguages() });
+        applyLanguage();
+        render();
+        window.scrollTo(0, 0);
+      };
+    });
   }
 
   function showExport() {
-    var json = storeLib.exportJSON(S);
+    var json = storeLib.exportJSON(S, t('io.exportNote'));
     var io = q('#io');
     io.innerHTML =
-      '<p><button class="plain" id="copy">Copy it</button>' +
-      (navigator.share ? '<button class="plain" id="share">Send it somewhere</button>' : '') +
-      '</p><textarea id="dump" readonly></textarea>';
+      '<p><button class="plain" id="copy">' + esc(t('io.copy')) + '</button>' +
+      (navigator.share ? '<button class="plain" id="share">' + esc(t('io.share')) + '</button>' : '') +
+      '</p><textarea id="dump" readonly aria-label="' + esc(t('io.export')) + '"></textarea>';
     q('#dump').value = json;
     on('#copy', function () {
-      var t = q('#dump');
-      t.select();
+      var box = q('#dump');
+      box.select();
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(json);
         else document.execCommand('copy');
       } catch (e) { /* the text is selected either way; the person can copy it themselves */ }
-      q('#copy').textContent = 'Copied';
+      q('#copy').textContent = t('io.copied');
+      announce(t('io.copied'));
     });
     on('#share', function () {
       /* The OS share sheet. It goes where the person sends it, and nowhere else. */
       try {
-        var p = navigator.share({ title: 'BETR', text: json });
+        var p = navigator.share({ title: t('brand'), text: json });
         if (p && p.catch) p.catch(function () { /* dismissed */ });
       } catch (e) { /* dismissed */ }
     });
@@ -997,10 +1149,10 @@
     var io = q('#io');
     if (!deleteArmed) {
       deleteArmed = true;
-      io.innerHTML = '<div class="warn">Delete everything on this phone? There is no copy ' +
-        'anywhere else, and we cannot get it back for you.' +
-        '<div class="row"><button class="ghost" id="yes">Delete it all</button>' +
-        '<button class="ghost" id="no">Keep it</button></div></div>';
+      io.innerHTML = '<div class="warn">' + esc(t('io.deleteAsk')) +
+        '<div class="row"><button class="ghost" id="yes">' + esc(t('io.deleteYes')) + '</button>' +
+        '<button class="ghost" id="no">' + esc(t('io.deleteNo')) + '</button></div></div>';
+      announce(t('io.deleteAsk'));
       on('#yes', function () {
         S = storeLib.blank();
         deleteArmed = false;
@@ -1016,5 +1168,6 @@
 
   /* ---------------------------------------------------------------- go */
 
+  applyLanguage();
   render();
 })();
