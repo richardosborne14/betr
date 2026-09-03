@@ -14,7 +14,13 @@
   restriction, body sensation, checking ritual, or anyone's safety. web/tests/content.test.js
   enforces this against the same word list the custom-entry guard uses.
 
-  Order matters: the first three get most of the taps, so they are the easiest to succeed at.
+  ORDER: the first taps have to be able to succeed on the day they are taken. Nine of the
+  original twelve waited on the world — someone had to ask you for something, a mistake had
+  to exist, an evening out had to be happening — so a person's first loop ended in "Didn't
+  get to it" and they learned nothing on the one day they were certain to open this. The
+  order now runs doable-today-and-alone first (founder's call, 2026-09-03). `strug` moved
+  from third to seventh: it is the highest-stakes item on the list, it needs a trusted person
+  to be free, and it was sitting in the slot scope §5.3c reserves for an easy win.
 
   Every phrase here is written fresh (B1, 2026-09-03). Nothing is adapted from CCI,
   Getselfhelp, Therapist Aid, Psychology Tools or Beck Institute material; all of them
@@ -54,63 +60,33 @@ var BETR_WORRIES = [
     lane: 'assertiveness'
   },
   {
-    id: 'strug',
-    label: 'Admitting I’m struggling',
-    belief: 'If I let someone see I’m struggling, then they’ll think less of me.',
-    expect: 'They’ll go quiet, change the subject, and keep a bit of distance after.',
-    test: 'Today, tell one person you trust one small, true thing you’re finding hard.',
-    drop: 'Don’t finish it with “but I’m fine”.',
-    lane: 'social'
-  },
-  {
-    id: 'funny',
-    label: 'Not being the funny one',
-    belief: 'If I stop being the entertaining one, then people won’t want me around.',
-    expect: 'The conversation will flatten out and they’ll drift off to someone else.',
-    test: 'For one conversation today, just listen and ask questions. No jokes.',
-    drop: 'Don’t fill the quiet bits.',
+    /*
+      Added 2026-09-03, replacing `funny`. Every other social item on this list needed a
+      live, spoken, in-person conversation, and for most people under about thirty the worry
+      lives in the messages instead. This one can be started inside an hour, alone, without
+      anybody agreeing to take part — which is why it sits third (see ORDER above).
+    */
+    id: 'reply',
+    label: 'Not replying straight away',
+    belief: 'If I leave a message a few hours, then they’ll think I don’t care.',
+    expect: 'They’ll go a bit cooler with me, and I’ll have to make it up to them.',
+    test: 'Pick one message today and leave it a few hours before you answer. Notice whether they chase you.',
+    drop: 'Don’t open with “sorry, only just seen this”, and don’t explain the delay.',
     lane: 'social'
   },
   {
     /*
-      Q2d, and the one item Misha has the casting vote on. The worry is other people
-      noticing, not the thing itself, so the label says so: nothing on the list should read
-      as a test of the habit to someone in early recovery. If it still does, it comes out.
+      Added 2026-09-03, replacing `favour`. Perfectionism had one item and it needed a job.
+      This one works for a student, somebody between jobs, somebody at home, and it is the
+      cheapest reversible experiment in the lane.
     */
-    id: 'drink',
-    label: 'Being the only one not joining in',
-    belief: 'If I turn up and don’t join in, then everyone will notice and ask me why.',
-    expect: 'Someone will say something, and then the whole table will be looking at me.',
-    test: 'Turn up, order something soft, and count how many people actually say anything.',
-    drop: 'Don’t arrive with a reason ready, and don’t hold a glass as cover.',
-    lane: 'social'
-  },
-  {
-    id: 'angry',
-    label: 'Saying I’m annoyed, calmly',
-    belief: 'If I tell someone I’m annoyed, even calmly, then it’ll turn into an argument.',
-    expect: 'They’ll get defensive, and it’ll turn into a much bigger thing.',
-    test: 'Say one thing that annoyed you, in one sentence, calmly. Then stop talking.',
-    drop: 'Don’t raise your voice, and don’t bring up a second thing.',
-    lane: 'assertiveness'
-  },
-  {
-    id: 'mist',
-    label: 'Owning a mistake at work',
-    belief: 'If I admit I got something wrong, then it’ll be held against me later.',
-    expect: 'They’ll remember this one, and trust me with less next time.',
-    test: 'Tell someone about one small mistake of yours today, before they find it.',
-    drop: 'Don’t bury it in excuses, and don’t wait until you’ve already fixed it.',
+    id: 'check',
+    label: 'Sending it without checking it again',
+    belief: 'If I send something without going over it again, then there’ll be a mistake in it and I’ll look sloppy.',
+    expect: 'Someone will spot something, and they’ll think I rushed it.',
+    test: 'Write one email or message today, read it through once, and send it.',
+    drop: 'No second read-through, and don’t go back to edit it after it’s gone.',
     lane: 'perfectionism'
-  },
-  {
-    id: 'rest',
-    label: 'Resting when there’s stuff to do',
-    belief: 'If I rest while there’s still stuff to do, then I’m being lazy.',
-    expect: 'I’ll feel guilty the whole time and wish I’d just got on with it.',
-    test: 'Plan two hours of rest today and actually take them. Notice how you feel after.',
-    drop: 'No “I’ll just quickly do this one thing” first.',
-    lane: 'rest'
   },
   {
     id: 'sit',
@@ -131,13 +107,54 @@ var BETR_WORRIES = [
     lane: 'urge-timing'
   },
   {
-    id: 'favour',
-    label: 'Skipping a favour I always do',
-    belief: 'If I stop doing the things I always do for people, then they’ll drift away.',
-    expect: 'They’ll notice straight away, and be cooler with me next time.',
-    test: 'Skip one favour you always do, and see whether anyone actually mentions it.',
-    drop: 'Don’t offer before you’re asked, and don’t make up for it another way.',
+    id: 'strug',
+    label: 'Admitting I’m struggling',
+    belief: 'If I let someone see I’m struggling, then they’ll think less of me.',
+    expect: 'They’ll go quiet, change the subject, and keep a bit of distance after.',
+    test: 'Today, tell one person you trust one small, true thing you’re finding hard.',
+    drop: 'Don’t finish it with “but I’m fine”.',
+    lane: 'social'
+  },
+  {
+    id: 'mist',
+    label: 'Owning a mistake at work',
+    belief: 'If I admit I got something wrong, then it’ll be held against me later.',
+    expect: 'They’ll remember this one, and trust me with less next time.',
+    test: 'Tell someone about one small mistake of yours today, before they find it.',
+    drop: 'Don’t bury it in excuses, and don’t wait until you’ve already fixed it.',
+    lane: 'perfectionism'
+  },
+  {
+    id: 'angry',
+    label: 'Saying I’m annoyed, calmly',
+    belief: 'If I tell someone I’m annoyed, even calmly, then it’ll turn into an argument.',
+    expect: 'They’ll get defensive, and it’ll turn into a much bigger thing.',
+    test: 'Say one thing that annoyed you, in one sentence, calmly. Then stop talking.',
+    drop: 'Don’t raise your voice, and don’t bring up a second thing.',
     lane: 'assertiveness'
+  },
+  {
+    id: 'rest',
+    label: 'Resting when there’s stuff to do',
+    belief: 'If I rest while there’s still stuff to do, then I’m being lazy.',
+    expect: 'I’ll feel guilty the whole time and wish I’d just got on with it.',
+    test: 'Plan two hours of rest today and actually take them. Notice how you feel after.',
+    drop: 'No “I’ll just quickly do this one thing” first.',
+    lane: 'rest'
+  },
+  {
+    /*
+      Q2d, and the one item Misha has the casting vote on. The worry is other people
+      noticing, not the thing itself, so the label says so: nothing on the list should read
+      as a test of the habit to someone in early recovery. If it still does, it comes out.
+    */
+    id: 'drink',
+    label: 'Being the only one not joining in',
+    belief: 'If I turn up and don’t join in, then everyone will notice and ask me why.',
+    expect: 'Someone will say something, and then the whole table will be looking at me.',
+    test: 'Turn up, order something soft, and count how many people actually say anything.',
+    drop: 'Don’t arrive with a reason ready, and don’t hold a glass as cover.',
+    lane: 'social'
   },
   {
     id: 'cut',

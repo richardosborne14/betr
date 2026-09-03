@@ -103,10 +103,52 @@ door points only at worries that exist, and none of the phrases we never use app
 390×844 — pick, plan, lock, record, re-rate, result and Your worries — and every new string
 renders on one screen without clipping.
 
+## Amended 2026-09-03 — two items swapped, and the order changed
+
+A review of the twelve against "the average adult or young adult", rather than against
+research §8's corpus alone, found three things. The founder took all three.
+
+**Two out. `funny` (Not being the funny one)** presupposed that you *are* the entertaining
+one and are in group conversations regularly; for most people it is not their role, so it is a
+button they read past. **`favour` (Skipping a favour I always do)** had a sound belief but a
+test that cannot produce data — skip one favour today and almost nobody mentions it, so the
+person comes back with nothing to write. Research §7 candidate 10 said *a fortnight* for that
+reason, and a fortnight does not fit an app that says "Today:". Its belief also overlapped
+`no` and `help`, and assertiveness had four items to perfectionism's one.
+
+**Two in.**
+
+- **`reply` — Not replying straight away** (social). Every other social item needed a live,
+  spoken, in-person conversation. For most people under about thirty the worry lives in the
+  messages, and this one can be started inside an hour, alone, with nobody's cooperation.
+- **`check` — Sending it without checking it again** (perfectionism). The lane had one item
+  and it needed a job. This one works for a student, somebody between jobs, somebody at home.
+
+**The order changed, and this is the substantive one.** Only three of the original twelve
+could actually be started on the day they were picked; the other nine waited on the world.
+`no` — first on the list, most taps — needs somebody to ask you for something. So a person's
+first loop ended in *Didn't get to it*, on the one day they were certain to open the app. The
+order now runs doable-today-and-alone first, and **`strug` moved from third to seventh**: it is
+the highest-stakes item on the list, it needs a trusted person to be free, and it was sitting
+in the slot scope §5.3c reserves for an easy win. Four of the top six are now
+startable-today against one before.
+
+`content.test.js`'s order assertion is now `['no', 'help', 'reply']`, which supersedes
+scope §5.3c's proposal. Two doors in `whats-going-on.js` were repointed so nothing aims at a
+worry that is gone — *On my phone…* is `phone · sit · reply`, *Saying yes when I mean no* is
+`no · angry · help` — and their `under` lines were reworded to match. The `work` door said
+resting makes you "worthless"; `rest`'s belief has said "lazy" since the rewrite, so that word
+was corrected too. **The six labels are untouched and still need Misha.** 146 tests green.
+
+**This was the last moment for it.** An id is permanent once a person's stored results point
+at one. Nothing has shipped, so removing `funny` and `favour` was clean. After release it
+never is again.
+
 ## Gaps
 
 - **Nobody outside this building has read the list.** That is steps 2 and 3, and it is the
   entire remaining risk in B1. The words are careful; careful is not reviewed.
+- **Misha and the CBT reviewer have still read none of it**, including the two new items.
 - **The `sleep` lane is still empty.** It is allowed (scope §5.2, research §7 candidate 13) and
   no item uses it. Twelve is the cap, so a sleep item means dropping one. Not a session's call.
 - **`whats-going-on.js` was not rewritten**, only checked against the new labels. Its six

@@ -48,7 +48,7 @@ test('no test and no drop line touches the habit itself', () => {
 });
 
 test('the easiest and most universal three come first (scope §5.3c)', () => {
-  assert.deepStrictEqual(worries.slice(0, 3).map((f) => f.id), ['no', 'help', 'strug']);
+  assert.deepStrictEqual(worries.slice(0, 3).map((f) => f.id), ['no', 'help', 'reply']);
 });
 
 test('ids are stable: stored results point at them and they are never reused', () => {

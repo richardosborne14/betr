@@ -31,8 +31,8 @@ var BETR_DOORS = {
     {
       id: 'phone',
       label: 'On my phone more than I want to be',
-      under: 'Usually underneath: missing something that matters, and not being able to sit still without it.',
-      worries: ['phone', 'sit', 'funny']
+      under: 'Usually underneath: missing something that matters, what people think when you don’t answer, and not being able to sit still without it.',
+      worries: ['phone', 'sit', 'reply']
     },
     {
       id: 'temper',
@@ -43,13 +43,13 @@ var BETR_DOORS = {
     {
       id: 'yes',
       label: 'Saying yes when I mean no',
-      under: 'Usually underneath: that saying no, or stopping a favour, costs you the person.',
-      worries: ['no', 'favour', 'help']
+      under: 'Usually underneath: that saying no, or saying you’re annoyed, costs you the person.',
+      worries: ['no', 'angry', 'help']
     },
     {
       id: 'work',
       label: 'Never switching off from work',
-      under: 'Usually underneath: that resting makes you worthless, and one mistake gets held against you.',
+      under: 'Usually underneath: that resting makes you lazy, and one mistake gets held against you.',
       worries: ['rest', 'mist', 'no']
     },
     {
