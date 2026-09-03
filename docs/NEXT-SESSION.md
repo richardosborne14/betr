@@ -1,47 +1,59 @@
 # Start here
 
-**Last refreshed:** 2026-09-02, after the founder tested v1 and three changes were made.
+**Last refreshed:** 2026-09-03, after the founder ran v1 in a browser and asked for a menu.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**v1 is built, amended once after the founder walked it, and tested. It has not been used on a
-phone, and its words are still the prototype's.** Betr was scoped and prototyped on 2026-09-01;
-`web/` was built on 2026-09-02 and amended the same day.
+**v1 is built, amended twice, and tested in a real browser. It has not been used on a phone,
+and its words are still the prototype's.** Scoped and prototyped 2026-09-01, built 2026-09-02,
+amended 2026-09-02 (the ladder) and 2026-09-03 (the brand and capitalisation).
 
-Eleven screens: the seven from scope §3, the second door, the three one-box screens for a
-person's own entry, *your worries*, and *what this is*. 61 tests pass. No dependencies, no
-build step, no requests after the page loads.
+Eleven screens, 63 tests, no dependencies, no build step, no requests after the page loads.
 
-**The founder's three calls on 2026-09-02, after testing (all live in the build):**
-- **"Fear" is now "worry"**, everywhere a person can see it and everywhere in the code —
-  `content/worries.js`, `BETR_WORRIES`, the door key. Fear sounded scary. "Worry" was already
-  the word in the nine sentences. **Misha still has the last word on tone.**
-- **The re-rate moves a 1–10 ladder** instead of storing a fixed number. This was a bug, not a
-  preference: the four words are relative, so three days of "a bit less sure" used to record
-  the same number three times. Everything starts at 10; the tap is still one of four words.
-- **A fifth, quiet option, *more sure than before***, chosen against the safer recommendation,
-  because a ladder that can only fall is a nicer story than someone's week.
-- **A *your worries* screen**: one card per belief, its ladder, what you wrote each time, and
-  *test this again*. Nothing is combined across cards.
+**2026-09-02, after the founder walked it:** "fear" became **worry** everywhere, in the app and
+in the code. The re-rate now moves a **1–10 ladder** instead of storing a fixed number — that
+was a bug, not a preference: the four words are relative, so three days of "a bit less sure"
+used to record the same number three times. A fifth, quiet **"more sure than before"** was added
+against the safer recommendation. **Your worries** was added: one card per belief, its ladder,
+what was written each time, and *Test this again*.
 
-**Earlier, and still true:** both doors ship in v1 (**Misha must sign off the six surface-problem
-labels before release**); a person's own entry ships in v1; **Q1 (name, trademark, domain) is
-still open** and blocks release, not build.
+**2026-09-03, after the founder ran it:** the wordmark is **BETR**, all caps, everywhere a
+person reads it, and **no label a person taps is all-lowercase** any more. Both are guarded by
+tests. And **B8 was written** — see below. It is the next build.
+
+**Still true:** both doors ship in v1 (**Misha must sign off the six surface-problem labels
+before release**); a person's own entry ships in v1; **Q1 (name, trademark, domain) is open**
+and blocks release, not build.
 
 ## 2. The next action
 
-**Two things, and they are not for a coding session:**
+**B8, `docs/tasks/B8-the-menu-and-help.md`.** A permanent row of three at the bottom of every
+screen — *Your worries · New worry · Help* — and a Help screen that absorbs *What this is* and
+adds crisis lines first, then places to go that we don't run. The founder took all four design
+decisions on 2026-09-03; they are in the task file, along with the two CLAUDE.md rules this
+amends (rule 10's no-tab-bar, rule 9's TrybeUP gate) and the conditions on each.
 
-1. **Walk J1 and J2 on a phone.** `docs/journeys.md`. J2 is new and is the one that matters:
-   the same worry three days running, watching the ladder come down. Until B3 there is no URL,
-   so this means opening `web/index.html` on a laptop browser, or B3 first.
+A session can start on it with this:
+
+> Read `CLAUDE.md`, then `docs/NEXT-SESSION.md`, then `docs/tasks/B8-the-menu-and-help.md`,
+> and build B8. The four design decisions are taken — don't reopen them. The parts that need
+> care, in order: the menu must not cover the big button on a short phone; a locked-in test
+> must survive *New worry* and reappear on the front screen and in Your worries; Help must open
+> with wifi off with the crisis block above everything else; and every external link has to be
+> plain https with no parameters and no runtime checking of any kind. Don't write the link list
+> itself beyond a placeholder shape — Misha signs that off. Tests, then the phone walk (add J3),
+> then update the task file, `docs/learnings.md` and this file, then commit and push `main`.
+
+**Two things that are not for a coding session and are still open:**
+
+1. **Walk J1 and J2 on a phone.** `docs/journeys.md`. J2 is the one that matters: the same
+   worry three days running, watching the ladder come down.
 2. **B1: write the twelve items fresh.** The shape, the file and the tests are done; the words
-   are the prototype's and are a placeholder. This is the unvalidated part of the product and
-   the part that matters most. Then Misha, then one paid CBT reviewer.
+   are the prototype's and are a placeholder. Then Misha, then one paid CBT reviewer.
 
-**The next coding task is B3** (`docs/tasks/B3-hosting-and-deploy.md`), which carries four
-corrections at the top that B2 forced. Read them before writing the workflow.
+**B3 (hosting) is still the other coding task**, and carries four corrections at its top that
+B2 forced. B8 before B3 unless a URL is suddenly needed.
 
 ## 3. Environment facts
 
@@ -49,9 +61,9 @@ corrections at the top that B2 forced. Read them before writing the workflow.
 | --- | --- |
 | Repo | `github.com/richardosborne14/betr`, private, branch `main` |
 | Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
-| See it now | open `web/index.html` in any browser. No server needed |
-| See a screen without doing four loops | copy `web/` somewhere, add a `seed.js` that writes `localStorage['betr.v1']` before `app.js`, serve it over `python3 -m http.server` (storage is opaque over `file:`), screenshot with `--headless=new` |
-| Dev host (B3, not yet set up) | TrybeUP dev droplet, SSH alias `le-jibe`; target `betr.dev.trybeup.com`, `/var/www/betr-dev/`; needs its own deploy key and repo secrets |
+| See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then `open http://127.0.0.1:8760/`. Opening `web/index.html` directly also works, but browsers are unreliable about saving anything for a `file:` page, so serve it when testing persistence |
+| Drive it for real | headless Chrome + CDP over plain `fetch`/`WebSocket` in Node 22, no dependencies. `--remote-debugging-port`, then `Runtime.evaluate` to click and read `document.body.innerText`. It caught nothing the tests missed, but it is the only way to prove localStorage across loops |
+| Dev host (B3, not set up) | TrybeUP dev droplet, SSH alias `le-jibe`; target `betr.dev.trybeup.com`, `/var/www/betr-dev/` |
 | Production host | none yet; waits on Q1 (a domain) |
 | Related repo | `trybeup/trybeup-prod` — the B6 bridge's server side, and the audience research |
 
@@ -59,41 +71,36 @@ corrections at the top that B2 forced. Read them before writing the workflow.
 
 - **`node --test web/tests/` does not work on Node 22.** Use `node --test` from the repo root.
 - **Content is `web/content/worries.js`, not `.json`.** A browser will not fetch JSON, or load
-  an ES module, from a page opened off the filesystem, and that is how this gets looked at.
-  Same reason `web/lib/*.js` are classic scripts with a small export shim.
-- **The ladder is one belief's grip and must stay that way.** No total, no average across
-  worries, no line, no target, no comparison between two beliefs. `rate.test.js` fails the
-  build if the words "average", "total", "score", "streak" or "target" appear in `rate.js`.
+  an ES module, from a page opened off the filesystem. Same reason `web/lib/*.js` are classic
+  scripts with a small export shim.
+- **The ladder is one belief's grip.** No total, no average across worries, no line, no target.
+  `rate.test.js` fails the build if "average", "total", "score", "streak" or "target" appears
+  in `rate.js`.
 - **Storage is at version 2.** Version 1 results carry `rate` (80/55/30/10) and are moved onto
-  the nearest rung on load. Do not delete that migration until nothing in the world has v1 data.
+  the nearest rung on load. Don't delete that migration.
+- **Text checks in the browser are case-sensitive but the CSS uppercases headings.** `.kicker`
+  is `text-transform: uppercase`, so `innerText` returns "HERE'S YOUR TEST".
 - **`--window-size` is not the CSS viewport in headless Chrome.** Layout came out ~110px wider
   than asked, which looks exactly like an overflow bug. Check an unchanged screen first.
-- **`file:` is in the CSP source lists** so the page works when opened off disk. B3's header
-  drops it — and must not carry `'unsafe-inline'` for scripts, because there is no inline script.
+- **`file:` is in the CSP source lists** so the page works off disk. B3's header drops it, and
+  must not carry `'unsafe-inline'` for scripts.
 - **iPhone Safari deletes a web page's storage after seven days unused.** The install card and
-  `navigator.storage.persist()` are in, but the real fix is B5's native wrap. Research §9.1.
-- **The habit-word guard blocks the word "bet"** in a person's own test. Correct, and relevant
-  to Q1: it does not block "Betr", which is tested.
+  `navigator.storage.persist()` are in; the real fix is B5's native wrap. Research §9.1.
+- **The habit-word guard blocks "bet"** in a person's own test. Correct, and relevant to Q1.
 - **Every worksheet phrase must be fresh.** CCI, Getselfhelp and Therapist Aid all forbid reuse.
+  B8 links to them; it takes no words from them.
 - **"Improve your mental health" is inside Illinois's definition of therapy services.** Never.
-- **The recovery subreddits remove almost every "I built an app" post.** B7 is a reply first,
-  and only after two weeks of membership.
 
 ## 5. Decisions locked
 
-The ten rules in `CLAUDE.md` (rule 3 now names the word *worry*; rule 5 now covers the ladder).
-Q2, Q3, Q8. The interface in scope §3. The nine sentences from research §10, verbatim and
-unedited, in `app.js`. The bridge to TrybeUP is gated on TrybeUP un-paywalling private groups
-on production (B6).
+The ten rules in `CLAUDE.md` — rule 3 names the word *worry*, rule 5 covers the ladder, rule 7
+covers BETR and capitalisation, and rules 9 and 10 carry the B8 amendments with their
+conditions. Q2, Q3, Q8. The nine sentences from research §10, verbatim, in `app.js`.
 
 ## 6. What changed last session
 
-2026-09-02, part one: B0 Q2 and Q3 answered; `web/` built — ten screens, both guards,
-persistence, install prompt, export, delete, the CSP, the icons, the manifest,
-`tools/build-hash.js`, 47 tests.
-
-2026-09-02, part two, after the founder tested it: the belief ladder (`lib/rate.js` rewritten,
-store at v2 with a migration), *more sure than before*, the *your worries* screen, the result
-screen showing this belief's ladder in place of the flat "Earlier" list, and "fear" → "worry"
-across the app, the content, the tests and the docs. 14 new tests, 61 in all. J2 added to
-`docs/journeys.md`; B2 carries the amendment in full; two new entries in `docs/learnings.md`.
+2026-09-03: ran v1 in a real browser and drove a four-loop walk over CDP (the ladder went
+10 → 9 → 8 → 5, then 6 on "more sure than before"; the second worry stayed its own ladder;
+persistence survived a reload). BETR became the wordmark; every tapped label was capitalised;
+two guard tests added, 63 in all. `docs/tasks/B8-the-menu-and-help.md` written and the two
+CLAUDE.md rules it amends updated in place.

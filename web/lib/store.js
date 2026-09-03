@@ -115,10 +115,10 @@
   function exportJSON(state) {
     var s = state || blank();
     return JSON.stringify({
-      app: 'Betr',
+      app: 'BETR',
       version: VERSION,
       exported: new Date().toISOString(),
-      note: 'Everything Betr has ever stored on this device. There is no copy anywhere else.',
+      note: 'Everything BETR has ever stored on this device. There is no copy anywhere else.',
       results: (s.done || []).map(function (d) {
         return {
           when: d.when || null,

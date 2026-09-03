@@ -63,3 +63,14 @@ understand or when a decision was reversed.
   the CSS viewport in headless: the layout came out about 110px wider than asked, which looked
   exactly like a CSS overflow bug until the untouched start screen did it too. Check an
   unchanged screen before believing a layout finding from a headless screenshot.
+- **A rule the founder set can be overruled by the founder, and the record has to say so.**
+  "No tab bar" (CLAUDE.md rule 10) and "TrybeUP only in the small print" (rule 9) were both
+  amended on 2026-09-03 by the person who wrote them. Amending the rule in place, with the date
+  and the conditions attached, is the only thing that stops a later session deleting the new
+  work as drift — or quietly widening the exception. Never leave the amendment only in a task
+  file: the rules file is what gets read first.
+- **A screenshot is not proof that a browser can save anything.** The ladder rendered perfectly
+  from seeded storage long before anything proved a real second loop would keep its number. The
+  proof was driving Chrome over CDP — plain `fetch` and `WebSocket` in Node 22, no dependencies
+  — clicking through four loops on a real page and reading `localStorage` back. Worth the
+  fifteen minutes for anything where the value only appears on the second use.

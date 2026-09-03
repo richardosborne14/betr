@@ -1,7 +1,7 @@
 {
-  "name": "Betr",
-  "short_name": "Betr",
-  "description": "Betr helps you test unhelpful beliefs in everyday life. You pick a worry about how people will react, it gives you one small thing to try today, and you record what actually happened.",
+  "name": "BETR",
+  "short_name": "BETR",
+  "description": "BETR helps you test unhelpful beliefs in everyday life. You pick a worry about how people will react, it gives you one small thing to try today, and you record what actually happened.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

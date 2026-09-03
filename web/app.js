@@ -29,7 +29,7 @@
     site and another on social). If you change it here, change it in index.html's <meta
     name="description">, manifest.webmanifest, and everywhere it has ever been published.
   */
-  var PURPOSE = 'Betr helps you test unhelpful beliefs in everyday life. You pick a worry ' +
+  var PURPOSE = 'BETR helps you test unhelpful beliefs in everyday life. You pick a worry ' +
     'about how people will react, it gives you one small thing to try today, and you record ' +
     'what actually happened.';
 
@@ -108,7 +108,7 @@
   }
 
   function backButton() {
-    return '<button class="back" id="back">← back</button>';
+    return '<button class="back" id="back">← Back</button>';
   }
   function wireBack(target) { on('#back', function () { go(target); }); }
 
@@ -184,14 +184,14 @@
     var n = S.done.length;
     app.innerHTML =
       '<div class="stage">' +
-        '<div class="kicker">Betr</div>' +
+        '<div class="kicker">BETR</div>' +
         '<h1>Sure it’ll go badly?</h1>' +
         '<p class="sub">Pick a worry. Get one tiny thing to do today. Come back and say what happened.</p>' +
         '<button class="big pulse" id="go">Pick a worry <span aria-hidden="true">→</span></button>' +
         '<p class="tiny"><button id="doors">Not sure which? Start from what’s going on</button></p>' +
         '<p class="tiny">No account. No AI. Nothing leaves your phone.' +
-          (n ? ' · <button id="hist">your worries</button>' : '') +
-          ' · <button id="about">what this is</button></p>' +
+          (n ? ' · <button id="hist">Your worries</button>' : '') +
+          ' · <button id="about">What this is</button></p>' +
         (storageOk ? '' :
           '<p class="tiny">This browser won’t let Betr remember anything — a private window usually does that. ' +
           'The loop still works; nothing will be here tomorrow.</p>') +
@@ -338,8 +338,8 @@
           '<p class="line"><b>' + esc(c.drop) + '</b> That’s the bit that makes it count.</p>' +
           '<p class="lbl">What you expect</p>' +
           (c.editing
-            ? '<textarea id="x" class="short">' + esc(c.x) + '</textarea><button class="edit" id="xdone">done</button>'
-            : '<p class="expect">' + esc(c.x) + '</p><button class="edit" id="xedit">not quite? change it</button>') +
+            ? '<textarea id="x" class="short">' + esc(c.x) + '</textarea><button class="edit" id="xdone">Done</button>'
+            : '<p class="expect">' + esc(c.x) + '</p><button class="edit" id="xedit">Not quite? Change it</button>') +
         '</div>' +
         '<button class="big wide" id="lock">I’ll do it today</button>' +
         '<p class="tiny">That locks in what you expect, so later you can’t talk yourself out of ' +
@@ -469,8 +469,8 @@
           '<button class="big" id="again">Do it again tomorrow</button>' +
           '<button class="ghost" id="other">Different worry</button>' +
         '</div>' +
-        '<p class="tiny"><button id="mine">your worries</button> · ' +
-        '<button id="home">home</button> · <button id="about">what this is</button></p>' +
+        '<p class="tiny"><button id="mine">Your worries</button> · ' +
+        '<button id="home">Home</button> · <button id="about">What this is</button></p>' +
       '</div>';
 
     on('#again', function () { again(last, 'result'); });
@@ -595,8 +595,8 @@
           '<span><b>0</b><small>accounts</small></span>' +
           '<span><b>0 B</b><small>sent to us, ever</small></span>' +
         '</div>' +
-        '<p><button class="plain" id="export">export everything</button>' +
-        '<button class="plain" id="wipe">delete everything</button></p>' +
+        '<p><button class="plain" id="export">Export everything</button>' +
+        '<button class="plain" id="wipe">Delete everything</button></p>' +
         '<div id="io"></div>' +
 
         '<h3>What this is</h3>' +
@@ -611,9 +611,9 @@
         'same thing is done in small private groups. Only if and when you want that.</p>' +
 
         '<h3>The code</h3>' +
-        '<p>Betr is plain HTML, CSS and JavaScript with no libraries, small enough to read in ' +
+        '<p>BETR is plain HTML, CSS and JavaScript with no libraries, small enough to read in ' +
         'an evening. This build:</p>' +
-        '<p class="build">' + (hash === 'dev' ? 'dev build — not published' : esc(hash)) + '</p>' +
+        '<p class="build">' + (hash === 'dev' ? 'Dev build — not published' : esc(hash)) + '</p>' +
 
       '</div></div>';
 
@@ -626,8 +626,8 @@
     var json = storeLib.exportJSON(S);
     var io = q('#io');
     io.innerHTML =
-      '<p><button class="plain" id="copy">copy it</button>' +
-      (navigator.share ? '<button class="plain" id="share">send it somewhere</button>' : '') +
+      '<p><button class="plain" id="copy">Copy it</button>' +
+      (navigator.share ? '<button class="plain" id="share">Send it somewhere</button>' : '') +
       '</p><textarea id="dump" readonly></textarea>';
     q('#dump').value = json;
     on('#copy', function () {
@@ -637,12 +637,12 @@
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(json);
         else document.execCommand('copy');
       } catch (e) { /* the text is selected either way; the person can copy it themselves */ }
-      q('#copy').textContent = 'copied';
+      q('#copy').textContent = 'Copied';
     });
     on('#share', function () {
       /* The OS share sheet. It goes where the person sends it, and nowhere else. */
       try {
-        var p = navigator.share({ title: 'Betr', text: json });
+        var p = navigator.share({ title: 'BETR', text: json });
         if (p && p.catch) p.catch(function () { /* dismissed */ });
       } catch (e) { /* dismissed */ }
     });

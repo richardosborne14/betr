@@ -181,7 +181,7 @@ test('"what this is" carries the sentences, the crisis lines and the lineage', (
   a.shows('It does not diagnose, treat, cure or prevent any condition');
   a.shows('116 123').shows('988').shows('findahelpline.com');
   a.shows('made by the people behind TrybeUP');
-  a.shows('dev build — not published');
+  a.shows('Dev build — not published');
 });
 
 test('none of the phrases that are never used appears anywhere in the app', () => {
@@ -212,7 +212,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
   a.tap('#about').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
-  assert.strictEqual(dump.app, 'Betr');
+  assert.strictEqual(dump.app, 'BETR');
   assert.strictEqual(dump.results.length, 1);
   assert.strictEqual(dump.results[0].happened, 'He said fair enough.');
   assert.strictEqual(dump.results[0].worry, 'Saying no without an excuse');
@@ -237,9 +237,9 @@ test('it starts cleanly from nothing, from rubbish, and from a half-finished loo
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
   a.tap('#go').tap('[data-id]', 1).tap('#lock');
-  a.hides('not quite? change it');
+  a.hides('Not quite? Change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
-  a.hides('not quite? change it');
+  a.hides('Not quite? Change it');
 });
 
 /* ------------------------------------------------------- the ladder, and getting back to a worry */
@@ -295,9 +295,9 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
 
 test('your worries is reachable from the front screen, and only once there is one', () => {
   const a = boot();
-  a.hides('your worries');
+  a.hides('Your worries');
   loop(a, 0, 'He said fair enough.', 1);
-  a.tap('#home').shows('your worries');
+  a.tap('#home').shows('Your worries');
   a.tap('#hist').shows('Your worries');
   a.tap('#back').shows('Sure it’ll go badly?');
 });
@@ -311,4 +311,45 @@ test('a result saved by the version before the ladder still opens, and still cou
   };
   const a = boot({ 'betr.v1': JSON.stringify({ stage: 'start', done: [old] }) });
   a.tap('#hist').shows('Your worries').shows('>6<').shows('He said fair enough.');
+});
+
+/*
+  Founder, 2026-09-03: "please don't put things with no capitalisation … it's very modern but
+  not cool". So no label a person taps starts lowercase, and the wordmark is BETR.
+*/
+test('every label a person taps starts with a capital, and the wordmark is BETR', () => {
+  const a = boot();
+  const seen = [];
+  const sweep = () => {
+    for (const m of a.html().matchAll(/<button[^>]*>([^<]+)</g)) {
+      const label = m[1].replace(/^[←→·\s]+/, '');
+      if (label) seen.push(label);
+    }
+  };
+
+  sweep();                                             /* start */
+  a.tap('#doors'); sweep();
+  a.tap('#back').tap('#go'); sweep();                  /* pick */
+  a.tap('[data-id]', 0); sweep();                      /* plan */
+  a.tap('#lock'); sweep();                             /* locked, with the install card */
+  a.tap('#nothanks').tap('#done'); sweep();            /* happened */
+  a.type('#o', 'He said fair enough.').tap('#next'); sweep();   /* sure */
+  a.tap('[data-key]', 1); sweep();                     /* result */
+  a.tap('#mine'); sweep();                             /* your worries */
+  a.tap('#back').tap('#about'); sweep();               /* what this is */
+  a.tap('#export'); sweep();
+
+  assert.ok(seen.length > 20, 'only found ' + seen.length + ' labels to check');
+  for (const label of seen) {
+    assert.ok(!/^[a-z]/.test(label), 'lowercase label: "' + label + '"');
+  }
+  assert.ok(a.html().indexOf('BETR') !== -1 || seen.length > 0);
+});
+
+test('the brand is BETR everywhere a person reads it', () => {
+  const a = boot();
+  a.shows('BETR');
+  a.tap('#about').shows('BETR helps you test unhelpful beliefs');
+  a.shows('BETR is plain HTML');
+  assert.ok(a.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in prose');
 });

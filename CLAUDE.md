@@ -43,13 +43,23 @@ rules at once, and every one of them has failed in some other product.
    §10 appear verbatim. The purpose statement is identical in the app, the listing and every
    post. The phrases "digital CBT", "treats", "reduces symptoms", "for people with [diagnosis]",
    "tracks your anxiety" and "improve your mental health" never appear anywhere.
+   **The wordmark is BETR, all caps, everywhere a person reads it** — app, title, manifest,
+   export, listings, posts. And **nothing a person taps is all-lowercase** (founder, 2026-09-03:
+   "very modern but not cool"). `loop.test.js` fails the build on either.
 8. **Every phrase is written fresh.** No wording from CCI, Getselfhelp, Therapist Aid,
    Psychology Tools or the Beck Institute; all restrict reuse.
 9. **Visible lineage.** "Made by the people behind TrybeUP" stays in the small print. TrybeUP
-   is not mentioned anywhere else until B6's gate is open.
+   is not mentioned anywhere else until B6's gate is open — **except, from 2026-09-03, as one
+   plain entry among the other places on the Help screen** (founder's call, B8). Never first,
+   never a button, never styled apart; it says we made it and what it costs, right there in the
+   entry; no deep link, no campaign parameter, no referral code, ever. Not on the front screen,
+   not in the loop, not in the result, not on the menu.
 10. **The interface is one big button.** Four taps and one sentence per loop. Anything that
-    looks like a form, a wizard, a slider, a tab bar or a chat has already been rejected by
-    the founder. Do not bring it back.
+    looks like a form, a wizard, a slider or a chat has already been rejected by the founder.
+    Do not bring it back. **Amended 2026-09-03 (B8):** there is now a permanent row of three
+    at the bottom of every screen — *Your worries · New worry · Help*. The founder overruled
+    their own no-tab-bar rule knowingly. It stays three plain words: no icons, no selected
+    state, no badges, no counts, no fourth item. It is three doors, not a place you live in.
 
 ## How the repo works
 

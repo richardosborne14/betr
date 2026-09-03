@@ -126,7 +126,7 @@ test('the export is readable, stable, and holds every result', () => {
   const s = store.blank();
   s.done.push(RESULT);
   const out = JSON.parse(store.exportJSON(s));
-  assert.strictEqual(out.app, 'Betr');
+  assert.strictEqual(out.app, 'BETR');
   assert.strictEqual(out.version, store.VERSION);
   assert.strictEqual(out.results.length, 1);
   assert.deepStrictEqual(Object.keys(out.results[0]), [
