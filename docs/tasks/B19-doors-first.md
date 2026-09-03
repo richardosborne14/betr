@@ -1,260 +1,232 @@
 # B19: Doors first, and a worry you can understand from the button
 
-**Status:** **PROPOSED, not built.** Waiting on the founder, and on Misha for the six doors
-**Confidence:** 8/10 that the diagnosis is right. 6/10 in the new words — nobody outside this
-building has read them, which is the same reason B1 sits at 5/10
+**Status:** **PROPOSED, not built. Second draft, 2026-09-03**, after the founder's notes on the
+first. Waiting on the founder for two decisions, and on Misha for the doors
+**Confidence:** 8/10 that the diagnosis is right. 6/10 in the new words
 **Date opened:** 2026-09-03 · **Founder's ask, same day, after the first two test users**
 **Depends on:** B1 (the twelve), B8 (the three doors), B18 (`why.js`, keyed by worry id)
-**Blocks:** nothing technical. It does make Misha's read of B0 Q2a urgent rather than pending
 
 ## What happened
 
-The founder sat with two people and watched them use BETR. Both stalled in the same place and
-for the same reason.
+The founder sat with two people and watched them use BETR. Both stalled in the same place.
 
-They opened the app, tapped **Pick a worry**, and read twelve short labels. What they were
+They opened the app, tapped **Pick a worry**, and read twelve short labels. What each was
 holding in their head was a problem — *I'm drinking too much*, *I want to be able to ask for
 help* — and none of the twelve labels was that. **Being the only one not joining in** did not
-read as anything. They picked something, landed on the plan screen, and did not understand
-what *What you expect* was doing there or where it had come from.
-
-The founder found the same thing trying to explain it out loud.
+read as anything.
 
 **The diagnosis: the conditional is the product, and it is invisible until the seventh screen.**
-Every worry in `worries.js` has a `belief` — "If I turn up and don't join in, then everyone
-will notice and ask me why" — and that sentence is the only part of an item that explains
-itself. A person does not see it on the front screen, does not see it on the pick list, and
-does not see it on the plan screen either. The first time it appears is `sure`, the re-rate,
-**after** they have already done the test. In B18's "Why this one sticks" it is clearer still,
-and that screen is deliberately locked until somebody has a result.
+Every worry has a `belief` — "If I turn up and don't join in, then everyone will notice and ask
+me why" — and that sentence is the only part of an item that explains itself. It is not on the
+front screen, not on the pick list, not on the plan screen. The first time anybody sees it is
+`sure`, the re-rate, **after** they have already done the test. So the app asks people to choose
+between twelve two-word summaries of sentences it will not show them for another four screens.
 
-So the app asks people to choose between twelve two-word summaries of sentences it will not
-show them for another four screens.
+**Second finding: the door screen is the clear one.** It gives a label *and* a line underneath,
+and both test users understood it immediately. It is currently a link almost nobody taps.
 
-**The second finding: the door screen is the clear one.** "What's going on?" gives a label
-*and* a line underneath, and both test users understood it immediately. It is currently a
-secondary link on the front screen — *Not sure which? Start from what's going on* — reached by
-almost nobody.
+## The three changes
 
-## What is proposed
+**1. The doors become the way in.** `Start → What's going on? → the worries under it → the test.`
+Scope §5.3a recommended against this and that reasoning still holds: a door names a behaviour,
+which is the closest thing here to the regulatory line. Nothing about a door changes — first
+person, no diagnosis, never tested, only ever points at worries. What changes is that the safe
+general screen comes before the specific one instead of instead of it. **Cost: one extra tap**,
+against CLAUDE.md rule 10, and that is the founder's to accept.
 
-Three changes. The third is the cheap one that does most of the work.
+**2. The button says the worry, not a summary of it.** Label on top, the `belief` sentence
+underneath, rendered the way a door already renders its `under` line. No new field, no new
+writing, one line in `pick()` and CSS that already exists. **If only one change is made, this is
+it.** Longer buttons need a shorter list, which is what change 1 buys.
 
-### 1. The doors become the way in, not the side door
+**3. Twenty worries, four or five per door.** Twelve had to cover everybody, so they were spread
+thin and several doors pointed at the same three. With a filter in front, a door can afford five
+that are about the thing just tapped.
 
-`Start → What's going on? → the worries under it → the test.`
+## What the founder changed in the second draft
 
-A person names the surface problem first, in their own words, and only then meets the worries.
-Scope §5.3a considered this and recommended against it — worries first, doors as an optional
-second entrance — on the grounds that naming a behaviour on the first screen sits closer to
-the regulatory line. **That reasoning holds and does not change here.** A door still names no
-diagnosis, still is written in the first person, and still can never be tested: it only points
-at worries, and every test still comes out of `worries.js`. What changes is that a person meets
-the safe general screen before the specific one, instead of instead of it.
+All six of their notes are taken, and the note under them is the substantive one:
 
-**Cost: one extra tap before the first test**, against CLAUDE.md rule 10. That is the founder's
-to accept, and it is the main thing to say no to if any of this is wrong. See "Two shapes" below.
+> *"You really need to work on the comprehensibility of these phrases at the top of the items.
+> The descriptions are good but they can't carry the ambiguity."*
 
-### 2. The button says the worry, not a summary of it
+That is right, and it applies to labels the first draft did not touch. **Every one of the twenty
+labels has been rewritten against one rule: a person reading only the label knows what act is
+being proposed.** No pronoun without something to point at (*handing it over* → *handing
+something over*). No channel left open (*Not replying straight away* → *Not answering a
+message*). And no safety behaviour smuggled into the label, which is the mistake in *Saying I'm
+annoyed, calmly* — "calmly" is the `test`, and putting it on the button quietly narrows the
+worry to people who are already willing to say something.
 
-This is the change that fixes what the test users hit. A worry on the pick list stops being a
-two-word label and becomes the label **with its `belief` sentence underneath it**, rendered
-exactly the way a door already renders its `under` line — which is the rendering both test
-users understood.
+| Founder's note | Done |
+| --- | --- |
+| Remove *Saying I'm cutting back* | Gone. `cut` is deleted, and its `why.js` entry with it |
+| *Not replying straight away* is ambiguous — messages or spoken? | Messages. Now **Not answering a message straight away** |
+| *Saying I'm annoyed* — drop "calmly" | Now **Telling someone they've annoyed me**. "Calmly" moves to the `test`, where it was always the drop |
+| *Letting someone finish* — without interrupting | Now **Letting someone finish without interrupting** |
+| Compliment without expecting one back — maybe separate | Separate. `praise` is its own worry; `care` keeps its own ground |
+| *Handing it over* → *handing something over*; same for sending | Both changed |
 
-    Being the only one not joining in
-    If I turn up and don't join in, then everyone will notice
-    and ask me why.
+## The twenty worries
 
-Nothing new is written for this and no field is added: the sentence is already in the file, it
-is already the thing being tested, and it is already what the person will be asked to re-rate.
-It is one line in `pick()` and one CSS rule that already exists. **If only one of these three
-changes is made, it is this one.**
+Rewritten labels are marked. The `belief` column is the sentence that now sits under the label
+on the button; the founder judged these good, so they are mostly unchanged.
 
-Longer buttons only work on a shortened list, which is what change 1 buys.
+| id | Label | The sentence under it | Lane |
+| --- | --- | --- | --- |
+| `no` | Saying no without giving a reason ✎ | If I say no and don't explain myself, then people will think I'm selfish. | assertiveness |
+| `help` | Asking someone for help ✎ | If I ask someone for help, then I become a burden to them. | assertiveness |
+| `reply` | Not answering a message straight away ✎ | If I leave a message a few hours, then they'll think I don't care. | social |
+| `check` | Sending something without checking it again ✎ | If I send something without going over it again, then there'll be a mistake in it and I'll look sloppy. | perfectionism |
+| `sit` | Sitting still when I feel restless ✎ | If I feel restless or bored, then I can't just sit there with it. | urge-timing |
+| `phone` | Going an evening without my phone ✎ | If I don't check tonight, then I'll miss something that matters. | urge-timing |
+| `strug` | Telling someone I'm struggling ✎ | If I let someone see I'm struggling, then they'll think less of me. | social |
+| `mist` | Owning up to a mistake before anyone finds it ✎ | If I admit I got something wrong, then it'll be held against me later. | perfectionism |
+| `angry` | Telling someone they've annoyed me ✎ | If I tell someone they've annoyed me, then it'll turn into an argument. | assertiveness |
+| `rest` | Resting when there's stuff to do | If I rest while there's still stuff to do, then I'm being lazy. | rest |
+| `drink` | Turning up and not joining in ✎ | If I turn up and don't join in, then everyone will notice and ask me why. | social |
+| `early` | Leaving before everyone else does · **new** | If I leave while it's still going, then they'll think I'm boring and stop asking me. | social |
+| `feed` | A day without checking social media · **new** | If I stop keeping up with everyone, then I'll fall out of things without noticing. | urge-timing |
+| `sorry` | Apologising without explaining myself · **new** | If I properly apologise for how I acted, then they'll hold it over me from now on. | social |
+| `right` | Letting someone else be right · **new** | If I agree someone else has the better point, then I'll look like I don't know what I'm talking about. | social |
+| `hear` | Letting someone finish without interrupting · **new** | If I don't get in quickly, then I'll look like I've got nothing worth saying. | social |
+| `enough` | Handing something over before it's perfect · **new** | If I hand something in that's only good enough, then they'll think I don't care about it. | perfectionism |
+| `care` | Telling someone they matter to me · **new** | If I tell someone what they mean to me, then it'll be awkward and they won't say it back. | social |
+| `praise` | Paying someone a compliment · **new** | If I say something good about someone and nothing comes back, then it'll look like I was fishing for one. | social |
+| `low` | Telling someone I've been feeling low · **new** | If I tell someone I've been feeling low, then they won't know what to do with it and they'll keep their distance. | social |
 
-### 3. Nineteen worries instead of twelve, four or five per door
+`cut` is deleted. `joke` is offered below and is not counted in the twenty.
 
-Twelve worries had to cover everybody, so they were spread thin and several doors pointed at
-the same three. With an obligatory filter in front, a door can afford four or five that are
-actually about the thing the person just tapped. The twelve keep their ids and their words;
-seven are new.
+### The three added in this draft, in full
+
+All three pass `guards.checkTest` on `test` and `drop`, which is the check that fails the build.
+
+**`praise` — Paying someone a compliment** · social
+- **expect:** There'll be an odd beat, and I'll wish I'd kept it to myself.
+- **test:** Say one specific good thing about somebody today, to their face.
+- **drop:** Don't follow it with one about yourself, and don't wait around for one back.
+
+`care` and `praise` look close and are not. `care` is about the size of what you'd be admitting;
+its drop is the joke you'd hide behind. `praise` is about what happens when nothing comes back;
+its drop is the fishing. Keeping them apart was the founder's call and it is the right one.
+
+**`low` — Telling someone I've been feeling low** · social — *back in, at the founder's push*
+- **expect:** They'll say something kind, change the subject, and be careful around me after.
+- **test:** Tell one person you trust, today, in one sentence, that you've been feeling low lately.
+- **drop:** Don't add that it's nothing really, and don't ask whether that was too much.
+
+This is the founder's *talking about negative emotions*, which the first draft folded into
+`strug` and should not have. `strug` is a situation you're finding hard — sayable. `low` is a
+state you're in — not sayable, by this audience, ever. **It is the closest pair on the list**, and
+if the CBT reviewer says they are one worry, `low` is the one that goes.
+
+**`joke` — Getting through a conversation without a joke** · social — **offered, not proposed**
+- **belief:** If I don't have something funny ready, then I'll be dull and people will drift off.
+- **expect:** The conversation will go flat, and they'll find someone else to talk to.
+- **test:** In one conversation today, say the plain thing where you'd normally reach for the joke.
+- **drop:** No laughing it off when it gets serious, and no making anyone else the punchline.
+
+This serves the founder's *insulting or making fun of people*. Its ancestor `funny` was cut in
+B1 for a good reason — it needed a whole evening out, and somebody had to be there. This version
+needs one conversation and nobody's agreement, which is the bar B1 set. **Founder's call.**
 
 ## The six doors
 
-Reworded from the founder's five. Each is a label and one recognition line — what it looks
-like from the inside, not what is underneath it. That is a change of job for the `under`
-field: it used to preview the worries, and it no longer needs to, because the worries now
-explain themselves.
+Each is a label and one line of recognition: what it looks like from the inside, not what is
+underneath it. That is a new job for `under`, which used to preview the worries and no longer
+needs to, because the worries now explain themselves.
 
 | id | Label | Under | Opens onto |
 | --- | --- | --- | --- |
-| `habit` | Something I keep doing more than I mean to | The one you've quietly decided to stop more than once, and haven't. BETR never tests that thing itself — only what you think happens if people see you not doing it. | drink · cut · early · strug · no |
-| `phone` | On my phone more than I want to be | Picking it up without deciding to, and the evening's gone. Half of it is the scroll, and half is not being able to sit still without it. | phone · feed · sit · reply |
-| `temper` | Taking it out on the people closest to me | Snapping, going quiet, talking down to people, not really listening — and knowing it while you're doing it. | angry · sorry · hear · right · strug |
-| `secret` | Keeping it all to myself | Nobody around you knows the half of it. Not hiding it exactly; it just never seems like the moment. | strug · mist · help · care |
-| `yes` | Going along with things I don't want to do | Yes when you meant no. Saying nothing when something's annoyed you. Answering the second the message lands. | no · angry · help · reply |
+| `habit` | Something I keep doing more than I mean to | The one you've quietly decided to stop more than once, and haven't. BETR never tests that thing itself — only what you think happens if people see you not doing it. | drink · early · sit · strug · no |
+| `phone` | On my phone more than I want to be | Picking it up without deciding to, and the evening's gone. Half of it is the scroll. Half is not being able to sit still without it. | phone · feed · sit · reply |
+| `temper` | Taking it out on the people closest to me | Snapping, going quiet, talking down to people, not really listening — and knowing it while you're doing it. | angry · sorry · hear · right · praise |
+| `secret` | Keeping it all to myself | Nobody around you knows the half of it. Not hiding it exactly; it just never seems like the moment. | strug · low · mist · help · care |
+| `yes` | Going along with things I don't want to do | Yes when you meant no. Nothing said when something's annoyed you. An answer sent the second the message lands. | no · angry · help · reply |
 | `work` | Never letting myself stop | There's always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either. | rest · enough · check · mist |
 
-The founder proposed five. `work` is the sixth: without it the whole rest lane has no door, and
-`rest`, `check` and `enough` have nowhere to live.
+The founder proposed five. `work` is the sixth: without it the rest lane has no door and `rest`,
+`check` and `enough` are unreachable. Their *keeping things inside* and *feeling like I'm weak*
+overlapped heavily; they are split on a line that holds — **`secret` is what you don't say about
+yourself, `yes` is what you don't say to other people.**
 
-The founder's *keeping things inside* and *feeling like I'm weak* overlapped heavily — both had
-asking for help and admitting you're struggling in them. They are split here on a line that
-holds: **`secret` is what you don't say about yourself; `yes` is what you don't say to other
-people.** `help` sits in both, which is fine — `strug` already sits in three.
+If `joke` goes in, it goes in `temper`, which then holds six.
 
-## The nineteen worries
+## "Are you sure they're not worth putting in?"
 
-The twelve keep their `id`, their `belief`, their `test` and their `drop`. Two labels change,
-both for the same reason `check` replaced `favour` in B1: they needed a job.
+The founder asked. Taking it seriously changed two answers.
 
-| id | Label | The sentence now on the button | Lane | Doors |
-| --- | --- | --- | --- | --- |
-| `no` | Saying no without an excuse | If I say no and don't explain myself, then people will think I'm selfish. | assertiveness | habit, yes |
-| `help` | Asking for help | If I ask someone for help, then I become a burden to them. | assertiveness | secret, yes |
-| `reply` | Not replying straight away | If I leave a message a few hours, then they'll think I don't care. | social | phone, yes |
-| `check` | Sending it without checking it again | If I send something without going over it again, then there'll be a mistake in it and I'll look sloppy. | perfectionism | work |
-| `sit` | Sitting with a bad feeling | If I feel restless or bored, then I can't just sit there with it. | urge-timing | phone |
-| `phone` | An evening off my phone | If I don't check tonight, then I'll miss something that matters. | urge-timing | phone |
-| `strug` | Admitting I'm struggling | If I let someone see I'm struggling, then they'll think less of me. | social | habit, temper, secret |
-| `mist` | **Owning up to a mistake** *(was: at work)* | If I admit I got something wrong, then it'll be held against me later. | perfectionism | secret, work |
-| `angry` | Saying I'm annoyed, calmly | If I tell someone I'm annoyed, even calmly, then it'll turn into an argument. | assertiveness | temper, yes |
-| `rest` | Resting when there's stuff to do | If I rest while there's still stuff to do, then I'm being lazy. | rest | work |
-| `drink` | Being the only one not joining in | If I turn up and don't join in, then everyone will notice and ask me why. | social | habit |
-| `cut` | Saying I'm cutting back | If I tell someone I'm cutting back, then they'll lecture me or feel sorry for me. | social | habit |
-| `early` | **New** — Leaving before everyone else | If I leave while it's still going, then they'll think I'm boring and stop asking me. | social | habit |
-| `feed` | **New** — A day without seeing what everyone's up to | If I stop keeping up with everyone, then I'll fall out of things without noticing. | urge-timing | phone |
-| `sorry` | **New** — Apologising without explaining why | If I properly apologise for how I acted, then they'll hold it over me from now on. | social | temper |
-| `right` | **New** — Letting someone else be right | If I agree someone else has the better point, then I'll look like I don't know what I'm talking about. | social | temper |
-| `hear` | **New** — Letting someone finish | If I don't get in quickly, then I'll look like I've got nothing worth saying. | social | temper |
-| `enough` | **New** — Handing it over before it's perfect | If I hand something in that's only good enough, then they'll think I don't care about it. | perfectionism | work |
-| `care` | **New** — Telling someone they matter to me | If I tell someone what they mean to me, then it'll be awkward and they won't say it back. | social | secret |
+**Talking about negative emotions — back in.** `low`, above. The first draft folded it into
+`strug` and that was wrong.
 
-### The seven new ones, in full
+**Making fun of people — offered back.** `joke`, above. Cutting it on B1's precedent was too
+quick; B1's objection was the test, and this test is different.
 
-Every one is doable today, cheap, reversible, entirely in the person's own control, and touches
-no habit — the same six rules as the twelve (scope §5.2). All seven pass `guards.checkTest` on
-both `test` and `drop`, which is the check that fails the build.
+**Re-checking emails — never cut.** It is `check` and `enough`. What is excluded is only the
+framing: a standard you hold yourself to, never a ritual that makes a feeling go away.
 
-**`early` — Leaving before everyone else** · lane: social
-- **expect:** Someone will try to talk me into staying, and I'll feel like I've let them down.
-- **test:** Decide before you go what time you're leaving. At that time, say one sentence and go.
-- **drop:** Don't apologise for going, and don't promise to stay longer next time.
+**Talking about shameful thoughts — still out, for a better reason than the first draft gave.**
+The first draft said OCD, which is true and is not the strongest argument. The strongest one is
+scope §5.2: every test on this list is small, cheap and **reversible**. Leaving a message three
+hours, sending an email once, going home early — all of them can be walked back tomorrow. You
+cannot un-tell somebody a thought you are ashamed of. There is no version of that test that
+belongs in an app with no person on the other end of it.
 
-**`feed` — A day without seeing what everyone's up to** · lane: urge-timing
-- **expect:** I'll be the only one who hasn't heard something, and it'll be obvious.
-- **test:** Go one day without opening the apps you scroll. At the end, write down what you actually missed.
-- **drop:** No opening one "just to see if anyone's messaged me".
+**Checking my weight — out, and not a judgement call.** Food, weight and body sensations are a
+refused lane (research §6). `guards.js` blocks *weigh*, *weight*, *calories*, *diet*, and
+`content.test.js` runs every `test` and every `drop` through it, so **a weight worry cannot pass
+the build without changing the guard**. Frozen sentence 4 says BETR is not for somebody with an
+eating disorder. A door naming weight-checking calls to exactly the person we have just told to
+go elsewhere. This one needs the founder to change a frozen sentence, not a wording pass.
 
-**`sorry` — Apologising without explaining why** · lane: social
-- **expect:** They'll accept it, and then bring it up the next time we disagree.
-- **test:** Say sorry to one person today, for one specific thing you did. One sentence.
-- **drop:** Don't explain what kind of day you were having, and don't ask whether you're all right now.
+**Taking advantage of people — no honest version found.** Every worry here is held in place by a
+prediction about how somebody will react. That is what makes it testable. Taking advantage of
+people is mostly not held there; it is held by not noticing, and there is no experiment for not
+noticing. Forcing it would produce an item that looks like the others and does nothing.
 
-**`right` — Letting someone else be right** · lane: social
-- **expect:** They'll take it as a win, and I'll go down in their estimation.
-- **test:** Once today, say "you're right, I hadn't thought of that" — and then stop.
-- **drop:** No "but", and don't add a point of your own to level it back up.
+## The two decisions
 
-**`hear` — Letting someone finish** · lane: social
-- **expect:** The conversation will move on without me and I'll have missed my go.
-- **test:** In one conversation today, let them finish, then ask one question before you say your bit.
-- **drop:** Don't plan your answer while they're still talking, and don't finish their sentence.
+**Door one, how plainly it names the thing.** The founder's wording named alcohol, drugs and
+porn — the most recognisable version, and the version that calls to the person frozen sentence 4
+excludes. **(a)** name them; **(b)** name none, as the table above does; **(c)** *recommended* —
+name them and put one plain line on that door and no other: *if you're dependent on alcohol or
+drugs, this isn't the right thing — Help has places that are.* (c) needs `validateDoors` to allow
+that field and `menu.test.js` to know about it, so the safety line shows up in a diff.
 
-**`enough` — Handing it over before it's perfect** · lane: perfectionism
-- **expect:** They'll spot the rough edges and quietly decide I've dropped off.
-- **test:** Finish one thing today at good enough and hand it over. Write down the time you stopped.
-- **drop:** No last look through, and no message saying what you'd have done with more time.
+**The front screen.** **A** *(recommended)* — keep the one big button; it leads to the doors,
+and *Not sure which?* retires. One extra screen. **B** — the six doors are the front screen; no
+extra tap, but the wordmark, the question, the promise line and six described buttons make it a
+scroll, and the big button is most of what makes that screen feel unlike anything else.
 
-**`care` — Telling someone they matter to me** · lane: social
-- **expect:** They'll laugh it off, and I'll wish I hadn't said it.
-- **test:** Tell one person, today, one specific thing you're glad about them.
-- **drop:** Don't turn it into a joke, and don't move straight on to something else.
+## What it would take
 
-## What is deliberately not here, and why
+About one session. The twelve keep their ids, so **eleven of B18's twelve explanations stay
+valid** — `cut`'s is deleted, and eight are new (`early`, `feed`, `sorry`, `right`, `hear`,
+`enough`, `care`, `praise`, `low`, and `joke` if taken).
 
-Three things from the founder's five categories are left out. Each is a rule that does not bend.
-
-**Checking my weight is out, and stays out.** It is not a wording problem. Food, weight and body
-sensations are a refused lane (research §6), `guards.js` refuses any test that mentions them,
-and frozen sentence 4 says in as many words that BETR is not for somebody with an eating
-disorder. A door that names weight-checking invites exactly the person the app has just told to
-go elsewhere. Nothing in this proposal mentions weight.
-
-**Re-checking emails is in, but only as perfectionism.** `check` and `enough` are about the
-standard a person holds themselves to — "it'll look sloppy", "they'll think I don't care".
-Neither is framed as a ritual that takes a feeling away, because that is a compulsion, OCD is
-excluded by the same sentence 4, and re-running a compulsion as a "test" is how somebody gets
-hurt. The founder's "rechecking my emails" is served; "checking until the dread goes" is not,
-and the wording keeps them apart on purpose.
-
-**Talking about shameful thoughts is out.** It reads as intrusive thoughts, which is OCD
-territory, and the test it implies — tell somebody a thought you're ashamed of — is the one
-thing on any candidate list that is neither small, nor cheap, nor reversible. `strug` covers
-the version that is safe: one small, true, hard thing, to one person you trust.
-
-## The one open decision: how plainly door 1 names the thing
-
-`habit` is the door the founder cares most about and the only one near a line.
-
-The founder's wording named alcohol, drugs and porn in the description. That is the most
-recognisable version and it is also the version that calls to the person frozen sentence 4
-excludes — "or are dependent on alcohol or drugs. Those need a person, not an app."
-
-Three ways, and it is the founder's call with the research open:
-
-- **(a) Name them.** "Drink, weed, porn, betting." Most people find themselves fastest. Closest
-  to "for people with…".
-- **(b) Name none.** "The one you've quietly decided to stop more than once, and haven't." Safest,
-  and what the table above uses. A person looking for the drinking door has to recognise
-  themselves in an abstraction.
-- **(c) Name them, and be honest on the same screen.** The words in (a), plus one plain line on
-  that door and no other: *if you're dependent on alcohol or drugs, this isn't the right thing —
-  Help has places that are.* **Recommended.** It says out loud what sentence 4 already says, at
-  the one moment it is relevant, and it costs one optional field on a door.
-
-(c) needs `validateDoors` to allow that field and `menu.test.js` to know about it. Neither is
-hard. It should not be added quietly — it is a safety line, and it should be in a diff.
-
-## Two shapes for the front screen
-
-**A — the front screen keeps its one big button** (recommended). The button stops saying *Pick a
-worry* and starts saying something that leads to the doors; *Not sure which? Start from what's
-going on* disappears, because that is now the main road. One extra screen before the first test.
-
-**B — the six doors are the front screen.** No extra tap, and rule 10 is untouched. But the front
-screen currently carries the wordmark, the question, the promise line and whatever is on the go,
-and six buttons with a line of description each turns it into a scroll. The one big button is
-most of what makes the first screen feel unlike anything else.
-
-## What it would take to build
-
-Roughly one session, and none of it is hard. The list is here so the size is visible:
-
-1. `worries.js` — seven new entries; two labels changed. Twelve ids unchanged, so **the twelve
-   existing `why.js` entries stay valid**. (The founder offered to tear the ids down. There is no
-   need: nothing costs anything by keeping them, and B18's file stays correct.)
-2. `why.js` — seven new explanations, two paragraphs each. This is the slowest part, and the
-   file most at risk of echoing CCI or Getselfhelp; every word fresh (rule 8).
+1. `worries.js` — one deleted, nine or ten added, ten labels rewritten.
+2. `why.js` — `cut` out; nine or ten new explanations, two paragraphs each. The slowest part and
+   the file most at risk of echoing CCI or Getselfhelp; every word fresh (rule 8).
 3. `whats-going-on.js` — six doors rewritten, `under` doing a new job.
-4. `content.js` — `MAX_VISIBLE` (12) becomes a cap per door, not on the list. Add a rule that
-   every worry is behind at least one door, or it is unreachable.
-5. `pick()` in `app.js` — the belief sentence under the label. The `.under` CSS already exists.
+4. `content.js` — `MAX_VISIBLE` (12) becomes a cap per door, plus a rule that no worry is behind
+   zero doors, or it is unreachable.
+5. `pick()` — the belief sentence under the label. `.under` already exists in the CSS.
 6. `app.js` + `strings-en.js` — the front-screen button and the routing; `pick.showAll` retires
-   (nineteen unfiltered is the scroll that caused this) and the way out of a door becomes
-   *Something else*, straight to writing your own.
-7. `content.test.js` — the "easiest three come first" test (scope §5.3c) is about a single flat
-   list and stops meaning anything. It is replaced by the same rule per door: the first worry
-   behind every door can be started today, alone, by somebody who has nobody free.
-8. `docs/00-scope.md` §5 and CLAUDE.md rule 10 both record the old shape and would need amending.
-9. `node tools/copy-sheet.js`, and the walk on a real phone.
+   (twenty unfiltered is the scroll that caused this), and the way out of a door is *Something
+   else*, straight to writing your own.
+7. `content.test.js` — "the easiest three come first" is about one flat list and stops meaning
+   anything. It becomes the same rule per door: the first worry behind every door can be started
+   today, alone, by somebody who has nobody free.
+8. `docs/00-scope.md` §5 and CLAUDE.md rule 10 record the old shape and need amending.
+9. `node tools/copy-sheet.js`, and the loop walked on a real phone.
 
 ## Sign-off
 
-- [ ] **Founder** — doors first, at the cost of one tap (shape A or B), or no
-- [ ] **Founder** — how plainly door 1 names the thing: (a), (b) or (c)
-- [ ] **Misha** — the six door labels and their lines. This is B0 Q2a, and it is now all six
-- [ ] **Misha** — still has the casting vote on `drink` (B0 Q2d), unchanged
-- [ ] **The paid CBT reviewer** — reads nineteen worries and nineteen explanations in one pass,
-      not twelve. Worth waiting for this decision before booking them
+- [ ] **Founder** — doors first, at the cost of one tap: shape A, shape B, or no
+- [ ] **Founder** — door one: (a), (b) or (c)
+- [ ] **Founder** — `joke` in or out
+- [ ] **Founder** — the twenty rewritten labels
+- [ ] **Misha** — the six door labels and their lines. B0 Q2a, and it is now all six
+- [ ] **Misha** — the casting vote on `drink`, now *Turning up and not joining in* (B0 Q2d)
+- [ ] **CBT reviewer** — twenty worries and twenty explanations in one pass. `strug` against
+      `low`, and `care` against `praise`, are the two pairs to ask about
