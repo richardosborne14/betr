@@ -39,7 +39,8 @@ A session can start on it with this:
 > Read `CLAUDE.md`, then `docs/NEXT-SESSION.md`, then `docs/tasks/B8-the-menu-and-help.md`,
 > and build B8. The four design decisions are taken — don't reopen them. The parts that need
 > care, in order: the menu must not cover the big button on a short phone; a locked-in test
-> must survive *New worry* and reappear on the front screen and in Your worries; Help must open
+> must survive *New worry* and reappear on the front screen and in Your worries, with no cap on
+> how many are open and no count or badge anywhere; Help must open
 > with wifi off with the crisis block above everything else; and every external link has to be
 > plain https with no parameters and no runtime checking of any kind. Don't write the link list
 > itself beyond a placeholder shape — Misha signs that off. Tests, then the phone walk (add J3),

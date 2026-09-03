@@ -102,18 +102,43 @@ able to go looking for it.
      suitable for the person based on anything they entered.
 4. **Who made this, and the code.** As now, plus the build hash.
 
-### 3. A test that is waiting for you
+### 3. Tests that are waiting for you — no limit on how many
 
 Today `S.cur` is one slot, so starting a new worry overwrites a locked-in test with no warning.
 With **New worry** always one tap away, that stops being an edge case.
 
-- A test that has been locked in and not yet finished is **kept**, not replaced.
-- It shows on the front screen as one line — *You've got one on the go: [the test]* — and at the
-  top of **Your worries**, with **Done it** and **Didn't get to it** on it.
-- Cap it. **Three at most**, and when there are three, starting a fourth asks which to let go.
-  BETR is not a to-do list and a pile of unfinished commitments is its own kind of red day.
-- Nothing about a waiting test is ever framed as a failure, a debt, or a number. No count on the
-  menu, no badge, no "2 overdue". Rule 5.
+**There is no cap.** A first draft of this task capped open tests at three. The founder asked
+what the research actually said, and it does not support a cap — it points the other way:
+
+- **The number of experiments completed moderated improvement.** Mindable, the one unguided app
+  with behavioural experiments as its core mechanic (n=33, uncontrolled, so weak — but it is the
+  closest analogue that exists). Research §3.3. More completed tests is the thing we want.
+- **The risk in unguided self-help is stopping, not doing too much.** Cuijpers 2011: dropout
+  between 5% and 45%, and in one trial **38% never finished session one**. Research §3.1. Every
+  gate, cap and "are you sure?" is on the wrong side of that number.
+- **Nothing in the research, or in CBT practice, says one experiment at a time.** A therapist
+  usually sets one or two between sessions, but that is the shape of a weekly appointment, not a
+  clinical limit. The record sheet is per experiment; a person can run several.
+- The safety guard is **what a test is**, never how many there are: rule 4 and the guards in
+  `lib/guards.js` are what keep a test small, legal and not about the habit.
+
+**What actually needs protecting is the day, not the number.** The front screen promises *one
+tiny thing to do today*. So:
+
+- A test that has been locked in and not yet finished is **kept**, never replaced. Start as many
+  as you like.
+- **Your worries** is where they all live, each on its card, with **Done it** and **Didn't get
+  to it** on any that are open.
+- The front screen shows **what is on the go without becoming a tally**. One line if there is
+  one. If there are several, a line that opens Your worries — not a stacked list of everything
+  you said you would do.
+- Nothing about a waiting test is ever a failure, a debt or a number. **No count on the menu, no
+  badge, no "3 open", no "overdue", no red, no ordering by how old it is.** Rule 5.
+  *INFERRED, not sourced:* a screen tallying things you said you would do and did not is a shame
+  surface, and shame-proneness is the trait that predicts substance problems (Dearing, Stuewig &
+  Tangney 2005; Luoma's danger zone is the day after a slip — research §4.3). No source says a
+  to-do list causes that. It is a judgement about tone, and it is why the rule above is about
+  display rather than about permission.
 
 ### 4. The wordmark and capitalisation — done 2026-09-03, ahead of this task
 
