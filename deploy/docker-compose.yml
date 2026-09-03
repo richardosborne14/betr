@@ -1,0 +1,39 @@
+# BETR's own container (B3). Lives on the droplet at /opt/betr/docker-compose.yml.
+#
+# Why BETR has a container of its own rather than a folder inside TrybeUP's:
+#
+#   TrybeUP's nginx runs in a container that can only see a fixed list of folders, and that
+#   list is set in TrybeUP's docker-compose.prod.yml. Adding BETR's folder to it would mean
+#   editing that file — and TrybeUP's deploy treats any change to it as a reason to tear down
+#   and rebuild the API and auth containers and run database migrations. A five-second web
+#   server restart is one thing; bouncing TrybeUP's API to publish a static page is another.
+#
+#   So BETR serves itself. TrybeUP's nginx gains one pass-through block and nothing else, and
+#   that change is a zero-downtime reload. It also means every future change to how BETR is
+#   served is a change in BETR's repo, and TrybeUP is never touched again.
+#
+# The bind address is deliberate. 172.17.0.1 is the Docker bridge, which is what
+# host.docker.internal resolves to inside TrybeUP's nginx. Binding there makes this server
+# reachable from that nginx and from nowhere on the public internet, so the only way in is
+# through TLS on betr.trybeup.com.
+
+services:
+  betr:
+    image: nginx:alpine
+    container_name: betr-web
+    restart: unless-stopped
+    ports:
+      - "172.17.0.1:8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /var/www/betr:/var/www/betr:ro
+    # nginx's own logging is off in nginx.conf; this stops Docker keeping a copy of the
+    # little that is left, so there is no record of a visit at either layer.
+    logging:
+      driver: "local"
+      options:
+        max-size: "1m"
+        max-file: "1"
+        # The local driver compresses rotated files by default, and refuses to start at all
+        # if there is only one file to rotate. There is nothing here worth compressing.
+        compress: "false"

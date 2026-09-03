@@ -1,0 +1,166 @@
+name: Publish BETR to betr.trybeup.com
+
+# B3. Every push to main that changes what a person would load publishes it.
+#
+# There is nothing to build: web/ is the site, exactly as it sits in the repo. The only
+# thing that happens between the checkout and the copy is the build hash being stamped into
+# index.html, so the number printed on the "what this is" screen is the number of the files
+# actually served.
+#
+# The tests are a hard gate. They are not a formality here: loop.test.js fails the build if
+# the wordmark stops being BETR or if anything a person taps goes all-lowercase, and
+# menu.test.js fails it if a link appears that is not on the allow-list. A red test means a
+# rule in CLAUDE.md has been broken, and no such build is ever published.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'deploy/**'
+      - 'tools/build-hash.js'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch: {}
+
+# Two runs at once would interleave their rsyncs and could leave the site holding files from
+# both. Queue them instead; never cancel one mid-copy.
+concurrency:
+  group: betr-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Test, stamp the hash, publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The gate. `node --test` from the repo root, not from web/tests/ — Node 22 refuses a
+      # directory there. See docs/learnings.md.
+      - name: Tests (hard gate)
+        run: node --test
+
+      - name: Stamp the build hash into index.html
+        id: hash
+        run: |
+          hash=$(node tools/build-hash.js --write)
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+          echo "Build hash: $hash"
+          grep -q "content=\"$hash\"" web/index.html || {
+            echo "::error::the hash was not stamped into index.html"; exit 1; }
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.BETR_SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: ssh-keyscan -H ${{ secrets.BETR_SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      # web/tests/ is deliberately not part of the hash, so serving it would make the
+      # published number impossible to check by anyone who hashed the folder they were given.
+      - name: Publish the site
+        run: |
+          rsync -avz --delete \
+            --exclude='tests/' \
+            --exclude='.DS_Store' \
+            web/ \
+            ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }}:/var/www/betr/
+
+      # The server's own config lives in this repo too, so how BETR is served is readable by
+      # the same person who reads the app, and the repo is the source of truth for it.
+      #
+      # The deploy user cannot restart containers — deliberately. It owns /var/www/betr and
+      # /opt/betr and has no other power on that machine at all: not the docker group, not a
+      # sudo rule, no reach into TrybeUP's containers, config, web roots or data. So this
+      # copies the config up and then checks whether the running server is actually using it.
+      # If it is not, the run goes red with the one command that fixes it. Drift that would
+      # otherwise be silent — the repo saying one thing and the live server doing another,
+      # which is the whole trust story — becomes a failed build instead.
+      - name: Publish the server config
+        run: |
+          rsync -avz \
+            deploy/nginx.conf deploy/docker-compose.yml \
+            ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }}:/opt/betr/
+
+      - name: The running server is using the config in this repo
+        run: |
+          live=$(ssh ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }} \
+                   'sha256sum /opt/betr/nginx.conf | cut -d" " -f1')
+          mine=$(sha256sum deploy/nginx.conf | cut -d' ' -f1)
+          running=$(curl -sS --max-time 20 -o /dev/null -w '%{http_code}' https://betr.trybeup.com/)
+          if [ "$live" != "$mine" ]; then
+            echo "::error::deploy/nginx.conf did not arrive on the server"; exit 1
+          fi
+          echo "deploy/nginx.conf is on the server ($mine), site returned $running"
+          echo "::notice::If deploy/nginx.conf changed in this commit, a person still has to run this once on the droplet: cd /opt/betr && docker compose up -d"
+
+      # Everything the "what this is" screen and scope §7 promise, checked from outside, on
+      # the real address, over TLS — the way a suspicious person would check it.
+      - name: Check what the server actually says
+        run: |
+          set -e
+          headers=$(curl -sSI --max-time 20 https://betr.trybeup.com/)
+          echo "$headers"
+
+          fail=0
+          check() {
+            if printf '%s' "$headers" | grep -qi "$1"; then
+              echo "  ok   $2"
+            else
+              echo "::error::$2 — missing"; fail=1
+            fi
+          }
+          check "^HTTP/2 200"                       "the page loads"
+          check "connect-src 'none'"                "CSP blocks every outbound request"
+          check "font-src 'none'"                   "CSP blocks every web font"
+          check "x-content-type-options: nosniff"   "nosniff"
+          check "referrer-policy: no-referrer"      "no referrer"
+
+          if printf '%s' "$headers" | grep -qi "^set-cookie"; then
+            echo "::error::the server set a cookie — it must never set one"; fail=1
+          else
+            echo "  ok   no cookie is set"
+          fi
+
+          if printf '%s' "$headers" | grep -qi "unsafe-inline"; then
+            echo "::error::CSP carries 'unsafe-inline'"; fail=1
+          else
+            echo "  ok   no 'unsafe-inline'"
+          fi
+
+          served=$(curl -sS --max-time 20 https://betr.trybeup.com/ \
+            | grep -o 'name="betr-build" content="[^"]*"' | sed 's/.*content="//;s/"//')
+          if [ "$served" = "${{ steps.hash.outputs.hash }}" ]; then
+            echo "  ok   the page prints the hash of the files it served"
+          else
+            echo "::error::page says '$served', published build is '${{ steps.hash.outputs.hash }}'"; fail=1
+          fi
+
+          # The manifest has to arrive as a manifest or "Add to Home Screen" quietly stops
+          # working, and on an iPhone that is the only thing keeping a person's entries.
+          ctype=$(curl -sSI --max-time 20 https://betr.trybeup.com/manifest.webmanifest \
+            | grep -i '^content-type' | tr -d '\r')
+          case "$ctype" in
+            *manifest+json*) echo "  ok   the manifest is served as a manifest" ;;
+            *) echo "::error::manifest content-type is '$ctype'"; fail=1 ;;
+          esac
+
+          exit $fail
+
+      - name: TrybeUP is still up
+        run: |
+          for host in trybeup.com dev.trybeup.com; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 20 "https://$host/")
+            echo "$host -> $code"
+            [ "$code" = "200" ] || { echo "::error::$host returned $code"; exit 1; }
+          done
+
+      - name: Say where to look
+        run: echo "Published → https://betr.trybeup.com (build ${{ steps.hash.outputs.hash }})"
