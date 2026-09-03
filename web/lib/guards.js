@@ -51,10 +51,10 @@
       'That test involves the thing itself. Those aren’t tests — the worry underneath is. ' +
       'Try one about what people will think, or about going without the crutch.',
     body:
-      'Betr doesn’t do tests about food, weight or what your body is doing. Those need a ' +
+      'BETR doesn’t do tests about food, weight or what your body is doing. Those need a ' +
       'person, not this.',
     harm:
-      'Betr can’t help with that one, and it would be wrong to pretend otherwise. If you are ' +
+      'BETR can’t help with that one, and it would be wrong to pretend otherwise. If you are ' +
       'in danger or in crisis, call your local emergency number. In the US, call or text 988. ' +
       'In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, findahelpline.com ' +
       'lists free helplines in over 175 countries.'

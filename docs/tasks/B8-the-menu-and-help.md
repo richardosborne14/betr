@@ -243,6 +243,29 @@ places; who made this and the code.
    on the front screen and gained one on the pick list, because *New worry* lands on the pick
    list and the second door would otherwise be reachable only by going back.
 
+### Added after the build, 2026-09-03: the crisis numbers dial
+
+The founder asked for the emergency numbers to be tappable. **988** and **116 123** are now
+`tel:` links and **findahelpline.com** is an `https:` link, in the crisis block on Help, in
+sentence 7 of the nine, and in the refusal a person meets after typing a test about hurting
+themselves — which is the place they matter most.
+
+- **The words did not change.** Only three of them are wrapped. `menu.test.js` strips the tags
+  back off and compares against sentence 7 character for character, so the wording stays
+  verbatim however this markup is edited later.
+- **findahelpline.com was made a link too**, though the ask was about phone numbers: it is in
+  the same sentence for the same reason, and a person in crisis should not be retyping a URL.
+  It is the one of the three that needs the internet, which is why it reads last.
+- **Nothing about rule 1 changes.** A `tel:` link is inert until it is tapped, and then it is
+  the phone's dialler, not us. No request, nothing sent, and no way for us to know it happened.
+  Checked in a real browser: still twelve resources fetched, all of them the page itself.
+- **B5 now carries the wrap's half of this**: `tel:` must reach the system dialler and `https:`
+  the system browser, never an in-app webview.
+
+**One thing fixed on the way past:** the two refusal messages still said "Betr", not BETR — the
+only place in the app the 2026-09-03 wordmark change had missed, because the brand test only
+swept the screens a happy path reaches. The test now walks both refusals.
+
 ## What is still open
 
 - **The link list itself is a placeholder. Misha signs it off before release.** `signedOff:

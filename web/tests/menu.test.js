@@ -171,6 +171,7 @@ test('Help carries the nine sentences and the one clear thing to read about CBT'
   link, not about whether the right places are on it.
 */
 const ALLOWED = [
+  'https://findahelpline.com',
   'https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments/talking-therapies-and-counselling/cognitive-behavioural-therapy-cbt',
   'https://www.babcp.com/About/What-is-CBT',
   'https://www.cci.health.wa.gov.au',
@@ -184,23 +185,60 @@ const ALLOWED = [
   'https://trybeup.com'
 ];
 
-test('every link is plain https, has nothing attached, and is on the allow-list', () => {
+/*
+  The three tappable crisis numbers. These are the only links allowed outside Help, because
+  the refusal a person meets after typing a test about hurting themselves carries them too.
+*/
+const DIALLABLE = ['tel:988', 'tel:116123', 'https://findahelpline.com'];
+
+test('every link is plain https or tel, has nothing attached, and is on the allow-list', () => {
   const a = boot();
   const links = [...a.tap('#m-help').html().matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
-  assert.ok(links.length >= 10, 'only found ' + links.length + ' links');
+  assert.ok(links.length >= 12, 'only found ' + links.length + ' links');
   for (const url of links) {
+    if (url.startsWith('tel:')) {
+      assert.ok(/^tel:[0-9]+$/.test(url), url + ' is not a plain number');
+      assert.ok(DIALLABLE.indexOf(url) !== -1, url + ' is not one of the crisis numbers');
+      continue;
+    }
     assert.ok(url.startsWith('https://'), url + ' is not https');
     assert.ok(url.indexOf('?') === -1 && url.indexOf('#') === -1, url + ' carries a parameter');
     assert.ok(ALLOWED.indexOf(url) !== -1, url + ' is not on the allow-list in menu.test.js');
   }
-  /* and there are none anywhere else: a link belongs on Help, not in the loop */
+  /* everywhere else in the app: nothing but the crisis numbers */
   const b = boot();
   let rest = b.html();
   rest += b.tap('#go').html();
   rest += b.tap('[data-id]', 0).html();
   rest += b.tap('#lock').html();
   rest += b.tap('#nothanks').tap('#done').html();
-  assert.ok(rest.indexOf('href=') === -1, 'a link turned up outside Help');
+  for (const m of rest.matchAll(/href="([^"]+)"/g)) {
+    assert.ok(DIALLABLE.indexOf(m[1]) !== -1, m[1] + ' turned up outside Help');
+  }
+});
+
+test('the crisis numbers dial, and the sentence around them is still word for word', () => {
+  const a = boot();
+  const h = a.tap('#m-help').html();
+  const block = h.slice(h.indexOf('</h3>', h.indexOf('If you are in danger or in crisis')));
+  const words = block.slice(0, block.indexOf('</p>')).replace(/<[^>]+>/g, '');
+  assert.strictEqual(words,
+    'If you are in danger or in crisis, call your local emergency number. In the US, call ' +
+    'or text 988. In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, ' +
+    'findahelpline.com lists free helplines in over 175 countries.',
+    'sentence 7 was reworded to make the numbers tappable');
+  assert.ok(block.indexOf('href="tel:988"') !== -1, '988 does not dial');
+  assert.ok(block.indexOf('href="tel:116123"') !== -1, '116 123 does not dial');
+  assert.ok(block.indexOf('href="https://findahelpline.com"') !== -1, 'findahelpline.com is not a link');
+});
+
+test('a refusal about self-harm carries numbers that dial, not numbers to copy out', () => {
+  const a = boot();
+  a.tap('#go').tap('#own');
+  a.type('#t', 'If I say no, people will think I am selfish').tap('#next');
+  a.type('#t', 'Cut myself where nobody will see it').tap('#next');
+  a.shows('href="tel:988"').shows('href="tel:116123"');
+  a.shows('call your local emergency number');
 });
 
 test('ours is on the Help list, never first, and says who made it and what it costs', () => {

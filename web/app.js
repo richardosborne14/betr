@@ -87,6 +87,37 @@
   /* The four screens that belong to a test in hand. Everywhere else is outside the loop. */
   var IN_LOOP = ['plan', 'locked', 'happened', 'sure'];
 
+  /*
+    The crisis numbers, tappable. Founder's ask, 2026-09-03: somebody reading that line is the
+    least able person in the app to copy a number out by hand.
+
+    The words do not change. This wraps three of them and nothing else, so sentence 7 still
+    reads exactly as it is written in research §10 — `menu.test.js` strips the tags back off
+    and compares, so it stays that way.
+
+    A tel: link is inert until it is tapped, and then it is the phone's dialler, not us. It
+    makes no request, sends nothing, and cannot tell us it was tapped. The airplane-mode proof
+    is untouched, and 988 and 116 123 both work with no signal on any phone that can call at
+    all. findahelpline.com is the one that needs the internet, which is why it is last.
+
+    In the native wrap (B5) these must hand off to the system dialler and the system browser,
+    never open inside our own webview.
+  */
+  var CALLABLE = [
+    { text: '988', href: 'tel:988' },
+    { text: '116 123', href: 'tel:116123' },
+    { text: 'findahelpline.com', href: 'https://findahelpline.com' }
+  ];
+
+  function callable(sentence) {
+    var html = esc(sentence);
+    CALLABLE.forEach(function (n) {
+      /* a plain string replaces the first match only, which is the only one there is */
+      html = html.replace(n.text, '<a href="' + n.href + '">' + n.text + '</a>');
+    });
+    return html;
+  }
+
   function go(stage) {
     refusal = null;
     /*
@@ -345,8 +376,13 @@
 
   /* -------- a person's own entry: three screens, one box each. Never a form. -------- */
 
+  /*
+    A refusal is the one place in the loop where the crisis lines can appear, and it is the
+    place they matter most: somebody has just typed a test about hurting themselves. The
+    numbers in it are tappable for the same reason they are on Help.
+  */
   function warnBlock() {
-    return refusal ? '<div class="warn">' + esc(refusal) + '</div>' : '';
+    return refusal ? '<div class="warn">' + callable(refusal) + '</div>' : '';
   }
 
   function ownScreen(opts) {
@@ -738,7 +774,7 @@
       '<div class="stage"><div class="sheet">' +
 
         '<h3>If you are in danger or in crisis</h3>' +
-        '<p>' + esc(CRISIS) + '</p>' +
+        '<p>' + callable(CRISIS) + '</p>' +
 
         /*
           The primer. Founder, 2026-09-03: there should be one clear thing to read about CBT,
@@ -769,7 +805,7 @@
 
         '<h3>What this is</h3>' +
         '<p>' + esc(PURPOSE) + '</p>' +
-        '<ol>' + SENTENCES.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol>' +
+        '<ol>' + SENTENCES.map(function (t) { return '<li>' + callable(t) + '</li>'; }).join('') + '</ol>' +
 
         '<h3>Don’t take our word for it</h3>' +
         '<p>Turn on airplane mode. Everything still works, because nothing here ever needed ' +

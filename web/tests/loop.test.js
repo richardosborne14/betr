@@ -241,10 +241,18 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   assert.ok(a.html().indexOf('BETR') !== -1 || seen.length > 0);
 });
 
-test('the brand is BETR everywhere a person reads it', () => {
+test('the brand is BETR everywhere a person reads it, refusals included', () => {
   const a = boot();
   a.shows('BETR');
   a.tap('#m-help').shows('BETR helps you test unhelpful beliefs');
   a.shows('BETR is plain HTML');
   assert.ok(a.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in prose');
+
+  /* the two refusals a person can actually be shown, which is where it hid until 2026-09-03 */
+  const b = boot();
+  b.tap('#go').tap('#own');
+  b.type('#t', 'If I say no, people will think I am selfish').tap('#next');
+  b.type('#t', 'Weigh myself every morning').tap('#next').shows('BETR doesn’t do tests about');
+  b.type('#t', 'Cut myself where nobody will see it').tap('#next').shows('BETR can’t help');
+  assert.ok(b.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in a refusal');
 });

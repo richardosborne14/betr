@@ -100,4 +100,9 @@ understand or when a decision was reversed.
   same hole behind Help, behind Your worries and behind the back button. One line at the top of
   `go()` — if the destination is outside the loop, put down what you are holding — closes all
   of them, and makes the rule true by construction rather than by remembering.
+- **A sweep that only walks the happy path misses the screens people are shown when something
+  goes wrong.** The wordmark test walked the loop, Your worries and Help, and passed — while
+  both guard refusals still said "Betr". Refusals, empty states and error text are read by
+  people at their worst moment and are the least likely to be in a test. When adding a rule
+  about wording, walk it into a refusal.
 

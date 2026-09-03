@@ -34,6 +34,19 @@ the trust claim made by someone other than us.
    release**, by the CLAUDE.md rule, and it is a separate app, so it does not touch TrybeUP's
    listing or Capgo channel.
 
+## Links, in the wrap (added 2026-09-03, B8)
+
+The web build carries three `tel:`/`https:` links in the crisis lines and eleven `https:` links
+on Help. **In the wrap, every one of them must hand off to the OS** — the system dialler for
+`tel:`, the system browser for `https:` — and never open inside our own webview. An in-app
+webview is our software watching where somebody went, which breaks rule 1 and the *Data Not
+Collected* label with it. On Capacitor that is the `appUrlOpen` / external-URL configuration,
+and it is worth a line in the test plan below rather than an assumption.
+
+**`tel:988` and `tel:116123` are the ones to check first.** They are what a person in trouble
+taps, and a `tel:` link that silently does nothing inside a webview is the worst failure in
+the app.
+
 ## Test plan
 
 - Airplane mode on a real iPhone and a real Android phone: full loop, export via Share sheet.
