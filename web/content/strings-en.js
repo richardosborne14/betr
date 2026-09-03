@@ -132,6 +132,24 @@ var BETR_STRINGS_EN = {
         'itself. Those aren’t tests. We test the worry underneath.'
     },
 
+    /* ------------------------------------------------- which of these is it? (B20) */
+
+    /*
+      The screen between the list and the test. The worry's label is the heading, so these
+      three lines are all the words around it: the three predictions themselves are in
+      content/worries.js, because they are the product and not the interface.
+
+      `sub` has one job and it is a hard one — to say "these are three different worries, not
+      three ways of saying one" in a line and a half, to somebody who has tapped once and
+      wants to get on with it. `foot` is why the choice matters at all, and it is the only
+      place in BETR that explains what makes an experiment work, in a sentence.
+    */
+    belief: {
+      sub: 'Which of these is the bit you’re actually worried about? Under each one is what you’d be braced for.',
+      own: 'None of these — I’ll put it my own way',
+      foot: 'Pick the one that would sting. A worry that’s only nearly yours can’t be proved wrong by anything that happens today.'
+    },
+
     /* ------------------------------------------------------- a person's own entry */
 
     own: {
@@ -177,7 +195,6 @@ var BETR_STRINGS_EN = {
     /* ------------------------------------------------------------------ the loop */
 
     plan: {
-      kicker: 'Here’s your test',
       today: 'Today',
       /* {drop} is the person's own words, in bold. Keep it where the sentence needs it. */
       line: '{drop} That’s the bit that makes it count.',

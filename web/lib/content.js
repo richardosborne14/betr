@@ -12,7 +12,27 @@
 })(typeof self !== 'undefined' ? self : this, function (guards) {
 
   var LANES = ['social', 'assertiveness', 'perfectionism', 'urge-timing', 'rest', 'sleep'];
-  var FIELDS = ['id', 'label', 'belief', 'expect', 'test', 'drop', 'lane'];
+  /* The parts of a worry that are one sentence each. `beliefs` is the eighth and is a
+     list, so checkBeliefs() below is what holds it to its own shape. */
+  var FIELDS = ['id', 'label', 'belief', 'test', 'drop', 'lane'];
+
+  /*
+    B20. Three beliefs a person chooses between, and the number is not arbitrary.
+
+    One was wrong. Test users read the single "If I ___, then ___" a worry used to carry and
+    said it sort of matched their worry and not really — because one sentence per worry has
+    to guess which consequence the person is actually afraid of, and that guess was wrong
+    about as often as it was right. More than three would be a list to weigh up, and weighing
+    up a list is the thing the doors exist to stop (B19). Three, plus "put it my own way",
+    is a choice a person makes on sight.
+
+    A belief is two fields and no third, for the same reason a place on the Help screen has
+    three and an explanation has two: there is nowhere to hang a lane, a condition or a
+    second version, so which sentence a person reads can never be decided for them by
+    anything they entered (research §5.2).
+  */
+  var BELIEFS_PER_WORRY = 3;
+  var BELIEF_FIELDS = ['belief', 'expect'];
 
   /*
     B19. The cap moved off the list and onto the door. It used to be twelve, because twelve
@@ -84,6 +104,8 @@
         problems.push(where + ' lane "' + f.lane + '" is not one of: ' + LANES.join(', '));
       }
 
+      checkBeliefs(f, where, problems);
+
       /* The rule that never bends: no test, and no drop line, touches the habit itself. */
       ['test', 'drop'].forEach(function (field) {
         if (typeof f[field] !== 'string') return;
@@ -93,6 +115,45 @@
     });
 
     return problems;
+  }
+
+  /*
+    The three a person actually chooses between, and the rules that keep them worth choosing
+    between. The last rule is the one that matters: two of them predicting the same thing in
+    different words are one belief and a wasted tap, which is an easy thing to write by
+    accident and an invisible thing to read back.
+  */
+  function checkBeliefs(f, where, problems) {
+    if (!Array.isArray(f.beliefs)) {
+      problems.push(where + ' has no beliefs to choose from');
+      return;
+    }
+    if (f.beliefs.length !== BELIEFS_PER_WORRY) {
+      problems.push(where + ' offers ' + f.beliefs.length + ' beliefs, and it has to be ' + BELIEFS_PER_WORRY);
+    }
+    var seen = {};
+    f.beliefs.forEach(function (b, j) {
+      var at = where + ' belief ' + j;
+      if (!b || typeof b !== 'object' || Array.isArray(b)) { problems.push(at + ' is not a belief'); return; }
+
+      BELIEF_FIELDS.forEach(function (field) {
+        if (typeof b[field] !== 'string' || !b[field].trim()) problems.push(at + ' is missing ' + field);
+      });
+      Object.keys(b).forEach(function (field) {
+        if (BELIEF_FIELDS.indexOf(field) === -1) {
+          problems.push(at + ' has an extra field "' + field + '": a belief is two fields, so that ' +
+            'which sentence a person reads can never be decided for them');
+        }
+      });
+      if (typeof b.belief !== 'string') return;
+
+      if (!/^if\b/i.test(b.belief.trim())) problems.push(at + ' does not start with "If"');
+      if (!/\bthen\b/i.test(b.belief)) problems.push(at + ' has no "then", so it is not a prediction');
+
+      var flat = b.belief.toLowerCase().replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim();
+      if (seen[flat] !== undefined) problems.push(at + ' says the same thing as belief ' + seen[flat]);
+      seen[flat] = j;
+    });
   }
 
   function validateDoors(doors, worries) {
@@ -269,6 +330,8 @@
     FIELDS: FIELDS,
     PLACE_FIELDS: PLACE_FIELDS,
     DOOR_FIELDS: DOOR_FIELDS,
+    BELIEF_FIELDS: BELIEF_FIELDS,
+    BELIEFS_PER_WORRY: BELIEFS_PER_WORRY,
     MAX_PER_DOOR: MAX_PER_DOOR,
     byId: byId,
     validateWorries: validateWorries,

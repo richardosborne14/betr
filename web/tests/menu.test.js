@@ -24,7 +24,7 @@ const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
 function lockOne(a, item) {
   if (a.html().indexOf('id="go"') !== -1) a.tap('#go');   /* already past the front screen, or not */
   if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', 0);
-  a.tap('[data-id]', item).tap('#lock');
+  a.tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   return a;
 }
@@ -36,7 +36,7 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
   const stops = [
     () => a.tap('#go'),                       /* what's going on */
     () => a.tap('[data-door]', 0),            /* pick */
-    () => a.tap('[data-id]', 0),              /* plan */
+    () => a.tap('[data-id]', 0).tap('[data-b]', 0),              /* plan */
     () => a.tap('#lock'),                     /* locked */
     () => a.tap('#nothanks').tap('#done'),    /* happened */
     () => a.type('#o', 'He said fair enough.').tap('#next'),  /* sure */
@@ -60,7 +60,7 @@ test('every door on the menu works from every screen', () => {
     (a) => a,                                                     /* the start screen */
     (a) => a.tap('#go'),                                          /* what's going on */
     (a) => a.tap('#go').tap('[data-door]', 0),                    /* pick */
-    (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0),  /* plan */
+    (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0),  /* plan */
     (a) => lockOne(a, 0),                                         /* locked */
     (a) => lockOne(a, 0).tap('#done'),                            /* happened */
     (a) => a.tap('#go').tap('#own')                               /* a person's own entry */
@@ -124,7 +124,7 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
 
 test('an unfinished test that was never locked in is simply let go', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).shows('Here’s your test');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).shows('I’ll do it today');
   a.tap('#m-new').tap('#back');
   a.hides('On the go');
 });
@@ -225,7 +225,7 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
   let rest = b.html();
   rest += b.tap('#go').html();
   rest += b.tap('[data-door]', 0).html();
-  rest += b.tap('[data-id]', 0).html();
+  rest += b.tap('[data-id]', 0).tap('[data-b]', 0).html();
   rest += b.tap('#lock').html();
   rest += b.tap('#nothanks').tap('#done').html();
   for (const m of rest.matchAll(/href="([^"]+)"/g)) {
@@ -280,7 +280,7 @@ test('ours is on the Help list, never first, and says who made it and what it co
   /* and it is not on the front screen, in the loop, in the result, or on the menu */
   const b = boot();
   let rest = b.html();
-  rest += b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).html();
+  rest += b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).html();
   rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
   rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');

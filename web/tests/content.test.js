@@ -91,6 +91,55 @@ test('every worry is behind at least one door, so something leads to all of them
   assert.deepStrictEqual(content.validateDoors(doors, worries), []);
 });
 
+/*
+  B20. The three predictions under a worry, and the two rules that keep them worth the tap.
+
+  The field sweep is the same one a place on the Help screen and an explanation get, and it
+  is here for the same reason: with two fields and no third there is nowhere to hang a lane,
+  a condition or a second version, so which of the three a person reads can never be decided
+  for them by anything they entered (research §5.2). The three are on the screen together,
+  in a fixed order, always.
+*/
+test('a belief a person chooses between can never be aimed at them', () => {
+  const fields = new Set();
+  for (const f of worries) for (const b of f.beliefs) Object.keys(b).forEach((k) => fields.add(k));
+  assert.deepStrictEqual([...fields].sort(), ['belief', 'expect']);
+});
+
+/*
+  Three that predict the same thing are one prediction and two wasted taps, and that is the
+  easy mistake to make writing sixty-three sentences in an evening. validateWorries catches
+  two that are word for word; this catches two that are the same sentence with the ends
+  swapped, which is what it actually looks like when it happens.
+*/
+test('the three under one worry are three different predictions', () => {
+  for (const f of worries) {
+    const shapes = f.beliefs.map((b) =>
+      b.belief.toLowerCase().replace(/[^a-z ]+/g, ' ').split(/\s+/).filter(Boolean).sort().join(' '));
+    assert.strictEqual(new Set(shapes).size, 3, f.id + ' offers the same prediction twice');
+    for (const b of f.beliefs) {
+      assert.match(b.belief, /^If /, f.id + ': "' + b.belief + '" is not conditional');
+      assert.match(b.belief, /, then /, f.id + ': "' + b.belief + '" does not say what then');
+    }
+  }
+});
+
+/*
+  The one on the card is the loose one, and it has a different job: it is read on a list of
+  four to six, to work out which worry this is. The three inside are read one screen later,
+  one at a time, to work out which prediction is yours. If the card sentence is word for word
+  one of the three, the second screen has a right answer already ticked on the first, and
+  that is the guess B20 exists to stop making.
+*/
+test('the sentence on the card is the loose one, not one of the three', () => {
+  for (const f of worries) {
+    for (const b of f.beliefs) {
+      assert.notStrictEqual(b.belief, f.belief,
+        f.id + ' puts one of its three on the card, which pre-answers the next screen');
+    }
+  }
+});
+
 test('no test and no drop line touches the habit itself', () => {
   for (const f of worries) {
     assert.ok(guards.checkTest(f.test).ok, f.id + ' test: ' + f.test);

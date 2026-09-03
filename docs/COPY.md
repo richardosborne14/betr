@@ -260,13 +260,25 @@ keep it, and put it wherever the sentence needs it.
 
 > Write what you think will happen.
 
+### Screen 3b — "Which of these is it?"
+
+*B20. The screen between the list and the test, where a person says which prediction under the worry is theirs. The three themselves are under THE WORRY LIST; these are the words around them.*
+
+**`belief.sub`**
+
+> Which of these is the bit you’re actually worried about? Under each one is what you’d be braced for.
+
+**`belief.own`**
+
+> None of these — I’ll put it my own way
+
+**`belief.foot`**
+
+> Pick the one that would sting. A worry that’s only nearly yours can’t be proved wrong by anything that happens today.
+
 ### Screen 4 — the test
 
 *What you do today, and what you leave out.*
-
-**`plan.kicker`**
-
-> Here’s your test
 
 **`plan.today`**
 
@@ -776,11 +788,17 @@ keep it, and put it wherever the sentence needs it.
 
 ## The worry list
 
-`web/content/worries.js`. This is the product. Six parts each, all required, in the order
-a person meets them. The **id** never changes once anybody has used it — a stored result
-points at it. **belief** is always "If I ___, then ___"; a worry that is not conditional is
-not testable. No **test** and no **drop** may touch the habit itself; the build fails if one
-does.
+`web/content/worries.js`. This is the product. The **id** never changes once anybody has
+used it — a stored result points at it. No **test** and no **drop** may touch the habit
+itself; the build fails if one does.
+
+**Read the three under each worry together.** B20 split the worry from the prediction, and
+that is where most of the words now are. The **card sentence** is loose on purpose: it is
+read on a list of four to six, to work out which worry this is. The **three** are read one
+screen later, one at a time, to work out which one is yours — so each has to predict a
+different thing, and each has to be something that could turn out to be wrong. Under each
+one, **braced for** is the same prediction in the voice of somebody expecting it, and it is
+what BETR writes into "What you expect" when they pick that one.
 
 ### 1. Sitting still when I feel restless
 
@@ -789,10 +807,17 @@ does.
 | **id** | `sit` |
 | **lane** | urge-timing |
 | **label** — the button | Sitting still when I feel restless |
-| **belief** — the worry itself | If I feel restless or bored, then I can’t just sit there with it. |
-| **expect** — what you are braced for | It’ll build and build until I have to do something about it. |
+| **card sentence** — under the label on the list | If I feel restless, then I can’t just sit with it. |
 | **test** — the one thing, today | Set a ten-minute timer and do nothing at all. Notice when it peaks, and whether it drops. |
 | **drop** — what you leave out | Don’t reach for your phone, and don’t get up to do a task. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I sit with the restlessness, then it’ll build until I have to do something about it. | By about the fifth minute I’ll be up and doing something else. |
+| 2 | If I don’t do something with the feeling, then I’ll be no use for the rest of the day. | I’ll write the day off and get nothing done. |
+| 3 | If I stop and do nothing, then everything I’ve been not thinking about will land at once. | The whole list will arrive at once, and stopping will have cost me. |
 
 ### 2. Going an evening without my phone
 
@@ -801,10 +826,17 @@ does.
 | **id** | `phone` |
 | **lane** | urge-timing |
 | **label** — the button | Going an evening without my phone |
-| **belief** — the worry itself | If I don’t check tonight, then I’ll miss something that matters. |
-| **expect** — what you are braced for | Something urgent will come in and I’ll have let someone down. |
+| **card sentence** — under the label on the list | If I’m not reachable for an evening, then something will go wrong. |
 | **test** — the one thing, today | Put it in a drawer from eight o’clock. In the morning, write down what you actually missed. |
 | **drop** — what you leave out | No checking it “just once” before bed. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I don’t check tonight, then I’ll miss something that actually needed me. | Something urgent will come in and I’ll have let someone down. |
+| 2 | If someone can’t get hold of me, then they’ll think I’m ignoring them. | There’ll be a short reply in the morning and a bit of an atmosphere. |
+| 3 | If I put it away, then I’ll be twitchy all evening and get nothing out of it anyway. | I’ll spend two hours thinking about the phone instead of using them. |
 
 ### 3. A day without checking social media
 
@@ -813,10 +845,17 @@ does.
 | **id** | `feed` |
 | **lane** | urge-timing |
 | **label** — the button | A day without checking social media |
-| **belief** — the worry itself | If I stop keeping up with everyone, then I’ll fall out of things without noticing. |
-| **expect** — what you are braced for | I’ll be the only one who hasn’t heard something, and it’ll be obvious. |
+| **card sentence** — under the label on the list | If I stop keeping up with everyone, then I’ll fall out of things. |
 | **test** — the one thing, today | Go one day without opening the apps you scroll. At the end, write down what you actually missed. |
 | **drop** — what you leave out | No opening one “just to see if anyone’s messaged me”. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I don’t look today, then I’ll be the only one who hasn’t heard something. | Someone will mention it and it’ll be obvious I’m out of the loop. |
+| 2 | If I go quiet for a day, then people will think I’ve gone off them. | Somebody will notice I’ve disappeared and read something into it. |
+| 3 | If I stop looking, then I’ll have nothing to talk about. | I’ll be sitting there with nothing to say. |
 
 ### 4. Not answering a message straight away
 
@@ -825,10 +864,17 @@ does.
 | **id** | `reply` |
 | **lane** | social |
 | **label** — the button | Not answering a message straight away |
-| **belief** — the worry itself | If I leave a message a few hours, then they’ll think I don’t care. |
-| **expect** — what you are braced for | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
+| **card sentence** — under the label on the list | If I don’t answer a message quickly, then people take it badly. |
 | **test** — the one thing, today | Pick one message today and leave it a few hours before you answer. Notice whether they chase you. |
 | **drop** — what you leave out | Don’t open with “sorry, only just seen this”, and don’t explain the delay. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I leave a message a few hours, then they’ll think I don’t care. | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
+| 2 | If I don’t answer straight away, then they’ll assume I’m annoyed with them. | They’ll ask if everything’s all right, in that careful way. |
+| 3 | If I take my time replying, then they’ll stop bothering to message me. | They’ll go to somebody else next time, and I’ll hear about it after. |
 
 ### 5. Sending something without checking it again
 
@@ -837,10 +883,17 @@ does.
 | **id** | `check` |
 | **lane** | perfectionism |
 | **label** — the button | Sending something without checking it again |
-| **belief** — the worry itself | If I send something without going over it again, then there’ll be a mistake in it and I’ll look sloppy. |
-| **expect** — what you are braced for | Someone will spot something, and they’ll think I rushed it. |
+| **card sentence** — under the label on the list | If I send something without going over it again, then it won’t be right. |
 | **test** — the one thing, today | Write one email or message today, read it through once, and send it. |
 | **drop** — what you leave out | No second read-through, and don’t go back to edit it after it’s gone. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I send it without a second read, then there’ll be a mistake in it and I’ll look sloppy. | Someone will spot something, and they’ll think I rushed it. |
+| 2 | If I don’t read it twice, then it’ll come out blunter than I meant it. | They’ll take it the wrong way and I’ll spend the day fixing it. |
+| 3 | If I send it as it is, then I’ll be thinking about it all afternoon. | I’ll keep going back to it and get nothing else done. |
 
 ### 6. Handing something over before it’s perfect
 
@@ -849,10 +902,17 @@ does.
 | **id** | `enough` |
 | **lane** | perfectionism |
 | **label** — the button | Handing something over before it’s perfect |
-| **belief** — the worry itself | If I hand something in that’s only good enough, then they’ll think I don’t care about it. |
-| **expect** — what you are braced for | They’ll spot the rough edges and quietly decide I’ve dropped off. |
+| **card sentence** — under the label on the list | If I hand over something that’s only good enough, then it won’t be good enough. |
 | **test** — the one thing, today | Finish one thing today at good enough and hand it over. Write down the time you stopped. |
 | **drop** — what you leave out | No last look through, and no message saying what you’d have done with more time. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I hand in something that’s only good enough, then they’ll think I don’t care about it. | They’ll spot the rough edges and quietly decide I’ve dropped off. |
+| 2 | If I stop before it’s right, then it’ll come straight back to me with a list. | I’ll end up doing it twice, and that’s worse than doing it properly. |
+| 3 | If I let this one go at good enough, then that becomes what people expect from me. | The standard slips, and I don’t get it back. |
 
 ### 7. Resting when there’s stuff to do
 
@@ -861,10 +921,17 @@ does.
 | **id** | `rest` |
 | **lane** | rest |
 | **label** — the button | Resting when there’s stuff to do |
-| **belief** — the worry itself | If I rest while there’s still stuff to do, then I’m being lazy. |
-| **expect** — what you are braced for | I’ll feel guilty the whole time and wish I’d just got on with it. |
+| **card sentence** — under the label on the list | If I rest before everything’s done, then I’m being lazy. |
 | **test** — the one thing, today | Plan two hours of rest today and actually take them. Notice how you feel after. |
 | **drop** — what you leave out | No “I’ll just quickly do this one thing” first. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I rest while there’s still stuff to do, then I’ll feel guilty the whole time. | I’ll sit there thinking about the list and get nothing out of it. |
+| 2 | If I stop now, then I won’t start again today. | The afternoon will go, and tomorrow starts further behind. |
+| 3 | If anyone sees me sitting down, then they’ll think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
 
 ### 8. Paying someone a compliment
 
@@ -873,10 +940,17 @@ does.
 | **id** | `praise` |
 | **lane** | social |
 | **label** — the button | Paying someone a compliment |
-| **belief** — the worry itself | If I say something good about someone and nothing comes back, then it’ll look like I was fishing for one. |
-| **expect** — what you are braced for | There’ll be an odd beat, and I’ll wish I’d kept it to myself. |
+| **card sentence** — under the label on the list | If I say something good about someone, then it’ll land wrong. |
 | **test** — the one thing, today | Say one specific good thing about somebody today, to their face. |
 | **drop** — what you leave out | Don’t follow it with one about yourself, and don’t wait around for one back. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I say something good and nothing comes back, then it’ll look like I was fishing for one. | There’ll be an odd beat, and I’ll wish I’d kept it to myself. |
+| 2 | If I compliment someone out of nowhere, then they’ll think I want something. | They’ll be polite about it and wait for the ask. |
+| 3 | If I say it out loud, then it’ll come out wrong and make things awkward. | It’ll sound odd, and neither of us will know what to say next. |
 
 ### 9. Telling someone they matter to me
 
@@ -885,10 +959,17 @@ does.
 | **id** | `care` |
 | **lane** | social |
 | **label** — the button | Telling someone they matter to me |
-| **belief** — the worry itself | If I tell someone what they mean to me, then it’ll be awkward and they won’t say it back. |
-| **expect** — what you are braced for | They’ll laugh it off, and I’ll wish I hadn’t said it. |
+| **card sentence** — under the label on the list | If I tell someone what they mean to me, then it’ll be awkward. |
 | **test** — the one thing, today | Tell one person, today, one specific thing you’re glad about them. |
 | **drop** — what you leave out | Don’t turn it into a joke, and don’t move straight on to something else. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I tell someone what they mean to me, then they won’t say it back. | They’ll laugh it off, and I’ll wish I hadn’t said it. |
+| 2 | If I say something that serious, then it’ll change how we are with each other. | It’ll be a bit stiff between us afterwards. |
+| 3 | If I tell them, then they’ll wonder what’s brought this on. | They’ll ask if I’m all right, and I’ll have to explain myself. |
 
 ### 10. Saying no without giving a reason
 
@@ -897,10 +978,17 @@ does.
 | **id** | `no` |
 | **lane** | assertiveness |
 | **label** — the button | Saying no without giving a reason |
-| **belief** — the worry itself | If I say no and don’t explain myself, then people will think I’m selfish. |
-| **expect** — what you are braced for | There’ll be a pause, and they’ll be a bit off with me afterwards. |
+| **card sentence** — under the label on the list | If I say no and don’t explain, then people will think badly of me. |
 | **test** — the one thing, today | Say “No, I can’t this time” to one small request today. |
 | **drop** — what you leave out | No reason, no apology, no softening it. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I say no and don’t explain myself, then people will think I’m selfish. | There’ll be a pause, and they’ll be a bit off with me afterwards. |
+| 2 | If I turn something down, then they’ll stop asking me. | I’ll be left out of the next one, and nobody will say why. |
+| 3 | If I give no reason, then they’ll take it as rude. | They’ll take it personally, and it’ll sit there between us. |
 
 ### 11. Asking someone for help
 
@@ -909,10 +997,17 @@ does.
 | **id** | `help` |
 | **lane** | assertiveness |
 | **label** — the button | Asking someone for help |
-| **belief** — the worry itself | If I ask someone for help, then I become a burden to them. |
-| **expect** — what you are braced for | They’ll do it, and quietly file me under people who can’t cope. |
+| **card sentence** — under the label on the list | If I ask someone for help, then it costs me something. |
 | **test** — the one thing, today | Ask one person for one small, specific favour today. |
 | **drop** — what you leave out | No “sorry to bother you”, and no offering something back. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I ask someone for help, then I become a burden to them. | They’ll do it, and quietly file me under people who can’t cope. |
+| 2 | If I admit I can’t do it on my own, then I’ll be trusted with less. | Next time it’ll go to somebody else, without a word to me. |
+| 3 | If I ask, then they’ll say yes and resent it. | They’ll help, and be a bit short with me for a while after. |
 
 ### 12. Telling someone I’ve been feeling low
 
@@ -921,10 +1016,17 @@ does.
 | **id** | `low` |
 | **lane** | social |
 | **label** — the button | Telling someone I’ve been feeling low |
-| **belief** — the worry itself | If I tell someone I’ve been feeling low, then they won’t know what to do with it and they’ll keep their distance. |
-| **expect** — what you are braced for | They’ll say something kind, change the subject, and be careful around me after. |
+| **card sentence** — under the label on the list | If I say I’ve been feeling low, then it changes how people treat me. |
 | **test** — the one thing, today | Tell one person you trust, today, in one sentence, that you’ve been feeling low lately. |
 | **drop** — what you leave out | Don’t add that it’s nothing really, and don’t ask whether that was too much. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I tell someone I’ve been feeling low, then they won’t know what to do with it. | They’ll say something kind, change the subject, and be careful around me after. |
+| 2 | If I say it out loud, then they’ll start worrying about me. | They’ll check up on me, and I’ll wish I’d never said it. |
+| 3 | If they know, then it’s the thing they think of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
 
 ### 13. Telling someone I’m struggling
 
@@ -933,10 +1035,17 @@ does.
 | **id** | `strug` |
 | **lane** | social |
 | **label** — the button | Telling someone I’m struggling |
-| **belief** — the worry itself | If I let someone see I’m struggling, then they’ll think less of me. |
-| **expect** — what you are braced for | They’ll go quiet, change the subject, and keep a bit of distance after. |
+| **card sentence** — under the label on the list | If I let someone see I’m struggling, then it costs me something with them. |
 | **test** — the one thing, today | Today, tell one person you trust one small, true thing you’re finding hard. |
 | **drop** — what you leave out | Don’t finish it with “but I’m fine”. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I let someone see I’m struggling, then they’ll think less of me. | They’ll go quiet, change the subject, and keep a bit of distance after. |
+| 2 | If I say I’m finding this hard, then they’ll wonder what else I can’t manage. | It’ll come up again the next time something needs doing. |
+| 3 | If I admit it, then I’ll be the one everybody has to work around. | People will start being careful with me, and I’ll hate it. |
 
 ### 14. Owning up to a mistake before anyone finds it
 
@@ -945,10 +1054,17 @@ does.
 | **id** | `mist` |
 | **lane** | perfectionism |
 | **label** — the button | Owning up to a mistake before anyone finds it |
-| **belief** — the worry itself | If I admit I got something wrong, then it’ll be held against me later. |
-| **expect** — what you are braced for | They’ll remember this one, and trust me with less next time. |
+| **card sentence** — under the label on the list | If I own up to a mistake, then it counts against me. |
 | **test** — the one thing, today | Tell someone about one small mistake of yours today, before they find it. |
 | **drop** — what you leave out | Don’t bury it in excuses, and don’t wait until you’ve already fixed it. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I admit I got something wrong, then it’ll be held against me later. | They’ll remember this one, and trust me with less next time. |
+| 2 | If I tell them before they find it, then they’ll start looking for others. | Everything I do goes under the microscope after this. |
+| 3 | If I own up, then they’ll think worse of me than if I’d quietly fixed it. | They’ll be fine to my face, and it’ll go on my record anyway. |
 
 ### 15. Telling someone they’ve annoyed me
 
@@ -957,10 +1073,17 @@ does.
 | **id** | `angry` |
 | **lane** | assertiveness |
 | **label** — the button | Telling someone they’ve annoyed me |
-| **belief** — the worry itself | If I tell someone they’ve annoyed me, then it’ll turn into an argument. |
-| **expect** — what you are braced for | They’ll get defensive, and it’ll turn into a much bigger thing. |
+| **card sentence** — under the label on the list | If I say that something’s annoyed me, then it’ll go badly. |
 | **test** — the one thing, today | Say one thing that annoyed you, in one sentence, calmly. Then stop talking. |
 | **drop** — what you leave out | Don’t raise your voice, and don’t bring up a second thing. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I tell someone they’ve annoyed me, then it’ll turn into an argument. | They’ll get defensive, and it’ll turn into a much bigger thing. |
+| 2 | If I bring it up, then they’ll say I’m making something out of nothing. | I’ll come out of it feeling like the unreasonable one. |
+| 3 | If I say it, then things will be off between us for days. | It’ll be polite and cold, and I’ll be the one who has to fix it. |
 
 ### 16. Letting someone else be right
 
@@ -969,10 +1092,17 @@ does.
 | **id** | `right` |
 | **lane** | social |
 | **label** — the button | Letting someone else be right |
-| **belief** — the worry itself | If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about. |
-| **expect** — what you are braced for | They’ll take it as a win, and I’ll go down in their estimation. |
+| **card sentence** — under the label on the list | If I let someone else be right, then I lose something. |
 | **test** — the one thing, today | Once today, say “you’re right, I hadn’t thought of that” — and then stop. |
 | **drop** — what you leave out | No “but”, and don’t add a point of your own to level it back up. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about. | They’ll take it as a win, and I’ll go down in their estimation. |
+| 2 | If I give ground once, then they’ll talk over me from then on. | Next time they won’t even wait for my answer. |
+| 3 | If I say they’re right, then nobody will ask what I think again. | The conversation will move on, and I’ll stay out of it. |
 
 ### 17. Letting someone finish without interrupting
 
@@ -981,10 +1111,17 @@ does.
 | **id** | `hear` |
 | **lane** | social |
 | **label** — the button | Letting someone finish without interrupting |
-| **belief** — the worry itself | If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying. |
-| **expect** — what you are braced for | The conversation will move on without me and I’ll have missed my go. |
+| **card sentence** — under the label on the list | If I don’t get in quickly, then I lose my place in the conversation. |
 | **test** — the one thing, today | In one conversation today, let them finish, then ask one question before you say your bit. |
 | **drop** — what you leave out | Don’t plan your answer while they’re still talking, and don’t finish their sentence. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying. | The conversation will move on without me and I’ll have missed my go. |
+| 2 | If I wait for them to finish, then I’ll forget what I was going to say. | It’ll go out of my head and I’ll sit there with nothing. |
+| 3 | If I let them run on, then they’ll take the whole conversation. | I’ll come out of it having said nothing at all. |
 
 ### 18. Getting through a conversation without a joke
 
@@ -993,10 +1130,17 @@ does.
 | **id** | `joke` |
 | **lane** | social |
 | **label** — the button | Getting through a conversation without a joke |
-| **belief** — the worry itself | If I don’t have something funny ready, then I’ll be dull and people will drift off. |
-| **expect** — what you are braced for | The conversation will go flat, and they’ll find someone else to talk to. |
+| **card sentence** — under the label on the list | If I’m not the funny one, then people won’t want to talk to me. |
 | **test** — the one thing, today | In one conversation today, say the plain thing where you’d normally reach for the joke. |
 | **drop** — what you leave out | No laughing it off when it gets serious, and no making anyone else the punchline. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I haven’t got something funny ready, then I’ll be dull and people will drift off. | The conversation will go flat, and they’ll find someone else to talk to. |
+| 2 | If I say the plain thing, then it’ll get too serious and they’ll be uncomfortable. | There’ll be a silence, and I’ll be the one who made it. |
+| 3 | If I’m not the one keeping it light, then nobody will bother. | It’ll be hard work, and they’ll leave earlier than they would have. |
 
 ### 19. Apologising without explaining myself
 
@@ -1005,10 +1149,17 @@ does.
 | **id** | `sorry` |
 | **lane** | social |
 | **label** — the button | Apologising without explaining myself |
-| **belief** — the worry itself | If I properly apologise for how I acted, then they’ll hold it over me from now on. |
-| **expect** — what you are braced for | They’ll accept it, and then bring it up the next time we disagree. |
+| **card sentence** — under the label on the list | If I properly apologise, then it’ll be used against me. |
 | **test** — the one thing, today | Say sorry to one person today, for one specific thing you did. One sentence. |
 | **drop** — what you leave out | Don’t explain what kind of day you were having, and don’t ask whether you’re all right now. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I properly apologise for how I acted, then they’ll hold it over me from now on. | They’ll accept it, and then bring it up the next time we disagree. |
+| 2 | If I say sorry with no explanation, then they’ll think it was worse than it was. | They’ll decide something’s wrong with me, on the strength of one bad day. |
+| 3 | If I apologise first, then I’ve taken the whole thing on myself. | Their part in it never gets mentioned again. |
 
 ### 20. Turning up and not joining in
 
@@ -1017,10 +1168,17 @@ does.
 | **id** | `drink` |
 | **lane** | social |
 | **label** — the button | Turning up and not joining in |
-| **belief** — the worry itself | If I turn up and don’t join in, then everyone will notice and ask me why. |
-| **expect** — what you are braced for | Someone will say something, and then the whole table will be looking at me. |
+| **card sentence** — under the label on the list | If I turn up and don’t join in, then it won’t go unnoticed. |
 | **test** — the one thing, today | Turn up, order something soft, and count how many people actually say anything. |
 | **drop** — what you leave out | Don’t arrive with a reason ready, and don’t hold a glass as cover. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I turn up and don’t join in, then everyone will notice and ask me why. | Someone will say something, and then the whole table will be looking at me. |
+| 2 | If I’m the only one sitting it out, then I’ll spoil it for everybody else. | It’ll go a bit flat, and they’ll wish I hadn’t come. |
+| 3 | If I go and sit it out, then I won’t enjoy any of it. | I’ll be counting the minutes and wishing I’d stayed at home. |
 
 ### 21. Leaving before everyone else does
 
@@ -1029,10 +1187,17 @@ does.
 | **id** | `early` |
 | **lane** | social |
 | **label** — the button | Leaving before everyone else does |
-| **belief** — the worry itself | If I leave while it’s still going, then they’ll think I’m boring and stop asking me. |
-| **expect** — what you are braced for | Someone will try to talk me into staying, and I’ll feel like I’ve let them down. |
+| **card sentence** — under the label on the list | If I leave early, then it costs me something with them. |
 | **test** — the one thing, today | Decide before you go what time you’re leaving. At that time, say one sentence and go. |
 | **drop** — what you leave out | Don’t apologise for going, and don’t promise to stay longer next time. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I leave while it’s still going, then they’ll think I’m boring and stop asking me. | Someone will try to talk me into staying, and I’ll feel like I’ve let them down. |
+| 2 | If I go first, then they’ll talk about me once I’ve gone. | There’ll be a comment about it, and I’ll hear it repeated later. |
+| 3 | If I leave before the end, then I’ll have missed the part everyone remembers. | They’ll be laughing about something next week and I won’t have been there. |
 
 ---
 

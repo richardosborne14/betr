@@ -30,6 +30,12 @@ rules at once, and every one of them has failed in some other product.
 3. **Conditional beliefs only.** Every item is "If I ___, then ___". "I am ___" is reframed,
    never accepted. The word for one of these, everywhere a person can see it, is **worry**.
    Not "fear" (founder, 2026-09-02: it sounds scary), not "thought", not "belief" on a button.
+   **Amended 2026-09-03 (B20):** a worry is a situation and carries **three** predictions, and
+   the person picks which one is theirs, or writes their own in its place. One per worry had
+   to guess which consequence they feared, and test users said the guess "sort of matches my
+   worry but not really" — a prediction that is only nearly yours cannot be disconfirmed, so
+   the loop runs and moves nothing. Three, plus their own words; never a fourth stock one, and
+   never one BETR chooses for them.
 4. **Never the habit itself.** No test involves the drink, the screen, the substance, food
    restriction, body sensations, checking rituals, or anyone's safety. In v1 this is
    structural: there is no free-text test field.
@@ -66,6 +72,12 @@ rules at once, and every one of them has failed in some other product.
     `belief` — its "If I ___, then ___" — is drawn under its label wherever a person picks
     one.** That sentence is the only part of a worry that explains itself, and it used to be
     invisible until the re-rate. A pick list without it is the bug, not the tidy version.
+    **Amended once more 2026-09-03 (B20), and it cost the second tap:** picking a worry opens
+    *which of these three is it?* before the test. Still one screen, one question, a list of
+    plain buttons — not a form and not a wizard. And from B20 **the worry's label and the
+    exact sentence being tested sit at the top of every screen from that choice to the
+    result**, in the same words in the same place. A screen inside the loop that does not say
+    which worry it belongs to is the bug.
 
 ## How the repo works
 
@@ -74,9 +86,12 @@ rules at once, and every one of them has failed in some other product.
   `package.json` dependencies. Tests run with `node --test` from the repo root (not
   `node --test web/tests/`; Node 22 rejects a directory there). Keep it readable by a
   stranger in an evening; that is part of the trust story.
-- **Content lives in `web/content/`**, not in code: `worries.js` (B1 and B19 own it, and
+- **Content lives in `web/content/`**, not in code: `worries.js` (B1, B19 and B20 own it, and
   since B19 a label must be comprehensible on its own — no pronoun with nothing to point at,
-  no open channel, and never the `drop` smuggled onto the button), `whats-going-on.js`
+  no open channel, and never the `drop` smuggled onto the button; since B20 every worry
+  carries **exactly three** `beliefs`, each two fields and no third, each predicting something
+  different, and the loose `belief` on the card is never word for word one of them),
+  `whats-going-on.js`
   (B19: the way in, four to six worries a door, and every worry behind at least one)
   and, from B8, `places.js` — every link on the Help screen, and the only place a link may be
   added. From B17 there are two more: `zones.js`, which is **generated from the IANA time zone

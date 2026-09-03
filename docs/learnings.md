@@ -349,3 +349,54 @@ The second half is smaller and worth the same care. A label with `drop` folded i
 *"Saying I'm annoyed, calmly"* — silently narrows the worry to the people who are already
 willing to say something, which is not the audience. The safety behaviour belongs in `test`,
 never on the button.
+
+## One sentence per worry was a guess, and a guess cannot be disconfirmed (B20, 2026-09-03)
+
+The same evening as B19, from the same test users. With the `belief` finally drawn on the
+button, the next thing they said was that it "sort of matches what my worry is, but not really".
+
+**Why that is fatal and not cosmetic.** A worry on the list is a *situation* — turning up and
+not joining in, sending something without checking it. What a behavioural experiment tests is
+the **prediction underneath** the situation, and there is always more than one: under *turning
+up and not joining in* sits *everyone will ask me why*, and *I'll spoil it for the others*, and
+*I won't enjoy any of it*. Those are three different experiments with three different pieces of
+evidence. One field per worry had to guess which one the person meant, and a prediction that is
+only nearly yours **cannot be proved wrong by anything that happens** — whatever they write into
+"What actually happened" does not bear on the sentence they did not quite mean. So the loop
+runs, the ladder moves for the wrong reason or not at all, and the person concludes the app
+does not work rather than that the sentence was not theirs.
+
+**The lesson: where a field has to be true of one specific person, do not write one and hope.
+Write the common few and let them say which.** Three, plus their own words. It is not
+personalisation and it is not a recommendation — nothing is chosen for anybody, the three are
+fixed, in a fixed order, identical for everyone (rule 2). It is the difference between a form
+that asks and a form that assumes.
+
+The second half of the same fix: **the thing a person is braced for has to travel with the
+prediction it belongs to.** `expect` used to be a separate top-level field, which meant a second
+guess bolted onto the first, and the pair could be — and often was — about two different things.
+
+## Four screens gave four different answers to "which worry am I in?" (B20, 2026-09-03)
+
+The founder's words: "you don't get confused and worry you've filled out the wrong worry item."
+The pick list showed label + sentence, the test screen showed *Here's your test* and neither,
+the re-rate showed the sentence without the label, and the result showed the label without the
+sentence. Every screen was individually defensible and the sequence was not.
+
+**The lesson: continuity is a property of the sequence, not of any screen in it.** Nothing here
+was found by reading a screen; it was found by walking five of them in a row. The fix is one
+component used on all of them, so the next screen added to the loop cannot forget — and there is
+now a test that walks the whole run and asserts the label and the sentence on every step, which
+is the only kind of test that could have caught this.
+
+## The yellow was not a taste problem, it was arithmetic (B20, 2026-09-03)
+
+"The lines look like they're too tightly packed." An inline highlight with `box-decoration-break:
+clone` paints a band behind every wrapped line, and the band is the text plus its top and bottom
+padding. Two bands stay apart only while `line-height` is greater than
+`(font-size + padding-top + padding-bottom) / font-size` — here 1.44 at the biggest size in the
+clamp. It was 1.2, so every band overlapped the one below, and a marker pen turned into a slab.
+
+**The lesson: a highlighted inline span couples its padding to its line-height, and the two have
+to be changed together.** The test that pins it asserts both numbers rather than the look, and
+says why, because the line-height is exactly the sort of thing a tidy-up reduces.

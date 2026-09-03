@@ -49,6 +49,10 @@ const SCREENS = [
   ['own', 'Screen 3a — writing your own worry', 'Three screens, one box each.'],
   ['refusal', 'Screen 3a — when BETR says no',
     'What a person is told when their own test involves the habit, the body, or anyone’s safety.'],
+  ['belief', 'Screen 3b — "Which of these is it?"',
+    'B20. The screen between the list and the test, where a person says which prediction under ' +
+    'the worry is theirs. The three themselves are under THE WORRY LIST; these are the words ' +
+    'around them.'],
   ['plan', 'Screen 4 — the test', 'What you do today, and what you leave out.'],
   ['locked', 'Screen 5 — locked in', ''],
   ['happened', 'Screen 6 — what happened', ''],
@@ -208,11 +212,17 @@ w('<a id="the-worry-list"></a>');
 w();
 w('## The worry list');
 w();
-w('`web/content/worries.js`. This is the product. Six parts each, all required, in the order');
-w('a person meets them. The **id** never changes once anybody has used it — a stored result');
-w('points at it. **belief** is always "If I ___, then ___"; a worry that is not conditional is');
-w('not testable. No **test** and no **drop** may touch the habit itself; the build fails if one');
-w('does.');
+w('`web/content/worries.js`. This is the product. The **id** never changes once anybody has');
+w('used it — a stored result points at it. No **test** and no **drop** may touch the habit');
+w('itself; the build fails if one does.');
+w();
+w('**Read the three under each worry together.** B20 split the worry from the prediction, and');
+w('that is where most of the words now are. The **card sentence** is loose on purpose: it is');
+w('read on a list of four to six, to work out which worry this is. The **three** are read one');
+w('screen later, one at a time, to work out which one is yours — so each has to predict a');
+w('different thing, and each has to be something that could turn out to be wrong. Under each');
+w('one, **braced for** is the same prediction in the voice of somebody expecting it, and it is');
+w('what BETR writes into "What you expect" when they pick that one.');
 w();
 worries.forEach((f, i) => {
   w('### ' + (i + 1) + '. ' + f.label);
@@ -222,10 +232,17 @@ worries.forEach((f, i) => {
   w('| **id** | `' + f.id + '` |');
   w('| **lane** | ' + f.lane + ' |');
   w('| **label** — the button | ' + f.label + ' |');
-  w('| **belief** — the worry itself | ' + f.belief + ' |');
-  w('| **expect** — what you are braced for | ' + f.expect + ' |');
+  w('| **card sentence** — under the label on the list | ' + f.belief + ' |');
   w('| **test** — the one thing, today | ' + f.test + ' |');
   w('| **drop** — what you leave out | ' + f.drop + ' |');
+  w();
+  w('The three a person chooses between, in the order they are shown:');
+  w();
+  w('| | If I ___, then ___ | braced for |');
+  w('| --- | --- | --- |');
+  f.beliefs.forEach((b, j) => {
+    w('| ' + (j + 1) + ' | ' + b.belief + ' | ' + b.expect + ' |');
+  });
   w();
 });
 

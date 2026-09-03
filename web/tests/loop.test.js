@@ -30,7 +30,14 @@ test('a full loop, from the start screen to a result', () => {
   a.shows('Sure it’ll go badly?');
   a.tap('#go').shows('What’s going on?');
   a.tap('[data-door]', 0).shows('Which one?');
-  a.tap('[data-id]', 0).shows('Here’s your test').shows(firstBehind(0).test);
+  /*
+    B20. Tapping a worry opens the three predictions under it; tapping one of those starts
+    the test. What the plan screen has to carry is the worry's own label and the exact
+    sentence that was chosen, because that is what a person checks they are still inside.
+  */
+  a.tap('[data-id]', 0).shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
+  a.tap('[data-b]', 0).shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
+  a.shows(firstBehind(0).test).shows('I’ll do it today');
   a.shows('That’s the bit that makes it count');
   a.tap('#lock').shows('Go and do it.');
   a.tap('#nothanks').tap('#done').shows('What happened?');
@@ -51,7 +58,7 @@ test('a full loop, from the start screen to a result', () => {
 test('what happened keeps the line breaks a person typed, on the result and on the card', () => {
   const written = 'He said fair enough.\n\nThen he made me one as well.';
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', written).tap('#next').tap('[data-key]', 2);
 
   /* One paragraph per paragraph, and the class that lets a browser draw a line break. */
@@ -66,7 +73,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
   /* A single line break inside one paragraph is the stylesheet's job, and stays in the text. */
   const b = boot();
-  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'One line.\nAnd the next.').tap('#next').tap('[data-key]', 2);
   assert.ok(b.html().indexOf('One line.\nAnd the next.') !== -1,
     'a single line break inside a paragraph must survive into the markup');
@@ -78,7 +85,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
 test('the count is completed tests, and "didn’t get to it" costs nothing', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
   a.tap('#miss').shows('still here for tomorrow');
   a.hides('missed').hides('streak');
   a.tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 0);
@@ -94,6 +101,105 @@ test('the second door opens onto worries, never onto a test of its own', () => {
   a.shows('Something else');
 });
 
+/* ------------------------------------------------- B20: which of the three is yours */
+
+/*
+  The screen the task exists for. A worry is a situation; the thing an experiment tests is the
+  prediction underneath it, and there is more than one under every situation on the list. The
+  one a person taps is the one that has to travel — onto the plan, into the record, and back
+  out onto the result and the card. It used to be whichever single sentence the file happened
+  to carry, which is why test users said it sort of matched and not really.
+*/
+test('the prediction a person picks is the one that gets tested, not the first one', () => {
+  const f = firstBehind(0);
+  const a = boot();
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0);
+
+  /* all three are offered, with what you would be braced for under each */
+  for (const b of f.beliefs) a.shows(b.belief).shows(b.expect);
+
+  /* the second one, deliberately: the first would pass whether it was carried or not */
+  a.tap('[data-b]', 1).shows(f.beliefs[1].belief).shows(f.beliefs[1].expect);
+  a.hides(f.beliefs[0].belief).hides(f.beliefs[2].belief);
+  a.shows(f.test);
+
+  a.tap('#lock').tap('#nothanks').tap('#done');
+  a.type('#o', 'Nothing happened.').tap('#next').shows(f.beliefs[1].belief);
+  a.tap('[data-key]', 1).shows(f.beliefs[1].belief).shows(f.beliefs[1].expect);
+
+  /* and doing it again tomorrow keeps the sentence they chose, without asking twice */
+  a.tap('#again').shows(f.beliefs[1].belief).hides(f.beliefs[0].belief);
+  a.tap('#m-mine').shows(f.beliefs[1].belief);
+});
+
+/*
+  The founder's own complaint, and the reason this is a test rather than a look: the list said
+  one sentence, the test screen said another, and the result screen said a third, so a person
+  four screens in could not tell whether they were still in the worry they had picked. The
+  label and the exact sentence being tested are on every screen from the choice to the result.
+*/
+test('the worry and the sentence being tested are on every screen in between', () => {
+  const f = firstBehind(0);
+  const a = boot();
+  a.tap('#go').tap('[data-door]', 0);
+  a.shows(f.label).shows(f.belief);                 /* the list: the loose one */
+  a.tap('[data-id]', 0).shows(f.label);             /* choosing which prediction */
+  a.tap('[data-b]', 2);
+
+  const chosen = f.beliefs[2].belief;
+  a.shows(f.label).shows(chosen);                   /* the plan */
+  a.tap('#lock').shows(f.label).shows(chosen);      /* locked in */
+  a.tap('#nothanks').tap('#done').shows(f.label).shows(chosen);          /* what happened */
+  a.type('#o', 'She said fine.').tap('#next').shows(f.label).shows(chosen);  /* the re-rate */
+  a.tap('[data-key]', 1).shows(f.label).shows(chosen);                   /* the result */
+  a.tap('#m-mine').shows(f.label).shows(chosen);                         /* and the card */
+});
+
+/*
+  "I'll put it my own way" is the fourth option, not a fourth screen: it keeps the worry, the
+  test, the thing to be left out and the explanation behind "Why this one sticks", and swaps
+  the one sentence. It is a person's own belief, so it goes through the same guard one does.
+*/
+test('putting it your own way keeps the worry and replaces only the sentence', () => {
+  const f = firstBehind(0);
+  const a = boot();
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
+
+  a.type('#t', 'I am the sort of person who can’t sit still').tap('#next');
+  a.shows('verdict, not a prediction');
+  a.type('#t', 'If I sit with it, then I will be climbing the walls by ten past').tap('#next');
+
+  a.shows('I will be climbing the walls by ten past');   /* the expectation, off their belief */
+  a.shows(f.label).shows(f.test).shows(f.drop);          /* everything else is still the worry */
+  for (const b of f.beliefs) a.hides(b.belief);
+
+  a.tap('#lock').tap('#nothanks').tap('#done');
+  a.type('#o', 'It dropped off after four minutes.').tap('#next').tap('[data-key]', 2);
+  a.shows('If I sit with it, then I will be climbing the walls by ten past');
+  /* it is still that worry, so the explanation behind it is still offered */
+  a.shows('Why this one sticks');
+  a.tap('[data-why]').shows('Why “' + f.label + '” sticks');
+});
+
+/*
+  Founder, 2026-09-03: the yellow at the end of a report "looks weird, the lines look like
+  they're too tightly packed". The highlight is drawn round each line of the inline span with
+  6px of padding above and below, so two bands stay apart only while the line height is bigger
+  than the text plus both paddings — 1.44 at the largest size in the clamp. It was 1.2, so
+  every band overlapped the one below it. This pins the fix the same way the pre-wrap
+  assertion above pins the line breaks.
+*/
+test('the highlight on the result screen has room between its lines', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'app.css'), 'utf8');
+  const rule = css.match(/\.result \.real \{([^}]*)\}/);
+  assert.ok(rule, 'the highlighted paragraph has no rule of its own any more');
+  const lh = Number((rule[1].match(/line-height\s*:\s*([\d.]+)/) || [])[1]);
+  assert.ok(lh >= 1.5, 'line-height is ' + lh + ': the yellow bands will touch or overlap');
+
+  const pad = css.match(/\.result \.real \.wrote \{[^}]*padding\s*:\s*(\d+)px/);
+  assert.ok(pad && Number(pad[1]) <= 8, 'the padding grew without the line-height growing with it');
+});
+
 test('a person’s own entry is refused by both guards before it is accepted', () => {
   const a = boot();
   a.tap('#go').tap('#own').shows('What do you think will happen?');
@@ -103,7 +209,7 @@ test('a person’s own entry is refused by both guards before it is accepted', (
   a.type('#t', 'Go for a pint with them and ask then').tap('#next').shows('the worry underneath');
   a.type('#t', 'Ask for Friday off in one sentence').tap('#next').shows('What will you leave out?');
   a.type('#t', 'Don’t explain why.').tap('#next');
-  a.shows('Here’s your test').shows('Ask for Friday off');
+  a.shows('I’ll do it today').shows('Ask for Friday off');
   a.shows('My boss will think I am not committed');   /* the expectation, taken from the belief */
 });
 
@@ -142,7 +248,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   seen += a.html();
   /* and the two screens the ladder lives on, which is where a score would creep in */
   const b = boot();
-  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   seen += b.html();
   seen += b.tap('#m-mine').html();
@@ -155,7 +261,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
 
 test('export holds every result, and delete leaves nothing behind', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
@@ -183,7 +289,7 @@ test('it starts cleanly from nothing, from rubbish, and from a half-finished loo
 
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 1).tap('#lock');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock');
   a.hides('Not quite? Change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
   a.hides('Not quite? Change it');
@@ -193,7 +299,7 @@ test('a locked expectation cannot be edited after the test is done', () => {
 
 /* One whole loop, ending on the given re-rate. 0 still / 1 a bit / 2 a lot / 3 not at all / 4 more. */
 function loop(a, item, said, key) {
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', item).tap('#lock');
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   return a;
@@ -227,7 +333,7 @@ test('a bad day can go back up, and it is not a red day', () => {
 test('an earlier worry is one tap away, and picks up where its ladder left off', () => {
   const a = boot();
   loop(a, 0, 'He said fair enough.', 2);     /* worry one: 10 → 7 */
-  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('#lock').tap('#done');
+  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock').tap('#done');
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
   a.tap('#m-mine').shows('2 tests across 2 worries');
@@ -278,7 +384,7 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   sweep();                                             /* start */
   a.tap('#go'); sweep();                               /* what's going on */
   a.tap('[data-door]', 0); sweep();                    /* pick */
-  a.tap('[data-id]', 0); sweep();                      /* plan */
+  a.tap('[data-id]', 0).tap('[data-b]', 0); sweep();                      /* plan */
   a.tap('#lock'); sweep();                             /* locked, with the install card */
   a.tap('#nothanks').tap('#done'); sweep();            /* happened */
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();   /* sure */
@@ -326,7 +432,7 @@ test('why a worry sticks is offered after a result, on both screens, and never b
   /* Not on the doors, not on the pick list, and not while a test is waiting. */
   a.tap('#go').hides('Why this one sticks');
   a.tap('[data-door]', 0).hides('Why this one sticks');
-  a.tap('[data-id]', 0).hides('Why this one sticks');
+  a.tap('[data-id]', 0).tap('[data-b]', 0).hides('Why this one sticks');
   a.tap('#lock').hides('Why this one sticks');
 
   a.tap('#nothanks').tap('#done').type('#o', 'He said fair enough.').tap('#next');

@@ -52,7 +52,10 @@ never automatic (§6).
 
 ## 3. The interface, as decided today
 
-Six screens. Four taps and one sentence for a full loop.
+Six screens. Four taps and one sentence for a full loop. **Six taps as built**, after B19 put
+a door in front of the list and B20 put the choice of prediction in front of the test; both
+were paid knowingly and both are one line to take back (`docs/tasks/B19-doors-first.md`,
+`docs/tasks/B20-three-worries-under-one.md`).
 
 | # | Screen | What's on it | Taps |
 | --- | --- | --- | --- |
@@ -114,11 +117,21 @@ Six screens. Four taps and one sentence for a full loop.
 
 ## 5. The stock list
 
-This is the product. The interface is four taps; the list is what those taps land on.
+This is the product. The interface is a handful of taps; the list is what those taps land on.
 
 ### 5.1 The twelve
 
-**Superseded twice on 2026-09-03: by B1, and then by B19.** There are now **twenty-one**
+**Superseded three times on 2026-09-03: by B1, then B19, then B20.** B20 is the one that
+changed the *shape* of an item rather than its words. A worry is now a **situation** carrying
+**three predictions**, and the person says which is theirs on a screen of its own before the
+test — or writes their own in its place. The single `belief`/`expect` pair every item used to
+have was a guess at which consequence that person feared, and a prediction that is only nearly
+yours cannot be disconfirmed by anything that happens, so the loop ran and moved nothing.
+`docs/tasks/B20-three-worries-under-one.md` has the reasoning; the sixty-three sentences are in
+`web/content/worries.js` and printed per worry in `docs/COPY.md`. What is left on the card under
+each label is deliberately the loosest of the four, because its job is recognition on a list.
+
+There are **twenty-one**
 worries and they are reached **through a door**, not from a flat list — `docs/tasks/B19-doors-first.md`
 has the reasoning and the whole list. `cut` (*Saying I'm cutting back*) was deleted; nine were
 added; ten labels were rewritten so that a label stands up on its own. **§5.3a's recommendation

@@ -1,11 +1,15 @@
 /*
   Betr's stock list. This file is the product; everything else is plumbing.
 
-  Six parts per item, all required (scope §5.2):
+  Seven parts per item, all required (scope §5.2):
     id      stable, never reused, never renamed — stored results point at it
     label   the button text. The situation, in plain words. Never a diagnosis
-    belief  "If I ___, then ___". How people will react, or how it will feel
-    expect  one sentence, the thing the person is braced for. Shown pre-written, editable
+    belief  the general shape of the worry, "If I ___, then ___". This one is the CARD:
+            it is drawn under the label wherever a person picks a worry, and it is never
+            itself tested. It is deliberately the loosest of the four
+    beliefs three of them, and they are the ones a person actually tests. Each is one
+            `belief` — a specific "If I ___, then ___" — and one `expect`, the thing they
+            are braced for, shown pre-written on the test screen and editable there
     test    one line, doable today, cheap, legal, reversible, in the person's control
     drop    the safety behaviour to leave out. Without it the item is not an experiment
     lane    social | assertiveness | perfectionism | urge-timing | rest | sleep
@@ -14,12 +18,30 @@
   restriction, body sensation, checking ritual, or anyone's safety. web/tests/content.test.js
   enforces this against the same word list the custom-entry guard uses.
 
-  B19, 2026-09-03. Twenty-one items, four to six behind each door. THE LABEL IS THE PART
-  THAT CHANGED. Two people were watched using the twelve, and both stalled on the pick list:
-  what they were holding in their head was a problem, and what the screen offered was twelve
-  two-word summaries of sentences the app would not show them for another four screens. The
-  `belief` is now drawn under the label on the button, and every label was rewritten against
-  one rule (founder, 2026-09-03):
+  B20, 2026-09-03. WHY THERE ARE NOW THREE OF THEM. Test users read the single "If I ___,
+  then ___" each worry used to have and said it "sort of matches what my worry is, but not
+  really". They were right, and the reason is structural: one sentence per worry has to guess
+  which consequence the person is actually afraid of, and that guess was wrong about as often
+  as it was right. A worry is a situation; the *prediction* underneath it varies from person
+  to person, and the prediction is the thing a behavioural experiment tests.
+
+  So the situation and the prediction are now two different fields. `label` and `belief` name
+  the situation loosely enough to be recognisable on a list. The three in `beliefs` are the
+  common predictions underneath it, and the person picks the one that is theirs — or writes
+  their own on the same screen, which keeps the worry, the test and the drop and replaces only
+  the sentence being tested.
+
+  How the three are written, and it is the whole job:
+    - each one predicts a DIFFERENT consequence, not the same one reworded. If two of them
+      could be answered by the same evidence, one of them is wasted
+    - every one of them could turn out to be wrong. "If I do this, then I'll find it hard" is
+      not testable and does not belong here
+    - the first is the most common one, because it is read first and most often taken
+    - `expect` is the same prediction in the voice of somebody bracing for it, and it is
+      small enough to be true: someone going quiet, a face, being filed away. Never a
+      catastrophe, and never a verdict on the person
+
+  B19, 2026-09-03, and it still holds: THE LABEL IS THE PART THAT HAS TO STAND ALONE.
 
       Somebody reading only the label knows what act is being proposed.
 
@@ -30,7 +52,7 @@
   on the button, which quietly narrowed the worry to people already willing to speak up. The
   worry is telling someone at all. "Calmly" belongs in `test`, and that is where it is.
 
-  ORDER, AND WHY IT IS NOW PER DOOR: the first tap has to be able to succeed on the day it is
+  ORDER, AND WHY IT IS PER DOOR: the first tap has to be able to succeed on the day it is
   taken, or a person's first loop ends in "Didn't get to it" and they learn nothing on the one
   day they were certain to open this. Most items wait on the world — somebody has to ask you
   for something, a mistake has to exist, an evening has to be happening. So the first item
@@ -46,15 +68,6 @@
   Psychology Tools or Beck Institute material; all of them restrict reuse in a product. The
   five-step method is not protected expression; the words are.
 
-  How these are written, and why (research §8, the language bank):
-    - the audience is the person nobody knows this about — "the functional one". So an
-      `expect` is what they are actually braced for, in their own voice, and small enough
-      to be true: someone going quiet, a face, being filed away. Never a catastrophe.
-    - every `test` ends in something a person can observe and report in one sentence,
-      because that sentence is the whole record.
-    - every `drop` names the safety behaviour by what they would actually do, not by a
-      clinical label. It renders as: "<drop> That's the bit that makes it count."
-
   Why this is a .js file and not worries.json: the founder opens web/index.html straight from
   the filesystem, and browsers refuse to fetch a .json (or load an ES module) from a file://
   page. A classic script tag is the only thing that works both there and on the dev host.
@@ -67,8 +80,21 @@ var BETR_WORRIES = [
   {
     id: 'sit',
     label: 'Sitting still when I feel restless',
-    belief: 'If I feel restless or bored, then I can’t just sit there with it.',
-    expect: 'It’ll build and build until I have to do something about it.',
+    belief: 'If I feel restless, then I can’t just sit with it.',
+    beliefs: [
+      {
+        belief: 'If I sit with the restlessness, then it’ll build until I have to do something about it.',
+        expect: 'By about the fifth minute I’ll be up and doing something else.'
+      },
+      {
+        belief: 'If I don’t do something with the feeling, then I’ll be no use for the rest of the day.',
+        expect: 'I’ll write the day off and get nothing done.'
+      },
+      {
+        belief: 'If I stop and do nothing, then everything I’ve been not thinking about will land at once.',
+        expect: 'The whole list will arrive at once, and stopping will have cost me.'
+      }
+    ],
     test: 'Set a ten-minute timer and do nothing at all. Notice when it peaks, and whether it drops.',
     drop: 'Don’t reach for your phone, and don’t get up to do a task.',
     lane: 'urge-timing'
@@ -76,8 +102,21 @@ var BETR_WORRIES = [
   {
     id: 'phone',
     label: 'Going an evening without my phone',
-    belief: 'If I don’t check tonight, then I’ll miss something that matters.',
-    expect: 'Something urgent will come in and I’ll have let someone down.',
+    belief: 'If I’m not reachable for an evening, then something will go wrong.',
+    beliefs: [
+      {
+        belief: 'If I don’t check tonight, then I’ll miss something that actually needed me.',
+        expect: 'Something urgent will come in and I’ll have let someone down.'
+      },
+      {
+        belief: 'If someone can’t get hold of me, then they’ll think I’m ignoring them.',
+        expect: 'There’ll be a short reply in the morning and a bit of an atmosphere.'
+      },
+      {
+        belief: 'If I put it away, then I’ll be twitchy all evening and get nothing out of it anyway.',
+        expect: 'I’ll spend two hours thinking about the phone instead of using them.'
+      }
+    ],
     test: 'Put it in a drawer from eight o’clock. In the morning, write down what you actually missed.',
     drop: 'No checking it “just once” before bed.',
     lane: 'urge-timing'
@@ -90,8 +129,21 @@ var BETR_WORRIES = [
     */
     id: 'feed',
     label: 'A day without checking social media',
-    belief: 'If I stop keeping up with everyone, then I’ll fall out of things without noticing.',
-    expect: 'I’ll be the only one who hasn’t heard something, and it’ll be obvious.',
+    belief: 'If I stop keeping up with everyone, then I’ll fall out of things.',
+    beliefs: [
+      {
+        belief: 'If I don’t look today, then I’ll be the only one who hasn’t heard something.',
+        expect: 'Someone will mention it and it’ll be obvious I’m out of the loop.'
+      },
+      {
+        belief: 'If I go quiet for a day, then people will think I’ve gone off them.',
+        expect: 'Somebody will notice I’ve disappeared and read something into it.'
+      },
+      {
+        belief: 'If I stop looking, then I’ll have nothing to talk about.',
+        expect: 'I’ll be sitting there with nothing to say.'
+      }
+    ],
     test: 'Go one day without opening the apps you scroll. At the end, write down what you actually missed.',
     drop: 'No opening one “just to see if anyone’s messaged me”.',
     lane: 'urge-timing'
@@ -99,8 +151,21 @@ var BETR_WORRIES = [
   {
     id: 'reply',
     label: 'Not answering a message straight away',
-    belief: 'If I leave a message a few hours, then they’ll think I don’t care.',
-    expect: 'They’ll go a bit cooler with me, and I’ll have to make it up to them.',
+    belief: 'If I don’t answer a message quickly, then people take it badly.',
+    beliefs: [
+      {
+        belief: 'If I leave a message a few hours, then they’ll think I don’t care.',
+        expect: 'They’ll go a bit cooler with me, and I’ll have to make it up to them.'
+      },
+      {
+        belief: 'If I don’t answer straight away, then they’ll assume I’m annoyed with them.',
+        expect: 'They’ll ask if everything’s all right, in that careful way.'
+      },
+      {
+        belief: 'If I take my time replying, then they’ll stop bothering to message me.',
+        expect: 'They’ll go to somebody else next time, and I’ll hear about it after.'
+      }
+    ],
     test: 'Pick one message today and leave it a few hours before you answer. Notice whether they chase you.',
     drop: 'Don’t open with “sorry, only just seen this”, and don’t explain the delay.',
     lane: 'social'
@@ -108,8 +173,21 @@ var BETR_WORRIES = [
   {
     id: 'check',
     label: 'Sending something without checking it again',
-    belief: 'If I send something without going over it again, then there’ll be a mistake in it and I’ll look sloppy.',
-    expect: 'Someone will spot something, and they’ll think I rushed it.',
+    belief: 'If I send something without going over it again, then it won’t be right.',
+    beliefs: [
+      {
+        belief: 'If I send it without a second read, then there’ll be a mistake in it and I’ll look sloppy.',
+        expect: 'Someone will spot something, and they’ll think I rushed it.'
+      },
+      {
+        belief: 'If I don’t read it twice, then it’ll come out blunter than I meant it.',
+        expect: 'They’ll take it the wrong way and I’ll spend the day fixing it.'
+      },
+      {
+        belief: 'If I send it as it is, then I’ll be thinking about it all afternoon.',
+        expect: 'I’ll keep going back to it and get nothing else done.'
+      }
+    ],
     test: 'Write one email or message today, read it through once, and send it.',
     drop: 'No second read-through, and don’t go back to edit it after it’s gone.',
     lane: 'perfectionism'
@@ -121,8 +199,21 @@ var BETR_WORRIES = [
     */
     id: 'enough',
     label: 'Handing something over before it’s perfect',
-    belief: 'If I hand something in that’s only good enough, then they’ll think I don’t care about it.',
-    expect: 'They’ll spot the rough edges and quietly decide I’ve dropped off.',
+    belief: 'If I hand over something that’s only good enough, then it won’t be good enough.',
+    beliefs: [
+      {
+        belief: 'If I hand in something that’s only good enough, then they’ll think I don’t care about it.',
+        expect: 'They’ll spot the rough edges and quietly decide I’ve dropped off.'
+      },
+      {
+        belief: 'If I stop before it’s right, then it’ll come straight back to me with a list.',
+        expect: 'I’ll end up doing it twice, and that’s worse than doing it properly.'
+      },
+      {
+        belief: 'If I let this one go at good enough, then that becomes what people expect from me.',
+        expect: 'The standard slips, and I don’t get it back.'
+      }
+    ],
     test: 'Finish one thing today at good enough and hand it over. Write down the time you stopped.',
     drop: 'No last look through, and no message saying what you’d have done with more time.',
     lane: 'perfectionism'
@@ -130,8 +221,21 @@ var BETR_WORRIES = [
   {
     id: 'rest',
     label: 'Resting when there’s stuff to do',
-    belief: 'If I rest while there’s still stuff to do, then I’m being lazy.',
-    expect: 'I’ll feel guilty the whole time and wish I’d just got on with it.',
+    belief: 'If I rest before everything’s done, then I’m being lazy.',
+    beliefs: [
+      {
+        belief: 'If I rest while there’s still stuff to do, then I’ll feel guilty the whole time.',
+        expect: 'I’ll sit there thinking about the list and get nothing out of it.'
+      },
+      {
+        belief: 'If I stop now, then I won’t start again today.',
+        expect: 'The afternoon will go, and tomorrow starts further behind.'
+      },
+      {
+        belief: 'If anyone sees me sitting down, then they’ll think I’m not pulling my weight.',
+        expect: 'Somebody will make a comment about it, and it’ll stick.'
+      }
+    ],
     test: 'Plan two hours of rest today and actually take them. Notice how you feel after.',
     drop: 'No “I’ll just quickly do this one thing” first.',
     lane: 'rest'
@@ -145,8 +249,21 @@ var BETR_WORRIES = [
     */
     id: 'praise',
     label: 'Paying someone a compliment',
-    belief: 'If I say something good about someone and nothing comes back, then it’ll look like I was fishing for one.',
-    expect: 'There’ll be an odd beat, and I’ll wish I’d kept it to myself.',
+    belief: 'If I say something good about someone, then it’ll land wrong.',
+    beliefs: [
+      {
+        belief: 'If I say something good and nothing comes back, then it’ll look like I was fishing for one.',
+        expect: 'There’ll be an odd beat, and I’ll wish I’d kept it to myself.'
+      },
+      {
+        belief: 'If I compliment someone out of nowhere, then they’ll think I want something.',
+        expect: 'They’ll be polite about it and wait for the ask.'
+      },
+      {
+        belief: 'If I say it out loud, then it’ll come out wrong and make things awkward.',
+        expect: 'It’ll sound odd, and neither of us will know what to say next.'
+      }
+    ],
     test: 'Say one specific good thing about somebody today, to their face.',
     drop: 'Don’t follow it with one about yourself, and don’t wait around for one back.',
     lane: 'social'
@@ -154,20 +271,46 @@ var BETR_WORRIES = [
   {
     id: 'care',
     label: 'Telling someone they matter to me',
-    belief: 'If I tell someone what they mean to me, then it’ll be awkward and they won’t say it back.',
-    expect: 'They’ll laugh it off, and I’ll wish I hadn’t said it.',
+    belief: 'If I tell someone what they mean to me, then it’ll be awkward.',
+    beliefs: [
+      {
+        belief: 'If I tell someone what they mean to me, then they won’t say it back.',
+        expect: 'They’ll laugh it off, and I’ll wish I hadn’t said it.'
+      },
+      {
+        belief: 'If I say something that serious, then it’ll change how we are with each other.',
+        expect: 'It’ll be a bit stiff between us afterwards.'
+      },
+      {
+        belief: 'If I tell them, then they’ll wonder what’s brought this on.',
+        expect: 'They’ll ask if I’m all right, and I’ll have to explain myself.'
+      }
+    ],
     test: 'Tell one person, today, one specific thing you’re glad about them.',
     drop: 'Don’t turn it into a joke, and don’t move straight on to something else.',
     lane: 'social'
   },
 
-  /* --------------------------------------- waits on somebody else, or on the day itself */
+  /* --------------------------------- waits on somebody else, or on the day itself */
 
   {
     id: 'no',
     label: 'Saying no without giving a reason',
-    belief: 'If I say no and don’t explain myself, then people will think I’m selfish.',
-    expect: 'There’ll be a pause, and they’ll be a bit off with me afterwards.',
+    belief: 'If I say no and don’t explain, then people will think badly of me.',
+    beliefs: [
+      {
+        belief: 'If I say no and don’t explain myself, then people will think I’m selfish.',
+        expect: 'There’ll be a pause, and they’ll be a bit off with me afterwards.'
+      },
+      {
+        belief: 'If I turn something down, then they’ll stop asking me.',
+        expect: 'I’ll be left out of the next one, and nobody will say why.'
+      },
+      {
+        belief: 'If I give no reason, then they’ll take it as rude.',
+        expect: 'They’ll take it personally, and it’ll sit there between us.'
+      }
+    ],
     test: 'Say “No, I can’t this time” to one small request today.',
     drop: 'No reason, no apology, no softening it.',
     lane: 'assertiveness'
@@ -175,8 +318,21 @@ var BETR_WORRIES = [
   {
     id: 'help',
     label: 'Asking someone for help',
-    belief: 'If I ask someone for help, then I become a burden to them.',
-    expect: 'They’ll do it, and quietly file me under people who can’t cope.',
+    belief: 'If I ask someone for help, then it costs me something.',
+    beliefs: [
+      {
+        belief: 'If I ask someone for help, then I become a burden to them.',
+        expect: 'They’ll do it, and quietly file me under people who can’t cope.'
+      },
+      {
+        belief: 'If I admit I can’t do it on my own, then I’ll be trusted with less.',
+        expect: 'Next time it’ll go to somebody else, without a word to me.'
+      },
+      {
+        belief: 'If I ask, then they’ll say yes and resent it.',
+        expect: 'They’ll help, and be a bit short with me for a while after.'
+      }
+    ],
     test: 'Ask one person for one small, specific favour today.',
     drop: 'No “sorry to bother you”, and no offering something back.',
     lane: 'assertiveness'
@@ -191,8 +347,21 @@ var BETR_WORRIES = [
     */
     id: 'low',
     label: 'Telling someone I’ve been feeling low',
-    belief: 'If I tell someone I’ve been feeling low, then they won’t know what to do with it and they’ll keep their distance.',
-    expect: 'They’ll say something kind, change the subject, and be careful around me after.',
+    belief: 'If I say I’ve been feeling low, then it changes how people treat me.',
+    beliefs: [
+      {
+        belief: 'If I tell someone I’ve been feeling low, then they won’t know what to do with it.',
+        expect: 'They’ll say something kind, change the subject, and be careful around me after.'
+      },
+      {
+        belief: 'If I say it out loud, then they’ll start worrying about me.',
+        expect: 'They’ll check up on me, and I’ll wish I’d never said it.'
+      },
+      {
+        belief: 'If they know, then it’s the thing they think of every time they see me.',
+        expect: 'I’ll be the one who isn’t doing well, and that’s what I’ll stay.'
+      }
+    ],
     test: 'Tell one person you trust, today, in one sentence, that you’ve been feeling low lately.',
     drop: 'Don’t add that it’s nothing really, and don’t ask whether that was too much.',
     lane: 'social'
@@ -200,8 +369,21 @@ var BETR_WORRIES = [
   {
     id: 'strug',
     label: 'Telling someone I’m struggling',
-    belief: 'If I let someone see I’m struggling, then they’ll think less of me.',
-    expect: 'They’ll go quiet, change the subject, and keep a bit of distance after.',
+    belief: 'If I let someone see I’m struggling, then it costs me something with them.',
+    beliefs: [
+      {
+        belief: 'If I let someone see I’m struggling, then they’ll think less of me.',
+        expect: 'They’ll go quiet, change the subject, and keep a bit of distance after.'
+      },
+      {
+        belief: 'If I say I’m finding this hard, then they’ll wonder what else I can’t manage.',
+        expect: 'It’ll come up again the next time something needs doing.'
+      },
+      {
+        belief: 'If I admit it, then I’ll be the one everybody has to work around.',
+        expect: 'People will start being careful with me, and I’ll hate it.'
+      }
+    ],
     test: 'Today, tell one person you trust one small, true thing you’re finding hard.',
     drop: 'Don’t finish it with “but I’m fine”.',
     lane: 'social'
@@ -209,8 +391,21 @@ var BETR_WORRIES = [
   {
     id: 'mist',
     label: 'Owning up to a mistake before anyone finds it',
-    belief: 'If I admit I got something wrong, then it’ll be held against me later.',
-    expect: 'They’ll remember this one, and trust me with less next time.',
+    belief: 'If I own up to a mistake, then it counts against me.',
+    beliefs: [
+      {
+        belief: 'If I admit I got something wrong, then it’ll be held against me later.',
+        expect: 'They’ll remember this one, and trust me with less next time.'
+      },
+      {
+        belief: 'If I tell them before they find it, then they’ll start looking for others.',
+        expect: 'Everything I do goes under the microscope after this.'
+      },
+      {
+        belief: 'If I own up, then they’ll think worse of me than if I’d quietly fixed it.',
+        expect: 'They’ll be fine to my face, and it’ll go on my record anyway.'
+      }
+    ],
     test: 'Tell someone about one small mistake of yours today, before they find it.',
     drop: 'Don’t bury it in excuses, and don’t wait until you’ve already fixed it.',
     lane: 'perfectionism'
@@ -218,8 +413,21 @@ var BETR_WORRIES = [
   {
     id: 'angry',
     label: 'Telling someone they’ve annoyed me',
-    belief: 'If I tell someone they’ve annoyed me, then it’ll turn into an argument.',
-    expect: 'They’ll get defensive, and it’ll turn into a much bigger thing.',
+    belief: 'If I say that something’s annoyed me, then it’ll go badly.',
+    beliefs: [
+      {
+        belief: 'If I tell someone they’ve annoyed me, then it’ll turn into an argument.',
+        expect: 'They’ll get defensive, and it’ll turn into a much bigger thing.'
+      },
+      {
+        belief: 'If I bring it up, then they’ll say I’m making something out of nothing.',
+        expect: 'I’ll come out of it feeling like the unreasonable one.'
+      },
+      {
+        belief: 'If I say it, then things will be off between us for days.',
+        expect: 'It’ll be polite and cold, and I’ll be the one who has to fix it.'
+      }
+    ],
     test: 'Say one thing that annoyed you, in one sentence, calmly. Then stop talking.',
     drop: 'Don’t raise your voice, and don’t bring up a second thing.',
     lane: 'assertiveness'
@@ -231,8 +439,21 @@ var BETR_WORRIES = [
     */
     id: 'right',
     label: 'Letting someone else be right',
-    belief: 'If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about.',
-    expect: 'They’ll take it as a win, and I’ll go down in their estimation.',
+    belief: 'If I let someone else be right, then I lose something.',
+    beliefs: [
+      {
+        belief: 'If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about.',
+        expect: 'They’ll take it as a win, and I’ll go down in their estimation.'
+      },
+      {
+        belief: 'If I give ground once, then they’ll talk over me from then on.',
+        expect: 'Next time they won’t even wait for my answer.'
+      },
+      {
+        belief: 'If I say they’re right, then nobody will ask what I think again.',
+        expect: 'The conversation will move on, and I’ll stay out of it.'
+      }
+    ],
     test: 'Once today, say “you’re right, I hadn’t thought of that” — and then stop.',
     drop: 'No “but”, and don’t add a point of your own to level it back up.',
     lane: 'social'
@@ -241,8 +462,21 @@ var BETR_WORRIES = [
     /* B19. The founder's "not listening". */
     id: 'hear',
     label: 'Letting someone finish without interrupting',
-    belief: 'If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying.',
-    expect: 'The conversation will move on without me and I’ll have missed my go.',
+    belief: 'If I don’t get in quickly, then I lose my place in the conversation.',
+    beliefs: [
+      {
+        belief: 'If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying.',
+        expect: 'The conversation will move on without me and I’ll have missed my go.'
+      },
+      {
+        belief: 'If I wait for them to finish, then I’ll forget what I was going to say.',
+        expect: 'It’ll go out of my head and I’ll sit there with nothing.'
+      },
+      {
+        belief: 'If I let them run on, then they’ll take the whole conversation.',
+        expect: 'I’ll come out of it having said nothing at all.'
+      }
+    ],
     test: 'In one conversation today, let them finish, then ask one question before you say your bit.',
     drop: 'Don’t plan your answer while they’re still talking, and don’t finish their sentence.',
     lane: 'social'
@@ -251,8 +485,21 @@ var BETR_WORRIES = [
     /* B19. The founder's "insulting or making fun of people". */
     id: 'joke',
     label: 'Getting through a conversation without a joke',
-    belief: 'If I don’t have something funny ready, then I’ll be dull and people will drift off.',
-    expect: 'The conversation will go flat, and they’ll find someone else to talk to.',
+    belief: 'If I’m not the funny one, then people won’t want to talk to me.',
+    beliefs: [
+      {
+        belief: 'If I haven’t got something funny ready, then I’ll be dull and people will drift off.',
+        expect: 'The conversation will go flat, and they’ll find someone else to talk to.'
+      },
+      {
+        belief: 'If I say the plain thing, then it’ll get too serious and they’ll be uncomfortable.',
+        expect: 'There’ll be a silence, and I’ll be the one who made it.'
+      },
+      {
+        belief: 'If I’m not the one keeping it light, then nobody will bother.',
+        expect: 'It’ll be hard work, and they’ll leave earlier than they would have.'
+      }
+    ],
     test: 'In one conversation today, say the plain thing where you’d normally reach for the joke.',
     drop: 'No laughing it off when it gets serious, and no making anyone else the punchline.',
     lane: 'social'
@@ -261,8 +508,21 @@ var BETR_WORRIES = [
     /* B19. Repair, which the twelve had no item for. */
     id: 'sorry',
     label: 'Apologising without explaining myself',
-    belief: 'If I properly apologise for how I acted, then they’ll hold it over me from now on.',
-    expect: 'They’ll accept it, and then bring it up the next time we disagree.',
+    belief: 'If I properly apologise, then it’ll be used against me.',
+    beliefs: [
+      {
+        belief: 'If I properly apologise for how I acted, then they’ll hold it over me from now on.',
+        expect: 'They’ll accept it, and then bring it up the next time we disagree.'
+      },
+      {
+        belief: 'If I say sorry with no explanation, then they’ll think it was worse than it was.',
+        expect: 'They’ll decide something’s wrong with me, on the strength of one bad day.'
+      },
+      {
+        belief: 'If I apologise first, then I’ve taken the whole thing on myself.',
+        expect: 'Their part in it never gets mentioned again.'
+      }
+    ],
     test: 'Say sorry to one person today, for one specific thing you did. One sentence.',
     drop: 'Don’t explain what kind of day you were having, and don’t ask whether you’re all right now.',
     lane: 'social'
@@ -275,8 +535,21 @@ var BETR_WORRIES = [
     */
     id: 'drink',
     label: 'Turning up and not joining in',
-    belief: 'If I turn up and don’t join in, then everyone will notice and ask me why.',
-    expect: 'Someone will say something, and then the whole table will be looking at me.',
+    belief: 'If I turn up and don’t join in, then it won’t go unnoticed.',
+    beliefs: [
+      {
+        belief: 'If I turn up and don’t join in, then everyone will notice and ask me why.',
+        expect: 'Someone will say something, and then the whole table will be looking at me.'
+      },
+      {
+        belief: 'If I’m the only one sitting it out, then I’ll spoil it for everybody else.',
+        expect: 'It’ll go a bit flat, and they’ll wish I hadn’t come.'
+      },
+      {
+        belief: 'If I go and sit it out, then I won’t enjoy any of it.',
+        expect: 'I’ll be counting the minutes and wishing I’d stayed at home.'
+      }
+    ],
     test: 'Turn up, order something soft, and count how many people actually say anything.',
     drop: 'Don’t arrive with a reason ready, and don’t hold a glass as cover.',
     lane: 'social'
@@ -285,8 +558,21 @@ var BETR_WORRIES = [
     /* B19. The other half of an evening out, and the cheaper one to try. */
     id: 'early',
     label: 'Leaving before everyone else does',
-    belief: 'If I leave while it’s still going, then they’ll think I’m boring and stop asking me.',
-    expect: 'Someone will try to talk me into staying, and I’ll feel like I’ve let them down.',
+    belief: 'If I leave early, then it costs me something with them.',
+    beliefs: [
+      {
+        belief: 'If I leave while it’s still going, then they’ll think I’m boring and stop asking me.',
+        expect: 'Someone will try to talk me into staying, and I’ll feel like I’ve let them down.'
+      },
+      {
+        belief: 'If I go first, then they’ll talk about me once I’ve gone.',
+        expect: 'There’ll be a comment about it, and I’ll hear it repeated later.'
+      },
+      {
+        belief: 'If I leave before the end, then I’ll have missed the part everyone remembers.',
+        expect: 'They’ll be laughing about something next week and I won’t have been there.'
+      }
+    ],
     test: 'Decide before you go what time you’re leaving. At that time, say one sentence and go.',
     drop: 'Don’t apologise for going, and don’t promise to stay longer next time.',
     lane: 'social'

@@ -1,9 +1,11 @@
 /*
   Betr v1 — the whole app.
 
-  Seven screens for the loop (start, doors, pick, test, locked, happened, sure, result), plus the
-  second door, the three screens for a person's own entry, "your worries", and Help.
-  Four taps and one sentence gets you all the way round.
+  Nine screens for the loop (start, doors, pick, which-of-these, test, locked, happened, sure,
+  result), plus the two screens for putting a worry your own way, the three for a person's own
+  entry from scratch, "your worries", "why this one sticks", the country list and Help.
+  Six taps and one sentence gets you all the way round — it was four before B19 put a door in
+  front of the list and B20 put the choice of prediction in front of the test.
 
   Under all of them, on every screen, three plain words: Your worries · New worry · Help.
   That row is not a tab bar and must not grow into one (B8, CLAUDE.md rule 10 as amended
@@ -123,6 +125,13 @@
   */
   var whyId = null;
   var whyBack = 'mine';
+  /*
+    B20. The worry a person has tapped but not yet started: they are choosing which of its
+    three "If I ___, then ___" is theirs, or writing their own. Not stored, for the same
+    reason whyId is not — a reload here drops back to the doors rather than adding a field
+    to a person's saved state for a screen they are two taps from anyway.
+  */
+  var pending = null;
   var toSay = null;        /* what the next paint() should read out. Cleared as it is used */
 
   /* localStorage itself can throw on access in a locked-down browser, not just on write. */
@@ -201,6 +210,28 @@
     if (top && top.focus) { try { top.focus(); } catch (e) { /* older browser */ } }
     announce(toSay || '');
     toSay = null;
+  }
+
+  /*
+    ------------------------------------------------------------------ the worry, everywhere
+
+    B20, 2026-09-03, and it is half of what that task is for. The worry a person is working
+    on now says the same two things, in the same words, in the same place, on every screen
+    from choosing it to the result: the label they tapped, and the exact sentence they are
+    testing. Before this, the pick list said one thing, the test screen said another and the
+    result screen said a third, and a person three screens in could not tell whether they
+    were still in the worry they had chosen.
+
+    `heading` is true where the label is the only title the screen has — the test screen and
+    the result — so it is the h2 that focus lands on and a screen reader reads. Everywhere
+    else the screen has its own heading and this is a quiet strip above it.
+  */
+  function worryHead(label, belief, heading) {
+    return '<div class="worry' + (heading ? '' : ' quiet') + '">' +
+      (heading ? head('h2', label, 'worry-label')
+               : '<p class="worry-label">' + esc(label) + '</p>') +
+      (belief ? '<p class="worry-belief wrote">\u201C' + esc(belief) + '\u201D</p>' : '') +
+    '</div>';
   }
 
   /* The heading a screen is announced by, and the thing focus lands on. */
@@ -438,12 +469,18 @@
     waiting on Your worries, and becoming a result (B9). B8 made several waiting at once
     possible, and two devices' waiting lists cannot be put together without one.
   */
-  function startFrom(f) {
+  /*
+    `b` is the belief the person chose on the screen after the list — one of the worry's
+    three, or the one they wrote themselves. It carries the expectation with it, because the
+    two are the same prediction said twice and a mismatched pair is how the old single
+    `expect` came to be wrong for so many people (B20).
+  */
+  function startFrom(f, b) {
     S.cur = {
       rid: storeLib.rid(),
-      source: 'stock', id: f.id, label: f.label, belief: f.belief,
-      x: f.expect, test: f.test, drop: f.drop,
-      from: 'pick', editing: false, locked: null, missed: false
+      source: 'stock', id: f.id, label: f.label, belief: b.belief,
+      x: b.expect, test: f.test, drop: f.drop,
+      from: 'belief', editing: false, locked: null, missed: false
     };
   }
 
@@ -537,6 +574,7 @@
   function render() {
     var map = {
       start: start, doors: doors, pick: pick,
+      belief: beliefScreen, 'belief-own': beliefOwn,
       'own-belief': ownBelief, 'own-test': ownTest, 'own-drop': ownDrop,
       plan: plan, locked: locked, happened: happened, sure: sure,
       result: result, mine: mine, help: help, where: whereScreen, why: whyScreen,
@@ -546,6 +584,8 @@
     if (IN_LOOP.indexOf(S.stage) !== -1 && !S.cur) S.stage = 'start';
     /* Same for a reload on "Why this one sticks", which knows its worry only in memory. */
     if (S.stage === 'why' && !whyFor(whyId)) S.stage = 'mine';
+    /* And for the two screens between the list and a test, which know theirs the same way. */
+    if ((S.stage === 'belief' || S.stage === 'belief-own') && !pending) S.stage = 'doors';
     (map[S.stage] || start)();
     wireCrisis();
     wireMenu();
@@ -655,11 +695,90 @@
       of the six has "Something else" on the doors screen itself.
     */
     wireBack('doors');
+    /*
+      B20. Tapping a worry no longer starts a test. It opens the one screen between the list
+      and the plan, where the person says which prediction underneath it is actually theirs.
+    */
     qa('[data-id]').forEach(function (b) {
-      b.onclick = function () { startFrom(content.byId(WORRIES, b.getAttribute('data-id'))); go('plan'); };
+      b.onclick = function () { pending = content.byId(WORRIES, b.getAttribute('data-id')); go('belief'); };
     });
     /* The box starts with the opening of a conditional already in it, in their language. */
     on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
+  }
+
+  /* ---------------------------------------------- which of these is it? (B20) */
+
+  /*
+    The screen the whole of B20 exists for.
+
+    A worry is a situation. The thing a behavioural experiment actually tests is the
+    prediction underneath it — and there is more than one prediction under every situation on
+    the list. One sentence per worry had to guess which, and test users read the guess and
+    said it "sort of matches what my worry is, but not really". A prediction that is only
+    nearly yours cannot be disconfirmed by anything that happens, so the loop runs and moves
+    nothing.
+
+    So the three are the common ones and the person says which is theirs, in one tap, with
+    what they are braced for written under each so the choice is between two things they can
+    feel rather than two sentences they have to parse. It is the same shape as the pick list
+    and the doors, deliberately: three screens in a row that a person reads the same way.
+
+    "I'll put it my own way" keeps everything else about the worry — the label it is filed
+    under, the test, the thing to leave out, the explanation behind "Why this one sticks" —
+    and replaces only the sentence being tested. It goes through the same guard a fully
+    custom belief does, because it is one.
+  */
+  function beliefScreen() {
+    var f = pending;
+    paint( backButton() +
+      '<div class="stage">' +
+        worryHead(f.label, '', true) +
+        '<p class="sub tight">' + esc(t('belief.sub')) + '</p>' +
+        '<div class="list">' +
+          f.beliefs.map(function (b, i) {
+            return '<button data-b="' + i + '"><span>' + esc(b.belief) +
+              '<span class="under">' + esc(b.expect) + '</span></span>' +
+              '<span class="go arrow" aria-hidden="true">\u2192</span></button>';
+          }).join('') +
+          '<button class="own" id="own"><span>' + esc(t('belief.own')) + '</span>' +
+          '<span class="go arrow" aria-hidden="true">\u2192</span></button>' +
+        '</div>' +
+        '<p class="tiny">' + esc(t('belief.foot')) + '</p>' +
+      '</div>');
+    wireBack('pick');
+    qa('[data-b]').forEach(function (btn) {
+      btn.onclick = function () {
+        startFrom(f, f.beliefs[Number(btn.getAttribute('data-b'))]);
+        go('plan');
+      };
+    });
+    /* The box opens with the opening of a conditional in it, in their language. */
+    on('#own', function () { draft.belief = t('own.beliefSeed'); go('belief-own'); });
+  }
+
+  /*
+    Their own sentence, for a worry that is still ours. One box, the same words and the same
+    guard as the first screen of a fully custom entry — a verdict is reframed here too, and
+    "If I ___" is still the only shape that goes through. The placeholder is the worry's own
+    general sentence, because the nearest thing to what they want to write is already written.
+  */
+  function beliefOwn() {
+    var f = pending;
+    ownScreen({
+      back: 'belief',
+      before: worryHead(f.label, '', false),
+      title: t('own.belief.title'),
+      sub: t('own.belief.sub'),
+      placeholder: f.belief,
+      value: draft.belief,
+      next: function (v) {
+        draft.belief = v;
+        var check = guards.checkBelief(v);
+        if (!check.ok) { refuse(check); return; }
+        startFrom(f, { belief: v.trim(), expect: guards.expectationFrom(v) });
+        go('plan');
+      }
+    });
   }
 
   /* -------- a person's own entry: three screens, one box each. Never a form. -------- */
@@ -687,6 +806,7 @@
   function ownScreen(opts) {
     paint( backButton() +
       '<div class="stage">' +
+        (opts.before || '') +
         head('h2', opts.title) +
         '<p class="sub tight">' + esc(opts.sub) + '</p>' +
         warnBlock() +
@@ -764,7 +884,7 @@
     var c = S.cur;
     paint( backButton() +
       '<div class="stage">' +
-        head('h2', t('plan.kicker'), 'kicker') +
+        worryHead(c.label, c.belief, true) +
         '<div class="plan">' +
           '<p class="lbl">' + esc(t('plan.today')) + '</p>' +
           '<p class="do wrote">' + esc(c.test) + '</p>' +
@@ -780,7 +900,7 @@
         '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
       '</div>');
     /* Back goes where they actually came from, not back into a half-finished entry. */
-    wireBack(c.from || 'pick');
+    wireBack(c.from || 'belief');
     on('#xedit', function () { c.editing = true; save(); render(); q('#x').focus(); });
     on('#xdone', function () { c.x = q('#x').value.trim() || c.x; c.editing = false; save(); render(); });
     on('#lock', function () {
@@ -796,6 +916,7 @@
     var offerInstall = !S.seenInstall && !isInstalled();
     paint(
       '<div class="stage">' +
+        worryHead(c.label, c.belief, false) +
         '<div class="kicker">' + esc(t('locked.kicker')) + '</div>' +
         head('h2', t('locked.title')) +
         '<p class="sub wrote">' + esc(c.test) + '<br><b>' + esc(c.drop) + '</b></p>' +
@@ -811,8 +932,10 @@
   }
 
   function happened() {
+    var c = S.cur;
     paint( backButton() +
       '<div class="stage">' +
+        worryHead(c.label, c.belief, false) +
         head('h2', t('happened.title')) +
         '<p class="sub">' + esc(t('happened.sub')) + '</p>' +
         '<textarea id="o" aria-labelledby="top" placeholder="' + esc(t('happened.placeholder')) + '"></textarea>' +
@@ -820,7 +943,7 @@
       '</div>');
     wireBack('locked');
     var o = q('#o');
-    o.value = S.cur.o || '';
+    o.value = c.o || '';
     o.focus();
     on('#next', function () {
       var v = o.value.trim();
@@ -844,8 +967,8 @@
     S.done.forEach(function (d) { if (rate.keyOf(d) === rate.keyOf(c)) tested++; });
     paint( backButton() +
       '<div class="stage">' +
+        worryHead(c.label, c.belief, false) +
         head('h2', t('sure.title')) +
-        '<p class="sub tight wrote">“' + esc(c.belief) + '”</p>' +
         '<div class="ladder one" role="group" aria-label="' +
           esc(t('a11y.ladder', { belief: unstop(c.belief) })) + '">' +
           rung(t(tested ? 'ladder.lastTime' : 'ladder.started'), at, {}) +
@@ -899,7 +1022,7 @@
 
     paint(
       '<div class="stage">' +
-        head('h2', last.label, 'kicker') +
+        worryHead(last.label, last.belief, true) +
         '<div class="result">' +
           '<p class="lbl">' + esc(t('result.expected')) + '</p>' +
           paras(last.x, 'you') +
