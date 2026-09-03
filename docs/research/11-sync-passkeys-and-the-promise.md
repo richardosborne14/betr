@@ -161,10 +161,163 @@ a screenful of nonsense — next to what it says on their phone.
 2. **Do A now-ish** — name the transfer, make it a QR, make it obvious. It costs a few hours and
    it answers most of the real need.
 3. **Do B with the native app** if Apple's label wording confirms it. Free sync for the Apple
-   family, no server, no promise broken.
+   family, no server, no promise broken. **Corrected 2026-09-03, after re-reading B5:** this is
+   not quite free, and it does not come first — B5 already rules, from App Store guideline 5.1.3,
+   that BETR's data stays out of iCloud. The fix is to put only *sealed boxes* there, which means
+   the lock (Phase 2) comes before this. See `docs/tasks/B11-own-cloud-sync.md`.
 4. **Keep C on the shelf, designed** (§4), and build it when actual people ask — not before. If it
    is ever built, rule 1 gets amended in the open, in `CLAUDE.md` and the scope, on the founder's
    say-so, and the *Data Not Collected* label and privacy policy change with it.
 
 **What this changes in the docs today: nothing.** Q6 gains this file as its working. Rule 1 stands
 as written until the founder decides otherwise.
+
+---
+
+## 7. If we were going to do it: the actual build
+
+Asked 2026-09-03: *what would you do to reach WhatsApp-style encryption of a person's worries,
+synced to their PC?* This is that answer — the whole route, in the order I'd take it. Still not a
+decision. Phase 0 is the only part I'd argue for doing soon, and it is worth doing whether or not
+any of the rest ever happens.
+
+### Phase 0 — make the record mergeable. Half a day, and cheap only if done early.
+
+Sync means two devices each adding results without knowing about the other, and then joining the
+two histories. The current record can't survive that, for three small reasons:
+
+- **No result has an id.** `app.js:430` pushes `{id, source, label, belief, x, test, drop, o,
+  level, rateLabel, when}`. `id` is the *worry's* id, shared by every test of that worry. So two
+  histories can't be joined without either duplicating results or dropping them. **Fix:** a random
+  `rid` on every result.
+- **The ladder stores where it landed, not what was tapped.** `level: rate.next(at, ch.key)` — the
+  resulting rung — is saved; `ch.key` (`still` / `bit` / `lot` / `none` / `more`) is not, only its
+  display label. Merge two devices and there are two rungs each claiming to be the latest, and no
+  way to work out what the person actually did. **Fix:** store `move: ch.key`. The ladder is then
+  just the taps replayed in order, and it recomputes correctly however the results interleave.
+  `rate.js` already has everything needed for this; `next()` is the replay step.
+- **Order is array position, not time.** `series()` and `levelFor()` both walk `done` in the order
+  it happens to be in. **Fix:** sort by `when`.
+
+`rate.keyOf()` — which decides what counts as the same belief — is already merge-safe. Good.
+
+All three are a storage version bump (v2 → v3) of exactly the kind `store.js` was built for, and
+old records carry over the way v1's did. Do it before people have months of data, not after.
+It also makes two exported files joinable by hand, which is useful on its own.
+
+### Phase 1 — the native app, syncing through the person's own iCloud. No server.
+
+**Order corrected after this section was written: Phase 2 comes first.** B5 already rules BETR's
+data out of iCloud, sourced to App Store guideline 5.1.3, so what goes there has to be ciphertext
+under the person's own key — which is Phase 2's job. The reasoning is in
+`docs/tasks/B11-own-cloud-sync.md`; the task numbering there is the order to trust.
+
+Ships with B5. iPhone, iPad and Mac see the same worries automatically; nothing of ours is
+involved; *Data Not Collected* should survive (§3B). Doesn't touch Windows or Android. This alone
+answers the question for a large share of the people who'd ask it.
+
+### Phase 2 — the lock, with no sync behind it yet.
+
+*Lock this with Face ID*, opt-in, off by default:
+
+- Create a passkey with the PRF extension.
+- Generate **one random 256-bit vault key**. This is the only secret that matters; everything is
+  encrypted with it (AES-256-GCM).
+- The passkey produces a *second* key, which **wraps** (locks) the vault key. The wrapped copy
+  sits on the device. Wrapping rather than deriving the vault key directly is the important
+  choice: it's what later lets several devices each hold their own wrapped copy of the *same*
+  vault key, so a computer can be added or removed without re-encrypting everything.
+- Storage on the device is now ciphertext.
+
+Worth doing even with no sync: someone who picks up an unlocked phone can't read the worries. And
+it proves PRF works on real devices before any server exists. **The risk to watch:** this puts a
+lock screen in front of "one big button". Off by default, never in a first-time person's way.
+
+### Phase 3 — sealed boxes on a deliberately stupid server.
+
+- **One box per worry, not one big file.** Three to twelve boxes per person, a few kB each, padded
+  to a fixed size so the size says nothing. Per-worry granularity keeps merges rare and small.
+- **The account is a random number attached to the passkey.** No email, no username, no name,
+  nothing to type. Signing in is Face ID.
+- **The server does four things:** what's changed since X, here's a new box, remove a box, delete
+  everything. Ciphertext in, ciphertext out. Hard size cap and rate limits so it can't be used as
+  free storage.
+- **What we could still see, and must say out loud:** that an account exists, roughly how many
+  boxes it has, when they last changed, and the IP address at the moment of syncing. Not one word
+  of content — no worry, no sentence, no rung. WhatsApp's position on metadata is comparable or
+  worse; ours is defensible, but only if we state it rather than let someone find it.
+- **Delete everything wipes the server too**, and the app shows the person the server confirming
+  it's gone.
+
+### Phase 4 — the PC, by QR. (This is the picture in the founder's question.)
+
+1. The PC opens BETR and shows a QR: a one-time key the PC just invented.
+2. The phone's camera reads it and asks *Let this computer see your worries?*
+3. The phone seals the vault key so that **only that PC** can open it, and posts it. The PC
+   collects it and opens it. Nothing readable passes through us at any point.
+4. **Both screens then show the same three words.** If they don't match, something is in the
+   middle — stop. This is WhatsApp's security-code idea, it costs almost nothing, and it is the
+   checkable proof (§5) rather than a paragraph asking to be believed.
+5. The PC asks: *remember this computer, or forget it when I close the tab?* **Default forget.**
+   Where the machine can (Windows Hello, Dashlane, 1Password), "remember" is itself locked behind
+   that.
+
+Note what this avoids: it never needs PRF on the desktop — the flaky case (§2) — and it never asks
+someone to enrol a passkey on a machine that might not be theirs. The phone stays the only holder.
+
+### Phase 5 — removing a computer, and getting back in.
+
+- The phone lists the paired computers, with when each was added, and can remove one. Removing has
+  to *mean* something, so it also **rotates the key**: the phone makes a new vault key, re-seals
+  everything (seconds — the data is tiny) and hands the new key to the devices that are left. The
+  removed computer's copy stops opening anything. Without this step, "remove" is a lie.
+- **Getting back in** normally needs nothing: the passkey itself returns with the person's new
+  phone via iCloud Keychain or Google. If they've turned that off and the phone is gone, the data
+  is gone, and we cannot help. That sentence goes on the screen where they switch sync on, in the
+  same size type as the good news.
+- **One optional escape hatch:** a recovery code, shown once, to write down. Off by default, with
+  a plain line that a code is only as safe as where it's kept. Every password manager does this.
+  Without it, "new phone, iCloud was off" is a total loss with nothing we can say to them.
+
+### Phase 6 — the proof, and the paperwork.
+
+- **A *show me* screen:** the worry as they wrote it, and beside it the exact bytes we hold — a
+  screenful of nonsense. That is the sync equivalent of "turn your wifi off and watch it work".
+- **Publish the code.** On the web, publish the hash of the file that does the encrypting, so a
+  changed version is at least noticeable. It helps; it does not close the gap of §5. **The
+  app-store binary does. So: the app first, the web second — never the web alone.**
+- Privacy policy, a data-controller position, breach-notification duty, and the App Store label
+  moves off *Data Not Collected* (unless it stays the Apple-only route of Phase 1). Rule 1 in
+  `CLAUDE.md` gets amended in the open, by the founder, before a line of Phase 3 is written.
+
+### What it costs
+
+Phase 0 is half a day. Phase 1 comes almost free with the native app and covers every
+iPhone-and-Mac person. **Phases 2–6 are roughly three to five focused weeks of build, plus the
+policy work, plus a server somebody owns forever** — and a category of bug where being wrong means
+either silently losing somebody's history or quietly breaking the exact promise the product is
+sold on. That is the number to weigh, and it is why §6 still says: not now.
+
+---
+
+## 8. The tasks
+
+Scoped 2026-09-03, at the founder's request, so that the answer exists if someone asks. **None of
+them is scheduled and none is next.** B9 is the only one worth doing before anyone asks for sync.
+
+| Task | What it is | Breaks a rule? | Cost |
+| --- | --- | --- | --- |
+| **B9** — the mergeable record | Three small changes so two histories can be joined at all | No | Half a day |
+| **B10** — the lock | Passkey → a vault key → encrypted on the device. No sync | No | Days |
+| **B11** — own-cloud sync | iPhone ↔ Mac through the person's own iCloud. No server of ours | No | Days, with B5 |
+| **B12** — the sealed-box server | ⚠ The first thing BETR ever sends anywhere | **Rule 1** | Weeks, then forever |
+| **B13** — pairing a computer | The QR, the three words, and un-pairing that means it | Gated by B12 | Weeks |
+| **B14** — the proof and the paperwork | The *show me* screen, the policy, the label | Gated by B12 | Weeks, mostly not code |
+
+**The line that matters is between B11 and B12.** Everything up to B11 keeps every promise BETR
+makes today, word for word. B12 is where "nothing leaves the phone" stops being true as written,
+and it needs the founder to amend rule 1 themselves, in the open, before a line of it is built.
+
+It is entirely legitimate to stop at B11. If that happens, Q6 is answered, the Apple half of the
+audience gets sync, the promise is untouched, and B12–B14 are three files nobody had to write
+twice. **That is a good outcome, not a failure.**
