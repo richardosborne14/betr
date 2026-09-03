@@ -152,3 +152,43 @@ understand or when a decision was reversed.
   the symptom is not an error — the script exits 0 having done nothing. Resolve a promise when
   the `\r\n\r\n` is found in the socket buffer and await it before the first `send()`. Also,
   `/json/new` needs `PUT`, not `GET`.
+
+## 2026-09-03 — hosting (B3)
+
+- **A container can only see the folders it was told about when it was created, and on this
+  droplet that list belongs to TrybeUP's deploy.** TrybeUP's nginx mounts five specific paths
+  from `docker-compose.prod.yml`. Adding a sixth for BETR looked like a one-line change; it is
+  not, because TrybeUP's `deploy-prod.yml` treats any edit to that file as a reason to rebuild
+  the API and GoTrue containers and run database migrations. The fix was to stop trying to be a
+  folder inside TrybeUP and give BETR its own container on its own port, with TrybeUP's nginx
+  doing nothing but terminating TLS and passing the request through. That is one server block,
+  applied with a zero-downtime reload — a smaller change than the one that was approved, and it
+  means BETR's own repo now owns every header a person can observe. **Before planning any change
+  to a shared machine, read the deploy workflow's path filters and ask what else your edit
+  fires.**
+- **Editing a config file on the droplet is not the same as changing it.** `/opt/trybeup/nginx.conf`
+  and `docker-compose.prod.yml` are rsynced over from the `trybeup-prod` repo on every deploy
+  that touches them. A hand edit on the server survives until the next TrybeUP deploy and then
+  vanishes, and the symptom arrives days later with no obvious cause. Anything meant to last
+  goes in the repo that owns the file.
+- **nginx has no MIME type for `.webmanifest`.** It is not in `mime.types` in nginx 1.29, so the
+  manifest is served as `application/octet-stream`, the browser refuses it, and "Add to Home
+  Screen" stops working — with nothing in the console, nothing in the logs, and no visible
+  difference on the page. For BETR that is the difference between a person keeping their entries
+  and an iPhone deleting them after seven days. One `types { }` block fixes it, and there is now
+  a test for it. **When a feature is invisible until it silently isn't there, test the plumbing.**
+- **Caching and a published build hash are in direct conflict unless filenames are
+  fingerprinted.** BETR's `app.js` is always called `app.js`, so a browser that cached it for a
+  year would be running a mix of two builds while the page printed the hash of neither. Everything
+  is served `no-cache` — revalidate every time — and that is the honest setting until a build
+  step puts content hashes in filenames, which v1 deliberately does not have.
+- **Give the deploy its own key and its own user, not the founder's.** The `betr` user owns
+  exactly two folders and has no Docker, no sudo and no reach into TrybeUP. The cost is real and
+  worth naming: it cannot restart its own container, so a change to `deploy/nginx.conf` needs one
+  manual `docker compose up -d`. The workflow goes red rather than letting the repo and the live
+  server quietly disagree.
+- **A promise printed on a screen is a server setting somewhere.** *"Loading this page is the
+  only thing any server ever sees, and we keep no record of it"* is `access_log off` in two
+  places and a capped Docker log driver in a third. It is asserted in `tests/deploy.test.js` for
+  the same reason the wordmark is: the sentence and the setting have to fail together, or one
+  day the sentence will be alone.
