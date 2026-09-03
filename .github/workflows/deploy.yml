@@ -117,7 +117,10 @@ jobs:
               echo "::error::$2 — missing"; fail=1
             fi
           }
-          check "^HTTP/2 200"                       "the page loads"
+          # Not "^HTTP/2 200": TrybeUP's nginx terminates TLS for this address and enables
+          # http2 on no host, so BETR is served over HTTP/1.1. The protocol version was never
+          # the thing being checked — that the address answers 200 is (2026-09-03).
+          check "^HTTP/[0-9.]* 200"                 "the page loads"
           check "connect-src 'none'"                "CSP blocks every outbound request"
           check "font-src 'none'"                   "CSP blocks every web font"
           check "x-content-type-options: nosniff"   "nosniff"
