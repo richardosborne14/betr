@@ -69,9 +69,12 @@ Better than expected in places. **What is already right, and must not be undone:
 8. **Text scaling.** Headings are `clamp(36px, 8vw, 60px)`; `vw` does not respond to a person's
    text-size setting. Check the whole loop at 200% text and fix what clips.
 
-## The decision on i18next — and it is the founder's to overturn
+## The decision on i18next — **settled by the founder, 2026-09-03**
 
-**Recommendation: don't use i18next. Write a ~60-line `web/lib/i18n.js` instead.**
+**Decided: no i18next. Write the ~60-line `web/lib/i18n.js`.** Founder's answer, 2026-09-03,
+taking the recommendation below. This is no longer a question a session has to bring back.
+
+**Recommendation, as it was put to them: don't use i18next. Write a ~60-line `web/lib/i18n.js` instead.**
 
 i18next is a good library and in a normal project I would reach for it. Here it costs three
 things BETR is explicitly built not to spend: a dependency (CLAUDE.md — *don't add a

@@ -116,7 +116,16 @@ Six screens. Four taps and one sentence for a full loop.
 
 This is the product. The interface is four taps; the list is what those taps land on.
 
-### 5.1 The twelve in the prototype today
+### 5.1 The twelve
+
+**Superseded 2026-09-03 by B1.** The table below is the prototype's wording and is kept
+here only as the record of what the twelve *are* — the situations, the lanes and the order,
+which have not changed. **The live words are `web/content/worries.js` and nowhere else.**
+Every one of them was rewritten fresh on 2026-09-03; two are worth knowing about here:
+*Not drinking at a social thing* is now labelled **Being the only one not joining in**
+(Q2d's own reasoning, put on the button), and *rest*'s belief ends "then I'm being lazy"
+rather than "I'm worthless". Misha and the CBT reviewer have not read any of it yet.
+
 
 | Label (what the button says) | Belief underneath | Test, today | Drop |
 | --- | --- | --- | --- |

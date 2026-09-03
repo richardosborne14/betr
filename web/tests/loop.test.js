@@ -8,6 +8,16 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const { boot } = require('./harness.js');
 
+/*
+  Labels and tests come from web/content/, never from a literal here. B1 rewrote every one of
+  them and three assertions in this file broke on the words rather than on the behaviour;
+  what these walks are actually about is that the right worry is on the right screen.
+*/
+const worries = require('../content/worries.js');
+const doors = require('../content/whats-going-on.js');
+const content = require('../lib/content.js');
+const labelOf = (id) => content.byId(worries, id).label;
+
 /* ------------------------------------------------------- the walks */
 
 test('a full loop, from the start screen to a result', () => {
@@ -37,7 +47,7 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
 test('the second door opens onto worries, never onto a test of its own', () => {
   const a = boot();
   a.tap('#doors').shows('What’s going on?').shows('Drinking more than I mean to');
-  a.tap('[data-door]', 0).shows('Which one?').shows('Not drinking at a social thing');
+  a.tap('[data-door]', 0).shows('Which one?').shows(labelOf(doors.items[0].worries[0]));
   a.tap('#all').shows('Something else');
 });
 
@@ -109,7 +119,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   assert.strictEqual(dump.app, 'BETR');
   assert.strictEqual(dump.results.length, 1);
   assert.strictEqual(dump.results[0].happened, 'He said fair enough.');
-  assert.strictEqual(dump.results[0].worry, 'Saying no without an excuse');
+  assert.strictEqual(dump.results[0].worry, worries[0].label);
   a.tap('#wipe').shows('There is no copy anywhere else');
   a.tap('#yes').shows('Sure it’ll go badly?');
   a.hides('He said fair enough');
@@ -178,7 +188,7 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
   a.tap('#m-mine').shows('2 tests across 2 worries');
-  a.shows('Asking for help').shows('Saying no without an excuse');
+  a.shows(worries[1].label).shows(worries[0].label);
 
   /* the older one is the second card, and going again keeps its rung rather than starting over */
   a.tap('[data-again]', 1).shows('No, I can’t this time');

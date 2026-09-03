@@ -80,8 +80,11 @@ layer B16 was going to need is now there, in English, before a word was translat
 
 Things a session found that the next one needs.
 
-- **B15, unresolved and needs the founder:** i18next, or a ~60-line `web/lib/i18n.js`? The task
-  file recommends the small module and gives the reasons. Don't decide it in a session.
+- **B15's one open question is closed.** The founder answered on 2026-09-03: **no i18next, write
+  the ~60-line `web/lib/i18n.js`.** Recorded at the top of the B15 task file. B15 can start.
+- **B1 landed on the main line on 2026-09-03**, so B15 no longer has to translate twice: the
+  words in `content/worries.js` are the written ones. Misha's pass will change some of them
+  again, which is an argument for the string file B15 builds, not against it.
 - **B15 inherits B17's shape.** `web/lib/where.js` is the pattern for anything a screen has to
   work out about a person's phone: it is handed its data, reads the browser in one place, and
   the app passes it in. Country and language stay two separate questions and must not be

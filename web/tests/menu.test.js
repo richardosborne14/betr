@@ -128,7 +128,7 @@ test('export carries the tests that are waiting as well as the results', () => {
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
   assert.strictEqual(dump.waiting.length, 1);
-  assert.strictEqual(dump.waiting[0].worry, 'Saying no without an excuse');
+  assert.strictEqual(dump.waiting[0].worry, require('../content/worries.js')[0].label);
   assert.ok(dump.waiting[0].lockedIn);
 });
 

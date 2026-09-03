@@ -129,3 +129,26 @@ understand or when a decision was reversed.
   data attributes into one array per attribute name, so picking one country out of 247 meant
   knowing its index. Two lines to also index each element under `[data-cc="AU"]` turned a
   brittle test into a readable one. Worth doing the moment a list gets longer than a handful.
+- **A test that asserts a content string is a test that breaks when the content improves.**
+  Three assertions in `loop.test.js` and `menu.test.js` had worry labels typed into them, and
+  B1's rewrite broke one of them on the wording of a button, not on any behaviour the test was
+  about. The walk was checking *"the drinking door opens onto the right worry"*; what it
+  actually compared was a sentence. They now read the label out of `content/worries.js`, which
+  is what the assertion meant all along. The rule for this repo: content lives in
+  `web/content/`, so a test may read from there, and may never restate it.
+- **The words render differently from how they read in the file.** Two things only showed up
+  once the loop was driven at phone size: straight `"quotes"` inside a test look wrong next to
+  the app's own curly apostrophes, and a test starting *"Go, order something soft"* loses the
+  worry's context, because the screen it lands on says HERE'S YOUR TEST and not the label.
+  Neither is catchable by `node --test`; both took one screenshot. Write the words, then look
+  at them on a phone-shaped screen before calling it done.
+- **A locked-in test keeps its own copy of the words, and that is correct.** Screenshotting
+  after a content change showed the *old* wording, because the in-flight test had been saved
+  with the text it was created from. Results and waiting tests snapshot their strings and only
+  point at the id, so a person mid-test never has the sentence change under them. When checking
+  a content edit in a browser, clear storage first or you are looking at yesterday's words.
+- **Driving Chrome over CDP by hand: send nothing until the WebSocket handshake has come
+  back.** Writing a frame before the HTTP 101 arrives makes Chrome close the connection, and
+  the symptom is not an error — the script exits 0 having done nothing. Resolve a promise when
+  the `\r\n\r\n` is found in the socket buffer and await it before the first `send()`. Also,
+  `/json/new` needs `PUT`, not `GET`.

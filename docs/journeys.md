@@ -24,7 +24,7 @@ must work with them off. If anything fails, that is the finding.
 | --- | --- | --- |
 | 1 | Open it | *Sure it'll go badly?*, one big blue button, and one line: no account, no AI, nothing leaves your phone |
 | 2 | Tap **Pick a worry** | Twelve worries as big buttons, *Something else* last, and a line about what is deliberately absent |
-| 3 | Tap **Saying no without an excuse** | *Today:* one thing to do. Underneath in bold: *Don't explain. Don't apologise.* Then *What you expect*, already written, with *not quite? change it* |
+| 3 | Tap **Saying no without an excuse** | *Today:* one thing to do. Underneath in bold: *No reason, no apology, no softening it.* Then *What you expect*, already written, with *not quite? change it* |
 | 4 | Tap **not quite? change it**, edit it, tap **done** | Your words, in the blue box |
 | 5 | Tap **I'll do it today** | *Go and do it.* The test again. A card offering **Add to home screen** |
 | 6 | Tap **Not now** / **Got it** | The card goes and does not come back |
