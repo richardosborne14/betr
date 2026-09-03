@@ -6,10 +6,8 @@
 ## 1. Where we are
 
 **v1 is built, amended three times, and driven in a real browser. It has not been used on a
-phone, and its words are still the prototype's.** Scoped and prototyped 2026-09-01, built
-2026-09-02, amended 2026-09-02 (the ladder), 2026-09-03 (the brand) and 2026-09-03 (B8).
-
-Eleven screens, **78 tests**, no dependencies, no build step, no requests after the page loads.
+phone, and its words are still the prototype's.** Eleven screens, **78 tests**, no dependencies,
+no build step, no requests after the page loads.
 
 **2026-09-02:** "fear" became **worry** everywhere; the re-rate moves a **1–10 ladder** instead
 of storing a fixed number; **Your worries** was added. **2026-09-03, morning:** the wordmark is
@@ -20,14 +18,13 @@ of storing a fixed number; **Your worries** was added. **2026-09-03, morning:** 
   selected state, no badges, no counts, no fourth item. Measured at 320×568: nothing covers the
   big button on any screen.
 - **A test you locked in waits for you.** `S.open`, no cap, nothing counts them. Parking is in
-  `go()`, so it holds for every way out of the loop, not just *New worry*. The front screen
-  shows one line; Your worries carries them on their cards, with **Done it** / **Didn't get
-  to it**.
+  `go()`, so it holds for every way out of the loop, not just *New worry*. Your worries carries
+  them on their cards, with **Done it** / **Didn't get to it**.
 - **Help** replaced *What this is*: crisis lines first, then the CBT primer, then the nine
   sentences, the airplane proof, export/delete, other places, who made this, the build hash.
-- **The crisis numbers dial.** 988 and 116 123 are `tel:` links, findahelpline.com is a link —
-  on Help and in the refusal after a self-harm test. The words are untouched; a test strips the
-  tags off and compares sentence 7 character for character.
+- **The crisis numbers dial.** 988 and 116 123 are `tel:` links, findahelpline.com is a link,
+  on Help and in the self-harm refusal. The words are untouched: a test strips the tags off and
+  compares sentence 7 character for character.
 - **`web/content/places.js`** is new and holds every link. TrybeUP is in it, second in its
   group, saying we made it and what it costs. **Placeholder until Misha signs it off.**
 
