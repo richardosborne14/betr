@@ -71,7 +71,7 @@ B2 forced. B8 before B3 unless a URL is suddenly needed.
 | Repo | `github.com/richardosborne14/betr`, private, branch `main` |
 | Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
 | See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then `open http://127.0.0.1:8760/`. Opening `web/index.html` directly also works, but browsers are unreliable about saving anything for a `file:` page, so serve it when testing persistence |
-| Drive it for real | headless Chrome + CDP over plain `fetch`/`WebSocket` in Node 22, no dependencies. `--remote-debugging-port`, then `Runtime.evaluate` to click and read `document.body.innerText`. It caught nothing the tests missed, but it is the only way to prove localStorage across loops |
+| Drive it for real | headless Chrome + CDP over plain `fetch`/`WebSocket` in Node 22, no dependencies: `--remote-debugging-port`, then `Runtime.evaluate` to click and read `innerText`. The only way to prove localStorage across loops |
 | Dev host (B3, not set up) | TrybeUP dev droplet, SSH alias `le-jibe`; target `betr.dev.trybeup.com`, `/var/www/betr-dev/` |
 | Production host | none yet; waits on Q1 (a domain) |
 | Related repo | `trybeup/trybeup-prod` — the B6 bridge's server side, and the audience research |
@@ -87,10 +87,10 @@ B2 forced. B8 before B3 unless a URL is suddenly needed.
   in `rate.js`.
 - **Storage is at version 2.** Version 1 results carry `rate` (80/55/30/10) and are moved onto
   the nearest rung on load. Don't delete that migration.
-- **Text checks in the browser are case-sensitive but the CSS uppercases headings.** `.kicker`
-  is `text-transform: uppercase`, so `innerText` returns "HERE'S YOUR TEST".
-- **`--window-size` is not the CSS viewport in headless Chrome.** Layout came out ~110px wider
-  than asked, which looks exactly like an overflow bug. Check an unchanged screen first.
+- **Headless Chrome lies about two things.** `.kicker` is `text-transform: uppercase`, so
+  `innerText` returns "HERE'S YOUR TEST"; and `--window-size` is not the CSS viewport — layout
+  came out ~110px wider than asked, which looks exactly like an overflow bug until you check an
+  unchanged screen.
 - **`file:` is in the CSP source lists** so the page works off disk. B3's header drops it, and
   must not carry `'unsafe-inline'` for scripts.
 - **iPhone Safari deletes a web page's storage after seven days unused.** The install card and
