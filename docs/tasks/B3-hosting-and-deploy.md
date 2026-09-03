@@ -1,8 +1,8 @@
 # B3: Hosting and deploy — the page load is the only thing any server ever sees
 
-**Status:** Built and running on the droplet; **waiting on one DNS record** before the address
-answers. Everything else is done and checked.
-**Confidence:** 8/10 (see the bottom)
+**Status:** **Live.** `https://betr.trybeup.com` answers, on its own certificate, and the
+deploy is green end to end.
+**Confidence:** 9/10 — the 1 is that the address is still a borrowed subdomain (Q1)
 **Date opened:** 2026-09-01 · **Built:** 2026-09-03
 **Depends on:** B2 (done). Production domain waits on B0 Q1 — see "What is still open".
 
@@ -166,13 +166,66 @@ Branch `betr-nginx` off `origin/main` in `trybeup/trybeup-prod`, two files:
 | A missing file is a 404, not `index.html` | ✅ |
 | Reachable from TrybeUP's nginx, not from the internet | ✅ |
 | The deploy user cannot touch TrybeUP | ✅ |
-| `curl -I https://betr.trybeup.com` shows the header and no `Set-Cookie` | ⏳ needs DNS |
-| A full loop in the browser shows one document request and nothing else | ⏳ needs DNS |
-| `dev.trybeup.com` and `trybeup.com` still serve | ⏳ after the TrybeUP reload |
+| `curl -I https://betr.trybeup.com` shows the header and no `Set-Cookie` | ✅ 2026-09-03 |
+| A full loop in the browser shows one document request and nothing else | ✅ 19 requests, every one to `betr.trybeup.com`, none off-site |
+| `dev.trybeup.com` and `trybeup.com` still serve | ✅ 200 before and after |
+
+## Going live — 2026-09-03, and two things were not as this file recorded them
+
+The founder added the `A` record. What was left should have been the certificate. It was not.
+
+**1. The TrybeUP change had never actually been applied.** The section above describes a
+branch `betr-nginx` on `trybeup/trybeup-prod` and a zero-downtime reload. **There is no such
+branch**, `main`'s `nginx.conf` contains no `betr`, and the live `/opt/trybeup/nginx.conf` had
+not been touched since June. BETR's port-80 redirect appeared to work only because the first
+`server` block on port 80 is nginx's default and catches any unknown host. So the block was
+written for the first time on 2026-09-03, into the live file, with a backup alongside it at
+`/opt/trybeup/nginx.conf.bak-before-betr-20260903-182920`.
+
+**2. TrybeUP's nginx container was holding a stale handle to its own config.** A single-file
+bind mount binds an *inode*. Something had replaced `/opt/trybeup/nginx.conf` with a new inode
+(rsync writes a temp file and renames, which does exactly this), so the container went on
+reading the inode it captured in April. `nginx -t` and `nginx -s reload` both operate on the
+container's copy, so **both reported success while changing nothing at all**. The fix was
+`docker compose up -d --force-recreate --no-deps nginx`; the running config and the file on
+disk were byte-identical, so that applied BETR's block and nothing else.
+
+**This is a live bug in TrybeUP's own deploy, not just BETR's problem.**
+`deploy-prod.yml` rsyncs `nginx.conf` to the host and then runs `nginx -t` + `nginx -s reload`
+inside the container. If that rsync ever changes the inode — and rsync's default
+write-and-rename does — **the reload silently applies nothing and the deploy still goes
+green.** Nothing is broken today because the contents happen to match. The next real change to
+TrybeUP's nginx will not take effect and nobody will be told.
+
+**And the deploy's own check was wrong.** `check "^HTTP/2 200"` could never pass: TrybeUP's
+nginx enables `http2` on no host, so BETR is served over HTTP/1.1. Every other assertion in
+that step passed on the first try. It now checks for a 200 at any protocol version.
+
+### What is live
+
+| | |
+| --- | --- |
+| Certificate | `betr.trybeup.com`, ECDSA, webroot, expires **2026-12-02** |
+| Renewal | certbot's own scheduled task. **Not yet in TrybeUP's `renew-cert.yml`** — see below |
+| Build served | `4efa928b…`, equal to the repo at `main` |
+| Headers | CSP with `connect-src 'none'` and `font-src 'none'`, nosniff, no-referrer, no `Set-Cookie`, `Cache-Control: no-cache`, manifest as `application/manifest+json` |
+| The loop, live | walked at 390×844 in headless Chrome, pick → result → *Why this one sticks*. **19 requests, every one to `betr.trybeup.com`.** No off-site request of any kind |
+
+### Two things still open from this
+
+- **The droplet and the TrybeUP repo disagree.** The block exists on the server and not in
+  `trybeup/trybeup-prod`. TrybeUP's deploy rsyncs `nginx.conf` from that repo **whenever that
+  file changes**, so the next TrybeUP nginx change deletes BETR's block and the address goes
+  dark with no obvious cause. The founder chose the droplet edit knowing this; a PR on
+  `trybeup/trybeup-prod` carrying the same block closes it and has not been opened yet.
+- **`renew-cert.yml` has no `betr.trybeup.com` entry.** certbot will renew on its own timer,
+  but the *alarm* — the run that fails and emails the admins when a cert is within 14 days of
+  expiry, the one that was missing during the 2026-06-01 outage — does not cover BETR. Same PR.
 
 ## Done when
 
-The three ⏳ rows are ✅.
+~~The three ⏳ rows are ✅.~~ **They are, 2026-09-03.** What remains is the PR on
+`trybeup/trybeup-prod` so the server stops disagreeing with its repo.
 
 **Confidence: 8/10.** The server, the workflow, the permissions and the tests are built and
 checked. The 2 is the DNS record and the certificate — routine, but unproven until they exist,

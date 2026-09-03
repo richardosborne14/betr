@@ -1,6 +1,6 @@
 # Start here
 
-**Last refreshed:** 2026-09-03, after B9, a rework of the twelve worries, and B18.
+**Last refreshed:** 2026-09-03, after B9, the worry rework, B18, and BETR going live.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
@@ -11,26 +11,31 @@ the page loads. Earlier amendments, each in its own task file: *worry* and the *
 ladder**; the **BETR** wordmark; **B8**'s three plain words and its waiting test; **B17**'s
 country-aware crisis block; **B1**; **B3**'s web server; **B15**'s strings and speech.
 
-**2026-09-03, B9.** Storage is **v3**: every result has an id of its own (`rid`; `id` stays
-the *worry's* id), says which word was tapped (`move`), and is read in **clock order** — so two
-devices' histories join without losing or duplicating a result. Nothing a person sees changed.
+**2026-09-03, B9.** Storage is **v3**: every result has its own `rid`, says which word was
+tapped (`move`), and is read in **clock order**, so two devices' histories join cleanly.
 
-**2026-09-03, the twelve worries reworked — this session.** Read against "the average adult or
-young adult" rather than research §8's corpus alone. **`funny` and `favour` are gone** — one
-presupposed you are the entertaining one, the other had a test that cannot produce data in a
-day. **`reply`** (Not replying straight away) and **`check`** (Sending it without checking it
-again) are in: the first social item needing no live spoken conversation, and a perfectionism
-item needing no job. **The order changed**, and that is the substantive part: only three of the
-twelve could be started on the day they were picked, so a first loop ended in *Didn't get to
-it*. Doable-today-and-alone now comes first and **`strug` moved from third to seventh**. Two
-doors repointed. Ids were removed while nothing has shipped; after release an id is permanent.
+**2026-09-03, the twelve worries reworked.** Read against "the average adult or young adult"
+rather than research §8's corpus alone. **`funny` and `favour` are gone**; **`reply`** (Not
+replying straight away) and **`check`** (Sending it without checking it again) are in — the
+first social item needing no live spoken conversation, and a perfectionism item needing no job.
+**The order changed**, and that is the substantive part: only three of the twelve could be
+started on the day they were picked, so a first loop ended in *Didn't get to it*.
+Doable-today-and-alone now comes first and **`strug` moved from third to seventh**. Two doors
+repointed. Reasoning in B1's file.
 
 **2026-09-03, B18 built.** **"Why this one sticks"** — a thirteenth screen, offered from the
 result and from a card in Your worries, never before somebody has a result of their own. Two
 short paragraphs per worry in `content/why.js`: what the worry is underneath, and which safety
-behaviour keeps it from being tested. **Keyed by worry id and by nothing else** — the
-regulatory line, and `validateWhy()` fails the build on a third field. A screen, not the modal
-that was asked for, so `paint()` handles focus and the announcement.
+behaviour keeps it from being tested. **Keyed by worry id and nothing else** — the regulatory
+line, and `validateWhy()` fails the build on a third field. A screen, not a modal, so `paint()`
+handles focus and the announcement.
+
+**2026-09-03, BETR is live at `https://betr.trybeup.com`** — cert to 2026-12-02, deploy green
+end to end, and a full loop on the live address makes **19 requests, every one to
+`betr.trybeup.com`**. Two surprises, both written up in B3: the TrybeUP nginx change **had
+never been applied** (no `betr-nginx` branch ever existed), and **TrybeUP's nginx container
+held a stale handle to its config**, so `nginx -t` and `-s reload` both reported success while
+changing nothing. Fixed by recreating the container.
 
 **Still true:** **Q1 (name, trademark, domain) is open** and blocks release. **Nobody outside
 this building has read the twelve worries or the twelve explanations**, and **nobody who uses
@@ -51,8 +56,14 @@ ask the founder which of these five to move, not start B10.** All five block rel
   `why.js` is the file most at risk of echoing CCI or Getselfhelp wording; say so to them.
 - **A real screen-reader pass on a real phone**, VoiceOver and TalkBack, by somebody who uses
   one daily. Worth more than every automated check here. Release condition in B15's file.
-- **B3's DNS record for `betr.trybeup.com`**, then J1, J2 and J3 walked on a phone
-  (`docs/journeys.md`). Everything else on hosting is built and running.
+- **A PR on `trybeup/trybeup-prod`.** BETR's nginx block is on the droplet and **not** in that
+  repo, and TrybeUP's deploy rsyncs `nginx.conf` from it whenever that file changes — so the
+  next TrybeUP nginx change deletes BETR's block and the address goes dark. The same PR should
+  add `betr.trybeup.com` to `renew-cert.yml`, which is the alarm that emails admins before a
+  cert expires. **Also tell them their deploy has a live bug**: it reloads nginx inside the
+  container, so if rsync ever changes `nginx.conf`'s inode the reload silently does nothing and
+  the deploy still goes green.
+- **J1, J2 and J3 walked on a real phone** against the live address (`docs/journeys.md`).
 - **Somebody owns checking links and helplines each release** (`helplines.js` has
   `owner: null`, and the tests say so every run), and **Q1** — nothing ships unnamed.
 
@@ -64,7 +75,7 @@ ask the founder which of these five to move, not start B10.** All five block rel
 | Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
 | See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then open `http://127.0.0.1:8760/`. Opening `web/index.html` off disk works too, but storage is unreliable for a `file:` page — serve it when testing persistence |
 | Drive it for real | headless Chrome + CDP over plain `fetch`/`WebSocket`. **Viewport with `Emulation.setDeviceMetricsOverride`, never `--window-size`**; country with `Emulation.setTimezoneOverride`; **await the WebSocket handshake before the first `send()`**, `/json/new` needs `PUT`, and pick a free debugging port — another Electron app may hold 9222 |
-| Live address | `betr.trybeup.com`, built and running, **waiting on one DNS record**. No production domain yet; that waits on Q1 |
+| Live address | **`https://betr.trybeup.com` — live.** Cert expires 2026-12-02. Still a borrowed subdomain; a real domain waits on Q1 |
 
 ## 4. Gotchas, live
 

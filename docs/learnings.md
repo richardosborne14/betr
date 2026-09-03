@@ -285,3 +285,46 @@ understand or when a decision was reversed.
   failing — the app had deduplicated on load and had no reason to write anything back yet.
   **Read the app's state through the app** (here, the export screen), not through the store
   underneath it.
+
+## A bind-mounted config file can go stale, and the reload will still say it worked
+
+**2026-09-03, B3, about two hours.** BETR's nginx block was written into
+`/opt/trybeup/nginx.conf`, `nginx -t` passed, `nginx -s reload` reported success — and
+`betr.trybeup.com` went on serving trybeup.com's certificate. `nginx -T` inside the container
+showed no `betr` anywhere.
+
+**A single-file bind mount binds an inode, not a path.** Something had replaced
+`/opt/trybeup/nginx.conf` with a *new* inode months earlier — which is exactly what rsync's
+default write-a-temp-file-and-rename does — so the container went on reading the inode it
+captured when it started. Everything then lies convincingly: `nginx -t` tests the container's
+copy, `nginx -s reload` reloads the container's copy, and both are green while the file you
+edited is not involved at any point.
+
+**How to tell in one command**, before wasting an hour:
+
+```
+stat -c %i /opt/x/nginx.conf
+docker exec c stat -c %i /etc/nginx/nginx.conf     # different number = stale mount
+```
+
+The fix is `docker compose up -d --force-recreate --no-deps nginx`, which re-resolves the
+mount. **Diff the two copies before doing it** — a recreate applies every difference at once,
+and a config that has silently not been live for months may contain changes nobody expects to
+go out today. Here they were byte-identical, so it applied one block and nothing else.
+
+**Two general lessons.** Mount the *directory*, not the file, if it will ever be rewritten. And
+a deploy step that edits a file, then tests and reloads inside a container, is not proving what
+it appears to prove — TrybeUP's `deploy-prod.yml` has this shape today, so its next real nginx
+change will silently not apply and the run will still go green.
+
+## A task file can say a thing was done when it was not
+
+Same day. B3's file described a branch on another repo and a zero-downtime reload, in the past
+tense. The branch did not exist, the repo's config had no mention of BETR, and the live file had
+not been touched in three months. The redirect *appeared* to work only because the first
+`server` block on port 80 is nginx's default and catches any unknown host — a coincidence that
+made a missing change look like a working one.
+
+**Check the machine, not the note**, before building on a step recorded as finished — especially
+one on somebody else's system, where the write may have been planned, written up, and then not
+made. `grep` the live config, not the task file.
