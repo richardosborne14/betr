@@ -1,7 +1,8 @@
 # B22: Recognition, not category — the rule the other five tasks answer to
 
-**Status:** **Step 1 done 2026-09-04 — the sort exists, in `docs/three-piles.md`. Steps 2 and 3
-wait on the founder and Misha. No word in the app has changed**
+**Status:** **Step 1 done, and three of the five decisions taken and shipped, 2026-09-04.**
+**Two are still out: door one's four nouns (Misha's casting vote, B23) and the word *diagnosis*
+on the doors footer (wants a second opinion on the legal point first)**
 **Confidence:** 9/10 that the pattern is real, because it is the same pattern B19 found by
 watching two people. 5/10 on any individual rewrite, because nobody outside this building has
 read a word
@@ -176,10 +177,28 @@ What kept him was the small print admitting TrybeUP's own paywall — *"nobody d
 **The promise did not win the sceptic; the admission did.** Recorded in `three-piles.md` for
 B25 and B26.
 
-## Steps 2 and 3 — not done, and not this session's to do
+## Steps 2 and 3 — three of five taken, 2026-09-04
 
-Step 2 is the founder and Misha reading `docs/three-piles.md` and taking five decisions. Step 3
-is the rewrites plus a test per changed string, and it cannot start until they have.
+The founder read the five proposals and took the three that are theirs alone. All three shipped
+the same afternoon, each walked on screen with `tools/walk.js` before it was committed.
+
+| # | The sentence | Decision | Now reads |
+| --- | --- | --- | --- |
+| 2 | `pick.notHere`, the line under every worry list | **Changed** | *"Nothing here tests the thing itself, only what you expect to happen without it. That's the worry underneath, and that's what we test."* |
+| 4 | `rest`'s card sentence | **Changed** | *"If I rest before everything's done, then I'll pay for it."* |
+| 5 | `refusal.habit`'s closing clause | **Changed** | *"...Try one about what people will think, or about what happens when you go without it."* |
+| 1 | Door one's four nouns | **Open** | Misha's casting vote — **B23** |
+| 3 | *diagnosis* on the doors footer | **Open** | Wants a second opinion on the legal point |
+
+**Nothing in the codebase moved except those three strings.** The boundary each one draws is
+unchanged: `pick.notHere` still says the thing itself is not what gets tested, and
+`guards.checkTest` still refuses a habit test with the same words in a different tail. No test
+was added for these three — each is a sentence rather than a rule, and `docs/changing-the-words.md`
+is how they get changed again.
+
+**What did not change, and why it is worth saying:** `rest`'s three predictions underneath are
+untouched. The card sentence is never itself tested, so this was the one pile-3 entry with no
+mechanical consequence at all.
 
 **Confidence: 8/10.** High on the sort itself — the piles are small, the boundary is checkable,
 and every entry has the walk that produced it written next to it. The 2 is that **three

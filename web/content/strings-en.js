@@ -146,8 +146,8 @@ var BETR_STRINGS_EN = {
       title: 'Which one?',
       sub: 'Tap the one that’s closest.',
       own: 'Something else',
-      notHere: 'Not here on purpose: anything that tests the drink, the screen or the habit ' +
-        'itself. Those aren’t tests. We test the worry underneath.'
+      notHere: 'Nothing here tests the thing itself, only what you expect to happen without ' +
+        'it. That’s the worry underneath, and that’s what we test.'
     },
 
     /* ------------------------------------------------- which of these is it? (B20) */
@@ -213,7 +213,8 @@ var BETR_STRINGS_EN = {
     */
     refusal: {
       habit: 'That test involves the thing itself. Those aren’t tests — the worry underneath ' +
-        'is. Try one about what people will think, or about going without the crutch.',
+        'is. Try one about what people will think, or about what happens when you go ' +
+        'without it.',
       body: 'BETR doesn’t do tests about food, weight or what your body is doing. Those need ' +
         'a person, not this.',
       harm: 'BETR can’t help with that one, and it would be wrong to pretend otherwise.',

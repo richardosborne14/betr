@@ -221,7 +221,7 @@ var BETR_WORRIES = [
   {
     id: 'rest',
     label: 'Resting when there’s stuff to do',
-    belief: 'If I rest before everything’s done, then I’m being lazy.',
+    belief: 'If I rest before everything’s done, then I’ll pay for it.',
     beliefs: [
       {
         belief: 'If I rest while there’s still stuff to do, then I’ll feel guilty the whole time.',

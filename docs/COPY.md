@@ -170,7 +170,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`pick.notHere`**
 
-> Not here on purpose: anything that tests the drink, the screen or the habit itself. Those aren’t tests. We test the worry underneath.
+> Nothing here tests the thing itself, only what you expect to happen without it. That’s the worry underneath, and that’s what we test.
 
 ### Screen 3a — writing your own worry
 
@@ -238,7 +238,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`refusal.habit`**
 
-> That test involves the thing itself. Those aren’t tests — the worry underneath is. Try one about what people will think, or about going without the crutch.
+> That test involves the thing itself. Those aren’t tests — the worry underneath is. Try one about what people will think, or about what happens when you go without it.
 
 **`refusal.body`**
 
@@ -949,7 +949,7 @@ The three a person chooses between, in the order they are shown:
 | **id** | `rest` |
 | **lane** | rest |
 | **label** — the button | Resting when there’s stuff to do |
-| **card sentence** — under the label on the list | If I rest before everything’s done, then I’m being lazy. |
+| **card sentence** — under the label on the list | If I rest before everything’s done, then I’ll pay for it. |
 | **test** — the one thing, today | Plan two hours of rest today and actually take them. Notice how you feel after. |
 | **drop** — what you leave out | No “I’ll just quickly do this one thing” first. |
 

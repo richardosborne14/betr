@@ -457,3 +457,39 @@ neither chosen nor disconfirmable.
 **The lesson: the test is "could a reader answer *that's not me* on the strength of one word",
 not "is this word hard".** Written into `docs/three-piles.md` so the next pass does not soften
 Help's primer for no reason.
+
+## A belief is not screened for harm, only the test is (found 2026-09-04, not fixed)
+
+Found while walking the three B22 wording changes, by typing a habit belief on the write-your-own
+screen and expecting to be stopped. Nothing stopped it.
+
+`guards.checkTest` runs three word lists in order — `HARM`, `HABIT`, `BODY`. **`checkBelief` runs
+none of them.** Its only hard stops are `empty` and `verdict`; everything else is the shape nudge
+the founder loosened the same morning. So:
+
+```
+checkBelief("If I tell them how I really feel, then they will know I want to kill myself")
+  → { ok: true }
+checkTest("Tell them I want to kill myself")
+  → { ok: false, kind: 'harm', reason: 'refusal.harm' }
+```
+
+A person who writes a belief naming self-harm gets **"What will you do?"** as the next screen, and
+only hears *"BETR can't help with that one, and it would be wrong to pretend otherwise"* after they
+have typed a plan for it. One screen late, at the worst possible moment.
+
+**Why it is not obviously a bug.** `HABIT` on a belief is arguably correct as it stands: rule 4 is
+about the *test*, and "if I stop drinking at the wedding, then they'll ask why" is a legitimate
+worry whose test never goes near a drink. Screening beliefs for `HABIT` would refuse the exact
+worries door one exists to hold. **`HARM` is the different one**, and it is the one that matters:
+there is no reading of the rules where a belief about suicide should get a plan screen first.
+
+**Why it was not fixed on the spot.** `checkBelief` had its walls taken down that morning
+*because a wall cost somebody a session* (the gluten refusal). Adding a hard stop back into it is
+the founder's call, not a session's, even when the case looks one-sided. It is written up here and
+in `NEXT-SESSION.md` rather than quietly patched.
+
+**The lesson that generalises:** two guards that read the same person's words a screen apart do
+not have to enforce the same rules, and nothing in the code says which rules each one owns. The
+comment block above `checkBelief` explains at length what it *stopped* enforcing and never says
+what it *never* enforced.

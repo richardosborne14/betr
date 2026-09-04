@@ -3,6 +3,12 @@
 **For the founder and Misha. Written 2026-09-04 (B22). Nothing in the app was changed to make
 this.** It sorts and proposes; the words are yours.
 
+> **Decided, 2026-09-04, later the same day.** The founder took proposals **2, 4 and 5** as
+> written and they are live. **1 and 3 are still open** — 1 is Misha's casting vote inside B23,
+> and 3 wants a second opinion on the legal point before it moves. Each entry below is marked.
+> The "Now" text under 2, 4 and 5 is what the app said *before* the change, kept because it is
+> the evidence for why it moved.
+
 ## The rule this sorts by
 
 > **Describe the inside of the moment. Never name the kind of person.**
@@ -82,7 +88,7 @@ find it, not where somebody browsing meets it first.
 **Five sentences. None of them has been changed.** Each one below is what it says now, what it
 costs, and one proposed replacement.
 
-### 1 · Door one's line — and it is four words, not the whole line
+### 1 · Door one's line — and it is four words, not the whole line — **STILL OPEN (B23)**
 
 **Now:** *"The one you've quietly decided to stop more than once, and haven't — **drink, weed,
 porn, betting**. BETR never goes near the thing itself. Only what you think happens if people
@@ -104,7 +110,7 @@ Marcus found themselves in half a second: *"First one, no dancing around it. Tha
 **This belongs to B23** — the same decision as the order of the doors, and Misha's casting vote.
 B22's contribution is only to say precisely which four words did the damage.
 
-### 2 · "Which one?" — the line under every worry list
+### 2 · "Which one?" — the line under every worry list — **TAKEN, LIVE**
 
 **Now:** *"Not here on purpose: anything that tests **the drink, the screen or the habit
 itself**. Those aren't tests. We test the worry underneath."*
@@ -120,7 +126,7 @@ things. The boundary it draws is right and has to stay; the three nouns are what
 
 Says the same to Marcus, says nothing about Priya.
 
-### 3 · The footer on "What's going on?"
+### 3 · The footer on "What's going on?" — **STILL OPEN**
 
 **Now, as a person reads it** (two lines are printed together):
 *"None of these gets tested. The worry underneath does. **None of these is a diagnosis, and
@@ -139,7 +145,7 @@ requirement.** I am not a lawyer and that is worth a second opinion before it mo
 
 > *"None of these gets tested. The worry underneath does. Nothing here is decided for you."*
 
-### 4 · The card sentence on "Resting when there's stuff to do"
+### 4 · The card sentence on "Resting when there's stuff to do" — **TAKEN, LIVE**
 
 **Now:** *"If I rest before everything's done, **then I'm being lazy**."*
 
@@ -162,7 +168,7 @@ tested. The three underneath it are all proper predictions and none of them is a
 
 Same moment, no verdict, and still loose enough to be the card rather than one of the three.
 
-### 5 · The refusal, when somebody's own test involves the thing itself
+### 5 · The refusal, when somebody's own test involves the thing itself — **TAKEN, LIVE**
 
 **Now:** *"That test involves the thing itself. Those aren't tests — the worry underneath is.
 Try one about what people will think, or about going without **the crutch**."*
@@ -176,7 +182,7 @@ moment it has just told them no.
 
 ---
 
-## What I'd ask you and Misha to decide
+## What I'd ask you and Misha to decide — **three of five answered 2026-09-04**
 
 1. **The four nouns in door one.** Keep, or cut? This is the expensive one and it is really the
    same conversation as which order the doors go in — **B23, Misha's casting vote.**
@@ -186,8 +192,8 @@ moment it has just told them no.
 4. **"then I'm being lazy"** — change it, or leave it as the softened version you already chose.
 5. **"the crutch"** — the smallest of the five. I would take the change.
 
-Nothing happens to any of them until you say so, and any of them can be changed by you directly
-on github.com — `docs/changing-the-words.md` is how.
+**2, 4 and 5 were taken as proposed and are live.** 1 and 3 are still yours. Any of them can be
+changed again by you directly on github.com — `docs/changing-the-words.md` is how.
 
 ---
 
