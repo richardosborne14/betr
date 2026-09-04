@@ -1537,6 +1537,19 @@ Misha: **not yet**.
 | NHS: cognitive behavioural therapy | What CBT is, what a course of it involves, and how to get it on the NHS. | `https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments/talking-therapies-and-counselling/cognitive-behavioural-therapy-cbt` |
 | BABCP: what is CBT? | The same thing from the UK body that accredits CBT therapists. | `https://www.babcp.com/About/What-is-CBT` |
 
+### If it’s drinking or drugs
+
+These are the UK, and one for the United States. We haven’t checked anywhere else, and a wrong door is worse than no door.
+
+| Name | What we say about it | Link |
+| --- | --- | --- |
+| NHS: alcohol support | Where the NHS says to start with drinking, and the services and groups it points you to. UK. | `https://www.nhs.uk/live-well/alcohol-advice/alcohol-support` |
+| NHS: drug addiction, getting help | What treatment for drugs actually involves, and how to get it. UK. | `https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help` |
+| WithYou | Free and confidential. An online chat open seven days a week, and a search for services near you. England and Scotland. | `https://www.wearewithyou.org.uk` |
+| Talk to Frank | Straight information about drugs, and a search for local services. Free. UK. | `https://www.talktofrank.com` |
+| UK SMART Recovery | A charity running free meetings, in person and online, built on the same ideas CBT is. UK. | `https://smartrecovery.org.uk` |
+| FindTreatment.gov | The US government’s search for licensed treatment, for alcohol and for drugs. Confidential and anonymous. United States. | `https://findtreatment.gov` |
+
 ### Free CBT worksheets and reading
 
 | Name | What we say about it | Link |

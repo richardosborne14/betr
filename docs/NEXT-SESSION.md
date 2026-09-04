@@ -1,14 +1,13 @@
 # Start here
 
-**Last refreshed:** 2026-09-04, after the founder signed off the gluten fix and it went live.
+**Last refreshed:** 2026-09-04, after the gluten fix went live and B24 closed the one safety gap.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**v1 is built and live, and everything from 2026-09-04 is committed and published.** 167 tests,
+**v1 is built and live, and everything from 2026-09-04 is committed and published.** 169 tests,
 no dependencies, no build step, nothing requested after load. The founder read the changed
-sentences and said commit and push (`dadb734`); `betr.trybeup.com` is serving them. The working
-tree is clean.
+sentences and said commit and push (`dadb734`); `betr.trybeup.com` is serving them.
 
 **What 2026-09-04 did, in order.**
 
@@ -27,6 +26,12 @@ tree is clean.
 - **B21: three characters walked the app in a real browser** — `tools/walk.js`, one command per
   step. `docs/journeys-observed.md`. Ten findings.
 - **B22–B27 written** from those findings, ordered in `docs/TRACK-understandable.md`.
+- **B24 done, and it was the release blocker.** Door one's note promised *"Help has places that
+  are"* and Help had none. It has six now — NHS alcohol, NHS drugs, WithYou, Talk to Frank, UK
+  SMART Recovery, FindTreatment.gov — **every one read on its own site on 2026-09-04**, and no
+  phone number written. **The founder overruled `places.js` rule 5 knowingly** to name a
+  fellowship; the rule now records that it was overruled and how to reverse it. The note is a
+  button, and it lands on the group, not on the top of a 4,700px screen.
 
 **The founder's read of the walks, and it is the through-line:** everything that worked
 **described the inside of a moment**; everything that nearly lost somebody **named a kind of
@@ -38,17 +43,13 @@ the app.**
 
 ## 2. The next action
 
-**Start on B24.** The wording sign-off is done. `docs/TRACK-understandable.md` has the order
-and the reasoning:
+**Start on B27 items 1–3.** B24 is done. `docs/TRACK-understandable.md` has the rest of the
+order and the reasoning:
 
 ```
-B24  ──▶  B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
+B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
 ```
 
-- **B24 is the only harm, not a loss, and it is a release blocker.** Door one's note says *"Help
-  has places that are"* and `places.js` has **no alcohol or drug service on it at all**. Every
-  service is read off the provider's own site on the day, with the URL, exactly like
-  `helplines.js`. **Nothing from memory.**
 - **B27 items 1–3 need nobody's permission and are about an hour**: the miss state still shouts
   *LOCKED IN · Go and do it*; `own.belief.only` is missing from `beliefOwn()`; `early` and
   `strug` share a word-for-word consequence on the same screen.
@@ -109,5 +110,9 @@ and helplines (`helplines.js` has `owner: null`); and **Q1**.
 - **`docs/COPY.md` is generated** by `node tools/copy-sheet.js`; never hand-edit it. The founder
   may edit the five content files on github.com — `docs/changing-the-words.md` is what they are
   following, so keep it true if a content file moves or a rule changes.
+- **`walk.js shot` leaves the page scrolled to the bottom.** Check `scrollY` before you
+  screenshot, or `open` again; otherwise a working landing looks broken.
+- **In `places.js` a GROUP may carry `note` and `id`; an ITEM still has three fields and no
+  fourth**, and that is the rule that stops the Help list being aimed at anybody.
 - **A link is allowed; a request is not** — `menu.test.js` holds the allow-list. **`why.js` has
   two fields and no third** — the regulatory line, not a style rule.

@@ -23,7 +23,7 @@ whether it stays.
 | --- | --- | --- | --- | --- |
 | **B22** | `B22-recognition-not-category.md` | The rule, and a sort of every sentence into three piles | Founder + Misha choose the rewrites | No, but it governs the rest |
 | **B23** | `B23-the-doors-someone-else-can-walk-through.md` | Priya nearly leaving on screen two; door one promising an audience its list doesn't serve | **Founder + Misha. Misha has the casting vote** | No |
-| **B24** | `B24-somewhere-to-send-them.md` | We tell people to go to Help and Help hasn't got it | Founder decides (a) or (b); the services need checking | **Yes — it is a live broken promise** |
+| ~~**B24**~~ | `B24-somewhere-to-send-them.md` | **DONE 2026-09-04.** Help has the six places, all read on the day, and the note opens them | Founder took all three decisions | ~~Yes~~ — closed |
 | **B25** | `B25-the-number-that-brought-them.md` | The ad's number is nowhere on the way in, and today's headline lost the reason it starts at 10 | Founder — one half is about the ad, not the app | No |
 | **B26** | `B26-help-for-someone-who-is-not-in-crisis.md` | 2,711px to the thing that wins the sceptic | Founder confirms the nine sentences are frozen in wording, not order | No |
 | **B27** | `B27-the-small-repairs.md` | Four small things; three need no decision | Only item 4 (the home-screen name) | No |
@@ -32,12 +32,13 @@ whether it stays.
 
 ```
 B24  ──▶  B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
-safety     free, today        the rule    the doors   the number   Help
+DONE       free, today        the rule    the doors   the number   Help
 ```
 
-**B24 first**, because it is the only one that is a harm rather than a loss: a person told "not
-this, go there" and sent somewhere that hasn't got it. It also needs the most calendar time,
-because every service has to be read on its own site before it can be written down.
+**B24 was first**, because it was the only one that was a harm rather than a loss: a person told
+"not this, go there" and sent somewhere that hasn't got it. Closed 2026-09-04 — six services,
+every one read on its provider's own site that day, and a test that fails the build if the
+promise on door one outlives the places behind it.
 
 **B27's first three next**, because they need nobody's permission and they are an hour.
 

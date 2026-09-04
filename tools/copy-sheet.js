@@ -336,6 +336,8 @@ w();
 places.groups.forEach((g) => {
   w('### ' + g.title);
   w();
+  /* B24: a group may carry one line of its own, above its list. One does. */
+  if (g.note) { w(g.note); w(); }
   w('| Name | What we say about it | Link |');
   w('| --- | --- | --- |');
   g.items.forEach((p) => w('| ' + p.name + ' | ' + p.what + ' | `' + p.url + '` |'));

@@ -17,6 +17,7 @@ const { boot } = require('./harness.js');
 const worries = require('../content/worries.js');
 const allDoors = require('../content/whats-going-on.js');
 const content = require('../lib/content.js');
+const places = require('../content/places.js');
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
 
@@ -179,6 +180,13 @@ test('Help carries the nine sentences and the one clear thing to read about CBT'
 */
 const ALLOWED = [
   'https://findahelpline.com',
+  /* B24, all six read on the provider's own site on 2026-09-04. See content/places.js. */
+  'https://www.nhs.uk/live-well/alcohol-advice/alcohol-support',
+  'https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help',
+  'https://www.wearewithyou.org.uk',
+  'https://www.talktofrank.com',
+  'https://smartrecovery.org.uk',
+  'https://findtreatment.gov',
   'https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments/talking-therapies-and-counselling/cognitive-behavioural-therapy-cbt',
   'https://www.babcp.com/About/What-is-CBT',
   'https://www.cci.health.wa.gov.au',
@@ -284,4 +292,61 @@ test('ours is on the Help list, never first, and says who made it and what it co
   rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
   rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');
+});
+
+/* ------------------------------------------------------- B24: the promise on door one */
+
+/*
+  Door one has said since B19: "If you're dependent on alcohol or drugs, this isn't the right
+  thing. Help has places that are." For a day it was not true — places.js had no such service
+  on it at all, and the one sentence in BETR that deliberately sends somebody away sent them
+  to CBT worksheets and therapist registers.
+
+  This test is why it cannot come apart silently again. It is deliberately written the way
+  round it is: the promise is what is checked FOR, so deleting the group without deleting the
+  sentence fails the build, and deleting the sentence too is the only way to make it pass —
+  which is a decision somebody has to make on purpose, in a diff.
+*/
+test('if door one still promises places for alcohol and drugs, Help has them', () => {
+  const promises = allDoors.items.filter((d) => d.note)
+    .map((d) => d.note).join(' ');
+  if (!/alcohol|drug/i.test(promises)) return;   /* the promise is gone; nothing left to keep */
+
+  const group = places.groups.find((g) => /drink|drug|alcohol/i.test(g.title));
+  assert.ok(group, 'door one promises Help has places for alcohol and drugs; places.js has no such group');
+  assert.ok(group.items.length >= 3, 'only ' + group.items.length + ' places behind that promise');
+
+  /* and they are actually drawn, not merely present in the file */
+  const h = boot().tap('#m-help').html();
+  for (const place of group.items) {
+    assert.ok(h.indexOf(place.url) !== -1, place.name + ' is in places.js but not on the Help screen');
+  }
+  /* the group says which countries it covers, the way helplines.js does */
+  assert.ok(typeof group.note === 'string' && /UK|United States/.test(group.note),
+    'the group does not say where its places actually work');
+  assert.ok(h.indexOf(group.note) !== -1, 'that line is not drawn');
+});
+
+/*
+  Naming a screen is not the same as opening it. The note goes to Help when it is tapped —
+  inside the app, not as a link, so the rule that only Help carries links is untouched.
+*/
+test('tapping door one\'s note opens Help, and lands on the places it promised', () => {
+  const a = boot().tap('#go');
+  a.shows('data-note=');
+  a.tap('[data-note]');
+  a.shows(places.groups[0].items[0].url);
+
+  /*
+    Not the top of Help. Help is four screenfuls long and this person was told, one tap ago,
+    that BETR is not the right thing for them. Focus is the assertion because it is what
+    carries somebody listening as well as somebody looking.
+  */
+  assert.strictEqual(a.focusedId(), 'group-substances',
+    'the note opened Help but left them at the top of it');
+
+  /* it moved inside the app: the note itself is not a link out */
+  const doors = boot().tap('#go').html();
+  const note = doors.slice(doors.indexOf('doornote'), doors.indexOf('doornote') + 400);
+  assert.ok(note.indexOf('href=') === -1, 'the note is a link out, not a move inside the app');
 });

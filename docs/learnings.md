@@ -400,3 +400,26 @@ clamp. It was 1.2, so every band overlapped the one below, and a marker pen turn
 **The lesson: a highlighted inline span couples its padding to its line-height, and the two have
 to be changed together.** The test that pins it asserts both numbers rather than the look, and
 says why, because the line-height is exactly the sort of thing a tidy-up reduces.
+
+## "Open Help" and "reach the thing on Help" are not the same act (B24, 2026-09-04)
+
+Door one's note promises *"Help has places that are"*. B24 gave Help those places and made the
+note tap through to it. Tests passed. Walked in a real browser, it was still a broken promise:
+Help is **4,718 pixels** long and the person landed at the top of it, four screenfuls of crisis
+block, CBT explainer and nine legal sentences away from the six links they had been sent for.
+
+Then `focus()` on the group's heading looked like the fix and was not, quite. **`focus()` scrolls
+the minimum it can get away with** — it put the heading at the bottom of the viewport with two of
+the six places under the fold. `scrollIntoView()` alone would have moved the eye and not the
+screen reader. It needs both, in that order: focus for whoever is listening, scroll for whoever
+is looking, and neither does the other's job.
+
+**The lesson: on a long screen, navigating is only half of arriving.** A test that asserts "it
+opened Help" passes for a screen the person will never scroll to the bottom of. The test now
+asserts *which element has focus*, which is the only assertion that would have failed.
+
+## A full-page screenshot moves the page (B24, 2026-09-04)
+
+`node tools/walk.js shot` scrolls the page to capture it and **leaves it scrolled**. Reading
+`window.scrollY` afterwards reported 3,874 — the bottom of the document — and made a working
+landing look badly broken. Check the position first, screenshot second, or re-`open`.

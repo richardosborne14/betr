@@ -658,7 +658,8 @@
             return '<button data-door="' + esc(d.id) + '">' +
               '<span>' + esc(d.label) + '<span class="under">' + esc(d.under) + '</span></span>' +
               '<span class="go arrow" aria-hidden="true">→</span></button>' +
-              (d.note ? '<p class="doornote">' + esc(d.note) + '</p>' : '');
+              (d.note ? '<p class="doornote"><button class="plain" data-note="' + esc(d.id) +
+                '">' + esc(d.note) + '</button></p>' : '');
           }).join('') +
           '<button class="own" id="own"><span>' + esc(t('doors.own')) + '</span>' +
           '<span class="go arrow" aria-hidden="true">→</span></button>' +
@@ -668,6 +669,36 @@
     wireBack('start');
     qa('[data-door]').forEach(function (b) {
       b.onclick = function () { S.filter = b.getAttribute('data-door'); go('pick'); };
+    });
+    /*
+      B24, founder 2026-09-04. The note says "Help has places that are", and until today Help
+      did not have them. Now that it does, the sentence goes there when it is tapped instead
+      of naming a screen three taps away through a row this person may never have used.
+
+      It moves inside the app; it is not a link, so the rule that only Help carries links is
+      untouched (menu.test.js checks that on every other screen).
+    */
+    qa('[data-note]').forEach(function (b) {
+      b.onclick = function () {
+        go('help');
+        /*
+          And land on the group, not at the top. Help is four screenfuls long, and a person
+          who has just been told "this isn't the right thing" should not have to scroll past
+          an essay about CBT to reach what the sentence promised them.
+
+          Focus, not a scroll: it moves the view for somebody looking and the reading point
+          for somebody listening, which a scroll on its own does not (see "heard, not seen").
+        */
+        var h = q('#group-substances');
+        if (h && h.focus) { try { h.focus(); } catch (e) { /* older browser */ } }
+        /*
+          focus() on its own scrolls the least it can get away with, which put the heading at
+          the bottom of the screen with two of the six places under the fold. This puts it at
+          the top. Both, in this order: the focus is what a screen reader follows, the scroll
+          is what an eye follows, and neither does the other's job.
+        */
+        if (h && h.scrollIntoView) { try { h.scrollIntoView(); } catch (e) { /* older browser */ } }
+      };
     });
     /* Nobody is in all six. The way out of the screen is the same one as inside a door. */
     on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
@@ -1393,7 +1424,15 @@
         '<h2>' + esc(t('help.placesTitle')) + '</h2>' +
         '<p>' + esc(PLACES.intro) + '</p>' +
         PLACES.groups.map(function (grp) {
-          return '<h3>' + esc(grp.title) + '</h3>' +
+          /*
+            B24. A group may carry one `note`, drawn under its title. One does: the alcohol
+            and drug group, saying which countries it covers. It is on the GROUP and never on
+            an item, so there is still nowhere to hang a rule that shows one person a
+            different list from another (places.js rule 3).
+          */
+          return '<h3' + (grp.id ? ' id="group-' + esc(grp.id) + '" tabindex="-1"' : '') +
+            '>' + esc(grp.title) + '</h3>' +
+            (grp.note ? '<p class="tiny">' + esc(grp.note) + '</p>' : '') +
             '<ul class="places">' + grp.items.map(function (place) {
               return '<li><a href="' + esc(place.url) + '" target="_blank" rel="noopener noreferrer">' +
                 esc(place.name) + '</a> — ' + esc(place.what) + '</li>';

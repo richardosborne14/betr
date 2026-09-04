@@ -2,8 +2,8 @@
   The "other places" list on the Help screen. Places to go that we do not run.
 
   PLACEHOLDER. Misha signs this list off before release, the same way he signs off the six
-  surface-problem labels (B0 Q2a, B8). `signedOff` below is false until he has, and the third
-  group — doing it with other people — is the one that most needs him.
+  surface-problem labels (B0 Q2a, B8). `signedOff` below is false until he has, and two groups
+  most need him: doing it with other people, and — since B24 put it there — the first one.
 
   The rules this list lives under (B8, and CLAUDE.md rules 1, 8 and 9):
 
@@ -19,9 +19,18 @@
        device (research §5.2). If you are adding a `lane` or a `forDoor` here, stop.
     4. Linking to CCI, Getselfhelp and the rest is the correct way to point at their material.
        Copying their wording is not, and never becomes fine (rule 8). Every line below is ours.
-    5. No entry implies anything about the reader. Naming a recovery fellowship would say "this
-       app is for addicts" about whoever is reading it (research §5.4). None is named.
-    6. TrybeUP is in the third group under the conditions in B8: never first, never a button,
+    5. No entry implies anything about the reader. A group's title may name a condition —
+       "If it's drinking or drugs" is addressed to somebody, not said about everybody — but no
+       entry ever describes the person reading it (research §5.4).
+       AMENDED 2026-09-04 (B24). This rule used to end "Naming a recovery fellowship would say
+       'this app is for addicts' about whoever is reading it. None is named." The founder
+       overruled that knowingly, and named one: UK SMART Recovery is on the list below. The
+       reasoning they were given and took — the alternative was to link only the NHS page and
+       let the NHS name the fellowships, which is one more tap for the person least able to
+       spend it, and SMART Recovery is the closest thing to what BETR itself does. If this is
+       ever reversed, drop that one item; the NHS pages beside it already name AA, Al-Anon and
+       SMART Recovery themselves, so nothing is lost but a tap.
+    6. TrybeUP is in the last group under the conditions in B8: never first, never a button,
        never styled apart, it says we made it and what it costs right there, and it never
        carries a link parameter of any kind.
 
@@ -53,6 +62,88 @@ var BETR_PLACES = {
   ],
 
   groups: [
+    /*
+      B24, 2026-09-04. The group that makes door one's note true.
+
+      `whats-going-on.js` has carried this since B19, at the founder's request:
+
+          "If you're dependent on alcohol or drugs, this isn't the right thing.
+           Help has places that are."
+
+      For a day it was not true. Help had no alcohol or drug service on it at all. It is the
+      one sentence in BETR that deliberately sends somebody away — written for the person
+      frozen sentence 4 excludes, at the exact moment it is relevant — and it sent them to
+      nine links about CBT worksheets and therapist registers.
+
+      It is FIRST because the person reading it was sent here by that sentence and should not
+      have to scroll past worksheets to reach what they were just promised. Moving it down is
+      one edit and breaks nothing.
+
+      EVERY ENTRY WAS READ ON THE PROVIDER'S OWN SITE ON 2026-09-04. That is the discipline
+      `helplines.js` holds for a phone number, held here for the same reason: a person in this
+      state follows the first link and may only try once. No number is written here — not one,
+      not anywhere; `helplines.js` is the only file allowed to hold one.
+
+      Read on the day and deliberately left out, so nobody spends the afternoon finding out
+      the same thing twice:
+
+        Drinkaware   funded by the drinks industry. Not from this sentence, of all sentences.
+        Adfam        a real charity, for the family of somebody who drinks. A different
+                     promise; door one's note is about the person reading it.
+        SAMHSA's own national-helpline page returned 403 both times it was asked.
+                     FindTreatment.gov is the same agency and it rendered.
+    */
+    {
+      /*
+        The only group with an `id`, and it is an anchor and nothing else. Door one's note
+        lands a person on this heading rather than at the top of a screen that is 4,700 pixels
+        long — four screenfuls of CBT reading between the promise and what was promised. It is
+        on the GROUP, it names a place on a page, and it is never read from anything a person
+        typed; rule 3 above is about an ITEM and it still has three fields and no fourth.
+      */
+      id: 'substances',
+      title: 'If it’s drinking or drugs',
+      /*
+        The country line. `helplines.js` shows NO number at all in a country nobody has
+        checked, and says so; this is the same answer in the same voice. Founder's call,
+        2026-09-04, over per-country places — which would need a fourth field on an item and
+        would break rule 3 above.
+      */
+      note: 'These are the UK, and one for the United States. We haven’t checked anywhere ' +
+        'else, and a wrong door is worse than no door.',
+      items: [
+        {
+          name: 'NHS: alcohol support',
+          url: 'https://www.nhs.uk/live-well/alcohol-advice/alcohol-support',
+          what: 'Where the NHS says to start with drinking, and the services and groups it points you to. UK.'
+        },
+        {
+          name: 'NHS: drug addiction, getting help',
+          url: 'https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help',
+          what: 'What treatment for drugs actually involves, and how to get it. UK.'
+        },
+        {
+          name: 'WithYou',
+          url: 'https://www.wearewithyou.org.uk',
+          what: 'Free and confidential. An online chat open seven days a week, and a search for services near you. England and Scotland.'
+        },
+        {
+          name: 'Talk to Frank',
+          url: 'https://www.talktofrank.com',
+          what: 'Straight information about drugs, and a search for local services. Free. UK.'
+        },
+        {
+          name: 'UK SMART Recovery',
+          url: 'https://smartrecovery.org.uk',
+          what: 'A charity running free meetings, in person and online, built on the same ideas CBT is. UK.'
+        },
+        {
+          name: 'FindTreatment.gov',
+          url: 'https://findtreatment.gov',
+          what: 'The US government’s search for licensed treatment, for alcohol and for drugs. Confidential and anonymous. United States.'
+        }
+      ]
+    },
     {
       title: 'Free CBT worksheets and reading',
       items: [

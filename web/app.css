@@ -154,6 +154,17 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 */
 .list .doornote { background:var(--soft); color:var(--soft-ink); border-radius:14px; padding:12px 16px; font-size:.9375rem; line-height:1.4; margin:-4px 0 2px; }
 
+/*
+  B24. The note is a button now. "Help has places that are" opens Help, because until B24 Help
+  did not have them, and naming a screen is not the same as opening it. Two things it has to
+  do: look exactly like the sentence it already was, and be tappable across the whole sentence
+  — a two-word target inside a paragraph is a miss on a phone, by the person least able to
+  spend a second try.
+*/
+.list .doornote .plain { display:block; width:100%; background:none; border:0; padding:0;
+  font:inherit; color:inherit; text-align:start; text-decoration:underline;
+  text-underline-offset:3px; }
+
 .list .under { display:block; font-family:var(--body); font-weight:400; font-size:.90625rem; color:var(--ink-3); margin-top:6px; line-height:1.35; }
 
 /*
