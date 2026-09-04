@@ -113,6 +113,13 @@
   /* Scratch state: never persisted, because none of it should survive a reload. */
   var draft = { belief: '', test: '', drop: '' };
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
+  /*
+    The last guard NUDGE, which is not a refusal (2026-09-04). A sentence that does not read
+    as a prediction is not sent back any more: the shape that works is shown once, the button
+    becomes "Keep mine as it is", and the second tap takes the person's own words through
+    unchanged. Cleared by go(), like refusal, so it never survives leaving the screen.
+  */
+  var nudge = null;
   var installEvent = null; /* Android's beforeinstallprompt, if the browser offers one */
   var storageOk = true;
   var deleteArmed = false;
@@ -382,6 +389,7 @@
 
   function go(stage) {
     refusal = null;
+    nudge = null;
     /*
       Leaving the loop puts whatever is in hand down safely: a locked-in test goes to Your
       worries and waits, an unlocked draft is let go. Nothing you promised yourself is ever
@@ -773,10 +781,10 @@
       value: draft.belief,
       next: function (v) {
         draft.belief = v;
-        var check = guards.checkBelief(v);
-        if (!check.ok) { refuse(check); return; }
-        startFrom(f, { belief: v.trim(), expect: guards.expectationFrom(v) });
-        go('plan');
+        takeBelief(v, function () {
+          startFrom(f, { belief: v.trim(), expect: guards.expectationFrom(v) });
+          go('plan');
+        });
       }
     });
   }
@@ -796,13 +804,37 @@
       (refusal.kind === 'harm' ? crisisBlock() : '') + '</div>';
   }
 
+  /*
+    A nudge, which is the opposite of a refusal in every way that matters: the person's words
+    are still in the box, the button still goes forward, and the note says what usually works
+    rather than what is wrong. It uses the quiet style, not the warning one.
+  */
+  function nudgeBlock() {
+    if (!nudge) return '';
+    return '<p class="note">' + esc(t(nudge.soft)) + '</p>';
+  }
+
   /* A refusal is read out, because focus goes to the heading and the heading has not changed. */
   function refuse(check) {
     refusal = check;
+    nudge = null;
     say(t(check.reason));
     render();
   }
 
+  /* Read out for the same reason, and it has to say the button changed under them. */
+  function ask(check) {
+    nudge = check;
+    refusal = null;
+    say(t(check.soft) + ' ' + t('own.keep') + '.');
+    render();
+  }
+
+  /*
+    One box, one question, one button. `foot` is the quiet line under it and `next` gets the
+    words; the button's label is the only thing a nudge changes, because a person who has been
+    asked once and meant it should be able to see that tapping again goes through.
+  */
   function ownScreen(opts) {
     paint( backButton() +
       '<div class="stage">' +
@@ -810,9 +842,12 @@
         head('h2', opts.title) +
         '<p class="sub tight">' + esc(opts.sub) + '</p>' +
         warnBlock() +
+        nudgeBlock() +
         '<textarea id="t" class="short" aria-labelledby="top" placeholder="' +
           esc(opts.placeholder) + '">' + esc(opts.value) + '</textarea>' +
-        '<button class="big wide" id="next">' + esc(t('own.next')) + '</button>' +
+        '<button class="big wide" id="next">' +
+          esc(nudge ? t('own.keep') : t('own.next')) + '</button>' +
+        (opts.foot ? '<p class="tiny">' + esc(opts.foot) + '</p>' : '') +
       '</div>');
     wireBack(opts.back);
     var box = q('#t');
@@ -821,18 +856,40 @@
     on('#next', function () { opts.next(box.value); });
   }
 
+  /*
+    What both belief boxes do with what was typed. A hard refusal sends it back; a soft one
+    asks, once — and if the person taps again with the same shape it goes through, which is
+    the whole point of it being a question rather than a wall.
+  */
+  function takeBelief(v, onward) {
+    var asked = nudge;
+    var check = guards.checkBelief(v);
+    if (!check.ok) { refuse(check); return; }
+    if (check.soft && !asked) { ask(check); return; }
+    nudge = null;
+    refusal = null;
+    onward(v);
+  }
+
+  /*
+    The blank box, and the one screen in BETR where a person can write a worry it cannot work
+    on. 2026-09-04: a test user wrote "if I eat gluten, then I'll feel sick" — a true thing,
+    settled long ago, and every screen he had passed asked him what he was worried about
+    without once saying which worries this is for. `own.belief.only` is that sentence, and it
+    sits under the box rather than above it: a rule read before you have written anything is a
+    rule about somebody else.
+  */
   function ownBelief() {
     ownScreen({
       back: 'pick',
       title: t('own.belief.title'),
       sub: t('own.belief.sub'),
+      foot: t('own.belief.only'),
       placeholder: t('own.belief.placeholder'),
       value: draft.belief,
       next: function (v) {
         draft.belief = v;
-        var check = guards.checkBelief(v);
-        if (!check.ok) { refuse(check); return; }
-        go('own-test');
+        takeBelief(v, function () { go('own-test'); });
       }
     });
   }

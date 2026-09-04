@@ -3,3 +3,6 @@ node_modules/
 web/hash.txt
 mobile/ios/Pods/
 mobile/android/build/
+
+# tools/walk.js keeps a live browser between commands here. Never committed.
+.walk.json

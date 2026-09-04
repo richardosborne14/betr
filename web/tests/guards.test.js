@@ -34,10 +34,46 @@ test('a conditional belief with a consequence is accepted', () => {
   assert.strictEqual(guards.checkBelief('If I rest then I will feel guilty all day').ok, true);
 });
 
-test('a belief with no consequence is sent back', () => {
-  assert.strictEqual(guards.checkBelief('If I say no').ok, false);
-  assert.strictEqual(guards.checkBelief('People will hate me').ok, false);
-  assert.strictEqual(guards.checkBelief('').ok, false);
+/*
+  2026-09-04, and the test user who caused it. He typed "if I eat gluten, it won't go well"
+  and the app refused it for a missing "then" — a sentence any reader understands, walled by
+  grammar. Nothing about the shape is sent back any more.
+*/
+test('a clear prediction goes through whatever punctuation it has', () => {
+  for (const s of ['if I eat gluten, it won’t go well',
+                   'If I say no they will think I am selfish',
+                   'My boss will think I am slacking if I leave at five',
+                   'I’m going to get fired if I ask for Friday off']) {
+    const r = guards.checkBelief(s);
+    assert.strictEqual(r.ok, true, s);
+    assert.ok(!r.soft, 'asked about a sentence that already reads as a prediction: ' + s);
+  }
+});
+
+test('a belief with no consequence is asked about, not refused', () => {
+  for (const s of ['If I say no', 'People will hate me']) {
+    const r = guards.checkBelief(s);
+    assert.strictEqual(r.ok, true, s);
+    assert.strictEqual(r.soft, 'nudge.shape', s);
+    assert.match(words(r.soft), /If I ___, then ___/);
+  }
+});
+
+test('an empty box is still the one thing besides a verdict that cannot go on', () => {
+  const r = guards.checkBelief('');
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.reason, 'refusal.emptyBelief');
+});
+
+/*
+  The narrow exemption that came with the loosening. "I'm going to get fired if I ask" is a
+  textbook prediction and used to be refused as a verdict on its first two words. A sentence
+  with "if" in it is a conditional; a bare one is still a core belief and still refused.
+*/
+test('a conditional is never read as a verdict, and a bare one still is', () => {
+  assert.strictEqual(guards.checkBelief('I’m useless').ok, false);
+  assert.strictEqual(guards.checkBelief('I’m no good at any of this').ok, false);
+  assert.strictEqual(guards.checkBelief('I’m the one they’ll blame if the thing fails').ok, true);
 });
 
 test('a test mentioning the habit is refused with the reason', () => {

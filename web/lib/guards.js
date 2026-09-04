@@ -5,7 +5,9 @@
   test. These are what make that safe:
 
     checkBelief  "I am a bad person" is a verdict. It is reframed at the door into a
-                 prediction, because you cannot run an experiment against a verdict.
+                 prediction, because you cannot run an experiment against a verdict. Since
+                 2026-09-04 that is the ONLY thing it refuses besides an empty box: the shape
+                 rules ask once and let the person's own words through. See checkBelief.
     checkTest    a test that involves the habit, food and body, or anyone's safety is
                  refused with the reason, not warned about. Refusing quietly teaches nothing;
                  refusing with the reason teaches the whole point of the product.
@@ -73,6 +75,17 @@
     emptyBelief: 'refusal.emptyBelief'
   };
 
+  /*
+    What a nudge says. Same rule as REASON: a key, never a sentence, so it can be translated,
+    and so no phone number can ever appear in this file.
+
+    `notConditional` and `noConsequence` above are still keys a translator has to fill, and
+    nothing reaches them any more: they were the two refusals that became this one nudge, and
+    they are kept because a language file that dropped a key would fail i18n.test.js on the
+    day somebody puts the wall back. Neither is shown.
+  */
+  var NUDGE = { shape: 'nudge.shape' };
+
   /* Word-boundary match, so "Betr" never trips "bet" and "fastest" never trips "fasting". */
   function hit(text, words) {
     var t = ' ' + String(text || '').toLowerCase().replace(/[’']/g, '\'').replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
@@ -103,24 +116,45 @@
   }
 
   /*
-    A belief. Conditional only: "If I ___, then ___".
-    Returns { ok: true } or { ok: false, kind, reason }.
+    A belief.
+
+    LOOSENED 2026-09-04, founder's call, and the reason is a person. A test user typed
+    "if I eat gluten, it won't go well" and was refused for a missing "then". The grammar was
+    never the point: that sentence is a clear prediction, a reader understands it instantly,
+    and the wall taught him nothing and cost him the session.
+
+    So the shape rules are a NUDGE now, not a refusal. The app asks once, shows the shape that
+    works, and the person's own words go through on the next tap. Four things went with it:
+    "if" may sit anywhere in the sentence rather than only at the front, no comma is required,
+    no "then" is required, and the six-word floor is a five-word one.
+
+    Two stops stay hard, and neither is a grammar preference:
+
+      empty    there is nothing to test.
+      verdict  "I am a bad person" is a CORE belief. Research §2.1 is explicit that a tool with
+               no therapist must not go near one: Padesky's client looks at contrary evidence
+               and says "yes, and I am still bad". Reframed, never accepted. CLAUDE.md rule 3.
+               A sentence with "if" in it is a conditional and is exempt, because
+               "I'm going to get fired if I ask" used to be refused as a verdict and it is a
+               textbook prediction.
+
+    Returns { ok: false, kind, reason }  cannot go on
+         or { ok: true }                 reads as a prediction
+         or { ok: true, soft, kind }     goes on when the person taps again
   */
   function checkBelief(text) {
     var s = String(text || '').trim().replace(/\s+/g, ' ');
     if (!s) return { ok: false, kind: 'empty', reason: REASON.emptyBelief };
 
-    if (/^(i\s*am|i'm|i’m|im|i\s+will\s+always|i\s+never)\b/i.test(s)) {
+    var conditional = /\bif\b/i.test(s);
+
+    if (!conditional && /^(i\s*am|i'm|i’m|im|i\s+will\s+always|i\s+never)\b/i.test(s)) {
       return { ok: false, kind: 'verdict', reason: REASON.verdict };
     }
 
-    if (!/^if\b/i.test(s)) {
-      return { ok: false, kind: 'not-conditional', reason: REASON.notConditional };
-    }
-
-    var hasConsequence = s.indexOf(',') !== -1 || /\bthen\b/i.test(s);
-    if (!hasConsequence || s.split(' ').length < 6) {
-      return { ok: false, kind: 'no-consequence', reason: REASON.noConsequence };
+    /* Both halves of a prediction, roughly: the "if", and enough words to carry a consequence. */
+    if (!conditional || s.split(' ').length < 5) {
+      return { ok: true, soft: NUDGE.shape, kind: 'shape' };
     }
 
     return { ok: true };
@@ -144,6 +178,7 @@
     BODY: BODY,
     HARM: HARM,
     REASON: REASON,
+    NUDGE: NUDGE,
     checkTest: checkTest,
     checkBelief: checkBelief,
     expectationFrom: expectationFrom

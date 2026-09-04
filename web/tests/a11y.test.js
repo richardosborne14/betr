@@ -182,7 +182,7 @@ test('lang and dir follow the language, and survive a reload', () => {
   /* a stored choice is read back on the next open, exactly as the country is */
   const c = boot({ 'betr.v1': JSON.stringify({ stage: 'start', lang: 'en', done: [] }) });
   assert.strictEqual(c.lang(), 'en');
-  c.shows('Sure it’ll go badly?');
+  c.shows(en.s.start.title);
 });
 
 /* ------------------------------------------------- names, and things with no name */

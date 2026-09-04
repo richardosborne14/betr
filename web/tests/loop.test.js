@@ -19,6 +19,7 @@ const worries = require('../content/worries.js');
 const doors = require('../content/whats-going-on.js');
 const content = require('../lib/content.js');
 const why = require('../content/why.js');
+const en = require('../content/strings-en.js');
 const labelOf = (id) => content.byId(worries, id).label;
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0]);
@@ -27,7 +28,7 @@ const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0])
 
 test('a full loop, from the start screen to a result', () => {
   const a = boot();
-  a.shows('Sure it’ll go badly?');
+  a.shows(en.s.start.title);
   a.tap('#go').shows('What’s going on?');
   a.tap('[data-door]', 0).shows('Which one?');
   /*
@@ -270,7 +271,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   assert.strictEqual(dump.results[0].happened, 'He said fair enough.');
   assert.strictEqual(dump.results[0].worry, worries[0].label);
   a.tap('#wipe').shows('There is no copy anywhere else');
-  a.tap('#yes').shows('Sure it’ll go badly?');
+  a.tap('#yes').shows(en.s.start.title);
   a.hides('He said fair enough');
   a.tap('#m-help');
   assert.strictEqual(JSON.parse(a.tap('#export').valueOf('#dump')).results.length, 0);
@@ -278,13 +279,13 @@ test('export holds every result, and delete leaves nothing behind', () => {
 });
 
 test('it starts cleanly from nothing, from rubbish, and from a half-finished loop', () => {
-  boot({ 'betr.v1': '{{{ not json' }).shows('Sure it’ll go badly?');
-  boot({ 'betr.v1': '[]' }).shows('Sure it’ll go badly?');
+  boot({ 'betr.v1': '{{{ not json' }).shows(en.s.start.title);
+  boot({ 'betr.v1': '[]' }).shows(en.s.start.title);
   /* a stage that needs a current test, with no current test, must not strand anyone */
   boot({ 'betr.v1': JSON.stringify({ stage: 'plan', cur: null, done: [] }) })
-    .shows('Sure it’ll go badly?');
+    .shows(en.s.start.title);
   boot({ 'betr.v1': JSON.stringify({ stage: 'result', cur: null, done: [] }) })
-    .shows('Sure it’ll go badly?');
+    .shows(en.s.start.title);
 });
 
 test('a locked expectation cannot be edited after the test is done', () => {
@@ -350,10 +351,10 @@ test('your worries opens the pick list until there is one, and the worry after t
   const a = boot();
   /* nothing recorded: the door still works, and lands somewhere with something to do */
   a.tap('#m-mine').shows('What’s going on?');
-  a.tap('#back').shows('Sure it’ll go badly?');
+  a.tap('#back').shows(en.s.start.title);
   loop(a, 0, 'He said fair enough.', 1);
   a.tap('#m-mine').shows('Your worries').shows('He said fair enough.');
-  a.tap('#back').shows('Sure it’ll go badly?');
+  a.tap('#back').shows(en.s.start.title);
 });
 
 test('a result saved by the version before the ladder still opens, and still counts', () => {
@@ -398,6 +399,55 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
     assert.ok(!/^[a-z]/.test(label), 'lowercase label: "' + label + '"');
   }
   assert.ok(a.html().indexOf('BETR') !== -1 || seen.length > 0);
+});
+
+/*
+  2026-09-04, and it is named for the person it happened to. A test user typed "if I eat
+  gluten, it won't go well" and the app walled him over a missing "then". The shape rules are
+  a question now: asked once, with the shape that works, and the next tap takes his words.
+
+  What this holds down is the difference between a question and a wall — if the second tap
+  ever stops going through, the wall is back and nobody will notice from the words alone.
+*/
+test('a sentence that is not quite a prediction is asked about once, then goes through', () => {
+  const a = boot().tap('#go').tap('#own');
+
+  a.type('#t', 'People will hate me').tap('#next');
+  a.shows('If I ___, then ___');
+  a.shows('Keep mine as it is');
+  a.shows(en.s.own.belief.title);
+  assert.ok(a.html().indexOf('class="warn"') === -1, 'a nudge was drawn as a refusal');
+  assert.ok(a.html().indexOf('People will hate me') !== -1, 'the person’s words were taken away');
+
+  /* The second tap, with nothing changed, is the whole point. */
+  a.tap('#next').shows(en.s.own.test.title);
+});
+
+test('the nudge is gone once the sentence reads as a prediction, and never nags twice', () => {
+  const a = boot().tap('#go').tap('#own');
+  a.type('#t', 'If I say no').tap('#next').shows('If I ___, then ___');
+
+  /* Rewriting it clears the note, and it does not follow the person to the next box. */
+  a.type('#t', 'If I say no, they will think I am selfish').tap('#next');
+  a.shows(en.s.own.test.title).hides('Keep mine as it is').hides('If I ___, then ___');
+});
+
+test('a verdict is still refused, and an empty box still is', () => {
+  const a = boot().tap('#go').tap('#own');
+  a.type('#t', 'I am a bad person').tap('#next');
+  a.shows(en.s.refusal.verdict).shows(en.s.own.belief.title);
+
+  a.type('#t', '').tap('#next');
+  a.shows(en.s.refusal.emptyBelief).shows(en.s.own.belief.title);
+});
+
+/*
+  The line the whole of 2026-09-04 exists for. Every worry in content/worries.js is about what
+  other people will think, say or do; the blank box never said so, so a person wrote a true
+  worry about his own body into it and the app took it.
+*/
+test('the blank box says which worries BETR is for', () => {
+  boot().tap('#go').tap('#own').shows('Not the weather, and not your body');
 });
 
 test('the brand is BETR everywhere a person reads it, refusals included', () => {

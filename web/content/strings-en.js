@@ -92,16 +92,34 @@ var BETR_STRINGS_EN = {
     /* ------------------------------------------------------------------ the front screen */
 
     start: {
-      title: 'Sure it’ll go badly?',
-      sub: 'Pick a worry. Get one tiny thing to do today. Come back and say what happened.',
+      /*
+        2026-09-04. The front screen's job changed. It used to describe the loop; it now has to
+        say, before anything else, WHICH WORRIES THIS IS FOR — because a test user wrote "if I
+        eat gluten, then I'll feel sick" and the app had never once told him it was not for
+        that. Nothing else in fifteen screens says it either.
+
+        It cannot say "irrational". Research §4.3 rules that word out from three directions at
+        once: Gilbert's clients could see their thoughts were irrational and felt no different,
+        Luoma found fast shame reduction predicted MORE use later, and shame-proneness is the
+        trait that predicts problems. "Irrational" is a verdict (rule 6) and it is the verdict
+        this audience has already passed on themselves.
+
+        So the boundary is drawn as a description instead of a rule, and the description is the
+        rehearsal: the thing you run in your head every day and have never once let happen. A
+        gluten intolerance has happened, every time. It fails the sentence on sight, and nobody
+        has been told anything about themselves.
+      */
+      title: 'You’ve played it out a hundred times.',
+      sub: 'It’s never once gone that way. Try it for real today, and write down what did happen.',
       /*
         B19. It used to say "Pick a worry" and lead straight to the list. It leads to the
         doors now, and "Not sure which? Start from what's going on" is gone with the change:
         it was the second way in, and the second way in turned out to be the only one two
         test users could read.
       */
-      go: 'Find your worry',
-      promise: 'No account. No AI. Nothing leaves your phone.',
+      go: 'Pick a worry',
+      /* The trust line, with the human half first. §9.2: airplane mode is the proof. */
+      promise: 'Nobody sees this but you. No account, no AI, nothing leaves your phone.',
       noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +
         'does that. The loop still works; nothing will be here tomorrow.'
     },
@@ -155,11 +173,25 @@ var BETR_STRINGS_EN = {
     own: {
       label: 'Your own',
       next: 'Next',
+      /* The second tap on a nudged sentence. Their words go through unchanged. */
+      keep: 'Keep mine as it is',
       /* Already in the box when it opens: the opening half of a conditional, not a hint. */
       beliefSeed: 'If I ',
       belief: {
         title: 'What do you think will happen?',
-        sub: 'One sentence, starting “If I…”. It has to be something that could turn out to be wrong.',
+        /*
+          "Write the version you play out" is the front screen's sentence arriving where it is
+          actionable. It also asks for the right thing clinically: the prediction has to be the
+          feared one, specific enough to be checked (research §2.3), not a tidy summary.
+        */
+        sub: 'Write the version you play out. One sentence, and make it about people.',
+        /*
+          The boundary, and the whole reason 2026-09-04 happened. Every one of the twenty-one
+          worries in content/worries.js is about what other people will think, say or do; not
+          one is about what the world will physically do to you. That was true and unwritten.
+          "Never found out" is the half that excludes a true worry without judging anybody.
+        */
+        only: 'Not the weather, and not your body. Only the ones you’ve never actually found out about.',
         placeholder: 'If I ask for a day off, my boss will think I’m not committed.'
       },
       test: {
@@ -190,6 +222,18 @@ var BETR_STRINGS_EN = {
       noConsequence: 'Say what you think happens next: “If I ___, then ___”.',
       emptyTest: 'Write the one thing you’ll do today.',
       emptyBelief: 'Write what you think will happen.'
+    },
+
+    /*
+      Not a refusal. Founder's call, 2026-09-04, after a test user typed "if I eat gluten, it
+      won't go well" and hit a wall over a missing "then". The grammar was never the point —
+      that sentence is a clear prediction and any reader understands it instantly. So the shape
+      rules ask once, show the shape that works, and let the person's own words through on the
+      next tap. lib/guards.js decides when to ask; this says it.
+    */
+    nudge: {
+      shape: 'These work best as “If I ___, then ___”. Like: If I ask for Friday off, then my ' +
+        'boss will think I’m slacking. Or keep yours as it is.'
     },
 
     /* ------------------------------------------------------------------ the loop */

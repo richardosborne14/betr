@@ -22,6 +22,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const { boot } = require('./harness.js');
+const en = require('../content/strings-en.js');
 const store = require('../lib/store.js');
 const worries = require('../content/worries.js');
 const allDoors = require('../content/whats-going-on.js');
@@ -82,7 +83,7 @@ test('every screen that phone can reach still shows the same rungs', () => {
   a.shows('Nobody said anything at all.');
   /* the one it locked in and never finished is still waiting, and still says so */
   a.shows('Say one thing that annoyed you');
-  a.tap('#back').shows('Sure it’ll go badly?');
+  a.tap('#back').shows(en.s.start.title);
 });
 
 test('normalising the same v2 file twice gives every record the same id', () => {

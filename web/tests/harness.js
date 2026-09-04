@@ -55,9 +55,26 @@ function makeEl(id) {
   once under its own value, `[data-cc="AU"]`, which is how a test picks one country out of
   two hundred and forty-seven without counting down the list.
 */
+/*
+  What the app escaped on the way out, undone on the way in. Only used for a box's contents:
+  a textarea holds text, not markup, so this is the whole of it (see esc() in app.js).
+*/
+const unesc = (s) => s
+  .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+  .replace(/&amp;/g, '&');
+
 function parse(html) {
   const kids = {};
   for (const m of html.matchAll(/id="([^"]+)"/g)) kids['#' + m[1]] = makeEl(m[1]);
+  /*
+    A box keeps what is written in it across a repaint, the way a real one does. Without this
+    every re-render emptied the box, and a test could only ever check a screen that sends the
+    person's words back — never one that hands them back, which is what a nudge does.
+  */
+  for (const m of html.matchAll(/<textarea[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/textarea>/g)) {
+    if (kids['#' + m[1]]) kids['#' + m[1]].value = unesc(m[2]);
+  }
   for (const m of html.matchAll(/data-([a-z]+)="([^"]+)"/g)) {
     const el = makeEl();
     el._attrs = { ['data-' + m[1]]: m[2] };

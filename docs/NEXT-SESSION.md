@@ -1,71 +1,74 @@
 # Start here
 
-**Last refreshed:** 2026-09-03, after B20 — a worry now carries three predictions, and the
-same two lines are on every screen of the loop.
+**Last refreshed:** 2026-09-04, after the gluten fix, three observed walks, and six tasks
+written out of them.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**v1 is built, amended twelve times, live, and there is nothing left to build without
-somebody's decision.** Fifteen screens, **160 tests**, no dependencies, no build step, no
-requests after the page loads. Earlier amendments, each in its own task file: *worry* and the
-**1–10 ladder**; the **BETR** wordmark; **B8**'s three plain words; **B17**'s country-aware
-crisis block; **B9**'s `rid` and `move` (storage is **v3**); **B15**'s strings and speech;
-**B18**'s "Why this one sticks"; **B3**'s web server; **B19**'s doors.
+**v1 is built, live, and there is a working tree full of uncommitted change that the founder
+has not signed off.** 167 tests, no dependencies, no build step, nothing requested after load.
+**Nothing from 2026-09-04 is committed or pushed, deliberately** — a push to `main` publishes
+`betr.trybeup.com`, and what is in the tree is the founder's copy, not ours.
 
-**2026-09-03, B20, from the same two test users as B19 and on the same evening.** Three asks,
-all built:
+**What 2026-09-04 did, in order.**
 
-- **One worry, three predictions.** With B19 finally showing a worry's "If I ___, then ___",
-  the next thing they said was that it "sort of matches my worry but not really". A worry is a
-  *situation*; what an experiment tests is the **prediction underneath**, and there is always
-  more than one. So `worries.js` now carries a loose `belief` for the card and **exactly three
-  `beliefs`** — `{ belief, expect }` — that a person chooses between on a new screen, or
-  replaces with their own words. Top-level `expect` is gone; it travels with the prediction now.
-  **Sixty-three new sentences.**
-- **The same words all the way through.** `worryHead()` puts the label and the exact sentence
-  being tested at the top of every screen from the choice to the result. `plan.kicker`
-  ("Here's your test") is gone; the worry's own label is that screen's heading.
-- **The yellow.** `.result .real` line-height was 1.2 against a 1.44 minimum, so every
-  highlight band overlapped the one below. Now 1.6, pinned by a test with the arithmetic.
+- **The gluten problem.** A test user typed *"if I eat gluten, then I'll feel sick"* into the
+  blank box. He is gluten intolerant, he was answering the question honestly, and **no screen in
+  the app had ever said which worries BETR is for.** Fixed in words: a new front screen
+  (*"You've played it out a hundred times."*), and `own.belief.only` under the blank box —
+  *"Not the weather, and not your body. Only the ones you've never actually found out about."*
+- **The grammar wall became a nudge.** He had also been refused for a missing "then". `if` may
+  now sit anywhere, no comma, no "then", five-word floor; anything that does not read as a
+  prediction is **asked about once** and the button becomes *Keep mine as it is*. Three stops
+  stay hard: empty, `I am ___`, self-harm. One narrow loosening: a sentence containing "if" is
+  exempt from the verdict check, because *"I'm going to get fired if I ask"* used to be refused.
+- **`web/tests/harness.js` learned that a box keeps its text across a repaint**, which is the
+  only way to test "hands your words back" rather than "sends your words back".
+- **B21: three characters walked the app in a real browser** — `tools/walk.js`, one command per
+  step. `docs/journeys-observed.md`. Ten findings.
+- **B22–B27 written** from those findings, ordered in `docs/TRACK-understandable.md`.
 
-**Cost: the loop is six taps, not four.** B19 bought one, B20 bought the other. **The founder
-accepted both on 2026-09-04** — "one extra tap is fine" — and chose the **shared ladder**: all
-three predictions under a worry move that worry's one ladder. Rule 5 and rule 10 in `CLAUDE.md`
-now say so. Neither is an open question; do not reopen either as a tidy-up.
+**The founder's read of the walks, and it is the through-line:** everything that worked
+**described the inside of a moment**; everything that nearly lost somebody **named a kind of
+person**. That is B22 and it governs the other five.
 
 **Still true:** **Q1 (name, trademark, domain) is open** and blocks release. **Nobody outside
-this building has read a word of the worry list** — and it is three times the size it was this
-morning. **Nobody who uses a screen reader has touched the app.**
+this building has read a word of the worry list.** **Nobody who uses a screen reader has touched
+the app.**
 
 ## 2. The next action
 
-**There isn't a coding one.** B10 must not start until passkeys-in-a-Capacitor-webview is
-settled (`capacitor://localhost` fails WebAuthn's origin check, and B5 allows no extra
-plugins); B11 rests on an unchecked fact about Apple's CloudKit wording; B12–B14 need the
-founder to amend rule 1 **in writing**; B16 waits for real users. **A session that opens should
-ask the founder which of these to move, not start B10.** All of them block release:
+**Ask the founder whether today's uncommitted wording is right, then commit it.** It is their
+copy and they have seen it in the terminal but not on a phone. Until then nothing here is pushed.
 
-- **One paid CBT-trained reviewer** reads, per worry, **the label, the card sentence, the three
-  predictions and the explanation together**. The question is whether the three are three real
-  predictions or one prediction and two paraphrases — only somebody trained will see it. Never
-  an endorsement. Two pairs to ask about by name: **`strug` against `low`**, and **`care`
-  against `praise`**; if either is called one worry, `low` and `praise` are the ones that go.
-  Say out loud that `why.js` is the file most at risk of echoing CCI or Getselfhelp.
-- **Misha reads the six doors and the sixty-three**, plus the `note` on door one, and he keeps
-  the casting vote on `drink`, now *Turning up and not joining in* (B0 Q2a, Q2d).
-- **A real screen-reader pass on a real phone**, VoiceOver and TalkBack, by somebody who uses
-  one daily. Release condition in B15's file. **And nobody has walked B20 on a phone at all** —
-  the new strip sits above the heading on five screens, unseen at 390 wide with big text.
-- **A PR on `trybeup/trybeup-prod`.** BETR's nginx block is on the droplet and **not** in that
-  repo, and their deploy rsyncs `nginx.conf` whenever it changes — so their next nginx change
-  deletes BETR's block and the address goes dark. Same PR adds `betr.trybeup.com` to
-  `renew-cert.yml`. **Tell them their deploy has a live bug too**: it reloads nginx inside the
-  container, so an inode change makes the reload silently do nothing and the run still goes green.
-- **J1, J2 and J3 walked on a real phone** against the live address (`docs/journeys.md`). They
-  were written for the four-tap flow and are now two taps out of date.
-- **Somebody owns checking links and helplines each release** (`helplines.js` has
-  `owner: null`), and **Q1** — nothing ships unnamed.
+After that, `docs/TRACK-understandable.md` has the order and the reasoning:
+
+```
+B24  ──▶  B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
+```
+
+- **B24 is the only harm, not a loss, and it is a release blocker.** Door one's note says *"Help
+  has places that are"* and `places.js` has **no alcohol or drug service on it at all**. Every
+  service is read off the provider's own site on the day, with the URL, exactly like
+  `helplines.js`. **Nothing from memory.**
+- **B27 items 1–3 need nobody's permission and are about an hour**: the miss state still shouts
+  *LOCKED IN · Go and do it*; `own.belief.only` is missing from `beliefOwn()`; `early` and
+  `strug` share a word-for-word consequence on the same screen.
+- **B23 is the founder's and Misha's**, and it has no free option — door one is what nearly lost
+  Priya *and* what got Dan and Marcus in. Five options costed in the file. **Misha's casting vote.**
+- **B25 contains a regression made the same day.** Scope §3: *"Everything starts at 10 — that is
+  what the front screen says."* The new headline does not say it. Dan read his 10 → 9 as barely
+  moving. The fix carries a test, because a rule that lives only in a doc can be deleted by a
+  well-meaning edit on github.com.
+
+**Unchanged release conditions, none of which B21 touched:** one paid CBT-trained reviewer on the
+worries (add `early`/`strug` to the list beside `strug`/`low` and `care`/`praise`); **Misha on
+the six doors and the sixty-three**; a real screen-reader pass on a real phone; **a PR on
+`trybeup/trybeup-prod`** — BETR's nginx block is on the droplet and not in that repo, so their
+next nginx change takes the address dark, and their deploy reloads nginx inside the container so
+an inode change makes the reload silently do nothing; J1–J3 walked on a phone; an owner for links
+and helplines (`helplines.js` has `owner: null`); and **Q1**.
 
 ## 3. Environment facts
 
@@ -73,57 +76,41 @@ ask the founder which of these to move, not start B10.** All of them block relea
 | --- | --- |
 | Repo | `github.com/richardosborne14/betr`, private, branch `main` |
 | Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
-| See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then open `http://127.0.0.1:8760/`. Opening `web/index.html` off disk works too, but storage is unreliable for a `file:` page — serve it when testing persistence |
-| Drive it for real | headless Chrome + CDP over plain `fetch`/`WebSocket`. **Viewport with `Emulation.setDeviceMetricsOverride`, never `--window-size`**; country with `Emulation.setTimezoneOverride`; **await the WebSocket handshake before the first `send()`**, `/json/new` needs `PUT`, and pick a free debugging port |
-| Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02. Still a borrowed subdomain; a real domain waits on Q1 |
+| See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then `http://127.0.0.1:8760/`. Opening `web/index.html` off disk works for words; serve it when testing storage |
+| **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap <sel>` · `type <sel> <text>` · `shot <file>` · `stop`. Keeps Chrome alive between commands, 390×844 @3x, Europe/London. `.walk.json` is gitignored. **Always `stop`** — it leaves a Chrome and a python server running otherwise |
+| Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02 |
 
 ## 4. Gotchas, live
 
 - **`node --test web/tests/` does not work on Node 22** — run it from the repo root.
-  `harness.js` is the fake DOM; `boot(seed, { timeZone, languages })` is the phone it pretends
-  to be (London, English). In its `vm`, **`instanceof Array` is unreliable** and there is **no
-  `crypto`**.
-- **A walk in a test is five taps now**: `#go` → `[data-door]` → `[data-id]` → `[data-b]` →
-  `#lock`. Nothing in a test may hard-code a worry's words; use `doors.items[n].worries[0]` and
-  look it up, and use `f.beliefs[n]` rather than typing a sentence.
+  `harness.js` is the fake DOM; in its `vm`, **`instanceof Array` is unreliable** and there is
+  **no `crypto`**. Since 2026-09-04 a **textarea keeps its value across a repaint** there.
+- **`docs/prose-craft.md` is a ZIP, not markdown** — a skill package with the wrong extension.
+  `unzip` it to read it. It is the writing guide the front screen was rewritten against.
+- **Nothing in a test may hard-code a worry's words, or the front screen's.** Four tests did the
+  latter and broke on the headline change; they read `en.s.start.title` now.
+- **A walk in a test is five taps**: `#go` → `[data-door]` → `[data-id]` → `[data-b]` → `#lock`.
 - **A worry is a loose `belief` plus exactly three `beliefs`**, two fields each, each predicting
-  something different, and the card sentence is never one of the three. The build fails on all
-  of it (`lib/content.js`, `content.test.js`).
-- **`content.test.js` holds `STARTS_TODAY` by hand** — the first worry behind every door has to
-  be startable the day it is tapped. **A worry behind no door is unreachable**, and
-  `validateDoors` fails the build on it; a door is four fields and no fifth.
+  something different, and the card sentence is never one of the three.
+- **`content.test.js` holds `STARTS_TODAY` by hand.** A worry behind no door is unreachable.
 - **Every word a person reads is in `web/content/strings-en.js`**; a sentence back in `app.js`
-  fails `i18n.test.js`, as does a `left:` or a `px` font size in `app.css`.
-- **Every screen goes through `paint()`**: menu, focus to `#top`, and anything `say()` left.
-- **`worryHead()` is on every screen from the choice to the result**; a new screen inside the
-  loop must use it, and `loop.test.js` walks the run asserting both lines on each step.
-  **`pending`, the worry being chosen for, is not stored** (like `whyId`): a reload there drops
-  to the doors. **The highlight's `line-height` and padding are coupled** — the arithmetic is
-  in the test named for it, and reducing one alone makes the yellow a slab again.
-- **Content is `web/content/*.js`, not `.json`**, and `web/lib/*.js` are classic scripts. A
-  test may **read** content out of there, never restate it; a locked-in test keeps its own copy
-  of the words, so **clear storage** before checking a content edit in a browser.
-- **A new field on the stored state goes in three places**: `blank()`, `normalise()`,
-  `isEmpty()`. (A field on a *record* inside `done`/`open` is `normalise()` only.)
-- **Storage is v3 and B20 did not bump it**: a record already stored `belief` and `x`, only
-  which sentence goes in them changed. **A ladder's rungs come from `g.rungs`, not `r.level`.**
-  `rate.keyOf()` keys a stock ladder by **worry id**, so all three predictions share one ladder
-  — a decision, and B20's file says how to reverse it.
+  fails `i18n.test.js`, as does a `left:` or a `px` font size in `app.css`. `refusal.notConditional`
+  and `refusal.noConsequence` are **dead keys kept on purpose** — nothing reaches them since the
+  nudge, and dropping a key would fail the build the day somebody puts the wall back.
+- **Every screen goes through `paint()`**, and **`worryHead()` is on every screen from the choice
+  to the result**. `pending` and `whyId` are not stored; a reload there drops to the doors.
+- **`nudge` is cleared by `go()`, like `refusal`.** `takeBelief()` is the only caller of
+  `guards.checkBelief` and it is what makes the second tap go through.
+- **A new field on the stored state goes in three places**: `blank()`, `normalise()`, `isEmpty()`.
+- **Storage is v3.** A ladder's rungs come from `g.rungs`, not `r.level`. `rate.keyOf()` keys a
+  stock ladder by **worry id**, so all three predictions share one ladder — a decision, and
+  B20's file says how to reverse it.
 - **`content/zones.js` is generated, never hand-edited**, and **no helpline number is written
   from memory**. **Sentence 7 names 988 and 116 123 inside itself**: frozen.
 - **Language and country are two separate questions.** **The ladder is one belief's grip** — no
-  total, no average, no target. **`.kicker` is uppercase in CSS.** **The guard blocks "bet"**.
-- **`docs/COPY.md` is generated** by `node tools/copy-sheet.js`; never hand-edit it. The
-  founder may edit the five content files on github.com — `docs/changing-the-words.md` is what
-  they are following, so keep it true if a content file moves or a rule changes.
+  total, no average, no target. **`.kicker` is uppercase in CSS.** **The guard blocks "bet".**
+- **`docs/COPY.md` is generated** by `node tools/copy-sheet.js`; never hand-edit it. The founder
+  may edit the five content files on github.com — `docs/changing-the-words.md` is what they are
+  following, so keep it true if a content file moves or a rule changes.
 - **A link is allowed; a request is not** — `menu.test.js` holds the allow-list. **`why.js` has
   two fields and no third** — the regulatory line, not a style rule.
-
-## 5. Decisions locked
-
-> Everything in this repo landed on 2026-09-03: B15, B1, B17, B3, B9, B18, B19 and B20.
-
-The ten rules in `CLAUDE.md` — rule 3 names *worry* and, since B20, the three predictions;
-rule 5 the ladder; rule 7 BETR and capitalisation; rules 9 and 10 the B8, B19 and B20
-amendments. Q2, Q3, Q8. The nine sentences, verbatim. **B19 reversed scope §5.3a's
-recommendation, on evidence**, and **B20 changed the shape of an item**, on the same evidence.
