@@ -121,6 +121,13 @@ rules at once, and every one of them has failed in some other product.
 
 ## When you finish a task
 
+**One of these is not like the others. `docs/NEXT-SESSION.md` is rewritten at the end of EVERY
+session, whether or not a task finished** — a session that committed one sentence, or answered
+one question, or got half way and stopped, still leaves the next session reading that file as
+its only account of where things are. A file that describes yesterday sends somebody to do work
+that is already done, or past a decision the founder has already made. Rewrite it, never append,
+under 120 lines, and make its "next action" the thing you would genuinely do next.
+
 - [ ] Tests pass (`node --test` from the repo root) and the loop has been walked on a phone
 - [ ] Confidence score 8/10 or higher, recorded in the task file
 - [ ] The task file in `docs/tasks/` updated: status, what was built, decisions, gaps
@@ -128,8 +135,10 @@ rules at once, and every one of them has failed in some other product.
 - [ ] **`docs/NEXT-SESSION.md` rewritten**, not appended to, under 120 lines
 - [ ] Commit with a clear one-sentence message and push `main`
 - [ ] **Tell the founder how to see it.** Until B3: open `web/index.html` in a browser, or the
-      prototype. After B3: `https://betr.dev.trybeup.com`, wifi off after load. After B5: a
-      TestFlight build, which is a new App Store release each time.
+      prototype. Since B3: **`https://betr.trybeup.com`**, wifi off after load — every push to
+      `main` touching `web/**` publishes it. (This file said `betr.dev.trybeup.com` until
+      2026-09-04. That address does not resolve and never did.) After B5: a TestFlight build,
+      which is a new App Store release each time.
 
 ## The TrybeUP dev droplet (for B3 and B6 only)
 

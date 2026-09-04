@@ -75,7 +75,7 @@ and helplines (`helplines.js` has `owner: null`); and **Q1**.
 | Repo | `github.com/richardosborne14/betr`, private, branch `main` |
 | Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
 | See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then `http://127.0.0.1:8760/`. Opening `web/index.html` off disk works for words; serve it when testing storage |
-| **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap <sel>` · `type <sel> <text>` · `shot <file>` · `stop`. Keeps Chrome alive between commands, 390×844 @3x, Europe/London. `.walk.json` is gitignored. **Always `stop`** — it leaves a Chrome and a python server running otherwise |
+| **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap <sel>` · `type <sel> <text>` · `shot <file>` · **`eval <js>`** · `stop`. `eval` is how you check where a screen actually landed. Keeps Chrome alive between commands, 390×844 @3x, Europe/London. `.walk.json` is gitignored. **Always `stop`** — it leaves a Chrome and a python server running otherwise |
 | Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02 |
 
 ## 4. Gotchas, live
