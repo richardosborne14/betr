@@ -630,6 +630,8 @@
         '<button class="big pulse" id="go">' + esc(t('start.go')) +
           ' <span class="arrow" aria-hidden="true">→</span></button>' +
         waitingBlock() +
+        /* B25. Where the ladder starts, on the only screen that can say it before the loop. */
+        '<p class="tiny">' + esc(t('start.ladder')) + '</p>' +
         '<p class="tiny">' + esc(t('start.promise')) + '</p>' +
         (storageOk ? '' : '<p class="tiny">' + esc(t('start.noStorage')) + '</p>') +
       '</div>');

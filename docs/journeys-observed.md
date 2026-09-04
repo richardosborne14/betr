@@ -170,6 +170,13 @@ Scope §3: *"Everything starts at 10 — that is what the front screen says."* T
 his 9 with no frame for it and read it as barely moving. **This is a regression introduced on
 2026-09-04 and it was not spotted until the walk.**
 
+**Repaired the same day (B25, option a).** The front screen now says *"Every worry starts at ten
+out of ten — that's how sure you are. It moves when you find out what happens."* under the
+button, and `loop.test.js` fails the build if it goes again or grows a promise about how far or
+how fast. **Finding 4 is still open**: the line says where the number starts, not that day one
+is one rung, and the fix for that is the ad rather than the app — B25 option (d), the founder's
+call.
+
 ### 6 · Help opens with a crisis helpline, and the proof is 2,711px down
 Dan tapped Help to find the price. The entire first screen is *If you are in danger or in
 crisis*. The counters that would have won him — **0 accounts · 0 B sent to us, ever** — sit

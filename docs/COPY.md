@@ -112,6 +112,10 @@ keep it, and put it wherever the sentence needs it.
 
 > Pick a worry
 
+**`start.ladder`**
+
+> Every worry starts at ten out of ten — that’s how sure you are. It moves when you find out what happens.
+
 **`start.promise`**
 
 > Nobody sees this but you. No account, no AI, nothing leaves your phone.

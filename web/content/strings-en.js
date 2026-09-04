@@ -118,6 +118,18 @@ var BETR_STRINGS_EN = {
         test users could read.
       */
       go: 'Pick a worry',
+      /*
+        B25, 2026-09-04. Scope §3: "Everything starts at 10 — that is what the front screen
+        says." The old headline, "Sure it'll go badly?", said it in its first word. The new one
+        does not, and the line went with it — so a test user finished his first test, saw
+        10 → 9, and had nothing to read it against: he had arrived from a post showing
+        somebody at 6.
+
+        It says where the number starts and that it moves. It may never say how far, how fast,
+        or where anybody else got to (rule 5, and research §5.4 on claims), and "what actually
+        happens" is direction-neutral on purpose — a test can leave a person more sure.
+      */
+      ladder: 'Every worry starts at ten out of ten — that’s how sure you are. It moves when you find out what happens.',
       /* The trust line, with the human half first. §9.2: airplane mode is the proof. */
       promise: 'Nobody sees this but you. No account, no AI, nothing leaves your phone.',
       noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +

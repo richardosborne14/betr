@@ -503,6 +503,28 @@ test('both boxes say which worries BETR is for, not just the blank one', () => {
   boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
 });
 
+/*
+  B25. Scope §3 says the front screen is where "everything starts at 10" is said, and on
+  2026-09-04 a headline change quietly took it away — nobody noticed until a walker finished
+  his first test, saw 10 → 9, and had no idea whether that was good. A rule that lives only in
+  a doc can be deleted by a well-meaning edit on github.com, so it lives here too.
+
+  It checks three things and no more: the line is on the front screen before anything is
+  tapped; it says where the number starts; and it does not promise how far or how fast.
+*/
+test('the front screen still says every worry starts at ten', () => {
+  const line = en.s.start.ladder;
+  assert.ok(/ten|10/.test(line), 'the front screen no longer says where the ladder starts');
+
+  boot().shows(line);
+
+  /* No claim about outcome. Rule 5 and research §5.4: no target, no pace, nobody else's number. */
+  [/most people/i, /within/i, /in (a|two|three) (day|week|month)/i, /will (drop|fall|go down)/i]
+    .forEach(function (bad) {
+      assert.ok(!bad.test(line), 'the ladder line has grown a promise: ' + line);
+    });
+});
+
 test('the brand is BETR everywhere a person reads it, refusals included', () => {
   const a = boot();
   a.shows('BETR');
