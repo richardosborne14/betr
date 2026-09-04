@@ -81,28 +81,29 @@ reframed here too.
 The footer is the only place in BETR that says why the choice matters: *Pick the one that would
 sting. A worry that's only nearly yours can't be proved wrong by anything that happens today.*
 
-### Cost: the second tap
+### Cost: the second tap — **accepted, founder, 2026-09-04**
 
 B19 spent one extra tap on the doors. This spends another. The loop is now five taps to a
-locked-in test rather than three. **That is the founder's to accept and it is written down
-here so it can be taken back**: deleting the screen means routing `pick()` straight to
-`startFrom(f, f.beliefs[0])`, which is one line.
+locked-in test rather than three. **The founder accepted it the next morning: "one extra tap
+is fine."** It is not an open question any more and it should not be reopened as a tidy-up.
 
-The case for paying it: the tap buys the one thing the loop cannot work without. The case
-against: it is the second tap added in one evening to an app whose rule 10 is *one big button*.
+It is still one line to take back if that ever changes — route `pick()` straight to
+`startFrom(f, f.beliefs[0])` — and the reason to pay it stands: the tap buys the one thing the
+loop cannot work without, which is a prediction that is actually the person's.
 
-### What the ladder does about it
+### What the ladder does about it — **decided, founder, 2026-09-04**
 
-**Nothing, on purpose.** `rate.keyOf()` is unchanged: a stock worry's ladder is keyed by its
-**id**, so all three predictions under one worry share one ladder, and so does a sentence the
-person wrote themselves for that worry. Rule 5 says the ladder is one belief's grip; the reading
-taken here is that a worry is one belief and the three are three ways of saying where it bites.
+**One ladder per worry, shared by all three predictions.** `rate.keyOf()` is unchanged: a stock
+worry's ladder is keyed by its **id**, so the three predictions under one worry — and a sentence
+the person wrote themselves for that worry — all move the same ladder. **The founder chose this
+explicitly on 2026-09-04** ("yes to the shared ladder"), and CLAUDE.md rule 5 now says so, so it
+is a decision and not an accident of how `keyOf` happens to be written.
 
-The alternative — a ladder per prediction — was rejected because a person who comes back through
-the list and taps a different one of the three would appear to have lost their history, and
-because "Your worries" would then carry two cards with the same title. **If the founder wants
-it the other way it is a change to `keyOf` and nothing else**, and B9's `move` field means the
-old records would still draw correctly.
+Rule 5 says the ladder is one belief's grip; the reading taken is that a worry **is** one belief
+and the three are three ways of saying where it bites. The alternative — a ladder per prediction
+— was rejected because a person who comes back through the list and taps a different one of the
+three would appear to have lost their history, and because "Your worries" would then carry two
+cards with the same title.
 
 Consequence to know about: a card in Your worries quotes the **most recent** prediction tested,
 so a person who switches shows the newer sentence over the older ladder. The label above it
@@ -181,7 +182,9 @@ nobody tidies the line-height back down without the padding coming with it.
 
 ## Boxes for the founder
 
+- [x] **The second tap: kept.** Founder, 2026-09-04 — "one extra tap is fine"
+- [x] **One ladder per worry, shared by the three.** Founder, 2026-09-04
 - [ ] Read `docs/COPY.md` — the three under each worry are in one table per worry now
-- [ ] The second tap: keep the choice screen, or send everybody to the first prediction?
-- [ ] One ladder per worry, or one per prediction? (one line either way, see above)
 - [ ] Misha reads the sixty-three
+
+`docs/changing-the-words.md` is how to do something about anything on that read.

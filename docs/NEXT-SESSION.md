@@ -29,8 +29,10 @@ all built:
 - **The yellow.** `.result .real` line-height was 1.2 against a 1.44 minimum, so every
   highlight band overlapped the one below. Now 1.6, pinned by a test with the arithmetic.
 
-**Cost: the loop is six taps, not four.** B19 bought one, B20 bought the other. Both are one
-line to take back and both task files say which line.
+**Cost: the loop is six taps, not four.** B19 bought one, B20 bought the other. **The founder
+accepted both on 2026-09-04** — "one extra tap is fine" — and chose the **shared ladder**: all
+three predictions under a worry move that worry's one ladder. Rule 5 and rule 10 in `CLAUDE.md`
+now say so. Neither is an open question; do not reopen either as a tidy-up.
 
 **Still true:** **Q1 (name, trademark, domain) is open** and blocks release. **Nobody outside
 this building has read a word of the worry list** — and it is three times the size it was this
@@ -44,8 +46,6 @@ plugins); B11 rests on an unchecked fact about Apple's CloudKit wording; B12–B
 founder to amend rule 1 **in writing**; B16 waits for real users. **A session that opens should
 ask the founder which of these to move, not start B10.** All of them block release:
 
-- **Two decisions only the founder can take**, both in B20's file with the line to change: keep
-  the choice-of-prediction screen, and one ladder per worry (as built) or one per prediction.
 - **One paid CBT-trained reviewer** reads, per worry, **the label, the card sentence, the three
   predictions and the explanation together**. The question is whether the three are three real
   predictions or one prediction and two paraphrases — only somebody trained will see it. Never
@@ -113,7 +113,9 @@ ask the founder which of these to move, not start B10.** All of them block relea
   from memory**. **Sentence 7 names 988 and 116 123 inside itself**: frozen.
 - **Language and country are two separate questions.** **The ladder is one belief's grip** — no
   total, no average, no target. **`.kicker` is uppercase in CSS.** **The guard blocks "bet"**.
-- **`docs/COPY.md` is generated** by `node tools/copy-sheet.js`; never hand-edit it.
+- **`docs/COPY.md` is generated** by `node tools/copy-sheet.js`; never hand-edit it. The
+  founder may edit the five content files on github.com — `docs/changing-the-words.md` is what
+  they are following, so keep it true if a content file moves or a rule changes.
 - **A link is allowed; a request is not** — `menu.test.js` holds the allow-list. **`why.js` has
   two fields and no third** — the regulatory line, not a style rule.
 

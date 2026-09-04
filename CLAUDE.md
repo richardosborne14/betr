@@ -13,7 +13,9 @@ Read automatically at the start of every session. Follow it without exception.
 ## Who you are working with
 
 **The founder is not a developer.** Plain language, no jargon. Never ask them to run a command
-or edit a file; do it. When a decision is theirs, lay out the options simply and let them
+or edit a file; do it. The one exception they asked for, 2026-09-04: **`docs/changing-the-words.md`**
+tells them how to change any sentence in the app themselves on github.com, and how the tests
+stop them publishing something that breaks a rule. Keep it true when the content files move. When a decision is theirs, lay out the options simply and let them
 choose. Misha is the co-decider on anything about the audience, the list, or the tone.
 
 ## The rules that never bend
@@ -43,6 +45,11 @@ rules at once, and every one of them has failed in some other product.
    tests. "Didn't get to it" keeps the test for tomorrow. The one other number is the belief
    ladder: 1-10, per belief, moved by the person's own re-rate. It is never a score of the
    person, never totalled or averaged across worries, and never carries a target.
+   **A worry is one belief (founder, 2026-09-04).** Since B20 a worry offers three predictions,
+   and **all of them share that worry's one ladder** — including a sentence the person wrote
+   themselves for it. `rate.keyOf()` keys a stock ladder by the worry's **id**, and that is a
+   decision, not an oversight: keying by the sentence would make a person look like they had
+   lost their history the moment they came back and picked a different one of the three.
 6. **No verdicts.** Never "irrational". Outcomes are observations. A bad outcome is data and
    the re-rate is optional.
 7. **The wording is fixed.** The eight sentences and the crisis lines in scope §10 / research
@@ -72,9 +79,10 @@ rules at once, and every one of them has failed in some other product.
     `belief` — its "If I ___, then ___" — is drawn under its label wherever a person picks
     one.** That sentence is the only part of a worry that explains itself, and it used to be
     invisible until the re-rate. A pick list without it is the bug, not the tidy version.
-    **Amended once more 2026-09-03 (B20), and it cost the second tap:** picking a worry opens
-    *which of these three is it?* before the test. Still one screen, one question, a list of
-    plain buttons — not a form and not a wizard. And from B20 **the worry's label and the
+    **Amended once more 2026-09-03 (B20), and it cost the second tap — accepted by the founder
+    on 2026-09-04, "one extra tap is fine":** picking a worry opens *which of these three is
+    it?* before the test. Still one screen, one question, a list of plain buttons — not a form
+    and not a wizard. Six taps to a locked-in test is the shape now; do not "restore" four. And from B20 **the worry's label and the
     exact sentence being tested sit at the top of every screen from that choice to the
     result**, in the same words in the same place. A screen inside the loop that does not say
     which worry it belongs to is the bug.
