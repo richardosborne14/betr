@@ -22,7 +22,7 @@
   now, so `under` does the other job: recognition. What this looks like from the inside, so a
   person knows in one line whether this is their door.
 
-  `note` IS A SAFETY LINE AND IT IS ON ONE DOOR (founder, 2026-09-03, option c). The first
+  `note` IS A SAFETY LINE AND IT IS ON ONE DOOR (founder, 2026-09-03, option c). The `habit`
   door names drink and drugs, which is the wording people find themselves in fastest and also
   the wording that calls to the person frozen sentence 4 excludes — "or are dependent on
   alcohol or drugs. Those need a person, not an app." So that door says so, in the same words,
@@ -31,14 +31,42 @@
   reason a place on the Help screen has three — there must be nowhere to put a rule that shows
   one person different words from another.
 
-  RELEASE CONDITION: Misha signs off all six labels, all six lines and the note before this
-  ships to anyone (B0 Q2a). B19 rewrote every one of them, so his read is of six new doors.
-  Built, not cleared.
+  THE ORDER IS A DECISION AND IT CHANGED ON 2026-09-04 (B23, founder’s call, options a and c).
+  `habit` was first. It is the door the product exists for — two of the three people watched
+  in B21 tapped it and said “that’s me” — and it is also four words in which a third nearly
+  closed the tab: “drink, weed, porn, betting — oh. Is this a recovery app? That’s not me at
+  all.” Her door was sixth, below the fold, and she reached it only because she scrolled.
+
+  So `habit` is second now, behind one door about a phone, and the intro says to read to the
+  bottom before picking. That is enough for her: the first thing anybody reads is plainly not
+  about recovery, which is the sentence her flinch was asking for.
+
+  IT WAS THIRD FOR AN HOUR AND THE MEASUREMENT SENT IT BACK TO SECOND. The menu is `position:
+  fixed` and covers the bottom 59px of the screen, so the first screenful is 785px, not 844.
+  With `habit` third its `note` landed at 800–842 — behind the menu, invisible, unreachable
+  without scrolling. That note is the one line on this screen that tells a dependent person to
+  go somewhere else, and Marcus read it twice in B21. Second puts it at 643–685, clear by a
+  hundred pixels. **Whatever else moves here, the door carrying `note` stays first or second**,
+  and `content.test.js` fails if it does not.
+
+  `work` is not first, and that was considered: read in four words, “Never letting myself stop”
+  can be heard as never letting myself stop drinking, which sends the wrong person through it.
+
+  RELEASE CONDITION: Misha signs off all six labels, all six lines, the note AND THE ORDER
+  before this ships to anyone (B0 Q2a; the order is his and the founder’s together, B23).
+  B19 rewrote every one of them and B23 moved them, so his read is of six new doors in a new
+  order. Built, not cleared.
 */
 var BETR_DOORS = {
-  intro: 'Tap what’s closest. It just points you at the worries that usually sit under it.',
+  intro: 'More than one of these might fit. Read to the bottom, then tap what’s closest. It just points you at the worries that usually sit under it.',
   foot: 'None of these gets tested. The worry underneath does.',
   items: [
+    {
+      id: 'phone',
+      label: 'On my phone more than I want to be',
+      under: 'Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it.',
+      worries: ['phone', 'feed', 'sit', 'reply']
+    },
     {
       id: 'habit',
       label: 'Something I keep doing more than I mean to',
@@ -47,10 +75,10 @@ var BETR_DOORS = {
       worries: ['sit', 'drink', 'early', 'strug', 'no']
     },
     {
-      id: 'phone',
-      label: 'On my phone more than I want to be',
-      under: 'Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it.',
-      worries: ['phone', 'feed', 'sit', 'reply']
+      id: 'work',
+      label: 'Never letting myself stop',
+      under: 'There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either.',
+      worries: ['rest', 'enough', 'check', 'mist']
     },
     {
       id: 'temper',
@@ -69,12 +97,6 @@ var BETR_DOORS = {
       label: 'Going along with things I don’t want to do',
       under: 'Yes when you meant no. Nothing said when something’s annoyed you. An answer sent the second the message lands.',
       worries: ['reply', 'no', 'angry', 'help']
-    },
-    {
-      id: 'work',
-      label: 'Never letting myself stop',
-      under: 'There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either.',
-      worries: ['rest', 'enough', 'check', 'mist']
     }
   ]
 };

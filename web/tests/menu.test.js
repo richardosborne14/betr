@@ -120,7 +120,8 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
   again.shows('On the go').shows(firstBehind().test);
   again.tap('#m-mine').tap('[data-notyet]', 0).shows('still here for tomorrow');
   again.shows('On the go');
-  again.hides('missed').hides('streak').hides('failed');
+  /* not bare "missed": a worry's own test may ask you to write down what you missed. */
+  again.hides('you missed').hides('missed a').hides('streak').hides('failed');
 });
 
 test('an unfinished test that was never locked in is simply let go', () => {
@@ -136,7 +137,7 @@ test('export carries the tests that are waiting as well as the results', () => {
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
   assert.strictEqual(dump.waiting.length, 1);
-  assert.strictEqual(dump.waiting[0].worry, require('../content/worries.js')[0].label);
+  assert.strictEqual(dump.waiting[0].worry, firstBehind().label);
   assert.ok(dump.waiting[0].lockedIn);
 });
 

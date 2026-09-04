@@ -502,3 +502,55 @@ not have to enforce the same rules — but the file has to say which rules each 
 comment block above `checkBelief` explained at length what it had *stopped* enforcing and never
 once said what it had *never* enforced, so the gap was invisible to anyone reading rather than
 typing. It says both now.
+
+## The dump under-reports the fold by 59px, and it hid a safety line (B23, 2026-09-04)
+
+`node tools/walk.js dump` marks a tappable thing as below the fold when its top is past
+`window.innerHeight`. On a 390×844 phone that is 844. **The usable first screenful is 785**:
+`nav.menu` is `position: fixed` over the bottom 59px of every screen, and whatever is under it
+is in the markup, in the accessibility tree, and invisible.
+
+B23 reordered the doors and put `habit` third. The dump said the door and its `note` were both
+on screen. They were not: the note — *"If you're dependent on alcohol or drugs, this isn't the
+right thing"* — rendered at 800–842px, entirely behind the menu. **The screenshot is what
+caught it**, and only because it was taken at all; the change had already passed 177 tests and a
+clean-looking dump.
+
+Two things follow, and the second is the one that generalises.
+
+- **Anything within 60px of the bottom of a walk needs a screenshot or a measured rect.**
+  `eval` the element's `getBoundingClientRect()` against `nav.menu`'s `top`, not against
+  `innerHeight`. The doors screen is where it bit, but the menu is on every screen.
+- **A fix aimed at one person can land on another, and the second one is the one nobody is
+  watching.** The reorder existed to stop Priya closing the tab on screen two. The thing it
+  nearly broke was the single line in BETR that tells somebody who is dependent to go elsewhere
+  — for Marcus, who read it twice. Both halves of that trade have to be measured, not just the
+  half the task is named after.
+
+`content.test.js` now fails if the door carrying the note is not first or second. The test is
+about the note's door rather than about `habit` by name, so the rule travels if the note moves.
+
+## Chrome keeps the old content file between `open`s (B23, 2026-09-04)
+
+`node tools/walk.js open` clears storage and reloads, and that is not enough: the browser had
+`web/content/whats-going-on.js` cached, so a reordered doors screen came back in the old order
+twice in a row. It reads as "the edit did not save" and it is not. **After editing anything
+under `web/content/`, `stop` and `start` the walker**, not just `open`.
+
+## A test that reads one word off the whole screen belongs to the content, not to the app (B23, 2026-09-04)
+
+Four tests broke on the door reorder and **all four were wrong before it**, in two ways.
+
+Two asserted `worries[0].label` where they meant *the first worry behind the first door* — the
+same thing only while `habit` happened to be door one. `loop.test.js` already had `firstBehind()`
+for exactly this, twenty lines up.
+
+The other two proved rule 5 — BETR never says *you missed* — with `a.hides('missed')` on the
+whole rendered screen. Behind the `phone` door, a worry's own test reads *"write down what you
+actually missed"*. That is BETR **asking**, not accusing, and the assertion cannot tell the
+difference. `menu.test.js` already had the right form (`'you missed'`, `'overdue'`, `'streak'`)
+in a test on the line above.
+
+**The rule: assert the phrase the rule is about, not a word that could appear in a person's
+worry.** The content is the product and it changes; a test that reads a bare word off the screen
+is really a test of today's content list.

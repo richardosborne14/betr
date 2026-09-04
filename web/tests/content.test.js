@@ -263,3 +263,52 @@ test('nothing in the content says any of the phrases that are never used', () =>
     assert.ok(all.toLowerCase().indexOf(phrase) === -1, 'content contains "' + phrase + '"');
   }
 });
+
+/*
+  B23, 2026-09-04. The first door is the only one everybody reads. For two days it was `habit`,
+  whose line names four substances, and in B21 that cost a person who had no habit and no
+  business reading them: four words in, "is this a recovery app? That's not me at all", and she
+  nearly closed the tab on screen two. Her door was sixth.
+
+  So this is the rule the reorder bought, and it is written here because the order lives in a
+  data file a well-meaning edit can shuffle back. It does not pin the six in place — Misha and
+  the founder own the order (B0 Q2a) and may change it — it pins the one thing that must not
+  come back: the screen may not open on a substance. If the four nouns are ever deleted from
+  `habit` (B23 option b, Misha's casting vote), this passes wherever the door sits, which is
+  correct: the harm was the words, not the door.
+*/
+test('the first door a person reads does not name a substance', () => {
+  const first = doors.items[0];
+  const words = (first.label + ' ' + first.under + ' ' + (first.note || '')).toLowerCase();
+  for (const w of guards.HABIT) {
+    assert.ok(!new RegExp('\\b' + w + '\\b').test(words),
+      'door 1 is "' + first.id + '" and its line says "' + w + '". That is the first thing ' +
+      'everybody reads, and in B21 it was four words into a tab somebody nearly closed.');
+  }
+});
+
+/*
+  The other half of the same trade, and it was bought with a measurement rather than a guess.
+  The door that names substances is the only one carrying a `note` — the line telling somebody
+  who is dependent to go somewhere else — and that line may not be the thing that scrolls off.
+
+  On 2026-09-04 the reorder put `habit` third and the note landed at 800–842px. The menu is
+  `position: fixed` and covers 785–844, so the note was behind it: on screen in the markup,
+  invisible on the phone. Marcus read that note twice in B21. Moving `habit` to second put the
+  note at 643–685, a hundred pixels clear. Hence TWO, and hence this test is about the note's
+  door rather than about `habit` by name — if the note ever moves to another door, the rule
+  travels with it.
+
+  Re-measure with `node tools/walk.js tap '#go'`, then `eval` the note's bounding rect against
+  the menu's. Anything that makes this screen taller above the note — the intro included —
+  spends the margin.
+*/
+test('the door carrying the safety note is high enough for the note to be seen', () => {
+  const at = doors.items.findIndex((d) => d.note);
+  assert.notStrictEqual(at, -1, 'no door carries the safety note any more');
+  assert.ok(at < 2, 'the door with the safety note is door ' + (at + 1) + '. The menu is fixed ' +
+    'over the bottom 59px, so from door three down the note renders behind it and the one ' +
+    'line telling a dependent person to go elsewhere is invisible until somebody scrolls.');
+  assert.strictEqual(doors.items.filter((d) => d.note).length, 1,
+    'more than one door has a note, so "the door with the note" no longer names one thing');
+});

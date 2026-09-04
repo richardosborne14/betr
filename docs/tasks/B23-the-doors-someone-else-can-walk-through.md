@@ -1,8 +1,11 @@
 # B23: The doors, for the person who did not come here about a habit
 
-**Status:** **Open — written 2026-09-04. Needs the founder's and Misha's decision before code**
-**Confidence:** 9/10 that the loss is real (Priya nearly closed the tab on screen two). 4/10 on
-which fix, because every option costs somebody something
+**Status:** **First half DONE 2026-09-04 (options c and a, founder's call). Second half open —
+door one's list does not serve porn recovery, and that waits for the CBT reviewer and Misha.**
+**Confidence:** 9/10 that the loss is real (Priya nearly closed the tab on screen two). **8/10
+on the fix as shipped** — it is measured on a real phone and it costs Dan and Marcus nothing
+they can see, but it has been walked by nobody outside this building
+**Release condition added:** Misha signs off the ORDER as well as the labels and lines (B0 Q2a)
 **Date opened:** 2026-09-04 · **Depends on:** B19 (the doors), B22 (the rule)
 **This is the most expensive finding in `docs/journeys-observed.md`. It is finding 1 and 3.**
 
@@ -75,6 +78,74 @@ off the table protects the thing Dan valued most, which the walks say is real an
 this is the founder's and Misha's call and Misha holds the casting vote on the door labels
 (B0 Q2a).**
 
+## What the founder chose, and what shipped — 2026-09-04
+
+**(c) and (a), as recommended. (b) was not taken**, so *"— drink, weed, porn, betting"* is still
+on the `habit` door, word for word. Dan keeps the thing he valued most. **Misha's casting vote on
+those four nouns is still outstanding and is now the only open wording question on this screen.**
+
+**The order is `phone, habit, work, temper, secret, yes`.** `habit` is second, not third, and the
+reason is the whole story of this half of the task — see below.
+
+**The intro (c) is now:** *"More than one of these might fit. Read to the bottom, then tap what's
+closest. It just points you at the worries that usually sit under it."* It does not say *most
+people are in a bit of two*, which is a claim about people nobody here has measured. *More than
+one might fit* says the same thing to the reader and claims nothing.
+
+### The hour `habit` spent at door three, and why it is not there
+
+(a) as written says *"door one goes third or fourth"*, and third is what was built and walked
+first. The text dump said it fitted. **The screenshot said otherwise.** `nav.menu` is
+`position: fixed` over the bottom 59px, so the first screenful is 785px, not 844 — and with
+`habit` third its `note` rendered at **800–842px, entirely behind the menu.**
+
+That note is the one line on this screen that tells somebody who is dependent to go elsewhere.
+**Marcus read it twice.** Shipping a reorder that hides it would have traded Priya's flinch for
+the exact person sentence 4 exists to catch.
+
+`habit` at **second** puts the note at **643–685, a hundred pixels clear.** Priya still does not
+open on substances — the first thing she reads is a phone door, which answers *"is this a
+recovery app?"* before she can ask it — and she reads the four nouns one door sooner than the
+strongest version of the fix would have given her. **That is the cost, and the founder took it
+knowingly** when the measurement was put in front of them.
+
+`work` is not first, and that was considered: read in four words, *"Never letting myself stop"*
+can be heard as never letting myself stop **drinking**, which sends the wrong person through it.
+
+### What holds it in place
+
+Two tests in `content.test.js`, both written from what actually went wrong:
+
+- **the first door a person reads does not name a substance** — checks door one's label, line and
+  note against `guards.HABIT`. It does not pin the six in place; the order is Misha's and the
+  founder's to change. It pins the one thing that may not come back. If (b) is ever taken and the
+  four nouns are deleted, it passes wherever the door sits, which is correct: the harm was the
+  words, not the door.
+- **the door carrying the safety note is high enough for the note to be seen** — the note's door
+  must be first or second. It is about the *note's* door, not about `habit` by name, so the rule
+  travels if the note ever moves.
+
+**Four existing tests broke on the reorder and all four were wrong before it.** Two asserted
+`worries[0].label` where they meant "the first worry behind the first door" — true only by
+coincidence while `habit` was first. Two read the bare word `missed` off the whole screen to
+prove BETR never says *you missed*; behind the `phone` door a worry's own test says *"write down
+what you actually missed"*, which is BETR asking, not accusing. `menu.test.js` already had the
+right form — `'you missed'` — twenty lines away.
+
+### Re-walked after the change
+
+- **Priya.** Door one is *On my phone more than I want to be*. No substances on screen until she
+  has already been told this is not a recovery app. Her door, *Never letting myself stop*, is
+  third and its heading is on the first screenful. Reaches *Sending something without checking it
+  again* in two taps as before.
+- **Marcus.** Door three → door two. His door and its safety note are both fully visible without
+  scrolling, which is better than before the change, not merely no worse. Walked to LOCKED IN.
+- **Dan.** Door two rather than door one, same words, no scroll. The only thing he loses is
+  being first, and nothing on the screen tells him so.
+
+**What is NOT fixed:** she still meets the four nouns on screen two, one door later. If Misha
+takes (b) that disappears; if he does not, this is as far as ordering can carry it.
+
 ## The second half: door one's list does not serve porn recovery
 
 Separate from the order. Of `['sit', 'drink', 'early', 'strug', 'no']` behind `habit`, nothing
@@ -100,8 +171,11 @@ is content, so it waits for the paid CBT reviewer and Misha either way.**
 
 ## Plan
 
-1. Founder and Misha choose from (a)–(e). One conversation, not a build.
-2. Whichever is chosen: change it, re-walk Priya and Marcus with `tools/walk.js`, and record
-   both walks in `journeys-observed.md` under the change.
-3. The porn-recovery half goes on the CBT reviewer's list beside `strug`/`low`, `care`/`praise`
-   and the `early`/`strug` duplicate.
+1. ~~Founder and Misha choose from (a)–(e). One conversation, not a build.~~ **Done 2026-09-04:
+   the founder took (c) and (a). Misha has not seen it.**
+2. ~~Whichever is chosen: change it, re-walk Priya and Marcus with `tools/walk.js`, and record
+   both walks in `journeys-observed.md` under the change.~~ **Done 2026-09-04.**
+3. **Open.** The porn-recovery half goes on the CBT reviewer's list beside `strug`/`low`,
+   `care`/`praise` and the `early`/`strug` duplicate.
+4. **Open.** Misha on the order and on the four nouns, together. He is being asked two questions
+   about the same screen and should be asked them once.

@@ -88,7 +88,8 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
   const a = boot();
   a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
   a.tap('#miss').shows('still here for tomorrow');
-  a.hides('missed').hides('streak');
+  /* not bare "missed": a worry's own test may ask you to write down what you missed. */
+  a.hides('you missed').hides('missed a').hides('streak').hides('failed');
   a.tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 0);
   a.shows('>1<');
 });
@@ -309,7 +310,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   assert.strictEqual(dump.app, 'BETR');
   assert.strictEqual(dump.results.length, 1);
   assert.strictEqual(dump.results[0].happened, 'He said fair enough.');
-  assert.strictEqual(dump.results[0].worry, worries[0].label);
+  assert.strictEqual(dump.results[0].worry, firstBehind().label);
   a.tap('#wipe').shows('There is no copy anywhere else');
   a.tap('#yes').shows(en.s.start.title);
   a.hides('He said fair enough');

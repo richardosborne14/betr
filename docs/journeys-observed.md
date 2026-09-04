@@ -137,6 +137,14 @@ people BETR could serve are in doors five and six, and both are below the fold.
 Marcus and Dan both found themselves in door one immediately, and putting it fourth costs them
 the recognition that kept them. **Founder's and Misha's call, not a fix to apply quietly.**
 
+> **FIXED 2026-09-04 (B23, founder's call: options a and c).** The order is now `phone, habit,
+> work, temper, secret, yes` and the intro reads *"More than one of these might fit. Read to the
+> bottom, then tap what's closest."* Priya no longer opens on substances; she reads a phone door
+> first, which answers *"is this a recovery app?"* before she can ask it. The four nouns are
+> unchanged — **(b) was not taken and Misha's casting vote on them is still open.** The re-walks
+> are at the bottom of this file. `habit` is second and not third for a reason worth knowing:
+> see finding 11.
+
 ### 2 · We tell Marcus to go somewhere that isn't there
 The note says *"If you're dependent on alcohol or drugs, this isn't the right thing. Help has
 places that are."* **Help has no alcohol or drug service on it at all** — `places.js` is CBT
@@ -207,6 +215,47 @@ to refuse. Worth knowing before B5.
   in `tools/walk.js` records every `fetch` and `XMLHttpRequest`; it stayed empty throughout.
 - **Being told about TrybeUP's paywall in the small print bought trust rather than costing it.**
   Dan's word: *"nobody does that."* Rule 9 is earning its keep.
+
+## The re-walks, 2026-09-04, after B23 changed the doors
+
+Not new characters. The same three, on the same 390×844 phone, down the same paths, with only
+the doors screen changed. What follows is what actually differs.
+
+**Priya.** Screen two now opens *"On my phone more than I want to be"*. There is nothing on it
+to flinch at, and the sentence above the six says more than one might fit. She meets *"drink,
+weed, porn, betting"* at door two rather than door one — **one door later, not never**, which is
+as far as ordering can carry this. Her door, *Never letting myself stop*, is third; its heading
+is on the first screenful instead of below the fold, and she reaches *Sending something without
+checking it again* in the same two taps.
+
+**Marcus.** His door moved from first to second and he is measurably better off than before the
+change, not merely no worse: the safety note he read twice sits at 643–685px, a hundred pixels
+clear of the menu, where before it was at ~300 and after the first attempt at this fix it was
+at 800–842 and invisible. Walked through to LOCKED IN; the loop is untouched.
+
+**Dan.** Door two rather than door one, in the same words. He loses being first and nothing on
+the screen tells him so.
+
+**What the re-walks did not do** is find anything new. They confirm a change, which is worth
+recording and is not the same as watching somebody who has not read the code.
+
+### 11 · A text dump cannot see a fixed menu, and this one nearly hid a safety line
+
+New, and found while fixing finding 1. `nav.menu` is `position: fixed` over the bottom 59px, so
+the first screenful of any BETR screen is **785px, not 844.** The first version of the reorder
+put `habit` third, and `tools/walk.js`'s dump — which marks a thing below the fold by comparing
+its top against `window.innerHeight` — reported the door and its note as on screen. **The
+screenshot showed the note rendered underneath the menu.** 800–842px: in the markup, in the
+accessibility tree, invisible on the phone.
+
+The line hidden was *"If you're dependent on alcohol or drugs, this isn't the right thing."*
+Finding 2 above is about that same sentence sending Marcus somewhere that did not exist; this
+would have stopped him reading it at all. **A fix for the person who nearly left would have cost
+the person the app is most careful about.**
+
+`habit` is second because of this, and `content.test.js` now fails if the door carrying the note
+falls past second. **The general lesson is bigger than this screen: `dump` under-reports the
+fold by 59px, and a screenshot is not optional when something near the bottom matters.**
 
 ## What these walks could not test
 

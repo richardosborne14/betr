@@ -1244,13 +1244,22 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 
 **`intro`**
 
-> Tap what’s closest. It just points you at the worries that usually sit under it.
+> More than one of these might fit. Read to the bottom, then tap what’s closest. It just points you at the worries that usually sit under it.
 
 **`foot`**
 
 > None of these gets tested. The worry underneath does.
 
-### 1. Something I keep doing more than I mean to
+### 1. On my phone more than I want to be
+
+| | |
+| --- | --- |
+| **id** | `phone` |
+| **label** | On my phone more than I want to be |
+| **under** | Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it. |
+| **opens onto** | Going an evening without my phone · A day without checking social media · Sitting still when I feel restless · Not answering a message straight away |
+
+### 2. Something I keep doing more than I mean to
 
 | | |
 | --- | --- |
@@ -1260,16 +1269,16 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **note** — the safety line | If you’re dependent on alcohol or drugs, this isn’t the right thing. Help has places that are. |
 | **opens onto** | Sitting still when I feel restless · Turning up and not joining in · Leaving before everyone else does · Telling someone I’m struggling · Saying no without giving a reason |
 
-### 2. On my phone more than I want to be
+### 3. Never letting myself stop
 
 | | |
 | --- | --- |
-| **id** | `phone` |
-| **label** | On my phone more than I want to be |
-| **under** | Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it. |
-| **opens onto** | Going an evening without my phone · A day without checking social media · Sitting still when I feel restless · Not answering a message straight away |
+| **id** | `work` |
+| **label** | Never letting myself stop |
+| **under** | There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either. |
+| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Sending something without checking it again · Owning up to a mistake before anyone finds it |
 
-### 3. Taking it out on the people closest to me
+### 4. Taking it out on the people closest to me
 
 | | |
 | --- | --- |
@@ -1278,7 +1287,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **under** | Snapping, going quiet, talking down to people, not really listening — and knowing it while you’re doing it. |
 | **opens onto** | Paying someone a compliment · Letting someone finish without interrupting · Telling someone they’ve annoyed me · Apologising without explaining myself · Letting someone else be right · Getting through a conversation without a joke |
 
-### 4. Keeping it all to myself
+### 5. Keeping it all to myself
 
 | | |
 | --- | --- |
@@ -1287,7 +1296,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **under** | Nobody around you knows the half of it. Not hiding it exactly; it just never seems like the moment. |
 | **opens onto** | Telling someone they matter to me · Telling someone I’m struggling · Telling someone I’ve been feeling low · Owning up to a mistake before anyone finds it · Asking someone for help |
 
-### 5. Going along with things I don’t want to do
+### 6. Going along with things I don’t want to do
 
 | | |
 | --- | --- |
@@ -1295,15 +1304,6 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **label** | Going along with things I don’t want to do |
 | **under** | Yes when you meant no. Nothing said when something’s annoyed you. An answer sent the second the message lands. |
 | **opens onto** | Not answering a message straight away · Saying no without giving a reason · Telling someone they’ve annoyed me · Asking someone for help |
-
-### 6. Never letting myself stop
-
-| | |
-| --- | --- |
-| **id** | `work` |
-| **label** | Never letting myself stop |
-| **under** | There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either. |
-| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Sending something without checking it again · Owning up to a mistake before anyone finds it |
 
 ---
 
