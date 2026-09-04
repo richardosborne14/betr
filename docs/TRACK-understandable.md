@@ -21,7 +21,7 @@ whether it stays.
 
 | | Task | What it fixes | Whose call | Blocks release? |
 | --- | --- | --- | --- | --- |
-| **B22** | `B22-recognition-not-category.md` | The rule, and a sort of every sentence into three piles | Founder + Misha choose the rewrites | No, but it governs the rest |
+| **B22** | `B22-recognition-not-category.md` | **Step 1 DONE 2026-09-04 — the sort is `docs/three-piles.md`.** 487 sentences; pile 3 has five | **Waiting on founder + Misha: five decisions** | No, but it governs the rest |
 | **B23** | `B23-the-doors-someone-else-can-walk-through.md` | Priya nearly leaving on screen two; door one promising an audience its list doesn't serve | **Founder + Misha. Misha has the casting vote** | No |
 | ~~**B24**~~ | `B24-somewhere-to-send-them.md` | **DONE 2026-09-04.** Help has the six places, all read on the day, and the note opens them | Founder took all three decisions | ~~Yes~~ — closed |
 | **B25** | `B25-the-number-that-brought-them.md` | The ad's number is nowhere on the way in, and today's headline lost the reason it starts at 10 | Founder — one half is about the ad, not the app | No |
@@ -31,8 +31,10 @@ whether it stays.
 ## The order I would take them in
 
 ```
-B24  ──▶  B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
-DONE       DONE               the rule    the doors   the number   Help
+B24  ──▶  B27 (items 1-3)  ──▶  B22 step 1  ──▶  B23  ──▶  B25  ──▶  B26
+DONE       DONE               DONE            the doors   the number   Help
+                              ▲
+                              └── B22 steps 2-3 wait on the founder and Misha
 ```
 
 **B24 was first**, because it was the only one that was a harm rather than a loss: a person told
@@ -46,10 +48,19 @@ build if two worries behind one door end the same way. **B27 item 4 is still ope
 next: it needs somebody to look at an iPhone's *Add to Home Screen* sheet before anybody can
 decide anything, and it is really a B5 question wearing a v1 coat.
 
-**So B22 is next**, and it is where it always was in this order.
+**B22's sort is done**, 2026-09-04, and it is where it always was in this order. `docs/three-piles.md`
+is the table everyone can now look at: 465 sentences to leave alone, 17 that name a category and
+have to, and **five that name one and don't have to**. Nothing in the app was changed.
 
-**B22 now**, because B23, B25 and B26 are all easier to decide once the piles exist and everyone
-is looking at the same table.
+**The one finding that sharpens another task:** door one's damage is **four nouns, not the line**.
+The label is a description and one of the best on the screen; the note is pile 2. What Priya
+bounced off is *"drink, weed, porn, betting"* inside `under`. **B23 already has this as its
+option (b)** — what B22 adds is that (b) can be a deletion rather than a rewrite: cut the four
+nouns and the rest of the sentence still describes the same moment, word for word as it stands.
+Cheaper than (b) reads, and it is still Misha's casting vote, because those four words are also
+why Dan and Marcus found themselves in half a second.
+
+**B23 is next**, and it now carries B22's question 1 inside it.
 
 ## What none of these tasks may do
 

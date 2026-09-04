@@ -1,6 +1,7 @@
 # B22: Recognition, not category — the rule the other five tasks answer to
 
-**Status:** **Open — written 2026-09-04 from the three observed walks. Nothing built**
+**Status:** **Step 1 done 2026-09-04 — the sort exists, in `docs/three-piles.md`. Steps 2 and 3
+wait on the founder and Misha. No word in the app has changed**
 **Confidence:** 9/10 that the pattern is real, because it is the same pattern B19 found by
 watching two people. 5/10 on any individual rewrite, because nobody outside this building has
 read a word
@@ -109,3 +110,80 @@ heavy words, to find one number. Nothing there is wrong. All of it arrives at on
    of the five sentences in the table above.
 3. Only then, the rewrites — and `loop.test.js` gains a test per changed string, because a
    sentence with a reason has to be held down.
+
+---
+
+## Step 1, done 2026-09-04 — what the sort found
+
+**The sort is `docs/three-piles.md`**, written for the founder and Misha. It covers **all 487
+sentences a person can read** — 180 in `strings-en.js` (including the frozen ten and everything
+a screen reader says), 210 in `worries.js`, 15 in `whats-going-on.js`, 42 in `why.js`, 40 in
+`places.js`. Verified against a freshly generated `docs/COPY.md`; nothing had drifted.
+
+| Pile | Count |
+| --- | --- |
+| 1 — describes the inside | 465 |
+| 2 — names a category, and has to | 17 |
+| 3 — names a category, and doesn't have to | **5** |
+
+Pile 1 is defined by subtraction and the count is checkable: 487 − 17 − 5.
+
+### Pile 3 — the three the task predicted, and two it did not
+
+1. **Door one's `under`** — and the finding that sharpens B23: **it is four nouns, not the
+   line.** The label is a description and one of the best on the screen; the safety note is pile
+   2. What Priya bounced off is *"drink, weed, porn, betting"* in the middle of `under`. Cut them
+   and the sentence still describes the same moment. **Still B23's call, still Misha's casting
+   vote** — the same four words are why Dan and Marcus found themselves in half a second.
+2. **`pick.notHere`** — on the screen every person reaches, whichever door they came through.
+   Proposal keeps the boundary and drops the three nouns.
+3. **`doors.foot`'s second half** — and a fact worth having before it moves: the disclaimer
+   Google Play requires is **frozen sentence 1**, which lives in Help, and MHRA is explicit that
+   a general disclaimer is not what protects a product anyway (research §5.2). So this line is an
+   extra, not a requirement. **Flagged in the doc as wanting a second opinion; not a lawyer.**
+
+**New, and the more interesting of the two:**
+
+4. **`worries.js` `rest`, the card sentence — *"then I'm being lazy"*.** It names a kind of
+   person, and it is a **verdict rather than a prediction** — the exact thing `refusal.verdict`
+   refuses when a person types one. Priya was refused for *"I'm not as good at this as they think
+   I am"* and took it well; a stranger reading the worry list meets BETR doing the thing it tells
+   them off for. Nothing breaks either way — it is the loose card sentence and is never itself
+   tested, and the three predictions under it are all proper predictions. **On the record:
+   already softened once, from "I'm worthless" (scope §5.3), so this is a second look at a
+   sentence somebody has thought about.**
+5. **`refusal.habit`'s "the crutch"** — BETR putting a judging word on the person's thing at the
+   moment it has just said no. Smallest of the five.
+
+### What the sort deliberately did not treat as a problem
+
+- **Hard words are a different problem, and not a big one.** CBT, "behavioural experiment",
+  safety behaviour. They name a **method**, not a kind of person, and nobody in the walks bounced
+  off one. The rule does not reach them. Saying so is part of the deliverable: without it the
+  next session softens Help's primer for no reason.
+- **`own.belief.only` and `refusal.body`** name **topics** (the weather, the body, food, weight)
+  rather than people, which is why neither stings. Filed pile 2, with the reason written down.
+- **A person's own prediction may name a kind of person** — *"then I become a burden to them"*,
+  *"then people will think I'm selfish"*. Those are predictions about somebody else's reaction,
+  disconfirmable, and chosen by the reader rather than applied to them. They stay in pile 1.
+  `rest`'s card sentence fails precisely because it is neither chosen nor disconfirmable.
+- **The weight of Help** (B26) and **the door order** (B23) are placement, not wording.
+
+### One finding for whoever writes the next promise line
+
+Dan's reaction to *"No account, no AI, nothing leaves your phone"* was *"everyone says that."*
+What kept him was the small print admitting TrybeUP's own paywall — *"nobody does that."*
+**The promise did not win the sceptic; the admission did.** Recorded in `three-piles.md` for
+B25 and B26.
+
+## Steps 2 and 3 — not done, and not this session's to do
+
+Step 2 is the founder and Misha reading `docs/three-piles.md` and taking five decisions. Step 3
+is the rewrites plus a test per changed string, and it cannot start until they have.
+
+**Confidence: 8/10.** High on the sort itself — the piles are small, the boundary is checkable,
+and every entry has the walk that produced it written next to it. The 2 is that **three
+characters written by the author of the app are still the only evidence**, so pile 3 may be
+missing an entry that only a stranger would feel, and any individual proposed sentence is
+untested prose. Nothing was changed in the app, so being wrong here costs a conversation, not a
+release. 173 tests still pass.

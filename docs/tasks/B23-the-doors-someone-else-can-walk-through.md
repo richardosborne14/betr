@@ -44,6 +44,13 @@ listing substances and describes the moment instead — the 9pm decision, the pr
 broken, the thing nobody knows about. Pile 3 of B22.
 *Costs:* the men who found themselves instantly *because* the word was there. Dan's exact
 reaction was relief at being named without euphemism. This trades his recognition for hers.
+> **B22's sort, 2026-09-04, makes (b) cheaper than it reads here.** It does not need a rewrite.
+> The damage is **four nouns**, not the sentence: the label is a description and one of the best
+> on the screen, the note is pile 2, and the first clause of `under` — *"The one you've quietly
+> decided to stop more than once, and haven't"* — is pile 1 and should survive whatever happens.
+> Deleting *"— drink, weed, porn, betting"* and nothing else leaves the moment described in the
+> words it is already in. See `docs/three-piles.md`, pile 3 entry 1. **The trade above is
+> unchanged and this is still Misha's casting vote.**
 
 **(c) A line above all six that reframes the screen.** `BETR_DOORS.intro` currently says *"Tap
 what's closest. It just points you at the worries that usually sit under it."* It could say that

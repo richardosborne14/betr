@@ -423,3 +423,37 @@ asserts *which element has focus*, which is the only assertion that would have f
 `node tools/walk.js shot` scrolls the page to capture it and **leaves it scrolled**. Reading
 `window.scrollY` afterwards reported 3,874 — the bottom of the document — and made a working
 landing look badly broken. Check the position first, screenshot second, or re-`open`.
+
+## Two footers are one sentence on the screen (B22, 2026-09-04)
+
+The doors screen has a `foot` in `whats-going-on.js` — *"None of these gets tested. The worry
+underneath does."* — and a `doors.foot` in `strings-en.js` — *"None of these is a diagnosis, and
+BETR never decides which one you are."* They live in different files, in different sections of
+`docs/COPY.md`, under different rules about who may change them. **`app.js:667` prints them into
+the same `<p>`, separated by a space.** A person reads one four-clause sentence.
+
+It cost half an hour of sorting them as two separate items before opening `app.js` and finding
+they are not. It also changes the answer: the first half does the whole job the screen needs,
+which is only visible once you read them the way they are rendered.
+
+**The lesson: sort copy by what a person reads, not by where it is stored.** Two keys in two
+files can be one sentence, and `docs/COPY.md` — which is organised by file, correctly — will not
+show you that. Grep `app.js` for both keys before deciding what either one says.
+
+## Naming a method is not naming a person (B22, 2026-09-04)
+
+B22's rule is *describe the inside of the moment, never name the kind of person*, and the obvious
+misreading of it is "so simplify the hard words". Wrong, and expensively so: *CBT*, *behavioural
+experiment* and *safety behaviour* name a **method**, and nobody in the three walks bounced off
+one. *"Drink, weed, porn, betting"* is four easy words and one person nearly closed the tab.
+
+The same distinction sorts two more: *"Not the weather, and not your body"* and *"food, weight or
+what your body is doing"* name **topics**, not people, which is why neither stings — and a
+person's own prediction may name a kind of person (*"then I become a burden to them"*) because it
+is a disconfirmable guess about somebody else's reaction that they chose, not a label applied to
+them. The one worry sentence that fails is `rest`'s card — *"then I'm being lazy"* — which is
+neither chosen nor disconfirmable.
+
+**The lesson: the test is "could a reader answer *that's not me* on the strength of one word",
+not "is this word hard".** Written into `docs/three-piles.md` so the next pass does not soften
+Help's primer for no reason.
