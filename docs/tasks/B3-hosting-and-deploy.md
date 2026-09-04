@@ -1,7 +1,8 @@
 # B3: Hosting and deploy — the page load is the only thing any server ever sees
 
-**Status:** **Live.** `https://betr.trybeup.com` answers, on its own certificate, and the
-deploy is green end to end.
+**Status:** **Done.** `https://betr.trybeup.com` answers, on its own certificate, the deploy is
+green end to end, and since 2026-09-04 TrybeUP's repo carries the block its server was already
+running — so a TrybeUP deploy can no longer take the address dark.
 **Confidence:** 9/10 — the 1 is that the address is still a borrowed subdomain (Q1)
 **Date opened:** 2026-09-01 · **Built:** 2026-09-03
 **Depends on:** B2 (done). Production domain waits on B0 Q1 — see "What is still open".
@@ -211,22 +212,59 @@ that step passed on the first try. It now checks for a 200 at any protocol versi
 | Headers | CSP with `connect-src 'none'` and `font-src 'none'`, nosniff, no-referrer, no `Set-Cookie`, `Cache-Control: no-cache`, manifest as `application/manifest+json` |
 | The loop, live | walked at 390×844 in headless Chrome, pick → result → *Why this one sticks*. **19 requests, every one to `betr.trybeup.com`.** No off-site request of any kind |
 
-### Two things still open from this
+### Two things still open from this — ~~open~~ **both closed 2026-09-04**
 
-- **The droplet and the TrybeUP repo disagree.** The block exists on the server and not in
-  `trybeup/trybeup-prod`. TrybeUP's deploy rsyncs `nginx.conf` from that repo **whenever that
-  file changes**, so the next TrybeUP nginx change deletes BETR's block and the address goes
-  dark with no obvious cause. The founder chose the droplet edit knowing this; a PR on
-  `trybeup/trybeup-prod` carrying the same block closes it and has not been opened yet.
-- **`renew-cert.yml` has no `betr.trybeup.com` entry.** certbot will renew on its own timer,
-  but the *alarm* — the run that fails and emails the admins when a cert is within 14 days of
-  expiry, the one that was missing during the 2026-06-01 outage — does not cover BETR. Same PR.
+- ~~**The droplet and the TrybeUP repo disagree.**~~ The block exists on the server **and now in
+  `trybeup/trybeup-prod`**. TrybeUP's deploy rsyncs `nginx.conf` from that repo whenever that
+  file changes; until 2026-09-04 the next such change would have deleted BETR's block and taken
+  the address dark with no obvious cause. It cannot now.
+- ~~**`renew-cert.yml` has no `betr.trybeup.com` entry.**~~ It has one, in all three loops. The
+  *alarm* — the run that fails and emails the admins when a cert is within 14 days of expiry,
+  the one that was missing during the 2026-06-01 outage — now covers BETR.
+
+## The TrybeUP PR — merged 2026-09-04, and this file had it backwards
+
+The section above, and `NEXT-SESSION.md` after it, both said the PR "has not been opened yet".
+**It had been, the same evening it was written** — `trybeup/trybeup-prod#2245`, pushed after
+this file's last save. A session that took the sentence at its word would have written the
+branch a second time. **Check the remote before repeating work a handoff calls undone**; see
+`learnings.md`.
+
+Founder's call, 2026-09-04: merge all of it, both commits. Squash-merged as `d1d47520`.
+
+**What went in.** Two things, in one PR, by the founder's choice:
+
+1. **`nginx.conf`** — `betr.trybeup.com` on the port-80 redirect's `server_name`, plus the 443
+   block: TLS, `access_log off`, the cookie guard, `proxy_pass` to `172.17.0.1:8080`. No headers
+   set there. **Verified byte-identical to the live `/opt/trybeup/nginx.conf` before merging**,
+   so the deploy's rsync wrote the same bytes it found and changed nothing about behaviour.
+   `renew-cert.yml` — `betr.trybeup.com` in the port-80 probe, the renew loop and the alert.
+2. **`deploy-prod.yml`** — `rsync --inplace`, and a new step that hashes the host file against
+   the container's copy and fails with the recovery command. This is the fix for TrybeUP's own
+   `deploy-nginx` job going green while applying nothing (the stale-inode bug, above). It is
+   TrybeUP's bug, not BETR's; it went in the same PR because BETR found it.
+
+**The merge ran TrybeUP's production deploy, and it is green:** run `33889549168`, every job
+success. The new guard step passed on its first real run — its log carries the container `exec`,
+so the comparison genuinely happened rather than being skipped. `nginx -t` reported syntax ok
+before the reload.
+
+| After the deploy | |
+| --- | --- |
+| `betr.trybeup.com` | ✅ 200, CSP with `font-src 'none'`, nosniff, no-referrer, **no `Set-Cookie`** |
+| `trybeup.com` | ✅ 200 |
+| `dev.trybeup.com` | ✅ 200 |
+| `api.trybeup.com` | ✅ 404 at `/`, unchanged |
+| BETR's certificate | expires **2026-12-02**, now inside the expiry alarm |
 
 ## Done when
 
-~~The three ⏳ rows are ✅.~~ **They are, 2026-09-03.** What remains is the PR on
-`trybeup/trybeup-prod` so the server stops disagreeing with its repo.
+~~The three ⏳ rows are ✅.~~ **They are, 2026-09-03.** ~~What remains is the PR on
+`trybeup/trybeup-prod` so the server stops disagreeing with its repo.~~ **Merged 2026-09-04.
+B3 is done.**
 
-**Confidence: 8/10.** The server, the workflow, the permissions and the tests are built and
-checked. The 2 is the DNS record and the certificate — routine, but unproven until they exist,
-and a certificate is the one thing here that can silently expire.
+**Confidence: 9/10.** The server, the workflow, the permissions and the tests are built and
+checked, and the repo and the droplet now say the same thing — which was the last engineering
+gap in this task. **The 1 is the address itself**: `betr.trybeup.com` is a borrowed subdomain on
+TrybeUP's droplet, and B0 Q1 (the name, the trademark, the real domain) is still open and still
+a release blocker. Nothing here is the answer to that.

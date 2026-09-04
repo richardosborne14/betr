@@ -572,3 +572,23 @@ records the adaptation as a scroll or a pause. **When a walk says "they had to h
 the file for X before moving anything — twice now the answer has been that X did not exist.**
 The other time was the day before: the front screen's ladder line (B25) was not buried, it had
 been deleted, and it took a person finishing a test to notice.
+
+## A handoff file can be older than the session that wrote it (B3, 2026-09-04)
+
+`NEXT-SESSION.md` opened this session by naming the `trybeup/trybeup-prod` PR as the one
+unblocked engineering job left in v1, and `B3-hosting-and-deploy.md` backed it up: *"there is no
+such branch"*, the PR *"has not been opened yet"*. **Both were wrong. The branch was pushed and
+the PR opened the same evening those sentences were written**, after their last save. Taking
+either at its word meant writing a branch that already existed on the remote.
+
+**This one file has now been wrong in both directions about the same change.** On 2026-09-03 it
+described a `betr-nginx` branch and a zero-downtime reload that had never happened; on 2026-09-04
+it denied a branch and a PR that had. The pattern is not carelessness, it is ordering: a file
+rewritten *at the end* of a session still gets overtaken by whatever that session does next, and
+nothing rewrites it a second time.
+
+**So: before repeating work a handoff calls undone, check the thing itself.** Here that was four
+commands and about a minute — `git fetch`, `git branch -a`, `gh pr list`, and a diff of the
+branch's `nginx.conf` against the live `/opt/trybeup/nginx.conf` (byte-identical, which is the
+fact that actually made the merge safe). The handoff file says what somebody believed at one
+moment. The remote and the running server say what is true.
