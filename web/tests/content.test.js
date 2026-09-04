@@ -140,6 +140,73 @@ test('the sentence on the card is the loose one, not one of the three', () => {
   }
 });
 
+/*
+  B27 item 3, 2026-09-04, and it came out of a walk rather than a read.
+
+  Behind door one, one above the other on the same screen: `early` — "If I leave early, then it
+  costs me something with them" — and `strug` — "If I let someone see I'm struggling, then it
+  costs me something with them". The consequence clause is word for word the same. The test
+  above catches two of the THREE under one worry repeating each other; nothing looked across
+  worries, and nothing looked at the card sentence at all, which is the one drawn on a list of
+  four to six where a person is choosing between them.
+
+  Two worries that end the same way are, on that screen, one worry with two beginnings.
+
+  KNOWN is held by hand, like STARTS_TODAY below, and for the same reason: whether two worries
+  are really one is a judgement about the words, and it belongs to the paid CBT reviewer and to
+  Misha, not to a session. Until they read it, the pair is written down here so it shows in a
+  diff and so nothing NEW joins it quietly. The test under it fails once the pair stops being a
+  duplicate — which is what forces the exemption out of this file on the day it is fixed.
+*/
+const KNOWN_SHARED_CONSEQUENCE = [
+  /* door `habit`, waiting on the CBT reviewer beside `strug`/`low` and `care`/`praise` (B1) */
+  ['early', 'strug']
+];
+
+const consequenceOf = (sentence) => {
+  const at = sentence.toLowerCase().indexOf(', then ');
+  if (at === -1) return null;
+  return sentence.slice(at + 7).toLowerCase().replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
+const knownPair = (a, b) => KNOWN_SHARED_CONSEQUENCE.some((p) =>
+  (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
+
+test('no two worries behind one door end the same way', () => {
+  for (const d of doors.items) {
+    const byEnding = new Map();
+    for (const id of d.worries) {
+      const ending = consequenceOf(content.byId(worries, id).belief);
+      if (!ending) continue;
+      const first = byEnding.get(ending);
+      if (first && !knownPair(first, id)) {
+        assert.fail('behind "' + d.id + '", "' + first + '" and "' + id + '" both end "' +
+          ending + '". On that screen they are one worry with two beginnings.');
+      }
+      if (!first) byEnding.set(ending, id);
+    }
+  }
+});
+
+/*
+  The other half of holding a list by hand: an exemption that has outlived what it exempts is
+  an exemption nobody will ever remove. This fails the day the reviewer's answer is written
+  into worries.js, and the fix is to delete the pair from the list above.
+*/
+test('every pair excused above is still the duplicate it was excused for', () => {
+  for (const pair of KNOWN_SHARED_CONSEQUENCE) {
+    const a = content.byId(worries, pair[0]);
+    const b = content.byId(worries, pair[1]);
+    assert.ok(a && b, pair.join('/') + ' is excused above and one of them is not a worry');
+    assert.ok(doors.items.some((d) =>
+      d.worries.indexOf(pair[0]) !== -1 && d.worries.indexOf(pair[1]) !== -1),
+    pair.join('/') + ' is excused above and no door shows them together any more');
+    assert.strictEqual(consequenceOf(a.belief), consequenceOf(b.belief),
+      pair.join('/') + ' no longer share a consequence. Delete the pair from ' +
+      'KNOWN_SHARED_CONSEQUENCE — the exemption has outlived the problem.');
+  }
+});
+
 test('no test and no drop line touches the habit itself', () => {
   for (const f of worries) {
     assert.ok(guards.checkTest(f.test).ok, f.id + ' test: ' + f.test);

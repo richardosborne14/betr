@@ -250,12 +250,23 @@ var BETR_STRINGS_EN = {
         'actually happened.'
     },
 
+    /*
+      Two states, one screen. The second one is B27 item 1, 2026-09-04: a test user tapped
+      "Didn’t get to it", got the right sentence, and read it under a heading that still said
+      LOCKED IN · GO AND DO IT. He asked whether it had done anything. Rule 5 was honoured in
+      the words and undercut by the screen — and the last thing somebody sees as they close
+      the app is what they take away, so it cannot be an instruction they have just declined.
+      The `rest` three are what the same screen says once the test is put down for today.
+    */
     locked: {
       kicker: 'Locked in',
       title: 'Go and do it.',
       missed: 'No problem. It’s still here for tomorrow. Smaller counts, too.',
       done: 'Done it. Here’s what happened',
-      miss: 'Didn’t get to it'
+      miss: 'Didn’t get to it',
+      restKicker: 'Set aside',
+      restTitle: 'Nothing lost.',
+      restDone: 'Actually, I did it'
     },
 
     happened: {

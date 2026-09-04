@@ -808,6 +808,14 @@
       before: worryHead(f.label, '', false),
       title: t('own.belief.title'),
       sub: t('own.belief.sub'),
+      /*
+        B27 item 2, 2026-09-04. `own.belief.only` was written for the blank box and rendered
+        only there, and this is the other box a person can type a worry into — four taps from
+        cold, and the one a test user actually took. The worry above is ours, so the frame is
+        arguably already set; arguable is not a reason for the boundary to be on one of the
+        two screens where somebody writes their own sentence. loop.test.js asserts both.
+      */
+      foot: t('own.belief.only'),
       placeholder: f.belief,
       value: draft.belief,
       next: function (v) {
@@ -999,22 +1007,39 @@
     });
   }
 
+  /*
+    One screen, two states, and the second one is B27 item 1 (2026-09-04).
+
+    Before it, tapping "Didn't get to it" added a kind sentence to a screen that otherwise did
+    not move: the kicker still read LOCKED IN, the heading still said GO AND DO IT, and the
+    button still offered to take the outcome. A test user asked whether it had registered.
+    Rule 5 says a miss costs nothing, and the words said so while the screen went on issuing
+    an instruction the person had just declined — which is the last thing they see, because
+    tapping that is how somebody closes the app for the day.
+
+    So `rest` is a state, not a sentence. Same screen, no new one (rule 10): the kicker and
+    the heading change, the command softens to something a person could still take up, and
+    "Didn't get to it" is not offered a second time, because it has already happened. The
+    test and the drop stay exactly where they are — that is what is waiting for tomorrow.
+  */
   function locked() {
     var c = S.cur;
     var offerInstall = !S.seenInstall && !isInstalled();
+    var rest = !!c.missed;
     paint(
       '<div class="stage">' +
         worryHead(c.label, c.belief, false) +
-        '<div class="kicker">' + esc(t('locked.kicker')) + '</div>' +
-        head('h2', t('locked.title')) +
+        '<div class="kicker">' + esc(rest ? t('locked.restKicker') : t('locked.kicker')) + '</div>' +
+        head('h2', rest ? t('locked.restTitle') : t('locked.title')) +
         '<p class="sub wrote">' + esc(c.test) + '<br><b>' + esc(c.drop) + '</b></p>' +
-        (c.missed ? '<div class="note">' + esc(t('locked.missed')) + '</div>' : '') +
+        (rest ? '<div class="note">' + esc(t('locked.missed')) + '</div>' : '') +
         (offerInstall ? installBlock() : '') +
-        '<button class="big wide" id="done">' + esc(t('locked.done')) + '</button>' +
-        '<p class="tiny"><button id="miss">' + esc(t('locked.miss')) + '</button></p>' +
+        '<button class="big wide" id="done">' +
+          esc(rest ? t('locked.restDone') : t('locked.done')) + '</button>' +
+        (rest ? '' : '<p class="tiny"><button id="miss">' + esc(t('locked.miss')) + '</button></p>') +
       '</div>');
     on('#done', function () { go('happened'); });
-    /* Nothing happens visually below the fold, so the note is read out as well as drawn. */
+    /* The heading changes under them, so the note is read out as well as drawn. */
     on('#miss', function () { S.cur.missed = true; save(); say(t('locked.missed')); render(); });
     wireInstall();
   }

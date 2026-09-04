@@ -26,13 +26,13 @@ whether it stays.
 | ~~**B24**~~ | `B24-somewhere-to-send-them.md` | **DONE 2026-09-04.** Help has the six places, all read on the day, and the note opens them | Founder took all three decisions | ~~Yes~~ — closed |
 | **B25** | `B25-the-number-that-brought-them.md` | The ad's number is nowhere on the way in, and today's headline lost the reason it starts at 10 | Founder — one half is about the ad, not the app | No |
 | **B26** | `B26-help-for-someone-who-is-not-in-crisis.md` | 2,711px to the thing that wins the sceptic | Founder confirms the nine sentences are frozen in wording, not order | No |
-| **B27** | `B27-the-small-repairs.md` | Four small things; three need no decision | Only item 4 (the home-screen name) | No |
+| **B27** | `B27-the-small-repairs.md` | **Items 1–3 DONE 2026-09-04.** Item 4 left: the home-screen name | Founder, and it needs a look at a real iPhone first | No |
 
 ## The order I would take them in
 
 ```
 B24  ──▶  B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
-DONE       free, today        the rule    the doors   the number   Help
+DONE       DONE               the rule    the doors   the number   Help
 ```
 
 **B24 was first**, because it was the only one that was a harm rather than a loss: a person told
@@ -40,9 +40,15 @@ DONE       free, today        the rule    the doors   the number   Help
 every one read on its provider's own site that day, and a test that fails the build if the
 promise on door one outlives the places behind it.
 
-**B27's first three next**, because they need nobody's permission and they are an hour.
+**B27's first three are done**, 2026-09-04, and they took the hour they were costed at. The miss
+is a state instead of a sentence, the boundary line is on both boxes, and a test now fails the
+build if two worries behind one door end the same way. **B27 item 4 is still open** and is not
+next: it needs somebody to look at an iPhone's *Add to Home Screen* sheet before anybody can
+decide anything, and it is really a B5 question wearing a v1 coat.
 
-**Then B22**, because B23, B25 and B26 are all easier to decide once the piles exist and everyone
+**So B22 is next**, and it is where it always was in this order.
+
+**B22 now**, because B23, B25 and B26 are all easier to decide once the piles exist and everyone
 is looking at the same table.
 
 ## What none of these tasks may do

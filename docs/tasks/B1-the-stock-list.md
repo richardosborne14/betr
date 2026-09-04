@@ -43,7 +43,17 @@ Starting material: the twelve in scope §5.1 and the fifteen candidates in resea
 2. Misha reads for the audience: which items read as a substance test, which feel like a
    diagnosis, which a person in early recovery would tap first. **Outstanding.**
 3. One CBT-trained reviewer reads once for lane and wording. Paid, brief, and **never described
-   as an endorsement** anywhere. **Outstanding.**
+   as an endorsement** anywhere. **Outstanding.** Three named pairs go with the list, and each
+   one is the same question — *are these one worry or two?*
+
+   | Pair | Why it is on the list | If they are one |
+   | --- | --- | --- |
+   | `strug` / `low` | A situation you're finding hard against a state you're in. B19 calls it the closest pair on the list | `low` is the one that goes |
+   | `care` / `praise` | The size of what you'd be admitting against what happens when nothing comes back. Kept apart at the founder's call (B19) | The founder's call to reverse |
+   | `early` / `strug` | **Added 2026-09-04, B27 item 3.** Their card sentences end word for word the same — *"then it costs me something with them"* — and they sit one above the other behind door one. On that screen they are one worry with two beginnings | Either one goes, or one card sentence is rewritten |
+
+   The third is written down in `web/tests/content.test.js` as well, in `KNOWN_SHARED_CONSEQUENCE`,
+   so nothing new joins it quietly. **The reviewer's answer is what deletes it from there.**
 4. ~~If B0 Q2a chose the second door~~ **It did.** `content/whats-going-on.js` exists with six
    surface problems, each mapping to three or four worry ids, written against research §5.4:
    first person, a behaviour and never a condition, and nothing that claims to fix anything.

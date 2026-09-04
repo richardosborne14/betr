@@ -93,6 +93,46 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
   a.shows('>1<');
 });
 
+/*
+  B27 item 1. The words were already right and the screen was not: after "Didn’t get to it"
+  the kicker still read LOCKED IN and the heading still said GO AND DO IT, so a person closing
+  the app for the day carried away an instruction they had just declined.
+
+  What this holds down is that a miss is a STATE. The heading has to change, the command has
+  to stop being a command, and the offer to put it down must not be made a second time — while
+  the test and the drop stay exactly where they are, because they are what is waiting for
+  tomorrow. And it must still be the way back in: a test put down is not a test taken away.
+*/
+test('putting a test down for the day changes the screen, not just adds a sentence', () => {
+  const a = boot();
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
+  a.shows(en.s.locked.kicker).shows(en.s.locked.title).shows(en.s.locked.miss);
+
+  a.tap('#miss');
+  a.shows(en.s.locked.restKicker).shows(en.s.locked.restTitle).shows(en.s.locked.missed);
+  a.hides(en.s.locked.kicker).hides(en.s.locked.title);
+
+  /* No second offer to put down what is already down. */
+  a.hides(en.s.locked.miss);
+
+  /* The command softened, and what is waiting for tomorrow is still on the screen. */
+  a.shows(en.s.locked.restDone).hides(en.s.locked.done);
+  a.shows(firstBehind(0).test).shows(firstBehind(0).drop);
+
+  a.tap('#done').shows(en.s.happened.title);
+});
+
+/* Closed and opened again tomorrow, the screen still says it was put down, not still shouting. */
+test('a test put down for today is still put down when the app is opened again', () => {
+  const a = boot();
+  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#miss');
+
+  /* Reopening lands straight back on the test in hand, in the state it was left in. */
+  const again = boot(a.mem);
+  again.shows(en.s.locked.restKicker).shows(en.s.locked.restTitle);
+  again.hides(en.s.locked.title).hides(en.s.locked.miss);
+});
+
 test('the second door opens onto worries, never onto a test of its own', () => {
   const a = boot();
   a.tap('#go').shows('What’s going on?').shows(doors.items[0].label);
@@ -445,9 +485,21 @@ test('a verdict is still refused, and an empty box still is', () => {
   The line the whole of 2026-09-04 exists for. Every worry in content/worries.js is about what
   other people will think, say or do; the blank box never said so, so a person wrote a true
   worry about his own body into it and the app took it.
+
+  B27 item 2 is the other half of it. There are TWO boxes a person can write a worry into and
+  the line was on one of them: the second is "I'll put it my own way" under a stock worry,
+  four taps from cold, and it is the one a test user actually took. Both, so it cannot fall
+  off one of them again.
 */
-test('the blank box says which worries BETR is for', () => {
-  boot().tap('#go').tap('#own').shows('Not the weather, and not your body');
+test('both boxes say which worries BETR is for, not just the blank one', () => {
+  const only = en.s.own.belief.only;
+  assert.ok(only.indexOf('not your body') !== -1, 'the boundary line has been reworded: ' + only);
+
+  /* the blank box, reached from the doors */
+  boot().tap('#go').tap('#own').shows(only);
+
+  /* and their own words under a worry that is still ours */
+  boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
 });
 
 test('the brand is BETR everywhere a person reads it, refusals included', () => {

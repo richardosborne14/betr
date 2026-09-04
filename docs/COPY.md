@@ -338,6 +338,18 @@ keep it, and put it wherever the sentence needs it.
 
 > Didn’t get to it
 
+**`locked.restKicker`**
+
+> Set aside
+
+**`locked.restTitle`**
+
+> Nothing lost.
+
+**`locked.restDone`**
+
+> Actually, I did it
+
 ### Screen 6 — what happened
 
 **`happened.title`**
