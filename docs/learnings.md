@@ -458,7 +458,7 @@ neither chosen nor disconfirmable.
 not "is this word hard".** Written into `docs/three-piles.md` so the next pass does not soften
 Help's primer for no reason.
 
-## A belief is not screened for harm, only the test is (found 2026-09-04, not fixed)
+## A belief is not screened for harm, only the test is (found and fixed 2026-09-04)
 
 Found while walking the three B22 wording changes, by typing a habit belief on the write-your-own
 screen and expecting to be stopped. Nothing stopped it.
@@ -486,10 +486,19 @@ there is no reading of the rules where a belief about suicide should get a plan 
 
 **Why it was not fixed on the spot.** `checkBelief` had its walls taken down that morning
 *because a wall cost somebody a session* (the gluten refusal). Adding a hard stop back into it is
-the founder's call, not a session's, even when the case looks one-sided. It is written up here and
-in `NEXT-SESSION.md` rather than quietly patched.
+the founder's call, not a session's, even when the case looks one-sided. It was written up here
+and in `NEXT-SESSION.md` rather than quietly patched.
+
+**What the founder decided, next session: stop it at the worry box.** `HARM` now runs in
+`checkBelief`, returning `checkTest`'s own `refusal.harm` — which is why the crisis lines
+appeared under the belief box with no change to `app.js`: it already draws them for any refusal
+whose `kind` is `harm`. `HABIT` and `BODY` stay `checkTest`'s alone, and there is now a test whose
+only job is to fail when somebody tidies that asymmetry away. **The waiting was right and cheap:
+one question, one answer, three lines.** A guard that had just been loosened for a good reason is
+the last place to tighten on your own judgement.
 
 **The lesson that generalises:** two guards that read the same person's words a screen apart do
-not have to enforce the same rules, and nothing in the code says which rules each one owns. The
-comment block above `checkBelief` explains at length what it *stopped* enforcing and never says
-what it *never* enforced.
+not have to enforce the same rules — but the file has to say which rules each one owns. The
+comment block above `checkBelief` explained at length what it had *stopped* enforcing and never
+once said what it had *never* enforced, so the gap was invisible to anyone reading rather than
+typing. It says both now.

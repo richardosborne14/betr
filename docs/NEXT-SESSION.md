@@ -1,31 +1,31 @@
 # Start here
 
-**Last refreshed:** 2026-09-04, after three of B22's five decisions were taken and shipped.
+**Last refreshed:** 2026-09-04, after the self-harm gap in the worry box was closed.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**v1 is built and live, and everything from 2026-09-04 is committed and published.** 173 tests,
+**v1 is built and live, and everything from 2026-09-04 is committed and published.** 175 tests,
 no dependencies, no build step, nothing requested after load. `betr.trybeup.com` is serving it.
 
 **2026-09-04, in order.** The gluten fix; the grammar wall became a nudge; B21's three walks
 (`docs/journeys-observed.md`, ten findings); B22–B27 written from them; **B24 closed**; **B27
-items 1–3 done**; **B22 step 1 — the sort** (`docs/three-piles.md`); and now **three of B22's
-five decisions taken by the founder and live**.
+items 1–3**; **B22 step 1 — the sort** (`docs/three-piles.md`); **three of B22's five wording
+decisions**; and last, **B27 item 5 — the one wall that went back up.**
 
-**What changed in the app today, and it is three sentences**, each walked on screen first:
+**What changed this session.** `guards.checkBelief` screened for nothing but an empty box and a
+verdict, so somebody who wrote *"If I tell them how I really feel, then they'll know I want to
+kill myself"* was answered with **"What will you do?"** and stopped only after typing a plan into
+that box. Founder's call, taken this session: **stop it at the worry box.** `HARM` now runs in
+`checkBelief` and returns `checkTest`'s own `refusal.harm`, so `app.js` drew the crisis lines
+under the belief box with no change to `app.js` at all. Walked in a browser: the refusal, the
+emergency line, and **116 123 — Samaritans** as a tappable number; a second tap refuses again.
 
-| Where | Now reads |
-| --- | --- |
-| `pick.notHere` — under **every** worry list | *"Nothing here tests the thing itself, only what you expect to happen without it. That's the worry underneath, and that's what we test."* |
-| `rest`'s card sentence | *"If I rest before everything's done, then I'll pay for it."* |
-| `refusal.habit`, closing clause | *"...or about what happens when you go without it."* |
+**`HABIT` and `BODY` stay `checkTest`'s alone, deliberately.** "If I stop drinking at the wedding,
+then they'll ask why" is exactly the worry door one exists to hold, and its test never goes near
+a drink. **A test now fails if somebody "makes the two guards consistent".**
 
-All three removed a noun that named a kind of person and kept the boundary the sentence draws.
-**No rule moved.** `guards.checkTest` still refuses a habit test in the same words with a
-different tail; `rest`'s three predictions underneath are untouched.
-
-**Two of the five are still open and both are yours:**
+**Two of B22's five are still open and both are yours:**
 - **Door one's four nouns** — *"— drink, weed, porn, betting"*. **Misha's casting vote, B23.**
 - **The word *diagnosis*** on the doors footer — wants a second opinion on the legal point first.
 
@@ -34,27 +34,10 @@ building has read a word of the worry list, and nobody using a screen reader has
 
 ## 2. The next action
 
-**A belief is not screened for harm. Only the test is.** Found today while walking the wording
-changes; written up in `docs/learnings.md` with the two lines that prove it.
+**B23 — door one, which still carries B22's first question inside it.**
 
 ```
-checkBelief("If I tell them how I really feel, then they will know I want to kill myself")
-  → { ok: true }   → next screen is "What will you do?"
-checkTest(same words)
-  → { ok: false, kind: 'harm' }
-```
-
-`guards.checkTest` runs `HARM`, `HABIT`, `BODY`. **`checkBelief` runs none of them.** Somebody who
-writes a belief about self-harm types a plan for it before BETR says anything. **`HABIT` on a
-belief is arguably right as it is** — "if I stop drinking at the wedding, then they'll ask why" is
-exactly what door one is for. **`HARM` is the one that matters, and it is a founder's call**,
-because `checkBelief` had its walls taken down this morning precisely because a wall cost somebody
-a session. **Ask before patching.**
-
-**Then B23**, which still carries B22's first question inside it:
-
-```
-B22 steps 2-3  ──▶  B23  ──▶  B25  ──▶  B26     (B24 and B27 items 1-3 done)
+B22 steps 2-3  ──▶  B23  ──▶  B25  ──▶  B26     (B24 done; B27 1-3 and 5 done)
 3 of 5 SHIPPED      doors     number    Help
    └── 2 left: door one's nouns (Misha), "diagnosis" (legal)
 ```
@@ -74,6 +57,11 @@ B22 steps 2-3  ──▶  B23  ──▶  B25  ──▶  B26     (B24 and B27 i
   did** — Dan shrugged at *"no account, no AI"* and stayed for TrybeUP's paywall in the small print.
 - **B27 item 4 is open and is NOT next.** It needs somebody to look at an iPhone's *Add to Home
   Screen* sheet; nothing in the repo can answer it, and it bites harder at **B5**.
+
+**One thing this session opened and did not close.** `HARM` matches whole words, so *"end it"* in
+a sentence about ending a friendship is refused on a box where the words are a person's own. That
+is the trade the guard file has always made on purpose, and it has never been watched in front of
+anybody. It belongs with the screen-reader pass, not in a patch.
 
 **Unchanged release conditions:** one paid CBT-trained reviewer on the worries (**three pairs are
 written down for them** in `B1-the-stock-list.md` step 3); **Misha on the six doors and the
@@ -96,10 +84,12 @@ reload silently do nothing; J1–J3 walked on a phone; an owner for links and he
 ## 4. Gotchas, live
 
 - **`node --test web/tests/` does not work on Node 22** — run it from the repo root, and only
-  from there: run it inside `web/` and you get 166 tests instead of 173 and no warning.
+  from there: run it inside `web/` and you get fewer tests than the real count and no warning.
   `harness.js` is the fake DOM; in its `vm`, **`instanceof Array` is unreliable** and there is
   **no `crypto`**. A textarea keeps its value across a repaint there.
-- **`checkBelief` and `checkTest` do not enforce the same rules**, and no comment says so. See §2.
+- **`checkBelief` and `checkTest` deliberately do not enforce the same lists.** `HARM` is on both;
+  `HABIT` and `BODY` are `checkTest`'s alone. The comment block above `checkBelief` says so now,
+  and a test enforces it. **Do not tidy this into symmetry.**
 - **Two footers are one sentence.** `whats-going-on.js`'s `foot` and `strings-en.js`'s
   `doors.foot` are printed into the same `<p>` at `app.js:667`. `docs/COPY.md` is organised by
   file and cannot show you that. **Sort copy by what a person reads, not by where it is stored.**

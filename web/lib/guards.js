@@ -4,10 +4,10 @@
   Custom entries are in v1 by the founder's call, which puts free text back in front of the
   test. These are what make that safe:
 
-    checkBelief  "I am a bad person" is a verdict. It is reframed at the door into a
-                 prediction, because you cannot run an experiment against a verdict. Since
-                 2026-09-04 that is the ONLY thing it refuses besides an empty box: the shape
-                 rules ask once and let the person's own words through. See checkBelief.
+    checkBelief  refuses an empty box, a worry naming anyone's safety, and a verdict
+                 ("I am a bad person"), and nothing else: the shape rules ask once and let
+                 the person's own words through. It does NOT screen for the habit or for
+                 food and body, and that is deliberate — see checkBelief.
     checkTest    a test that involves the habit, food and body, or anyone's safety is
                  refused with the reason, not warned about. Refusing quietly teaches nothing;
                  refusing with the reason teaches the whole point of the product.
@@ -128,15 +128,27 @@
     "if" may sit anywhere in the sentence rather than only at the front, no comma is required,
     no "then" is required, and the six-word floor is a five-word one.
 
-    Two stops stay hard, and neither is a grammar preference:
+    Three stops stay hard, and none of them is a grammar preference:
 
       empty    there is nothing to test.
+      harm     ADDED 2026-09-04, founder's call, and it is the one wall that went back up.
+               checkTest has always refused a plan naming suicide or self-harm; this box
+               did not, so somebody who wrote "if I tell them how I really feel, then
+               they'll know I want to kill myself" was answered with "What will you do?"
+               and only stopped once they had typed a plan for it. One screen late, at the
+               worst possible moment. Same words as the test refusal, and app.js puts the
+               crisis lines for their country underneath it.
       verdict  "I am a bad person" is a CORE belief. Research §2.1 is explicit that a tool with
                no therapist must not go near one: Padesky's client looks at contrary evidence
                and says "yes, and I am still bad". Reframed, never accepted. CLAUDE.md rule 3.
                A sentence with "if" in it is a conditional and is exempt, because
                "I'm going to get fired if I ask" used to be refused as a verdict and it is a
                textbook prediction.
+
+    HABIT and BODY are checkTest's alone, on purpose. Rule 4 is about the *test*, and
+    "if I stop drinking at the wedding, then they'll ask why" is exactly the worry door one
+    exists to hold; its test never goes near a drink. Screening beliefs for those lists would
+    refuse the people BETR is most for. Do not "make the two guards consistent".
 
     Returns { ok: false, kind, reason }  cannot go on
          or { ok: true }                 reads as a prediction
@@ -145,6 +157,9 @@
   function checkBelief(text) {
     var s = String(text || '').trim().replace(/\s+/g, ' ');
     if (!s) return { ok: false, kind: 'empty', reason: REASON.emptyBelief };
+
+    var w = hit(s, HARM);
+    if (w) return { ok: false, kind: 'harm', word: w, reason: REASON.harm };
 
     var conditional = /\bif\b/i.test(s);
 

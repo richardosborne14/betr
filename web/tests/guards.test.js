@@ -59,10 +59,42 @@ test('a belief with no consequence is asked about, not refused', () => {
   }
 });
 
-test('an empty box is still the one thing besides a verdict that cannot go on', () => {
+test('an empty box is one of the three things that cannot go on', () => {
   const r = guards.checkBelief('');
   assert.strictEqual(r.ok, false);
   assert.strictEqual(r.reason, 'refusal.emptyBelief');
+});
+
+/*
+  2026-09-04, founder's call, and the wall that went back up. This box used to send a worry
+  naming suicide straight on to "What will you do?" and stop it only once a plan had been
+  typed into the next box. The refusal is the same one checkTest gives, so app.js draws the
+  crisis lines under it (app.js: refusal.kind === 'harm').
+*/
+test('a belief naming anyone\u2019s safety is refused here, not one screen later', () => {
+  for (const s of ['If I tell them how I really feel, then they will know I want to kill myself',
+                   'If I say it out loud they will think I am suicidal',
+                   'If I go home tonight I will hurt myself']) {
+    const r = guards.checkBelief(s);
+    assert.strictEqual(r.ok, false, s);
+    assert.strictEqual(r.kind, 'harm', s);
+    assert.strictEqual(r.reason, 'refusal.harm', s);
+    assert.strictEqual(r.reason, guards.checkTest(s).reason, 'the two guards must say the same thing: ' + s);
+  }
+});
+
+/*
+  The other half of the same decision, and the more important half to keep. HABIT and BODY
+  are checkTest's alone: rule 4 is about the test, and these are exactly the worries door one
+  exists to hold. A well-meaning edit that "makes the two guards consistent" fails here.
+*/
+test('a belief about the habit still goes through \u2014 it is the test that may not', () => {
+  for (const s of ['If I stop drinking at the wedding, then they will ask me why',
+                   'If they see me turn down a pint they will think I have a problem',
+                   'If I say no to the casino night, then I will be left out']) {
+    assert.strictEqual(guards.checkBelief(s).ok, true, s);
+    assert.strictEqual(guards.checkTest(s).ok, false, 'as a test it must still be refused: ' + s);
+  }
 });
 
 /*

@@ -1,13 +1,14 @@
 # B27: The small repairs the walks turned up
 
-**Status:** **Items 1, 2 and 3 built and pushed, 2026-09-04. Item 4 is open and is the only**
-**one that needed a decision — it also needs a check on a real phone that no session can do**
-**Confidence:** 9/10 on what was built. Each of the three is provable and each carries a test
+**Status:** **Items 1, 2, 3 and 5 built and pushed, 2026-09-04. Item 4 is open and is the only**
+**one still needing a check on a real phone that no session can do**
+**Confidence:** 9/10 on what was built. Each of the four is provable and each carries a test
 **Date opened:** 2026-09-04 · **Depends on:** nothing. Items 1–3 took under an hour
-**Findings 7, 8 and 9 in `docs/journeys-observed.md`.**
+**Findings 7, 8 and 9 in `docs/journeys-observed.md`. Item 5 was found the same way, later
+the same day, and is the most serious thing in this file.**
 
-Four things, none of them big, all of them the kind of thing that only shows up when somebody
-walks the app instead of reading it.
+Five things. Four are small. Item 5 is not, and it arrived last because it only shows up when
+somebody types the wrong sentence into the right box.
 
 ---
 
@@ -88,6 +89,27 @@ puts a fixed name and icon on the home screen with no rename sheet at all.
 
 ---
 
+## 5 · A worry naming self-harm was answered with "What will you do?" — **DONE**
+
+`guards.checkTest` has always refused a plan naming suicide or self-harm, with the crisis
+lines underneath. `guards.checkBelief` — the box one screen earlier — screened for none of it.
+
+```
+checkBelief("If I tell them how I really feel, then they will know I want to kill myself")
+  → { ok: true }            → next screen: "What will you do?"
+```
+
+So the one person BETR most needs to stop was handed a box asking them to plan it, and heard
+*"BETR can't help with that one"* only after they had typed something into it. One screen late,
+at the worst possible moment.
+
+Not fixed on the spot, and written into `learnings.md` unfixed, because `checkBelief` had its
+walls taken down **that same morning** on the founder's call — a grammar wall had cost a test
+user his session. Putting a wall back into that box was theirs to decide. **They decided it the
+next session: stop it at the worry box.**
+
+---
+
 ## What this task may not do
 
 - **It may not add a screen** for the miss state. Same screen, different state.
@@ -103,6 +125,8 @@ puts a fixed name and icon on the home screen with no rename sheet at all.
 3. ~~The same-door duplicate-consequence test~~ **done**; the content question is on the
    reviewer's list in `B1-the-stock-list.md`, in a table with the other two pairs.
 4. Check the iOS rename sheet on a real phone, then take item 4 to the founder. **Open.**
+5. ~~`HARM` in `checkBelief`, refusing in `checkTest`'s exact words so the crisis block draws
+   underneath it — and a test that pins HABIT to `checkTest` alone.~~ **Done.**
 
 ---
 
@@ -160,8 +184,37 @@ The content question went to `docs/tasks/B1-the-stock-list.md` step 3, as a tabl
 other two pairs (`strug`/`low`, `care`/`praise`) and what happens to each if the answer is
 "one worry".
 
+### 5 · The one wall that went back up
+
+Three lines in `web/lib/guards.js`: `HARM` is checked in `checkBelief` immediately after the
+empty box, before the verdict rule, and returns `refusal.harm` — the same key `checkTest`
+returns. That matters more than it looks: `app.js:842` already draws the crisis block whenever
+`refusal.kind === 'harm'`, so the country's own helpline appeared under the belief box with no
+change to `app.js` at all.
+
+Walked in a real browser. Typing the sentence above into *"None of these — I'll write my own"*
+now gives the refusal, *"If you are in danger right now, call your local emergency number"*,
+and **116 123 — Samaritans** as a tappable number. Tapping **Next** again refuses again: this is
+a wall, not the shape nudge, and a second tap does not buy a way past it.
+
+**175 tests.** Two new ones, and the second is the one to keep:
+
+| Test | What it pins |
+| --- | --- |
+| a belief naming anyone's safety is refused here, not one screen later | the fix, and that both guards return the *same* key |
+| a belief about the habit still goes through — it is the test that may not | that nobody "makes the two guards consistent" later |
+
 ## Decisions
 
+- **`HARM` is screened on a belief; `HABIT` and `BODY` are not, and that is deliberate.** Rule 4
+  is about the *test*. "If I stop drinking at the wedding, then they'll ask why" is precisely
+  the worry door one exists to hold, and its test never goes near a drink. Screening beliefs for
+  `HABIT` would refuse the people BETR is most for. The second new test fails if someone tidies
+  this away, and the comment block above `checkBelief` now says which lists it owns and why —
+  it previously explained at length what it had stopped enforcing and never said what it had
+  never enforced.
+- **The same words, not softer ones.** A separate, gentler refusal for the belief box would
+  have been two sentences for one situation and one more thing to translate.
 - **"Set aside · Nothing lost."** Not "Put down" (it reads as an ending), not a repeat of the
   note's own words (it is directly beneath). It names what happened to the test and says what
   it cost, which is the whole of rule 5 in four words.
@@ -175,6 +228,11 @@ other two pairs (`strug`/`low`, `care`/`praise`) and what happens to each if the
 
 ## Gaps
 
+- **The word list is blunt and always was.** `HARM` matches on whole words, so "end it" in a
+  sentence about ending a friendship is refused. That is the trade the guard file has always
+  made deliberately — a person whose real worry is refused can reword it; a person whose real
+  crisis is let through has been failed by the one rule that never bends — but it is now made
+  on a box where the wording is a person's own, and it has not been watched in front of anyone.
 - **Item 4 is untouched and it is the only one that needed a decision.** It also needs
   something no session can do: *does iOS still let a person type their own name for the icon on
   the Add to Home Screen sheet?* That has to be seen on a real phone before the card can say it.
