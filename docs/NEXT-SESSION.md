@@ -1,15 +1,14 @@
 # Start here
 
-**Last refreshed:** 2026-09-04, after the gluten fix, three observed walks, and six tasks
-written out of them.
+**Last refreshed:** 2026-09-04, after the founder signed off the gluten fix and it went live.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**v1 is built, live, and there is a working tree full of uncommitted change that the founder
-has not signed off.** 167 tests, no dependencies, no build step, nothing requested after load.
-**Nothing from 2026-09-04 is committed or pushed, deliberately** — a push to `main` publishes
-`betr.trybeup.com`, and what is in the tree is the founder's copy, not ours.
+**v1 is built and live, and everything from 2026-09-04 is committed and published.** 167 tests,
+no dependencies, no build step, nothing requested after load. The founder read the changed
+sentences and said commit and push (`dadb734`); `betr.trybeup.com` is serving them. The working
+tree is clean.
 
 **What 2026-09-04 did, in order.**
 
@@ -39,10 +38,8 @@ the app.**
 
 ## 2. The next action
 
-**Ask the founder whether today's uncommitted wording is right, then commit it.** It is their
-copy and they have seen it in the terminal but not on a phone. Until then nothing here is pushed.
-
-After that, `docs/TRACK-understandable.md` has the order and the reasoning:
+**Start on B24.** The wording sign-off is done. `docs/TRACK-understandable.md` has the order
+and the reasoning:
 
 ```
 B24  ──▶  B27 (items 1-3)  ──▶  B22  ──▶  B23  ──▶  B25  ──▶  B26
