@@ -185,6 +185,13 @@ The crisis block is first for good reasons (B17) and nobody should move it witho
 But the person tapping *Help* to check the price and the person in crisis are not the same
 person, and right now they get the same screen.
 
+> **Fixed 2026-09-04 (B26).** The proof block is second now, under the crisis lines — 456px, on
+> the first screen. The crisis block did not move and was never proposed for moving. Reading the
+> file to move it turned up the thing this walk had not: **Help never said what BETR costs**, in
+> any words, anywhere in the app. It does now — *"BETR is free. No ads, no subscription, nothing
+> to buy, and nothing to unlock."* Dan's actual question had never been answered; he inferred it
+> from the TrybeUP paywall admission at 4,167px.
+
 ### 7 · "Didn't get to it" barely changes anything
 The heading still says **LOCKED IN · Go and do it**, and both buttons stay. Marcus was not sure
 it had registered. Rule 5 is honoured in the words and undercut by the screen.

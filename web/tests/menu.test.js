@@ -157,6 +157,61 @@ test('Help opens with the crisis lines, above everything else in the markup', ()
   a.shows('988').shows('116 123').shows('findahelpline.com');
 });
 
+/*
+  B26, 2026-09-04. The order of the first two blocks, and it is the whole task.
+
+  The crisis block is first because B17 put it there for the person who cannot scroll and gets
+  one chance. The proof is second because the person checking for a catch is a different person
+  and used to get the same screen: the counters were 2,607px down, three and a half screens,
+  behind the CBT explainer and the nine sentences.
+
+  Both halves of this fail the build. Moving the crisis block off the top has the standing of
+  rule 1 and needs the founder in writing; moving the proof back down undoes B26 by accident,
+  which is exactly how the front screen lost its ladder line the day before.
+*/
+test('Help answers the person checking for a catch on the first screen, under the crisis lines', () => {
+  const a = boot();
+  a.tap('#m-help');
+  const h = a.html();
+  const at = (s) => {
+    const i = h.indexOf(s);
+    assert.ok(i !== -1, 'not on Help: ' + s);
+    return i;
+  };
+  const crisis = at('If you are in danger or in crisis');
+  const proof = at('Don’t take our word for it');
+  assert.ok(crisis < proof, 'the crisis lines are no longer first');
+  for (const later of ['What CBT is', 'What this is', 'This is a self-help worksheet',
+    'Other places', 'Who made this', 'The code']) {
+    assert.ok(proof < at(later), '"' + later + '" is above the proof block');
+  }
+  /* the counters and both ways out are inside that block, not stranded below the fold */
+  for (const part of ['sent to us, ever', 'accounts', 'Turn on airplane mode']) {
+    assert.ok(at(part) < at('What CBT is'), '"' + part + '" fell below the CBT explainer');
+  }
+});
+
+/*
+  B26, founder 2026-09-04. Help is where somebody goes to find the catch, and until this day
+  BETR never said anywhere what it costs. §08: paywall complaints carry a −1.89 star penalty
+  and outnumber AI complaints 34 to 1, so the unanswered question is not a small one.
+
+  This test only checks the sentence is there and is read before the CBT explainer. IF BETR
+  EVER GAINS A THING TO BUY, THE SENTENCE COMES OUT — no test can notice that for you.
+*/
+test('Help says in plain words what BETR costs, before anything else it explains', () => {
+  const a = boot();
+  a.tap('#m-help');
+  a.shows('BETR is free');
+  a.shows('nothing to buy');
+  const h = a.html();
+  assert.ok(h.indexOf('BETR is free') < h.indexOf('What CBT is'),
+    'the price is below the CBT explainer again');
+  /* it speaks for BETR; TrybeUP's paid plan is still stated in TrybeUP's own entry (rule 9) */
+  assert.ok(h.indexOf('the private groups need a paid plan') > h.indexOf('BETR is free'),
+    'TrybeUP\'s paywall admission has moved or gone');
+});
+
 test('Help carries the nine sentences and the one clear thing to read about CBT', () => {
   const a = boot();
   a.tap('#m-help');

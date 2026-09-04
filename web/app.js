@@ -1390,13 +1390,21 @@
     person who needs the first block most is the least able to go looking for it (B8).
 
       1. the crisis lines, above everything, scrolled past by nobody
-      2. what CBT is and which bit of it this is — the one clear thing to read, asked for by
+      2. what it costs and what leaves the phone: the free line, the airplane-mode proof, the
+         three counters, export and delete. Second since B26, 2026-09-04 — it was fourth, and
+         the person who taps Help to check for a catch had to scroll three and a half screens
+         to find the strongest thing BETR has. Nothing was deleted to make room and nothing
+         above it moved
+      3. what CBT is and which bit of it this is — the one clear thing to read, asked for by
          the founder on 2026-09-03. B8's order had this screen going straight from the crisis
          lines into the small print; this is the deliberate change to it
-      3. what this is: the purpose statement, the nine sentences, the airplane-mode proof,
-         export and delete. This is the old "what this is" screen, word for word
-      4. other places to go, none of them run by us, from content/places.js
-      5. who made this, the language, and the code
+      4. what this is: the purpose statement and the nine sentences, word for word
+      5. other places to go, none of them run by us, from content/places.js
+      6. who made this, the language, and the code
+
+    The nine sentences are frozen in WORDING, not in position, and nothing about their own
+    order changed here — a block moved above them. Their wording is checked by menu.test.js
+    against research §10 and it is not this function's to touch.
 
     Nothing on this screen is fetched. A link is inert until a person taps it, and then it is
     their browser going there — no favicon, no preview, no availability check, nothing counted.
@@ -1413,6 +1421,35 @@
         head('h2', t('crisis.title')) +
         crisisBlock() +
         '<p class="quiet">' + esc(t('crisis.howWeKnow')) + '</p>' +
+
+        /*
+          B26, founder 2026-09-04. This block used to sit fourth, 2,607px down — three and a
+          half screens. A test user tapped Help for one reason, to find out what BETR costs
+          before typing anything into it, and the first thing he got was a suicide line. He
+          scrolled, and what would have answered him was past the CBT explainer and the nine
+          sentences (`docs/journeys-observed.md` finding 6).
+
+          THE CRISIS BLOCK DID NOT MOVE and does not move. B17 put it first for the person who
+          cannot scroll and gets one chance, and that person is still first. This is second
+          now because the person checking for a catch is a different person, and until today
+          they got the same screen.
+
+          `help.free` is the answer to the question he actually arrived with, and BETR had
+          never once said it — not here, not on the front screen, not anywhere. It names BETR
+          and only BETR: TrybeUP's paid plan is stated in TrybeUP's own entry further down,
+          and that admission is the other thing that kept him (rule 9 — it stays where it is).
+        */
+        '<h2>' + esc(t('help.proofTitle')) + '</h2>' +
+        '<p>' + esc(t('help.free')) + '</p>' +
+        '<p>' + esc(t('help.airplane')) + '</p>' +
+        '<div class="proof">' +
+          '<span><b>' + S.done.length + '</b><small>' + esc(t('help.proofResults')) + '</small></span>' +
+          '<span><b>0</b><small>' + esc(t('help.proofAccounts')) + '</small></span>' +
+          '<span><b>' + esc(t('help.zeroBytes')) + '</b><small>' + esc(t('help.proofSent')) + '</small></span>' +
+        '</div>' +
+        '<p><button class="plain" id="export">' + esc(t('io.export')) + '</button>' +
+        '<button class="plain" id="wipe">' + esc(t('io.wipe')) + '</button></p>' +
+        '<div id="io"></div>' +
 
         /*
           The primer. Founder, 2026-09-03: there should be one clear thing to read about CBT,
@@ -1436,17 +1473,6 @@
         '<h2>' + esc(t('help.whatThisTitle')) + '</h2>' +
         '<p>' + esc(purpose()) + '</p>' +
         '<ol>' + sentences().map(function (s) { return '<li>' + callable(s) + '</li>'; }).join('') + '</ol>' +
-
-        '<h2>' + esc(t('help.proofTitle')) + '</h2>' +
-        '<p>' + esc(t('help.airplane')) + '</p>' +
-        '<div class="proof">' +
-          '<span><b>' + S.done.length + '</b><small>' + esc(t('help.proofResults')) + '</small></span>' +
-          '<span><b>0</b><small>' + esc(t('help.proofAccounts')) + '</small></span>' +
-          '<span><b>' + esc(t('help.zeroBytes')) + '</b><small>' + esc(t('help.proofSent')) + '</small></span>' +
-        '</div>' +
-        '<p><button class="plain" id="export">' + esc(t('io.export')) + '</button>' +
-        '<button class="plain" id="wipe">' + esc(t('io.wipe')) + '</button></p>' +
-        '<div id="io"></div>' +
 
         '<h2>' + esc(t('help.placesTitle')) + '</h2>' +
         '<p>' + esc(PLACES.intro) + '</p>' +

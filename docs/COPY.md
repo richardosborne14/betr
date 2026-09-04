@@ -674,6 +674,10 @@ keep it, and put it wherever the sentence needs it.
 
 > Don’t take our word for it
 
+**`help.free`**
+
+> BETR is free. No ads, no subscription, nothing to buy, and nothing to unlock.
+
 **`help.airplane`**
 
 > Turn on airplane mode. Everything still works, because nothing here ever needed the internet. Loading this page is the only thing any server ever sees, and we keep no record of it.

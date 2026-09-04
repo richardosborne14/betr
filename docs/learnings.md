@@ -554,3 +554,21 @@ in a test on the line above.
 **The rule: assert the phrase the rule is about, not a word that could appear in a person's
 worry.** The content is the product and it changes; a test that reads a bare word off the screen
 is really a test of today's content list.
+
+## A walk finds what is hard to reach. Only reading the file finds what was never written (B26, 2026-09-04)
+
+B21 watched Dan tap *Help* to check the price, scroll three and a half screens past a suicide
+line and the nine sentences, and stay. The finding written down was a **distance** — 2,711px to
+the counters — and B26 was scoped to fix the order.
+
+Opening `strings-en.js` to move the block turned up the actual problem: **BETR does not say
+anywhere that it is free.** Not on Help, not on the front screen, not in any of the ~150
+sentences. The counters answer *what leaves your phone*; the only price on the screen is
+TrybeUP's, for a different product. Dan's question was never answered — he inferred it from a
+paywall admission at 4,167px, and inferring it is why he read as won over rather than told.
+
+A person walking a product cannot report a sentence that is not there. They adapt, and the walk
+records the adaptation as a scroll or a pause. **When a walk says "they had to hunt for X", read
+the file for X before moving anything — twice now the answer has been that X did not exist.**
+The other time was the day before: the front screen's ladder line (B25) was not buried, it had
+been deleted, and it took a person finishing a test to notice.

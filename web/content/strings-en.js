@@ -449,6 +449,18 @@ var BETR_STRINGS_EN = {
       whatThisTitle: 'What this is',
 
       proofTitle: 'Don’t take our word for it',
+      /*
+        B26, founder 2026-09-04. The first thing under the heading, because it is the question
+        a person taps Help with. Nothing in BETR said it until today — a test user went looking
+        for the price before he would type a word into the app, and found four thousand pixels
+        of correct writing that never once answered him (`docs/journeys-observed.md` finding 6).
+
+        It names BETR and it does not speak for TrybeUP, whose paid plan is stated plainly in
+        TrybeUP's own entry further down the same screen. If BETR ever gains a thing to buy,
+        THIS SENTENCE COMES OUT THE SAME DAY. It is the one line here that could become a lie
+        by something happening elsewhere, and menu.test.js only checks that it is present.
+      */
+      free: 'BETR is free. No ads, no subscription, nothing to buy, and nothing to unlock.',
       airplane: 'Turn on airplane mode. Everything still works, because nothing here ever ' +
         'needed the internet. Loading this page is the only thing any server ever sees, and ' +
         'we keep no record of it.',
