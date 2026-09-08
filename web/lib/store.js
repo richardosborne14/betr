@@ -41,7 +41,25 @@
     ladder where a single result predates `move`, and normalise() gives an old record an id
     derived from itself, so the same file normalised twice gets the same ids.
   */
-  var VERSION = 3;
+  /*
+    4 is B30's, 2026-09-08, and it is a version bump with NO DATA MIGRATION — which is worth
+    saying out loud, because the usual reason to bump is that something has to be converted.
+
+    What changed is the shape of a NEW record. A test a person builds now carries `ifPart` and
+    `thenPart` (the two halves of the sentence they typed) beside the joined `belief`, and it
+    carries an `id` of its own for the first time. Before this, an own test had `id: null` and
+    rate.keyOf() grouped its ladder by the sentence itself — so correcting a typo in the
+    sentence started a new ladder and the old one looked lost. On a side path that was a
+    wrinkle; as the main road it is a bug, so an own test gets a stable id at the moment it is
+    built and keeps it.
+
+    Nothing older needs converting, and that is by design rather than by luck: an own record
+    made before today still has `id: null`, and rate.keyOf() still falls back to the sentence
+    for exactly those. Their ladders draw the same rungs they drew yesterday, forever. The
+    number is here so an exported file says which shape it is, and so the next change has
+    something to migrate FROM.
+  */
+  var VERSION = 4;
   var OLD_RATES = { 80: 8, 55: 6, 30: 3, 10: 1 };
 
   /*
@@ -268,7 +286,12 @@
         return {
           id: t.rid || null,
           lockedIn: t.locked || null,
-          worry: t.label || t.id || null,
+          /*
+            The name of the thing, as a person would recognise it. A borrowed test has a label;
+            one they built has no label and its own sentence is its name (B30). Never the id —
+            an own id is a random string and means nothing to whoever opens this file.
+          */
+          worry: t.label || t.belief || null,
           belief: t.belief || null,
           expected: t.x || null,
           test: t.test || null,
@@ -286,7 +309,7 @@
           */
           id: d.rid || null,
           when: d.when || null,
-          worry: d.label || d.id || null,
+          worry: d.label || d.belief || null,
           belief: d.belief || null,
           expected: d.x || null,
           test: d.test || null,

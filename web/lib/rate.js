@@ -66,13 +66,25 @@
   }
 
   /*
-    Which results belong to the same belief. A stock item is its id, so a corrected wording in
-    the list keeps the person's ladder. A person's own belief is its own text, so editing it
-    starts a new one — which is right: a different sentence is a different belief.
+    Which results belong to the same belief.
+
+    A stock item is its id, so a corrected wording in the list keeps the person's ladder.
+
+    A test a person built is ITS OWN ID too, since B30 (2026-09-08). It used to be the
+    sentence, on the reasoning that a different sentence is a different belief — true, and it
+    also meant that fixing a typo the next day looked exactly like losing your history. A
+    person editing three words of their own sentence has not started a new belief, and on the
+    main road that happens constantly. Editing the sentence into something genuinely different
+    is a NEW test, made at the build screen with a new id, which is the same answer arrived at
+    honestly.
+
+    An own record made before B30 has no id and falls back to its sentence, exactly as it did
+    — which is why v4 needed no migration. Do not "tidy" the fallback away; it is somebody's
+    ladder.
   */
   function keyOf(d) {
     if (!d) return 'stock:';
-    if (d.source === 'own') return 'own:' + (d.belief || '');
+    if (d.source === 'own') return 'own:' + (d.id || d.belief || '');
     return 'stock:' + (d.id || d.label || '');
   }
 

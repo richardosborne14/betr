@@ -85,9 +85,9 @@ test('a country with no checked line shows no phone number at all', () => {
 
 test('a self-harm refusal in a country with no checked line also shows no number', () => {
   const a = boot(null, { timeZone: 'Africa/Lagos' });
-  a.tap('#go').tap('#own');
-  a.type('#t', 'If I ask for help, people will think less of me').tap('#next');
-  a.type('#t', 'Find out how long I can go without wanting to hurt myself').tap('#next');
+  a.tap('#m-new');
+  a.type('#if', 'ask for help').type('#then', 'people will think less of me').tap('#next');
+  a.type('#do', 'Find out how long I can go without wanting to hurt myself').tap('#lock');
   a.shows('can’t help with that one');
   a.shows('call your local emergency number');
   a.shows('Nigeria');

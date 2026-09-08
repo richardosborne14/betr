@@ -85,7 +85,8 @@
     notConditional: 'refusal.notConditional',
     noConsequence: 'refusal.noConsequence',
     emptyTest: 'refusal.emptyTest',
-    emptyBelief: 'refusal.emptyBelief'
+    emptyBelief: 'refusal.emptyBelief',
+    emptyIf: 'refusal.emptyIf'
   };
 
   /*
@@ -124,6 +125,33 @@
       above, still exported, and still the rule BETR's own content is held to. A person's own
       test goes through.
     */
+    return { ok: true };
+  }
+
+  /*
+    ONE BLANK of the sentence on the build screen (B30, 2026-09-08).
+
+    The shape rules that used to live in checkBelief are structural here: the screen prints
+    "If I" and ", then" and a person fills the gaps, so a sentence that is not conditional
+    cannot be made. `notConditional`, `noConsequence` and the shape nudge are all unreachable
+    from this road, and `verdict` is too — "I am a bad person" typed into the first blank
+    comes out as "If I am a bad person, then …", which is a conditional and always was
+    exempt. checkBelief keeps all of them anyway: it is cheap, guards.test.js proves each
+    still fires on a bare sentence, and the day somebody pastes one in is not the day to find
+    out the check was deleted.
+
+    So this refuses two things and no more: an empty blank, and anyone's safety. `part` is
+    'if' or 'then' and decides ONE thing — which empty line is read out. It changes nothing
+    else, and it must not grow into a second set of rules for the second blank.
+  */
+  function checkPart(text, part) {
+    var s = String(text || '').trim();
+    if (!s) {
+      return { ok: false, kind: 'empty',
+        reason: part === 'if' ? REASON.emptyIf : REASON.emptyBelief };
+    }
+    var w = hit(s, HARM);
+    if (w) return { ok: false, kind: 'harm', word: w, reason: REASON.harm };
     return { ok: true };
   }
 
@@ -212,6 +240,7 @@
     hit: hit,
     checkTest: checkTest,
     checkBelief: checkBelief,
+    checkPart: checkPart,
     expectationFrom: expectationFrom
   };
 });

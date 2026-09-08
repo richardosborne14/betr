@@ -24,6 +24,20 @@ const labelOf = (id) => content.byId(worries, id).label;
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0]);
 
+/*
+  B30. Building a test from nothing: the two blanks, then what you'll do. Six taps' worth of
+  the founder's "from a car, under thirty seconds to Lock it in", in one line of a test.
+*/
+function buildOwn(a, ifPart, thenPart, doIt, dropIt) {
+  if (a.html().indexOf('id="if"') === -1) a.tap('#m-new');
+  a.type('#if', ifPart).type('#then', thenPart).tap('#next');
+  a.type('#do', doIt);
+  if (dropIt !== undefined) a.type('#drop', dropIt);
+  a.tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  return a;
+}
+
 /* ------------------------------------------------------- the walks */
 
 test('a full loop, from the start screen to a result', () => {
@@ -247,32 +261,118 @@ test('the highlight on the result screen has room between its lines', () => {
   a sentence about anyone's safety is still refused; a test naming the habit now goes
   through, because the founder moved that line out of the app and onto Help.
 */
-test('a person’s own entry is refused for a verdict and for harm, and for nothing else', () => {
-  const a = boot();
-  a.tap('#go').tap('#own').shows('What do you think will happen?');
-  a.type('#t', 'I am a waste of space').tap('#next').shows('verdict, not a prediction');
-  a.type('#t', 'If I ask for Friday off, my boss will think I am not committed').tap('#next');
-  a.shows('What will you do?');
-  a.type('#t', 'Cut myself where nobody will see it').tap('#next').shows('can’t help with that one');
+test('the build screen refuses an empty blank and anyone’s safety, and nothing else', () => {
+  const a = boot().tap('#m-new').shows(en.s.build.title);
+
+  /* An empty first blank has its own line, because the second one's would read as nonsense. */
+  a.tap('#next').shows(en.s.refusal.emptyIf).shows(en.s.build.title);
+  a.type('#if', 'ask for Friday off').tap('#next').shows(en.s.refusal.emptyBelief);
+
+  /* The one hard stop, on the second blank, with the crisis lines under it. */
+  a.type('#then', 'they’ll know I want to kill myself').tap('#next');
+  a.shows('can’t help with that one').shows('call your local emergency number');
+  /* and the person's own words are still in the blanks, not taken away */
+  assert.strictEqual(a.valueOf('#if'), 'ask for Friday off');
+
+  a.type('#then', 'my boss will think I am not committed').tap('#next');
+  a.shows(en.s.build.doTitle);
+
+  /* and again on the plan, where it is a thing to do rather than a thing to expect */
+  a.type('#do', 'Cut myself where nobody will see it').tap('#lock').shows('can’t help with that one');
   /* the habit, which used to be a wall here and is not one any more */
-  a.type('#t', 'Go for a pint with them and ask then').tap('#next').shows('What will you leave out?');
-  a.tap('#back').type('#t', 'Ask for Friday off in one sentence').tap('#next').shows('What will you leave out?');
-  a.type('#t', 'Don’t explain why.').tap('#next');
-  a.shows('I’ll do it today').shows('Ask for Friday off');
-  a.shows('My boss will think I am not committed');   /* the expectation, taken from the belief */
+  a.type('#do', 'Go for a pint with them and ask then').tap('#lock').shows(en.s.locked.title);
+});
+
+/*
+  B30, and it is the founder's bar written down: from a car, under thirty seconds to Lock it
+  in. Nothing between the two blanks and the locked screen may grow into another question.
+*/
+test('a test built from nothing goes straight from the sentence to locked in', () => {
+  const a = boot();
+  buildOwn(a, 'ask for Friday off', 'my boss will think I am not committed',
+    'Ask for Friday off in one sentence.', 'Don’t explain why.');
+  a.shows(en.s.locked.title).shows('Ask for Friday off in one sentence.').shows('Don’t explain why.');
+  /* the sentence is its own title, assembled from the two halves and the printed words */
+  a.shows('If I ask for Friday off, then my boss will think I am not committed.');
+
+  a.tap('#done').type('#o', 'She said fine.').tap('#next').tap('[data-key]', 1);
+  a.shows('You expected').shows('My boss will think I am not committed');
+  a.shows('If I ask for Friday off, then my boss will think I am not committed.');
+});
+
+/*
+  The chips, which are the Practice half: everything typed above can also be tapped, and a
+  person who taps their way through never sees a box they had to think of words for.
+*/
+test('the whole thing can be built from the suggestions, with nothing typed', () => {
+  const starts = require('../content/starts.js');
+  const a = boot().tap('#m-new');
+
+  a.tap('[data-if]', 0).shows(starts.items[0].if);
+  /* the second blank's suggestions are that start's, not the general ones */
+  for (const line of starts.items[0].thens) a.shows(line);
+  a.tap('[data-then]', 0).tap('#next');
+
+  for (const line of starts.items[0].dos) a.shows(line);
+  a.tap('[data-do]', 0);
+  for (const line of starts.items[0].drops) a.shows(line);
+  a.tap('[data-drop]', 0).tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+
+  a.shows(en.s.locked.title).shows(starts.items[0].dos[0]).shows(starts.items[0].drops[0]);
+  a.shows('If I ' + starts.items[0].if + ', then ' + starts.items[0].thens[0] + '.');
+});
+
+/*
+  And a first blank BETR did not write gets the general set — which after the first week is
+  most of the time. The lookup is word for word and is not allowed to become cleverer than
+  that (CLAUDE.md rule 2): whether a suggestion is offered may never depend on a judgement.
+*/
+test('a sentence BETR did not write gets the general suggestions, not a guess', () => {
+  const starts = require('../content/starts.js');
+  const a = boot().tap('#m-new');
+  a.type('#if', 'let the washing up wait until the morning').tap('[data-then]', 0);
+  a.shows(starts.general.thens[0]);
+  /* items[1], not items[0]: the first start's first prediction is also the placeholder. */
+  for (const line of starts.items[1].thens) a.hides(line);
 });
 
 test('a person’s own test can be repeated tomorrow, and back goes to the result', () => {
   const a = boot();
-  a.tap('#go').tap('#own');
-  a.type('#t', 'If I ask for Friday off, my boss will think I am not committed').tap('#next');
-  a.type('#t', 'Ask for Friday off in one sentence').tap('#next');
-  a.type('#t', 'Don’t explain why.').tap('#next');
-  a.tap('#lock').tap('#nothanks').tap('#done');
+  buildOwn(a, 'ask for Friday off', 'my boss will think I am not committed',
+    'Ask for Friday off in one sentence.', 'Don’t explain why.');
+  a.tap('#done');
   a.type('#o', 'She said fine and went back to her screen.').tap('#next').tap('[data-key]', 3);
-  a.shows('Your own');
-  a.tap('#again').shows('Ask for Friday off');
+  /* B30: a test a person built has no label. Its own sentence is its title, everywhere. */
+  a.shows('If I ask for Friday off, then my boss will think I am not committed.');
+  a.hides('Your own');
+  a.tap('#again').shows('Ask for Friday off in one sentence.');
   a.tap('#back').shows('You expected');
+});
+
+/*
+  B30, and it is a bug fixed rather than a feature added. An own ladder used to be grouped by
+  the SENTENCE, so correcting three words of your own wording the next day started a new
+  ladder and the old one looked lost. It gets an id of its own at the moment it is built.
+*/
+test('a test you built keeps its ladder, and the ladder is not keyed by the sentence', () => {
+  const rate = require('../lib/rate.js');
+  const a = boot();
+  buildOwn(a, 'ask for Friday off', 'my boss will think I am not committed',
+    'Ask for Friday off in one sentence.', 'Don’t explain why.');
+  a.tap('#done').type('#o', 'She said fine.').tap('#next').tap('[data-key]', 1);
+  a.tap('#again').tap('#lock').tap('#done').type('#o', 'Nobody minded.').tap('#next').tap('[data-key]', 1);
+  a.shows('>8<');
+  a.tap('#m-mine').shows('1 test, done 2 times');
+
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  assert.strictEqual(done.length, 2);
+  assert.ok(done[0].id && done[0].id === done[1].id, 'the two runs are not the same test');
+  assert.strictEqual(rate.keyOf(done[0]), 'own:' + done[0].id, 'an own ladder is keyed by its sentence again');
+
+  /* a record made before B30 has no id, and still groups by its sentence, exactly as it did */
+  const old = { source: 'own', id: null, belief: 'If I rest, then I will feel guilty.' };
+  assert.strictEqual(rate.keyOf(old), 'own:If I rest, then I will feel guilty.');
 });
 
 test('Help carries the sentences, the crisis lines and the lineage', () => {
@@ -295,6 +395,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   seen += a.html();
   a.tap('#own');
   seen += a.html();
+  seen += a.type('#if', 'say no').type('#then', 'they will mind').tap('#next').html();
   /* and the two screens the ladder lives on, which is where a score would creep in */
   const b = boot();
   b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
@@ -447,7 +548,8 @@ test('nothing a person taps, and no heading, calls it a worry', () => {
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();
   a.tap('[data-key]', 1); sweep();
   a.tap('#m-mine'); sweep();
-  a.tap('#back').tap('#m-new').tap('#own'); sweep();
+  a.tap('#back').tap('#m-new'); sweep();
+  a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); sweep();
   a.tap('#m-help'); sweep();
 
   assert.ok(bits.length > 40, 'only found ' + bits.length + ' labels and headings to check');
@@ -468,14 +570,19 @@ test('nothing a person taps, and no heading, calls it a worry', () => {
 test('every label a person taps starts with a capital, and the wordmark is BETR', () => {
   const a = boot();
   const seen = [];
+  /* Chips are swept separately, below, and held to the opposite rule — see the note there. */
   const sweep = () => {
-    for (const m of a.html().matchAll(/<button[^>]*>([^<]+)</g)) {
-      const label = m[1].replace(/^[←→·\s]+/, '');
+    for (const m of a.html().matchAll(/<button([^>]*)>([^<]+)</g)) {
+      if (/class="chip"/.test(m[1])) continue;
+      const label = m[2].replace(/^[←→·\s]+/, '');
       if (label) seen.push(label);
     }
   };
 
   sweep();                                             /* start */
+  a.tap('#m-new'); sweep();                            /* the build screen */
+  a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); sweep();
+  a.tap('#back').tap('#back');
   a.tap('#go'); sweep();                               /* what's going on */
   a.tap('[data-door]', 0); sweep();                    /* pick */
   a.tap('[data-id]', 0).tap('[data-b]', 0); sweep();                      /* plan */
@@ -491,6 +598,31 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   for (const label of seen) {
     assert.ok(!/^[a-z]/.test(label), 'lowercase label: "' + label + '"');
   }
+
+  /*
+    THE ONE EXEMPTION, AND IT IS NARROW ON PURPOSE (B30, 2026-09-08).
+
+    A suggestion chip is not a label. It is a fragment of the sentence printed above it — the
+    screen says "If I" and the chip says "say no without giving a reason", and capitalising it
+    would put a capital in the middle of somebody's sentence. So chips are swept separately
+    and held to the opposite rule, which is the only way the founder's rule stays enforced on
+    everything that IS a label: if a chip class ever lands on a real button, this fails.
+
+    A `dos` or a `drops` chip is a whole sentence and starts with a capital either way, which
+    is checked in content.test.js, not here.
+  */
+  const chips = [];
+  const chipSweep = (h) => {
+    for (const m of h.matchAll(/<button class="chip"[^>]*>([^<]+)</g)) chips.push(m[1]);
+  };
+  const c = boot().tap('#m-new');
+  chipSweep(c.html());
+  c.type('#if', 'say no').type('#then', 'they will mind').tap('#next');
+  chipSweep(c.html());
+  assert.ok(chips.length > 20, 'only found ' + chips.length + ' chips to check');
+  for (const chip of chips) {
+    assert.ok(seen.indexOf(chip) === -1, 'a chip is also drawn as a label somewhere: "' + chip + '"');
+  }
   assert.ok(a.html().indexOf('BETR') !== -1 || seen.length > 0);
 });
 
@@ -503,7 +635,13 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   ever stops going through, the wall is back and nobody will notice from the words alone.
 */
 test('a sentence that is not quite a prediction is asked about once, then goes through', () => {
-  const a = boot().tap('#go').tap('#own');
+  /*
+    B30 moved the free box off the front door: the way in is two blanks in a printed sentence,
+    so a person there cannot write something that is not conditional. This box is the one that
+    is left — "I'll put it my own way" under a borrowed test — and it is where the nudge still
+    lives. B32 is where it goes, and where these become guard-level assertions.
+  */
+  const a = boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
 
   a.type('#t', 'People will hate me').tap('#next');
   a.shows('If I ___, then ___');
@@ -513,20 +651,20 @@ test('a sentence that is not quite a prediction is asked about once, then goes t
   assert.ok(a.html().indexOf('People will hate me') !== -1, 'the person’s words were taken away');
 
   /* The second tap, with nothing changed, is the whole point. */
-  a.tap('#next').shows(en.s.own.test.title);
+  a.tap('#next').shows(en.s.plan.lock).shows('People will hate me');
 });
 
 test('the nudge is gone once the sentence reads as a prediction, and never nags twice', () => {
-  const a = boot().tap('#go').tap('#own');
+  const a = boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
   a.type('#t', 'If I say no').tap('#next').shows('If I ___, then ___');
 
-  /* Rewriting it clears the note, and it does not follow the person to the next box. */
+  /* Rewriting it clears the note, and it does not follow the person to the next screen. */
   a.type('#t', 'If I say no, they will think I am selfish').tap('#next');
-  a.shows(en.s.own.test.title).hides('Keep mine as it is').hides('If I ___, then ___');
+  a.shows(en.s.plan.lock).hides('Keep mine as it is').hides('If I ___, then ___');
 });
 
 test('a verdict is still refused, and an empty box still is', () => {
-  const a = boot().tap('#go').tap('#own');
+  const a = boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
   a.type('#t', 'I am a bad person').tap('#next');
   a.shows(en.s.refusal.verdict).shows(en.s.own.belief.title);
 
@@ -548,17 +686,17 @@ test('a verdict is still refused, and an empty box still is', () => {
   into, and the line has to be on both.
 */
 test('both boxes say which ones BETR is for, not just the blank one', () => {
-  const only = en.s.own.belief.only;
+  const only = en.s.build.only;
   assert.ok(only.indexOf('never actually found out about') !== -1,
     'the boundary line no longer excludes a settled fact: ' + only);
   assert.ok(/risk/.test(only), 'the boundary line no longer carries the risk line: ' + only);
   assert.ok(only.indexOf('your body') === -1,
     'the narrow lane is back: it refused the founder’s own two examples (B28 §3)');
 
-  /* the blank box, reached from the doors */
-  boot().tap('#go').tap('#own').shows(only);
+  /* the build screen, which is the front door and the box this line was written for */
+  boot().tap('#m-new').shows(only);
 
-  /* and their own words under a stock one that is still ours */
+  /* and their own words under a borrowed one, which is the other box there is */
   boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
 });
 
@@ -596,13 +734,14 @@ test('the brand is BETR everywhere a person reads it, refusals included', () => 
     2026-09-03. There used to be three of them here; since B29 the habit and body refusals
     are unreachable and this is the one hard stop that is left.
   */
-  const b = boot();
-  b.tap('#go').tap('#own');
-  b.type('#t', 'If I say no, people will think I am selfish').tap('#next');
-  b.type('#t', 'Weigh myself every morning').tap('#next').shows('What will you leave out?');
-  b.tap('#back');
-  b.type('#t', 'Cut myself where nobody will see it').tap('#next').shows('BETR can’t help');
-  assert.ok(b.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in a refusal');
+  const b = boot().tap('#m-new');
+  b.type('#if', 'say no').type('#then', 'people will think I am selfish').tap('#next');
+  b.type('#do', 'Weigh myself every morning').tap('#lock').shows(en.s.locked.title);
+  b.tap('#nothanks');
+  const c = boot().tap('#m-new');
+  c.type('#if', 'say no').type('#then', 'people will think I am selfish').tap('#next');
+  c.type('#do', 'Cut myself where nobody will see it').tap('#lock').shows('BETR can’t help');
+  assert.ok(c.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in a refusal');
 });
 
 /*
@@ -640,13 +779,11 @@ test('why a worry sticks is offered after a result, on both screens, and never b
   a.tap('#back').shows('Your tests');
 });
 
-test('a person’s own worry has nothing to explain, so it offers nothing', () => {
+test('a test a person built has nothing to explain, so it offers nothing', () => {
   const a = boot();
-  a.tap('#go').tap('#own');
-  a.type('#t', 'If I ask for Friday off, my boss will think I am not committed').tap('#next');
-  a.type('#t', 'Ask for Friday off in one sentence').tap('#next');
-  a.type('#t', 'Don’t explain why.').tap('#next');
-  a.tap('#lock').tap('#nothanks').tap('#done');
+  buildOwn(a, 'ask for Friday off', 'my boss will think I am not committed',
+    'Ask for Friday off in one sentence.', 'Don’t explain why.');
+  a.tap('#done');
   a.type('#o', 'She said fine and went back to her screen.').tap('#next').tap('[data-key]', 3);
   a.shows('You expected').hides('Why this one sticks');
   a.tap('#m-mine').hides('Why this one sticks');

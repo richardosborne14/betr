@@ -32,6 +32,7 @@
   var storeLib = Betr.store;
   var content = Betr.content;
   var WORRIES = Betr.worries;
+  var STARTS = Betr.starts;
   var DOORS = Betr.doors;
   var PLACES = Betr.places;
   var WHY = Betr.why;
@@ -110,8 +111,14 @@
   function purpose() { return t('frozen.purpose'); }
   function sentences() { return I.list('frozen.sentences'); }
 
-  /* Scratch state: never persisted, because none of it should survive a reload. */
-  var draft = { belief: '', test: '', drop: '' };
+  /*
+    Scratch state: never persisted, because none of it should survive a reload.
+
+    B30 split `belief` into the two halves a person actually types. `belief` stays beside them
+    because the borrow list fills the blanks from a stock sentence (B32) and because a nudge
+    on the old "put it my own way" box still writes to it.
+  */
+  var draft = { ifPart: '', thenPart: '', belief: '', test: '', drop: '' };
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
   /*
     The last guard NUDGE, which is not a refusal (2026-09-04). A sentence that does not read
@@ -233,11 +240,21 @@
     the result — so it is the h2 that focus lands on and a screen reader reads. Everywhere
     else the screen has its own heading and this is a quiet strip above it.
   */
+  /*
+    B30, 2026-09-08. A test a person wrote has no label — its own sentence IS its title,
+    everywhere, and never truncated. A borrowed one has both: the label it is filed under and
+    the exact sentence being tested. So an empty label promotes the sentence rather than
+    drawing an empty line above it, and this is the only place that decides it.
+  */
+  function titleOf(d) { return (d && (d.label || d.belief)) || ''; }
+
   function worryHead(label, belief, heading) {
+    var title = label || belief;
+    var under = label ? belief : '';
     return '<div class="worry' + (heading ? '' : ' quiet') + '">' +
-      (heading ? head('h2', label, 'worry-label')
-               : '<p class="worry-label">' + esc(label) + '</p>') +
-      (belief ? '<p class="worry-belief wrote">\u201C' + esc(belief) + '\u201D</p>' : '') +
+      (heading ? head('h2', title, 'worry-label')
+               : '<p class="worry-label">' + esc(title) + '</p>') +
+      (under ? '<p class="worry-belief wrote">\u201C' + esc(under) + '\u201D</p>' : '') +
     '</div>';
   }
 
@@ -402,6 +419,12 @@
     window.scrollTo(0, 0);
   }
 
+  /* A blank sentence and a blank plan. Nothing is carried over from the last one. */
+  function newTest() {
+    draft = { ifPart: '', thenPart: '', belief: '', test: '', drop: '' };
+    go('build');
+  }
+
   function q(sel) { return app.querySelector(sel); }
   function qa(sel) { return Array.prototype.slice.call(app.querySelectorAll(sel)); }
   function on(sel, fn) { var el = q(sel); if (el) el.onclick = fn; return el; }
@@ -430,7 +453,12 @@
 
   function wireMenu() {
     on('#m-mine', function () { go('mine'); });
-    on('#m-new', function () { S.filter = null; go('doors'); });
+    /*
+      B30. "New test" opens a new test. It led to the doors until 2026-09-08, when the stock
+      list stopped being the way in — the doors are one tap aside now, off the front screen
+      and off the build screen (B32), not the thing this button means.
+    */
+    on('#m-new', function () { S.filter = null; newTest(); });
     on('#m-help', function () { go('help'); });
   }
 
@@ -582,8 +610,10 @@
   function render() {
     var map = {
       start: start, doors: doors, pick: pick,
+      build: build, 'build-do': buildDo,
       belief: beliefScreen, 'belief-own': beliefOwn,
-      'own-belief': ownBelief, 'own-test': ownTest, 'own-drop': ownDrop,
+      /* What a phone that saw the three one-box screens has stored (B30). */
+      'own-belief': build, 'own-test': build, 'own-drop': build,
       plan: plan, locked: locked, happened: happened, sure: sure,
       result: result, mine: mine, help: help, where: whereScreen, why: whyScreen,
       about: help   /* what a phone that saw the old "what this is" screen has stored */
@@ -703,7 +733,7 @@
       };
     });
     /* Nobody is in all six. The way out of the screen is the same one as inside a door. */
-    on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
+    on('#own', newTest);
   }
 
   function pick() {
@@ -743,8 +773,8 @@
     qa('[data-id]').forEach(function (b) {
       b.onclick = function () { pending = content.byId(WORRIES, b.getAttribute('data-id')); go('belief'); };
     });
-    /* The box starts with the opening of a conditional already in it, in their language. */
-    on('#own', function () { draft = { belief: t('own.beliefSeed'), test: '', drop: '' }; go('own-belief'); });
+    /* Both of these now open the same blank build screen the front door does. */
+    on('#own', newTest);
   }
 
   /* ---------------------------------------------- which of these is it? (B20) */
@@ -817,7 +847,7 @@
         arguably already set; arguable is not a reason for the boundary to be on one of the
         two screens where somebody writes their own sentence. loop.test.js asserts both.
       */
-      foot: t('own.belief.only'),
+      foot: t('build.only'),
       placeholder: f.belief,
       value: draft.belief,
       next: function (v) {
@@ -828,6 +858,311 @@
         });
       }
     });
+  }
+
+  /* ---------------------------------------------- the build screen (B30) */
+
+  /*
+    The way in since 2026-09-08, and the one place in BETR that is a form. The founder made
+    rule 10 and overruled it here, knowingly (B28): "an If block and a Then block, each an
+    open field with suggestions, then what they will do, with suggestions on every part."
+
+    Why a form and not the three one-box screens it replaces. B28's diagnosis was that nobody's
+    worry is a stock worry and the person's own words were the last button, three screens deep,
+    labelled as a failure to find a match. Making them the front door means the sentence has to
+    be visible AS a sentence while it is being written — "If I ___, then ___" with two gaps in
+    it, not two questions in a row that a person has to hold in their head.
+
+    THE SHAPE IS THE GUARD. Because the screen prints "If I" and ", then", every entry is
+    conditional by construction: the three shape refusals and the shape nudge are unreachable
+    from here, and so is the verdict refusal, because "I am a bad person" typed into the first
+    blank comes out as a conditional. `guards.checkPart` is what is left — an empty blank, and
+    anyone's safety, on either half. See the comment above it.
+
+    THE CHIPS ARE HELP, NOT A MENU. They are drawn under a blank only while that blank is
+    empty, so a person who types sees them once and never again; in a browser an `oninput`
+    handler hides them the moment there is something in the box, which needs no repaint and so
+    never moves the caret. Everything they hold is fixed content in content/starts.js in a
+    fixed order, and which `thens` are offered depends on one thing — whether the first blank
+    holds, word for word, one of the starts. A lookup, not a judgement (rule 2).
+
+    THE BAR IS THE FOUNDER'S: from a car, under thirty seconds to Lock it in. Typing is the
+    fast road and it is at the top of the screen; the chips are underneath, for somebody who
+    does not yet know what to say.
+  */
+
+  /* The stored sentence is assembled from the same two fragments the screen prints. */
+  function sentenceOf(ifPart, thenPart) {
+    var a = String(ifPart || '').trim().replace(/[.,;]+$/, '');
+    var b = String(thenPart || '').trim();
+    if (!a && !b) return '';
+    var out = t('build.ifWord') + ' ' + a + t('build.thenWord') + ' ' + b;
+    return /[.!?]$/.test(out) ? out : out + '.';
+  }
+
+  /*
+    The start a typed first blank matches, or null. Word for word, ignoring case and the
+    punctuation a person's keyboard might have added — and nothing cleverer than that, ever.
+  */
+  /* \u0027 is a straight apostrophe. Written as an escape so the sweep in i18n.test.js,
+     which reads this file's string literals, does not see a quote opening here. */
+  function flat(text) {
+    return String(text || '').toLowerCase()
+      .replace(/[^a-z0-9\u2019\u0027 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  function startFor(ifPart) {
+    var want = flat(ifPart);
+    if (!want) return null;
+    for (var i = 0; i < STARTS.items.length; i++) {
+      if (flat(STARTS.items[i].if) === want) return STARTS.items[i];
+    }
+    return null;
+  }
+
+  /* The four chip sets, each falling back to the general one. */
+  function chipsFor(which, ifPart) {
+    var start = startFor(ifPart);
+    return (start && start[which]) || STARTS.general[which] || [];
+  }
+
+  /*
+    One row of suggestions. `attr` is what the tap handler reads the index off. Hidden with
+    the `hidden` attribute rather than removed, so the browser's oninput can bring it back
+    without a repaint.
+  */
+  function chipRow(intro, list, attr, hide) {
+    if (!list.length) return '';
+    return '<div class="chipset" data-chips="' + esc(attr) + '"' + (hide ? ' hidden' : '') + '>' +
+      '<p class="tiny chips-intro">' + esc(intro) + '</p>' +
+      '<div class="chips">' + list.map(function (line, i) {
+        return '<button class="chip" ' + attr + '="' + i + '">' + esc(line) + '</button>';
+      }).join('') + '</div>' +
+    '</div>';
+  }
+
+  /* Both blanks, read back off the screen, so nothing typed is lost to a repaint. */
+  function readBlanks() {
+    var a = q('#if');
+    var b = q('#then');
+    if (a) draft.ifPart = a.value;
+    if (b) draft.thenPart = b.value;
+  }
+
+  /*
+    One gap in the sentence. Every static attribute is in the first fragment on purpose:
+    i18n.test.js reads the string literals out of this file looking for prose, and a fragment
+    that starts mid-tag reads as two English words with a space between them.
+  */
+  function blank(id, label, placeholder, value) {
+    return '<input class="blank" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" id="' +
+      id + '" aria-label="' + esc(label) + '" placeholder="' + esc(placeholder) + '" value="' +
+      esc(value) + '">';
+  }
+
+  function build() {
+    var ifChips = STARTS.items.map(function (it) { return it.if; });
+    paint( backButton() +
+      '<div class="stage">' +
+        head('h2', t('build.title')) +
+        '<p class="sub tight">' + esc(t('build.sub')) + '</p>' +
+        warnBlock() +
+        '<p class="sentence">' +
+          '<span class="fixed">' + esc(t('build.ifWord')) + '</span> ' +
+          blank('if', t('build.ifLabel'), t('build.ifPlaceholder'), draft.ifPart) +
+          '<span class="fixed">' + esc(t('build.thenWord')) + '</span> ' +
+          blank('then', t('build.thenLabel'), t('build.thenPlaceholder'), draft.thenPart) +
+        '</p>' +
+        '<button class="big wide" id="next">' + esc(t('build.next')) + '</button>' +
+        /* One row at a time: the blank that has focus, and only while it is still empty. */
+        chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
+        chipRow(t('build.thenChips'), chipsFor('thens', draft.ifPart), 'data-then',
+          !draft.ifPart.trim() || !!draft.thenPart.trim()) +
+        /* Last, and small. A rule read before you have written anything is about somebody else. */
+        '<p class="tiny">' + esc(t('build.only')) + '</p>' +
+      '</div>');
+
+    /*
+      Always the front screen, wherever this was opened from. It is reached from three places
+      — the front screen's big button, "New test" on the bottom row, and the borrow list — and
+      a Back that guessed which would be a Back a person cannot predict.
+    */
+    wireBack('start');
+
+    /*
+      Focus goes to the first blank, not to the heading — this screen IS the box, the way the
+      old one-box screens were, and it pays for it by naming both blanks (see build.ifLabel).
+      An empty first blank takes it; a filled one hands over to the second.
+    */
+    var first = draft.ifPart.trim() && !draft.thenPart.trim() ? q('#then') : q('#if');
+    if (first && first.focus) {
+      first.focus();
+      try { first.setSelectionRange(first.value.length, first.value.length); } catch (e) { /* older browser */ }
+    }
+
+    /*
+      Live, and deliberately without a repaint: a repaint here would move the caret to the end
+      of the box on every keystroke. The suggestions simply get out of the way.
+    */
+    wireChips([['#if', 'data-if'], ['#then', 'data-then']]);
+
+    qa('[data-if]').forEach(function (b) {
+      b.onclick = function () {
+        readBlanks();
+        draft.ifPart = ifChips[Number(b.getAttribute('data-if'))];
+        refusal = null;
+        render();
+      };
+    });
+    qa('[data-then]').forEach(function (b) {
+      b.onclick = function () {
+        readBlanks();
+        draft.thenPart = chipsFor('thens', draft.ifPart)[Number(b.getAttribute('data-then'))];
+        refusal = null;
+        render();
+      };
+    });
+
+    on('#next', function () {
+      readBlanks();
+      var one = guards.checkPart(draft.ifPart, 'if');
+      if (!one.ok) { refuse(one); return; }
+      var two = guards.checkPart(draft.thenPart, 'then');
+      if (!two.ok) { refuse(two); return; }
+      go('build-do');
+    });
+  }
+
+  /*
+    "Under the ACTIVE blank" (B30) is what this is, and it is a measurement rather than a
+    preference. With every chip row on screen at once, *Lock it in* sat at 981px on a 390x844
+    phone and the menu is fixed over 785 — the button that ends the screen was invisible
+    without scrolling, which is the same failure the doors' safety note had in B23.
+
+    So one row at a time: the row for the box the person is in, and only while that box is
+    still empty. A box gets its own row on focus and gives it up when it loses focus, which
+    works for a finger and for a keyboard alike. None of it repaints, because a repaint here
+    would move the caret to the end of the box on every keystroke.
+
+    The fake DOM in tests fires no events, so what a test sees is whatever the paint decided.
+    That is deliberate: the paint is the state a person lands on, and the rest is live polish.
+  */
+  function wireChips(boxes) {
+    boxes.forEach(function (pair) {
+      var box = q(pair[0]);
+      var set = q('[data-chips="' + pair[1] + '"]');
+      if (!box) return;
+      var show = function (on) {
+        if (!set) return;
+        try { set.hidden = !on || !!box.value.trim(); } catch (e) { /* older browser */ }
+      };
+      box.oninput = function () { show(true); };
+      box.onfocus = function () {
+        show(true);
+        boxes.forEach(function (other) {
+          if (other[1] === pair[1]) return;
+          var el = q('[data-chips="' + other[1] + '"]');
+          try { if (el) el.hidden = true; } catch (e) { /* older browser */ }
+        });
+      };
+    });
+  }
+
+  /*
+    The second half. The sentence is at the top, in the same words in the same place it will
+    be on every screen from here to the result (rule 10 as amended by B20).
+
+    "And leave out" is optional and says so. Research §2.3 is why it is here at all — dropping
+    the safety behaviour is the difference between a test and a day — and the founder's
+    2026-09-08 note is why it does not block: freedom over completeness, on a box this small.
+  */
+  function buildDo() {
+    var said = sentenceOf(draft.ifPart, draft.thenPart);
+    paint( backButton() +
+      '<div class="stage">' +
+        worryHead('', said, false) +
+        head('h2', t('build.doTitle')) +
+        '<p class="sub tight">' + esc(t('build.doSub')) + '</p>' +
+        warnBlock() +
+        '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
+          esc(t('build.doPlaceholder')) + '">' + esc(draft.test) + '</textarea>' +
+        chipRow(t('build.doChips'), chipsFor('dos', draft.ifPart), 'data-do', !!draft.test.trim()) +
+        '<p class="lbl drop-label" id="droplbl">' + esc(t('build.dropLabel')) + '</p>' +
+        '<p class="sub tight">' + esc(t('build.dropSub')) + '</p>' +
+        '<textarea id="drop" class="line" aria-labelledby="droplbl" placeholder="' +
+          esc(t('build.dropPlaceholder')) + '">' + esc(draft.drop) + '</textarea>' +
+        chipRow(t('build.dropChips'), chipsFor('drops', draft.ifPart), 'data-drop', true) +
+        '<button class="big wide" id="lock">' + esc(t('build.lock')) + '</button>' +
+        '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
+      '</div>');
+
+    wireBack('build');
+    var box = q('#do');
+    box.focus();
+    try { box.setSelectionRange(box.value.length, box.value.length); } catch (e) { /* older browser */ }
+
+    wireChips([['#do', 'data-do'], ['#drop', 'data-drop']]);
+
+    function readBoxes() {
+      var d = q('#do');
+      var r = q('#drop');
+      if (d) draft.test = d.value;
+      if (r) draft.drop = r.value;
+    }
+    qa('[data-do]').forEach(function (b) {
+      b.onclick = function () {
+        readBoxes();
+        draft.test = chipsFor('dos', draft.ifPart)[Number(b.getAttribute('data-do'))];
+        refusal = null;
+        render();
+      };
+    });
+    qa('[data-drop]').forEach(function (b) {
+      b.onclick = function () {
+        readBoxes();
+        draft.drop = chipsFor('drops', draft.ifPart)[Number(b.getAttribute('data-drop'))];
+        refusal = null;
+        render();
+      };
+    });
+
+    on('#lock', function () {
+      readBoxes();
+      var one = guards.checkTest(draft.test);
+      if (!one.ok) { refuse(one); return; }
+      /* The drop is optional, so an empty one is not checked and not refused. */
+      if (draft.drop.trim()) {
+        var two = guards.checkTest(draft.drop);
+        if (!two.ok) { refuse(two); return; }
+      }
+      lockIn(startOwn());
+    });
+  }
+
+  /*
+    A test a person built. `id` is its own, made once and kept — rate.keyOf() groups an own
+    ladder by it, so fixing a typo in the sentence tomorrow does not look like losing your
+    history. Before B30 an own ladder was keyed by the sentence itself and that is exactly
+    what happened; on a side path it was a wrinkle, on the main road it is a bug.
+  */
+  function startOwn() {
+    var said = sentenceOf(draft.ifPart, draft.thenPart);
+    return {
+      rid: storeLib.rid(),
+      source: 'own', id: storeLib.rid(), label: null,
+      ifPart: draft.ifPart.trim(), thenPart: draft.thenPart.trim(),
+      belief: said, x: guards.expectationFrom(said),
+      test: draft.test.trim(), drop: draft.drop.trim(),
+      from: 'build-do', editing: false, locked: null, missed: false
+    };
+  }
+
+  /* Lock in and go. The same two lines the plan screen's button runs, in one place. */
+  function lockIn(cur) {
+    S.cur = cur;
+    S.cur.locked = new Date().toISOString();
+    askToPersist();
+    go('locked');
   }
 
   /* -------- a person's own entry: three screens, one box each. Never a form. -------- */
@@ -913,68 +1248,19 @@
   }
 
   /*
-    The blank box, and the one screen in BETR where a person can write a worry it cannot work
-    on. 2026-09-04: a test user wrote "if I eat gluten, then I'll feel sick" — a true thing,
-    settled long ago, and every screen he had passed asked him what he was worried about
-    without once saying which worries this is for. `own.belief.only` is that sentence, and it
-    sits under the box rather than above it: a rule read before you have written anything is a
-    rule about somebody else.
+    THE THREE ONE-BOX SCREENS THAT USED TO BE HERE WENT ON 2026-09-08 (B30).
+
+    `ownBelief`, `ownTest` and `ownDrop` asked one question each, in a row: what do you think
+    will happen, what will you do, what will you leave out. They were the last button on the
+    third screen of the stock road, labelled as a failure to find a match, and the founder's
+    B28 note is that nobody ever got that far. build() and buildDo() are the same three
+    questions with the first two drawn as one sentence, at the front door.
+
+    A phone that still has one of their stage names stored lands on build() — see render().
+
+    What is left of the old shape is `ownScreen` and `takeBelief` just above, which "I'll put
+    it my own way" under a borrowed test still uses. B32 is where that goes.
   */
-  function ownBelief() {
-    ownScreen({
-      back: 'pick',
-      title: t('own.belief.title'),
-      sub: t('own.belief.sub'),
-      foot: t('own.belief.only'),
-      placeholder: t('own.belief.placeholder'),
-      value: draft.belief,
-      next: function (v) {
-        draft.belief = v;
-        takeBelief(v, function () { go('own-test'); });
-      }
-    });
-  }
-
-  function ownTest() {
-    ownScreen({
-      back: 'own-belief',
-      title: t('own.test.title'),
-      sub: t('own.test.sub'),
-      placeholder: t('own.test.placeholder'),
-      value: draft.test,
-      next: function (v) {
-        draft.test = v;
-        var check = guards.checkTest(v);
-        if (!check.ok) { refuse(check); return; }
-        go('own-drop');
-      }
-    });
-  }
-
-  function ownDrop() {
-    ownScreen({
-      back: 'own-test',
-      title: t('own.drop.title'),
-      sub: t('own.drop.sub'),
-      placeholder: t('own.drop.placeholder'),
-      value: draft.drop,
-      next: function (v) {
-        draft.drop = v;
-        var check = guards.checkTest(v);
-        if (!check.ok) { refuse(check); return; }
-        S.cur = {
-          rid: storeLib.rid(),
-          source: 'own', id: null, label: t('own.label'),
-          belief: draft.belief.trim(),
-          x: guards.expectationFrom(draft.belief),
-          test: draft.test.trim(),
-          drop: draft.drop.trim(),
-          from: 'own-drop', editing: false, locked: null, missed: false
-        };
-        go('plan');
-      }
-    });
-  }
 
   /* ---------------------------------------------------------------- the loop */
 
@@ -1209,9 +1495,14 @@
             })
           : t('mine.nothing')) + '</p>' +
         cards.map(function (c) {
+          /*
+            B30. A borrowed test has a label and its sentence underneath; one a person built
+            has no label, and its own sentence is the title. Never truncated, on either.
+          */
           return '<div class="card">' +
-            '<h3 class="kicker">' + esc(c.label) + '</h3>' +
-            '<p class="belief wrote">“' + esc(c.belief) + '”</p>' +
+            '<h3 class="kicker' + (c.label ? '' : ' said-it') + '">' +
+              esc(titleOf(c)) + '</h3>' +
+            (c.label ? '<p class="belief wrote">“' + esc(c.belief) + '”</p>' : '') +
             (c.g
               ? ladder(c.g, { said: true })
               : '<div class="ladder" role="group" aria-label="' +

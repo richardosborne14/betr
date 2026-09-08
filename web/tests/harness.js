@@ -25,6 +25,7 @@ const WEB = path.join(__dirname, '..');
 const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
                'lib/i18n.js', 'content/strings-en.js',
                'content/worries.js', 'content/why.js', 'content/whats-going-on.js', 'content/places.js',
+               'content/starts.js',
                'content/zones.js', 'content/helplines.js', 'app.js'];
 
 
@@ -74,6 +75,16 @@ function parse(html) {
   */
   for (const m of html.matchAll(/<textarea[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/textarea>/g)) {
     if (kids['#' + m[1]]) kids['#' + m[1]].value = unesc(m[2]);
+  }
+  /*
+    B30. The build screen's two blanks are <input>s rather than boxes, and they keep what is
+    written in them the same way — a repaint that emptied them would make every refusal look
+    like the app had thrown the person's sentence away, which is the one thing it must not do.
+  */
+  for (const m of html.matchAll(/<input[^>]*>/g)) {
+    const id = (m[0].match(/ id="([^"]+)"/) || [])[1];
+    const val = (m[0].match(/ value="([^"]*)"/) || [])[1];
+    if (id && kids['#' + id] && val !== undefined) kids['#' + id].value = unesc(val);
   }
   for (const m of html.matchAll(/data-([a-z]+)="([^"]+)"/g)) {
     const el = makeEl();

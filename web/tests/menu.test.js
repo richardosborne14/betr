@@ -18,12 +18,15 @@ const worries = require('../content/worries.js');
 const allDoors = require('../content/whats-going-on.js');
 const content = require('../lib/content.js');
 const places = require('../content/places.js');
+const en = require('../content/strings-en.js');
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
 
 /* Lock a stock worry in and walk away from it, leaving it waiting. */
 function lockOne(a, item) {
   if (a.html().indexOf('id="go"') !== -1) a.tap('#go');   /* already past the front screen, or not */
+  /* B30: "New test" opens the build screen, so the borrow road starts from the front screen. */
+  if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#go');
   if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', 0);
   a.tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
@@ -64,10 +67,11 @@ test('every door on the menu works from every screen', () => {
     (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0),  /* plan */
     (a) => lockOne(a, 0),                                         /* locked */
     (a) => lockOne(a, 0).tap('#done'),                            /* happened */
-    (a) => a.tap('#go').tap('#own')                               /* a person's own entry */
+    (a) => a.tap('#m-new')                                        /* the build screen */
   ];
   for (const at of from) {
-    at(boot()).tap('#m-new').shows('What’s going on?');
+    /* B30: "New test" opens a new test, not the doors. The doors are one tap aside now. */
+    at(boot()).tap('#m-new').shows(en.s.build.title);
     at(boot()).tap('#m-help').shows('If you are in danger or in crisis');
     /* nothing recorded and nothing waiting lands on the pick list, never on a dead end */
     const mine = at(boot()).tap('#m-mine').html();
@@ -77,10 +81,10 @@ test('every door on the menu works from every screen', () => {
 
 /* ------------------------------------------------------- tests that wait for you */
 
-test('starting a new worry keeps the test you locked in, and it is waiting afterwards', () => {
+test('starting a new test keeps the one you locked in, and it is waiting afterwards', () => {
   const a = boot();
   lockOne(a, 0).shows('Go and do it.');
-  a.tap('#m-new').shows('What’s going on?');
+  a.tap('#m-new').shows(en.s.build.title);
 
   /* on the front screen, as one line with a way back in — not a list and not a number */
   a.tap('#back').shows('On the go').shows(firstBehind().test);
@@ -321,9 +325,9 @@ test('sentence 7 is still word for word, and its numbers still dial', () => {
 
 test('a refusal about self-harm carries a number that dials, for the right country', () => {
   const a = boot(null, { timeZone: 'Europe/London' });
-  a.tap('#go').tap('#own');
-  a.type('#t', 'If I say no, people will think I am selfish').tap('#next');
-  a.type('#t', 'Cut myself where nobody will see it').tap('#next');
+  a.tap('#m-new');
+  a.type('#if', 'say no').type('#then', 'people will think I am selfish').tap('#next');
+  a.type('#do', 'Cut myself where nobody will see it').tap('#lock');
   a.shows('href="tel:116123"').shows('Samaritans');
   a.shows('call your local emergency number');
   a.hides('href="tel:988"');

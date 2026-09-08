@@ -204,10 +204,6 @@ keep it, and put it wherever the sentence needs it.
 
 > Write the version you play out. One sentence.
 
-**`own.belief.only`**
-
-> Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.
-
 **`own.belief.placeholder`**
 
 > If I ask for a day off, my boss will think I’m not committed.
@@ -271,6 +267,10 @@ keep it, and put it wherever the sentence needs it.
 **`refusal.emptyBelief`**
 
 > Write what you think will happen.
+
+**`refusal.emptyIf`**
+
+> Say what you’d do differently. It goes after “If I”.
 
 ### Screen 3b — "Which of these is it?"
 
@@ -813,6 +813,90 @@ keep it, and put it wherever the sentence needs it.
 ### Not yet grouped
 
 *New since this document was last given a home for them. Say where they belong.*
+
+**`build.title`**
+
+> Set up a test
+
+**`build.sub`**
+
+> One sentence: the thing you’d do, and what you’re sure would happen.
+
+**`build.ifWord`**
+
+> If I
+
+**`build.thenWord`**
+
+> , then
+
+**`build.ifLabel`**
+
+> If I — what would you do?
+
+**`build.thenLabel`**
+
+> Then what — what are you sure will happen?
+
+**`build.ifPlaceholder`**
+
+> say no without giving a reason
+
+**`build.thenPlaceholder`**
+
+> they’ll think I’m being difficult
+
+**`build.ifChips`**
+
+> Or start from one of these:
+
+**`build.thenChips`**
+
+> Or one of these:
+
+**`build.next`**
+
+> What will you do?
+
+**`build.doTitle`**
+
+> What will you do today?
+
+**`build.doSub`**
+
+> One thing. Small, cheap, and entirely up to you.
+
+**`build.doPlaceholder`**
+
+> Say no to one thing today, in one sentence.
+
+**`build.doChips`**
+
+> Or one of these:
+
+**`build.dropLabel`**
+
+> And leave out
+
+**`build.dropSub`**
+
+> Leaving out what you’d normally do is what makes it count. Optional.
+
+**`build.dropPlaceholder`**
+
+> Don’t give a reason.
+
+**`build.dropChips`**
+
+> Or one of these:
+
+**`build.lock`**
+
+> Lock it in
+
+**`build.only`**
+
+> Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.
 
 **`nudge.shape`**
 

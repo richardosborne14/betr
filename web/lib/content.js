@@ -68,6 +68,16 @@
     text can never be chosen for the person by anything they did (research §5.2, B18).
   */
   var WHY_FIELDS = ['what', 'why'];
+
+  /*
+    B30. A start is four fields and no fifth, for the reason a place on the Help screen has
+    three and an explanation has two: with nowhere to hang a lane, a condition or a second
+    version, WHICH suggestions a person is offered can never be decided by anything they have
+    typed or done. It is decided by one thing — whether the first blank holds, word for word,
+    one of the `if` lines — and that is a lookup rather than a judgement (research §5.2).
+  */
+  var START_FIELDS = ['if', 'thens', 'dos', 'drops'];
+  var START_LISTS = ['thens', 'dos', 'drops'];
   var OURS = 'trybeup.com';
   var SHORTENERS = ['bit.ly', 't.co', 'tinyurl.com', 'goo.gl', 'ow.ly', 'buff.ly', 'rebrand.ly', 'lnkd.in'];
 
@@ -169,6 +179,99 @@
       var flat = b.belief.toLowerCase().replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim();
       if (seen[flat] !== undefined) problems.push(at + ' says the same thing as belief ' + seen[flat]);
       seen[flat] = j;
+    });
+  }
+
+  /*
+    The suggestion chips. Two things are being kept true here and they pull in opposite
+    directions, which is why both are spelled out.
+
+    First, they have to READ as part of the sentence: an `if` follows the printed words "If I"
+    and a `then` follows ", then", so both are lowercase fragments, while a `dos` or a `drops`
+    line is a whole sentence a person could act on and starts with a capital.
+
+    Second, they are BETR PROPOSING SOMETHING. Rule 4 as amended 2026-09-08 loosened what a
+    person may write for themselves and loosened nothing about what BETR writes, so every one
+    of these goes through the same three word lists the twenty-one stock tests do.
+  */
+  function validateStarts(starts) {
+    var problems = [];
+    if (!starts || !Array.isArray(starts.items) || !starts.items.length) {
+      return ['starts.js is empty'];
+    }
+    if (!starts.general || typeof starts.general !== 'object') {
+      problems.push('starts.js has no general set, so a sentence BETR did not write gets nothing');
+    } else {
+      checkStartLists('the general set', starts.general, problems);
+      if ('if' in starts.general) problems.push('the general set has an "if"; it is the one with no start');
+    }
+
+    var seen = {};
+    starts.items.forEach(function (it, i) {
+      var where = 'start ' + i + ' (' + ((it && it.if) || 'no if') + ')';
+      if (!it || typeof it !== 'object' || Array.isArray(it)) { problems.push(where + ' is not a start'); return; }
+
+      START_FIELDS.forEach(function (field) {
+        if (!(field in it)) problems.push(where + ' is missing ' + field);
+      });
+      Object.keys(it).forEach(function (field) {
+        if (START_FIELDS.indexOf(field) === -1) {
+          problems.push(where + ' has an extra field "' + field + '": a start is four fields, so ' +
+            'that which suggestions a person is offered can never be decided for them');
+        }
+      });
+
+      if (typeof it.if !== 'string' || !it.if.trim()) {
+        problems.push(where + ' has no if');
+      } else {
+        if (/^[A-Z]/.test(it.if)) problems.push(where + ' starts with a capital, and it follows the printed "If I"');
+        if (/[.!?]$/.test(it.if)) problems.push(where + ' ends in a full stop, and the sentence carries on after it');
+        var flat = it.if.toLowerCase().trim();
+        if (seen[flat]) problems.push(where + ' is the same start as ' + seen[flat]);
+        seen[flat] = where;
+      }
+
+      checkStartLists(where, it, problems);
+    });
+
+    return problems;
+  }
+
+  function checkStartLists(where, set, problems) {
+    START_LISTS.forEach(function (field) {
+      var list = set[field];
+      if (!Array.isArray(list) || !list.length) { problems.push(where + ' has no ' + field); return; }
+      var said = {};
+      list.forEach(function (line, j) {
+        var at = where + ' ' + field + ' ' + j;
+        if (typeof line !== 'string' || !line.trim()) { problems.push(at + ' is empty'); return; }
+
+        /*
+          A `then` follows ", then" and so is lowercase — except for "I", which is a capital
+          in English wherever it stands and is how half of these have to begin. A plan is a
+          sentence of its own and starts like one.
+        */
+        if (field === 'thens') {
+          if (/^[A-Z]/.test(line) && !/^I(\b|['\u2019])/.test(line)) {
+            problems.push(at + ' starts with a capital, and it follows the printed ", then"');
+          }
+        } else if (!/^[A-Z\u201C]/.test(line)) {
+          problems.push(at + ' does not start with a capital, and it is a whole sentence');
+        }
+
+        /* Two that say the same thing are one suggestion and a wasted tap. */
+        var flat = line.toLowerCase().replace(/[^a-z ]+/g, ' ').split(/\s+/).filter(Boolean).sort().join(' ');
+        if (said[flat] !== undefined) problems.push(at + ' says the same thing as ' + field + ' ' + said[flat]);
+        said[flat] = j;
+
+        /* BETR proposing it, so the three lists apply exactly as they do to a stock test. */
+        [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]].forEach(function (pair) {
+          var word = guards.hit(line, pair[1]);
+          if (word) {
+            problems.push(at + ' names something BETR may never propose (' + pair[0] + ': "' + word + '")');
+          }
+        });
+      });
     });
   }
 
@@ -349,8 +452,10 @@
     BELIEF_FIELDS: BELIEF_FIELDS,
     BELIEFS_PER_WORRY: BELIEFS_PER_WORRY,
     MAX_PER_DOOR: MAX_PER_DOOR,
+    START_FIELDS: START_FIELDS,
     byId: byId,
     validateWorries: validateWorries,
+    validateStarts: validateStarts,
     validateDoors: validateDoors,
     validatePlaces: validatePlaces,
     WHY_FIELDS: WHY_FIELDS,

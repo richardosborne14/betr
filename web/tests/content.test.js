@@ -6,6 +6,7 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 
 const worries = require('../content/worries.js');
+const starts = require('../content/starts.js');
 const doors = require('../content/whats-going-on.js');
 const places = require('../content/places.js');
 const why = require('../content/why.js');
@@ -14,6 +15,62 @@ const guards = require('../lib/guards.js');
 
 test('every worry has its six parts, a lane, and a conditional belief', () => {
   assert.deepStrictEqual(content.validateWorries(worries), []);
+});
+
+/* ------------------------------------------------- B30: the suggestions under the blanks */
+
+test('every suggestion under a blank reads as part of the sentence and is safe to propose', () => {
+  assert.deepStrictEqual(content.validateStarts(starts), []);
+});
+
+/*
+  A start has four fields and no fifth, the way a place on Help has three and an explanation
+  has two. The missing fifth is the point: with nowhere to hang a lane, a condition or a
+  second version, which suggestions a person is offered can never be decided by anything they
+  entered. It is decided by whether the first blank matches a start word for word, and if a
+  future session adds fuzzy matching, that is the rule it would be breaking (research §5.2).
+*/
+test('a suggestion can never be aimed at a person', () => {
+  const fields = new Set();
+  for (const it of starts.items) Object.keys(it).forEach((k) => fields.add(k));
+  assert.deepStrictEqual([...fields].sort(), ['dos', 'drops', 'if', 'thens']);
+  assert.deepStrictEqual(Object.keys(starts.general).sort(), ['dos', 'drops', 'thens']);
+  assert.ok(!/\blane\b|\bwhen\b|\bscore\b|\bif_?match/i.test(Object.keys(starts).join(' ')));
+});
+
+/*
+  The chips are BETR proposing something, so rule 4 applies to them in full — the version of
+  rule 4 that did NOT loosen on 2026-09-08. validateStarts checks every line; this checks that
+  it is actually checking, because a word list that has stopped matching fails silently.
+*/
+test('nothing BETR suggests names the habit, the body, or anyone’s safety', () => {
+  const lines = [];
+  for (const it of starts.items.concat([starts.general])) {
+    for (const f of ['thens', 'dos', 'drops']) lines.push(...it[f]);
+    if (it.if) lines.push(it.if);
+  }
+  assert.ok(lines.length > 150, 'only ' + lines.length + ' suggestions: the file has shrunk');
+  for (const line of lines) {
+    for (const [kind, list] of [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]]) {
+      assert.strictEqual(guards.hit(line, list), null, kind + ' word in "' + line + '"');
+    }
+  }
+  /* and the check itself still bites */
+  assert.strictEqual(guards.hit('Have one beer', guards.HABIT), 'beer');
+});
+
+/* Every start has to make a sentence a person would actually say out loud. */
+test('every start makes a whole sentence with the words the screen prints', () => {
+  const en = require('../content/strings-en.js').s;
+  for (const it of starts.items) {
+    for (const then of it.thens) {
+      const said = en.build.ifWord + ' ' + it.if + en.build.thenWord + ' ' + then + '.';
+      assert.match(said, /^If I \S/, said);
+      assert.match(said, /, then \S/, said);
+      assert.ok(said.split(' ').length >= 8, 'too short to be a prediction: ' + said);
+      assert.ok(!/  /.test(said), 'a doubled space in: ' + said);
+    }
+  }
 });
 
 test('the second door points only at worries that exist', () => {

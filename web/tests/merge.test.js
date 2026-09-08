@@ -244,7 +244,7 @@ test('every result the app writes has its own id and the word that was tapped', 
   a.type('#o', 'Nobody minded.').tap('#next').tap('[data-key]', 2);
 
   const saved = JSON.parse(a.mem['betr.v1']);
-  assert.strictEqual(saved.v, 3);
+  assert.strictEqual(saved.v, 4);
   assert.strictEqual(saved.done.length, 2);
   assert.deepStrictEqual(saved.done.map((d) => d.move), ['bit', 'lot']);
   assert.deepStrictEqual(saved.done.map((d) => d.level), [9, 6]);
@@ -258,7 +258,7 @@ test('a test locked in and finished later is one thing with one id all the way t
   const a = boot();
   a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
   /* leave it waiting and go and start something else, which is what B8 made possible */
-  a.tap('#m-new').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0);
+  a.tap('#m-new').tap('#back').tap('#go').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0);
   const waiting = JSON.parse(a.mem['betr.v1']).open;
   assert.strictEqual(waiting.length, 1);
   const id = waiting[0].rid;
@@ -275,8 +275,8 @@ test('a test locked in and finished later is one thing with one id all the way t
 test('two waiting tests at once have two different ids', () => {
   const a = boot();
   a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
-  a.tap('#m-new').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#lock');
-  a.tap('#m-new').tap('[data-door]', 1).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
+  a.tap('#m-new').tap('#back').tap('#go').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#lock');
+  a.tap('#m-new').tap('#back').tap('#go').tap('[data-door]', 1).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
   a.tap('#m-mine');
   const open = JSON.parse(a.mem['betr.v1']).open;
   assert.strictEqual(open.length, 3);
@@ -310,7 +310,7 @@ test('an exported file carries the id and the tapped word, so two of them can be
   a.tap('#m-help').tap('#export');
 
   const out = JSON.parse(a.valueOf('#dump'));
-  assert.strictEqual(out.version, 3);
+  assert.strictEqual(out.version, 4);   /* B30: ifPart/thenPart, and an own test has an id */
   assert.strictEqual(out.results.length, 1);
   const r = out.results[0];
   assert.ok(typeof r.id === 'string' && r.id.length > 15, 'the export has no id on a result');

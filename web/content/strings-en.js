@@ -180,6 +180,67 @@ var BETR_STRINGS_EN = {
       foot: 'Pick the one that would sting. A sentence that’s only nearly yours can’t be proved wrong by anything that happens today.'
     },
 
+    /* ------------------------------------------------- the build screen (B30) */
+
+    /*
+      The way in, since 2026-09-08. One sentence with two blanks, then what you'll do.
+
+      `ifWord` and `thenWord` are PRINTED, either side of the first blank, and they are also
+      what the stored sentence is assembled from — one source of truth, so a translation can
+      never end up with a screen that says one thing and a record that says another. Keep the
+      comma inside `thenWord`; a language that does not want one takes it out and both the
+      screen and the record follow.
+
+      The blanks are not labelled on screen, because the sentence labels them by being a
+      sentence. `ifLabel` and `thenLabel` are what a screen reader says instead, and they have
+      to work read alone, out of order, with no sentence around them.
+
+      The chips are suggestions and nothing more. They are in content/starts.js, in a fixed
+      order, and which set is under the second blank depends on one thing: whether the first
+      blank holds, word for word, one of the starts. That is a lookup, not a judgement.
+    */
+    build: {
+      title: 'Set up a test',
+      sub: 'One sentence: the thing you’d do, and what you’re sure would happen.',
+      ifWord: 'If I',
+      thenWord: ', then',
+      ifLabel: 'If I — what would you do?',
+      thenLabel: 'Then what — what are you sure will happen?',
+      ifPlaceholder: 'say no without giving a reason',
+      thenPlaceholder: 'they’ll think I’m being difficult',
+      ifChips: 'Or start from one of these:',
+      thenChips: 'Or one of these:',
+      next: 'What will you do?',
+      /* The second half. The sentence is above it, in the quiet strip, unchanged. */
+      doTitle: 'What will you do today?',
+      doSub: 'One thing. Small, cheap, and entirely up to you.',
+      doPlaceholder: 'Say no to one thing today, in one sentence.',
+      doChips: 'Or one of these:',
+      dropLabel: 'And leave out',
+      /*
+        Optional, and it says so in its own line rather than in a note underneath — the note
+        was a separate line of small print and it pushed "Lock it in" below the fold.
+      */
+      dropSub: 'Leaving out what you’d normally do is what makes it count. Optional.',
+      dropPlaceholder: 'Don’t give a reason.',
+      dropChips: 'Or one of these:',
+      lock: 'Lock it in',
+      /*
+        B27 item 2, moved here by B30. This was `own.belief.only` and it sat under the blank
+        box, because on 2026-09-04 a test user wrote a true thing about his own body into that
+        box and nothing in fifteen screens had told him which ones BETR is for. That box is
+        gone; THIS is the screen a person writes one on now, so the line moved with the job.
+        It is under the sentence rather than above it, for the reason it always was: a rule
+        read before you have written anything is a rule about somebody else.
+
+        Widened on 2026-09-08 (B28 §3). It used to open "Not the weather, and not your body",
+        which was a checkability hint working as a wall — the founder's own two examples, one
+        about time and one about a feeling, both failed it. What is left is the half that
+        excludes a settled fact, plus the risk line the founder asked for on the same day.
+      */
+      only: 'Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.'
+    },
+
     /* ------------------------------------------------------- a person's own entry */
 
     own: {
@@ -197,17 +258,6 @@ var BETR_STRINGS_EN = {
           feared one, specific enough to be checked (research §2.3), not a tidy summary.
         */
         sub: 'Write the version you play out. One sentence.',
-        /*
-          The boundary. It was narrower until 2026-09-08: "Not the weather, and not your body.
-          Only the ones you've never actually found out about." The first half was written as a
-          checkability hint and worked as a wall — the founder's own two examples, one about
-          time and one about a feeling, were both refused by it, and the research draws the
-          lane wider than the copy did (B28 §3). So the untestable half goes and the safety
-          half stays: "never actually found out" is what excludes a settled fact without
-          passing judgement on anybody, and the risk line is the disclaimer the founder asked
-          for on 2026-09-08, said again in full as frozen sentence 6 on Help.
-        */
-        only: 'Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.',
         placeholder: 'If I ask for a day off, my boss will think I’m not committed.'
       },
       test: {
@@ -238,7 +288,12 @@ var BETR_STRINGS_EN = {
       notConditional: 'Start it with “If I…”. It has to be something that could turn out to be wrong.',
       noConsequence: 'Say what you think happens next: “If I ___, then ___”.',
       emptyTest: 'Write the one thing you’ll do today.',
-      emptyBelief: 'Write what you think will happen.'
+      emptyBelief: 'Write what you think will happen.',
+      /*
+        B30. The first blank has its own empty line, because "write what you think will
+        happen" is the answer to the second one and reads as nonsense under the first.
+      */
+      emptyIf: 'Say what you’d do differently. It goes after “If I”.'
     },
 
     /*
