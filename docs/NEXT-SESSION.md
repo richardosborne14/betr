@@ -1,6 +1,6 @@
 # Start here
 
-**Last refreshed:** 2026-09-08, after the daughter walk and B36's research.
+**Last refreshed:** 2026-09-08, after the daughter walk, B36's research and its mockups.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
@@ -9,10 +9,12 @@
 after load. `main` is clean and live at `https://betr.trybeup.com`. **No code changed this
 session.** What was added is research and a proposal:
 
-- **`docs/research/12-guiding-the-first-test.md`** — sourced, on what to say to somebody who has
-  never done this, when to say it, and how small a first test may be made without stopping being
-  a test.
-- **`docs/tasks/B36-the-guide.md`** — the proposal, six items, ranked and costed. Nothing built.
+- **`docs/research/12-guiding-the-first-test.md`** — sourced: what to say to somebody who has
+  never done this, and how small a first test may be without stopping being a test.
+- **`docs/tasks/B36-the-guide.md`** — the proposal, **eleven items**, ranked and costed.
+- **The mockups**, eight phone screens and four notes, words editable by the founder:
+  `https://claude.ai/code/artifact/5b7cf7c8-1905-43f2-823f-f813871acfb5`
+  (working files in this session's scratchpad only, not in the repo).
 
 **Why.** The founder walked the build screen with their eldest daughter. She wrote a sentence of
 the right shape and the wrong content and nothing said so; she reached *What will you do today?*
@@ -23,45 +25,55 @@ a belief at 10 does. A therapist shrinks the step out loud, with the reason atta
 
 **Three things that are true in the code, without her:**
 
-1. **`content/examples.js` has no `did`.** The front screen shows prediction → what happened.
-   The one screen that teaches by showing skips the beat she got stuck on.
-2. **`content/why.js` is unreachable to her.** Twenty-one entries of the best writing in the
-   app, keyed to a **stock worry id** — she typed her own — and shown only **after a result**.
+1. **`content/examples.js` has no `did`.** The front screen shows prediction → what happened;
+   the one screen that teaches by showing skips the beat she got stuck on.
+2. **`content/why.js` is unreachable to her** — twenty-one entries of the best writing in the
+   app, keyed to a **stock worry id** (she typed her own) and shown only **after a result**.
 3. **The verdict guard cannot fire from the build screen.** `checkBelief()` exempts any sentence
    containing "if", and the build screen prints "If I". `guards.js` says so in its own comment.
 
+**Part two, from the founder the same day.** The therapist's *permission* is four things and the
+one BETR cannot have is the weakest — Bandura ranks mastery > vicarious > verbal persuasion, and
+the blessing is third. BETR supplies the two stronger ones, plus a plan for the bad outcome
+instead of authority. **And it never asks anybody to be brave: it asks them to find something
+out.** The **dial** is the evidenced half of the founder's idea; the **points** are refused (§9).
+
 ## 2. The next action
 
-**Get a decision on `docs/tasks/B36-the-guide.md`, then build item 1** — the cheapest and best
-evidenced: `examples.js` gains a `did` field, so the worked example shows what the person
-actually did, one short line, before what happened. Half a day. **Measure it on the walker at
-100% and 125%: the front screen is already at the fold (785 / 780px).**
+**Get a decision on `docs/tasks/B36-the-guide.md` (the mockups are how to read it), then build
+item 1** — cheapest and best evidenced: `examples.js` gains a `did` field, so the worked example
+shows what the person actually did, one short line, before what happened. Half a day, and
+**measure it on the walker at 100% and 125% — the front screen is already at the fold.** Then
+items 7 and 10a, strings only: the loop says *"Go and find out."*, and the lock carries one line
+saying a bad one counts the same as a good one.
 
-Items 2 and 3 are one screen each behind a text link — *Too big? Make it smaller* on the do
-screen, *Why it's written like this* on the build screen — sharing scaffolding, so about a day
-together. Item 4 is two nudges in `guards.js`, half a day. Item 5 (when and where) is
-deliberately **deferred behind the 125% fold bug**. Item 6 (should a half-written sentence
-survive leaving the screen) is a founder decision, not a build.
+Items 2 and 3 are one screen each behind a text link — *Too big? Make it smaller*, *Why it's
+written like this* — sharing scaffolding, about a day together. Item 4 is two nudges in
+`guards.js`, half a day. **Item 8, the dial, is the biggest thing in the file (2–3 days) and its
+centre.** Items 5 and 10b are **deferred behind the 125% fold bug, which now blocks two items and
+is still nobody's task.** Items 6 and 9 are decisions, not builds.
 
-**The rule that governs all of it, from research §6: the person opens the door.** No screen may
+**The rule that governs all of it (research §6): the person opens the door.** No screen may
 appear because of anything somebody typed, rated or did. Fixed prose everybody can open is a
 chapter in a book; prose shown *because of* an input is the app choosing — rule 2, and a device.
 
 Everything else open is somebody's reading:
 
-1. **The founder, six things.** B36 items 1–4 and item 6. Start #19, the checking ritual
-   (B34 §6). Which of the four examples leads the front screen and **whether it is real or an
-   example**. **The purpose statement**, which still says "you pick a worry", frozen in five
-   places — candidate in `B29`. **The `HARM` false refusal** (*"end it"* refuses a sentence about
-   ending a friendship). **Change the ad, not the app** (B25).
-2. **Misha, in one ask:** the four nouns (B23 option b), the door order, the 21 chips, and now
-   B36's tone — does *"Too big? Make it smaller"* read as helpful, or as being managed?
+1. **The founder.** B36 items 1–4, 7 and 10a to build; 6 and 9 to decide. Start #19, the
+   checking ritual (B34 §6). Which example leads the front screen, and **real or an example**.
+   **The purpose statement**, still saying "you pick a worry", frozen in five places (candidate
+   in `B29`). **The `HARM` false refusal** (*"end it"* refuses a sentence about ending a
+   friendship). **Change the ad, not the app** (B25).
+2. **Misha, in one ask:** the four nouns (B23 option b), the door order, the 21 chips, B36's
+   tone (does *"Too big? Make it smaller"* read as helpful or as being managed?), and the two the
+   mockups turned up (B36 §12) — the front card's **voice**, and the **red strike** through a
+   person's own sentence, next to rule 6.
 3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** —
-   245 rows, the 154 shipped lines beside the 91 proposed, blank score and rewrite columns;
+   245 rows, 154 shipped lines beside 91 proposed, blank score and rewrite columns;
    `docs/candidates-suggestions-batch-1.md` is the reasoning. Also `content/examples.js`, the
-   three `worries.js` sentences rewritten on 2026-09-08 (`phone`, `rest`, `low`), three pairs
-   from B1, and B34 §4's `general.thens`. **Add B36's strings**, with one question: is *"the
-   smallest version that could still turn out wrong"* safe to hand somebody with no clinician?
+   three `worries.js` sentences rewritten on 2026-09-08, three pairs from B1, and B34 §4's
+   `general.thens`. **Add B36's strings**, with one question: is *"the smallest version that
+   could still turn out wrong"* safe to hand somebody with no clinician?
 4. **A screen-reader pass on a real phone.** The tree was read in B33; **nobody has used it**,
    and B35's look chip is new and unheard.
 5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.
@@ -69,9 +81,9 @@ Everything else open is somebody's reading:
 **Two API keys were pasted into an earlier session — Groq and Anthropic. Both still need
 rotating.**
 
-**Gaps nobody owns:** no medication word list in `guards.js` (the *"sleeping tablets"* miss),
-and the 125% fold bug on the do screen, which now blocks B36 item 5. **Unchanged release
-conditions:** Misha on `places.signedOff`; J1–J3 on a phone; an owner for links and helplines.
+**Gaps nobody owns:** no medication word list in `guards.js`, and the 125% fold bug on the do
+screen, now blocking B36 items 5, 8 and 10b. **Unchanged release conditions:** Misha on
+`places.signedOff`; J1–J3 on a phone; an owner for links and helplines.
 
 ## 3. Environment facts
 
@@ -94,10 +106,9 @@ conditions:** Misha on `places.signedOff`; J1–J3 on a phone; an owner for link
 - **Tapping the look chip must never repaint**, or it throws away a sentence somebody is half
   way through typing. It swaps its own text in place; there is a test. **The three roads to the
   build screen offer three different suggestion sets** (B34 §1): check any chip change on all.
-- **The fake DOM in `harness.js` is flat and fires no events.** Live behaviour is walked, not
-  unit-tested — that is the bargain. `boot(seed, {dark: true})` is a dark-mode phone (B35).
-- **A REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners once swallowed
-  the whole build screen out of `app.js` (`learnings.md`).
+- **The fake DOM in `harness.js` is flat and fires no events**; live behaviour is walked, not
+  unit-tested. **A REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners
+  once swallowed the whole build screen out of `app.js` (`learnings.md`).
 - **The fold is 785px at 100% and 780px at 125%.** `doors.intro` is one line and must stay one.
   **Known and untouched: at 125% the `do` box on *What will you do today?* clips its own text
   and *Lock it in* sits under the menu.** Pre-existing; it now blocks B36 item 5.
@@ -108,12 +119,10 @@ conditions:** Misha on `places.signedOff`; J1–J3 on a phone; an owner for link
   alone serves a cache.
 - **`HABIT`/`BODY` refuse nothing any more** and still hold BETR's own content — and neither
   catches a checking ritual, which rule 4 also forbids BETR to propose.
-- **Help's order is three decisions and four tests hold it:** crisis first (B17), proof second
-  (B26), frozen sentence 6 third (B33), then CBT, then the nine.
-- **Every word a person reads is in `web/content/`**; a sentence back in `app.js` fails
-  `i18n.test.js` — and **a string literal that starts mid-tag reads as prose to that sweep**.
-- **Use `’` and `“ ”`, never `'` and `"`.** All 723 content strings already do, and since B35
-  `content.test.js` fails the build on a typewriter one. Anything drafted outside `web/content/`
-  arrives with the wrong quotes — B36's draft strings included.
+- **Help's order is three decisions and four tests hold it:** crisis, proof, frozen sentence 6,
+  then CBT, then the nine. **Every word a person reads is in `web/content/`** — a sentence back
+  in `app.js` fails `i18n.test.js`, and a literal starting mid-tag reads as prose to that sweep.
+- **Use `’` and `“ ”`, never `'` and `"`** — `content.test.js` fails the build on a typewriter
+  one, and anything drafted outside `web/content/` arrives wrong, B36's draft strings included.
 - **`content/zones.js` and `docs/COPY.md` are generated** (`node tools/copy-sheet.js`); never
   hand-edit. **No helpline number is written from memory.**

@@ -9,6 +9,9 @@ which is where the founder, Misha and the CBT reviewer come in.
 test and leave at the doing step.
 **Research:** [`../research/12-guiding-the-first-test.md`](../research/12-guiding-the-first-test.md),
 written the same day. Every claim below is sourced there.
+**The mockups:** https://claude.ai/code/artifact/5b7cf7c8-1905-43f2-823f-f813871acfb5 — eight
+phone screens and four notes; the founder can change the words on them directly. Every dashed
+**NEW** tag is something that is not in the app today; everything else is the app as it stands.
 **Depends on:** nothing. Item 1 could ship on its own tomorrow.
 
 ---
@@ -437,3 +440,24 @@ Nothing is removed. The order becomes:
 
 **And one thing to fix before item 8 can start: the 125% fold bug on the do screen.** It now
 blocks two items instead of one. It should be its own task and it is nobody's.
+
+
+---
+
+## 12. Two things the mockups found on their own
+
+Neither was in the proposal; both came out of drawing the screens and reading them back.
+
+**12a. The front-screen card has two voices the moment it has three labels.** It says *"You
+expected"* today, over somebody else's example, and that read fine with two labels. Add
+*"What they did"* and the card says you, they, then what happened. **A decision nobody has
+made:** is that card something you are being *shown*, or something you are being *invited
+into*? Either is fine; the two in one card is not. The mockup takes one option — *"They
+expected"* — to make the question visible. **Misha's, and it is one string either way.**
+
+**12b. The red line through what you expected.** `.result .you` strikes the person's own
+sentence through in `--warn` (#B23A2E), the same red a refusal wears. It is the shipped design
+and it predates all of this, but read cold, beside rule 6 — *outcomes are observations, never
+verdicts* — a red strike is closer to "you were wrong" than to "here is what you said". Worth a
+deliberate look rather than leaving it as the thing nobody questioned. **Cost if it changes:
+one line of CSS.** Not part of B36; raised here because this was the session that noticed.
