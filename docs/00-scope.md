@@ -43,30 +43,39 @@ never automatic (§6).
 - **Not a habit tracker, not a sobriety counter, not a journal.** TrybeUP already is those.
 - **Not adaptive.** It never scores, personalises, or picks for you. A fixed list you choose
   from is a chapter in a book; a system that chooses for you is a device (research §5.2).
+  *Unchanged by B28:* the suggestion chips under each blank are fixed content in
+  `web/content/starts.js`, in a fixed order, and BETR never picks one.
 - **Not a chatbot.** Two prototypes went that way and both read as "an AI that wants your
-  secrets". The final shape has no conversation and no free text until after the test is done.
-- **Not for the substance itself.** No test anywhere in it involves the drink, the screen or
-  the habit. That is structural: there is no free-text test field in v1 (Q3 changes this).
+  secrets". There is no conversation and nothing answers anybody. *Amended 2026-09-08 (B28,
+  founder):* **free text is now the front door** rather than the last button — two blanks in
+  one sentence, with suggestions under each. That is a form, and the founder overruled rule 10
+  for that one screen knowingly. It is still not a conversation and still not a wizard.
+- **BETR never proposes the substance itself.** No test BETR writes involves the drink, the
+  screen or the habit; `web/lib/content.js` holds every stock `test` and `drop` to the word
+  lists. *Amended 2026-09-08 (B29, founder):* this stopped being structural on the day free
+  text moved to the front. A **person's own** test naming the habit, food or the body is taken;
+  the one hard stop left is a sentence about ending it or hurting anyone, on both boxes, and
+  the line about everything else is frozen sentence 6 on Help.
 - **Not a metrics product.** It sends nothing, so we learn nothing from it directly (Q7).
 - **Not part of the First 100 sprint.** It cannot produce attributable signups by 11 September.
 
 ## 3. The interface, as decided today
 
-Six screens. Four taps and one sentence for a full loop. **Six taps as built**, after B19 put
-a door in front of the list and B20 put the choice of prediction in front of the test; both
-were paid knowingly and both are one line to take back (`docs/tasks/B19-doors-first.md`,
-`docs/tasks/B20-three-worries-under-one.md`).
+**Rewritten 2026-09-08 (B28, the founder's decisions; built in B29–B33).** The way in changed
+and the loop did not. What follows is the shape as built; the table it replaces described the
+stock list as the front door, which it stopped being on that day.
 
 | # | Screen | What's on it | Taps |
 | --- | --- | --- | --- |
-| 1 | **Start** | Headline *Sure it'll go badly?*, one big button *Pick a worry*, one small line: no account, no AI, nothing leaves your phone. Small links: *your worries*, *what this is*. | 1 |
-| 2 | **Pick** | The stock list as big buttons, plain words. One line at the bottom saying what is deliberately absent. | 1 |
-| 3 | **Test** | *Today:* the one-line test. The safety behaviour to drop, in bold. *What you expect:* pre-written, with *not quite? change it*. One big button *I'll do it today*. | 1 |
-| 4 | **Locked** | *Go and do it.* The test repeated. One big button *Done it. Here's what happened.* Small: *Didn't get to it* · *Pick a different one*. | 1 |
+| 1 | **Start** | One finished test, shown not described: the prediction, struck through, what actually happened in marker, the ladder from ten to a lower rung. Then *What's yours?* (big) and *Not sure? Try one of these* (ghost), and the trust line. | 1 |
+| 2 | **Build** | *If I ___, then ___* as one sentence, each blank an input, suggestion chips under the active one. One big button *What will you do?* | typing or 2 taps |
+| 3 | **Build · what you'll do** | The sentence in the quiet strip. *What will you do today?* (box, chips), *And leave out* (smaller box, chips, optional), *Lock it in*. | typing |
+| 4 | **Locked** | *Go and do it.* The test repeated. One big button *Done it. Here's what happened.* Small: *Didn't get to it*. | 1 |
 | 5 | **Happened** | One text box. *Just what they said or did. No verdict.* | typing |
-| 6 | **Sure?** | The belief, quoted, and the rung it is on now. Four buttons: still sure / a bit less / a lot less / not at all. Small, underneath: *more sure than before*. | 1 |
-| 7 | **Result** | Expectation struck through. What happened in marker. **The ladder for this belief**, started → now. Big number of tests done. *Do it again tomorrow* · *Different worry*. | — |
-| 8 | **Your worries** | One card per belief tested: its ladder, what you wrote each time, *Test this again*. Nothing combined across cards. | 1 |
+| 6 | **Sure?** | The sentence, quoted, and the rung it is on now. Four buttons: still sure / a bit less / a lot less / not at all. Small, underneath: *more sure than before*. | 1 |
+| 7 | **Result** | Expectation struck through. What happened in marker. **The ladder for this belief**, started → now. Big number of tests done. *Do it again tomorrow* · *Different test*. | — |
+| 8 | **Your tests** | One card per belief tested: its ladder, what you wrote each time, *Test this again*. Nothing combined across cards. | 1 |
+| — | **Borrow** (one tap aside) | The six doors and the stock list, reached from *Not sure?* Picking one opens screen 2 with the blanks filled. Everything editable. | 2 |
 
 **Why these choices hold (each is from the research):**
 
@@ -86,8 +95,10 @@ were paid knowingly and both are one line to take back (`docs/tasks/B19-doors-fi
 - **A fifth, quiet option: *more sure than before*.** A test can go badly and leave someone
   more convinced. A ladder that can only fall is a nicer story than the person's week. It is
   available and deliberately not prominent, in the place *didn't get to it* sits.
-- **The word is *worry*, never *fear*.** Founder, 2026-09-02: fear sounds scary. "Worry" is
-  already the word in the nine sentences ("manage everyday worry").
+- **The word is *test*.** Founder, 2026-09-08: nobody has to say they have worries to set up a
+  test. It was *worry* from 2026-09-02 (never *fear* — founder: fear sounds scary), and
+  "worry" stays only where it means the feeling: frozen sentence 3 ("manage everyday worry"),
+  the two paragraphs of "Why this one sticks", an outside page's own description of itself.
 - **"Do it again tomorrow" as the primary action.** Mindable found the number of completed
   experiments predicted improvement; CCI says one run "might convince yourself it was luck".
   The product metric is completed tests, never days or streaks.
@@ -334,7 +345,7 @@ domain, no cookie, no dependency. The TrybeUP repo keeps a one-file pointer at
 | --- | --- | --- |
 | Q1 | **The name, Betr.** Needs a trademark and domain search (betr.app, getbetr.com). And a Misha read on one thing: "bet" lands differently for someone whose habit is gambling, and the prototype's habit-word guard currently blocks the word "bet" in tests. Decide whether the pun is used in copy ("Bet it goes badly?") or only in the name. | Release |
 | Q2 | **The stock list.** *Answered 2026-09-02:* both doors (worries first, plus "start from what's going on"); twelve visible plus *Something else*; order as §5.1; "Not drinking at a social thing" stays, with its test reworded to contain no habit word. Who writes and reviews is unchanged and still open. The six surface-problem labels need Misha's sign-off before release. | Build — cleared |
-| Q3 | **Custom entries.** *Answered 2026-09-02:* in v1, as the last button, three screens of one box each, with both guards. | Build — cleared |
+| Q3 | **Custom entries.** *Answered 2026-09-02:* in v1, as the last button, three screens of one box each, with both guards. **Superseded 2026-09-08 by B28:** a person's own words are the front door, not the last button; one build screen replaces the three; the habit and body guards stop refusing and the harm guard stays on both boxes. | Build — cleared |
 | Q4 | **The TrybeUP bridge**: when it's mentioned, what moves across, whether the free tier is fixed first, one brand or two. | Release of the bridge only |
 | Q5 | **Trust**: hosting and logs, web and store or store only, data controller. | Release |
 | Q6 | **Own-cloud backup** offered or not. | v1.1 |

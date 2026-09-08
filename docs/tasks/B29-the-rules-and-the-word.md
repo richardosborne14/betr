@@ -1,74 +1,108 @@
 # B29: The rules rewritten, and "worry" becomes "test"
 
-**Status:** **Open. First of the five B28 tasks; nothing else starts until this is pushed**
-**Confidence:** 9/10 — it is words and tests, and every change is one the founder made in writing
-on 2026-09-08 (`B28-present-practice-produce.md`)
-**Date opened:** 2026-09-08 · **Depends on:** B28 (the decisions) · **Blocks:** B30, B31, B32, B33
+**Status:** **Done, 2026-09-08.** 181 tests green from the repo root, walked in `tools/walk.js`
+**Confidence:** 9/10 — it is words and tests, and every change is one the founder made in
+writing on 2026-09-08 (`B28-present-practice-produce.md`)
+**Date opened:** 2026-09-08 · **Depends on:** B28 (the decisions) · **Blocks:** B30–B33 (cleared)
 
-## Why this is its own task, and why it goes first
+## Why this went first
 
-Every session opens by reading `CLAUDE.md`, and `CLAUDE.md` today says the opposite of what the
+Every session opens by reading `CLAUDE.md`, and `CLAUDE.md` said the opposite of what the
 founder decided: that the word is *worry*, that free text is the last button, that a form has
-been rejected, that the habit word list refuses a test. A session that builds B30 against those
-rules will either fight them or quietly "restore" them. So the rules change first, dated, and
-the tests that hold the old rules change with them — **changed, never deleted**, so a new rule
-is held as firmly as the old one was.
+been rejected, that the habit word list refuses a test. A session building B30 against those
+rules would have fought them or quietly restored them. So the rules changed first, dated, and
+the tests that held the old rules changed with them — changed, never deleted.
 
-## 1 · The word
+## What was built
 
-**"Worry" becomes "test" everywhere a person reads it** (founder, 2026-09-08: nobody has to say
-"I have worries" to set up a test; "just pure CBT science"). The thing a person keeps is a
-*test*; the sentence inside it is *what you're sure will happen*; doing it is *doing the test*.
+### 1 · The word
 
-- `web/content/strings-en.js` — every `worry`/`worries` a person reads. The bottom row becomes
-  **Your tests · New test · Help**. Screen titles: *Your tests*, *Set up a test*, *Different
-  test*. Where "worry" was the noun for the belief, the new phrase is *what you're sure will
-  happen*, not "prediction" on a button and never "belief" on one.
-- **Where the two meanings could collide** — the count of tests done vs. the test a person keeps
-  — the mockup already separates them: *Test done* under the big number, *Do it again tomorrow*
-  for the next run. Keep that separation; do not write "tests" for both on one screen.
-- `web/content/worries.js`, `whats-going-on.js`, `why.js` — the file names and the `worries`
-  variable can stay (code, not read by a person). The `doors.foot` and the front-screen sentences
-  that say "worry" change.
-- The nine frozen sentences in scope §10 **do not change** — they say "worry" once, in sentence 3
-  ("manage everyday worry"), where it means the feeling, not the thing. Leave it.
-- `docs/COPY.md` is regenerated (`node tools/copy-sheet.js`), never hand-edited.
-- `docs/changing-the-words.md` stays true: check every path and key it names.
+**"Worry" is now "test" everywhere a person reads it**, and `loop.test.js` holds it: no button,
+no heading and no accessible name in the app may say *worry* or *worries*. Walked on every
+screen there is.
 
-## 2 · `CLAUDE.md`, rule by rule, each amended with the date
+- The bottom row is **Your tests · New test · Help**. The front screen's button is *Start a
+  test* (B31 replaces the whole screen). *Different worry* on the result is *Different test*.
+  *Your worries* is *Your tests*.
+- **The two counts on Your tests would have collided**, so they no longer share a noun. It said
+  "3 tests across 1 worry"; it says **"1 test, done 3 times"**. `mine.tests`/`mine.worries`
+  became `mine.kept`/`mine.runs`; a person reads *tests* for the things they keep and *times*
+  for the runs. Rule 5 is untouched — neither number is a score and neither is added across
+  cards. The result screen says the same way round: *3 tests done. Same test, different day.*
 
-| Rule | Was | Becomes |
+**The line drawn, and it is deliberate: the OBJECT is renamed, the English word is not.**
+"Worry" survives exactly where it means the feeling rather than the thing — frozen sentence 3
+("manage everyday worry"), the two paragraphs of *Why this one sticks* in `why.js`, and the
+NHS entry on the Help list describing its own page. B29 §1 already exempted the frozen
+sentence for that reason; the same reason covers the other two, and the test is written to
+allow them (buttons and headings only).
+
+**One thing was NOT renamed and it is a gap, not an oversight — see below.**
+
+### 2 · Rule 4, loosened, and the one hard stop
+
+`checkTest` no longer refuses the `HABIT` and `BODY` word lists. A person's own test naming a
+drink, a joint, a bet or a weighing scale is simply taken, with no note and no nudge. `HARM`
+still refuses, on both boxes, and still draws the crisis lines for the person's own country
+underneath.
+
+**The lists did not go anywhere, and this is the part most likely to be "tidied" wrongly.**
+BETR may still never *propose* one. That check used to be `guards.checkTest(f.test)` inside
+`validateWorries`, which became a no-op the moment the guard stopped refusing — so it is now
+spelled out in `web/lib/content.js` against `guards.HARM`, `guards.HABIT` and `guards.BODY`
+directly, with `guards.hit` newly exported for it. `guards.test.js` asserts that `content.js`
+still calls `guards.hit`, so deleting the lists as dead code fails the build.
+
+`refusal.habit` and `refusal.body` are unreachable now. Their keys and their words stay, the
+way `notConditional` and `noConsequence` have since 2026-09-04: a language file that dropped a
+key would fail `i18n.test.js` the day somebody put the wall back.
+
+### 3 · The own-words lane, widened
+
+`own.belief.sub` no longer says "make it about people" and `own.belief.only` no longer says
+"Not the weather, and not your body". Both refused the founder's own two examples — one about
+time, one about a feeling — and the research draws the lane wider than the copy did (B28 §3).
+What is left is the half that excludes a settled fact, plus the risk line the founder asked
+for: *"Only the ones you've never actually found out about. If it could put you or anyone else
+at risk, that one needs a person, not this."*
+
+### 4 · The documents
+
+`CLAUDE.md` rules 3, 4, 5 and 10 and the "What not to do" line, each amended with the date and
+with the founder's own words for the loosening. `docs/00-scope.md` §2, §3 (the screen table
+redrawn to the shape B30–B32 build) and §9 Q3 marked superseded. `docs/COPY.md` regenerated.
+`docs/changing-the-words.md` checked line by line and updated: the test count, the habit rule
+now described as a rule about what BETR proposes, and the new word on the safety-net list.
+
+## Decisions taken here
+
+| | Taken | Why |
 | --- | --- | --- |
-| 3 | The word is *worry*; three stock predictions, never one BETR chooses | The word is *test*. A test is *If I ___, then ___*; the person writes both halves or taps a suggestion into either. Suggestions are fixed content; never one BETR chooses for them (still true, still the device line) |
-| 4 | Never the habit itself; structural, no free-text test field | The habit and body word lists **stop refusing** a test. Sentence 6 on Help says what not to design. **Self-harm and harm to anyone is still refused, on both boxes** |
-| 10 | The interface is one big button; a form has been rejected; six taps | The way in is one sentence with two blanks and suggestions under each, then what you'll do and what you'll leave out, then *Lock it in*. **It is a form, and the founder chose it on 2026-09-08.** The front screen shows one finished test before anything is asked |
-| "What not to do" | Don't write a test that involves the habit | Keep the line for *us*: BETR's own stock content never involves the habit. A person's own test is theirs |
+| Rename the object or every use of the word | **The object** | A blanket rename would have rewritten `why.js`, which explains a mechanism in the sense frozen sentence 3 uses. The test is on buttons, headings and accessible names, which is where the founder's objection lives |
+| Two counts on Your tests | **tests kept, and times run** | "3 tests across 1 test" was the collision B29 §1 warned about. The mockup already separates them; this is the same separation in the summary line |
+| Where the habit rule now lives for stock content | **`content.js`, against the lists directly** | Borrowing the person-facing guard is what made it a no-op. Two rules, two call sites, and a test that fails if the second one goes |
+| The unreachable refusals | **Kept, words and all** | Same standing as `notConditional`: a wall that is ever restored has its words waiting, in every language |
 
-Also: the second paragraph of the founder note ("free ourselves up a little bit") goes into
-`CLAUDE.md` in its own words, so a future session knows the loosening was chosen, not drifted.
+## The gap, and it is the founder's
 
-## 3 · `docs/00-scope.md`
+**The purpose statement still says "worry"** — *"You pick a worry about how people will react"*
+— and it is frozen (rule 7): identical in the app, `index.html`'s meta description, the
+manifest, the store listing and every post. B29 was told the nine sentences do not change and
+was told nothing about the purpose statement, so it was left exactly as it is.
 
-§2 ("Not adaptive", "Not a chatbot", "no free text until after the test") and §3's table are
-rewritten to the new shape. §4 items 1 and 2 stand. §9's Q3 gets a line: *superseded by B28*.
-
-## 4 · The tests that hold the old rules
-
-Read each before touching it; the comment above it says which rule it holds.
-
-- `web/tests/loop.test.js` — the walk fixtures (`#go` → `[data-door]` → `[data-id]` → `[data-b]`
-  → `#lock`) describe the old six taps and change in B30, not here. **Here:** the two tests that
-  type a habit word and a body word and expect a refusal (around line 539) — they now expect the
-  words to go through. The capital-letter test and the BETR wordmark test stay exactly as they are.
-- `web/tests/guards.test.js` — the `HABIT` and `BODY` refusal cases flip to pass-through; the
-  `HARM` cases stay on both `checkTest` and `checkBelief`.
-- `web/tests/content.test.js` — the stock list's own rules stand (three beliefs each, no habit
-  word in a stock test). Nothing to change unless a label's word changes.
-- `web/tests/i18n.test.js` — will catch any sentence left in `app.js`.
+It is now the only place on the Help screen where a person meets the old word, and it also no
+longer describes what the app does: nobody *picks* a worry any more, they write a sentence.
+**Changing it is the founder's call and touches five places at once.** A candidate, keeping the
+same shape and the same claim: *"BETR helps you test unhelpful beliefs in everyday life. You
+write down what you're sure will happen, it gives you one small thing to try today, and you
+record what actually happened."*
 
 ## Definition of done
 
-- [ ] `node --test` green from the repo root, same number of tests or more, none deleted
-- [ ] No "worry"/"worries" on any screen: `node tools/walk.js` through every screen, `dump`, grep
-- [ ] `CLAUDE.md`, scope, `changing-the-words.md`, `COPY.md` all say the same thing
-- [ ] `NEXT-SESSION.md` rewritten, pointing at B30
+- [x] `node --test` green from the repo root — **181, up from 180**, none deleted
+- [x] No "worry"/"worries" on any button, heading or accessible name — held by a test, and
+      walked in `tools/walk.js` across the front screen, the doors, the pick list, the own box,
+      the loop, the result, Your tests and Help
+- [x] `CLAUDE.md`, scope, `changing-the-words.md`, `COPY.md` all say the same thing
+- [ ] The purpose statement — **the founder's, above**
+- [x] `NEXT-SESSION.md` rewritten at the end of the session

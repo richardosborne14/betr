@@ -4,17 +4,25 @@
   Custom entries are in v1 by the founder's call, which puts free text back in front of the
   test. These are what make that safe:
 
-    checkBelief  refuses an empty box, a worry naming anyone's safety, and a verdict
+    checkBelief  refuses an empty box, a sentence naming anyone's safety, and a verdict
                  ("I am a bad person"), and nothing else: the shape rules ask once and let
-                 the person's own words through. It does NOT screen for the habit or for
-                 food and body, and that is deliberate — see checkBelief.
-    checkTest    a test that involves the habit, food and body, or anyone's safety is
-                 refused with the reason, not warned about. Refusing quietly teaches nothing;
-                 refusing with the reason teaches the whole point of the product.
+                 the person's own words through.
+    checkTest    refuses an empty box and a plan naming anyone's safety. Nothing else.
 
-  The word lists are deliberately blunt and deliberately over-inclusive. A person whose real
-  test is refused can word it differently in ten seconds. A person whose unsafe test is
-  allowed has been let down by the one rule that never bends.
+  ONE HARD STOP, AND IT IS THE ONLY ONE (founder, 2026-09-08, B28/B29). Until that day a test
+  naming the habit, or food, weight or a body sensation, was refused outright; rule 4 was
+  structural because free text sat at the end of a side path. The founder moved free text to
+  the front door and loosened the rest in the same breath — "free ourselves up a little bit
+  from the constraints", few people will use it, and a disclaimer can say that if it is
+  dangerous it needs a doctor. So HABIT and BODY no longer refuse anything a person writes.
+  They are still exported, and still hold BETR's OWN content to the old line: no stock test
+  and no stock drop may name the habit (web/lib/content.js, web/tests/content.test.js).
+
+  What stays is HARM, on both boxes, and it stays because the founder said so in the same
+  note: "If I kill myself everyone will be better off" must still be refused. The line a
+  person reads about the rest is frozen sentence 6 on Help — choose experiments that are safe
+  and legal, never one that involves the habit, self-harm, restricting food, or putting
+  yourself or anyone else at risk.
 
   Since B15 a refusal carries a `reason` that is a KEY, not a sentence: the words live in
   web/content/strings-en.js so they can be translated. The lists, the matching and the
@@ -26,7 +34,12 @@
   else (root.Betr = root.Betr || {}).guards = api;
 })(typeof self !== 'undefined' ? self : this, function () {
 
-  /* The thing you're trying to change. Never the subject of a test (CLAUDE.md rule 4). */
+  /*
+    The thing you're trying to change. Since B29 this list no longer refuses a person's own
+    test — it holds BETR's own stock content, which may never propose one (CLAUDE.md rule 4
+    as amended 2026-09-08). `hit` is exported so content.js can check the list without
+    checkTest having to refuse on it.
+  */
   var HABIT = [
     'drink', 'drinks', 'drinking', 'drunk', 'booze', 'boozing', 'alcohol', 'alcoholic',
     'beer', 'beers', 'wine', 'lager', 'cider', 'pint', 'pints', 'vodka', 'gin', 'rum',
@@ -39,7 +52,7 @@
     'benzo', 'benzos', 'valium', 'xanax'
   ];
 
-  /* Food, weight and body sensations. Refused lanes (research §6). */
+  /* Food, weight and body sensations. Kept, and no longer a refusal — see the header. */
   var BODY = [
     'starve', 'starving', 'fasting', 'purge', 'purging', 'binge', 'bingeing', 'binging',
     'calories', 'calorie', 'weigh', 'weighing', 'weight', 'diet', 'dieting',
@@ -106,12 +119,11 @@
     var w = hit(s, HARM);
     if (w) return { ok: false, kind: 'harm', word: w, reason: REASON.harm };
 
-    w = hit(s, HABIT);
-    if (w) return { ok: false, kind: 'habit', word: w, reason: REASON.habit };
-
-    w = hit(s, BODY);
-    if (w) return { ok: false, kind: 'body', word: w, reason: REASON.body };
-
+    /*
+      HABIT and BODY used to refuse here and stopped on 2026-09-08 (B29). The lists are still
+      above, still exported, and still the rule BETR's own content is held to. A person's own
+      test goes through.
+    */
     return { ok: true };
   }
 
@@ -145,10 +157,9 @@
                "I'm going to get fired if I ask" used to be refused as a verdict and it is a
                textbook prediction.
 
-    HABIT and BODY are checkTest's alone, on purpose. Rule 4 is about the *test*, and
-    "if I stop drinking at the wedding, then they'll ask why" is exactly the worry door one
-    exists to hold; its test never goes near a drink. Screening beliefs for those lists would
-    refuse the people BETR is most for. Do not "make the two guards consistent".
+    HABIT and BODY never screened a belief and, since B29, no longer screen a test either.
+    "If I stop drinking at the wedding, then they'll ask why" is exactly the worry door one
+    exists to hold, and screening for those lists would refuse the people BETR is most for.
 
     Returns { ok: false, kind, reason }  cannot go on
          or { ok: true }                 reads as a prediction
@@ -194,6 +205,11 @@
     HARM: HARM,
     REASON: REASON,
     NUDGE: NUDGE,
+    /*
+      Exported since B29 so that BETR's own content can be held to the habit rule without
+      checkTest refusing a person's own words for it (web/lib/content.js).
+    */
+    hit: hit,
     checkTest: checkTest,
     checkBelief: checkBelief,
     expectationFrom: expectationFrom

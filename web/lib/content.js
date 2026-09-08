@@ -106,11 +106,27 @@
 
       checkBeliefs(f, where, problems);
 
-      /* The rule that never bends: no test, and no drop line, touches the habit itself. */
+      /*
+        The rule that never bends for BETR'S OWN CONTENT: no stock test, and no stock drop
+        line, touches the habit, food and body, or anyone's safety.
+
+        B29, 2026-09-08. This used to be `guards.checkTest`, and on that day checkTest stopped
+        refusing the habit and body lists so that a PERSON'S own test could name them (rule 4
+        as amended). The rule about what BETR proposes did not change with it, so the check is
+        spelled out here against the same three lists rather than borrowed from the guard a
+        person meets. If this is ever "tidied" back into one call, the twenty-one stock tests
+        stop being checked at all and nothing says so.
+      */
       ['test', 'drop'].forEach(function (field) {
         if (typeof f[field] !== 'string') return;
-        var v = guards.checkTest(f[field]);
-        if (!v.ok) problems.push(where + ' ' + field + ' is refused by the guard (' + v.kind + ': "' + v.word + '")');
+        if (!f[field].trim()) return;   /* the missing-field check above already said so */
+        [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]].forEach(function (pair) {
+          var word = guards.hit(f[field], pair[1]);
+          if (word) {
+            problems.push(where + ' ' + field + ' names something BETR may never propose (' +
+              pair[0] + ': "' + word + '")');
+          }
+        });
       });
     });
 

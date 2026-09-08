@@ -167,10 +167,11 @@ test('the language is the person’s choice, then the browser’s, then English'
 
 test('plurals and ordinals come from the browser, not from a table we wrote', () => {
   const I = i18n.create({ en: en });
-  assert.strictEqual(I.plural('mine.tests', 1), '1 test');
-  assert.strictEqual(I.plural('mine.tests', 4), '4 tests');
-  assert.strictEqual(I.plural('mine.worries', 1), '1 worry');
-  assert.strictEqual(I.plural('mine.worries', 2), '2 worries');
+  assert.strictEqual(I.plural('mine.kept', 1), '1 test');
+  assert.strictEqual(I.plural('mine.kept', 4), '4 tests');
+  /* B29: the second count on Your tests is said as times, so the two nouns cannot collide. */
+  assert.strictEqual(I.plural('mine.runs', 1), 'done once');
+  assert.strictEqual(I.plural('mine.runs', 2), 'done 2 times');
   assert.deepStrictEqual([1, 2, 3, 4, 11, 21].map((n) => I.ordinal(n)),
     ['1st', '2nd', '3rd', '4th', '11th', '21st']);
 });

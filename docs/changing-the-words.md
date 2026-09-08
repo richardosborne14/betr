@@ -23,7 +23,7 @@ sentence a person reads.
 
 | If you want to change… | The file |
 | --- | --- |
-| A worry: its name, its card sentence, its three "If I…, then…", the thing to try, the thing to leave out | `web/content/worries.js` |
+| One of the ready-made tests you can borrow: its name, its card sentence, its three "If I…, then…", the thing to try, the thing to leave out | `web/content/worries.js` |
 | The six doors on *What's going on?* | `web/content/whats-going-on.js` |
 | "Why this one sticks" — the two paragraphs behind each worry | `web/content/why.js` |
 | The links on Help | `web/content/places.js` |
@@ -62,7 +62,7 @@ That is it. There is no separate publish step: a change on `main` publishes itse
 
 About thirty seconds of machinery, in this order:
 
-1. **Every test runs.** 160 of them.
+1. **Every test runs.** 181 of them.
 2. If they all pass, the files are copied to the server.
 3. The published page is then checked **from outside**, over the real address: that it loads,
    that it sets no cookie, that it is allowed to make no outbound request of any kind, and
@@ -81,14 +81,20 @@ red cross means it did not, and nothing changed on the live site.
 and they publish nothing if one fails. Among the things that will stop your change dead:
 
 - the wordmark stops being **BETR**, or a button starts with a lowercase letter
-- a worry's test or its "leave out" line mentions drink, drugs, food, weight or self-harm
+- one of the ready-made tests, or its "leave out" line, mentions drink, drugs, food, weight
+  or self-harm — that rule is about what **BETR** proposes and did not change on 2026-09-08;
+  what a person writes for themselves is theirs, and only a sentence about ending it or
+  hurting somebody is refused
 - a link appears that is not on the allow-list, or anything in the app tries to fetch something
 - one of the nine frozen sentences has been reworded
 - any of "digital CBT", "improve your mental health", "irrational", "streak", "tracks your
   anxiety" appears anywhere
-- a worry ends up with anything other than exactly three "If I…, then…", or two of them say
-  the same thing, or one of them does not start with "If"
-- a worry stops being behind a door, so nothing in the app leads to it
+- one of them ends up with anything other than exactly three "If I…, then…", or two of them
+  say the same thing, or one of them does not start with "If"
+- one of them stops being behind a door, so nothing in the app leads to it
+- a button or a heading calls something a **worry**: since 2026-09-08 the word a person reads
+  is **test**. ("Worry" is still allowed where it means the feeling rather than the thing —
+  frozen sentence 3, and the two paragraphs of *Why this one sticks*.)
 
 If the run goes red, the live site is untouched — it is still serving the last good version.
 Nobody sees a broken app. The worst case is a red cross and a message.

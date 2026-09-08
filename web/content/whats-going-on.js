@@ -58,8 +58,8 @@
   order. Built, not cleared.
 */
 var BETR_DOORS = {
-  intro: 'More than one of these might fit. Read to the bottom, then tap what’s closest. It just points you at the worries that usually sit under it.',
-  foot: 'None of these gets tested. The worry underneath does.',
+  intro: 'More than one of these might fit. Read to the bottom, then tap what’s closest. It just points you at the tests that usually sit under it.',
+  foot: 'None of these gets tested. What you expect to happen does.',
   items: [
     {
       id: 'phone',

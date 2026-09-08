@@ -51,7 +51,7 @@ test('a full loop, from the start screen to a result', () => {
 
 /*
   Founder, 2026-09-03: what happened, typed as two paragraphs, came back out as one line —
-  in the highlighted text on the result screen, and again on the card in Your worries. The
+  in the highlighted text on the result screen, and again on the card in Your tests. The
   breaks were never lost from the stored text; nothing was telling the browser to draw them.
   The class is the fix, so the class is what this asserts, on both screens, plus the one line
   of CSS that gives it its meaning.
@@ -242,14 +242,21 @@ test('the highlight on the result screen has room between its lines', () => {
   assert.ok(pad && Number(pad[1]) <= 8, 'the padding grew without the line-height growing with it');
 });
 
-test('a person’s own entry is refused by both guards before it is accepted', () => {
+/*
+  B29, 2026-09-08, and the walk changed shape with the rule. A verdict is still reframed and
+  a sentence about anyone's safety is still refused; a test naming the habit now goes
+  through, because the founder moved that line out of the app and onto Help.
+*/
+test('a person’s own entry is refused for a verdict and for harm, and for nothing else', () => {
   const a = boot();
   a.tap('#go').tap('#own').shows('What do you think will happen?');
   a.type('#t', 'I am a waste of space').tap('#next').shows('verdict, not a prediction');
   a.type('#t', 'If I ask for Friday off, my boss will think I am not committed').tap('#next');
   a.shows('What will you do?');
-  a.type('#t', 'Go for a pint with them and ask then').tap('#next').shows('the worry underneath');
-  a.type('#t', 'Ask for Friday off in one sentence').tap('#next').shows('What will you leave out?');
+  a.type('#t', 'Cut myself where nobody will see it').tap('#next').shows('can’t help with that one');
+  /* the habit, which used to be a wall here and is not one any more */
+  a.type('#t', 'Go for a pint with them and ask then').tap('#next').shows('What will you leave out?');
+  a.tap('#back').type('#t', 'Ask for Friday off in one sentence').tap('#next').shows('What will you leave out?');
   a.type('#t', 'Don’t explain why.').tap('#next');
   a.shows('I’ll do it today').shows('Ask for Friday off');
   a.shows('My boss will think I am not committed');   /* the expectation, taken from the belief */
@@ -358,7 +365,7 @@ test('the same worry three days running comes down the ladder, one rung at a tim
   a.shows('>7<').shows('Down 3 since you started');
 
   /* three taps of the same words, three different rungs: the thing that used to be impossible */
-  a.tap('#m-mine').shows('Your worries').shows('3 tests across 1 worry');
+  a.tap('#m-mine').shows('Your tests').shows('1 test, done 3 times');
   a.shows('He said fair enough.').shows('She said no problem.');
 });
 
@@ -378,7 +385,7 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
   a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock').tap('#done');
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
-  a.tap('#m-mine').shows('2 tests across 2 worries');
+  a.tap('#m-mine').shows('2 tests, done 2 times');
   a.shows(labelOf(doors.items[0].worries[1])).shows(labelOf(doors.items[0].worries[0]));
 
   /* the older one is the second card, and going again keeps its rung rather than starting over */
@@ -394,7 +401,7 @@ test('your worries opens the pick list until there is one, and the worry after t
   a.tap('#m-mine').shows('What’s going on?');
   a.tap('#back').shows(en.s.start.title);
   loop(a, 0, 'He said fair enough.', 1);
-  a.tap('#m-mine').shows('Your worries').shows('He said fair enough.');
+  a.tap('#m-mine').shows('Your tests').shows('He said fair enough.');
   a.tap('#back').shows(en.s.start.title);
 });
 
@@ -406,7 +413,52 @@ test('a result saved by the version before the ladder still opens, and still cou
     o: 'He said fair enough.', rate: 55, rateLabel: 'A bit less sure', when: '2026-09-01T10:00:00.000Z'
   };
   const a = boot({ 'betr.v1': JSON.stringify({ stage: 'start', done: [old] }) });
-  a.tap('#m-mine').shows('Your worries').shows('>6<').shows('He said fair enough.');
+  a.tap('#m-mine').shows('Your tests').shows('>6<').shows('He said fair enough.');
+});
+
+/*
+  B29, 2026-09-08, founder: the word is TEST. "Nobody has to say they have worries to set up
+  a test." So nothing a person taps, and no heading they land on, calls the thing a worry.
+
+  The line this draws, and it is deliberate: the OBJECT is renamed, the ordinary English word
+  is not. "Worry" survives in exactly the places it means the feeling rather than the thing —
+  frozen sentence 3 ("manage everyday worry"), the two paragraphs of "Why this one sticks",
+  the NHS entry on the Help list. Those are prose about a mechanism, and B29 §1 exempts the
+  frozen sentence for the same reason. Buttons and headings are the interface, and this is
+  what stops "New worry" walking back onto the bottom row.
+*/
+test('nothing a person taps, and no heading, calls it a worry', () => {
+  const a = boot();
+  const bits = [];
+  const sweep = () => {
+    const h = a.html();
+    for (const m of h.matchAll(/<button[^>]*>([^<]+)</g)) bits.push(m[1]);
+    for (const m of h.matchAll(/<h[1-3][^>]*>([^<]+)</g)) bits.push(m[1]);
+    for (const m of h.matchAll(/aria-label="([^"]+)"/g)) bits.push(m[1]);
+  };
+
+  sweep();
+  a.tap('#go'); sweep();
+  a.tap('[data-door]', 0); sweep();
+  a.tap('[data-id]', 0); sweep();
+  a.tap('[data-b]', 0); sweep();
+  a.tap('#lock'); sweep();
+  a.tap('#nothanks').tap('#done'); sweep();
+  a.type('#o', 'He said fair enough.').tap('#next'); sweep();
+  a.tap('[data-key]', 1); sweep();
+  a.tap('#m-mine'); sweep();
+  a.tap('#back').tap('#m-new').tap('#own'); sweep();
+  a.tap('#m-help'); sweep();
+
+  assert.ok(bits.length > 40, 'only found ' + bits.length + ' labels and headings to check');
+  for (const bit of bits) {
+    assert.ok(!/\bworr(y|ies)\b/i.test(bit),
+      'a button or heading still says worry: "' + bit + '"');
+  }
+
+  /* And the bottom row, which is the one a person reads on every screen there is. */
+  assert.strictEqual(en.s.nav.mine, 'Your tests');
+  assert.strictEqual(en.s.nav.new, 'New test');
 });
 
 /*
@@ -483,23 +535,30 @@ test('a verdict is still refused, and an empty box still is', () => {
 });
 
 /*
-  The line the whole of 2026-09-04 exists for. Every worry in content/worries.js is about what
-  other people will think, say or do; the blank box never said so, so a person wrote a true
-  worry about his own body into it and the app took it.
+  The line the whole of 2026-09-04 exists for, as B29 leaves it. A person wrote a true thing
+  about his own body into the blank box — "if I eat gluten, then I'll feel sick" — and the
+  app had never once said which ones it is for.
 
-  B27 item 2 is the other half of it. There are TWO boxes a person can write a worry into and
-  the line was on one of them: the second is "I'll put it my own way" under a stock worry,
-  four taps from cold, and it is the one a test user actually took. Both, so it cannot fall
-  off one of them again.
+  What it says CHANGED on 2026-09-08. "Not the weather, and not your body" was written as a
+  checkability hint and worked as a wall: the founder's own two examples, one about time and
+  one about a feeling, both failed it. So the half that excludes a settled fact stays, and
+  the half that narrowed the lane is replaced by the risk line the founder asked for.
+
+  B27 item 2 is the other half and does not change: there are TWO boxes a person can write
+  into, and the line has to be on both.
 */
-test('both boxes say which worries BETR is for, not just the blank one', () => {
+test('both boxes say which ones BETR is for, not just the blank one', () => {
   const only = en.s.own.belief.only;
-  assert.ok(only.indexOf('not your body') !== -1, 'the boundary line has been reworded: ' + only);
+  assert.ok(only.indexOf('never actually found out about') !== -1,
+    'the boundary line no longer excludes a settled fact: ' + only);
+  assert.ok(/risk/.test(only), 'the boundary line no longer carries the risk line: ' + only);
+  assert.ok(only.indexOf('your body') === -1,
+    'the narrow lane is back: it refused the founder’s own two examples (B28 §3)');
 
   /* the blank box, reached from the doors */
   boot().tap('#go').tap('#own').shows(only);
 
-  /* and their own words under a worry that is still ours */
+  /* and their own words under a stock one that is still ours */
   boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
 });
 
@@ -532,11 +591,16 @@ test('the brand is BETR everywhere a person reads it, refusals included', () => 
   a.shows('BETR is plain HTML');
   assert.ok(a.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in prose');
 
-  /* the two refusals a person can actually be shown, which is where it hid until 2026-09-03 */
+  /*
+    The refusal a person can actually be shown, which is where the wordmark hid until
+    2026-09-03. There used to be three of them here; since B29 the habit and body refusals
+    are unreachable and this is the one hard stop that is left.
+  */
   const b = boot();
   b.tap('#go').tap('#own');
   b.type('#t', 'If I say no, people will think I am selfish').tap('#next');
-  b.type('#t', 'Weigh myself every morning').tap('#next').shows('BETR doesn’t do tests about');
+  b.type('#t', 'Weigh myself every morning').tap('#next').shows('What will you leave out?');
+  b.tap('#back');
   b.type('#t', 'Cut myself where nobody will see it').tap('#next').shows('BETR can’t help');
   assert.ok(b.html().indexOf('Betr ') === -1, 'found the old mixed-case wordmark in a refusal');
 });
@@ -570,10 +634,10 @@ test('why a worry sticks is offered after a result, on both screens, and never b
   a.shows('that is what a CBT therapist is for');
   a.tap('#back').shows('You expected');
 
-  /* And from the card in Your worries, where Back comes back to Your worries. */
+  /* And from the card in Your tests, where Back comes back to Your tests. */
   a.tap('#m-mine').shows('Why this one sticks');
   a.tap('[data-why]').shows('Why “' + firstBehind(0).label + '” sticks');
-  a.tap('#back').shows('Your worries');
+  a.tap('#back').shows('Your tests');
 });
 
 test('a person’s own worry has nothing to explain, so it offers nothing', () => {

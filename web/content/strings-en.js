@@ -84,8 +84,8 @@ var BETR_STRINGS_EN = {
     /* Three doors, on every screen. Not a tab bar (CLAUDE.md rule 10): never a fourth. */
     nav: {
       label: 'BETR',
-      mine: 'Your worries',
-      new: 'New worry',
+      mine: 'Your tests',
+      new: 'New test',
       help: 'Help'
     },
 
@@ -117,7 +117,7 @@ var BETR_STRINGS_EN = {
         it was the second way in, and the second way in turned out to be the only one two
         test users could read.
       */
-      go: 'Pick a worry',
+      go: 'Start a test',
       /*
         B25, 2026-09-04. Scope §3: "Everything starts at 10 — that is what the front screen
         says." The old headline, "Sure it'll go badly?", said it in its first word. The new one
@@ -129,7 +129,7 @@ var BETR_STRINGS_EN = {
         or where anybody else got to (rule 5, and research §5.4 on claims), and "what actually
         happens" is direction-neutral on purpose — a test can leave a person more sure.
       */
-      ladder: 'Every worry starts at ten out of ten — that’s how sure you are. It moves when you find out what happens.',
+      ladder: 'Every test starts at ten out of ten — that’s how sure you are it goes that way. It moves when you find out what happens.',
       /* The trust line, with the human half first. §9.2: airplane mode is the proof. */
       promise: 'Nobody sees this but you. No account, no AI, nothing leaves your phone.',
       noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +
@@ -159,7 +159,7 @@ var BETR_STRINGS_EN = {
       sub: 'Tap the one that’s closest.',
       own: 'Something else',
       notHere: 'Nothing here tests the thing itself, only what you expect to happen without ' +
-        'it. That’s the worry underneath, and that’s what we test.'
+        'it. That’s the part that gets tested.'
     },
 
     /* ------------------------------------------------- which of these is it? (B20) */
@@ -175,9 +175,9 @@ var BETR_STRINGS_EN = {
       place in BETR that explains what makes an experiment work, in a sentence.
     */
     belief: {
-      sub: 'Which of these is the bit you’re actually worried about? Under each one is what you’d be braced for.',
+      sub: 'Which of these is the bit that actually gets you? Under each one is what you’d be braced for.',
       own: 'None of these — I’ll put it my own way',
-      foot: 'Pick the one that would sting. A worry that’s only nearly yours can’t be proved wrong by anything that happens today.'
+      foot: 'Pick the one that would sting. A sentence that’s only nearly yours can’t be proved wrong by anything that happens today.'
     },
 
     /* ------------------------------------------------------- a person's own entry */
@@ -196,14 +196,18 @@ var BETR_STRINGS_EN = {
           actionable. It also asks for the right thing clinically: the prediction has to be the
           feared one, specific enough to be checked (research §2.3), not a tidy summary.
         */
-        sub: 'Write the version you play out. One sentence, and make it about people.',
+        sub: 'Write the version you play out. One sentence.',
         /*
-          The boundary, and the whole reason 2026-09-04 happened. Every one of the twenty-one
-          worries in content/worries.js is about what other people will think, say or do; not
-          one is about what the world will physically do to you. That was true and unwritten.
-          "Never found out" is the half that excludes a true worry without judging anybody.
+          The boundary. It was narrower until 2026-09-08: "Not the weather, and not your body.
+          Only the ones you've never actually found out about." The first half was written as a
+          checkability hint and worked as a wall — the founder's own two examples, one about
+          time and one about a feeling, were both refused by it, and the research draws the
+          lane wider than the copy did (B28 §3). So the untestable half goes and the safety
+          half stays: "never actually found out" is what excludes a settled fact without
+          passing judgement on anybody, and the risk line is the disclaimer the founder asked
+          for on 2026-09-08, said again in full as frozen sentence 6 on Help.
         */
-        only: 'Not the weather, and not your body. Only the ones you’ve never actually found out about.',
+        only: 'Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.',
         placeholder: 'If I ask for a day off, my boss will think I’m not committed.'
       },
       test: {
@@ -224,9 +228,9 @@ var BETR_STRINGS_EN = {
       A refusal explains, because refusing quietly teaches nothing.
     */
     refusal: {
-      habit: 'That test involves the thing itself. Those aren’t tests — the worry underneath ' +
-        'is. Try one about what people will think, or about what happens when you go ' +
-        'without it.',
+      habit: 'That test involves the thing itself. Those aren’t tests — what you expect to ' +
+        'happen without it is. Try one about what people will think, or about what happens ' +
+        'when you go without it.',
       body: 'BETR doesn’t do tests about food, weight or what your body is doing. Those need ' +
         'a person, not this.',
       harm: 'BETR can’t help with that one, and it would be wrong to pretend otherwise.',
@@ -312,10 +316,10 @@ var BETR_STRINGS_EN = {
       moved: 'Down {n} since you started.',
       count: {
         one: 'One test done. The second one is where it starts to stick.',
-        other: '{n} tests done. Same worry, different day, keeps working.'
+        other: '{n} tests done. Same test, different day, keeps working.'
       },
       again: 'Do it again tomorrow',
-      other: 'Different worry'
+      other: 'Different test'
     },
 
     /*
@@ -357,10 +361,17 @@ var BETR_STRINGS_EN = {
     },
 
     mine: {
-      title: 'Your worries',
-      summary: '{tests} across {worries}. Tap one to test it again.',
-      tests: { one: '{n} test', other: '{n} tests' },
-      worries: { one: '{n} worry', other: '{n} worries' },
+      title: 'Your tests',
+      /*
+        B29, 2026-09-08. Two counts on one screen and they mean different things: how many
+        tests a person keeps, and how many times they have run them. Written as "{n} tests
+        across {n} worries" the two words collided the moment "worry" became "test", so the
+        second count is said as times rather than as a noun. Rule 5 is untouched: neither
+        number is a score of anybody, and neither is added up across cards.
+      */
+      summary: '{kept}, {runs}. Tap one to do it again.',
+      kept: { one: '{n} test', other: '{n} tests' },
+      runs: { one: 'done once', other: 'done {n} times' },
       nothing: 'What you’ve got on the go. Nothing recorded yet.',
       onTheGo: 'On the go',
       did: 'Done it',

@@ -93,9 +93,13 @@ test('a refusal is read out, because the heading has not changed', () => {
   a.type('#t', 'I am a waste of space').tap('#next');
   assert.strictEqual(a.said(), en.s.refusal.verdict);
 
+  /*
+    B29, 2026-09-08: the habit list stopped refusing a test, so the refusal a person can
+    still be read out is the one hard stop. It is also the one that matters most out loud.
+  */
   a.type('#t', 'If I ask for a day off, my boss will mind').tap('#next');
-  a.type('#t', 'Have one beer and see').tap('#next');
-  assert.strictEqual(a.said(), en.s.refusal.habit);
+  a.type('#t', 'See how long I can go without wanting to hurt myself').tap('#next');
+  assert.strictEqual(a.said(), en.s.refusal.harm);
 });
 
 test('the result screen is read as a sentence, because a shape is not readable', () => {

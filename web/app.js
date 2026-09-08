@@ -1204,8 +1204,8 @@
         head('h2', t('mine.title')) +
         '<p class="sub">' + esc(n
           ? t('mine.summary', {
-              tests: I.plural('mine.tests', n),
-              worries: I.plural('mine.worries', groups.length)
+              kept: I.plural('mine.kept', groups.length),
+              runs: I.plural('mine.runs', n)
             })
           : t('mine.nothing')) + '</p>' +
         cards.map(function (c) {

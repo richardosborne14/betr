@@ -29,27 +29,43 @@ rules at once, and every one of them has failed in some other product.
    Apple's *Data Not Collected* label and the airplane-mode proof.
 2. **No AI.** Not for suggestions, not for wording, not for anything. Fixed content the person
    chooses from is a chapter in a book. A system that chooses for them is a medical device.
-3. **Conditional beliefs only.** Every item is "If I ___, then ___". "I am ___" is reframed,
-   never accepted. The word for one of these, everywhere a person can see it, is **worry**.
-   Not "fear" (founder, 2026-09-02: it sounds scary), not "thought", not "belief" on a button.
-   **Amended 2026-09-03 (B20):** a worry is a situation and carries **three** predictions, and
-   the person picks which one is theirs, or writes their own in its place. One per worry had
-   to guess which consequence they feared, and test users said the guess "sort of matches my
-   worry but not really" — a prediction that is only nearly yours cannot be disconfirmed, so
-   the loop runs and moves nothing. Three, plus their own words; never a fourth stock one, and
-   never one BETR chooses for them.
-4. **Never the habit itself.** No test involves the drink, the screen, the substance, food
-   restriction, body sensations, checking rituals, or anyone's safety. In v1 this is
-   structural: there is no free-text test field.
+3. **Conditional beliefs only, and the word is *test*.** Every item is "If I ___, then ___".
+   "I am ___" is reframed, never accepted. **Amended 2026-09-08 (B29), founder's call:** the
+   word for one of these, everywhere a person can see it, is **test** — not "worry" (it was
+   worry until that day; "nobody has to say they have worries to set up a test"), not "fear"
+   (founder, 2026-09-02: it sounds scary), not "thought", not "belief" on a button. A person
+   writes both halves themselves or taps a suggestion into either; the suggestions are fixed
+   content and BETR never chooses one for them, which is still the device line. **The rename
+   is of the OBJECT, not of the English word**: "worry" stays where it means the feeling
+   rather than the thing — frozen sentence 3, `why.js`, an outside page's own description.
+   `loop.test.js` fails the build if a button or a heading says it. **Amended 2026-09-03
+   (B20), and it survives as the borrow list:** a stock item carries **three** predictions and
+   the person picks which is theirs. One per item had to guess which consequence they feared,
+   and test users said the guess "sort of matches my worry but not really" — a prediction that
+   is only nearly yours cannot be disconfirmed, so the loop runs and moves nothing.
+4. **BETR never proposes the habit itself.** No test BETR writes involves the drink, the
+   screen, the substance, food restriction, body sensations, checking rituals, or anyone's
+   safety. `web/lib/content.js` holds every stock `test` and `drop` to the three word lists in
+   `guards.js`, and `content.test.js` walks the list through it.
+   **Amended 2026-09-08 (B29), founder's call, and this one is a loosening.** It used to be
+   structural — there was no free-text test field — and free text is the front door now. In
+   the founder's words: *"free ourselves up a little bit from the constraints"*; few people
+   will use it, and a disclaimer can say that if it is dangerous it needs a doctor. So the
+   **habit and body word lists stop refusing a person's own test.** They are still there and
+   still hold BETR's own content. **The one hard stop stays, on both boxes: a sentence about
+   ending it, or hurting anyone** — the founder's own example of what must still be refused is
+   "If I kill myself everyone will be better off". The line about everything else is drawn
+   once, by frozen sentence 6 on Help, and nowhere else in the app.
 5. **No streaks, no red days, no "you missed", no cap on rest.** The metric is completed
    tests. "Didn't get to it" keeps the test for tomorrow. The one other number is the belief
    ladder: 1-10, per belief, moved by the person's own re-rate. It is never a score of the
    person, never totalled or averaged across worries, and never carries a target.
-   **A worry is one belief (founder, 2026-09-04).** Since B20 a worry offers three predictions,
-   and **all of them share that worry's one ladder** — including a sentence the person wrote
-   themselves for it. `rate.keyOf()` keys a stock ladder by the worry's **id**, and that is a
-   decision, not an oversight: keying by the sentence would make a person look like they had
-   lost their history the moment they came back and picked a different one of the three.
+   **A test is one belief (founder, 2026-09-04).** A stock item offers three predictions and
+   **all of them share that item's one ladder** — including a sentence the person wrote
+   themselves for it. `rate.keyOf()` keys a ladder by **id**, never by the sentence, and that
+   is a decision, not an oversight: keying by the sentence would make a person look like they
+   had lost their history the moment they fixed a typo or came back and picked a different
+   one of the three.
 6. **No verdicts.** Never "irrational". Outcomes are observations. A bad outcome is data and
    the re-rate is optional.
 7. **The wording is fixed.** The eight sentences and the crisis lines in scope §10 / research
@@ -67,9 +83,14 @@ rules at once, and every one of them has failed in some other product.
    never a button, never styled apart; it says we made it and what it costs, right there in the
    entry; no deep link, no campaign parameter, no referral code, ever. Not on the front screen,
    not in the loop, not in the result, not on the menu.
-10. **The interface is one big button.** One sentence per loop. Anything that looks like a
-    form, a wizard, a slider or a chat has already been rejected by the founder. Do not bring
-    it back. **Amended 2026-09-03 (B8):** there is now a permanent row of three at the bottom
+10. **The interface is one big button — with one exception, chosen on 2026-09-08.** One
+    sentence per loop. A wizard, a slider or a chat has been rejected by the founder and does
+    not come back. **Amended 2026-09-08 (B28/B29), by the person who made the rule:** the way
+    in is **one sentence with two blanks** — *If I ___, then ___* — with suggestions under
+    each, then what you'll do and what you'll leave out, then *Lock it in*. **That is a form,
+    and the founder chose it knowingly.** The front screen shows one finished test before
+    anybody is asked about anything of their own. Everything below still holds.
+    **Amended 2026-09-03 (B8):** there is now a permanent row of three at the bottom
     of every screen — *Your worries · New worry · Help*. The founder overruled their own
     no-tab-bar rule knowingly. It stays three plain words: no icons, no selected state, no
     badges, no counts, no fourth item. It is three doors, not a place you live in.
@@ -152,6 +173,7 @@ site at `dev.trybeup.com` must keep working after any change; check it. The Tryb
 
 - Don't add a dependency. Don't add a font. Don't add analytics "just to see".
 - Don't add a questionnaire, a score, a streak, or a recommendation.
-- Don't write a test that involves the habit. Don't accept "I am" as a belief.
+- Don't write a test that involves the habit — that rule is about **BETR's own content** and
+  did not loosen on 2026-09-08. A person's own test is theirs. Don't accept "I am" as a belief.
 - Don't mention TrybeUP outside the small print. Don't build the bridge before its gate opens.
 - Don't say "improve your mental health", anywhere, ever.

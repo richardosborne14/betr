@@ -50,7 +50,7 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
     const items = a.html().match(/<nav class="menu"[^>]*>(.*?)<\/nav>/);
     assert.ok(items, 'no menu on screen: ' + a.html().slice(0, 120));
     const labels = [...items[1].matchAll(/<button[^>]*>([^<]+)</g)].map((m) => m[1]);
-    assert.deepStrictEqual(labels, ['Your worries', 'New worry', 'Help']);
+    assert.deepStrictEqual(labels, ['Your tests', 'New test', 'Help']);
   };
   check();
   for (const step of stops) { step(); check(); }
@@ -71,7 +71,7 @@ test('every door on the menu works from every screen', () => {
     at(boot()).tap('#m-help').shows('If you are in danger or in crisis');
     /* nothing recorded and nothing waiting lands on the pick list, never on a dead end */
     const mine = at(boot()).tap('#m-mine').html();
-    assert.ok(mine.indexOf('Your worries') !== -1 || mine.indexOf('What’s going on?') !== -1, mine.slice(0, 120));
+    assert.ok(mine.indexOf('Your tests') !== -1 || mine.indexOf('What’s going on?') !== -1, mine.slice(0, 120));
   }
 });
 
@@ -86,8 +86,8 @@ test('starting a new worry keeps the test you locked in, and it is waiting after
   a.tap('#back').shows('On the go').shows(firstBehind().test);
   a.hides('1 waiting').hides('overdue');
 
-  /* and on Your worries, on its own card, with both ways out of it */
-  a.tap('#m-mine').shows('Your worries').shows('On the go').shows('Done it');
+  /* and on Your tests, on its own card, with both ways out of it */
+  a.tap('#m-mine').shows('Your tests').shows('On the go').shows('Done it');
   a.tap('[data-did]', 0).shows('What happened?');
   a.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1);
   a.shows('>1<').shows('>9<');
@@ -108,7 +108,7 @@ test('there is no cap on how many are on the go, and nothing counts them', () =>
   /* they are all still there, and the menu still says nothing about how many */
   const mine = a.tap('#pickup').html();
   assert.strictEqual((mine.match(/data-did=/g) || []).length, 4);
-  assert.ok(mine.indexOf('>4<') === -1, 'your worries counted the waiting tests');
+  assert.ok(mine.indexOf('>4<') === -1, 'Your tests counted the waiting tests');
 });
 
 test('a test that is waiting survives a reload, and "didn’t get to it" costs it nothing', () => {

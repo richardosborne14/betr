@@ -78,8 +78,8 @@ test('a real v2 file loads, and every ladder draws exactly what it drew before',
 
 test('every screen that phone can reach still shows the same rungs', () => {
   const a = boot(v2());
-  /* it was left on Your worries, which is where its ladders are */
-  a.shows('Your worries').shows('>6<').shows('She said she was glad I asked.');
+  /* it was left on Your tests, which is where its ladders are */
+  a.shows('Your tests').shows('>6<').shows('She said she was glad I asked.');
   a.shows('Nobody said anything at all.');
   /* the one it locked in and never finished is still waiting, and still says so */
   a.shows('Say one thing that annoyed you');

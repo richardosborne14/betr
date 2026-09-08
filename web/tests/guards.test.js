@@ -1,6 +1,7 @@
 /*
-  The two guards on a person's own entry. Custom entries are in v1 (B0 Q3), so these are the
-  only thing standing between free text and a test that involves the habit.
+  The two guards on a person's own entry. Since B29 free text is the front door, so these are
+  the only thing standing between a person's own words and a test about anyone's safety —
+  which, since the same day, is the one hard stop there is.
 */
 const { test } = require('node:test');
 const assert = require('node:assert');
@@ -84,16 +85,21 @@ test('a belief naming anyone\u2019s safety is refused here, not one screen later
 });
 
 /*
-  The other half of the same decision, and the more important half to keep. HABIT and BODY
-  are checkTest's alone: rule 4 is about the test, and these are exactly the worries door one
-  exists to hold. A well-meaning edit that "makes the two guards consistent" fails here.
+  B29, 2026-09-08, and it is a founder's decision written down as a test rather than as a
+  comment. HABIT and BODY used to refuse a TEST; rule 4 was structural because free text sat
+  at the end of a side path. Free text is the front door now, the founder loosened the rest
+  in the same note ("free ourselves up a little bit from the constraints"), and the line a
+  person reads about it is frozen sentence 6 on Help rather than a wall inside the app.
+
+  So both boxes take it. If somebody restores the wall by accident, this fails; restoring it
+  on purpose needs the founder in writing, the way the loosening did.
 */
-test('a belief about the habit still goes through \u2014 it is the test that may not', () => {
+test('the habit goes through on both boxes now, and the lists still exist', () => {
   for (const s of ['If I stop drinking at the wedding, then they will ask me why',
                    'If they see me turn down a pint they will think I have a problem',
                    'If I say no to the casino night, then I will be left out']) {
     assert.strictEqual(guards.checkBelief(s).ok, true, s);
-    assert.strictEqual(guards.checkTest(s).ok, false, 'as a test it must still be refused: ' + s);
+    assert.strictEqual(guards.checkTest(s).ok, true, 'a test naming the habit is no longer refused: ' + s);
   }
 });
 
@@ -108,19 +114,38 @@ test('a conditional is never read as a verdict, and a bare one still is', () => 
   assert.strictEqual(guards.checkBelief('I’m the one they’ll blame if the thing fails').ok, true);
 });
 
-test('a test mentioning the habit is refused with the reason', () => {
+/*
+  The other side of the same loosening. A person's own test naming the habit, or food and
+  weight, is taken — and taken silently, with no note and no nudge, because the founder's
+  decision was that the app stops arguing about these and Help says the line once.
+*/
+test('a person\u2019s own test naming the habit or the body is simply taken', () => {
   for (const s of ['Have one beer and see what happens', 'Skip my evening joint',
-                   'Put a bet on and stop', 'Watch porn once and see']) {
+                   'Put a bet on and stop', 'Watch porn once and see',
+                   'Skip lunch and count calories']) {
     const r = guards.checkTest(s);
-    assert.strictEqual(r.ok, false, s);
-    assert.strictEqual(r.kind, 'habit', s);
-    assert.match(words(r.reason), /the worry underneath/);
+    assert.strictEqual(r.ok, true, 'a person\u2019s own test was refused: ' + s);
+    assert.ok(!r.soft, 'a person\u2019s own test was argued with: ' + s);
   }
+  /* Both refusals are unreachable now and their words stay, so every language keeps the key. */
+  assert.match(words('refusal.habit'), /involves the thing itself/);
+  assert.match(words('refusal.body'), /food, weight/);
 });
 
-test('food, weight and body sensations are refused, with their own reason', () => {
-  const r = guards.checkTest('Skip lunch and count calories');
-  assert.strictEqual(r.kind, 'body');
+/*
+  And the half that did NOT change, which is the more important half to keep. BETR may never
+  PROPOSE one of these: content.js holds the twenty-one stock tests and drop lines to the
+  same three lists, which is the whole reason the lists survive the loosening. If the lists
+  are ever deleted as "dead code", BETR's own content stops being checked and nothing says so.
+*/
+test('the word lists survive, because BETR\u2019s own content is still held to them', () => {
+  assert.ok(guards.HABIT.length > 20 && guards.BODY.length > 10, 'the word lists have been deleted');
+  assert.strictEqual(guards.hit('Have one beer and see what happens', guards.HABIT), 'beer');
+  assert.strictEqual(guards.hit('Skip lunch and count calories', guards.BODY), 'calories');
+  assert.strictEqual(guards.hit('Ask for the fastest option', guards.BODY), null);
+  /* content.js is where they are applied; content.test.js walks the actual list through it. */
+  const src = require('node:fs').readFileSync(require.resolve('../lib/content.js'), 'utf8');
+  assert.match(src, /guards\.hit\(/, 'content.js no longer checks BETR\u2019s own tests at all');
 });
 
 /*
