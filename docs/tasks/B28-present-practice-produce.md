@@ -1,6 +1,7 @@
 # B28: Present · Practice · Produce — the way in, not the engine
 
-**Status:** **Direction chosen by the founder, 2026-09-08. Mockups made; nothing built in `web/`.**
+**Status:** **Scoped into five tasks, 2026-09-08. Build in order: B29 → B30 → B31 → B32 → B33.**
+**Founder, on the mockups: "I love it." And later the same day: "worry" becomes "test" (in B29).**
 The mockups: https://claude.ai/code/artifact/59278217-cc23-4e17-804e-97a917507497 (seven phone
 screens and two notes; the founder can edit the words on them directly)
 **Confidence:** 7/10 in the diagnosis, 5/10 in the shape below — one person's account, and

@@ -13,13 +13,12 @@ its `nginx.conf` byte-identical to the live one; TrybeUP's next nginx deploy can
 BETR's block, and BETR's certificate (**expires 2026-12-02**) is inside the 14-day alarm. Details in
 `learnings.md`. **No engineering task is left in v1 that is not waiting on a person.** What remains:
 
-- **Decided, 2026-09-08, and it comes first: B28, the new way in.** The founder chose the
-  direction the same day it was proposed: **free text is the front door**, an If block and a
-  Then block with suggestions, the habit and body word lists **stop blocking**, and the **only
-  hard stop is self-harm or harm to anyone**. The front screen shows one finished test. Mockups
-  are at https://claude.ai/code/artifact/59278217-cc23-4e17-804e-97a917507497 and the decisions
-  and the build outline are in `docs/tasks/B28-present-practice-produce.md`. **Waiting on the
-  founder's read of the mockups** — and on their pick of the hero example, real or made up.
+- **B28 is scoped and is the whole of the next stretch.** The founder saw the mockups
+  (https://claude.ai/code/artifact/59278217-cc23-4e17-804e-97a917507497), said "I love it", and
+  added one more decision: **"worry" becomes "test"** everywhere a person reads it. Five task
+  files, in build order: **B29** the rules and the word · **B30** the build screen · **B31** the
+  front screen · **B32** the borrow list · **B33** Help and the walk. Every one names the files,
+  the tests that hold the old rule, and what is one line to flip.
 - **Three questions, all yours.** **(d) change the ad, not the app** — all three walkers arrived
   from a post showing somebody at **6/10** and landed on an app at 10, so the honest fix is an ad
   showing a **first** result, 10 → 9; costs no code, best answer in B25, yours and Misha's.
@@ -37,11 +36,12 @@ BETR's block, and BETR's certificate (**expires 2026-12-02**) is inside the 14-d
 
 ## 2. The next action
 
-**Build B28 once the founder has looked at the mockups and said go.** Start by rewriting `CLAUDE.md`
-rules 3, 4 and 10 and scope §2 to what was decided, dated, so nothing gets "restored"; then the
-build screen, then the front screen, then the guards, changing the tests that pin the old rules
-rather than deleting them. If they have not answered: the accessibility sweep of the loop, a
-release condition that needs nobody's permission.
+**Start B29: `docs/tasks/B29-the-rules-and-the-word.md`.** Rewrite `CLAUDE.md` rules 3, 4 and 10
+and scope §2 to what the founder decided, dated; rename *worry* to *test* in `strings-en.js`; flip
+the guard tests that expect a habit word to be refused; regenerate `COPY.md`; keep
+`changing-the-words.md` true. **Do not start B30 until B29 is pushed** — a session building the
+new screens against the old `CLAUDE.md` will fight it. Two open content calls sit inside B31:
+which front-screen example, and whether it is real or an example.
 
 - Walk the six taps with `tools/walk.js` and read the **accessibility tree**, not the pixels: every
   button's accessible name, heading order, `lang`, focus order after each tap, whether the worry
