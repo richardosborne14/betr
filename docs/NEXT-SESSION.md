@@ -106,10 +106,9 @@ links and helplines.
 - **The fold is 785px at 100% and 780px at 125%**; `doors.intro` must stay one line. **Known and
   untouched: at 125% the `do` box clips its own text and *Lock it in* sits under the menu** —
   pre-existing, and now blocking three B36 items.
-- **Chips are exempt from the capital-letter rule**, narrowly and by class. **`rate.keyOf()`
-  keys an own ladder by `id`**, falling back to the sentence only for a pre-B30 ladder (v4
-  migrated no data on purpose). **After editing `web/content/*`, `stop` and `start`** — `open`
-  alone serves a cache.
+- **Chips are exempt from the capital-letter rule**, by class. **`rate.keyOf()` keys an own
+  ladder by `id`**, falling back to the sentence only for a pre-B30 ladder (v4 migrated no data
+  on purpose). **After editing `web/content/*`, `stop` and `start`** — `open` serves a cache.
 - **`HABIT`/`BODY` refuse nothing any more** and still hold BETR's own content — and neither
   catches a checking ritual, which rule 4 also forbids BETR to propose.
 - **Help's order is three decisions and four tests hold it:** crisis, proof, frozen sentence 6,
