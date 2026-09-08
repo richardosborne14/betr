@@ -144,6 +144,10 @@ keep it, and put it wherever the sentence needs it.
 
 > What’s going on?
 
+**`doors.sub`**
+
+> Nothing here gets tested as it is. You take one and change it into yours.
+
 **`doors.own`**
 
 > None of these — I’ll write my own
@@ -162,7 +166,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`pick.sub`**
 
-> Tap the one that’s closest.
+> Tap the one that’s closest. You can change every word of it.
 
 **`pick.own`**
 
@@ -171,62 +175,6 @@ keep it, and put it wherever the sentence needs it.
 **`pick.notHere`**
 
 > Nothing here tests the thing itself, only what you expect to happen without it. That’s the part that gets tested.
-
-### Screen 3a — writing your own worry
-
-*Three screens, one box each.*
-
-**`own.label`**
-
-> Your own
-
-**`own.next`**
-
-> Next
-
-**`own.keep`**
-
-> Keep mine as it is
-
-**`own.beliefSeed`**
-
-> If I 
-
-**`own.belief.title`**
-
-> What do you think will happen?
-
-**`own.belief.sub`**
-
-> Write the version you play out. One sentence.
-
-**`own.belief.placeholder`**
-
-> If I ask for a day off, my boss will think I’m not committed.
-
-**`own.test.title`**
-
-> What will you do?
-
-**`own.test.sub`**
-
-> One thing, today. Small, cheap, and entirely up to you.
-
-**`own.test.placeholder`**
-
-> Ask for Friday off, in one sentence, with no reason given.
-
-**`own.drop.title`**
-
-> What will you leave out?
-
-**`own.drop.sub`**
-
-> The thing you’d normally do to take the edge off it. Leaving it out is what makes it a test.
-
-**`own.drop.placeholder`**
-
-> Don’t explain why. Don’t offer to make the time up.
 
 ### Screen 3a — when BETR says no
 
@@ -267,22 +215,6 @@ keep it, and put it wherever the sentence needs it.
 **`refusal.emptyIf`**
 
 > Say what you’d do differently. It goes after “If I”.
-
-### Screen 3b — "Which of these is it?"
-
-*B20. The screen between the list and the test, where a person says which prediction under the worry is theirs. The three themselves are under THE WORRY LIST; these are the words around them.*
-
-**`belief.sub`**
-
-> Which of these is the bit that actually gets you? Under each one is what you’d be braced for.
-
-**`belief.own`**
-
-> None of these — I’ll put it my own way
-
-**`belief.foot`**
-
-> Pick the one that would sting. A sentence that’s only nearly yours can’t be proved wrong by anything that happens today.
 
 ### Screen 4 — the test
 
@@ -850,6 +782,18 @@ keep it, and put it wherever the sentence needs it.
 
 > Or one of these:
 
+**`build.borrowTitle`**
+
+> Make it yours
+
+**`build.borrowSub`**
+
+> Change any of it. It only counts if it’s the one that would sting.
+
+**`build.borrowChips`**
+
+> Three ways people usually put this. Tap one to fill it in:
+
 **`build.next`**
 
 > What will you do?
@@ -951,7 +895,7 @@ The three a person chooses between, in the order they are shown:
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
 | 1 | If I don’t check tonight, then I’ll miss something that actually needed me. | Something urgent will come in and I’ll have let someone down. |
-| 2 | If someone can’t get hold of me, then they’ll think I’m ignoring them. | There’ll be a short reply in the morning and a bit of an atmosphere. |
+| 2 | If I don’t answer while it’s away, then they’ll think I’m ignoring them. | There’ll be a short reply in the morning and a bit of an atmosphere. |
 | 3 | If I put it away, then I’ll be twitchy all evening and get nothing out of it anyway. | I’ll spend two hours thinking about the phone instead of using them. |
 
 ### 3. A day without checking social media
@@ -1047,7 +991,7 @@ The three a person chooses between, in the order they are shown:
 | --- | --- | --- |
 | 1 | If I rest while there’s still stuff to do, then I’ll feel guilty the whole time. | I’ll sit there thinking about the list and get nothing out of it. |
 | 2 | If I stop now, then I won’t start again today. | The afternoon will go, and tomorrow starts further behind. |
-| 3 | If anyone sees me sitting down, then they’ll think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
+| 3 | If I let somebody see me sitting down, then they’ll think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
 
 ### 8. Paying someone a compliment
 
@@ -1142,7 +1086,7 @@ The three a person chooses between, in the order they are shown:
 | --- | --- | --- |
 | 1 | If I tell someone I’ve been feeling low, then they won’t know what to do with it. | They’ll say something kind, change the subject, and be careful around me after. |
 | 2 | If I say it out loud, then they’ll start worrying about me. | They’ll check up on me, and I’ll wish I’d never said it. |
-| 3 | If they know, then it’s the thing they think of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
+| 3 | If I tell them, then it’s the thing they think of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
 
 ### 13. Telling someone I’m struggling
 

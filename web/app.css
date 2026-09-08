@@ -236,11 +236,17 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
   either half is more than a few words.
 */
 .sentence {
-  display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px;
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 10px;
   width:100%; max-width:560px; margin:0 auto 22px; text-align:start;
   font-family:var(--display); font-weight:800; font-size:clamp(1.375rem,5vw,1.9375rem);
   line-height:1.3; letter-spacing:-.015em;
 }
+/*
+  One half of the sentence: the printed words and the gap that belongs to them, kept together
+  so a wrap never leaves ", then" at the end of one line with its blank on the next. 16ch is
+  the basis rather than a width — two halves fit on one line on a tablet and stack on a phone.
+*/
+.sentence .part { display:flex; flex:1 1 16ch; align-items:baseline; gap:8px; min-width:0; }
 .sentence .fixed { flex:0 0 auto; color:var(--ink-3); }
 .sentence .blank {
   flex:1 1 12ch; min-width:12ch; font:inherit; color:var(--ink);

@@ -115,19 +115,18 @@
   /*
     Scratch state: never persisted, because none of it should survive a reload.
 
-    B30 split `belief` into the two halves a person actually types. `belief` stays beside them
-    because the borrow list fills the blanks from a stock sentence (B32) and because a nudge
-    on the old "put it my own way" box still writes to it.
+    B30 split the belief into the two halves a person actually types. B32 added the last two:
+    `stock` is the id of the item being borrowed from, or null, and it decides two things and
+    nothing else — which suggestions sit under the sentence, and whether locking in keeps that
+    item's ladder. `expect` is the hand-written expectation that came with a stock prediction
+    (B20), cleared the moment the sentence stops being that one.
   */
-  var draft = { ifPart: '', thenPart: '', belief: '', test: '', drop: '' };
+  var draft = blankDraft();
+
+  function blankDraft() {
+    return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '' };
+  }
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
-  /*
-    The last guard NUDGE, which is not a refusal (2026-09-04). A sentence that does not read
-    as a prediction is not sent back any more: the shape that works is shown once, the button
-    becomes "Keep mine as it is", and the second tap takes the person's own words through
-    unchanged. Cleared by go(), like refusal, so it never survives leaving the screen.
-  */
-  var nudge = null;
   var installEvent = null; /* Android's beforeinstallprompt, if the browser offers one */
   var storageOk = true;
   var deleteArmed = false;
@@ -140,13 +139,6 @@
   */
   var whyId = null;
   var whyBack = 'mine';
-  /*
-    B20. The worry a person has tapped but not yet started: they are choosing which of its
-    three "If I ___, then ___" is theirs, or writing their own. Not stored, for the same
-    reason whyId is not — a reload here drops back to the doors rather than adding a field
-    to a person's saved state for a screen they are two taps from anyway.
-  */
-  var pending = null;
   var toSay = null;        /* what the next paint() should read out. Cleared as it is used */
   /* Which worked example this open is showing (B31). Decided once, at the bottom of the file. */
   var shown = 0;
@@ -409,7 +401,6 @@
 
   function go(stage) {
     refusal = null;
-    nudge = null;
     /*
       Leaving the loop puts whatever is in hand down safely: a locked-in test goes to Your
       worries and waits, an unlocked draft is let go. Nothing you promised yourself is ever
@@ -424,7 +415,23 @@
 
   /* A blank sentence and a blank plan. Nothing is carried over from the last one. */
   function newTest() {
-    draft = { ifPart: '', thenPart: '', belief: '', test: '', drop: '' };
+    draft = blankDraft();
+    go('build');
+  }
+
+  /*
+    Borrowing one (B32). The first blank comes from the item's CARD sentence — the loose one
+    that is never itself tested — and the second is left empty, because which prediction is
+    theirs is the one thing only they can say (B20). Its three are the chips underneath, and
+    its plan is already in the boxes on the next screen. All of it editable.
+  */
+  function borrow(f) {
+    if (!f) return;
+    draft = blankDraft();
+    draft.stock = f.id;
+    draft.ifPart = splitBelief(f.belief)[0];
+    draft.test = f.test;
+    draft.drop = f.drop;
     go('build');
   }
 
@@ -509,19 +516,10 @@
     possible, and two devices' waiting lists cannot be put together without one.
   */
   /*
-    `b` is the belief the person chose on the screen after the list — one of the worry's
-    three, or the one they wrote themselves. It carries the expectation with it, because the
-    two are the same prediction said twice and a mismatched pair is how the old single
-    `expect` came to be wrong for so many people (B20).
+    `startFrom` lived here until 2026-09-08. It made a test out of a worry and the prediction
+    somebody picked on the screen after the list; both screens went in B32 and one function,
+    builtTest(), makes both kinds now — see it for why that is one function and not two.
   */
-  function startFrom(f, b) {
-    S.cur = {
-      rid: storeLib.rid(),
-      source: 'stock', id: f.id, label: f.label, belief: b.belief,
-      x: b.expect, test: f.test, drop: f.drop,
-      from: 'belief', editing: false, locked: null, missed: false
-    };
-  }
 
   /* The arrow is decoration and is flipped by the stylesheet in a right-to-left language. */
   function backButton() {
@@ -614,9 +612,13 @@
     var map = {
       start: start, doors: doors, pick: pick,
       build: build, 'build-do': buildDo,
-      belief: beliefScreen, 'belief-own': beliefOwn,
-      /* What a phone that saw the three one-box screens has stored (B30). */
+      /*
+        What a phone that saw one of the five screens B30 and B32 retired has stored. Every
+        one of them was a person part way through writing a test, and the build screen is
+        where that happens now.
+      */
       'own-belief': build, 'own-test': build, 'own-drop': build,
+      belief: build, 'belief-own': build,
       plan: plan, locked: locked, happened: happened, sure: sure,
       result: result, mine: mine, help: help, where: whereScreen, why: whyScreen,
       about: help   /* what a phone that saw the old "what this is" screen has stored */
@@ -625,8 +627,6 @@
     if (IN_LOOP.indexOf(S.stage) !== -1 && !S.cur) S.stage = 'start';
     /* Same for a reload on "Why this one sticks", which knows its worry only in memory. */
     if (S.stage === 'why' && !whyFor(whyId)) S.stage = 'mine';
-    /* And for the two screens between the list and a test, which know theirs the same way. */
-    if ((S.stage === 'belief' || S.stage === 'belief-own') && !pending) S.stage = 'doors';
     (map[S.stage] || start)();
     wireCrisis();
     wireMenu();
@@ -739,7 +739,7 @@
     paint( backButton() +
       '<div class="stage">' +
         head('h2', t('doors.title')) +
-        '<p class="sub">' + esc(DOORS.intro) + '</p>' +
+        '<p class="sub">' + esc(DOORS.intro) + ' ' + esc(t('doors.sub')) + '</p>' +
         '<div class="list">' +
           DOORS.items.map(function (d) {
             /*
@@ -827,98 +827,34 @@
     */
     wireBack('doors');
     /*
-      B20. Tapping a worry no longer starts a test. It opens the one screen between the list
-      and the plan, where the person says which prediction underneath it is actually theirs.
+      B32. Tapping one no longer starts a test, and no longer opens a screen of its own: it
+      opens the build screen with the sentence half written and the plan already in the boxes.
+      A borrowed test is a test of your own with the blanks filled in.
     */
     qa('[data-id]').forEach(function (b) {
-      b.onclick = function () { pending = content.byId(WORRIES, b.getAttribute('data-id')); go('belief'); };
+      b.onclick = function () { borrow(content.byId(WORRIES, b.getAttribute('data-id'))); };
     });
     /* Both of these now open the same blank build screen the front door does. */
     on('#own', newTest);
   }
 
-  /* ---------------------------------------------- which of these is it? (B20) */
-
   /*
-    The screen the whole of B20 exists for.
+    THE TWO SCREENS BETWEEN THE LIST AND THE TEST WENT ON 2026-09-08 (B32).
 
-    A worry is a situation. The thing a behavioural experiment actually tests is the
-    prediction underneath it — and there is more than one prediction under every situation on
-    the list. One sentence per worry had to guess which, and test users read the guess and
-    said it "sort of matches what my worry is, but not really". A prediction that is only
-    nearly yours cannot be disconfirmed by anything that happens, so the loop runs and moves
-    nothing.
+    `beliefScreen` was B20's, and B20's finding stands: a worry is a situation, the thing an
+    experiment tests is the prediction underneath it, and there is more than one under every
+    situation — so the person says which of three is theirs, because a prediction that is only
+    nearly yours cannot be disconfirmed by anything that happens. `beliefOwn` was the fourth
+    option on it, a box for putting it their own way.
 
-    So the three are the common ones and the person says which is theirs, in one tap, with
-    what they are braced for written under each so the choice is between two things they can
-    feel rather than two sentences they have to parse. It is the same shape as the pick list
-    and the doors, deliberately: three screens in a row that a person reads the same way.
+    Neither is deleted so much as MOVED. The three predictions are a row of suggestion chips
+    under the sentence on the build screen, and "my own way" is what the build screen IS: two
+    blanks a person types into. The hand-written `expect` still travels with a prediction that
+    is taken word for word — see builtTest().
 
-    "I'll put it my own way" keeps everything else about the worry — the label it is filed
-    under, the test, the thing to leave out, the explanation behind "Why this one sticks" —
-    and replaces only the sentence being tested. It goes through the same guard a fully
-    custom belief does, because it is one.
+    What it cost: two taps came off the borrow road, and six taps to a locked-in test is four
+    again. Do not "restore" the screens; the founder was shown this shape and chose it.
   */
-  function beliefScreen() {
-    var f = pending;
-    paint( backButton() +
-      '<div class="stage">' +
-        worryHead(f.label, '', true) +
-        '<p class="sub tight">' + esc(t('belief.sub')) + '</p>' +
-        '<div class="list">' +
-          f.beliefs.map(function (b, i) {
-            return '<button data-b="' + i + '"><span>' + esc(b.belief) +
-              '<span class="under">' + esc(b.expect) + '</span></span>' +
-              '<span class="go arrow" aria-hidden="true">\u2192</span></button>';
-          }).join('') +
-          '<button class="own" id="own"><span>' + esc(t('belief.own')) + '</span>' +
-          '<span class="go arrow" aria-hidden="true">\u2192</span></button>' +
-        '</div>' +
-        '<p class="tiny">' + esc(t('belief.foot')) + '</p>' +
-      '</div>');
-    wireBack('pick');
-    qa('[data-b]').forEach(function (btn) {
-      btn.onclick = function () {
-        startFrom(f, f.beliefs[Number(btn.getAttribute('data-b'))]);
-        go('plan');
-      };
-    });
-    /* The box opens with the opening of a conditional in it, in their language. */
-    on('#own', function () { draft.belief = t('own.beliefSeed'); go('belief-own'); });
-  }
-
-  /*
-    Their own sentence, for a worry that is still ours. One box, the same words and the same
-    guard as the first screen of a fully custom entry — a verdict is reframed here too, and
-    "If I ___" is still the only shape that goes through. The placeholder is the worry's own
-    general sentence, because the nearest thing to what they want to write is already written.
-  */
-  function beliefOwn() {
-    var f = pending;
-    ownScreen({
-      back: 'belief',
-      before: worryHead(f.label, '', false),
-      title: t('own.belief.title'),
-      sub: t('own.belief.sub'),
-      /*
-        B27 item 2, 2026-09-04. `own.belief.only` was written for the blank box and rendered
-        only there, and this is the other box a person can type a worry into — four taps from
-        cold, and the one a test user actually took. The worry above is ours, so the frame is
-        arguably already set; arguable is not a reason for the boundary to be on one of the
-        two screens where somebody writes their own sentence. loop.test.js asserts both.
-      */
-      foot: t('build.only'),
-      placeholder: f.belief,
-      value: draft.belief,
-      next: function (v) {
-        draft.belief = v;
-        takeBelief(v, function () {
-          startFrom(f, { belief: v.trim(), expect: guards.expectationFrom(v) });
-          go('plan');
-        });
-      }
-    });
-  }
 
   /* ---------------------------------------------- the build screen (B30) */
 
@@ -951,12 +887,20 @@
     does not yet know what to say.
   */
 
-  /* The stored sentence is assembled from the same two fragments the screen prints. */
+  /*
+    The stored sentence, assembled from the same two fragments the screen prints.
+
+    The one wrinkle is the apostrophe: "If I" plus "'m not reachable for an evening" is one
+    word, not two, and half the stock sentences are written that way. So the space between
+    them is dropped when the first blank opens with an apostrophe or a comma — which is also
+    what a person gets if they type it that way themselves.
+  */
   function sentenceOf(ifPart, thenPart) {
     var a = String(ifPart || '').trim().replace(/[.,;]+$/, '');
     var b = String(thenPart || '').trim();
     if (!a && !b) return '';
-    var out = t('build.ifWord') + ' ' + a + t('build.thenWord') + ' ' + b;
+    var glue = /^[\u2019\u0027,]/.test(a) ? '' : ' ';
+    var out = t('build.ifWord') + glue + a + t('build.thenWord') + ' ' + b;
     return /[.!?]$/.test(out) ? out : out + '.';
   }
 
@@ -984,6 +928,22 @@
   function chipsFor(which, ifPart) {
     var start = startFor(ifPart);
     return (start && start[which]) || STARTS.general[which] || [];
+  }
+
+  /* The item being borrowed from, or null (B32). */
+  function borrowed() {
+    return draft.stock ? content.byId(WORRIES, draft.stock) : null;
+  }
+
+  /*
+    A stock "If I ___, then ___" taken apart into the two things a person would have typed.
+    Every one is held to that shape by lib/content.js, and content.test.js proves each splits
+    cleanly, so a prefill can never land half a sentence in a blank.
+  */
+  function splitBelief(said) {
+    var m = String(said || '').trim().match(/^If\s+I([\s\S]*?),\s*then\s+([\s\S]*)$/i);
+    if (!m) return [String(said || '').trim(), ''];
+    return [m[1].trim(), m[2].trim().replace(/\.$/, '')];
   }
 
   /*
@@ -1021,23 +981,40 @@
   }
 
   function build() {
+    var f = borrowed();
     var ifChips = STARTS.items.map(function (it) { return it.if; });
     paint( backButton() +
       '<div class="stage">' +
-        head('h2', t('build.title')) +
-        '<p class="sub tight">' + esc(t('build.sub')) + '</p>' +
+        (f ? worryHead(f.label, '', false) : '') +
+        head('h2', f ? t('build.borrowTitle') : t('build.title')) +
+        '<p class="sub tight">' + esc(f ? t('build.borrowSub') : t('build.sub')) + '</p>' +
         warnBlock() +
+        /*
+          Two halves, each a printed fragment and the gap after it. They are wrapped in a
+          group each so that the words stay with their own blank when the sentence runs onto
+          two lines, which on a 390px phone it always does — before this, ", then" was left
+          stranded at the end of the first line with its blank underneath.
+        */
         '<p class="sentence">' +
-          '<span class="fixed">' + esc(t('build.ifWord')) + '</span> ' +
-          blank('if', t('build.ifLabel'), t('build.ifPlaceholder'), draft.ifPart) +
-          '<span class="fixed">' + esc(t('build.thenWord')) + '</span> ' +
-          blank('then', t('build.thenLabel'), t('build.thenPlaceholder'), draft.thenPart) +
+          '<span class="part"><span class="fixed">' + esc(t('build.ifWord')) + '</span>' +
+            blank('if', t('build.ifLabel'), t('build.ifPlaceholder'), draft.ifPart) + '</span>' +
+          '<span class="part"><span class="fixed">' + esc(t('build.thenWord')) + '</span>' +
+            blank('then', t('build.thenLabel'), t('build.thenPlaceholder'), draft.thenPart) + '</span>' +
         '</p>' +
         '<button class="big wide" id="next">' + esc(t('build.next')) + '</button>' +
-        /* One row at a time: the blank that has focus, and only while it is still empty. */
-        chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
-        chipRow(t('build.thenChips'), chipsFor('thens', draft.ifPart), 'data-then',
-          !draft.ifPart.trim() || !!draft.thenPart.trim()) +
+        /*
+          B32, and it is what B20's screen became. A borrowed item carries three predictions
+          and the person says which is theirs — but each of the three is a whole sentence with
+          its OWN two halves, not three endings to one beginning. So a chip shows the whole
+          sentence and fills both blanks. Anything else would weld the card's beginning to
+          another prediction's ending and produce a sentence nobody wrote.
+        */
+        (f ? chipRow(t('build.borrowChips'),
+              f.beliefs.map(function (b) { return b.belief; }), 'data-b', false)
+           /* One row at a time: the blank that has focus, and only while it is still empty. */
+           : chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
+             chipRow(t('build.thenChips'), chipsFor('thens', draft.ifPart), 'data-then',
+               !draft.ifPart.trim() || !!draft.thenPart.trim())) +
         /* Last, and small. A rule read before you have written anything is about somebody else. */
         '<p class="tiny">' + esc(t('build.only')) + '</p>' +
       '</div>');
@@ -1078,6 +1055,23 @@
       b.onclick = function () {
         readBlanks();
         draft.thenPart = chipsFor('thens', draft.ifPart)[Number(b.getAttribute('data-then'))];
+        draft.expect = '';
+        refusal = null;
+        render();
+      };
+    });
+    /*
+      One of the borrowed item's three. It fills both halves, and it carries the hand-written
+      expectation written to go with it (B20) — what you would be braced for, which is not the
+      same words as the prediction and is better than anything derived from it.
+    */
+    qa('[data-b]').forEach(function (btn) {
+      btn.onclick = function () {
+        var b = f.beliefs[Number(btn.getAttribute('data-b'))];
+        var halves = splitBelief(b.belief);
+        draft.ifPart = halves[0];
+        draft.thenPart = halves[1];
+        draft.expect = b.expect;
         refusal = null;
         render();
       };
@@ -1138,9 +1132,16 @@
   */
   function buildDo() {
     var said = sentenceOf(draft.ifPart, draft.thenPart);
+    var f = borrowed();
     paint( backButton() +
       '<div class="stage">' +
-        worryHead('', said, false) +
+        /*
+          Rule 10 as amended by B20: from the moment a sentence is chosen to the result, every
+          screen says which test it belongs to, in the same words in the same place. A
+          borrowed one has a label as well as the sentence; one built from nothing has only
+          the sentence, and the sentence is its name (B30).
+        */
+        worryHead(f ? f.label : '', said, false) +
         head('h2', t('build.doTitle')) +
         '<p class="sub tight">' + esc(t('build.doSub')) + '</p>' +
         warnBlock() +
@@ -1195,26 +1196,49 @@
         var two = guards.checkTest(draft.drop);
         if (!two.ok) { refuse(two); return; }
       }
-      lockIn(startOwn());
+      lockIn(builtTest());
     });
   }
 
   /*
-    A test a person built. `id` is its own, made once and kept — rate.keyOf() groups an own
-    ladder by it, so fixing a typo in the sentence tomorrow does not look like losing your
-    history. Before B30 an own ladder was keyed by the sentence itself and that is exactly
-    what happened; on a side path it was a wrinkle, on the main road it is a bug.
+    The test about to be locked in, built from whatever is in the draft.
+
+    TWO KINDS COME OUT OF ONE SCREEN, and which one is decided by the WORDS rather than by
+    where they came from (B32). If somebody borrowed an item and locked in one of its three
+    predictions word for word, this is that item: same `id`, same label, so rate.keyOf() hands
+    them back the ladder they already had. Change so much as the first blank and it is their
+    own test with an id of its own — and the borrowed item's card stays exactly where it was
+    on Your tests, ladder untouched. That is the one place a person could feel they had lost
+    one, which is why the card must still be there; `loop.test.js` proves it.
+
+    `id` on an own test is its own, made once and kept: rate.keyOf() groups an own ladder by
+    it, so fixing a typo tomorrow does not look like losing your history (B30).
   */
-  function startOwn() {
+  function builtTest() {
     var said = sentenceOf(draft.ifPart, draft.thenPart);
+    var f = borrowed();
+    var same = f ? sameAsStock(f, said) : null;
     return {
       rid: storeLib.rid(),
-      source: 'own', id: storeLib.rid(), label: null,
+      source: same ? 'stock' : 'own',
+      id: same ? f.id : storeLib.rid(),
+      label: same ? f.label : null,
       ifPart: draft.ifPart.trim(), thenPart: draft.thenPart.trim(),
-      belief: said, x: guards.expectationFrom(said),
+      belief: same ? same.belief : said,
+      /* B20's hand-written expectation, where the sentence is still B20's sentence. */
+      x: same ? same.expect : guards.expectationFrom(said),
       test: draft.test.trim(), drop: draft.drop.trim(),
       from: 'build-do', editing: false, locked: null, missed: false
     };
+  }
+
+  /* Which of a borrowed item's three this is, word for word, or null if it is theirs now. */
+  function sameAsStock(f, said) {
+    var want = flat(said);
+    for (var i = 0; i < f.beliefs.length; i++) {
+      if (flat(f.beliefs[i].belief) === want) return f.beliefs[i];
+    }
+    return null;
   }
 
   /* Lock in and go. The same two lines the plan screen's button runs, in one place. */
@@ -1241,85 +1265,37 @@
   }
 
   /*
-    A nudge, which is the opposite of a refusal in every way that matters: the person's words
-    are still in the box, the button still goes forward, and the note says what usually works
-    rather than what is wrong. It uses the quiet style, not the warning one.
+  /*
+    THE NUDGE WENT ON 2026-09-08 (B32). It was the answer to a sentence that did not read as a
+    prediction: show the shape that works once, and let the person's own words through on the
+    next tap. The build screen prints "If I" and ", then" either side of the blanks, so a
+    sentence that is not a prediction cannot be made there, and there is nothing left to ask
+    about. `guards.checkBelief` still returns it and `guards.test.js` still proves it fires;
+    nothing in the app reads it, which is the standing the two shape refusals have had since
+    the day the nudge replaced them.
   */
-  function nudgeBlock() {
-    if (!nudge) return '';
-    return '<p class="note">' + esc(t(nudge.soft)) + '</p>';
-  }
 
   /* A refusal is read out, because focus goes to the heading and the heading has not changed. */
   function refuse(check) {
     refusal = check;
-    nudge = null;
     say(t(check.reason));
     render();
   }
 
-  /* Read out for the same reason, and it has to say the button changed under them. */
-  function ask(check) {
-    nudge = check;
-    refusal = null;
-    say(t(check.soft) + ' ' + t('own.keep') + '.');
-    render();
-  }
-
   /*
-    One box, one question, one button. `foot` is the quiet line under it and `next` gets the
-    words; the button's label is the only thing a nudge changes, because a person who has been
-    asked once and meant it should be able to see that tapping again goes through.
-  */
-  function ownScreen(opts) {
-    paint( backButton() +
-      '<div class="stage">' +
-        (opts.before || '') +
-        head('h2', opts.title) +
-        '<p class="sub tight">' + esc(opts.sub) + '</p>' +
-        warnBlock() +
-        nudgeBlock() +
-        '<textarea id="t" class="short" aria-labelledby="top" placeholder="' +
-          esc(opts.placeholder) + '">' + esc(opts.value) + '</textarea>' +
-        '<button class="big wide" id="next">' +
-          esc(nudge ? t('own.keep') : t('own.next')) + '</button>' +
-        (opts.foot ? '<p class="tiny">' + esc(opts.foot) + '</p>' : '') +
-      '</div>');
-    wireBack(opts.back);
-    var box = q('#t');
-    box.focus();
-    box.setSelectionRange(box.value.length, box.value.length);
-    on('#next', function () { opts.next(box.value); });
-  }
+    ONE BOX, ONE QUESTION, ONE BUTTON — the shape `ownScreen` drew, and `takeBelief` decided
+    what to do with what was typed. Both went on 2026-09-08 (B32) along with `ask`, the five
+    screens that used them, and the nudge. What survives is the deciding, in lib/guards.js,
+    where it always lived and where guards.test.js still proves every branch fires.
 
-  /*
-    What both belief boxes do with what was typed. A hard refusal sends it back; a soft one
-    asks, once — and if the person taps again with the same shape it goes through, which is
-    the whole point of it being a question rather than a wall.
-  */
-  function takeBelief(v, onward) {
-    var asked = nudge;
-    var check = guards.checkBelief(v);
-    if (!check.ok) { refuse(check); return; }
-    if (check.soft && !asked) { ask(check); return; }
-    nudge = null;
-    refusal = null;
-    onward(v);
-  }
+    Above them, until 2026-09-08, were `ownBelief`, `ownTest` and `ownDrop`: one question each,
+    in a row — what do you think will happen, what will you do, what will you leave out. They
+    were the last button on the third screen of the stock road, labelled as a failure to find a
+    match, and the founder's B28 note is that nobody ever got that far. build() and buildDo()
+    are the same three questions with the first two drawn as one sentence, at the front door.
 
-  /*
-    THE THREE ONE-BOX SCREENS THAT USED TO BE HERE WENT ON 2026-09-08 (B30).
-
-    `ownBelief`, `ownTest` and `ownDrop` asked one question each, in a row: what do you think
-    will happen, what will you do, what will you leave out. They were the last button on the
-    third screen of the stock road, labelled as a failure to find a match, and the founder's
-    B28 note is that nobody ever got that far. build() and buildDo() are the same three
-    questions with the first two drawn as one sentence, at the front door.
-
-    A phone that still has one of their stage names stored lands on build() — see render().
-
-    What is left of the old shape is `ownScreen` and `takeBelief` just above, which "I'll put
-    it my own way" under a borrowed test still uses. B32 is where that goes.
+    A phone that still has one of the five retired stage names stored lands on build(), which
+    is where a person part way through writing a test belongs — see render().
   */
 
   /* ---------------------------------------------------------------- the loop */

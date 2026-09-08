@@ -61,6 +61,19 @@
   The order of this array is the same rule applied to the whole list, and is only ever seen
   if a person reaches the pick screen without going through a door.
 
+  EVERY BELIEF HERE STARTS "If I", AND SINCE 2026-09-08 THAT IS STRUCTURAL, not a habit. The
+  build screen (B30) prints the words "If I" and ", then" either side of two blanks, and the
+  borrow list (B32) fills those blanks from these sentences — so a sentence that does not start
+  "If I" cannot be put on that screen at all. web/lib/content.js fails the build on one.
+
+  Three were reworded that day for exactly that reason, and all three moved from a situation
+  happening TO the person to an action the person takes, which is the shape a behavioural
+  experiment actually tests: `phone` belief 1 ("If someone can't get hold of me" → "If I don't
+  answer while it's away"), `rest` belief 2 ("If anyone sees me sitting down" → "If I let
+  somebody see me sitting down"), `low` belief 0 ("If they know" → "If I tell them"). The
+  prediction underneath each is unchanged. THE PAID CBT REVIEWER SHOULD READ THESE THREE
+  ALONGSIDE THE REST; they are the only sentences in this file a session has rewritten since B1.
+
   `cut` (Saying I'm cutting back) was deleted on 2026-09-03 at the founder's call. Its id is
   retired, not reused, and its explanation went with it.
 
@@ -109,7 +122,7 @@ var BETR_WORRIES = [
         expect: 'Something urgent will come in and I’ll have let someone down.'
       },
       {
-        belief: 'If someone can’t get hold of me, then they’ll think I’m ignoring them.',
+        belief: 'If I don’t answer while it’s away, then they’ll think I’m ignoring them.',
         expect: 'There’ll be a short reply in the morning and a bit of an atmosphere.'
       },
       {
@@ -232,7 +245,7 @@ var BETR_WORRIES = [
         expect: 'The afternoon will go, and tomorrow starts further behind.'
       },
       {
-        belief: 'If anyone sees me sitting down, then they’ll think I’m not pulling my weight.',
+        belief: 'If I let somebody see me sitting down, then they’ll think I’m not pulling my weight.',
         expect: 'Somebody will make a comment about it, and it’ll stick.'
       }
     ],
@@ -358,7 +371,7 @@ var BETR_WORRIES = [
         expect: 'They’ll check up on me, and I’ll wish I’d never said it.'
       },
       {
-        belief: 'If they know, then it’s the thing they think of every time they see me.',
+        belief: 'If I tell them, then it’s the thing they think of every time they see me.',
         expect: 'I’ll be the one who isn’t doing well, and that’s what I’ll stay.'
       }
     ],

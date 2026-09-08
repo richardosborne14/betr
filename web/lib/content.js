@@ -106,9 +106,7 @@
       if (seen[f.id]) problems.push(where + ' reuses the id "' + f.id + '"');
       seen[f.id] = true;
 
-      if (typeof f.belief === 'string' && !/^if\b/i.test(f.belief.trim())) {
-        problems.push(where + ' belief does not start with "If"');
-      }
+      if (typeof f.belief === 'string') splits(f.belief, where + ' belief', problems);
 
       if (LANES.indexOf(f.lane) === -1) {
         problems.push(where + ' lane "' + f.lane + '" is not one of: ' + LANES.join(', '));
@@ -149,6 +147,33 @@
     different words are one belief and a wasted tap, which is an easy thing to write by
     accident and an invisible thing to read back.
   */
+  /*
+    B32, 2026-09-08, and it stopped being a style rule that day.
+
+    Every sentence here is drawn on the build screen, which PRINTS the words "If I" and
+    ", then" either side of two blanks and fills those blanks by taking the sentence apart
+    (app.js splitBelief). A sentence that does not come apart cleanly puts half of itself in
+    one blank and nothing in the other, and a person is handed a broken sentence to test.
+
+    So: it starts "If I", it has a ", then", and both halves have words in them. Three
+    sentences in worries.js were reworded on the day this rule arrived — see the note at the
+    top of that file, which names them for the CBT reviewer.
+  */
+  function splits(said, at, problems) {
+    var s = String(said || '').trim();
+    if (!/^If\s+I\b/i.test(s)) {
+      problems.push(at + ' does not start with "If I", so the build screen cannot draw it: "' + s + '"');
+      return;
+    }
+    var m = s.match(/^If\s+I([\s\S]*?),\s*then\s+([\s\S]*)$/i);
+    if (!m) {
+      problems.push(at + ' has no ", then", so it is not a prediction: "' + s + '"');
+      return;
+    }
+    if (!m[1].trim()) problems.push(at + ' has nothing between "If I" and ", then": "' + s + '"');
+    if (!m[2].trim().replace(/\.$/, '')) problems.push(at + ' says nothing after ", then": "' + s + '"');
+  }
+
   function checkBeliefs(f, where, problems) {
     if (!Array.isArray(f.beliefs)) {
       problems.push(where + ' has no beliefs to choose from');
@@ -173,8 +198,7 @@
       });
       if (typeof b.belief !== 'string') return;
 
-      if (!/^if\b/i.test(b.belief.trim())) problems.push(at + ' does not start with "If"');
-      if (!/\bthen\b/i.test(b.belief)) problems.push(at + ' has no "then", so it is not a prediction');
+      splits(b.belief, at, problems);
 
       var flat = b.belief.toLowerCase().replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim();
       if (seen[flat] !== undefined) problems.push(at + ' says the same thing as belief ' + seen[flat]);

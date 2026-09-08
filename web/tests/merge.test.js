@@ -238,7 +238,7 @@ test('and the app itself continues an old phone’s ladder from where it was', (
 
 test('every result the app writes has its own id and the word that was tapped', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   a.tap('#again').tap('#lock').tap('#done');
   a.type('#o', 'Nobody minded.').tap('#next').tap('[data-key]', 2);
@@ -256,9 +256,9 @@ test('every result the app writes has its own id and the word that was tapped', 
 
 test('a test locked in and finished later is one thing with one id all the way through', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
   /* leave it waiting and go and start something else, which is what B8 made possible */
-  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0);
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#next');
   const waiting = JSON.parse(a.mem['betr.v1']).open;
   assert.strictEqual(waiting.length, 1);
   const id = waiting[0].rid;
@@ -274,9 +274,9 @@ test('a test locked in and finished later is one thing with one id all the way t
 
 test('two waiting tests at once have two different ids', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
-  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#lock');
-  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 1).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#next').tap('#lock');
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 1).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
   a.tap('#m-mine');
   const open = JSON.parse(a.mem['betr.v1']).open;
   assert.strictEqual(open.length, 3);
@@ -285,7 +285,7 @@ test('two waiting tests at once have two different ids', () => {
 
 test('testing the same worry again is a new id, not the old result’s', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#done');
   a.type('#o', 'Fine.').tap('#next').tap('[data-key]', 1);
   a.tap('#again');
   const s = JSON.parse(a.mem['betr.v1']);
@@ -305,7 +305,7 @@ test('ids do not repeat, in a browser with crypto and in one without', () => {
 
 test('an exported file carries the id and the tapped word, so two of them can be joined', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   a.tap('#m-help').tap('#export');
 
@@ -322,7 +322,7 @@ test('an exported file carries the id and the tapped word, so two of them can be
 
 test('a waiting test in an export has an id too', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
   a.tap('#m-help').tap('#export');
   const out = JSON.parse(a.valueOf('#dump'));
   assert.strictEqual(out.waiting.length, 1);

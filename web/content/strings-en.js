@@ -132,9 +132,15 @@ var BETR_STRINGS_EN = {
 
     /* ------------------------------------------------------------------ the second door */
 
+    /*
+      B32, 2026-09-08. The doors and the list behind them stopped being the way in and became
+      things to BORROW, one tap aside from the front screen. `sub` is the line that says so,
+      and `own` no longer reads as a failure to find a match — a person's own words are the
+      front door now, and this is the side road, not the other way round.
+    */
     doors: {
       title: 'What’s going on?',
-      /* Nobody is in all six, and the way out of the screen is the way out of a door. */
+      sub: 'Nothing here gets tested as it is. You take one and change it into yours.',
       own: 'None of these — I’ll write my own',
       foot: 'None of these is a diagnosis, and BETR never decides which one you are.'
     },
@@ -143,29 +149,20 @@ var BETR_STRINGS_EN = {
 
     pick: {
       title: 'Which one?',
-      sub: 'Tap the one that’s closest.',
+      sub: 'Tap the one that’s closest. You can change every word of it.',
       own: 'Something else',
       notHere: 'Nothing here tests the thing itself, only what you expect to happen without ' +
         'it. That’s the part that gets tested.'
     },
 
-    /* ------------------------------------------------- which of these is it? (B20) */
-
     /*
-      The screen between the list and the test. The worry's label is the heading, so these
-      three lines are all the words around it: the three predictions themselves are in
-      content/worries.js, because they are the product and not the interface.
-
-      `sub` has one job and it is a hard one — to say "these are three different worries, not
-      three ways of saying one" in a line and a half, to somebody who has tapped once and
-      wants to get on with it. `foot` is why the choice matters at all, and it is the only
-      place in BETR that explains what makes an experiment work, in a sentence.
+      THE `belief` BLOCK WENT ON 2026-09-08 (B32). It was the words around B20's screen —
+      which of these three is it, and what you would be braced for under each. That screen is
+      the build screen now and the three are a row of suggestion chips on it, so nothing reads
+      these keys any more. B20's finding is untouched: a prediction that is only nearly yours
+      cannot be disconfirmed by anything that happens, so the person still says which of the
+      three is theirs — in one tap, on the screen where the sentence is being written.
     */
-    belief: {
-      sub: 'Which of these is the bit that actually gets you? Under each one is what you’d be braced for.',
-      own: 'None of these — I’ll put it my own way',
-      foot: 'Pick the one that would sting. A sentence that’s only nearly yours can’t be proved wrong by anything that happens today.'
-    },
 
     /* ------------------------------------------------- the build screen (B30) */
 
@@ -197,6 +194,18 @@ var BETR_STRINGS_EN = {
       thenPlaceholder: 'they’ll think I’m being difficult',
       ifChips: 'Or start from one of these:',
       thenChips: 'Or one of these:',
+      /*
+        B32. The same screen, opened from the borrow list with the sentence half filled in.
+        The heading changes because the job has: you are not starting from nothing, you are
+        turning somebody else's words into yours, and "Set up a test" would hide that.
+      */
+      borrowTitle: 'Make it yours',
+      borrowSub: 'Change any of it. It only counts if it’s the one that would sting.',
+      /*
+        B20's three, now a row of suggestions instead of a screen of their own. Each of them
+        is a whole sentence and fills both blanks, so the line says so.
+      */
+      borrowChips: 'Three ways people usually put this. Tap one to fill it in:',
       next: 'What will you do?',
       /* The second half. The sentence is above it, in the quiet strip, unchanged. */
       doTitle: 'What will you do today?',
@@ -228,36 +237,13 @@ var BETR_STRINGS_EN = {
       only: 'Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.'
     },
 
-    /* ------------------------------------------------------- a person's own entry */
-
-    own: {
-      label: 'Your own',
-      next: 'Next',
-      /* The second tap on a nudged sentence. Their words go through unchanged. */
-      keep: 'Keep mine as it is',
-      /* Already in the box when it opens: the opening half of a conditional, not a hint. */
-      beliefSeed: 'If I ',
-      belief: {
-        title: 'What do you think will happen?',
-        /*
-          "Write the version you play out" is the front screen's sentence arriving where it is
-          actionable. It also asks for the right thing clinically: the prediction has to be the
-          feared one, specific enough to be checked (research §2.3), not a tidy summary.
-        */
-        sub: 'Write the version you play out. One sentence.',
-        placeholder: 'If I ask for a day off, my boss will think I’m not committed.'
-      },
-      test: {
-        title: 'What will you do?',
-        sub: 'One thing, today. Small, cheap, and entirely up to you.',
-        placeholder: 'Ask for Friday off, in one sentence, with no reason given.'
-      },
-      drop: {
-        title: 'What will you leave out?',
-        sub: 'The thing you’d normally do to take the edge off it. Leaving it out is what makes it a test.',
-        placeholder: 'Don’t explain why. Don’t offer to make the time up.'
-      }
-    },
+    /*
+      THE `own` BLOCK WENT WITH IT. It was the three one-box screens and the nudge: "What do
+      you think will happen?", "What will you do?", "What will you leave out?", and "Keep mine
+      as it is". All of it is `build.*` above now, on two screens instead of five, and
+      `own.belief.only` became `build.only` in B30 — it is the one line that had a job left,
+      and it is on the screen a person actually writes one on.
+    */
 
     /*
       The refusals. lib/guards.js decides, this file says it — so the guard has no words in

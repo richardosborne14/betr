@@ -24,30 +24,38 @@ const { boot } = require('./harness.js');
 
 const en = require('../content/strings-en.js');
 
+/* The borrow road as far as the plan being in the box, which is where five screens start. */
+const borrowed = (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0)
+  .tap('[data-b]', 0).tap('#next');
+const done = (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
+  .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
+
 /* Every screen there is, and the taps that get to it from a fresh start. */
 const SCREENS = {
   start: (a) => a,
   doors: (a) => a.tap('#not-sure'),
   pick: (a) => a.tap('#not-sure').tap('[data-door]', 0),
-  /* B20: the two screens between the list and a test, where the person says which one it is */
-  belief: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0),
-  'belief-own': (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own'),
   /* B30: the way in, and the two halves of it */
   build: (a) => a.tap('#m-new'),
   'build-do': (a) => a.tap('#m-new')
     .type('#if', 'say no without giving a reason')
     .type('#then', 'they’ll think I’m being difficult').tap('#next'),
-  plan: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0),
-  locked: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock'),
-  happened: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done'),
-  sure: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done')
+  /* B32: the same two screens, opened from the borrow list with the blanks filled */
+  borrow: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0),
+  /*
+    The loop, from the borrow road. `borrowed` is that road as far as Lock it in; `plan` is
+    NOT on it any more — since B30 the build screen goes straight to locked, and the plan
+    screen is what a REPEAT lands on, which is the one moment adjusting the expectation is
+    worth a screen of its own.
+  */
+  locked: (a) => borrowed(a).tap('#lock'),
+  happened: (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done'),
+  sure: (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
     .type('#o', 'He said fair enough.').tap('#next'),
-  result: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done')
-    .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1),
-  mine: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done')
-    .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1).tap('#m-mine'),
-  why: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done')
-    .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1).tap('[data-why]'),
+  result: (a) => done(a),
+  plan: (a) => done(a).tap('#again'),
+  mine: (a) => done(a).tap('#m-mine'),
+  why: (a) => done(a).tap('[data-why]'),
   help: (a) => a.tap('#m-help'),
   where: (a) => a.tap('#m-help').tap('#where')
 };
@@ -62,7 +70,11 @@ test('every screen has one heading, and focus lands on it when the screen change
     assert.match(a.html(), /<h[123][^>]*id="top" tabindex="-1"/,
       name + '’s landing point is not a heading that can take focus');
     /* the two screens that are a box to type in take the box instead, and name it — below */
-    const wanted = { 'belief-own': 't', build: 'if', 'build-do': 'do', happened: 'o' }[name] || 'top';
+    /*
+      B32: the borrow road arrives with the first blank already filled, so focus goes to the
+      second — the one thing only the person can say (B20).
+    */
+    const wanted = { build: 'if', borrow: 'then', 'build-do': 'do', happened: 'o' }[name] || 'top';
     assert.strictEqual(a.focusedId(), wanted, 'focus did not move on the way to ' + name);
   }
 });
@@ -126,10 +138,10 @@ test('a refusal is read out, because the heading has not changed', () => {
   b.type('#do', 'See how long I can go without wanting to hurt myself').tap('#lock');
   assert.strictEqual(b.said(), en.s.refusal.harm);
 
-  /* The verdict guard is unreachable by shape now, and still fires on a bare sentence. */
-  const c = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
-  c.type('#t', 'I am a waste of space').tap('#next');
-  assert.strictEqual(c.said(), en.s.refusal.verdict);
+  /* And a blank that is empty on the borrow road, where the first one arrives filled in. */
+  const c = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  c.tap('#next');
+  assert.strictEqual(c.said(), en.s.refusal.emptyBelief);
 });
 
 test('the result screen is read as a sentence, because a shape is not readable', () => {
@@ -164,7 +176,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
     if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
     a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   };
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0);
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
   loop('He said fair enough.', 1);          /* 10 -> 9 */
   a.tap('#again');
   loop('Nobody minded.', 2);                 /* 9 -> 6 */
@@ -191,7 +203,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
 
 test('a bad day is said as a rise, not as a failure', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He went quiet.').tap('#next').tap('[data-key]', 2);       /* 10 -> 7 */
   a.tap('#again').tap('#lock').tap('#done').type('#o', 'He brought it up again.').tap('#next');
   a.tap('[data-key]', 4);                                                 /* 7 -> 8 */
@@ -226,7 +238,7 @@ test('the one accessible name in the app says BETR, and the arrows say nothing',
   let h = a.html();
   h += a.tap('#not-sure').html();
   h += a.tap('[data-door]', 0).html();
-  h += a.tap('[data-id]', 0).tap('[data-b]', 0).html();
+  h += a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
   h += a.tap('#m-help').html();
 
   assert.match(h, /<nav class="menu" aria-label="BETR">/);
@@ -241,9 +253,14 @@ test('the one accessible name in the app says BETR, and the arrows say nothing',
 test('every box a person types into has a name', () => {
   const a = boot();
   let h = SCREENS['build-do'](boot()).html();
-  h += SCREENS['belief-own'](boot()).html();
+  h += SCREENS.borrow(boot()).html();
   h += SCREENS.happened(boot()).html();
-  h += a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#xedit').html();
+  /* the one box left on the plan screen, which is now only reached by repeating a test */
+  const r = boot();
+  r.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  r.type('#do', 'Put it in a drawer from eight.').tap('#lock').tap('#nothanks').tap('#done');
+  r.type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 1);
+  h += r.tap('#again').tap('#xedit').html();
   h += boot().tap('#m-help').tap('#export').html();
 
   h += SCREENS.build(boot()).html();

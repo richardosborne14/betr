@@ -50,10 +50,15 @@ test('a full loop, from the start screen to a result', () => {
     the test. What the plan screen has to carry is the worry's own label and the exact
     sentence that was chosen, because that is what a person checks they are still inside.
   */
+  /*
+    B32. Tapping one opens the build screen with the sentence half written and its three
+    predictions as chips; tapping one of those fills both blanks. What has to carry from here
+    to the result is the label it is filed under and the exact sentence being tested.
+  */
   a.tap('[data-id]', 0).shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
-  a.tap('[data-b]', 0).shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
-  a.shows(firstBehind(0).test).shows('I’ll do it today');
-  a.shows('That’s the bit that makes it count');
+  a.tap('[data-b]', 0).tap('#next').shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
+  a.shows(firstBehind(0).test).shows(en.s.build.lock);
+  a.shows(firstBehind(0).drop);
   a.tap('#lock').shows('Go and do it.');
   a.tap('#nothanks').tap('#done').shows('What happened?');
   a.type('#o', 'He said fair enough and got his own coffee.');
@@ -73,7 +78,7 @@ test('a full loop, from the start screen to a result', () => {
 test('what happened keeps the line breaks a person typed, on the result and on the card', () => {
   const written = 'He said fair enough.\n\nThen he made me one as well.';
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', written).tap('#next').tap('[data-key]', 2);
 
   /* One paragraph per paragraph, and the class that lets a browser draw a line break. */
@@ -88,7 +93,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
   /* A single line break inside one paragraph is the stylesheet's job, and stays in the text. */
   const b = boot();
-  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'One line.\nAnd the next.').tap('#next').tap('[data-key]', 2);
   assert.ok(b.html().indexOf('One line.\nAnd the next.') !== -1,
     'a single line break inside a paragraph must survive into the markup');
@@ -100,7 +105,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
 test('the count is completed tests, and "didn’t get to it" costs nothing', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks');
   a.tap('#miss').shows('still here for tomorrow');
   /* not bare "missed": a worry's own test may ask you to write down what you missed. */
   a.hides('you missed').hides('missed a').hides('streak').hides('failed');
@@ -120,7 +125,7 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
 */
 test('putting a test down for the day changes the screen, not just adds a sentence', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks');
   a.shows(en.s.locked.kicker).shows(en.s.locked.title).shows(en.s.locked.miss);
 
   a.tap('#miss');
@@ -140,12 +145,33 @@ test('putting a test down for the day changes the screen, not just adds a senten
 /* Closed and opened again tomorrow, the screen still says it was put down, not still shouting. */
 test('a test put down for today is still put down when the app is opened again', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#miss');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#miss');
 
   /* Reopening lands straight back on the test in hand, in the state it was left in. */
   const again = boot(a.mem);
   again.shows(en.s.locked.restKicker).shows(en.s.locked.restTitle);
   again.hides(en.s.locked.title).hides(en.s.locked.miss);
+});
+
+/*
+  B32. The doors stopped being the way in and became things to borrow — and the two lines on
+  them that were never about routing had to survive the demotion: door one's safety note, and
+  the footer saying none of these is a diagnosis. Both are still drawn, in the new word.
+*/
+test('the doors still carry the safety note and the footer, one tap aside', () => {
+  const a = boot().shows(en.s.start.borrow);
+  a.tap('#not-sure').shows(en.s.doors.title).shows(en.s.doors.sub);
+  a.shows(doors.foot).shows(en.s.doors.foot);
+
+  const note = doors.items.filter((d) => d.note)[0];
+  assert.ok(note, 'no door carries the safety note any more');
+  a.shows(note.note);
+  a.shows('data-note=');
+
+  /* and nothing on the screen calls one of them a worry */
+  for (const bit of [en.s.doors.title, en.s.doors.sub, en.s.doors.foot, doors.foot, doors.intro]) {
+    assert.ok(!/\bworr(y|ies)\b/i.test(bit), 'the doors still say worry: ' + bit);
+  }
 });
 
 test('the second door opens onto worries, never onto a test of its own', () => {
@@ -171,11 +197,16 @@ test('the prediction a person picks is the one that gets tested, not the first o
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
 
-  /* all three are offered, with what you would be braced for under each */
-  for (const b of f.beliefs) a.shows(b.belief).shows(b.expect);
+  /*
+    B32: all three are still offered and the person still says which is theirs — as a row of
+    chips on the screen where the sentence is being written, rather than on a screen of its
+    own. What they are braced for is no longer printed under each, because the sentence is
+    assembled above them as they choose; it still travels, and the last lines prove it.
+  */
+  for (const b of f.beliefs) a.shows(b.belief);
 
   /* the second one, deliberately: the first would pass whether it was carried or not */
-  a.tap('[data-b]', 1).shows(f.beliefs[1].belief).shows(f.beliefs[1].expect);
+  a.tap('[data-b]', 1).tap('#next').shows(f.beliefs[1].belief);
   a.hides(f.beliefs[0].belief).hides(f.beliefs[2].belief);
   a.shows(f.test);
 
@@ -200,7 +231,7 @@ test('the worry and the sentence being tested are on every screen in between', (
   a.tap('#not-sure').tap('[data-door]', 0);
   a.shows(f.label).shows(f.belief);                 /* the list: the loose one */
   a.tap('[data-id]', 0).shows(f.label);             /* choosing which prediction */
-  a.tap('[data-b]', 2);
+  a.tap('[data-b]', 2).tap('#next');
 
   const chosen = f.beliefs[2].belief;
   a.shows(f.label).shows(chosen);                   /* the plan */
@@ -212,32 +243,83 @@ test('the worry and the sentence being tested are on every screen in between', (
 });
 
 /*
-  "I'll put it my own way" is the fourth option, not a fourth screen: it keeps the worry, the
-  test, the thing to be left out and the explanation behind "Why this one sticks", and swaps
-  the one sentence. It is a person's own belief, so it goes through the same guard one does.
+  B32, AND IT IS THE ONE PLACE A PERSON COULD FEEL THEY HAD LOST A LADDER.
+
+  Borrowing is one screen now: the sentence arrives half written and everything is editable.
+  Which of the two kinds of test comes out is decided by the WORDS, not by the road — keep one
+  of the item's three predictions word for word and it is that item, with its ladder; change a
+  word and it is yours, with a ladder of its own.
+
+  So the borrowed item's card has to still be on Your tests afterwards, with its own rungs
+  untouched. If it ever stops being there, a person who edited three words will look as though
+  they deleted their history.
 */
-test('putting it your own way keeps the worry and replaces only the sentence', () => {
+test('editing a borrowed sentence makes it yours, and the borrowed one keeps its ladder', () => {
   const f = firstBehind(0);
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
 
-  a.type('#t', 'I am the sort of person who can’t sit still').tap('#next');
-  a.shows('verdict, not a prediction');
-  a.type('#t', 'If I sit with it, then I will be climbing the walls by ten past').tap('#next');
+  /* first, the borrowed one, twice, so it has a ladder worth losing */
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  a.tap('#lock').tap('#nothanks').tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 2);
+  a.shows('>7<');
 
-  a.shows('I will be climbing the walls by ten past');   /* the expectation, off their belief */
-  a.shows(f.label).shows(f.test).shows(f.drop);          /* everything else is still the worry */
-  for (const b of f.beliefs) a.hides(b.belief);
+  /* now borrow it again and change the prediction into their own words */
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  a.type('#then', 'nobody will even notice I was gone').tap('#next');
+  a.tap('#lock').tap('#done');
+  a.type('#o', 'Two people asked where I’d been.').tap('#next');
+  /* a sentence of their own starts its own ladder, at the top */
+  a.shows('Started').tap('[data-key]', 1).shows('>9<');
+  a.shows('nobody will even notice I was gone');
 
-  a.tap('#lock').tap('#nothanks').tap('#done');
-  a.type('#o', 'It dropped off after four minutes.').tap('#next').tap('[data-key]', 2);
-  a.shows('If I sit with it, then I will be climbing the walls by ten past');
-  /* it is still that worry, so the explanation behind it is still offered */
-  a.shows('Why this one sticks');
-  a.tap('[data-why]').shows('Why “' + f.label + '” sticks');
+  /* and the borrowed one is still there, on its own card, on the rung it was on */
+  a.tap('#m-mine').shows('2 tests, done 2 times');
+  a.shows(f.label).shows(f.beliefs[0].belief).shows('>7<');
+  a.shows('nobody will even notice I was gone');
+
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  assert.strictEqual(done[0].source, 'stock');
+  assert.strictEqual(done[0].id, f.id);
+  assert.strictEqual(done[1].source, 'own');
+  assert.notStrictEqual(done[1].id, f.id);
+  /*
+    Their sentence, assembled from the half that was already there and the half they wrote —
+    and the space after "If I" is dropped where the first half opens with an apostrophe, which
+    half the stock sentences do ("If I'm not reachable for an evening").
+  */
+  assert.match(done[1].belief, /^If I.*, then nobody will even notice I was gone\.$/);
+  assert.strictEqual(done[1].belief,
+    'If I\u2019m not reachable for an evening, then nobody will even notice I was gone.');
 });
 
 /*
+  The other half of the same decision: a borrowed test kept word for word IS that test. Same
+  id, same label, same ladder, and B20's hand-written expectation still travelling with the
+  sentence it was written for. Without this the borrow road would quietly orphan a ladder
+  every time somebody came back to it.
+*/
+test('a borrowed test kept word for word is that test, ladder and all', () => {
+  const f = firstBehind(0);
+  const loopIt = (a, said, key) => {
+    a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
+    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+    a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
+  };
+  const a = boot();
+  loopIt(a, 'Nothing happened.', 1);
+  a.shows('>9<');
+  a.tap('#m-new').tap('#back');
+  loopIt(a, 'Nobody said anything.', 1);
+  a.shows('>8<').shows(f.label);
+
+  a.tap('#m-mine').shows('1 test, done 2 times');
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  assert.ok(done.every((d) => d.source === 'stock' && d.id === f.id), 'a kept sentence lost its item');
+  assert.strictEqual(done[0].x, f.beliefs[0].expect, 'B20’s expectation did not travel');
+});
+
+/*
+  Founder, 2026-09-03: the yellow at the end of a report "looks weird/*
   Founder, 2026-09-03: the yellow at the end of a report "looks weird, the lines look like
   they're too tightly packed". The highlight is drawn round each line of the inline span with
   6px of padding above and below, so two bands stay apart only while the line height is bigger
@@ -398,7 +480,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   seen += a.type('#if', 'say no').type('#then', 'they will mind').tap('#next').html();
   /* and the two screens the ladder lives on, which is where a score would creep in */
   const b = boot();
-  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   seen += b.html();
   seen += b.tap('#m-mine').html();
@@ -411,7 +493,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
 
 test('export holds every result, and delete leaves nothing behind', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
@@ -439,7 +521,7 @@ test('it starts cleanly from nothing, from rubbish, and from a half-finished loo
 
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('#lock');
   a.hides('Not quite? Change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
   a.hides('Not quite? Change it');
@@ -449,7 +531,7 @@ test('a locked expectation cannot be edited after the test is done', () => {
 
 /* One whole loop, ending on the given re-rate. 0 still / 1 a bit / 2 a lot / 3 not at all / 4 more. */
 function loop(a, item, said, key) {
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   return a;
@@ -483,7 +565,7 @@ test('a bad day can go back up, and it is not a red day', () => {
 test('an earlier worry is one tap away, and picks up where its ladder left off', () => {
   const a = boot();
   loop(a, 0, 'He said fair enough.', 2);     /* worry one: 10 → 7 */
-  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock').tap('#done');
+  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#done');
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
   a.tap('#m-mine').shows('2 tests, done 2 times');
@@ -542,7 +624,7 @@ test('nothing a person taps, and no heading, calls it a worry', () => {
   a.tap('#not-sure'); sweep();
   a.tap('[data-door]', 0); sweep();
   a.tap('[data-id]', 0); sweep();
-  a.tap('[data-b]', 0); sweep();
+  a.tap('[data-b]', 0).tap('#next'); sweep();
   a.tap('#lock'); sweep();
   a.tap('#nothanks').tap('#done'); sweep();
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();
@@ -585,7 +667,7 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   a.tap('#back').tap('#back');
   a.tap('#not-sure'); sweep();                               /* what's going on */
   a.tap('[data-door]', 0); sweep();                    /* pick */
-  a.tap('[data-id]', 0).tap('[data-b]', 0); sweep();                      /* plan */
+  a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'); sweep();                      /* plan */
   a.tap('#lock'); sweep();                             /* locked, with the install card */
   a.tap('#nothanks').tap('#done'); sweep();            /* happened */
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();   /* sure */
@@ -627,65 +709,101 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
 });
 
 /*
-  2026-09-04, and it is named for the person it happened to. A test user typed "if I eat
-  gluten, it won't go well" and the app walled him over a missing "then". The shape rules are
-  a question now: asked once, with the shape that works, and the next tap takes his words.
+  2026-09-04, AND THE WALL THAT STOPPED BEING POSSIBLE ON 2026-09-08.
 
-  What this holds down is the difference between a question and a wall — if the second tap
-  ever stops going through, the wall is back and nobody will notice from the words alone.
+  A test user typed "if I eat gluten, it won't go well" and the app walled him over a missing
+  "then". The answer that day was a nudge: ask once, show the shape that works, and take his
+  words on the next tap. The answer now is that the shape is PRINTED — the screen says "If I"
+  and ", then" and a person fills the gaps — so a sentence that is not a prediction cannot be
+  made at all, and there is nothing left to ask about.
+
+  This is what replaced the three tests that held the nudge down. It is the same guarantee
+  said the other way round: whatever anybody types, the sentence that gets stored is a
+  conditional with both halves in it, and no screen ever hands their words back to them.
 */
-test('a sentence that is not quite a prediction is asked about once, then goes through', () => {
-  /*
-    B30 moved the free box off the front door: the way in is two blanks in a printed sentence,
-    so a person there cannot write something that is not conditional. This box is the one that
-    is left — "I'll put it my own way" under a borrowed test — and it is where the nudge still
-    lives. B32 is where it goes, and where these become guard-level assertions.
-  */
-  const a = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
+test('the shape is printed, so a sentence that is not a prediction cannot be made', () => {
+  const typed = ['I am a waste of space', 'people will hate me', 'it won’t go well',
+                 'say no', 'gluten'];
+  for (const words of typed) {
+    const a = boot().tap('#m-new');
+    a.type('#if', words).type('#then', words).tap('#next');
+    a.shows(en.s.build.doTitle);
+    a.type('#do', 'Do the smallest version of it today.').tap('#lock');
+    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+    a.shows(en.s.locked.title);
 
-  a.type('#t', 'People will hate me').tap('#next');
-  a.shows('If I ___, then ___');
-  a.shows('Keep mine as it is');
-  a.shows(en.s.own.belief.title);
-  assert.ok(a.html().indexOf('class="warn"') === -1, 'a nudge was drawn as a refusal');
-  assert.ok(a.html().indexOf('People will hate me') !== -1, 'the person’s words were taken away');
-
-  /* The second tap, with nothing changed, is the whole point. */
-  a.tap('#next').shows(en.s.plan.lock).shows('People will hate me');
-});
-
-test('the nudge is gone once the sentence reads as a prediction, and never nags twice', () => {
-  const a = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
-  a.type('#t', 'If I say no').tap('#next').shows('If I ___, then ___');
-
-  /* Rewriting it clears the note, and it does not follow the person to the next screen. */
-  a.type('#t', 'If I say no, they will think I am selfish').tap('#next');
-  a.shows(en.s.plan.lock).hides('Keep mine as it is').hides('If I ___, then ___');
-});
-
-test('a verdict is still refused, and an empty box still is', () => {
-  const a = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
-  a.type('#t', 'I am a bad person').tap('#next');
-  a.shows(en.s.refusal.verdict).shows(en.s.own.belief.title);
-
-  a.type('#t', '').tap('#next');
-  a.shows(en.s.refusal.emptyBelief).shows(en.s.own.belief.title);
+    const stored = JSON.parse(a.mem['betr.v1']).cur.belief;
+    assert.match(stored, /^If I/, 'a stored sentence is not conditional: ' + stored);
+    assert.match(stored, /, then \S/, 'a stored sentence has no consequence: ' + stored);
+  }
 });
 
 /*
-  The line the whole of 2026-09-04 exists for, as B29 leaves it. A person wrote a true thing
-  about his own body into the blank box — "if I eat gluten, then I'll feel sick" — and the
-  app had never once said which ones it is for.
-
-  What it says CHANGED on 2026-09-08. "Not the weather, and not your body" was written as a
-  checkability hint and worked as a wall: the founder's own two examples, one about time and
-  one about a feeling, both failed it. So the half that excludes a settled fact stays, and
-  the half that narrowed the lane is replaced by the risk line the founder asked for.
-
-  B27 item 2 is the other half and does not change: there are TWO boxes a person can write
-  into, and the line has to be on both.
+  And the three things that used to be said on the way through are said nowhere, because
+  nothing can reach them: the shape nudge, and the two shape refusals it replaced in 2026-09-04.
+  They are still in lib/guards.js and guards.test.js still proves every branch fires — this is
+  about the app, not the guard, and it is what would fail if a screen brought one back.
 */
-test('both boxes say which ones BETR is for, not just the blank one', () => {
+test('the nudge and the two shape refusals are unreachable from every screen there is', () => {
+  const a = boot();
+  let seen = a.html();
+  a.tap('#m-new'); seen += a.html();
+  a.tap('#next'); seen += a.html();
+  a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); seen += a.html();
+  a.tap('#back').tap('#back').tap('#not-sure'); seen += a.html();
+  a.tap('[data-door]', 0); seen += a.html();
+  a.tap('[data-id]', 0); seen += a.html();
+  a.tap('#next'); seen += a.html();
+  a.tap('[data-b]', 0).tap('#next'); seen += a.html();
+  a.tap('#lock'); seen += a.html();
+  seen += a.tap('#m-help').html();
+
+  for (const gone of [en.s.nudge.shape, en.s.refusal.notConditional, en.s.refusal.noConsequence]) {
+    assert.ok(seen.indexOf(gone) === -1, 'a shape wall is back on a screen: ' + gone);
+  }
+  /* and the guard still has all three, for the day somebody puts one back on purpose */
+  const guards = require('../lib/guards.js');
+  assert.strictEqual(guards.checkBelief('People will hate me').soft, 'nudge.shape');
+  assert.strictEqual(guards.checkBelief('I am a bad person').reason, 'refusal.verdict');
+});
+
+/*
+  What CAN still refuse a person on the way in, and it is two things. An empty blank, which is
+  not a judgement about anything, and the one hard stop. The verdict guard is unreachable by
+  shape — "I am a bad person" in the first blank comes out as a conditional — and it is kept
+  and unit-tested anyway, because the day somebody pastes a sentence in is not the day to find
+  out it was deleted.
+*/
+test('an empty blank is refused on both roads, and the words are not taken away', () => {
+  const a = boot().tap('#m-new');
+  a.tap('#next').shows(en.s.refusal.emptyIf);
+  a.type('#if', 'say no without giving a reason').tap('#next').shows(en.s.refusal.emptyBelief);
+  assert.strictEqual(a.valueOf('#if'), 'say no without giving a reason');
+
+  /* and on the borrow road, where the first blank arrives filled and the second does not */
+  const b = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  assert.ok(b.valueOf('#if'), 'the borrowed sentence did not fill the first blank');
+  b.tap('#next').shows(en.s.refusal.emptyBelief);
+  assert.ok(b.valueOf('#if'), 'the refusal took the borrowed half away');
+
+  /* the second half's box, which is a plan rather than a prediction */
+  b.tap('[data-b]', 0).tap('#next').type('#do', '').tap('#lock').shows(en.s.refusal.emptyTest);
+});
+
+/*
+  The line the whole of 2026-09-04 exists for, as B30 and B32 leave it. A person wrote a true
+  thing about his own body into the blank box — "if I eat gluten, then I'll feel sick" — and
+  the app had never once said which ones it is for.
+
+  What it SAYS changed on 2026-09-08: "Not the weather, and not your body" was a checkability
+  hint working as a wall, and the founder's own two examples both failed it. What is left is
+  the half that excludes a settled fact, plus the risk line the founder asked for.
+
+  WHERE it is has changed too, and B27 item 2's rule travels with it: it belongs on every
+  screen a person can write one on. There are two, and they are the same screen twice — blank,
+  and opened from the borrow list.
+*/
+test('every screen a person writes one on says which ones BETR is for', () => {
   const only = en.s.build.only;
   assert.ok(only.indexOf('never actually found out about') !== -1,
     'the boundary line no longer excludes a settled fact: ' + only);
@@ -693,11 +811,8 @@ test('both boxes say which ones BETR is for, not just the blank one', () => {
   assert.ok(only.indexOf('your body') === -1,
     'the narrow lane is back: it refused the founder’s own two examples (B28 §3)');
 
-  /* the build screen, which is the front door and the box this line was written for */
   boot().tap('#m-new').shows(only);
-
-  /* and their own words under a borrowed one, which is the other box there is */
-  boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
+  boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).shows(only);
 });
 
 /*
@@ -813,7 +928,7 @@ test('why a worry sticks is offered after a result, on both screens, and never b
   /* Not on the doors, not on the pick list, and not while a test is waiting. */
   a.tap('#not-sure').hides('Why this one sticks');
   a.tap('[data-door]', 0).hides('Why this one sticks');
-  a.tap('[data-id]', 0).tap('[data-b]', 0).hides('Why this one sticks');
+  a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').hides('Why this one sticks');
   a.tap('#lock').hides('Why this one sticks');
 
   a.tap('#nothanks').tap('#done').type('#o', 'He said fair enough.').tap('#next');
