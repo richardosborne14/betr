@@ -43,13 +43,12 @@ Newbie unstuck, nothing leaves the phone, no frozen sentence unfreezes, BETR nev
 **The founder took it on 2026-09-08** — *"yeah I reckon you just generate a bunch of
 sentences"* — **so no runtime call is being built, and the first batch exists:
 `docs/candidates-suggestions-batch-1.md`**, 91 lines written offline, **unreviewed and not in
-the app**. §1 is the part that matters (the `general` set, all the main road offers); §3 argues
-**start #19 should come out of `starts.js`**, a checking ritual BETR wrote itself that 206 tests
-never had an opinion about; §5 audits the 91 against the three blind spots and **recommends
-cutting one of its own**. **Nothing reaches `web/content/` unreviewed.**
+the app**. §1 is what matters (the `general` set, all the main road offers); §3 argues **start
+#19 should come out of `starts.js`**, a checking ritual BETR wrote itself that 206 tests never
+questioned; §5 audits the 91 and **withdraws two of its own**.
 
-**A gap that audit found and nobody owns: `guards.js` has no medication word list** — the
-*"sleeping tablets"* miss is the same hole seen from outside.
+**A gap nobody owns: `guards.js` has no medication word list** — the *"sleeping tablets"* miss
+is that hole seen from outside.
 
 **Two API keys were pasted into that session — Groq and Anthropic. Both need rotating.**
 
@@ -61,10 +60,13 @@ Everything else open is somebody's reading:
    `B29`. **The `HARM` false refusal** (*"end it"* refuses a sentence about ending a
    friendship). **Change the ad, not the app** (B25).
 2. **Misha, in one ask:** the four nouns (B23 option b), the door order, and the 21 chips.
-3. **The paid CBT reviewer, now the critical path:** **`candidates-suggestions-batch-1.md`
-   (91 lines, K/E/C in the margin)**, `content/starts.js` (~180 sentences),
+3. **The paid CBT reviewer, now the critical path. Send them `docs/suggestions-review.csv`** —
+   245 rows, the 154 lines already shipped beside the 91 proposed, with blank columns for a
+   score and a rewrite; `candidates-suggestions-batch-1.md` is the reasoning behind it. Also
    `content/examples.js`, the three `worries.js` sentences rewritten on 2026-09-08 (`phone`,
    `rest`, `low`), three pairs from B1, and B34 §4's `general.thens` (batch §1a proposes it).
+   **Building that sheet found three duplicate predictions already shipped in `starts.js`**
+   (`learnings.md`) — flagged in the sheet, deliberately not fixed, since content is theirs.
 4. **A screen-reader pass on a real phone.** The tree was read in B33; **nobody has used it**,
    and B35's chip is new and unheard.
 5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.

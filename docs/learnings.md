@@ -694,3 +694,40 @@ output before anything ships. That proposal is in
 **Operational, and it cost nothing this time:** an API key pasted into a chat is burnt and gets
 rotated — two were, this session. And a key cannot live in `web/` at all: BETR is static files,
 so anything the page can read, anyone can read.
+
+## The check written to catch our own duplicate found three the app had already shipped (2026-09-08, batch 1)
+
+An independent session checked the 91 offline-written suggestions in
+`docs/candidates-suggestions-batch-1.md` and found one defect worth having: a proposed addition
+to `general.thens`, *"the whole day will run behind"*, was **already in `starts.js` word for
+word** under start #13. The problem is not the repetition. It is that the main road and a chip
+road would offer one prediction **from two sources**, so a change to either leaves the other
+behind — B34's starts-vs-worries finding reproduced inside a single file. It was replaced with
+a line checked against all 66 shipped predictions.
+
+**Then the same check, run over the shipped content it had just been used to police, found
+three more.** They were surfaced by deduplicating `docs/suggestions-review.csv`, which lists
+what ships today next to what is proposed:
+
+| Prediction | Appears in |
+| --- | --- |
+| *they'll think less of me* | `general.thens` **and** start #3 |
+| *they'll go quiet with me* | `general.thens` **and** start #10 |
+| *they'll think I don't care* | start #6 **and** start #21 |
+
+The first two are precisely the defect the reviewer caught in ours, already shipped twice over,
+and `content.test.js` had no opinion about any of them: it holds that no two `thens` under
+**one** start predict the same thing, and nothing looks across starts or at `general`.
+
+**Three things worth keeping from it.**
+
+1. **Run the check you wrote for the new content over the old content.** A rule worth applying
+   to a draft is usually worth applying to the thing the draft is joining, and the old content
+   has never been through it. This cost one line of Python and found three defects.
+2. **A generated review artefact is a test in disguise.** Nobody set out to audit `starts.js`
+   here; the duplicates fell out of putting shipped and proposed lines in one column and asking
+   for the count of distinct values. Building the sheet the reviewer asked for did work that
+   nobody had scheduled.
+3. **They were left unfixed on purpose.** `starts.js` is content, the paid CBT reviewer is a
+   release condition, and a session editing shipped wording on its own judgement is the thing
+   that rule exists to stop. Flagged in the sheet, recorded here, not touched.
