@@ -1,6 +1,6 @@
 # Start here
 
-**Last refreshed:** 2026-09-04, after the TrybeUP PR merged — B3 is closed.
+**Last refreshed:** 2026-09-08, after the founder's B28 question. B3 is closed.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
@@ -8,22 +8,19 @@
 **v1 is built and live, everything is committed and pushed, and B3 is now genuinely done.**
 180 tests, no dependencies, no build step, nothing requested after load.
 
-**What closed today: the `trybeup/trybeup-prod` PR.** The previous handoff called it the last
-unblocked engineering job and said the branch did not exist. **It did** — `betr-nginx` and PR
-#2245 were pushed the same evening that sentence was written. Founder's call: merge all of it.
-Squash-merged as `d1d47520`. The branch's `nginx.conf` was checked **byte-identical to the live
-`/opt/trybeup/nginx.conf`** first, so the deploy it triggered wrote the bytes already there.
-TrybeUP's production run `33889549168` is green, every job; afterwards `betr.trybeup.com` 200
-with `font-src 'none'` and no `Set-Cookie`, `trybeup.com` and `dev.trybeup.com` 200,
-`api.trybeup.com` 404 at `/` as before.
+**B3 closed on 2026-09-04:** the `trybeup/trybeup-prod` PR #2245 was squash-merged as `d1d47520`,
+its `nginx.conf` byte-identical to the live one; TrybeUP's next nginx deploy can no longer delete
+BETR's block, and BETR's certificate (**expires 2026-12-02**) is inside the 14-day alarm. Details in
+`learnings.md`. **No engineering task is left in v1 that is not waiting on a person.** What remains:
 
-**Two risks are gone with it.** TrybeUP's next nginx deploy can no longer delete BETR's block, and
-BETR's certificate (**expires 2026-12-02**) is now inside the alarm that emails the admins at 14
-days — the one missing during the 2026-06-01 outage. The same PR fixed a bug of TrybeUP's own that
-BETR found: `deploy-nginx` went green while applying nothing (a bind mount binds an inode; rsync
-renames). `--inplace` plus a hash check. **So no engineering task is left in v1 that is not
-waiting on a person.** What remains:
-
+- **New, 2026-09-08, and it comes first: a direction question from the founder.** They have
+  not opened BETR since building it; their own worries arrive in the car and mid-argument, and
+  the canned list and the own-words builder do not fit them. Assessment and a proposed shape
+  are in **`docs/tasks/B28-present-practice-produce.md`**: the engine is right, the way in is
+  wrong, the missing step is a fixed worked example on the front screen, and own-words as the
+  main road puts the guards on the critical path. **Nothing built. Founder's and Misha's call.**
+  One content fix stands on its own: `own.belief` says "make it about people", which is narrower
+  than the research's lane and turns away the founder's own examples.
 - **Three questions, all yours.** **(d) change the ad, not the app** — all three walkers arrived
   from a post showing somebody at **6/10** and landed on an app at 10, so the honest fix is an ad
   showing a **first** result, 10 → 9; costs no code, best answer in B25, yours and Misha's.
@@ -41,8 +38,9 @@ waiting on a person.** What remains:
 
 ## 2. The next action
 
-**An accessibility sweep of the loop, to make the real screen-reader pass cheap.** It is the only
-substantial thing left that needs nobody's permission, and it is a release condition.
+**If the founder has answered B28, that is the next action.** Otherwise: **an accessibility sweep
+of the loop, to make the real screen-reader pass cheap.** It needs nobody's permission, and it is
+a release condition.
 
 - Walk the six taps with `tools/walk.js` and read the **accessibility tree**, not the pixels: every
   button's accessible name, heading order, `lang`, focus order after each tap, whether the worry
