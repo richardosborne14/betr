@@ -50,18 +50,16 @@ the person actually did, one short line, before what happened. Half a day, and *
 the walker at 100% and 125% — the front screen is already at the fold.** Then items 7 and 10a,
 strings only: the loop says *"Go and find out."*, and the lock says a bad one counts the same.
 
-**If B37 is a yes, its §4 identity fix is the next code after that** (`store.js` v5, `rate.js`,
-`app.js`, merge, export), and B36 item 8's dial then arrives as B37's three concrete sentences
-rather than three abstract sizes — which is better. B36 items 2 and 3 are one screen each behind
-a text link, sharing scaffolding, about a day together; item 4 is two nudges in `guards.js`, half
-a day. Items 5 and 10b are **deferred behind the 125% fold bug, now blocking three items and
-still nobody's task.** Items 6 and 9 are decisions, not builds.
+**If B37 is a yes, its §4 identity fix is the next code** (`store.js` v5, `rate.js`, `app.js`,
+merge, export), and B36 item 8's dial then arrives as B37's three concrete sentences rather than
+three abstract sizes — better. B36 items 2 and 3 are one screen each behind a text link, about a
+day together; item 4 is two nudges in `guards.js`. Items 5 and 10b wait on the **125% fold bug,
+now blocking three items and still nobody's**. Items 6 and 9 are decisions, not builds.
 
-**The rule that governs all of it (research §6): the person opens the door.** No screen appears
-because of what somebody typed, rated or did. Fixed prose everybody can open is a chapter in a
-book; prose shown *because of* an input is the app choosing — rule 2, and a device. **A template
-is inside that line**: it is a worksheet with blanks, and which `do` set appears is decided by
-which template was picked — the same lookup `starts.js` already makes and already defends.
+**The rule governing all of it (research §6): the person opens the door.** No screen appears
+because of what somebody typed, rated or did — prose shown *because of* an input is the app
+choosing, which is rule 2 and a device. **A template is inside that line**: a worksheet with
+blanks, whose `do` set is chosen by which template was picked — the lookup `starts.js` defends.
 
 Everything else open is somebody's reading:
 
@@ -92,20 +90,18 @@ conditions:** Misha on `places.signedOff`; J1–J3 on a phone; an owner for link
 
 | | |
 | --- | --- |
-| Repo | `github.com/richardosborne14/betr`, private, branch `main` |
-| Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
+| Repo · stack | `github.com/richardosborne14/betr`, private, `main`; plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
 | **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** |
 | Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02 |
 
 ## 4. Gotchas, live
 
-- **`walk.js` dies silently and a dead walker returns a stale page, not an error** — if a result
-  surprises you, `start` again before you believe it. **Its browser is set to DARK**, so BETR
-  opens dark there and that is correct (B35).
-- **`web/lib/theme.js` loads in the `<head>` before the stylesheet and has to** (later is a
-  flash of the wrong colour; CSP forbids inlining it). **Tapping the look chip must never
-  repaint** — it would throw away a half-typed sentence; it swaps its own text, and a test holds
-  it. **The three roads to the build screen offer three suggestion sets** (B34 §1): check all.
+- **`walk.js` dies silently and a dead walker returns a stale page, not an error** — `start`
+  again before believing a surprise. **Its browser is set to DARK**, so BETR opens dark (B35).
+- **`theme.js` loads in the `<head>` before the stylesheet and has to** (else a flash of the
+  wrong colour; CSP forbids inlining). **Tapping the look chip must never repaint** — it would
+  throw away a half-typed sentence. **Three roads reach the build screen with three suggestion
+  sets** (B34 §1): check all.
 - **The fake DOM in `harness.js` is flat and fires no events**; live behaviour is walked. **A
   REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners once swallowed the
   build screen out of `app.js` (`learnings.md`).
@@ -116,11 +112,11 @@ conditions:** Misha on `places.signedOff`; J1–J3 on a phone; an owner for link
   ladder by `id`**, falling back to the sentence only for a pre-B30 ladder (v4 migrated no data
   on purpose). **After editing `web/content/*`, `stop` and `start`** — `open` serves a cache.
 - **`HABIT`/`BODY` refuse nothing any more**, still hold BETR's own content, and neither catches
-  a checking ritual — which rule 4 also forbids BETR to propose. **Help's order is three
-  decisions held by four tests:** crisis, proof, frozen sentence 6, CBT, the nine.
+  a checking ritual, which rule 4 also forbids. **Help's order is three decisions held by four
+  tests:** crisis, proof, frozen sentence 6, CBT, the nine.
 - **Every word a person reads is in `web/content/`** — a sentence back in `app.js` fails
   `i18n.test.js`, and a literal starting mid-tag reads as prose to that sweep.
-- **Use `’` and `“ ”`, never `'` and `"`** — `content.test.js` fails the build on a typewriter
-  one, and anything drafted outside `web/content/` arrives wrong, B36's draft strings included.
-- **`content/zones.js` and `docs/COPY.md` are generated** (`node tools/copy-sheet.js`); never
-  hand-edit. **No helpline number is written from memory.**
+- **Use `’` and `“ ”`, never `'` and `"`** — the build fails on a typewriter one, and anything
+  drafted outside `web/content/` arrives wrong, B36's and B37's drafts included.
+- **`content/zones.js` and `docs/COPY.md` are generated**; never hand-edit. **No helpline number
+  is written from memory.**
