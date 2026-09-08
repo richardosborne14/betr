@@ -37,17 +37,16 @@
   --shadow: 0 20px 50px rgba(31,63,232,.22), 0 2px 6px rgba(20,22,28,.10);
 }
 /*
-  B35, 2026-09-08, founder's call: light is the default whatever the phone is set to, and the
-  chip in the top corner is the only thing that changes it. Until today this block was
-  `@media (prefers-color-scheme: dark)` and there was no chip: BETR wore the phone's clothes
-  and a person who wanted the other one had no way to say so.
+  B35, 2026-09-08. Until today this block was `@media (prefers-color-scheme: dark)` and there
+  was no way for a person to say otherwise: BETR wore the phone's clothes, forever. Now the
+  phone is only the OPENING position — from the moment somebody touches the chip in the top
+  corner, their choice wins and the phone stops being consulted.
 
-  lib/theme.js writes `data-theme` onto <html> from the HEAD, before this file is even asked
-  for, so a person who chose dark never sees a flash of white on the way in.
-
-  TO GO BACK TO FOLLOWING THE PHONE: this selector becomes
-  `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }`
-  and DEFAULT in lib/theme.js becomes null. Two edits, nothing else.
+  THE MEDIA QUERY IS GONE ON PURPOSE and must not come back. lib/theme.js reads the phone
+  itself and writes `data-theme` onto <html> from the HEAD, before this file is asked for. One
+  place decides, so a person's choice can beat the phone; with the query still here it could
+  not, and a `:root:not([data-theme])` dance to make it work is the version that breaks the
+  first time somebody's storage is cleared.
 */
 :root[data-theme="dark"] {
   color-scheme: dark;

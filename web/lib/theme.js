@@ -1,13 +1,17 @@
 /*
   Light or dark, and the one thing in BETR that remembers something a person did not write.
 
-  B35, 2026-09-08, founder's call: "I actually liked the light mode … can we do light mode by
-  default". Until today BETR wore whatever the phone wore — `prefers-color-scheme` and nothing
-  else — and there was no way to say otherwise. Now:
+  B35, 2026-09-08. The founder liked the light mockups and asked whether light could be the
+  default. It was built that way first, and then they chose the other answer once the cost was
+  put next to it: a dark-mode phone opening a white screen at eleven at night. So:
 
-    - LIGHT IS THE DEFAULT, whatever the phone is set to
-    - one chip in the top corner switches it, on every screen
-    - the choice is remembered, in a key of its own
+    - BETR FOLLOWS THE PHONE until somebody touches the chip
+    - from the moment they do, THEIR choice wins and the phone stops being consulted
+    - one chip in the top corner, on every screen, and the choice is remembered
+
+  That is why `stored()` can return null and `now()` has to ask the phone. A person who has
+  never tapped it has no preference to honour, and guessing one for them is the thing that
+  was rejected.
 
   WHY THIS FILE IS LOADED IN THE HEAD AND NOT WITH THE REST. The choice has to be on <html>
   before the stylesheet is asked for, or somebody who chose dark gets a white flash on every
@@ -24,10 +28,8 @@
   BETR and a fresh BETR are the same phone down to the last byte (store.js says so, and
   loop.test.js checks it).
 
-  TO GO BACK TO FOLLOWING THE PHONE: make DEFAULT null here, and in app.css turn
-  `:root[data-theme="dark"]` back into
-  `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }`.
-  Two edits, nothing else.
+  TO MAKE ONE OF THEM THE DEFAULT INSTEAD: give `phone()` a fixed answer here. The stylesheet
+  needs no change either way — it keys off the attribute, and this file always writes one.
 */
 (function (root, factory) {
   var api = factory();
@@ -38,7 +40,6 @@
   var KEY = 'betr.look';
   var DARK = 'dark';
   var LIGHT = 'light';
-  var DEFAULT = LIGHT;
 
   /* localStorage can throw on access, not only on write — see safeStorage() in app.js. */
   function box() {
@@ -57,8 +58,20 @@
     } catch (e) { return null; }
   }
 
-  /* What is on screen now: what the person chose, or the default if they never said. */
-  function now() { return stored() || DEFAULT; }
+  /*
+    What the phone is set to. matchMedia is missing in older browsers and can throw in a few,
+    so a phone that will not say is treated as a light one — which is what BETR looked like
+    before any of this existed.
+  */
+  function phone() {
+    try {
+      if (typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches) return DARK;
+    } catch (e) { /* falls through */ }
+    return LIGHT;
+  }
+
+  /* What is on screen now: what the person chose, or the phone if they have never said. */
+  function now() { return stored() || phone(); }
 
   /*
     One attribute and one meta tag. The attribute is what app.css keys off; the meta is what
@@ -86,11 +99,14 @@
 
   function toggle() { return set(now() === DARK ? LIGHT : DARK); }
 
-  /* "Delete everything" calls this, so a wiped phone stores nothing at all. */
+  /*
+    "Delete everything" calls this, so a wiped phone stores nothing at all. It goes back to
+    following the phone, which is where somebody who has never used BETR starts.
+  */
   function forget() {
     var b = box();
     if (b) { try { b.removeItem(KEY); } catch (e) { /* nothing to do about it */ } }
-    apply(DEFAULT);
+    apply(phone());
   }
 
   function isDark() { return now() === DARK; }

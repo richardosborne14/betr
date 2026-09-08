@@ -117,6 +117,9 @@ function find(el, sel) { return findAll(el, sel)[0] || null; }
 
   Both are optional. Left out, the time zone is London and there is no language region, so a
   test that says nothing about where it is gets the UK. A test that cares says so (B17).
+
+  B35 added a third: `dark: true` is a phone whose system is set to dark. Left out it is a
+  light phone, which is what `matchMedia` returning false has always meant here.
 */
 function boot(seed, env) {
   env = env || {};
@@ -157,7 +160,7 @@ function boot(seed, env) {
   box.window = box;
   box.window.scrollTo = () => {};
   box.window.addEventListener = () => {};
-  box.window.matchMedia = () => ({ matches: false });
+  box.window.matchMedia = (q) => ({ matches: !!env.dark && String(q).indexOf('dark') !== -1 });
   vm.createContext(box);
   for (const f of FILES) {
     vm.runInContext(fs.readFileSync(path.join(WEB, f), 'utf8'), box, { filename: f });

@@ -1006,16 +1006,18 @@ test('a borrowed test keeps the label-and-quote strip it was drawn for', () => {
 /* ------------------------------------------------------- light and dark (B35) */
 
 /*
-  Founder, 2026-09-08: "I actually liked the light mode … can we do light mode by default or
-  is it phone system default right now?" It was the phone's, and there was no way to say
-  otherwise. Now light is the default whatever the phone says, and one chip switches it.
+  Founder, 2026-09-08, in two steps. They asked whether light could be the default; it was
+  built that way, and once the cost was next to it — a dark-mode phone opening white at eleven
+  at night — they chose the other answer: **BETR opens as the phone is set, and from the moment
+  somebody touches the chip their choice wins and the phone is never consulted again.**
 
-  What these hold is the three things that would be quiet if they broke: the default, the
-  remembering, and the fact that an untouched BETR still stores nothing at all.
+  What these hold is the four things that would be quiet if they broke: the opening position,
+  the switch, the remembering, and the fact that an untouched BETR still stores nothing at all.
 */
-test('light is the default, whatever the phone is set to, and the chip is on every screen', () => {
+test('BETR opens as the phone is set, and the chip is on every screen', () => {
   const a = boot();
   assert.strictEqual(a.look(), 'light');
+  assert.strictEqual(boot(null, { dark: true }).look(), 'dark', 'a dark phone opened light');
   assert.deepStrictEqual(Object.keys(a.mem), [], 'the look was written before anybody chose one');
 
   /* the chip is drawn by paint(), so it is on the screens a walk passes through */
@@ -1043,6 +1045,33 @@ test('the chip says the look you would get, switches it, and remembers', () => {
   a.tap('#look');
   assert.strictEqual(a.look(), 'light');
   assert.strictEqual(a.mem['betr.look'], 'light');
+});
+
+/*
+  The half the founder actually decided. Following the phone is only the OPENING position: a
+  person who has said what they want has said it, and the phone does not get to overrule them
+  tomorrow morning. Both directions, because only testing the easy one is how this breaks.
+*/
+test('once somebody has chosen, their choice beats the phone in both directions', () => {
+  /* a dark phone, and somebody who wants light */
+  const d = boot(null, { dark: true });
+  assert.strictEqual(d.look(), 'dark');
+  d.tap('#look');
+  assert.strictEqual(d.look(), 'light');
+  assert.strictEqual(boot(d.mem, { dark: true }).look(), 'light', 'the phone overruled a choice');
+
+  /* a light phone, and somebody who wants dark */
+  const l = boot();
+  l.tap('#look');
+  assert.strictEqual(boot(l.mem).look(), 'dark');
+
+  /* and deleting everything hands them back to the phone, wherever it is pointing */
+  const w = boot(null, { dark: true });
+  w.tap('#look');
+  assert.strictEqual(w.mem['betr.look'], 'light');
+  w.tap('#m-help').tap('#wipe').tap('#yes');
+  assert.deepStrictEqual(Object.keys(w.mem), []);
+  assert.strictEqual(w.look(), 'dark', 'a wiped phone did not go back to following the phone');
 });
 
 test('switching the look does not throw away a sentence somebody is half way through', () => {
