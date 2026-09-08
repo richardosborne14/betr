@@ -29,21 +29,30 @@ live at `https://betr.trybeup.com`.
 biggest open question in the app.
 
 **They asked for LLM-written suggestions on *What will you do today?*** — the diagnosis is
-right, and B34 §1 found the same hole: a person who typed their own sentence is offered **two**
+right, and B34 §1 found the same hole: a person who typed their own sentence gets **two**
 generic `dos`. They set the bar themselves: *"it needs to respect the prompt … no exposure to
 risking someone hurting themselves"*. **Four rounds were measured offline. It does not clear
 that bar.** Full numbers in `docs/learnings.md`; the one line that matters:
 
 > **The safety gate scored 100% on the sentences it had been shown and 70% on the ones it had
-> not.** On held-out sentences it allowed *"walk home past the bridge"*, *"come off the
-> sleeping tablets"* and *"stop messaging her to check she's not angry"* — **3 times out of 3
-> each**. Not a wobble; a blind spot.
+> not.** Held out, it allowed *"walk home past the bridge"*, *"come off the sleeping tablets"*
+> and *"stop messaging her to check she's not angry"* — **3 of 3 each**. A blind spot.
 
 **The recommendation on the table: use the model offline as a writing assistant**, generate
 several hundred candidate `dos`/`drops`, put them through the CBT reviewer who is already a
 release condition, ship the good ones as **fixed content**. Newbie unstuck, nothing leaves the
-phone, no frozen sentence unfreezes, BETR still never chooses. **Do not build anything here
-until they answer.**
+phone, no frozen sentence unfreezes, BETR still never chooses.
+
+**The founder took that route on 2026-09-08** — *"yeah I reckon you just generate a bunch of
+sentences"* — **so the runtime call is not being built, and the first batch exists:
+`docs/candidates-suggestions-batch-1.md`**, 91 lines written offline, **unreviewed and not in
+the app**. §1 is the part that matters (the `general` set, all the main road offers); §3 argues
+**start #19 should come out of `starts.js`**, a checking ritual BETR wrote itself that 206 tests
+never had an opinion about; §5 audits the 91 against the three blind spots and **recommends
+cutting one of its own**. **Nothing reaches `web/content/` unreviewed.**
+
+**A gap that audit found and nobody owns: `guards.js` has no medication word list** — the
+*"sleeping tablets"* miss is the same hole seen from outside.
 
 **Two API keys were pasted into that session — Groq and Anthropic. Both need rotating.**
 
@@ -55,9 +64,10 @@ Everything else open is somebody's reading:
    `B29`. **The `HARM` false refusal** (*"end it"* refuses a sentence about ending a
    friendship). **Change the ad, not the app** (B25).
 2. **Misha, in one ask:** the four nouns (B23 option b), the door order, and the 21 chips.
-3. **The paid CBT reviewer:** `content/starts.js` (~180 sentences), `content/examples.js`, the
-   three sentences in `worries.js` a session rewrote on 2026-09-08 (`phone`, `rest`, `low`),
-   three pairs still waiting from B1, and B34 §4's proposal to lengthen `general.thens`.
+3. **The paid CBT reviewer, now the critical path:** **`candidates-suggestions-batch-1.md`
+   (91 lines, K/E/C in the margin)**, `content/starts.js` (~180 sentences),
+   `content/examples.js`, the three `worries.js` sentences rewritten on 2026-09-08 (`phone`,
+   `rest`, `low`), three pairs from B1, and B34 §4's `general.thens` (batch §1a proposes it).
 4. **A screen-reader pass on a real phone.** The tree was read in B33; **nobody has used it**,
    and B35's chip is new and unheard.
 5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.
