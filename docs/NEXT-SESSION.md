@@ -5,16 +5,15 @@
 
 ## 1. Where we are
 
-**B28–B35 are built and closed.** 208 tests, no dependencies, no build step, nothing requested
-after load. `main` is clean and live at `https://betr.trybeup.com`. **No code changed this
-session.** What was added is research and a proposal:
+**B28–B35 are built and closed.** 208 tests, `main` clean and live at `https://betr.trybeup.com`.
+**No code changed this session.** What was added is research, a proposal and its mockups:
 
 - **`docs/research/12-guiding-the-first-test.md`** — sourced: what to say to somebody who has
   never done this, and how small a first test may be without stopping being a test.
 - **`docs/tasks/B36-the-guide.md`** — the proposal, **eleven items**, ranked and costed.
 - **The mockups**, eight phone screens and four notes, words editable by the founder:
-  `https://claude.ai/code/artifact/5b7cf7c8-1905-43f2-823f-f813871acfb5`
-  (working files in this session's scratchpad only, not in the repo).
+  `https://claude.ai/code/artifact/5b7cf7c8-1905-43f2-823f-f813871acfb5` (working files were in
+  this session's scratchpad, not the repo — re-read the artifact to edit them).
 
 **Why.** The founder walked the build screen with their eldest daughter. She wrote a sentence of
 the right shape and the wrong content and nothing said so; she reached *What will you do today?*
@@ -29,8 +28,6 @@ a belief at 10 does. A therapist shrinks the step out loud, with the reason atta
    the one screen that teaches by showing skips the beat she got stuck on.
 2. **`content/why.js` is unreachable to her** — twenty-one entries of the best writing in the
    app, keyed to a **stock worry id** (she typed her own) and shown only **after a result**.
-3. **The verdict guard cannot fire from the build screen.** `checkBelief()` exempts any sentence
-   containing "if", and the build screen prints "If I". `guards.js` says so in its own comment.
 
 **Part two, from the founder the same day.** The therapist's *permission* is four things and the
 one BETR cannot have is the weakest — Bandura ranks mastery > vicarious > verbal persuasion, and
@@ -78,12 +75,10 @@ Everything else open is somebody's reading:
    and B35's look chip is new and unheard.
 5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.
 
-**Two API keys were pasted into an earlier session — Groq and Anthropic. Both still need
-rotating.**
-
-**Gaps nobody owns:** no medication word list in `guards.js`, and the 125% fold bug on the do
-screen, now blocking B36 items 5, 8 and 10b. **Unchanged release conditions:** Misha on
-`places.signedOff`; J1–J3 on a phone; an owner for links and helplines.
+**Two API keys pasted in an earlier session — Groq and Anthropic — still need rotating. Gaps
+nobody owns:** no medication word list in `guards.js`, and the 125% fold bug on the do
+screen, now blocking B36 items 5, 8 and 10b. **Release conditions unchanged:** Misha on `places.signedOff`; J1–J3 on a phone; an owner for
+links and helplines.
 
 ## 3. Environment facts
 
@@ -94,25 +89,23 @@ screen, now blocking B36 items 5, 8 and 10b. **Unchanged release conditions:** M
 | See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then `http://127.0.0.1:8760/` |
 | **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** |
 | Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02 |
-| TrybeUP's repo | `trybeup/trybeup-prod`, checkout at `~/vscode_projects/trybeup-prod`. Nothing further is owed to it |
 
 ## 4. Gotchas, live
 
-- **`walk.js` dies silently, and a dead walker returns a stale page rather than an error.** If a
-  result surprises you, `start` again and redo it before you believe it. **Its browser's system
-  is set to DARK**, so BETR opens dark there and that is correct (B35).
+- **`walk.js` dies silently and a dead walker returns a stale page, not an error** — if a result
+  surprises you, `start` again before you believe it. **Its browser is set to DARK**, so BETR
+  opens dark there and that is correct (B35).
 - **`web/lib/theme.js` loads in the `<head>`, before the stylesheet, and has to.** Later is a
   flash of the wrong colour on every screen; and it cannot be an inline script — CSP.
-- **Tapping the look chip must never repaint**, or it throws away a sentence somebody is half
-  way through typing. It swaps its own text in place; there is a test. **The three roads to the
-  build screen offer three different suggestion sets** (B34 §1): check any chip change on all.
+- **Tapping the look chip must never repaint** — it would throw away a half-typed sentence; it
+  swaps its own text in place, and there is a test. **The three roads to the build screen offer
+  three different suggestion sets** (B34 §1): check any chip change on all three.
 - **The fake DOM in `harness.js` is flat and fires no events**; live behaviour is walked, not
   unit-tested. **A REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners
   once swallowed the whole build screen out of `app.js` (`learnings.md`).
-- **The fold is 785px at 100% and 780px at 125%.** `doors.intro` is one line and must stay one.
-  **Known and untouched: at 125% the `do` box on *What will you do today?* clips its own text
-  and *Lock it in* sits under the menu.** Pre-existing; it now blocks B36 item 5.
-- **`go()` throws away an unlocked draft on the way out.** Deliberate, B8; B36 item 6 asks again.
+- **The fold is 785px at 100% and 780px at 125%**; `doors.intro` must stay one line. **Known and
+  untouched: at 125% the `do` box clips its own text and *Lock it in* sits under the menu** —
+  pre-existing, and now blocking three B36 items.
 - **Chips are exempt from the capital-letter rule**, narrowly and by class. **`rate.keyOf()`
   keys an own ladder by `id`**, falling back to the sentence only for a pre-B30 ladder (v4
   migrated no data on purpose). **After editing `web/content/*`, `stop` and `start`** — `open`
