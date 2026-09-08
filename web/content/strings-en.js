@@ -93,43 +93,30 @@ var BETR_STRINGS_EN = {
 
     start: {
       /*
-        2026-09-04. The front screen's job changed. It used to describe the loop; it now has to
-        say, before anything else, WHICH WORRIES THIS IS FOR — because a test user wrote "if I
-        eat gluten, then I'll feel sick" and the app had never once told him it was not for
-        that. Nothing else in fifteen screens says it either.
+        B31, 2026-09-08. THE FRONT SCREEN STOPPED DESCRIBING BETR AND STARTED SHOWING IT.
 
-        It cannot say "irrational". Research §4.3 rules that word out from three directions at
-        once: Gilbert's clients could see their thoughts were irrational and felt no different,
-        Luoma found fast shame reduction predicted MORE use later, and shame-proneness is the
-        trait that predicts problems. "Irrational" is a verdict (rule 6) and it is the verdict
-        this audience has already passed on themselves.
+        What went, and it went on purpose: "You've played it out a hundred times." with its
+        sub-line, and B25's "every test starts at ten out of ten". All three were the screen
+        explaining the loop in words to somebody who had never seen one. The card underneath
+        this caption does all three jobs at once — it shows the rehearsal, it shows the test,
+        and its ladder starts at ten where a person can see it. B25's problem (a first result
+        of 10 → 9 landing on a person with nothing to read it against) is answered by the
+        picture rather than by a sentence, and `loop.test.js` now holds the ten to the card.
 
-        So the boundary is drawn as a description instead of a rule, and the description is the
-        rehearsal: the thing you run in your head every day and have never once let happen. A
-        gluten intolerance has happened, every time. It fails the sentence on sight, and nobody
-        has been told anything about themselves.
+        `caption` is the most load-bearing string on the screen and it is four words long. It
+        is what makes the card a page in a book rather than a testimonial — the MHRA reads a
+        testimonial as an implied claim (research §5.2) — and it is the heading the screen is
+        announced by. If the founder ever chooses to show a real result of their own, this is
+        the line that changes, to say whose.
       */
-      title: 'You’ve played it out a hundred times.',
-      sub: 'It’s never once gone that way. Try it for real today, and write down what did happen.',
+      caption: 'What one test looks like',
       /*
-        B19. It used to say "Pick a worry" and lead straight to the list. It leads to the
-        doors now, and "Not sure which? Start from what's going on" is gone with the change:
-        it was the second way in, and the second way in turned out to be the only one two
-        test users could read.
+        The big button. It used to say "Pick a worry", then "Start a test"; it asks the
+        question instead now, because the card above it has just shown somebody else's.
       */
-      go: 'Start a test',
-      /*
-        B25, 2026-09-04. Scope §3: "Everything starts at 10 — that is what the front screen
-        says." The old headline, "Sure it'll go badly?", said it in its first word. The new one
-        does not, and the line went with it — so a test user finished his first test, saw
-        10 → 9, and had nothing to read it against: he had arrived from a post showing
-        somebody at 6.
-
-        It says where the number starts and that it moves. It may never say how far, how fast,
-        or where anybody else got to (rule 5, and research §5.4 on claims), and "what actually
-        happens" is direction-neutral on purpose — a test can leave a person more sure.
-      */
-      ladder: 'Every test starts at ten out of ten — that’s how sure you are it goes that way. It moves when you find out what happens.',
+      go: 'What’s yours?',
+      /* One tap aside, and never the main road: the stock list, as things to borrow (B32). */
+      borrow: 'Not sure? Try one of these',
       /* The trust line, with the human half first. §9.2: airplane mode is the proof. */
       promise: 'Nobody sees this but you. No account, no AI, nothing leaves your phone.',
       noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +

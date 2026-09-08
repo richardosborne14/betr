@@ -7,6 +7,7 @@ const assert = require('node:assert');
 
 const worries = require('../content/worries.js');
 const starts = require('../content/starts.js');
+const examples = require('../content/examples.js');
 const doors = require('../content/whats-going-on.js');
 const places = require('../content/places.js');
 const why = require('../content/why.js');
@@ -69,6 +70,64 @@ test('every start makes a whole sentence with the words the screen prints', () =
       assert.match(said, /, then \S/, said);
       assert.ok(said.split(' ').length >= 8, 'too short to be a prediction: ' + said);
       assert.ok(!/  /.test(said), 'a doubled space in: ' + said);
+    }
+  }
+});
+
+/* ------------------------------------------------- B31: the worked example on the front */
+
+/*
+  The first thing anybody sees, and the one piece of content in BETR that is read before a
+  person has agreed to anything. Three things are being held down and they are in order of
+  what they would cost if they went.
+
+  1. IT IS AN EXAMPLE, NOT A CLAIM. Shown as a real person's result it is a testimonial, and
+     the MHRA reads a testimonial as an implied claim (research §5.2). So no name, nobody
+     else's number, and none of the phrases that never appear anywhere.
+  2. IT IS THE SAME SHAPE a person's own result will be, or it is an advert for something
+     else: a conditional prediction, what actually happened, and a ladder from ten.
+  3. IT IS BETR PROPOSING SOMETHING, so rule 4 applies in full — the version of rule 4 that
+     did not loosen on 2026-09-08.
+*/
+test('every worked example is the same shape a person’s own result will be', () => {
+  assert.ok(examples.length >= 1 && examples.length <= 4,
+    'up to four: more is a gallery, and one per open stops being predictable');
+  for (const ex of examples) {
+    assert.deepStrictEqual(Object.keys(ex).sort(), ['from', 'happened', 'prediction', 'to'],
+      'an example is four fields, so there is nowhere to aim one at a person');
+
+    assert.match(ex.prediction, /^If I .+, then .+\.$/,
+      'the prediction is not the shape the build screen makes: ' + ex.prediction);
+    assert.strictEqual((ex.prediction.match(/[.!?]/g) || []).length, 1,
+      'the prediction is more than one sentence: ' + ex.prediction);
+
+    /* Two is allowed here and only here: the beat between them is most of the effect. */
+    assert.ok((ex.happened.match(/[.!?”]\s/g) || []).length <= 1,
+      'what happened is more than two sentences: ' + ex.happened);
+    assert.ok(ex.happened.length <= 90, 'what happened is not a handful of words: ' + ex.happened);
+
+    /* Scope §3: everything starts at ten. It moved, and it is this example's number. */
+    assert.strictEqual(ex.from, 10, 'an example does not start at ten');
+    assert.ok(ex.to >= 1 && ex.to <= 9, 'an example did not move, or went below the floor');
+  }
+});
+
+test('nothing in a worked example names the habit, the body, anyone’s safety, or a diagnosis', () => {
+  const DIAGNOSIS = ['anxiety', 'anxious', 'depression', 'depressed', 'disorder', 'ocd', 'ptsd',
+                     'bipolar', 'psychosis', 'addiction', 'addict', 'therapy', 'therapist',
+                     'symptom', 'symptoms', 'condition', 'diagnosis', 'mental health'];
+  const BANNED = ['digital cbt', 'improve your mental health', 'treats', 'reduces symptoms',
+                  'tracks your anxiety', 'irrational', 'streak', 'most people', 'on average'];
+  for (const ex of examples) {
+    for (const field of ['prediction', 'happened']) {
+      const said = ex[field];
+      for (const [kind, list] of [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]]) {
+        assert.strictEqual(guards.hit(said, list), null, kind + ' word in the example: ' + said);
+      }
+      assert.strictEqual(guards.hit(said, DIAGNOSIS), null, 'a diagnosis word in the example: ' + said);
+      for (const phrase of BANNED) {
+        assert.ok(said.toLowerCase().indexOf(phrase) === -1, said + ' contains "' + phrase + '"');
+      }
     }
   }
 });

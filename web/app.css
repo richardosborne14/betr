@@ -91,6 +91,16 @@ button:focus-visible, textarea:focus-visible { outline: 3px solid var(--btn); ou
   text-transform:uppercase; color: var(--btn); margin:0 0 14px; line-height:1.45;
 }
 h1 { font-family:var(--display); font-weight:800; font-size:clamp(2.25rem,8vw,3.75rem); line-height:1.04; letter-spacing:-.025em; margin:0 0 16px; text-wrap:balance; }
+/*
+  The front screen's heading (B31). It is four words and it is the most load-bearing string on
+  the screen — it is what makes the card below it a page in a book rather than somebody's
+  testimonial — so it is a real h1 that focus lands on and a screen reader reads, and it is
+  drawn small, because the card is what a person is meant to look at.
+*/
+h1.caption {
+  font-size:.8125rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); line-height:1.45; margin:0 0 14px;
+}
 h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.75rem); line-height:1.06; letter-spacing:-.02em; margin:0 0 14px; text-wrap:balance; }
 .sub { font-size:1.25rem; color:var(--ink-2); margin:0 auto 34px; max-width:34ch; text-wrap:balance; }
 .sub.tight { margin-bottom:18px; }
@@ -188,6 +198,16 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
   font-size:1.0625rem; line-height:1.45; color:var(--ink-2); margin:0;
   border-inline-start:3px solid var(--edge); padding-inline-start:14px;
 }
+/*
+  The example card on the front screen. It is `.result`, deliberately — the same card a
+  person's own result is drawn in — with only the ladder brought inside it, because on this
+  screen the whole thing has to read as one object.
+*/
+.result.example { margin-bottom:26px; }
+.result.example .ladder { margin-block-start:2px; }
+.result.example .you { margin-block-end:0; }
+.result.example .real { font-size:clamp(1.1875rem,4vw,1.4375rem); }
+
 /* Above a screen that has a heading of its own, so it must not outrank it. */
 .worry.quiet { margin-bottom:18px; }
 .worry.quiet .worry-label { font-size:1.0625rem; font-weight:700; margin:0 0 6px; letter-spacing:0; }
@@ -402,6 +422,22 @@ textarea.line { min-height:64px; }
   @keyframes pulse { 0%,100% { box-shadow:var(--shadow); } 50% { box-shadow:0 26px 60px rgba(31,63,232,.34), 0 2px 6px rgba(20,22,28,.10); } }
   .list button { transition:border-color .12s, transform .12s; }
   .chip { transition:border-color .12s, color .12s; }
+
+  /*
+    B31: the front screen's worked example, revealed over four seconds. The card is COMPLETE
+    in the markup — this only delays parts of it — so with reduced motion on, or with this
+    whole block never applied, a person simply sees the finished thing on paint. Nothing in
+    the app depends on the animation having run.
+
+    The order is the order a person lived it: the prediction is there from the start, the
+    strike is drawn through it at about a second, what actually happened arrives at two, and
+    the rung it moved to at three.
+  */
+  .example .you { animation: struck .45s ease-out 1s both; }
+  @keyframes struck { from { text-decoration-color: transparent; } to { text-decoration-color: var(--warn); } }
+  .example .late { animation: arrive .5s ease-out 2s both; }
+  .example .ladder .last { animation: arrive .5s ease-out 3s both; }
+  @keyframes arrive { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
   .list button:hover { transform:translateY(-1px); }
   .choices button { transition:border-color .12s; }
 }

@@ -89,8 +89,9 @@ stock list as the front door, which it stopped being on that day.
   single most "learn this first" element of every earlier prototype, so the tap stays four
   words. *Amended 2026-09-02:* the words are relative ("a bit less sure"), so each one now
   moves the belief along a ten-rung ladder from where it already was, instead of writing a
-  fixed number. Everything starts at 10 — that is what the front screen says — and nothing
-  goes below 1. Founder's own CBT used 1–10 and watching it fall is what kept them going.
+  fixed number. Everything starts at 10, and nothing goes below 1. *Amended 2026-09-08 (B31):*
+  the front screen **shows** a ladder starting at ten, on the worked example, instead of saying
+  so in a sentence. `loop.test.js` holds the ten to the card. Founder's own CBT used 1–10 and watching it fall is what kept them going.
   Research §11.6: "show the new belief's evidence growing" is the mechanism and the ad.
 - **A fifth, quiet option: *more sure than before*.** A test can go badly and leave someone
   more convinced. A ladder that can only fall is a nicer story than the person's week. It is

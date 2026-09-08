@@ -42,8 +42,8 @@ function buildOwn(a, ifPart, thenPart, doIt, dropIt) {
 
 test('a full loop, from the start screen to a result', () => {
   const a = boot();
-  a.shows(en.s.start.title);
-  a.tap('#go').shows('What’s going on?');
+  a.shows(en.s.start.caption);
+  a.tap('#not-sure').shows('What’s going on?');
   a.tap('[data-door]', 0).shows('Which one?');
   /*
     B20. Tapping a worry opens the three predictions under it; tapping one of those starts
@@ -73,7 +73,7 @@ test('a full loop, from the start screen to a result', () => {
 test('what happened keeps the line breaks a person typed, on the result and on the card', () => {
   const written = 'He said fair enough.\n\nThen he made me one as well.';
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', written).tap('#next').tap('[data-key]', 2);
 
   /* One paragraph per paragraph, and the class that lets a browser draw a line break. */
@@ -88,7 +88,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
   /* A single line break inside one paragraph is the stylesheet's job, and stays in the text. */
   const b = boot();
-  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'One line.\nAnd the next.').tap('#next').tap('[data-key]', 2);
   assert.ok(b.html().indexOf('One line.\nAnd the next.') !== -1,
     'a single line break inside a paragraph must survive into the markup');
@@ -100,7 +100,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
 test('the count is completed tests, and "didn’t get to it" costs nothing', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
   a.tap('#miss').shows('still here for tomorrow');
   /* not bare "missed": a worry's own test may ask you to write down what you missed. */
   a.hides('you missed').hides('missed a').hides('streak').hides('failed');
@@ -120,7 +120,7 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
 */
 test('putting a test down for the day changes the screen, not just adds a sentence', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks');
   a.shows(en.s.locked.kicker).shows(en.s.locked.title).shows(en.s.locked.miss);
 
   a.tap('#miss');
@@ -140,7 +140,7 @@ test('putting a test down for the day changes the screen, not just adds a senten
 /* Closed and opened again tomorrow, the screen still says it was put down, not still shouting. */
 test('a test put down for today is still put down when the app is opened again', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#miss');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#miss');
 
   /* Reopening lands straight back on the test in hand, in the state it was left in. */
   const again = boot(a.mem);
@@ -150,7 +150,7 @@ test('a test put down for today is still put down when the app is opened again',
 
 test('the second door opens onto worries, never onto a test of its own', () => {
   const a = boot();
-  a.tap('#go').shows('What’s going on?').shows(doors.items[0].label);
+  a.tap('#not-sure').shows('What’s going on?').shows(doors.items[0].label);
   a.tap('[data-door]', 0).shows('Which one?').shows(labelOf(doors.items[0].worries[0]));
   /* B19: and the worry's own sentence is on the button, which is the whole point of it. */
   a.shows(content.byId(worries, doors.items[0].worries[0]).belief);
@@ -169,7 +169,7 @@ test('the second door opens onto worries, never onto a test of its own', () => {
 test('the prediction a person picks is the one that gets tested, not the first one', () => {
   const f = firstBehind(0);
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0);
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
 
   /* all three are offered, with what you would be braced for under each */
   for (const b of f.beliefs) a.shows(b.belief).shows(b.expect);
@@ -197,7 +197,7 @@ test('the prediction a person picks is the one that gets tested, not the first o
 test('the worry and the sentence being tested are on every screen in between', () => {
   const f = firstBehind(0);
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0);
+  a.tap('#not-sure').tap('[data-door]', 0);
   a.shows(f.label).shows(f.belief);                 /* the list: the loose one */
   a.tap('[data-id]', 0).shows(f.label);             /* choosing which prediction */
   a.tap('[data-b]', 2);
@@ -219,7 +219,7 @@ test('the worry and the sentence being tested are on every screen in between', (
 test('putting it your own way keeps the worry and replaces only the sentence', () => {
   const f = firstBehind(0);
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
 
   a.type('#t', 'I am the sort of person who can’t sit still').tap('#next');
   a.shows('verdict, not a prediction');
@@ -391,14 +391,14 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   const screens = ['#m-help'];
   a.tap('#m-help');
   let seen = a.html();
-  a.tap('#back').tap('#go').tap('[data-door]', 0);
+  a.tap('#back').tap('#not-sure').tap('[data-door]', 0);
   seen += a.html();
   a.tap('#own');
   seen += a.html();
   seen += a.type('#if', 'say no').type('#then', 'they will mind').tap('#next').html();
   /* and the two screens the ladder lives on, which is where a score would creep in */
   const b = boot();
-  b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   seen += b.html();
   seen += b.tap('#m-mine').html();
@@ -411,7 +411,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
 
 test('export holds every result, and delete leaves nothing behind', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
@@ -420,7 +420,7 @@ test('export holds every result, and delete leaves nothing behind', () => {
   assert.strictEqual(dump.results[0].happened, 'He said fair enough.');
   assert.strictEqual(dump.results[0].worry, firstBehind().label);
   a.tap('#wipe').shows('There is no copy anywhere else');
-  a.tap('#yes').shows(en.s.start.title);
+  a.tap('#yes').shows(en.s.start.caption);
   a.hides('He said fair enough');
   a.tap('#m-help');
   assert.strictEqual(JSON.parse(a.tap('#export').valueOf('#dump')).results.length, 0);
@@ -428,18 +428,18 @@ test('export holds every result, and delete leaves nothing behind', () => {
 });
 
 test('it starts cleanly from nothing, from rubbish, and from a half-finished loop', () => {
-  boot({ 'betr.v1': '{{{ not json' }).shows(en.s.start.title);
-  boot({ 'betr.v1': '[]' }).shows(en.s.start.title);
+  boot({ 'betr.v1': '{{{ not json' }).shows(en.s.start.caption);
+  boot({ 'betr.v1': '[]' }).shows(en.s.start.caption);
   /* a stage that needs a current test, with no current test, must not strand anyone */
   boot({ 'betr.v1': JSON.stringify({ stage: 'plan', cur: null, done: [] }) })
-    .shows(en.s.start.title);
+    .shows(en.s.start.caption);
   boot({ 'betr.v1': JSON.stringify({ stage: 'result', cur: null, done: [] }) })
-    .shows(en.s.start.title);
+    .shows(en.s.start.caption);
 });
 
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#lock');
   a.hides('Not quite? Change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
   a.hides('Not quite? Change it');
@@ -449,7 +449,7 @@ test('a locked expectation cannot be edited after the test is done', () => {
 
 /* One whole loop, ending on the given re-rate. 0 still / 1 a bit / 2 a lot / 3 not at all / 4 more. */
 function loop(a, item, said, key) {
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   return a;
@@ -500,10 +500,10 @@ test('your worries opens the pick list until there is one, and the worry after t
   const a = boot();
   /* nothing recorded: the door still works, and lands somewhere with something to do */
   a.tap('#m-mine').shows('What’s going on?');
-  a.tap('#back').shows(en.s.start.title);
+  a.tap('#back').shows(en.s.start.caption);
   loop(a, 0, 'He said fair enough.', 1);
   a.tap('#m-mine').shows('Your tests').shows('He said fair enough.');
-  a.tap('#back').shows(en.s.start.title);
+  a.tap('#back').shows(en.s.start.caption);
 });
 
 test('a result saved by the version before the ladder still opens, and still counts', () => {
@@ -539,7 +539,7 @@ test('nothing a person taps, and no heading, calls it a worry', () => {
   };
 
   sweep();
-  a.tap('#go'); sweep();
+  a.tap('#not-sure'); sweep();
   a.tap('[data-door]', 0); sweep();
   a.tap('[data-id]', 0); sweep();
   a.tap('[data-b]', 0); sweep();
@@ -583,7 +583,7 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   a.tap('#m-new'); sweep();                            /* the build screen */
   a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); sweep();
   a.tap('#back').tap('#back');
-  a.tap('#go'); sweep();                               /* what's going on */
+  a.tap('#not-sure'); sweep();                               /* what's going on */
   a.tap('[data-door]', 0); sweep();                    /* pick */
   a.tap('[data-id]', 0).tap('[data-b]', 0); sweep();                      /* plan */
   a.tap('#lock'); sweep();                             /* locked, with the install card */
@@ -641,7 +641,7 @@ test('a sentence that is not quite a prediction is asked about once, then goes t
     is left — "I'll put it my own way" under a borrowed test — and it is where the nudge still
     lives. B32 is where it goes, and where these become guard-level assertions.
   */
-  const a = boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
+  const a = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
 
   a.type('#t', 'People will hate me').tap('#next');
   a.shows('If I ___, then ___');
@@ -655,7 +655,7 @@ test('a sentence that is not quite a prediction is asked about once, then goes t
 });
 
 test('the nudge is gone once the sentence reads as a prediction, and never nags twice', () => {
-  const a = boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
+  const a = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
   a.type('#t', 'If I say no').tap('#next').shows('If I ___, then ___');
 
   /* Rewriting it clears the note, and it does not follow the person to the next screen. */
@@ -664,7 +664,7 @@ test('the nudge is gone once the sentence reads as a prediction, and never nags 
 });
 
 test('a verdict is still refused, and an empty box still is', () => {
-  const a = boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
+  const a = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own');
   a.type('#t', 'I am a bad person').tap('#next');
   a.shows(en.s.refusal.verdict).shows(en.s.own.belief.title);
 
@@ -697,29 +697,82 @@ test('both boxes say which ones BETR is for, not just the blank one', () => {
   boot().tap('#m-new').shows(only);
 
   /* and their own words under a borrowed one, which is the other box there is */
-  boot().tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
+  boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('#own').shows(only);
 });
 
 /*
-  B25. Scope §3 says the front screen is where "everything starts at 10" is said, and on
-  2026-09-04 a headline change quietly took it away — nobody noticed until a walker finished
-  his first test, saw 10 → 9, and had no idea whether that was good. A rule that lives only in
-  a doc can be deleted by a well-meaning edit on github.com, so it lives here too.
+  B25, as B31 leaves it. Scope §3 says the front screen is where "everything starts at 10" is
+  said, and on 2026-09-04 a headline change quietly took the sentence away — nobody noticed
+  until a walker finished his first test, saw 10 → 9, and had no idea whether that was good.
 
-  It checks three things and no more: the line is on the front screen before anything is
-  tapped; it says where the number starts; and it does not promise how far or how fast.
+  On 2026-09-08 the sentence went again, on purpose: the front screen SHOWS a ladder starting
+  at ten instead of saying so. That is a better answer to the same problem and it is a more
+  fragile one, because a card is easy to change without noticing what it was carrying. So the
+  rule moved onto the card: the first rung reads ten, before anything is tapped.
+
+  And the promise half is unchanged and is the more important half. Rule 5 and research §5.4:
+  the screen may say what happened in ONE example and may never say what will happen to
+  anybody else — no "most people", no average, no pace, no target.
 */
-test('the front screen still says every worry starts at ten', () => {
-  const line = en.s.start.ladder;
-  assert.ok(/ten|10/.test(line), 'the front screen no longer says where the ladder starts');
+test('the front screen still shows a ladder that starts at ten', () => {
+  const examples = require('../content/examples.js');
+  const a = boot();
 
-  boot().shows(line);
+  /* the card is there before anything is tapped, and its first rung is ten */
+  a.shows(en.s.start.caption);
+  a.shows(examples[0].prediction).shows(examples[0].happened);
+  a.shows('Started: 10 out of 10.');
+  assert.match(a.html(), /class="result example"/, 'the front screen has no worked example on it');
 
-  /* No claim about outcome. Rule 5 and research §5.4: no target, no pace, nobody else's number. */
-  [/most people/i, /within/i, /in (a|two|three) (day|week|month)/i, /will (drop|fall|go down)/i]
-    .forEach(function (bad) {
-      assert.ok(!bad.test(line), 'the ladder line has grown a promise: ' + line);
-    });
+  /* it moved, and it says by how much for THIS example only */
+  a.shows('>' + examples[0].to + '<');
+
+  /* No claim about anybody else. */
+  const words = a.html().replace(/<[^>]*>/g, ' ');
+  for (const bad of [/most people/i, /on average/i, /within \d/i, /in (a|two|three) (day|week|month)/i,
+                     /people who/i, /users/i]) {
+    assert.ok(!bad.test(words), 'the front screen has grown a promise: ' + (words.match(bad) || [])[0]);
+  }
+});
+
+/*
+  B31. It is an example and it is captioned as one, which is the whole of what keeps it a page
+  in a book rather than a testimonial — and the MHRA reads a testimonial as an implied claim
+  (research §5.2). If the founder ever chooses to show a real result of their own, this test
+  is what makes changing the caption a deliberate act rather than an oversight.
+*/
+test('the worked example says it is an example, and names nobody', () => {
+  const a = boot();
+  a.shows(en.s.start.caption);
+  const h = a.html();
+  const at = h.indexOf(en.s.start.caption);
+  assert.ok(at !== -1 && at < h.indexOf('class="result example"'),
+    'the card is drawn above the line that says what it is');
+  /* first-person plural, a name, or a quotation mark round the whole thing would all be a claim */
+  for (const bad of [/\bsaid one\b/i, /\bone of our\b/i, /\breal person\b/i, /\btestimonial\b/i]) {
+    assert.ok(!bad.test(h), 'the example is presented as somebody’s result');
+  }
+});
+
+/*
+  The reveal is polish and nothing depends on it: the finished card is in the markup, and the
+  stylesheet only delays parts of it, inside the reduced-motion block where every other piece
+  of movement in BETR lives. A person who asked for nothing to move gets the finished thing.
+*/
+test('the worked example is complete in the markup, and only delayed by the stylesheet', () => {
+  const examples = require('../content/examples.js');
+  const h = boot().html();
+  assert.ok(h.indexOf(examples[0].prediction) !== -1);
+  assert.ok(h.indexOf(examples[0].happened) !== -1, 'what happened is not in the markup at all');
+  assert.ok(h.indexOf('Now: ' + examples[0].to + ' out of 10.') !== -1, 'the rung it moved to is not drawn');
+
+  const css = fs.readFileSync(path.join(__dirname, '..', 'app.css'), 'utf8');
+  const block = css.slice(css.indexOf('@media (prefers-reduced-motion: no-preference)'));
+  for (const rule of ['.example .you', '.example .late', '.example .ladder .last']) {
+    assert.ok(block.indexOf(rule) !== -1, rule + ' is not inside the reduced-motion block');
+    assert.ok(css.indexOf(rule) >= css.indexOf('@media (prefers-reduced-motion: no-preference)'),
+      rule + ' also animates outside the reduced-motion block');
+  }
 });
 
 test('the brand is BETR everywhere a person reads it, refusals included', () => {
@@ -758,7 +811,7 @@ test('why a worry sticks is offered after a result, on both screens, and never b
   const a = boot();
 
   /* Not on the doors, not on the pick list, and not while a test is waiting. */
-  a.tap('#go').hides('Why this one sticks');
+  a.tap('#not-sure').hides('Why this one sticks');
   a.tap('[data-door]', 0).hides('Why this one sticks');
   a.tap('[data-id]', 0).tap('[data-b]', 0).hides('Why this one sticks');
   a.tap('#lock').hides('Why this one sticks');

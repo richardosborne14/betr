@@ -24,9 +24,9 @@ const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
 
 /* Lock a stock worry in and walk away from it, leaving it waiting. */
 function lockOne(a, item) {
-  if (a.html().indexOf('id="go"') !== -1) a.tap('#go');   /* already past the front screen, or not */
+  if (a.html().indexOf('id="go"') !== -1) a.tap('#not-sure');   /* already past the front screen, or not */
   /* B30: "New test" opens the build screen, so the borrow road starts from the front screen. */
-  if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#go');
+  if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#not-sure');
   if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', 0);
   a.tap('[data-id]', item).tap('[data-b]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
@@ -38,7 +38,7 @@ function lockOne(a, item) {
 test('the menu is on every screen, and it is exactly three plain words', () => {
   const a = boot();
   const stops = [
-    () => a.tap('#go'),                       /* what's going on */
+    () => a.tap('#not-sure'),                       /* what's going on */
     () => a.tap('[data-door]', 0),            /* pick */
     () => a.tap('[data-id]', 0).tap('[data-b]', 0),              /* plan */
     () => a.tap('#lock'),                     /* locked */
@@ -62,9 +62,9 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
 test('every door on the menu works from every screen', () => {
   const from = [
     (a) => a,                                                     /* the start screen */
-    (a) => a.tap('#go'),                                          /* what's going on */
-    (a) => a.tap('#go').tap('[data-door]', 0),                    /* pick */
-    (a) => a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0),  /* plan */
+    (a) => a.tap('#not-sure'),                                          /* what's going on */
+    (a) => a.tap('#not-sure').tap('[data-door]', 0),                    /* pick */
+    (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0),  /* plan */
     (a) => lockOne(a, 0),                                         /* locked */
     (a) => lockOne(a, 0).tap('#done'),                            /* happened */
     (a) => a.tap('#m-new')                                        /* the build screen */
@@ -106,9 +106,18 @@ test('there is no cap on how many are on the go, and nothing counts them', () =>
   a.tap('#back');                       /* the front screen, with four waiting */
   a.shows('Tests you’ve got on the go');
   const front = a.html();
-  for (const shame of ['4 ', 'overdue', 'waiting for', 'you missed', 'streak', 'behind']) {
+  for (const shame of ['overdue', 'waiting for', 'you missed', 'streak', 'behind']) {
     assert.ok(front.toLowerCase().indexOf(shame.toLowerCase()) === -1, 'front screen says "' + shame + '"');
   }
+  /*
+    And the count itself is nowhere on it. This used to look for the bare string "4 ", which
+    stopped working on 2026-09-08: the front screen now carries a worked example whose ladder
+    legitimately says "Down 4 rungs" (B31). So it checks the LINE about what is on the go,
+    which is the one that would grow a tally, rather than the whole screen.
+  */
+  const line = front.slice(front.indexOf('Tests you’ve got on the go') - 200,
+                           front.indexOf('Tests you’ve got on the go') + 60);
+  assert.ok(!/\d/.test(line.replace(/<[^>]*>/g, '')), 'the line about what is on the go counts them: ' + line);
   /* they are all still there, and the menu still says nothing about how many */
   const mine = a.tap('#pickup').html();
   assert.strictEqual((mine.match(/data-did=/g) || []).length, 4);
@@ -130,7 +139,7 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
 
 test('an unfinished test that was never locked in is simply let go', () => {
   const a = boot();
-  a.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).shows('I’ll do it today');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).shows('I’ll do it today');
   a.tap('#m-new').tap('#back');
   a.hides('On the go');
 });
@@ -291,7 +300,7 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
   /* everywhere else in the app: nothing but the crisis numbers */
   const b = boot();
   let rest = b.html();
-  rest += b.tap('#go').html();
+  rest += b.tap('#not-sure').html();
   rest += b.tap('[data-door]', 0).html();
   rest += b.tap('[data-id]', 0).tap('[data-b]', 0).html();
   rest += b.tap('#lock').html();
@@ -348,7 +357,7 @@ test('ours is on the Help list, never first, and says who made it and what it co
   /* and it is not on the front screen, in the loop, in the result, or on the menu */
   const b = boot();
   let rest = b.html();
-  rest += b.tap('#go').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).html();
+  rest += b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).html();
   rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
   rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');
@@ -392,7 +401,7 @@ test('if door one still promises places for alcohol and drugs, Help has them', (
   inside the app, not as a link, so the rule that only Help carries links is untouched.
 */
 test('tapping door one\'s note opens Help, and lands on the places it promised', () => {
-  const a = boot().tap('#go');
+  const a = boot().tap('#not-sure');
   a.shows('data-note=');
   a.tap('[data-note]');
   a.shows(places.groups[0].items[0].url);
@@ -406,7 +415,7 @@ test('tapping door one\'s note opens Help, and lands on the places it promised',
     'the note opened Help but left them at the top of it');
 
   /* it moved inside the app: the note itself is not a link out */
-  const doors = boot().tap('#go').html();
+  const doors = boot().tap('#not-sure').html();
   const note = doors.slice(doors.indexOf('doornote'), doors.indexOf('doornote') + 400);
   assert.ok(note.indexOf('href=') === -1, 'the note is a link out, not a move inside the app');
 });

@@ -166,8 +166,14 @@
     `country` in the first two, and a person's chosen country was thrown away on the next
     save because isEmpty() still thought the record was empty. Both of these are in all three.
   */
+  /*
+    `seen` is B31's, and it counts opens so the front screen's worked example is the NEXT one
+    rather than a shuffle. It is the one stored field that isEmpty() deliberately ignores: a
+    BETR that has never been used, and one that has just been wiped, must leave nothing at all
+    behind, and which example comes next is not something anybody would miss.
+  */
   function blank() {
-    return { v: VERSION, stage: 'start', cur: null, country: null, lang: null, open: [], done: [], seenInstall: false };
+    return { v: VERSION, stage: 'start', cur: null, country: null, lang: null, open: [], done: [], seenInstall: false, seen: 0 };
   }
 
   /* Anything we cannot vouch for is replaced, never repaired halfway. */
@@ -191,6 +197,9 @@
     if (typeof raw.country === 'string' && /^[A-Z]{2}$/.test(raw.country)) s.country = raw.country;
     if (typeof raw.lang === 'string' && /^[a-zA-Z-]{2,12}$/.test(raw.lang)) s.lang = raw.lang;
     s.seenInstall = raw.seenInstall === true;
+    if (typeof raw.seen === 'number' && raw.seen === raw.seen && raw.seen >= 0) {
+      s.seen = Math.floor(raw.seen);
+    }
     return s;
   }
 

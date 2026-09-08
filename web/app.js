@@ -33,6 +33,7 @@
   var content = Betr.content;
   var WORRIES = Betr.worries;
   var STARTS = Betr.starts;
+  var EXAMPLES = Betr.examples;
   var DOORS = Betr.doors;
   var PLACES = Betr.places;
   var WHY = Betr.why;
@@ -147,6 +148,8 @@
   */
   var pending = null;
   var toSay = null;        /* what the next paint() should read out. Cleared as it is used */
+  /* Which worked example this open is showing (B31). Decided once, at the bottom of the file. */
+  var shown = 0;
 
   /* localStorage itself can throw on access in a locked-down browser, not just on write. */
   function safeStorage() {
@@ -651,27 +654,84 @@
     });
   }
 
+  /*
+    ---------------------------------------------------------------- the front screen (B31)
+
+    It shows one finished test and then asks the question. It used to describe the loop in
+    three sentences to somebody who had never seen one.
+
+    THE CARD IS THE SAME CARD a person's own result is drawn in — `.result`, the same two
+    labels, the same struck line, the same marker pen, the same ladder — because the point is
+    "this is what you are about to make", and a different-looking card would be an advert for
+    something else. What makes it an example rather than a testimonial is one line of four
+    words above it (research §5.2: the MHRA reads a testimonial as an implied claim).
+
+    THE FINAL STATE IS IN THE MARKUP. The reveal in app.css only DELAYS parts of it, and only
+    under `prefers-reduced-motion: no-preference`. Nothing here depends on the animation
+    having run: with reduced motion on, the finished card is simply there on paint.
+
+    Rule 5 holds on this card as it holds everywhere. Its ladder moves because that is what
+    happened in this example. The screen never says how far anybody else's will move, there is
+    no "most people", no average, and the number belongs to the test rather than to a person.
+  */
+  function exampleCard() {
+    var ex = EXAMPLES[exampleIndex()];
+    if (!ex) return '';
+    return '<div class="result example">' +
+        '<p class="lbl">' + esc(t('result.expected')) + '</p>' +
+        '<p class="you"><span class="wrote">' + esc(ex.prediction) + '</span></p>' +
+        '<p class="lbl late">' + esc(t('result.happened')) + '</p>' +
+        '<p class="real late"><span class="wrote">' + esc(ex.happened) + '</span></p>' +
+        '<p class="lbl">' + esc(t('result.ladderLabel')) + '</p>' +
+        /*
+          Named with the plain line, not with the example's own sentence: this ladder belongs
+          to a worked example and quoting it back would read as somebody's record.
+        */
+        '<div class="ladder" role="group" aria-label="' + esc(t('a11y.ladderPlain')) + '">' +
+          rung(t('ladder.started'), ex.from, {}) +
+          '<div class="last">' + rung(t('ladder.now'), ex.to, { prev: ex.from }) + '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /*
+    Which one, and it is a counter rather than a shuffle: a person who reopens sees the next
+    one, and anybody testing can say in advance which they will get.
+
+    It is fixed for the whole session, decided once at the bottom of this file, so that
+    walking back to the front screen mid-session does not swap the card underneath somebody.
+
+    `S.seen` is deliberately NOT counted by store.isEmpty(). A BETR that has never been used,
+    and one that has just been wiped, must leave nothing at all behind — and which example
+    comes next is not something a person would miss. The cost is that somebody with nothing
+    else stored sees the first one every time, which is the right way round anyway: the first
+    one is the one the founder chose to lead with.
+  */
+  function exampleIndex() {
+    if (!EXAMPLES.length) return 0;
+    return ((shown % EXAMPLES.length) + EXAMPLES.length) % EXAMPLES.length;
+  }
+
   function start() {
     paint(
       '<div class="stage">' +
         '<div class="kicker">' + esc(t('brand')) + '</div>' +
-        head('h1', t('start.title')) +
-        '<p class="sub">' + esc(t('start.sub')) + '</p>' +
+        head('h1', t('start.caption'), 'caption') +
+        exampleCard() +
         '<button class="big pulse" id="go">' + esc(t('start.go')) +
           ' <span class="arrow" aria-hidden="true">→</span></button>' +
+        '<p class="row"><button class="ghost" id="not-sure">' + esc(t('start.borrow')) + '</button></p>' +
         waitingBlock() +
-        /* B25. Where the ladder starts, on the only screen that can say it before the loop. */
-        '<p class="tiny">' + esc(t('start.ladder')) + '</p>' +
         '<p class="tiny">' + esc(t('start.promise')) + '</p>' +
         (storageOk ? '' : '<p class="tiny">' + esc(t('start.noStorage')) + '</p>') +
       '</div>');
+    /* The main road: their own sentence, from nothing. */
+    on('#go', newTest);
     /*
-      B19. The one big button leads to the doors, not to the whole list. Two people were
-      watched choosing from twenty-one two-word labels' worth of ambiguity and neither could;
-      both read a door on sight. `start.doors` — "Not sure which?" — is gone with it, because
-      it is no longer a second way in, it is the way in.
+      One tap aside, and it is the whole of what the doors and the stock list are now: things
+      to borrow (B32). It was the way in until 2026-09-08.
     */
-    on('#go', function () { S.filter = null; go('doors'); });
+    on('#not-sure', function () { S.filter = null; go('doors'); });
     wireWaiting();
   }
 
@@ -1884,6 +1944,16 @@
   }
 
   /* ---------------------------------------------------------------- go */
+
+  /*
+    One open, one step of the example counter (B31). Here rather than inside start(), so that
+    walking back to the front screen during a session does not swap the card underneath
+    somebody. It writes through save(), which for a person with nothing else stored is a
+    no-op — see exampleIndex() for why that is the right way round.
+  */
+  shown = typeof S.seen === 'number' && S.seen === S.seen ? S.seen : 0;
+  S.seen = shown + 1;
+  save();
 
   applyLanguage();
   render();

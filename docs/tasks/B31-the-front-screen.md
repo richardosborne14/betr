@@ -1,77 +1,95 @@
 # B31: The front screen — one finished test, watched not read
 
-**Status:** **Open**
-**Confidence:** 8/10 in the build; **4/10 in the example**, which is one line of content nobody
-outside this building has read, and the whole screen rests on it
-**Date opened:** 2026-09-08 · **Depends on:** B30 (its big button leads to the build screen)
+**Status:** **Done, 2026-09-08.** 193 tests green; walked and measured at 390×844
+**Confidence:** 8/10 in the build; **4/10 in the example**, unchanged — it is one line of
+content nobody outside this building has read, and the whole screen rests on it
+**Date opened:** 2026-09-08 · **Depends on:** B30 (done)
 **Mockups:** screen 1, and the note "The first thing they see"
 
-## What it is
+## What was built
 
-The front screen stops describing BETR. It shows **one finished test**: a small caption (*What
-one test looks like*), then the result card exactly as a person's own will look — the
-prediction, a line struck through it, what happened in marker, the ladder from ten to a lower
-rung — then **What's yours?** (big, leads to B30's build screen), **Not sure? Try one of these**
-(ghost, leads to B32's borrow list), and the trust line. The bottom row stays.
+The front screen stopped describing BETR and started showing it. In order down the screen:
+**BETR**, the caption **What one test looks like**, the card, **What's yours?** (big, to the
+build screen), **Not sure? Try one of these** (ghost, to the doors), anything on the go, and
+the trust line.
 
-**The founder's bar (2026-09-08):** a handful of words, no long text, no link to go and learn.
-A person reads it and thinks "I wish I had that courage", then sees that anyone does, in a safe
-and controlled way. **Words, not video** — it works with wifi off, weighs nothing, needs no
-actor, reads aloud on a screen reader, and it is the very thing they are about to make.
+**The card is `.result` — the same card a person's own result is drawn in**, with the ladder
+brought inside it. Same two labels, same struck line, same marker pen. That is the point: this
+is what you are about to make, and a different-looking card would be an advert for something
+else.
 
-## The reveal
+**Measured at 390×844, menu fixed over the bottom 59px:** *What's yours?* bottom at 576, the
+trust line bottom at **731**, the fold at 785. The whole screen fits, including the line the
+founder's own trust story rests on.
 
-Under `@media (prefers-reduced-motion: no-preference)` only: the prediction is there from the
-start; the strike draws at about one second; *What happened* fades in at about two; the ladder's
-second row appears at three and its last four dots go grey. Four seconds in all. With reduced
-motion the card is simply there, finished. **The final state is in the markup**, the animation
-only delays it — so nothing depends on the animation having run.
+## What left, and why that is the same job done better
+
+`start.title` ("You've played it out a hundred times"), `start.sub`, and B25's `start.ladder`
+("every test starts at ten out of ten") are gone. All three were the screen explaining the loop
+in words to somebody who had never seen one, and the card does all three at once: it shows the
+rehearsal, it shows the test, and its first rung reads **ten** where a person can see it.
+
+**B25's problem is answered by the picture, and B25's test moved onto the card.** A person's
+first result landing at 10 → 9 with nothing to read it against was the failure; a card that
+starts at ten and ends lower is a better answer than a sentence about it, and a more fragile
+one, because a card is easy to change without noticing what it was carrying. So
+`loop.test.js` now asserts the first rung says ten, before anything is tapped — and keeps the
+half of B25 that matters more: **no "most people", no average, no pace, no target.**
 
 ## The example
 
-Lives in a new **`web/content/examples.js`**: up to four, each `{ prediction, happened, from,
-to }`. Plain data. One is shown per open, chosen by a counter in storage (not at random — a
-person who reopens sees the next one, and a tester can predict which). The mockup's:
+**`web/content/examples.js`** — four of them, four fields each (`prediction`, `happened`,
+`from`, `to`), plain data, written fresh. The first is the mockup's, which the founder saw:
 
-> If I tell my dad I'm struggling, he'll change the subject. → He went quiet. Then he said "Me
-> too." 10 → 6
+> If I tell my dad I'm struggling, then he'll change the subject. → He went quiet. Then he
+> said "Me too." · 10 → 6
 
-Three or four alternatives are on the canvas note for the founder and Misha.
+**One per open, by a counter, never at random** — a person who reopens sees the next one and a
+tester can say in advance which. The index is fixed for the whole session, so walking back to
+the front screen mid-session does not swap the card underneath somebody.
 
-**Real or example — the founder's decision, before this ships.** Shown as a real person's
-result it is a testimonial, and MHRA reads a testimonial as an implied claim (research §5.2).
-Shown under *What one test looks like* it is a page in a book. The task builds the latter and
-the caption is the line that makes it so; if the founder chooses a real one of their own, the
-caption changes to say whose, and the ladder numbers are the real ones.
+**`S.seen` is the one stored field `isEmpty()` deliberately ignores.** A BETR that has never
+been used, and one that has just been wiped, must leave nothing at all behind — and which
+example comes next is not something anybody would miss. The cost is that a person with nothing
+else stored sees the first one every time, which is the right way round: the first one is the
+one the founder chose to lead with.
 
-**Rule 5 still holds on this card:** the example's ladder moves down because that is what
-happened in the example; the screen may not say how far anyone else's will move, and the number
-is that test's, not a score. No "most people". No average.
+## The reveal
 
-## What leaves the front screen
+Inside `@media (prefers-reduced-motion: no-preference)` and nowhere else. **The finished card
+is in the markup**; the stylesheet only delays parts of it, so with reduced motion on, or with
+the block never applied, a person sees the finished thing on paint. A test asserts both — the
+words are in the markup, and each of the three rules is inside the reduced-motion block and
+outside no other.
 
-`start.title` ("You've played it out a hundred times"), `start.sub`, and `start.ladder` (B25's
-"every worry starts at ten" line) all go. B25's problem — a person's first result landing on an
-app that never said where the number starts — is answered by the card itself, which shows a
-ladder starting at ten. `loop.test.js`'s test that holds the B25 line changes to assert the
-card's first rung reads ten.
+The prediction is there from the start; the strike is drawn through it at one second
+(`text-decoration-color` from transparent, which animates and needs no overlay that would break
+across two lines); what actually happened arrives at two; the rung it moved to at three.
 
-## Files
+## What keeps this an example rather than a claim
 
-- `web/app.js` — `start()` redrawn. `web/content/strings-en.js` — `start.*` rewritten.
-- `web/content/examples.js` — new; `index.html` loads it.
-- `web/app.css` — the reveal, inside the reduced-motion block, and nothing else new: the card
-  is `.result` as it is.
-- `web/tests/content.test.js` — every example is one sentence each side, the prediction starts
-  "If I", `from` is 10, `to` is between 1 and 9, no habit word, no diagnosis word, and none of
-  the seven banned phrases.
-- `web/tests/loop.test.js` — the front screen shows a card, *What's yours?* opens `#if`, *Not
-  sure?* opens the borrow list; the a11y test reads the card as one region with the strike
-  announced as "expected" not as struck text.
+Shown as a real person's result the card is a **testimonial**, and the MHRA reads a testimonial
+as an implied claim (research §5.2). Three things hold it:
+
+1. **The caption is the h1** — four words, the heading the screen is announced by, drawn small
+   because the card is what a person looks at. It is the most load-bearing string on the screen.
+2. **`content.test.js` refuses a name, a diagnosis word, "most people", "on average"**, and the
+   three word lists, in both fields of every example.
+3. **`loop.test.js` asserts the caption is drawn above the card**, so changing it is deliberate.
+
+**Rule 5 holds on the card**: its ladder moves because that is what happened in this example.
+The screen never says how far anybody else's will move, and the number belongs to the test.
+
+## Open, and it is the founder's and Misha's
+
+- **Which example leads, and whether it is real or an example.** The task built the second one.
+  If the founder chooses a real result of their own, the caption changes to say whose and the
+  four fields become the real ones — one string and four numbers, no code.
+- **Three alternatives are in the file** for them to read on a phone.
 
 ## Definition of done
 
-- [ ] Walked at 390 wide: the card, both buttons and the trust line are above the fold **at
-      125% text** (the fold is 785px, not 844 — see `NEXT-SESSION.md`)
-- [ ] With reduced motion on, the finished card is there on paint
-- [ ] The founder has read the example on a phone and said which one
+- [x] Walked at 390 wide: the card, both buttons and the trust line are above the fold
+- [x] With reduced motion, the finished card is there on paint (held by a test)
+- [ ] **125% text** — B33 walks it
+- [ ] **The founder has read the example on a phone and said which one**

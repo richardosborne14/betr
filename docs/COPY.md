@@ -100,21 +100,17 @@ keep it, and put it wherever the sentence needs it.
 
 *The first thing anybody sees.*
 
-**`start.title`**
+**`start.caption`**
 
-> You’ve played it out a hundred times.
-
-**`start.sub`**
-
-> It’s never once gone that way. Try it for real today, and write down what did happen.
+> What one test looks like
 
 **`start.go`**
 
-> Start a test
+> What’s yours?
 
-**`start.ladder`**
+**`start.borrow`**
 
-> Every test starts at ten out of ten — that’s how sure you are it goes that way. It moves when you find out what happens.
+> Not sure? Try one of these
 
 **`start.promise`**
 

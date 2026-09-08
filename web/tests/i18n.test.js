@@ -111,12 +111,12 @@ test('every key app.js asks for is in the string file', () => {
 test('a person never reads a key, and never reads an unfilled placeholder', () => {
   const a = boot();
   let seen = a.html();
-  a.tap('#go'); seen += a.html();                                    /* the doors */
+  a.tap('#not-sure'); seen += a.html();                                    /* the doors */
   a.tap('[data-door]', 0); seen += a.html();                        /* the worries behind one */
   a.tap('#own'); seen += a.html();                                   /* the build screen */
   a.tap('#next'); seen += a.html();                                  /* an empty-blank refusal */
   a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); seen += a.html();
-  a.tap('#back').tap('#back').tap('#go').tap('[data-door]', 0); seen += a.html();
+  a.tap('#back').tap('#back').tap('#not-sure').tap('[data-door]', 0); seen += a.html();
   a.tap('[data-id]', 0).tap('#own'); seen += a.html();               /* the other box, and its refusal */
   a.type('#t', 'I am hopeless').tap('#next'); seen += a.html();
   a.tap('#back').tap('[data-b]', 0); seen += a.html();               /* on to a test */
@@ -144,12 +144,12 @@ test('a person never reads a key, and never reads an unfilled placeholder', () =
 /* ------------------------------------------------- the module itself */
 
 test('a language falls back to English one key at a time, not one file at a time', () => {
-  const half = { lang: 'xx', dir: 'ltr', name: 'Halfish', s: { start: { title: 'Halfish title' } } };
+  const half = { lang: 'xx', dir: 'ltr', name: 'Halfish', s: { start: { caption: 'Halfish caption' } } };
   const I = i18n.create({ en: en, xx: half }, { chosen: 'xx' });
 
-  assert.strictEqual(I.t('start.title'), 'Halfish title', 'the translated key was not used');
-  assert.strictEqual(I.t('start.sub'), en.s.start.sub, 'a missing key did not fall back to English');
-  assert.ok(I.gapKeys().indexOf('start.sub') !== -1, 'the gap was not recorded for the translator');
+  assert.strictEqual(I.t('start.caption'), 'Halfish caption', 'the translated key was not used');
+  assert.strictEqual(I.t('start.promise'), en.s.start.promise, 'a missing key did not fall back to English');
+  assert.ok(I.gapKeys().indexOf('start.promise') !== -1, 'the gap was not recorded for the translator');
   assert.deepStrictEqual(I.unknownKeys(), [], 'a key that exists was called unknown');
 });
 
