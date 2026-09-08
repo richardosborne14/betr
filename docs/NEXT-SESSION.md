@@ -25,26 +25,23 @@ live at `https://betr.trybeup.com`.
 
 ## 2. The next action
 
-**Nothing is half-built. The next action is the founder's answer on B35 §3**, and it is the
-biggest open question in the app.
-
-**They asked for LLM-written suggestions on *What will you do today?*** — the diagnosis is
-right, and B34 §1 found the same hole: a person who typed their own sentence gets **two**
-generic `dos`. They set the bar themselves: *"it needs to respect the prompt … no exposure to
-risking someone hurting themselves"*. **Four rounds were measured offline. It does not clear
-that bar.** Full numbers in `docs/learnings.md`; the one line that matters:
+**Nothing is half-built.** The founder asked for LLM-written suggestions on *What will you do
+today?* — the diagnosis is right, and B34 §1 found the same hole: a person who typed their own
+sentence gets **two** generic `dos`. They set the bar themselves: *"it needs to respect the
+prompt … no exposure to risking someone hurting themselves"*. **Four rounds were measured
+offline. It does not clear that bar.** Full numbers in `docs/learnings.md`; the line that
+matters:
 
 > **The safety gate scored 100% on the sentences it had been shown and 70% on the ones it had
 > not.** Held out, it allowed *"walk home past the bridge"*, *"come off the sleeping tablets"*
 > and *"stop messaging her to check she's not angry"* — **3 of 3 each**. A blind spot.
 
-**The recommendation on the table: use the model offline as a writing assistant**, generate
-several hundred candidate `dos`/`drops`, put them through the CBT reviewer who is already a
-release condition, ship the good ones as **fixed content**. Newbie unstuck, nothing leaves the
-phone, no frozen sentence unfreezes, BETR still never chooses.
+**The route taken instead: the model offline as a writing assistant**, candidates through the
+CBT reviewer who is already a release condition, the good ones shipped as **fixed content**.
+Newbie unstuck, nothing leaves the phone, no frozen sentence unfreezes, BETR never chooses.
 
-**The founder took that route on 2026-09-08** — *"yeah I reckon you just generate a bunch of
-sentences"* — **so the runtime call is not being built, and the first batch exists:
+**The founder took it on 2026-09-08** — *"yeah I reckon you just generate a bunch of
+sentences"* — **so no runtime call is being built, and the first batch exists:
 `docs/candidates-suggestions-batch-1.md`**, 91 lines written offline, **unreviewed and not in
 the app**. §1 is the part that matters (the `general` set, all the main road offers); §3 argues
 **start #19 should come out of `starts.js`**, a checking ritual BETR wrote itself that 206 tests
@@ -116,6 +113,8 @@ an owner for links and helplines.
   (B26), frozen sentence 6 third (B33), then CBT, then the nine.
 - **Every word a person reads is in `web/content/`**; a sentence back in `app.js` fails
   `i18n.test.js` — and **a string literal that starts mid-tag reads as prose to that sweep**.
-  B35 tripped it with a class name (`' quiet solo'`).
+- **Use `’` and `“ ”`, never `'` and `"`.** All 723 content strings already do, and since B35
+  `content.test.js` fails the build on a typewriter one. It bit the offline batch sixty times:
+  anything drafted outside `web/content/` arrives with the wrong quotes.
 - **`content/zones.js` and `docs/COPY.md` are generated** (`node tools/copy-sheet.js`); never
   hand-edit. **No helpline number is written from memory.**

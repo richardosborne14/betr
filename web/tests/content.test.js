@@ -428,3 +428,48 @@ test('the door carrying the safety note is high enough for the note to be seen',
   assert.strictEqual(doors.items.filter((d) => d.note).length, 1,
     'more than one door has a note, so "the door with the note" no longer names one thing');
 });
+
+/*
+  B35, 2026-09-08, and it is here because a checker found it and no reader ever would.
+
+  723 strings across the six content files a person writes prose in, and **not one of them**
+  contains a straight apostrophe or a straight double quote. 116 lines in `starts.js` alone use
+  `’`, and ten use `“ ”`. The convention is absolute — and until this test it was completely
+  unenforced, so the first line that broke it would ship, and nothing would go red.
+
+  IT WOULD NOT LOOK LIKE A TYPO. It would look like two different apps on one screen: a chip
+  reading `Don't rehearse it beforehand.` directly under one reading `Don’t explain yourself.`
+
+  THE PERSON THIS PROTECTS IS THE FOUNDER. `docs/changing-the-words.md` tells them to edit
+  these files by hand on github.com, which is a plain textarea on a keyboard that types `'`.
+  They would break this on their first edit, every time, and nothing would tell them. Now
+  something does, before the change is published rather than after.
+
+  Batch 1 of the offline suggestions (`docs/candidates-suggestions-batch-1.md`) came back from
+  that checker with sixty of them, which is what prompted this — a reminder that anything
+  written outside these files is drafted somewhere with no typographic quotes.
+
+  `zones.js` and `helplines.js` are deliberately not swept: both are transcribed from outside
+  sources — IANA, and a provider's own website — and their words are not ours to restyle.
+  `places.js` is not swept for the same reason: it carries other organisations' names.
+*/
+test('every word a person reads uses the typographic apostrophe, not the typewriter one', () => {
+  const files = { 'strings-en.js': require('../content/strings-en.js'), 'worries.js': worries,
+                  'starts.js': starts, 'why.js': why, 'whats-going-on.js': doors,
+                  'examples.js': examples };
+  const found = [];
+  let swept = 0;
+  const walk = (node, path) => {
+    if (typeof node === 'string') {
+      swept++;
+      if (/['"]/.test(node)) found.push(path + ' — ' + node);
+      return;
+    }
+    if (node && typeof node === 'object') for (const k of Object.keys(node)) walk(node[k], path + '.' + k);
+  };
+  for (const name of Object.keys(files)) walk(files[name], name);
+
+  assert.ok(swept > 600, 'only swept ' + swept + ' strings: this check has stopped working');
+  assert.deepStrictEqual(found, [],
+    'use ’ and “ ” — every other line in web/content/ does, and a screen with both looks broken');
+});
