@@ -279,3 +279,161 @@ what step 4 is.
 | c | **Misha** | Tone on every string here, and one thing specifically: whether *"Too big? Make it smaller"* reads as helpful or as being managed. |
 | d | **CBT reviewer** | All of it, and it should go in the same envelope as `docs/suggestions-review.csv` rather than as a second ask. Specifically: is *"the smallest version that could still turn out wrong"* a safe thing to hand somebody with no clinician, and are the five dials the right five? |
 | e | **Nobody yet** | The fold bug that blocks item 5, and the medication word list. |
+
+---
+
+# Part two — permission, and the dial
+
+**Added 2026-09-08**, after the founder named the two things part one missed. Research:
+[`../research/12-guiding-the-first-test.md`](../research/12-guiding-the-first-test.md) §9–§11.
+
+## 7. The founder's first point, and what the evidence does to it
+
+> We don't have a therapist who can give my daughter the feeling of a safety net, of "someone of
+> authority and knowledge told me to, so I have permission to do something I'd normally be
+> terrified of".
+
+**True, and less bad than it looks, because the missing piece is the weak one.** Bandura's four
+sources of self-efficacy rank as: **mastery experience** (strongest), **vicarious experience**,
+**verbal persuasion**, physiological state. The therapist's blessing is verbal persuasion — the
+third. What BETR can have is the first two:
+
+- **Vicarious experience** is a worked example. Half-built already; item 1 finishes it.
+- **Mastery experience** is her doing a small version and nothing terrible happening — which is
+  only available if the first rung is small enough to happen. **The dial is not a nice-to-have.
+  It is how the strongest of the four gets delivered.**
+
+And the reframe that costs one round of copy and does most of the work:
+
+> **BETR must never ask anybody to be brave. It asks them to find something out.**
+
+A dare needs permission from somebody with authority. **A question does not.** Nobody needs
+authorisation to go and find out what happens. This is the one structural advantage a
+behavioural-experiment app has over an exposure app, and BETR is currently not using it — the
+loop says *"Go and do it"* where it could say *"Go and find out"*. Thinly evidenced, honestly:
+one high-quality study inside an inconclusive review found framing exposure as a cognitive test
+beat exposure alone (research §9.1). But it costs nothing and it is what the app already is.
+
+Paired with the honest line about the fear, from Rachman, who wrote the book on courage and
+found decorated bomb-disposal operators reported as much fear as everyone else:
+
+> **Being frightened of it is what a belief at 10 feels like from the inside. It isn't a sign
+> you've picked the wrong one.**
+
+**Item 7 — the framing pass.** Go through every screen in the loop and turn the dares into
+questions. `locked.title` is *"Go and do it."*; the plan screen's button is *"I'll do it today"*.
+Candidates, for Misha: *"Go and find out."* and *"Let's find out."* **Cost: an afternoon of
+copy plus tests.** No new screens, no new fields, no code beyond strings.
+**Whose call:** Misha's, on every word; the founder's on whether it changes at all.
+
+## 8. The dial. **Design C, and it is the centre of this whole task.**
+
+The founder's spectrum idea, put where it does the most good and costs the least.
+
+**How it works.**
+
+- On the do screen the person writes **one** test — as now. Under the box, three plain buttons,
+  always visible, **defaulted to the small end**. Picking one changes nothing except which fixed
+  hint shows under the box, and it is recorded on the run.
+- On a **repeat** — which the app already has, *Test this again* — the same three are offered
+  with what she did last time marked. Same again, or a notch up. Her choice, every time.
+- Each run's record carries its rung. *Your tests* shows it beside what the belief did.
+
+**Why not the founder's literal version** (write all three at build time): it is three sentences
+of typing at the screen where she left, and it makes one screen a form inside a form. **The
+spectrum still gets seen** — it is on the *Too big? Make it smaller* screen as a worked shrink
+(item 2), which is teaching rather than typing.
+
+**Why the repeat is the right home for it.** CCI says repeat a step before moving up, because
+doing something once lets you put it down to luck. Rachman says one worse-than-expected episode
+drives the next prediction sharply up, so the first go is the one that must not go badly. And
+Bandura says the person who climbs is the person who has already had a success on the rung
+below. All three sources point at the same screen.
+
+**Naming — Misha's, and it must not be numbers.** A number is a level and a level is a score.
+Two candidate sets:
+
+| | small | middling | big |
+| --- | --- | --- | --- |
+| a | **A small go** | **A bigger go** | **The whole thing** |
+| b | **Toe in the water** | **A proper go** | **The one you're dreading** |
+
+Set b is more honest and may be too much on a button. Nothing all-lowercase (rule 7).
+
+**Two things the dial must never do**, and a test should hold each:
+
+1. **Never offer the next rung because she succeeded**, and never grey out a rung. Three, always,
+   from the first screen to the fiftieth. The moment availability depends on her history, the app
+   is choosing (rule 2, research §6).
+2. **Never total, average or target it.** See item 9.
+
+- **Cost:** one control on the do screen and one on the repeat, one string set, one field on the
+  record, a store version bump (v5, migrating nothing, as v4 did), one export field, and tests.
+  **Two to three days**, and it is the largest thing in this file.
+- **Watch:** the do screen already clips at 125%. Three buttons is another row. **This may have
+  to wait behind the fold bug, exactly as item 5 does** — check before starting, not after.
+
+## 9. Points. **The answer is no, and the evidence is unusually clean.**
+
+> The higher the challenge, the more "points" you get? Gamification? I'm spitballing here.
+
+**Six et al., *JMIR Mental Health*, 2021 — 38 studies, 8,110 people.** Gamification was **not a
+significant predictor** of change in depressive symptoms (β = −0.03, P = .38), and a separate
+meta-regression showed **no effect of gamification elements on adherence** (β = −1.93, P = .40).
+The elements coded were exactly the ones in the spitball: points, badges, levels, rewards,
+progress metrics, challenges. Leaderboards were left out of the review altogether, deliberately,
+because social comparison is counterproductive in mental health.
+
+In the same literature, **customisation and personal control** have the more promising evidence.
+Which splits the founder's idea neatly along the line of what works: **letting her choose how
+hard her own test is IS the customisation. Scoring her for choosing a harder one is the points.**
+
+Three further reasons, each on its own sufficient:
+
+1. **It is a score of the person** — rule 5, the one rule that has never bent.
+2. **It pays for escalation**, which is the single direction Rachman says is expensive to get
+   wrong. Chase a bigger number, take a step that goes badly, and the next prediction goes *up*.
+3. **It walks toward the device line.** A number that rises as you do more, presented as
+   progress, is much harder to call a chapter in a book than a record of what you did.
+
+**What is recorded instead, and it is not a consolation prize:** the rung each run was done at,
+written on that run, next to what the belief did. *"Tested small, twice. Ten to eight."* That is
+a **fact about the test**, not a grade of the person — the same information the points were
+reaching for, with none of the three problems. No total, no average, no target, no badge,
+nothing that rises as she does more.
+
+## 10. The safety net, which is the part of the therapist we can actually replace
+
+The canonical record sheet has a field BETR left out: **likely problems, and what I'll do about
+them** (Harvey step 4; CCI). That is what the therapist's safety net actually consists of — not
+authority, but the knowledge that a bad outcome has already been thought about and is not a
+disaster. **A plan written at a calm moment is a thing an app can hold.**
+
+- **10a, free, do it with item 7.** One fixed line at the moment of the lock, saying the only
+  promise this needs: *whatever happens tomorrow, you bring it back here and write it down; a
+  bad one counts the same as a good one.* That is rule 6 (no verdicts) said out loud at the
+  moment it matters, and it is the sentence that makes the thing safe to attempt. **Cost: one
+  string.**
+- **10b, later, and only after the fold bug.** An optional box: *and if it goes badly?* Written
+  by her, before. More faithful to the source, more typing, and the do screen cannot take
+  another field today.
+
+## 11. What part two changes about the ranking
+
+Nothing is removed. The order becomes:
+
+| | | Cost | Note |
+| --- | --- | --- | --- |
+| 1 | Worked example shows the `did` | ½ day | unchanged, still first |
+| 7 | The framing pass: dares become questions | ½ day | new, cheapest thing here |
+| 10a | The safety-net line at the lock | 1 string | new, free, ships with 7 |
+| 2 + 3 | *Make it smaller* and *Why it's written like this* | ~1 day | unchanged |
+| 4 | Two nudges | ½ day | unchanged |
+| **8** | **The dial** | **2–3 days** | new, the biggest, may be blocked by the fold |
+| 5 | When and where | — | still deferred behind the fold |
+| 6 | Keep the half-written sentence | — | still a founder decision |
+| 9 | Points | — | **recommended: no.** A decision to record, not a build |
+| 10b | *And if it goes badly?* box | — | after the fold |
+
+**And one thing to fix before item 8 can start: the 125% fold bug on the do screen.** It now
+blocks two items instead of one. It should be its own task and it is nobody's.

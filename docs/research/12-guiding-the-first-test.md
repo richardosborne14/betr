@@ -238,3 +238,148 @@ It is a founder decision, not a bug, and it is listed as one in the task.
 - Match–mismatch in exposure in vivo — https://www.sciencedirect.com/science/article/abs/pii/0005796794900299 · https://pmc.ncbi.nlm.nih.gov/articles/PMC12197478/
 - Barbieri et al. 2023, worked examples meta-analysis — https://doi.org/10.1007/s10648-023-09745-1
 - Atkinson, Derry, Renkl & Wortham 2000, worked examples review — https://assess.ucr.edu/sites/default/files/2019-02/atkinsonderryrenklwortham_2000.pdf
+
+---
+
+# Part two — the therapist's permission, and the dial
+
+**Added 2026-09-08, same day**, after the founder named two things the first pass missed.
+
+## 9. What the therapist was actually giving, and which parts an app can supply
+
+The founder's description of the thing we haven't got:
+
+> A therapist in the picture gives you that feeling of "Oh God, they've asked me to do something
+> that I would NEVER dare do in a million years, but it's part of my healing process, and I trust
+> my therapist, so maybe I can give it a go". Almost as if the excuse of being in therapy is
+> enough to say 'to hell with it' … We don't have a therapist who can give my daughter the
+> feeling of a safety net, of 'someone of authority and knowledge told me to, so I have
+> permission to do something I'd normally be terrified of'.
+
+That is four separate things wearing one coat. Taken apart, **the part we cannot have is the
+weakest of them**, and two of the other three are already half-built.
+
+| What the therapist supplies | Can BETR? |
+| --- | --- |
+| **Verbal persuasion** — an expert, whom you trust, says you can do this | **No.** And Bandura's ranking of the sources of self-efficacy puts it **third**: mastery experience is strongest, then vicarious experience, then verbal persuasion, then physiological state — a ranking whose effect sizes have been called large and stable across four decades of replication. **FOUND** https://www.simplypsychology.org/self-efficacy.html · https://pmc.ncbi.nlm.nih.gov/articles/PMC12502103/ |
+| **Vicarious experience** — you have watched this go fine for somebody like you | **Yes, and it is second-strongest.** That is what a worked example is. `examples.js` is half of one already; B36 item 1 finishes it. |
+| **Mastery experience** — you did a version of it, and nothing terrible happened | **Yes, and it is the strongest of all four** — but only if the first rung is small enough to actually happen. This is the whole argument for the dial, arriving from a second direction. |
+| **A safety net** — "and if it goes badly, we'll look at it together next week" | **Partly, and it is the field we left out.** The canonical record sheet has *likely problems, and what I'll do about them* (Harvey step 4; CCI's "identify likely problems and how to deal with them" — [`10-cbt-gateway-approach.md`](10-cbt-gateway-approach.md) §2.3). BETR has no such field. Authority is not something an app can hold. **A plan the person wrote at a calm moment is.** |
+
+**INFERRED, and it is the most useful sentence in this file:** BETR cannot borrow anybody's
+authority, and should stop trying. What it can do is supply the two *stronger* sources the
+therapist was also supplying, and replace the safety net with a plan the person writes
+themselves before they need it.
+
+### 9.1 The reframe that does most of the work: never ask anybody to be brave
+
+**FOUND, and thinly — the evidence is one good study inside an inconclusive review.** McMillan &
+Lee's systematic review of behavioural experiments versus exposure alone (14 studies, 644 people)
+concluded there was *some* evidence experiments beat exposure alone but that methodological
+limitations prevented definitive conclusions; only one study satisfied all quality criteria for
+both conditions. Inside it, in the panic section, **one high-quality study found that framing
+exposure as a cognitive test improved outcome relative to exposure alone in a clinical sample**;
+two other panic studies found no difference.
+https://www.ncbi.nlm.nih.gov/books/NBK79820/ ·
+https://www.sciencedirect.com/science/article/abs/pii/S0272735810000164
+
+The practice guidance from the same tradition is to hold the experiment open — *"I wonder what
+you'll find out"* rather than *"this will prove your thought wrong"* — on the grounds that
+curiosity meets less resistance than compliance. **FOUND** (clinical guidance, not a trial)
+https://www.newharbinger.com/blog/quick-tips-therapists/using-cbt-to-challenge-beliefs-and-promote-curiosity-during-exposure-therapy/
+
+**INFERRED:** BETR is already a behavioural-experiment app and not an exposure app, and it is
+not using the one advantage that gives it. A dare needs permission from somebody. **A question
+does not.** Nobody needs authorisation to go and find something out. That is the substitute for
+the therapist's blessing, it is free, and it is a matter of which sentences are on the screen.
+
+### 9.2 And the honest thing to say about the fear itself
+
+Rachman spent a career on this and wrote the book: courage is **not** the absence of fear.
+Studying bomb-disposal operators and paratroopers, he found that decorated operators reported as
+much fear as their peers — they acted anyway, and the three components he separates are
+behavioural approach, the subjective fear, and the physiological arousal, which can come apart.
+**FOUND** (*Fear and Courage*, 2nd edn 1990; paratrooper studies)
+https://bpspsychub.onlinelibrary.wiley.com/doi/10.1111/j.2044-8295.1987.tb02255.x ·
+https://www.researchgate.net/publication/265806109_Fear_and_Courage_A_Psychological_Perspective
+
+**INFERRED:** so the line for her is not "this won't be scary". It will be, and saying otherwise
+is the first thing that would cost us her trust. It is: **being frightened of it is what a
+belief at 10 feels like from the inside. It is not a sign you have picked the wrong one.**
+
+## 10. The dial — and whether it can carry points
+
+**The founder's idea, in their words:** a spectrum on the *what you'll do* step, from least to
+most frightening; you pick where to start; every repeat you may turn it up; the record notes
+which level you tried. Then: *"The higher the challenge, the more 'points' you get? Gamification?
+I'm spitballing here."*
+
+**The dial is the well-evidenced half of that idea. The points are the unevidenced half, and the
+evidence against them is unusually clean.**
+
+| Finding | Source |
+| --- | --- |
+| CCI's stepladder module hands lay readers, with no clinician, exactly this: a set of dials — who, how many, how familiar, what, where, when, how long — turned to make one experiment easier or harder, and an explicit instruction that the point is to find a step **you are willing to start with** | §3 above **FOUND** |
+| A step must still **violate the expectation** to teach anything; anxiety reduction within the step is not the index of success | Craske et al. §4.1 **FOUND** |
+| Over-predictions of fear come down slowly across many disconfirmations; **one worse-than-expected episode drives the next prediction sharply up** | Rachman §4.2 **FOUND** |
+| **Gamification did not predict outcome and did not affect adherence.** 38 studies, 8,110 people: the gamification moderator "was not a significant predictor of depressive symptoms (β=–0.03, SE=0.04; P=.38)", and "a separate meta-regression also did not show an effect of gamification elements on intervention adherence (β=–1.93, SE=2.28; P=.40)". Elements coded: points, achievements/badges, levels, narrative, clear goals, performance feedback, rewards, progress metrics, challenges. **Leaderboards were excluded from the review on purpose**, for social comparison being counterproductive in mental health | Six, Byrne, Tibbett & Pericot-Valverde, *JMIR Mental Health* 8(11):e32199, 2021. **FOUND** https://pmc.ncbi.nlm.nih.gov/articles/PMC8669581/ |
+| In the same literature, **customisation and personal control** have more promising evidence than points and badges | **FOUND** https://mental.jmir.org/2019/6/e13717/ |
+
+**INFERRED, and it splits the founder's idea exactly along the evidence:** letting a person
+choose how hard their own test is **is** customisation and personal control — the part with the
+better evidence. Scoring them for choosing a harder one is points — the part with none. And
+three further reasons to refuse the points, each independently sufficient:
+
+1. **It is a score of the person** — rule 5, and the one rule the founder has never bent.
+2. **It rewards escalation**, which is the single direction Rachman says is expensive to get
+   wrong. A person chasing a bigger number takes a step that goes badly, and their next
+   prediction goes *up*.
+3. **It moves us toward the device line.** A number that goes up as you do more, presented as
+   progress, is much harder to describe as a chapter in a book than a record of what you did is.
+
+**What may be recorded, and this is not a compromise, it is the honest version:** which rung a
+run was done at, written on that run, beside what the belief did. That is a **fact about the
+test**, not a score of the person. No total, no average, no target, no badge, nothing that rises
+as she does more. She can see that she tested it small twice and the belief moved two rungs, and
+decide for herself what to do next. That is the same information the points were reaching for,
+without any of the three problems.
+
+## 11. Where the dial should live — three designs
+
+**Design A — she writes the whole spectrum at build time.** Three boxes: easiest, middling,
+hardest. Closest to the founder's description. **Rejected:** three sentences of typing at the
+exact moment she quit, and it turns one screen into a form inside a form.
+
+**Design B — one sentence, plus a three-position dial on the do screen.** She writes one test.
+Under it, three plain buttons; picking one changes only which fixed hint is shown, and records
+the rung. **Viable.** It is fixed content she chooses between, so it stays a chapter in a book.
+Costs one control and one string set.
+
+**Design C — she writes one, and the dial belongs to the repeat.** The first time, BETR asks for
+one thing only: the smallest version that could still turn out wrong. When she comes back —
+which the app already supports, *Test this again* — **that** is where it offers: the same again,
+or one notch up. The record carries the rung. **RECOMMENDED, and B is folded into it:** the
+three-position dial exists from the first build, defaulted to the small end, so the spectrum is
+*visible* the first time and *live* on every repeat.
+
+Three reasons C beats A and B on their own:
+
+1. It adds no typing to the screen where she left.
+2. It matches the source: CCI says **repeat a step before moving up**, because doing something
+   once lets you put it down to luck.
+3. It matches Rachman's asymmetry: the first go is the one that must not go badly, and the
+   ladder is climbed by somebody who has already had a success on it — which is Bandura's
+   mastery experience, arriving exactly when it is worth most.
+
+**One thing the dial must never do:** offer the next rung *because* she succeeded, or grey out
+a rung she is "not ready for". Both are the app deciding. She sees three, always, from the
+first screen to the fiftieth, and picks.
+
+## 12. Sources added in part two
+
+- Bandura, sources of self-efficacy and their ranking — https://www.simplypsychology.org/self-efficacy.html · https://pmc.ncbi.nlm.nih.gov/articles/PMC12502103/
+- McMillan & Lee, behavioural experiments vs exposure alone (DARE record) — https://www.ncbi.nlm.nih.gov/books/NBK79820/ · https://www.sciencedirect.com/science/article/abs/pii/S0272735810000164
+- Curiosity framing in practice guidance — https://www.newharbinger.com/blog/quick-tips-therapists/using-cbt-to-challenge-beliefs-and-promote-curiosity-during-exposure-therapy/
+- Rachman, *Fear and Courage*; paratrooper studies — https://bpspsychub.onlinelibrary.wiley.com/doi/10.1111/j.2044-8295.1987.tb02255.x · https://www.researchgate.net/publication/265806109_Fear_and_Courage_A_Psychological_Perspective
+- Six, Byrne, Tibbett & Pericot-Valverde 2021, gamification meta-analysis — https://pmc.ncbi.nlm.nih.gov/articles/PMC8669581/
+- Cheng et al., gamification systematic review (customisation) — https://mental.jmir.org/2019/6/e13717/
