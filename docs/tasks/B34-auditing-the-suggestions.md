@@ -4,8 +4,10 @@
 possibilities and suggestions combos … everything super clear and simple, and we're not
 missing anything."*
 
-**Status:** AUDIT ONLY. Nothing in `web/` was changed. 196 tests were green before and after;
-every screen below was walked at 390×844 with `tools/walk.js` and measured, not guessed.
+**Status:** AUDITED, then **D1 and D2 fixed** at the founder's go-ahead. Everything else in
+here is still open and is somebody's decision, not a session's. 206 tests green (196 + 4 new,
+and the count moved again under B35's own additions); every screen below was walked at 390×844
+with `tools/walk.js` and measured, not guessed.
 
 ---
 
@@ -31,9 +33,9 @@ hand-written `dos`/`drops`. Road C never reaches them at all.
 
 ---
 
-## 2. Defects — mechanical, not opinion
+## 2. Defects — mechanical, not opinion — **BOTH FIXED**
 
-### D1. The same sentence gives two different answers depending on whether it was typed or tapped
+### D1. The same sentence gives two different answers depending on whether it was typed or tapped — FIXED
 `ifPlaceholder` is *"say no without giving a reason"*, which is also chip 1 word for word — so
 people will type it. Typed, the Then suggestions are the three **generic** ones. Tapped, they
 are the three written for it. Then one screen later the *What will you do* chips **do** match,
@@ -48,14 +50,14 @@ Measured: typed the exact words → `they'll think less of me / they'll go quiet
 be held against me later`. Tapped → `they'll think I'm being difficult / they'll stop asking me
 / they'll be off with me for days`.
 
-### D2. *Back* on the *What will you do today?* screen throws away what was typed
+### D2. *Back* on the *What will you do today?* screen throws away what was typed — FIXED
 `buildDo()` calls `wireBack('build')` and never `readBoxes()`. Type a plan, tap Back to fix one
 word of the sentence, tap *What will you do?* — the plan is gone. On a borrowed test the stock
 line comes back in its place, which reads as BETR having overwritten you. `readBoxes()` already
 exists and is called by both chip handlers and by *Lock it in*; Back is the one exit that skips
 it. Walked and confirmed.
 
-### D3. Once an if-chip is tapped, the list of 21 cannot be reopened
+### D3. Once an if-chip is tapped, the list of 21 cannot be reopened — OPEN
 The row is hidden while the box holds any text, and re-focusing the box does not bring it back
 (`show()` re-tests `box.value.trim()`). Changing your mind means selecting and deleting ~30
 characters on a phone.
@@ -163,3 +165,47 @@ place BETR is closest to proposing an OCD exposure with no clinician anywhere ne
 
 **Confidence in the audit: 9/10.** Everything in §2 and §3 was walked and measured. §4–§6 are
 readings of the content, and §6 in particular is a judgement the founder makes, not me.
+
+---
+
+## 8. What was actually fixed, 2026-09-08
+
+**D1, and it was worse than §2 first described it.** The tap handler ran the lookup *again* on
+the click, so a chip could put a different sentence in the box from the one printed on it: type
+the placeholder's words, and the chip saying *"they'll think less of me"* inserted *"they'll
+think I'm being difficult"*. Two changes, and the first is the one that matters:
+
+- **A chip's handler now closes over the list that was printed.** `build()` works the Then
+  suggestions out once into `thenChips` and `wireThens(list)` is wired against it; `buildDo()`
+  does the same with `doChips` and `dropChips`. **What a chip says is now what it inserts**,
+  by construction, on all three screens. This is the half that is tested.
+- **The lookup runs again when the second blank takes focus.** `refreshThens()` reprints only
+  the buttons — not the screen, not the heading the row is named by (a screen reader names the
+  group from it), and nothing holding a caret. `wireChips()` gained an optional third element
+  per pair, a callback run before the row is shown; only the second blank passes one.
+
+Walked in Chrome at 390×844: typing *"say no without giving a reason"* and focusing the second
+blank now shows *they'll think I'm being difficult / they'll stop asking me / they'll be off
+with me for days*, and tapping the first inserts those exact words. The page is still 1,678px.
+
+**D2** is one line: `on('#back', function () { readBoxes(); go('build'); })` in `buildDo()`,
+replacing `wireBack('build')`. Walked on the borrow road — type over the stock plan, Back,
+forward, and the person's words are still there.
+
+**Four tests added** at the end of `loop.test.js`: the say-what-you-insert invariant on the
+Then row and on the plan row, and the Back invariant for a typed test and for a borrowed one.
+The borrowed case is the assertion worth keeping — a plan lost there does not come back empty,
+it comes back as BETR's words sitting where the person's were.
+
+**The live refresh itself is not unit-tested, and that is the existing bargain**, not a new
+one: the fake DOM in `harness.js` is flat and fires no events, so `refreshThens()` returns
+early there exactly as the hide/show around it never runs. The invariant that survives without
+events is the one that is tested.
+
+**Confidence: 9/10.** D1's display half rests on a real browser walk rather than on a test,
+which is the same footing as every other live behaviour on this screen.
+
+## 9. Still open after this
+
+D3 (the 21 can't be reopened), all of §3, §4, §5 and §6. **§6 — start #19's checking ritual —
+is the one to put in front of the founder**, and it has not been raised yet.
