@@ -58,7 +58,15 @@
   order. Built, not cleared.
 */
 var BETR_DOORS = {
-  intro: 'More than one of these might fit. Read to the bottom, then tap what’s closest. It just points you at the tests that usually sit under it.',
+  /*
+    B33, 2026-09-08, and the length of this line is load-bearing. The safety note on door two
+    has to be above the fold — B23 measured it at 643–685 with the menu fixed over 785 — and
+    every line added above it spends that margin. B32 added a second sentence saying these are
+    things to borrow, and the two together pushed the note to 701. So they are one line now,
+    and this is the one that carries both jobs: read to the bottom (B23), and nothing here is
+    tested as it stands (B32). RE-MEASURE IF YOU LENGTHEN IT.
+  */
+  intro: 'More than one might fit — read to the bottom. Nothing here gets tested as it is; you take one and change it into yours.',
   foot: 'None of these gets tested. What you expect to happen does.',
   items: [
     {

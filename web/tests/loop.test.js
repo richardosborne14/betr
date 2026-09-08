@@ -160,8 +160,15 @@ test('a test put down for today is still put down when the app is opened again',
 */
 test('the doors still carry the safety note and the footer, one tap aside', () => {
   const a = boot().shows(en.s.start.borrow);
-  a.tap('#not-sure').shows(en.s.doors.title).shows(en.s.doors.sub);
+  a.tap('#not-sure').shows(en.s.doors.title).shows(doors.intro);
   a.shows(doors.foot).shows(en.s.doors.foot);
+  /*
+    One intro line, not two. B23 bought the safety note a hundred pixels of clearance and a
+    second sentence above it spent fifty-eight of them; the note has to stay above the fold.
+    A test cannot see pixels, so what it holds is the thing that caused it: one line.
+  */
+  assert.ok(doors.intro.length < 140, 'the doors intro has grown; re-measure the safety note');
+  assert.strictEqual(en.s.doors.sub, undefined, 'a second intro line is back above the note');
 
   const note = doors.items.filter((d) => d.note)[0];
   assert.ok(note, 'no door carries the safety note any more');

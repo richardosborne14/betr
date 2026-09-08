@@ -82,7 +82,7 @@ button:focus-visible, textarea:focus-visible { outline: 3px solid var(--btn); ou
 /*
   The kicker. Since B20 the test screen and the result are titled by the worry's own label
   instead (.worry-label, below), so what is left wearing this is the "LOCKED IN" line and the
-  heading on each card in Your worries — where it is still the only title there is, and still
+  heading on each card in Your tests — where it is still the only title there is, and still
   a heading element, so a screen reader has something to land on. These rules have to beat the
   h1/h2/h3 ones below, which is why line-height is spelled out.
 */
@@ -203,7 +203,13 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
   person's own result is drawn in — with only the ladder brought inside it, because on this
   screen the whole thing has to read as one object.
 */
-.result.example { margin-bottom:26px; }
+/*
+  Tighter than a person's own result card, and it is a measurement (B33). At 125% text the
+  front screen overflows: with the same 28px padding the ghost button's last 18px sat behind
+  the fixed menu. 20px brings it fully clear, and costs nothing at 100% where the screen has
+  room to spare. The trust line still needs a small scroll at 125% — see the B33 task file.
+*/
+.result.example { margin-bottom:26px; padding:20px 18px; }
 .result.example .ladder { margin-block-start:2px; }
 .result.example .you { margin-block-end:0; }
 .result.example .real { font-size:clamp(1.1875rem,4vw,1.4375rem); }

@@ -28,6 +28,8 @@ const worries = require(path.join(ROOT, 'web/content/worries.js'));
 const doors = require(path.join(ROOT, 'web/content/whats-going-on.js'));
 const why = require(path.join(ROOT, 'web/content/why.js'));
 const places = require(path.join(ROOT, 'web/content/places.js'));
+const starts = require(path.join(ROOT, 'web/content/starts.js'));
+const examples = require(path.join(ROOT, 'web/content/examples.js'));
 
 /*
   The order a person meets the screens, with the name the founder would use for each. Any key
@@ -129,14 +131,17 @@ w('**Generated ' + stamp + ' by `node tools/copy-sheet.js`. Do not edit this fil
 w('rewritten from the source every time that command runs, so anything typed here is lost.');
 w('Mark it up, send it back, and the change gets made in the file named next to each section.');
 w();
-w('There are ' + worries.length + ' worries, ' + doors.items.length + ' doors and ' +
+w('There are ' + examples.length + ' front-screen examples, ' + starts.items.length +
+  ' suggestion starts, ' + worries.length + ' to borrow from, ' + doors.items.length + ' doors and ' +
   Object.keys(why).length + ' explanations in this build.');
 w();
 w('| Part | What it is | Which file |');
 w('| --- | --- | --- |');
 w('| [Frozen](#frozen) | Cannot be changed by anyone here | `strings-en.js` |');
 w('| [The screens](#the-screens) | Every sentence of the interface | `strings-en.js` |');
-w('| [The worry list](#the-worry-list) | Six parts per worry | `worries.js` |');
+w('| [The front-screen example](#the-front-screen-example) | The first thing anybody sees | `examples.js` |');
+w('| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `starts.js` |');
+w('| [The list you can borrow from](#the-worry-list) | Six parts each | `worries.js` |');
 w('| [The doors](#the-doors) | "What’s going on?" | `whats-going-on.js` |');
 w('| [Why this one sticks](#why-this-one-sticks) | One explanation per worry | `why.js` |');
 w('| [Places on Help](#places-on-help) | Every link in BETR | `places.js` |');
@@ -208,21 +213,77 @@ if (missed.length) {
 
 w('---');
 w();
+w('<a id="the-front-screen-example"></a>');
+w();
+w('## The finished test on the front screen');
+w();
+w('`web/content/examples.js`. The first thing anybody sees, and the only words in BETR read');
+w('before a person has agreed to anything. One is shown per open, in this order.');
+w();
+w('It is an EXAMPLE and it is captioned as one — "What one test looks like", above the card.');
+w('Shown as a real person’s result it would be a testimonial, and a testimonial reads as a');
+w('claim. Nobody is named, nobody else’s number appears, and the ladder moves because that is');
+w('what happened in this one.');
+w();
+w('| | You expected | What actually happened | Ladder |');
+w('| --- | --- | --- | --- |');
+examples.forEach((ex, i) => {
+  w('| ' + (i + 1) + ' | ' + ex.prediction + ' | ' + ex.happened + ' | ' + ex.from + ' → ' + ex.to + ' |');
+});
+w();
+
+w('---');
+w();
+w('<a id="the-suggestions"></a>');
+w();
+w('## The suggestions under the blanks');
+w();
+w('`web/content/starts.js`. The screen prints **If I** and **, then** either side of two gaps,');
+w('and these are what a person can tap into them instead of typing. Fixed content in a fixed');
+w('order; which set of predictions is offered depends on one thing only — whether the first');
+w('gap holds one of these situations, word for word.');
+w();
+w('An **if** and a **then** are lowercase, because they follow printed words and have to read');
+w('as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.');
+w();
+w('### The general set — shown when somebody has written their own situation');
+w();
+w('| | |');
+w('| --- | --- |');
+w('| **then** | ' + starts.general.thens.join(' · ') + ' |');
+w('| **do** | ' + starts.general.dos.join(' · ') + ' |');
+w('| **leave out** | ' + starts.general.drops.join(' · ') + ' |');
+w();
+starts.items.forEach((it, i) => {
+  w('### ' + (i + 1) + '. If I ' + it.if + '…');
+  w();
+  w('| | |');
+  w('| --- | --- |');
+  it.thens.forEach((line, j) => w('| **then** ' + (j + 1) + ' | ' + line + ' |'));
+  it.dos.forEach((line, j) => w('| **do** ' + (j + 1) + ' | ' + line + ' |'));
+  it.drops.forEach((line, j) => w('| **leave out** ' + (j + 1) + ' | ' + line + ' |'));
+  w();
+});
+
+w('---');
+w();
 w('<a id="the-worry-list"></a>');
 w();
-w('## The worry list');
+w('## The list you can borrow from');
 w();
-w('`web/content/worries.js`. This is the product. The **id** never changes once anybody has');
-w('used it — a stored result points at it. No **test** and no **drop** may touch the habit');
-w('itself; the build fails if one does.');
+w('`web/content/worries.js`. Since 2026-09-08 this is not the way in — it is one tap aside,');
+w('behind *Not sure? Try one of these* — and picking one opens the build screen with the');
+w('sentence half written and everything editable. The **id** never changes once anybody has');
+w('used it, because a stored result points at it. No **test** and no **drop** may touch the');
+w('habit itself; the build fails if one does.');
 w();
-w('**Read the three under each worry together.** B20 split the worry from the prediction, and');
-w('that is where most of the words now are. The **card sentence** is loose on purpose: it is');
-w('read on a list of four to six, to work out which worry this is. The **three** are read one');
-w('screen later, one at a time, to work out which one is yours — so each has to predict a');
-w('different thing, and each has to be something that could turn out to be wrong. Under each');
-w('one, **braced for** is the same prediction in the voice of somebody expecting it, and it is');
-w('what BETR writes into "What you expect" when they pick that one.');
+w('**Read the three under each one together.** The **card sentence** is loose on purpose: it');
+w('is read on a list of four to six, to work out which of these this is. The **three** are the');
+w('chips on the next screen, one of which is yours — so each has to predict a different thing,');
+w('and each has to be something that could turn out to be wrong. Every one of them starts');
+w('**If I** and has a **, then** in it, because that is what the build screen prints.');
+w('**Braced for** is the same prediction in the voice of somebody expecting it, and it is what');
+w('BETR writes into "What you expect" when somebody keeps that sentence word for word.');
 w();
 worries.forEach((f, i) => {
   w('### ' + (i + 1) + '. ' + f.label);
@@ -252,11 +313,11 @@ w('<a id="the-doors"></a>');
 w();
 w('## The doors — "What’s going on?"');
 w();
-w('`web/content/whats-going-on.js`. Since B19 this is the way in: the one big button on the');
-w('front screen leads here, and a door opens onto four to six worries. It is the one screen in');
-w('BETR that names a behaviour rather than a worry. Every label is what a person would say');
-w('about themselves, in the first person, and never a diagnosis. Nothing here is ever tested:');
-w('a door only points at worries.');
+w('`web/content/whats-going-on.js`. Reached from *Not sure? Try one of these* on the front');
+w('screen; a door opens onto four to six things to borrow. It is the one screen in BETR that');
+w('names a behaviour rather than a prediction. Every label is what a person would say about');
+w('themselves, in the first person, and never a diagnosis. Nothing here is ever tested: a door');
+w('only points.');
 w();
 w('One door carries a **note** — a safety line, shown under that door and no other. It says');
 w('what frozen sentence 4 already says, at the one moment it is relevant.');

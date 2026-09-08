@@ -592,3 +592,48 @@ commands and about a minute — `git fetch`, `git branch -a`, `gh pr list`, and 
 branch's `nginx.conf` against the live `/opt/trybeup/nginx.conf` (byte-identical, which is the
 fact that actually made the merge safe). The handoff file says what somebody believed at one
 moment. The remote and the running server say what is true.
+
+---
+
+## A region delete needs both ends checked, not one (2026-09-08, B32)
+
+Retiring five screens meant cutting whole regions out of `app.js` and `strings-en.js` by their
+comment banners: from *"which of these is it? (B20)"* up to the next section marker. Twice the
+region swallowed something that had been **inserted into it since the banner was written** —
+once the entire build screen out of `app.js`, once the whole `build.*` string block. Both times
+the guard assertion passed, because it only checked that the thing being deleted was present.
+
+**Assert what must NOT be in a region as well as what must.** The two-line version:
+
+```js
+for (const m of must)   assert.ok(chunk.includes(m));
+for (const m of mustnt) assert.ok(!chunk.includes(m));   // this is the one that saves you
+```
+
+And the second trap, which cost the longer detour: `own: {` contains a nested `belief: {`, so a
+`mustnt` guard on a bare key name matched the wrong nesting level and refused a correct cut.
+Guards on JS source want their indentation — `'    own: {'`, not `'own: {'`.
+
+Recovery both times was `git checkout <file>` and redo, which is cheap only because each task
+was committed before the next began. **Commit at the end of every task in a multi-task session,
+not at the end of the session.**
+
+## The fold is where content decisions get made (2026-09-08, B30–B33)
+
+Four separate design decisions in this stretch were settled by `node tools/walk.js eval` on a
+bounding rect, not by taste, and every one of them changed the plan:
+
+- **The chips are one row at a time** because with all four drawn, *Lock it in* sat at 981px
+  and the menu is fixed over 785. B30's own words were "under the active blank"; the
+  measurement is what made that a rule instead of a phrase.
+- **The doors' intro is one sentence** because B32 added a second one above the safety note and
+  it cost 58 of the 100px of clearance B23 had bought that note. Back to one line: 643–685,
+  exactly where B23 left it.
+- **Two sub-lines on the plan screen were shortened** because at 125% text they pushed *Lock it
+  in* to 811px against a 780px fold. Now 774.
+- **The front screen's example card has tighter padding than a person's own result card**,
+  because at 125% the ghost button's last 18px sat behind the menu.
+
+**The general shape: write the words, then measure at 390×844 and again at 125% text, then edit
+the words.** Three of the four fixes were a shorter sentence rather than a CSS change, and a
+sentence is the cheapest thing in this app to change.

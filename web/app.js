@@ -739,7 +739,7 @@
     paint( backButton() +
       '<div class="stage">' +
         head('h2', t('doors.title')) +
-        '<p class="sub">' + esc(DOORS.intro) + ' ' + esc(t('doors.sub')) + '</p>' +
+        '<p class="sub">' + esc(DOORS.intro) + '</p>' +
         '<div class="list">' +
           DOORS.items.map(function (d) {
             /*
@@ -953,8 +953,17 @@
   */
   function chipRow(intro, list, attr, hide) {
     if (!list.length) return '';
-    return '<div class="chipset" data-chips="' + esc(attr) + '"' + (hide ? ' hidden' : '') + '>' +
-      '<p class="tiny chips-intro">' + esc(intro) + '</p>' +
+    /*
+      The row is a named GROUP, and its name is the line already printed above it (B33). Read
+      out on its own, "say no without giving a reason, button" says nothing about which blank
+      it fills or that it is a suggestion at all — the sentence that makes sense of it is a
+      paragraph a screen reader passes on its way in. `aria-labelledby` points at that same
+      paragraph rather than repeating it, so nobody hears it twice.
+    */
+    var id = 'chips-' + esc(attr).replace(/[^a-z]/g, '');
+    return '<div class="chipset" role="group" data-chips="' + esc(attr) +
+      '" aria-labelledby="' + id + '"' + (hide ? ' hidden' : '') + '>' +
+      '<p class="tiny chips-intro" id="' + id + '">' + esc(intro) + '</p>' +
       '<div class="chips">' + list.map(function (line, i) {
         return '<button class="chip" ' + attr + '="' + i + '">' + esc(line) + '</button>';
       }).join('') + '</div>' +
@@ -1777,6 +1786,24 @@
         '<p><button class="plain" id="export">' + esc(t('io.export')) + '</button>' +
         '<button class="plain" id="wipe">' + esc(t('io.wipe')) + '</button></p>' +
         '<div id="io"></div>' +
+
+        /*
+          B33, 2026-09-08. Frozen sentence 6 said twice, and the second time is not a copy:
+          this draws the same array element the numbered list below draws, so there is exactly
+          one version of it in the build and it cannot drift.
+
+          It is here, third, because of what happened to rule 4 on the same day. The habit and
+          body word lists stopped refusing a person's own test — the founder's call — which
+          makes this sentence the only place in BETR where the line is drawn at all. Fourth,
+          buried in a numbered list, was the right position for a line the app also enforced.
+          It is not any more.
+
+          IT DOES NOT MOVE ABOVE THE CRISIS BLOCK (B17) OR THE PROOF (B26). Both of those are
+          for a person who gets one chance at the screen, and this is for a person who is
+          about to design something.
+        */
+        '<h2>' + esc(t('help.safeTitle')) + '</h2>' +
+        '<p>' + callable(sentences()[5]) + '</p>' +
 
         /*
           The primer. Founder, 2026-09-03: there should be one clear thing to read about CBT,

@@ -18,14 +18,23 @@ answer. Nothing in §9 is a build blocker for a prototype; several are blockers 
 
 ## 1. What it is, in one paragraph
 
-A free thing on your phone. One big button: *Pick a worry.* You pick one of a short list of
-worries about how people will react ("saying no without an excuse", "asking for help"). It hands
-you a one-line test to do today, already written, and what you probably expect to happen,
-already written. You tap *I'll do it today.* You go and do it. You come back, type one sentence
-about what happened, and tap one of four words for how sure you still are. It shows you your
-expectation with a line through it, what actually happened underneath, and that belief coming
-down a ten-rung ladder test by test — and offers the same test again tomorrow. No account. No
-server. No AI. Nothing leaves the phone.
+*Rewritten 2026-09-08 (B28–B33). What changed is the way in; the loop underneath is the one
+this paragraph described on the day it was written.*
+
+A free thing on your phone. It opens on one finished test — somebody's prediction, struck
+through, what actually happened next to it, and the ladder that moved. Then one big button:
+*What's yours?* You write one sentence with two gaps in it — *If I ___, then ___* — typing or
+tapping a suggestion into either. You say what you'll do about it today and what you'll leave
+out, and tap *Lock it in.* You go and do it. You come back, type one sentence about what
+happened, and tap one of four words for how sure you still are. It shows you your prediction
+with a line through it, what actually happened underneath, and that belief coming down a
+ten-rung ladder test by test — and offers the same test again tomorrow. If you do not know what
+to write, *Not sure? Try one of these* opens a short list to borrow from and change. No account.
+No server. No AI. Nothing leaves the phone.
+
+**The purpose statement in §10 and in the app still describes the old way in** ("you pick a
+worry about how people will react"). It is frozen (rule 7) and identical in five places, so
+changing it is the founder's call — `docs/tasks/B29-the-rules-and-the-word.md` has a candidate.
 
 **What it is, clinically:** the CBT behavioural experiment, and only that, run against
 conditional assumptions in the social-anxiety, assertiveness and perfectionism lanes. The

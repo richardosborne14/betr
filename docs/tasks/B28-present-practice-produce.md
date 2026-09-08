@@ -1,6 +1,10 @@
 # B28: Present · Practice · Produce — the way in, not the engine
 
-**Status:** **Scoped into five tasks, 2026-09-08. Build in order: B29 → B30 → B31 → B32 → B33.**
+**Status:** **CLOSED, 2026-09-08. All five tasks built, walked and pushed: B29 → B30 → B31 →
+B32 → B33.** 196 tests green, up from 180. What is left is four people's reading — the founder
+on the example and the purpose statement, Misha on the audience calls, the paid CBT reviewer on
+`starts.js` and `examples.js` and three rewritten sentences, and one person with a screen
+reader on a real phone. None of it is code.
 **Founder, on the mockups: "I love it." And later the same day: "worry" becomes "test" (in B29).**
 The mockups: https://claude.ai/code/artifact/59278217-cc23-4e17-804e-97a917507497 (seven phone
 screens and two notes; the founder can edit the words on them directly)

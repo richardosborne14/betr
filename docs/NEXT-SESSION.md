@@ -1,66 +1,57 @@
 # Start here
 
-**Last refreshed:** 2026-09-08, after the founder's B28 question. B3 is closed.
+**Last refreshed:** 2026-09-08, after B28 was built and closed.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**v1 is built and live, everything is committed and pushed, and B3 is now genuinely done.**
-180 tests, no dependencies, no build step, nothing requested after load.
+**B28 is built and closed. The way in is a different app; the loop underneath is untouched.**
+196 tests, no dependencies, no build step, nothing requested after load. All pushed.
 
-**B3 closed on 2026-09-04:** the `trybeup/trybeup-prod` PR #2245 was squash-merged as `d1d47520`,
-its `nginx.conf` byte-identical to the live one; TrybeUP's next nginx deploy can no longer delete
-BETR's block, and BETR's certificate (**expires 2026-12-02**) is inside the 14-day alarm. Details in
-`learnings.md`. **No engineering task is left in v1 that is not waiting on a person.** What remains:
+The founder's Present · Practice · Produce, as built in one day across B29–B33:
 
-- **B28 is scoped and is the whole of the next stretch.** The founder saw the mockups
-  (https://claude.ai/code/artifact/59278217-cc23-4e17-804e-97a917507497), said "I love it", and
-  added one more decision: **"worry" becomes "test"** everywhere a person reads it. Five task
-  files, in build order: **B29** the rules and the word · **B30** the build screen · **B31** the
-  front screen · **B32** the borrow list · **B33** Help and the walk. Every one names the files,
-  the tests that hold the old rule, and what is one line to flip.
-- **Three questions, all yours.** **(d) change the ad, not the app** — all three walkers arrived
-  from a post showing somebody at **6/10** and landed on an app at 10, so the honest fix is an ad
-  showing a **first** result, 10 → 9; costs no code, best answer in B25, yours and Misha's.
-  **Misha on the four nouns** (B23 option b) **and on the new door order, together** — ask once;
-  the labels and the safety note were already his (B0 Q2a). And **the word *diagnosis*** on the
-  doors footer, which wants a second opinion on the legal point.
-- **The `HARM` false refusal, which is a safety call and yours.** *"end it"* matches whole words,
-  so a sentence about ending a friendship is refused on a box where the words are the person's
-  own. Loosening it risks missing a real disclosure, and BETR over-refuses by standing rule. **Ask;
-  do not fix it quietly.**
-- **Q1 (name, trademark, domain) is open, blocks release and blocks B5 outright.** The live
-  address is a borrowed subdomain and is not where this finally lives.
-- **Nobody outside this building has read the worry list, and nobody using a screen reader has
-  touched the app.**
+- **B29** — the word a person reads is **test**, not worry, and `CLAUDE.md` rules 3, 4, 5 and 10
+  say so with the date. Rule 4 loosened at the founder's call: the habit and body word lists
+  **stop refusing a person's own test**, and the one hard stop left is anyone's safety, on both
+  boxes. Those lists still hold BETR's own content, in `lib/content.js`.
+- **B30** — *New test* opens **one sentence with two gaps**: `If I ___, then ___`, with
+  suggestion chips from the new `content/starts.js` under whichever blank you are in. Then what
+  you'll do, what you'll leave out (optional), *Lock it in*. Storage is **v4**.
+- **B31** — the front screen **shows one finished test** from the new `content/examples.js`,
+  then asks *What's yours?* It stopped describing BETR.
+- **B32** — the doors and the twenty-one are **things to borrow**, one tap aside. Picking one
+  opens the build screen with the sentence half written. Five screens retired.
+- **B33** — Help, the paperwork, and the walk. Frozen sentence 6 is third on Help now, because
+  since B29 it is the only place the line is drawn. Shots in `docs/shots/b33-*.png`.
+
+**Nothing engineering is left in v1 that is not waiting on a person.**
 
 ## 2. The next action
 
-**Start B29: `docs/tasks/B29-the-rules-and-the-word.md`.** Rewrite `CLAUDE.md` rules 3, 4 and 10
-and scope §2 to what the founder decided, dated; rename *worry* to *test* in `strings-en.js`; flip
-the guard tests that expect a habit word to be refused; regenerate `COPY.md`; keep
-`changing-the-words.md` true. **Do not start B30 until B29 is pushed** — a session building the
-new screens against the old `CLAUDE.md` will fight it. Two open content calls sit inside B31:
-which front-screen example, and whether it is real or an example.
+**There is no next task. Everything open is somebody's reading, and the useful thing a session
+can do is put it in front of them.** In the order it blocks release:
 
-- Walk the six taps with `tools/walk.js` and read the **accessibility tree**, not the pixels: every
-  button's accessible name, heading order, `lang`, focus order after each tap, whether the worry
-  and the sentence atop every loop screen are announced, whether the ladder's 1-10 is reachable and
-  says what it is, and whether the permanent row of three reads as three links.
-- **It does not replace the real pass.** A person on a real iPhone with VoiceOver is still a
-  release condition; this is so that pass finds wording problems instead of missing labels.
-  Anything it turns up is a fix in `app.js` + `strings-en.js` with a test, the usual shape.
-  **Check 125% text while you are in there** — same class of problem, and §4 says where it bites.
+1. **The founder, and it is four things.** Which of the four examples leads the front screen,
+   and **whether it is real or an example** (`content/examples.js` — shown as a real person's
+   result it is a testimonial, which the MHRA reads as a claim). **The purpose statement**,
+   which still says "you pick a worry", is frozen in five places, and no longer describes the
+   app — a candidate sentence is in `B29-the-rules-and-the-word.md`. **The `HARM` false
+   refusal:** *"end it"* matches whole words, so a sentence about ending a friendship is
+   refused; loosening risks missing a real disclosure, and BETR over-refuses by standing rule.
+   Ask; do not fix it quietly. And **(d) change the ad, not the app** — all three B21 walkers
+   arrived from a post showing 6/10 and landed on an app at 10; the honest fix is an ad showing
+   a *first* result, 10 → 9. Best answer in B25.
+2. **Misha, in one ask:** the four nouns (B23 option b), the door order, and — new — the
+   **twenty-one suggestion chips on the build screen**, which make that page 1,871px long.
+3. **The paid CBT reviewer:** `content/starts.js` (~180 sentences), `content/examples.js`, and
+   the **three sentences in `worries.js` a session rewrote** on 2026-09-08 (`phone`, `rest`,
+   `low` — named in `journeys-observed.md`). Three pairs still waiting from B1.
+4. **A screen-reader pass on a real phone.** The accessibility tree was read in B33 and is
+   correct; that is not the same as somebody using it.
+5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.
 
-**Not next, and why.** **B23's second half** (door one says *porn*; its five worries are shaped
-like a pub) is content, and waits for the CBT reviewer and Misha alongside `strug`/`low`,
-`care`/`praise` and the `early`/`strug` duplicate. **B27 item 4** needs an iPhone's *Add to Home
-Screen* sheet and bites harder at **B5**, which cannot start until Q1 is answered.
-
-**Unchanged release conditions:** one paid CBT-trained reviewer on the worries (**three pairs are
-written down for them** in `B1-the-stock-list.md` step 3); **Misha on the six doors, their order,
-the sixty-three, and `places.signedOff`**; a real screen-reader pass on a phone; J1–J3 on a phone;
-an owner for links and helplines; **Q1**.
+**Unchanged release conditions** beyond those: Misha on `places.signedOff`; J1–J3 on a phone;
+an owner for links and helplines.
 
 ## 3. Environment facts
 
@@ -69,51 +60,43 @@ an owner for links and helplines; **Q1**.
 | Repo | `github.com/richardosborne14/betr`, private, branch `main` |
 | Stack | plain HTML/CSS/JS in `web/`; **tests are `node --test` from the repo root** |
 | See it now | `python3 -m http.server 8760 --bind 127.0.0.1` from `web/`, then `http://127.0.0.1:8760/`. Opening `web/index.html` off disk works for words; serve it when testing storage |
-| **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** `dump`'s CAN TAP list gives the real selectors — doors are `[data-door="habit"]`, not the label |
-| Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02, and **the alarm now covers it** |
-| TrybeUP's repo | `trybeup/trybeup-prod`, checkout at `~/vscode_projects/trybeup-prod`. **Its own `CLAUDE.md` governs it.** Nothing further is owed to it |
+| **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** `dump`'s CAN TAP list gives the real selectors |
+| Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02, alarm covers it |
+| TrybeUP's repo | `trybeup/trybeup-prod`, checkout at `~/vscode_projects/trybeup-prod`. Nothing further is owed to it |
 
 ## 4. Gotchas, live
 
-- **A handoff file can be older than the session that wrote it** — this one denied a branch and a
-  PR that existed. **Check the remote before repeating work it calls undone.** `learnings.md`.
-- **`node --test web/tests/` does not work on Node 22** — run it from the repo root; inside `web/`
-  you get fewer tests and no warning. `harness.js` is the fake DOM; in its `vm` **`instanceof
-  Array` is unreliable** and there is **no `crypto`**.
-- **The fold is 785px, not 844.** `nav.menu` is fixed over the bottom 59px and `dump` cannot see
-  it, so a thing it calls on-screen can be invisible: **anything near the bottom needs a `shot` or
-  an `eval`'d rect against `nav.menu`** — and **check 125% text**, where the Help counters fall
-  off and the front screen's trust line already does.
-- **A walk finds what is hard to reach; only reading the file finds what was never written** (B25's
-  ladder line, B26's price) — grep before moving anything. `learnings.md`.
-- **`walk.js open` clears storage on purpose** (returning person: five taps to `#lock`, `#m-mine`,
-  `#back`). **After editing `web/content/*`, `stop` and `start`** — `open` alone serves a cache.
-- **Help's order is a decision and two tests hold it:** crisis first (B17), proof second (B26),
-  then CBT, then the nine sentences — frozen in **wording, not position**. **The doors order is a
-  decision too**: `phone, habit, work, temper, secret, yes` (B23, founder); door one may not name a
-  substance and the door with the note may not fall past second. Misha has signed off neither.
-- **BETR never said it was free until 2026-09-04.** That line now opens the Help proof block.
-  **If BETR ever gains a thing to buy, it comes out the same day.** No test can catch this.
-- **`checkBelief` and `checkTest` deliberately do not enforce the same lists** — `HARM` is on
-  both, `HABIT` and `BODY` are `checkTest`'s alone. **Do not tidy this into symmetry**; a test
-  fails. **Two footers are one sentence** — `whats-going-on.js`'s `foot` and `strings-en.js`'s
-  `doors.foot` share one `<p>`. **Sort copy by what a person reads.**
-- **`boot(a.mem)` lands back on the test in hand; `docs/prose-craft.md` is a ZIP** — `unzip` it.
-  **No test may hard-code a worry's words**, nor assert a bare word off the whole screen a worry
-  could use (`missed`); assert the phrase. **A walk in a test is five taps** — `#go` →
-  `[data-door]` → `[data-id]` → `[data-b]` → `#lock`; `doors.items[0]` is `phone`, so use
-  `firstBehind()`, never `worries[0]`.
-- **A worry is a loose `belief` plus exactly three `beliefs`**, two fields each, each predicting
-  something different, the card sentence never one of them — and **no two worries behind one door
-  may end the same way**, exemptions held by hand in `content.test.js`.
-- **Every word a person reads is in `web/content/strings-en.js`**; a sentence back in `app.js`
-  fails `i18n.test.js`, as does a `left:` or a `px` font size in `app.css`. The key sweep matches
-  `t('literal')` — **write `rest ? t('a') : t('b')`, never `t(rest ? 'a' : 'b')`**.
-- **`nudge` is cleared by `go()`, like `refusal`.** **A new stored field goes in three places**:
-  `blank()`, `normalise()`, `isEmpty()`. **The ladder is one belief's grip** — no total, no target.
-  **Storage is v3**; `rate.keyOf()` keys a stock ladder by **worry id**.
+- **The walks changed shape on 2026-09-08.** The front screen's `#go` is now *What's yours?*
+  and opens the **build** screen; the stock road is `#not-sure` → `[data-door]` → `[data-id]` →
+  `[data-b]` → `#next` → `#lock`. `#m-new` opens a new test, not the doors. Five stage names
+  (`own-belief`, `own-test`, `own-drop`, `belief`, `belief-own`) route to `build()`.
+- **A REGION DELETE NEEDS BOTH ENDS CHECKED.** Cutting from one comment banner to the next
+  swallowed the whole build screen out of `app.js`, and later the whole `build.*` string block,
+  because both had been *inserted into* the region since its banner was written. Assert what
+  must NOT be in the chunk as well as what must, and indent the guard (`'    own: {'`), because
+  `own: {` contains a nested `belief: {`. `learnings.md`.
+- **The fold is 785px at 100% and 780px at 125%, and it settles content decisions.** Four in
+  this stretch, three of them fixed by a shorter sentence rather than CSS. **`doors.intro` is
+  one line and must stay one** — a second cost the safety note 58 of its 100px. **Anything near
+  the bottom needs a `shot` or an `eval`'d rect**; `dump` cannot see the fixed menu.
+- **Chips are exempt from the capital-letter rule**, narrowly and by class, because they are
+  fragments of the printed sentence. `loop.test.js` sweeps them separately and fails if a
+  chip's words are also drawn as a real label.
+- **`rate.keyOf()` keys an own ladder by `id`, and falls back to the sentence when there is
+  none.** The fallback is somebody's pre-B30 ladder; do not tidy it away. **v4 migrated no
+  data on purpose** — see the comment in `store.js`.
+- **`walk.js open` clears storage on purpose.** **After editing `web/content/*`, `stop` and
+  `start`** — `open` alone serves a cache.
+- **`checkBelief`, `checkTest` and `checkPart` deliberately differ.** `HARM` is on all three;
+  `HABIT`/`BODY` refuse nothing any more and still hold BETR's own content. The nudge and the
+  two shape refusals are unreachable from every screen and are kept, tested, in `guards.js`.
+- **Help's order is three decisions and four tests hold it:** crisis first (B17), proof second
+  (B26), **frozen sentence 6 third (B33)**, then CBT, then the nine. Sentence 6 is drawn twice
+  from the same array element — never copy its words.
+- **Every word a person reads is in `web/content/`**; five files plus `starts.js` and
+  `examples.js`. A sentence back in `app.js` fails `i18n.test.js` — and **a string literal that
+  starts mid-tag reads as prose to that sweep**, so keep every static attribute in the fragment
+  that opens the tag.
 - **`content/zones.js` and `docs/COPY.md` are generated** (`node tools/copy-sheet.js`); never
-  hand-edit. **No helpline number is written from memory**; sentence 7 names 988 and 116 123
-  inside itself, and `docs/changing-the-words.md` is the founder's — keep it true.
-- **In `places.js` a GROUP may carry `note` and `id`; an ITEM has three fields and no fourth;
-  `why.js` two and no third. A link is allowed; a request is not** (`menu.test.js`).
+  hand-edit. **No helpline number is written from memory.** `docs/changing-the-words.md` is the
+  founder's — keep it true.

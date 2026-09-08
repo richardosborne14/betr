@@ -280,3 +280,43 @@ is a fair result and not a good one: it means the change is still only proved by
 And nobody here has a screen reader, a low-end phone, big text turned on, or a worry the
 twenty-one do not cover. Three characters written by the author of the app cannot find what the
 author cannot imagine.
+
+---
+
+# 2026-09-08 — what B29–B33 changed, and what is still unread
+
+No new walker. This section is here because the five tasks that rebuilt the way in produced
+**content decisions that belong to the founder and Misha**, and they should be read together
+rather than found one at a time in five task files.
+
+## Three sentences in `worries.js` were rewritten by a session
+
+The build screen prints the words **If I**, so a prediction that does not start that way cannot
+be drawn on it. Three of the sixty-three did not. All three moved from something happening TO
+the person to something the person does, which is the shape a behavioural experiment tests:
+
+- `phone` — "If **someone can't get hold of me**…" → "If **I don't answer while it's away**…"
+- `rest` — "If **anyone sees me sitting down**…" → "If **I let somebody see me sitting down**…"
+- `low` — "If **they know**…" → "If **I tell them**…"
+
+These are the only sentences in that file a session has rewritten since B1. **The paid CBT
+reviewer should read them alongside the rest.**
+
+## Two new content files nobody outside this building has read
+
+- **`web/content/starts.js`** — twenty-one situations, each with three predictions, some things
+  to do and some things to leave out. About a hundred and eighty sentences. They are BETR
+  proposing something, so they carry the same weight as the twenty-one stock tests.
+- **`web/content/examples.js`** — four finished tests, one of which is the first thing anybody
+  sees. **The founder chooses which leads and whether it is real or an example.**
+
+Both are in `docs/COPY.md` now, with their own sections.
+
+## The one thing a walk still cannot reach
+
+Same as 2026-09-04, and now more important rather than less. Nobody here has a screen reader, a
+low-end phone, or a situation the list does not cover — and the app has just moved from "pick
+one of twenty-one" to "write your own sentence", which is precisely the change that a person
+who does not know what to write will fail at silently. **The accessibility tree was read this
+time** (headings, focus, blank names, the chip rows as named groups) and it is correct; that is
+not the same as somebody using it.

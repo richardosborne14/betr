@@ -142,8 +142,8 @@
 
   /*
     `open` is every test that has been locked in and not yet finished. It was added by B8,
-    when "New worry" became one tap away from every screen: before that, starting another
-    worry silently overwrote whatever you had promised yourself you would do today.
+    when the bottom row put a new test one tap away from every screen: before that, starting
+    another one silently overwrote whatever you had promised yourself you would do today.
 
     There is no cap on how many are in here, on purpose (B8; research §3.1 and §3.3 — the
     risk in self-help is stopping, not doing too much). Nothing counts them, and nothing here

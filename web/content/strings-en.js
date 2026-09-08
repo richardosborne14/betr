@@ -140,7 +140,11 @@ var BETR_STRINGS_EN = {
     */
     doors: {
       title: 'What’s going on?',
-      sub: 'Nothing here gets tested as it is. You take one and change it into yours.',
+      /*
+        `sub` was here for a day. It said what `whats-going-on.js`'s own intro now says, and
+        two lines above the safety note cost the note 58px of the margin B23 bought it. One
+        line, in the file the founder edits.
+      */
       own: 'None of these — I’ll write my own',
       foot: 'None of these is a diagnosis, and BETR never decides which one you are.'
     },
@@ -209,7 +213,8 @@ var BETR_STRINGS_EN = {
       next: 'What will you do?',
       /* The second half. The sentence is above it, in the quiet strip, unchanged. */
       doTitle: 'What will you do today?',
-      doSub: 'One thing. Small, cheap, and entirely up to you.',
+      /* Short on purpose: at 125% text every line here pushes "Lock it in" behind the menu. */
+      doSub: 'One thing, today. Small and entirely up to you.',
       doPlaceholder: 'Say no to one thing today, in one sentence.',
       doChips: 'Or one of these:',
       dropLabel: 'And leave out',
@@ -217,7 +222,7 @@ var BETR_STRINGS_EN = {
         Optional, and it says so in its own line rather than in a note underneath — the note
         was a separate line of small print and it pushed "Lock it in" below the fold.
       */
-      dropSub: 'Leaving out what you’d normally do is what makes it count. Optional.',
+      dropSub: 'Leaving it out is what makes it count. Optional.',
       dropPlaceholder: 'Don’t give a reason.',
       dropChips: 'Or one of these:',
       lock: 'Lock it in',
@@ -467,15 +472,30 @@ var BETR_STRINGS_EN = {
     /* ------------------------------------------------------------------ help */
 
     help: {
+      /*
+        B33, 2026-09-08, and it is the one line on Help that got MORE important that day.
+
+        Frozen sentence 6 — "Choose experiments that are safe and legal…" — used to be the
+        fourth thing a person read and one of nine in a numbered list. Then rule 4 loosened:
+        the habit and body word lists stopped refusing a person's own test, so this sentence
+        became THE ONLY PLACE THE LINE IS DRAWN. It is drawn twice now: here, third, where a
+        person reads it before they read anything else about how BETR works, and again in its
+        own place among the nine, word for word, because the nine are frozen as a block.
+
+        The words are `frozen.sentences[5]`, not a copy — app.js draws that array element, so
+        there is no second version of it to drift.
+      */
+      safeTitle: 'Choosing one that is safe',
       cbtTitle: 'What CBT is, and which bit of it this is',
       primer: [
         'CBT is a talking therapy. Its plainest idea is this: what you expect to happen ' +
           'decides what you do, and staying away from the thing keeps the expectation safe. ' +
           'You never find out you were wrong, so you stay sure.',
         'The behavioural experiment is the part of CBT that finds out. You write down what ' +
-          'you think will happen. You do one small thing. Then you write down what actually ' +
-          'happened — not what it meant, just what was said or done. Beliefs move when the ' +
-          'evidence is yours and you collected it yourself.',
+          'you think will happen, in one sentence with two halves — if I do this, then that ' +
+          'will happen. You do the small thing. Then you write down what actually happened — ' +
+          'not what it meant, just what was said or done. Beliefs move when the evidence is ' +
+          'yours and you collected it yourself.',
         'BETR is that one part, and nothing else. It doesn’t ask how your week has been, ' +
           'doesn’t score you, doesn’t decide anything about you, and can’t see any of it. ' +
           'A therapist does far more than this, and if you can see one, please do. This is ' +

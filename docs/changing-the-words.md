@@ -18,14 +18,16 @@ Everything below is for when you want to do it yourself at eleven at night.
 
 ## Where the words actually live
 
-Five files, and every word in the app is in one of them. Nothing else in the repo contains a
+Seven files, and every word in the app is in one of them. Nothing else in the repo contains a
 sentence a person reads.
 
 | If you want to change… | The file |
 | --- | --- |
+| **The finished test on the front screen** — the first thing anybody sees | `web/content/examples.js` |
+| **The suggestions under the blanks** on *Set up a test* — the situations, the predictions, the things to do, the things to leave out | `web/content/starts.js` |
 | One of the ready-made tests you can borrow: its name, its card sentence, its three "If I…, then…", the thing to try, the thing to leave out | `web/content/worries.js` |
 | The six doors on *What's going on?* | `web/content/whats-going-on.js` |
-| "Why this one sticks" — the two paragraphs behind each worry | `web/content/why.js` |
+| "Why this one sticks" — the two paragraphs behind each ready-made one | `web/content/why.js` |
 | The links on Help | `web/content/places.js` |
 | **Every other sentence in the app** — buttons, headings, the front screen, Help, what a screen reader says | `web/content/strings-en.js` |
 
@@ -33,8 +35,48 @@ sentence a person reads.
 out to the file it lives in without hunting.
 
 Two files are **never** hand-edited: `web/content/zones.js` (generated from the world's time
-zone list) and `docs/COPY.md` itself (generated from the five above — editing it changes
-nothing in the app).
+zone list) and `docs/COPY.md` itself (generated from the others — editing it changes nothing in
+the app).
+
+### Changing the example on the front screen
+
+`web/content/examples.js` holds up to four, and a person sees one per open, in order. Each one
+is four lines:
+
+```
+  {
+    prediction: 'If I tell my dad I’m struggling, then he’ll change the subject.',
+    happened: 'He went quiet. Then he said “Me too.”',
+    from: 10,
+    to: 6
+  },
+```
+
+`from` is always 10 — that is where everything starts — and `to` is where it landed, between 1
+and 9. **To change which one leads, move it to the top of the list.** The caption above it,
+*What one test looks like*, is in `strings-en.js` under `start.caption`, and it is the line
+that makes the card an example rather than somebody's result. If you ever want it to be a real
+result of yours, that caption is the thing that has to change to say so.
+
+### Changing a suggestion chip
+
+`web/content/starts.js` is a list of situations, each with three predictions, some things to
+do, and some things to leave out:
+
+```
+    {
+      if: 'say no without giving a reason',
+      thens: [ 'they’ll think I’m being difficult', … ],
+      dos: [ 'Say no to one thing today, in one sentence.', … ],
+      drops: [ 'Don’t give a reason.', … ]
+    },
+```
+
+Two things about the punctuation, and the build will stop you on both. **An `if` and a `then`
+are lowercase**, because the screen prints "If I" before one and ", then" before the other and
+they have to read as one sentence. **A `dos` or a `drops` line is a whole sentence** and starts
+with a capital. `general` at the top is the short set shown when somebody has written a
+situation we did not think of, which is most of the time.
 
 ## Doing it yourself, on github.com
 
@@ -62,7 +104,7 @@ That is it. There is no separate publish step: a change on `main` publishes itse
 
 About thirty seconds of machinery, in this order:
 
-1. **Every test runs.** 181 of them.
+1. **Every test runs.** 196 of them.
 2. If they all pass, the files are copied to the server.
 3. The published page is then checked **from outside**, over the real address: that it loads,
    that it sets no cookie, that it is allowed to make no outbound request of any kind, and
@@ -90,8 +132,13 @@ and they publish nothing if one fails. Among the things that will stop your chan
 - any of "digital CBT", "improve your mental health", "irrational", "streak", "tracks your
   anxiety" appears anywhere
 - one of them ends up with anything other than exactly three "If I…, then…", or two of them
-  say the same thing, or one of them does not start with "If"
+  say the same thing, or one of them does not start with **"If I"** and split cleanly on
+  ", then" — the build screen prints those words and fills the blanks by taking the sentence
+  apart, so one that will not come apart hands somebody half a sentence
 - one of them stops being behind a door, so nothing in the app leads to it
+- a suggestion chip starts with a capital where it should be lowercase, or the other way round
+- the front-screen example does not start at 10, or does not move, or is more than a couple of
+  short sentences
 - a button or a heading calls something a **worry**: since 2026-09-08 the word a person reads
   is **test**. ("Worry" is still allowed where it means the feeling rather than the thing —
   frozen sentence 3, and the two paragraphs of *Why this one sticks*.)

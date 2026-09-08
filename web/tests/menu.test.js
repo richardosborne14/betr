@@ -194,10 +194,26 @@ test('Help answers the person checking for a catch on the first screen, under th
   const crisis = at('If you are in danger or in crisis');
   const proof = at('Don’t take our word for it');
   assert.ok(crisis < proof, 'the crisis lines are no longer first');
-  for (const later of ['What CBT is', 'What this is', 'This is a self-help worksheet',
-    'Other places', 'Who made this', 'The code']) {
+  for (const later of ['Choosing one that is safe', 'What CBT is', 'What this is',
+    'This is a self-help worksheet', 'Other places', 'Who made this', 'The code']) {
     assert.ok(proof < at(later), '"' + later + '" is above the proof block');
   }
+
+  /*
+    B33, 2026-09-08. Frozen sentence 6 is third now, and the reason is rule 4 loosening on the
+    same day: the habit and body word lists stopped refusing a person's own test, so this
+    sentence is the only place the line is drawn at all. It was fourth, inside a numbered list
+    of nine, which was the right place for a rule the app also enforced.
+
+    Both halves of this fail the build. It may not climb above the crisis block or the proof —
+    those are for the person who gets one chance at the screen — and it may not slide back
+    below the CBT explainer, which is where it was when it was one of nine and no more.
+  */
+  const safe = at('Choosing one that is safe');
+  assert.ok(proof < safe, 'the safe-experiments line has climbed above the proof block');
+  assert.ok(safe < at('What CBT is'),
+    'the safe-experiments line is below the CBT explainer again. Since 2026-09-08 it is the ' +
+    'only place BETR draws the line at all (rule 4 as amended)');
   /* the counters and both ways out are inside that block, not stranded below the fold */
   for (const part of ['sent to us, ever', 'accounts', 'Turn on airplane mode']) {
     assert.ok(at(part) < at('What CBT is'), '"' + part + '" fell below the CBT explainer');
@@ -223,6 +239,25 @@ test('Help says in plain words what BETR costs, before anything else it explains
   /* it speaks for BETR; TrybeUP's paid plan is still stated in TrybeUP's own entry (rule 9) */
   assert.ok(h.indexOf('the private groups need a paid plan') > h.indexOf('BETR is free'),
     'TrybeUP\'s paywall admission has moved or gone');
+});
+
+/*
+  And it is the SAME sentence, not a second copy of it: app.js draws the array element that
+  the numbered list below draws. A copy would drift the first time somebody edited one of them,
+  and this is a frozen sentence (rule 7) said in two places on one screen.
+*/
+test('the safe-experiments line said twice on Help is one sentence, word for word', () => {
+  const en = require('../content/strings-en.js');
+  const six = en.s.frozen.sentences[5];
+  assert.match(six, /^Choose experiments that are safe and legal\./, 'sentence 6 has moved');
+
+  const h = boot().tap('#m-help').html().replace(/<[^>]*>/g, '');
+  const both = h.split(six).length - 1;
+  assert.strictEqual(both, 2, 'sentence 6 is on Help ' + both + ' times, and it should be twice');
+
+  /* the app has no copy of it, in any file: it draws frozen.sentences[5] */
+  const src = require('node:fs').readFileSync(require.resolve('../app.js'), 'utf8');
+  assert.ok(src.indexOf('Choose experiments') === -1, 'app.js has its own copy of sentence 6');
 });
 
 test('Help carries the nine sentences and the one clear thing to read about CBT', () => {

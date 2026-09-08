@@ -4,13 +4,15 @@
 rewritten from the source every time that command runs, so anything typed here is lost.
 Mark it up, send it back, and the change gets made in the file named next to each section.
 
-There are 21 worries, 6 doors and 21 explanations in this build.
+There are 4 front-screen examples, 21 suggestion starts, 21 to borrow from, 6 doors and 21 explanations in this build.
 
 | Part | What it is | Which file |
 | --- | --- | --- |
 | [Frozen](#frozen) | Cannot be changed by anyone here | `strings-en.js` |
 | [The screens](#the-screens) | Every sentence of the interface | `strings-en.js` |
-| [The worry list](#the-worry-list) | Six parts per worry | `worries.js` |
+| [The front-screen example](#the-front-screen-example) | The first thing anybody sees | `examples.js` |
+| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `starts.js` |
+| [The list you can borrow from](#the-worry-list) | Six parts each | `worries.js` |
 | [The doors](#the-doors) | "What’s going on?" | `whats-going-on.js` |
 | [Why this one sticks](#why-this-one-sticks) | One explanation per worry | `why.js` |
 | [Places on Help](#places-on-help) | Every link in BETR | `places.js` |
@@ -143,10 +145,6 @@ keep it, and put it wherever the sentence needs it.
 **`doors.title`**
 
 > What’s going on?
-
-**`doors.sub`**
-
-> Nothing here gets tested as it is. You take one and change it into yours.
 
 **`doors.own`**
 
@@ -574,6 +572,10 @@ keep it, and put it wherever the sentence needs it.
 
 ### Screen 13 — Help
 
+**`help.safeTitle`**
+
+> Choosing one that is safe
+
 **`help.cbtTitle`**
 
 > What CBT is, and which bit of it this is
@@ -582,7 +584,7 @@ keep it, and put it wherever the sentence needs it.
 
 > **1.** CBT is a talking therapy. Its plainest idea is this: what you expect to happen decides what you do, and staying away from the thing keeps the expectation safe. You never find out you were wrong, so you stay sure.
 >
-> **2.** The behavioural experiment is the part of CBT that finds out. You write down what you think will happen. You do one small thing. Then you write down what actually happened — not what it meant, just what was said or done. Beliefs move when the evidence is yours and you collected it yourself.
+> **2.** The behavioural experiment is the part of CBT that finds out. You write down what you think will happen, in one sentence with two halves — if I do this, then that will happen. You do the small thing. Then you write down what actually happened — not what it meant, just what was said or done. Beliefs move when the evidence is yours and you collected it yourself.
 >
 > **3.** BETR is that one part, and nothing else. It doesn’t ask how your week has been, doesn’t score you, doesn’t decide anything about you, and can’t see any of it. A therapist does far more than this, and if you can see one, please do. This is the piece you can do on your own, today, in about a minute.
 
@@ -804,7 +806,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.doSub`**
 
-> One thing. Small, cheap, and entirely up to you.
+> One thing, today. Small and entirely up to you.
 
 **`build.doPlaceholder`**
 
@@ -820,7 +822,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.dropSub`**
 
-> Leaving out what you’d normally do is what makes it count. Optional.
+> Leaving it out is what makes it count. Optional.
 
 **`build.dropPlaceholder`**
 
@@ -844,21 +846,318 @@ keep it, and put it wherever the sentence needs it.
 
 ---
 
+<a id="the-front-screen-example"></a>
+
+## The finished test on the front screen
+
+`web/content/examples.js`. The first thing anybody sees, and the only words in BETR read
+before a person has agreed to anything. One is shown per open, in this order.
+
+It is an EXAMPLE and it is captioned as one — "What one test looks like", above the card.
+Shown as a real person’s result it would be a testimonial, and a testimonial reads as a
+claim. Nobody is named, nobody else’s number appears, and the ladder moves because that is
+what happened in this one.
+
+| | You expected | What actually happened | Ladder |
+| --- | --- | --- | --- |
+| 1 | If I tell my dad I’m struggling, then he’ll change the subject. | He went quiet. Then he said “Me too.” | 10 → 6 |
+| 2 | If I ask for the day off, then my boss will think I’m not committed. | She said “fine” and went back to her screen. | 10 → 7 |
+| 3 | If I say no without giving a reason, then they’ll be off with me for weeks. | He said “that’s all right” and asked somebody else. | 10 → 8 |
+| 4 | If I let the silence go on, then they’ll think I’ve got nothing to say. | She filled it herself, and told me something she never had before. | 10 → 7 |
+
+---
+
+<a id="the-suggestions"></a>
+
+## The suggestions under the blanks
+
+`web/content/starts.js`. The screen prints **If I** and **, then** either side of two gaps,
+and these are what a person can tap into them instead of typing. Fixed content in a fixed
+order; which set of predictions is offered depends on one thing only — whether the first
+gap holds one of these situations, word for word.
+
+An **if** and a **then** are lowercase, because they follow printed words and have to read
+as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.
+
+### The general set — shown when somebody has written their own situation
+
+| | |
+| --- | --- |
+| **then** | they’ll think less of me · they’ll go quiet with me · it’ll be held against me later |
+| **do** | Do it once today, in the smallest version that still counts. · Pick the version of it you could do in the next hour. |
+| **leave out** | Don’t explain yourself. · Don’t line up a way out first. |
+
+### 1. If I say no without giving a reason…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll think I’m being difficult |
+| **then** 2 | they’ll stop asking me |
+| **then** 3 | they’ll be off with me for days |
+| **do** 1 | Say no to one thing today, in one sentence. |
+| **do** 2 | Turn down one request without explaining why. |
+| **leave out** 1 | Don’t give a reason. |
+| **leave out** 2 | Don’t offer to make up for it another way. |
+
+### 2. If I ask for what I actually want…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll say no and I’ll feel stupid |
+| **then** 2 | they’ll think I’m taking advantage |
+| **then** 3 | it’ll change how they see me |
+| **do** 1 | Ask for one thing today, straight out. |
+| **do** 2 | Ask once, and don’t soften it. |
+| **leave out** 1 | Don’t say “only if it’s no trouble”. |
+| **leave out** 2 | Don’t ask for less than you want. |
+
+### 3. If I tell someone I’m struggling…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll change the subject |
+| **then** 2 | they’ll think less of me |
+| **then** 3 | they’ll start treating me carefully |
+| **do** 1 | Tell one person one true sentence about how this week has been. |
+| **do** 2 | Answer “how are you?” honestly, once, today. |
+| **leave out** 1 | Don’t follow it with “but I’m fine”. |
+| **leave out** 2 | Don’t make a joke of it. |
+
+### 4. If I hand something over before it’s perfect…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll spot everything wrong with it |
+| **then** 2 | they’ll think I’ve stopped caring |
+| **then** 3 | it’ll come straight back to me with a list |
+| **do** 1 | Finish one thing at good enough today and hand it over. |
+| **do** 2 | Stop at the time you planned, and send what you have. |
+| **leave out** 1 | No last read-through. |
+| **leave out** 2 | Don’t say what you’d have done with more time. |
+
+### 5. If I send it without reading it again…
+
+| | |
+| --- | --- |
+| **then** 1 | there’ll be a mistake in it |
+| **then** 2 | it’ll come out blunter than I meant |
+| **then** 3 | I’ll be going back to it all afternoon |
+| **do** 1 | Write one message today, read it once, and send it. |
+| **do** 2 | Send the next email the moment it’s written. |
+| **leave out** 1 | No second read-through. |
+| **leave out** 2 | Don’t go back and edit it after it’s gone. |
+
+### 6. If I don’t answer a message straight away…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll think I don’t care |
+| **then** 2 | they’ll assume I’m annoyed with them |
+| **then** 3 | they’ll stop bothering to message me |
+| **do** 1 | Leave one message a few hours before you answer it. |
+| **do** 2 | Pick one message today and answer it this evening. |
+| **leave out** 1 | Don’t open with “sorry, only just seen this”. |
+| **leave out** 2 | Don’t explain the delay. |
+
+### 7. If I sit still with the restlessness…
+
+| | |
+| --- | --- |
+| **then** 1 | it’ll build until I have to do something about it |
+| **then** 2 | I’ll be no use for the rest of the day |
+| **then** 3 | it won’t pass on its own |
+| **do** 1 | Set ten minutes and sit with it. Write down the time it eased. |
+| **do** 2 | Stay where you are for one urge, and time it. |
+| **leave out** 1 | Don’t pick anything up. |
+| **leave out** 2 | Don’t get up to do a job. |
+
+### 8. If I rest while there’s still stuff to do…
+
+| | |
+| --- | --- |
+| **then** 1 | I’ll feel guilty the whole time |
+| **then** 2 | I won’t start again today |
+| **then** 3 | somebody will think I’ve gone slack |
+| **do** 1 | Take two hours off today, and take them properly. |
+| **do** 2 | Sit down for half an hour with nothing to show for it. |
+| **leave out** 1 | No “I’ll just quickly do this one thing” first. |
+| **leave out** 2 | Don’t keep the list where you can see it. |
+
+### 9. If I go an evening without my phone…
+
+| | |
+| --- | --- |
+| **then** 1 | something will go wrong and nobody will reach me |
+| **then** 2 | I’ll miss something I needed to see |
+| **then** 3 | I won’t know what to do with myself |
+| **do** 1 | Put it in a drawer from eight. In the morning, write down what you actually missed. |
+| **do** 2 | Leave it in another room for one evening. |
+| **leave out** 1 | No checking it “just once” before bed. |
+| **leave out** 2 | Don’t tell anyone in advance where you’ll be. |
+
+### 10. If I say what I actually think…
+
+| | |
+| --- | --- |
+| **then** 1 | it’ll turn into a row |
+| **then** 2 | they’ll go quiet with me |
+| **then** 3 | they’ll decide I’m hard work |
+| **do** 1 | Say the thing you’d normally leave, once, in one sentence. |
+| **do** 2 | Disagree out loud with one person today. |
+| **leave out** 1 | Don’t soften it with a joke. |
+| **leave out** 2 | Don’t apologise for saying it. |
+
+### 11. If I don’t get the last word…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll think they’ve won |
+| **then** 2 | it’ll get brought up again |
+| **then** 3 | I’ll be going over it all night |
+| **do** 1 | Let one disagreement finish where it finishes today. |
+| **do** 2 | Say your bit once, and stop. |
+| **leave out** 1 | Don’t send the follow-up message. |
+| **leave out** 2 | Don’t go back to it later. |
+
+### 12. If I let somebody see I got it wrong…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll lose confidence in me |
+| **then** 2 | they’ll bring it up again later |
+| **then** 3 | they’ll stop trusting me with things |
+| **do** 1 | Say “I got that wrong” once today, and leave it there. |
+| **do** 2 | Own one mistake before anybody finds it. |
+| **leave out** 1 | Don’t explain how it happened. |
+| **leave out** 2 | Don’t offer to fix it before they ask. |
+
+### 13. If I don’t rush to be early…
+
+| | |
+| --- | --- |
+| **then** 1 | I’ll be late and it’ll look bad |
+| **then** 2 | they’ll think I don’t take it seriously |
+| **then** 3 | the whole day will run behind |
+| **do** 1 | Leave at the time it actually takes, once, and write down when you arrived. |
+| **do** 2 | Arrive on time rather than early, once. |
+| **leave out** 1 | Don’t leave a buffer. |
+| **leave out** 2 | Don’t message ahead to say where you are. |
+
+### 14. If I say something good about somebody…
+
+| | |
+| --- | --- |
+| **then** 1 | it’ll come out wrong |
+| **then** 2 | they’ll be embarrassed |
+| **then** 3 | they’ll think I want something |
+| **do** 1 | Tell one person one specific thing they did well. |
+| **do** 2 | Say it out loud rather than in a message. |
+| **leave out** 1 | Don’t follow it with a joke. |
+| **leave out** 2 | Don’t add “anyway”. |
+
+### 15. If I ask somebody for help…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll think I can’t cope |
+| **then** 2 | they’ll say yes and resent it |
+| **then** 3 | they’ll say no |
+| **do** 1 | Ask one person for one specific thing today. |
+| **do** 2 | Ask for help with something you could just about manage alone. |
+| **leave out** 1 | Don’t say “if you’ve got a minute”. |
+| **leave out** 2 | Don’t do half of it first. |
+
+### 16. If I stop before it’s finished…
+
+| | |
+| --- | --- |
+| **then** 1 | it’ll never get done |
+| **then** 2 | I’ll have wasted the whole run at it |
+| **then** 3 | somebody will see it half done |
+| **do** 1 | Stop at the hour, mid-thing, and go and do something else. |
+| **do** 2 | End one job today at a point that isn’t the end. |
+| **leave out** 1 | Don’t tidy it up first. |
+| **leave out** 2 | Don’t leave a note saying where you got to. |
+
+### 17. If I go to something on my own…
+
+| | |
+| --- | --- |
+| **then** 1 | I’ll stand there with nobody to talk to |
+| **then** 2 | everyone will notice I came alone |
+| **then** 3 | I’ll want to leave within ten minutes |
+| **do** 1 | Go to one thing today without arranging to meet anybody. |
+| **do** 2 | Stay half an hour, and write down who spoke to you. |
+| **leave out** 1 | Don’t hold your phone. |
+| **leave out** 2 | Don’t line up an excuse to leave. |
+
+### 18. If I leave early and say plainly that I’m going…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll take it as a snub |
+| **then** 2 | they’ll ask questions I don’t want to answer |
+| **then** 3 | I won’t get asked again |
+| **do** 1 | Leave one thing when you want to, and say plainly that you’re off. |
+| **do** 2 | Say goodbye once, and go. |
+| **leave out** 1 | Don’t invent a reason. |
+| **leave out** 2 | Don’t stay for one more of anything. |
+
+### 19. If I don’t check it a second time…
+
+| | |
+| --- | --- |
+| **then** 1 | I’ll have missed something |
+| **then** 2 | it’ll be wrong and I won’t know |
+| **then** 3 | I won’t settle until I’ve looked |
+| **do** 1 | Check once today, and write down the time you stopped wanting to look. |
+| **do** 2 | Lock up once, and walk away. |
+| **leave out** 1 | No second look. |
+| **leave out** 2 | Don’t ask anybody else to check for you. |
+
+### 20. If I let a message sit unread…
+
+| | |
+| --- | --- |
+| **then** 1 | it’ll turn out to be the urgent one |
+| **then** 2 | they’ll see I’ve ignored it |
+| **then** 3 | it’ll pile up and get worse |
+| **do** 1 | Leave one message unopened until this evening. |
+| **do** 2 | Turn the badge off for a day. |
+| **leave out** 1 | Don’t read the preview. |
+| **leave out** 2 | Don’t open it and leave it unanswered. |
+
+### 21. If I get through it without apologising…
+
+| | |
+| --- | --- |
+| **then** 1 | they’ll think I don’t care |
+| **then** 2 | it’ll sit between us |
+| **then** 3 | somebody will say something about it |
+| **do** 1 | Get through one small thing today without saying sorry. |
+| **do** 2 | Say “thanks for waiting” instead of “sorry I’m late”, once. |
+| **leave out** 1 | Don’t apologise in the first sentence. |
+| **leave out** 2 | Don’t apologise for not apologising. |
+
+---
+
 <a id="the-worry-list"></a>
 
-## The worry list
+## The list you can borrow from
 
-`web/content/worries.js`. This is the product. The **id** never changes once anybody has
-used it — a stored result points at it. No **test** and no **drop** may touch the habit
-itself; the build fails if one does.
+`web/content/worries.js`. Since 2026-09-08 this is not the way in — it is one tap aside,
+behind *Not sure? Try one of these* — and picking one opens the build screen with the
+sentence half written and everything editable. The **id** never changes once anybody has
+used it, because a stored result points at it. No **test** and no **drop** may touch the
+habit itself; the build fails if one does.
 
-**Read the three under each worry together.** B20 split the worry from the prediction, and
-that is where most of the words now are. The **card sentence** is loose on purpose: it is
-read on a list of four to six, to work out which worry this is. The **three** are read one
-screen later, one at a time, to work out which one is yours — so each has to predict a
-different thing, and each has to be something that could turn out to be wrong. Under each
-one, **braced for** is the same prediction in the voice of somebody expecting it, and it is
-what BETR writes into "What you expect" when they pick that one.
+**Read the three under each one together.** The **card sentence** is loose on purpose: it
+is read on a list of four to six, to work out which of these this is. The **three** are the
+chips on the next screen, one of which is yours — so each has to predict a different thing,
+and each has to be something that could turn out to be wrong. Every one of them starts
+**If I** and has a **, then** in it, because that is what the build screen prints.
+**Braced for** is the same prediction in the voice of somebody expecting it, and it is what
+BETR writes into "What you expect" when somebody keeps that sentence word for word.
 
 ### 1. Sitting still when I feel restless
 
@@ -1265,18 +1564,18 @@ The three a person chooses between, in the order they are shown:
 
 ## The doors — "What’s going on?"
 
-`web/content/whats-going-on.js`. Since B19 this is the way in: the one big button on the
-front screen leads here, and a door opens onto four to six worries. It is the one screen in
-BETR that names a behaviour rather than a worry. Every label is what a person would say
-about themselves, in the first person, and never a diagnosis. Nothing here is ever tested:
-a door only points at worries.
+`web/content/whats-going-on.js`. Reached from *Not sure? Try one of these* on the front
+screen; a door opens onto four to six things to borrow. It is the one screen in BETR that
+names a behaviour rather than a prediction. Every label is what a person would say about
+themselves, in the first person, and never a diagnosis. Nothing here is ever tested: a door
+only points.
 
 One door carries a **note** — a safety line, shown under that door and no other. It says
 what frozen sentence 4 already says, at the one moment it is relevant.
 
 **`intro`**
 
-> More than one of these might fit. Read to the bottom, then tap what’s closest. It just points you at the tests that usually sit under it.
+> More than one might fit — read to the bottom. Nothing here gets tested as it is; you take one and change it into yours.
 
 **`foot`**
 
