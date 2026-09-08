@@ -27,6 +27,7 @@
 */
 
 :root {
+  color-scheme: light;
   --ground:#FAFAF6; --ink:#14161C; --ink-2:#565A66; --ink-3:#8A8E99;
   --btn:#1F3FE8; --btn-ink:#FFFFFF; --btn-hover:#1734CF; --soft:#EDF0FF; --soft-ink:#1B33B8;
   --card:#FFFFFF; --edge:#E4E5EA; --mark:#FFE873; --mark-ink:#3A3000;
@@ -35,14 +36,26 @@
   --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --shadow: 0 20px 50px rgba(31,63,232,.22), 0 2px 6px rgba(20,22,28,.10);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:#0F1117; --ink:#F1F1EC; --ink-2:#B4B7C2; --ink-3:#7C808C;
-    --btn:#6B85FF; --btn-ink:#0B1030; --btn-hover:#8399FF; --soft:#1C2340; --soft-ink:#C7D0FF;
-    --card:#181B24; --edge:#2A2E3B; --mark:#E7CF4A; --mark-ink:#241E00;
-    --warn:#F08A7E; --warn-soft:#3A1F1B;
-    --shadow: 0 20px 50px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);
-  }
+/*
+  B35, 2026-09-08, founder's call: light is the default whatever the phone is set to, and the
+  chip in the top corner is the only thing that changes it. Until today this block was
+  `@media (prefers-color-scheme: dark)` and there was no chip: BETR wore the phone's clothes
+  and a person who wanted the other one had no way to say so.
+
+  lib/theme.js writes `data-theme` onto <html> from the HEAD, before this file is even asked
+  for, so a person who chose dark never sees a flash of white on the way in.
+
+  TO GO BACK TO FOLLOWING THE PHONE: this selector becomes
+  `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }`
+  and DEFAULT in lib/theme.js becomes null. Two edits, nothing else.
+*/
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:#0F1117; --ink:#F1F1EC; --ink-2:#B4B7C2; --ink-3:#7C808C;
+  --btn:#6B85FF; --btn-ink:#0B1030; --btn-hover:#8399FF; --soft:#1C2340; --soft-ink:#C7D0FF;
+  --card:#181B24; --edge:#2A2E3B; --mark:#E7CF4A; --mark-ink:#241E00;
+  --warn:#F08A7E; --warn-soft:#3A1F1B;
+  --shadow: 0 20px 50px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);
 }
 
 * { box-sizing: border-box; }
@@ -129,7 +142,21 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 .tiny { font-size:.875rem; color:var(--ink-3); margin-top:22px; max-width:44ch; }
 .tiny button { background:none; border:0; padding:0; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; font-size:.875rem; }
 /* A solid chip, not a floating word: Help is long, and it scrolls underneath this. */
-.back { position:fixed; inset-inline-start:14px; top:calc(12px + env(safe-area-inset-top)); background:var(--ground); box-shadow:0 0 0 1px var(--edge); border:0; border-radius:14px; font-family:var(--display); font-weight:700; font-size:.9375rem; color:var(--ink-3); padding:8px 10px; z-index:2; }
+/*
+  The two corner chips. Back has been there since B15; Look is B35's, and it is on every
+  screen because the founder asked for one that is "always floating somewhere easy to click".
+  Same chip, same size, mirrored — so it reads as the pair it is rather than as a new kind of
+  thing, and so neither of them is ever the most interesting object on the screen.
+
+  It is not the bottom row and must not join it: rule 10's three doors are still three, still
+  words, still no icons and still no fourth item.
+*/
+.back, .look { position:fixed; top:calc(12px + env(safe-area-inset-top)); background:var(--ground); box-shadow:0 0 0 1px var(--edge); border:0; border-radius:14px; font-family:var(--display); font-weight:700; font-size:.9375rem; color:var(--ink-3); padding:8px 10px; z-index:2; }
+.back { inset-inline-start:14px; }
+.look { inset-inline-end:14px; }
+.back:hover, .look:hover { color:var(--ink-2); }
+/* The sun and the moon. Decoration — the word beside them is what is read out. */
+.mark { display:inline-block; font-size:1rem; line-height:1; }
 
 /*
   The three doors, on every screen. Not a tab bar and must not become one: plain words, no
@@ -218,6 +245,27 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 .worry.quiet { margin-bottom:18px; }
 .worry.quiet .worry-label { font-size:1.0625rem; font-weight:700; margin:0 0 6px; letter-spacing:0; }
 .worry.quiet .worry-belief { font-size:.9375rem; }
+
+/*
+  B35, and it is the founder's own diagnosis: "why is it small and left aligned when the rest
+  is big and centred?" A test somebody wrote themselves has no label, so worryHead() promotes
+  the sentence into the label's slot — and the label's type is a small bold left-aligned strip
+  drawn to sit above a quote rule. With no quote rule under it and a centred heading below it,
+  that type reads as a caption somebody forgot to finish.
+
+  `solo` is the one-part case and it is not a label. It is the sentence, quoted the way the
+  borrowed one is quoted, centred with the rest of the screen, one step ABOVE the body size
+  rather than one step below it. The two-part case above keeps its left edge, because a label
+  with a quote rule beneath it needs one.
+*/
+/* 40ch and not the .sub's 34ch, and it is a measurement: at 34ch the sentence above broke
+   into three lines and cost 27px on a screen whose "Lock it in" is already below the fold. */
+.worry.quiet.solo { max-width:40ch; text-align:center; margin-bottom:20px; }
+.worry.quiet.solo .worry-label {
+  font-family:var(--body); font-weight:400; font-size:1.1875rem; line-height:1.4;
+  letter-spacing:0; color:var(--ink-2); margin:0;
+  overflow-wrap:break-word; text-wrap:balance;
+}
 
 .plan { background:var(--card); border:2px solid var(--edge); border-radius:24px; padding:28px 26px; width:100%; max-width:560px; text-align:start; margin:0 auto 22px; }
 .lbl { font-family:var(--display); font-weight:700; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0 0 6px; }

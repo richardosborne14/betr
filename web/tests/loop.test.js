@@ -963,3 +963,172 @@ test('a test a person built has nothing to explain, so it offers nothing', () =>
   a.shows('You expected').hides('Why this one sticks');
   a.tap('#m-mine').hides('Why this one sticks');
 });
+
+/* ------------------------------------------------------- the sentence with no label (B35) */
+
+/*
+  The founder's own words, 2026-09-08: "why is it small and left aligned when the rest is big
+  and centred?" A borrowed test has a label with the sentence quoted under it, and that strip
+  is drawn small and left-aligned so the label sits on top of its quote rule. A test somebody
+  WROTE has no label, so its sentence was being drawn in that same label type — a caption on a
+  screen where the heading below it is large and centred.
+
+  worryHead() now marks the one-part case `solo`, and the stylesheet draws it as the sentence
+  it is: quoted, centred, a size up rather than a size down. This holds the markup, because
+  the markup is the half a test can see; the type is in app.css, where the comment says why.
+*/
+test('a test with no label draws its sentence as a sentence, not as a caption', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', 'ask for Friday off')
+   .type('#then', 'my boss will think I am not committed').tap('#next');
+
+  const h = a.html();
+  /* the one-part case: quoted, and marked so the stylesheet can centre it */
+  assert.match(h, /<div class="worry quiet solo">/);
+  assert.match(h, /<p class="worry-label">“If I ask for Friday off, then my boss will think I am not committed\.”<\/p>/);
+  /* and there is no empty label above it, which is what `solo` exists to prevent */
+  assert.ok(!/class="worry-belief/.test(h.slice(h.indexOf('worry quiet solo'), h.indexOf('worry quiet solo') + 400)),
+    'the sentence was drawn twice, as a title and as a quote');
+});
+
+test('a borrowed test keeps the label-and-quote strip it was drawn for', () => {
+  const f = firstBehind(0);
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+
+  const h = a.html();
+  assert.match(h, /<div class="worry quiet">/);
+  assert.ok(h.indexOf('worry quiet solo') === -1, 'a labelled test was drawn as the solo one');
+  assert.ok(h.indexOf('<p class="worry-label">' + f.label + '</p>') !== -1, 'the label went missing');
+  assert.ok(h.indexOf('class="worry-belief wrote">“' + f.beliefs[0].belief) !== -1);
+});
+
+/* ------------------------------------------------------- light and dark (B35) */
+
+/*
+  Founder, 2026-09-08: "I actually liked the light mode … can we do light mode by default or
+  is it phone system default right now?" It was the phone's, and there was no way to say
+  otherwise. Now light is the default whatever the phone says, and one chip switches it.
+
+  What these hold is the three things that would be quiet if they broke: the default, the
+  remembering, and the fact that an untouched BETR still stores nothing at all.
+*/
+test('light is the default, whatever the phone is set to, and the chip is on every screen', () => {
+  const a = boot();
+  assert.strictEqual(a.look(), 'light');
+  assert.deepStrictEqual(Object.keys(a.mem), [], 'the look was written before anybody chose one');
+
+  /* the chip is drawn by paint(), so it is on the screens a walk passes through */
+  const screens = [() => a.tap('#m-new'), () => a.tap('#back').tap('#not-sure'),
+                   () => a.tap('[data-door]', 0), () => a.tap('#m-mine'), () => a.tap('#m-help')];
+  assert.match(a.html(), /<button class="look" id="look"/);
+  for (const step of screens) { step(); assert.match(a.html(), /<button class="look" id="look"/); }
+});
+
+test('the chip says the look you would get, switches it, and remembers', () => {
+  const a = boot();
+  a.shows('Switch to dark colours').shows('</span> Dark</button>').hides('Switch to light colours');
+
+  a.tap('#look');
+  assert.strictEqual(a.look(), 'dark');
+  assert.strictEqual(a.mem['betr.look'], 'dark');
+  /* and the chip turned round in place, without repainting the screen under it */
+  a.shows('</span> Light');
+
+  /* a second phone-load with that storage comes up dark, before anything is drawn */
+  const b = boot(a.mem);
+  assert.strictEqual(b.look(), 'dark');
+  b.shows('Switch to light colours').shows('</span> Light</button>').hides('Switch to dark colours');
+
+  a.tap('#look');
+  assert.strictEqual(a.look(), 'light');
+  assert.strictEqual(a.mem['betr.look'], 'light');
+});
+
+test('switching the look does not throw away a sentence somebody is half way through', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', 'say no without giving a reason');
+  a.tap('#look');
+  assert.strictEqual(a.valueOf('#if'), 'say no without giving a reason');
+  assert.strictEqual(a.look(), 'dark');
+});
+
+test('delete everything takes the look with it, so a wiped phone is a fresh phone', () => {
+  const a = boot();
+  buildOwn(a, 'ask for Friday off', 'my boss will think I am not committed',
+    'Ask for Friday off in one sentence.');
+  a.tap('#look');
+  assert.deepStrictEqual(Object.keys(a.mem).sort(), ['betr.look', 'betr.v1']);
+
+  a.tap('#m-help').tap('#wipe').tap('#yes');
+  assert.deepStrictEqual(Object.keys(a.mem), [], 'something survived the delete');
+  assert.strictEqual(a.look(), 'light');
+});
+
+/* ------------------------------------------------- B34: the suggestions say what they do */
+
+const starts = require('../content/starts.js');
+
+/* The words printed on one chip, read back off the screen. */
+function chipText(a, attr, i) {
+  const m = a.html().match(new RegExp(attr + '="' + i + '">([^<]*)</button>'));
+  assert.ok(m, 'no ' + attr + ' chip ' + i + ' on screen');
+  return m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
+/*
+  B34 D1. The lookup that decides which suggestions appear runs at paint. Typing does not
+  repaint — a repaint would move the caret — so a person who TYPED the words of a start saw
+  the general three, while the tap handler ran the lookup AGAIN and handed back the start's
+  three. The chip said one thing and put another in the box.
+
+  The placeholder in the first blank is one of the starts word for word, so typing it is not a
+  contrived case; it is the case. Whichever three are on screen, a chip inserts its own words.
+*/
+test('a suggestion puts in the box exactly the words printed on it', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', starts.items[0].if);
+  const said = chipText(a, 'data-then', 0);
+  a.tap('[data-then]', 0).tap('#next');
+  a.shows(said);
+});
+
+/* The same invariant on the second screen, where the plan and the drop are chosen. */
+test('a plan suggestion puts in the box exactly the words printed on it', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', starts.items[0].if).type('#then', 'they will be off with me').tap('#next');
+  const plan = chipText(a, 'data-do', 0);
+  a.tap('[data-do]', 0);
+  assert.strictEqual(a.valueOf('#do'), plan);
+});
+
+/*
+  B34 D2. Back was the one way off "What will you do today?" that did not read the boxes
+  first, so a person who typed a plan, stepped back to fix a word of the sentence and came
+  forward again found the plan gone.
+*/
+test('going back to fix the sentence keeps the plan already typed', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', 'ask for Friday off')
+    .type('#then', 'my boss will think I am not committed').tap('#next');
+  a.type('#do', 'Ask for Friday off in one sentence.').type('#drop', 'No explaining why.');
+  a.tap('#back').tap('#next');
+  assert.strictEqual(a.valueOf('#do'), 'Ask for Friday off in one sentence.');
+  assert.strictEqual(a.valueOf('#drop'), 'No explaining why.');
+});
+
+/*
+  The same, borrowed — and this is the damaging one. The boxes arrive holding the stock item's
+  own plan, so a plan thrown away on Back does not come back empty: it comes back as BETR's
+  words sitting where the person's were, which reads as having been overwritten.
+*/
+test('going back does not put the stock plan back over one somebody wrote', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  const stock = firstBehind(0).test;
+  assert.strictEqual(a.valueOf('#do'), stock, 'the borrowed plan should arrive in the box');
+  a.type('#do', 'My own plan, in my own words.');
+  a.tap('#back').tap('#next');
+  assert.strictEqual(a.valueOf('#do'), 'My own plan, in my own words.');
+});

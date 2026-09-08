@@ -744,6 +744,22 @@ keep it, and put it wherever the sentence needs it.
 
 *New since this document was last given a home for them. Say where they belong.*
 
+**`look.dark`**
+
+> Dark
+
+**`look.light`**
+
+> Light
+
+**`look.toDark`**
+
+> Switch to dark colours
+
+**`look.toLight`**
+
+> Switch to light colours
+
 **`build.title`**
 
 > Set up a test

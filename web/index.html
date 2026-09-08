@@ -41,7 +41,18 @@
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="BETR helps you test unhelpful beliefs in everyday life. You pick a worry about how people will react, it gives you one small thing to try today, and you record what actually happened.">
 <meta name="theme-color" content="#1F3FE8">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
+
+<!--
+  The one script in the head, and it is here for one reason: the light-or-dark choice has to
+  be on <html> before the stylesheet below is asked for, or somebody who chose dark gets a
+  flash of white on the way into every screen. It is twenty lines, it reads one key and writes
+  one attribute, and like everything else here it fetches nothing.
+
+  It cannot be an inline <script>: the policy above is script-src 'self', which blocks inline
+  script outright. That is deliberate, and this is the shape that respects it.
+-->
+<script src="lib/theme.js"></script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="BETR">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -83,6 +94,7 @@
   strings-<code>.js line here and nothing else — never a fetch, so the airplane-mode proof
   holds in every language BETR ever ships.
 -->
+<!-- theme.js is already loaded, in the head; it has to be, and the comment there says why. -->
 <script src="lib/guards.js"></script>
 <script src="lib/rate.js"></script>
 <script src="lib/store.js"></script>

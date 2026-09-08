@@ -81,6 +81,19 @@ var BETR_STRINGS_EN = {
     brand: 'BETR',
     back: 'Back',
 
+    /*
+      The corner chip, B35. It names the look you would GET by tapping it, not the one you are
+      in — "Dark" means tap here for dark. The sun and the moon beside the words are
+      decoration and are hidden from a screen reader, so the spelled-out label is the whole of
+      what it says out loud.
+    */
+    look: {
+      dark: 'Dark',
+      light: 'Light',
+      toDark: 'Switch to dark colours',
+      toLight: 'Switch to light colours'
+    },
+
     /* Three doors, on every screen. Not a tab bar (CLAUDE.md rule 10): never a fourth. */
     nav: {
       label: 'BETR',

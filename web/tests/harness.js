@@ -22,7 +22,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const WEB = path.join(__dirname, '..');
-const FILES = ['lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
+const FILES = ['lib/theme.js', 'lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
                'lib/i18n.js', 'content/strings-en.js',
                'content/worries.js', 'content/why.js', 'content/whats-going-on.js', 'content/places.js',
                'content/starts.js', 'content/examples.js',
@@ -188,6 +188,8 @@ function boot(seed, env) {
     focusedId() { return focused ? focused._id : null; },
     lang() { return html.getAttribute('lang'); },
     dir() { return html.getAttribute('dir'); },
+    /* B35: light or dark, as written onto <html> by lib/theme.js. */
+    look() { return html.getAttribute('data-theme'); },
     /* Read a box back. The export lands in a textarea's value, not in the markup. */
     valueOf(sel) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); return el.value; },
     shows(s) { assert.ok(api.html().indexOf(s) !== -1, 'not on screen: ' + s + '\non: ' + api.html().slice(0, 300)); return api; },

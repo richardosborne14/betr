@@ -28,6 +28,7 @@
   'use strict';
 
   var guards = Betr.guards;
+  var look = Betr.theme;
   var rate = Betr.rate;
   var storeLib = Betr.store;
   var content = Betr.content;
@@ -214,7 +215,7 @@
 
   /* The one thing every screen goes through. Setting app.innerHTML anywhere else loses the menu. */
   function paint(html) {
-    app.innerHTML = html + menu();
+    app.innerHTML = html + themeChip() + menu();
     var top = q('#top');
     if (top && top.focus) { try { top.focus(); } catch (e) { /* older browser */ } }
     announce(toSay || '');
@@ -243,12 +244,27 @@
   */
   function titleOf(d) { return (d && (d.label || d.belief)) || ''; }
 
+  /*
+    B35, 2026-09-08, founder: "why is it small and left aligned when the rest is big and
+    centred?" The two-part case — a borrowed label with the sentence quoted under it — is what
+    this strip was drawn for, and it is untouched. The one-part case is not a label at all:
+    a test somebody wrote themselves has no label, so its own SENTENCE was being drawn in the
+    label's small bold left-aligned type, on a screen where the heading below it is large and
+    centred. It read as a caption on the wrong screen.
+
+    So an empty label gets `solo`, and the stylesheet draws it as what it is: the sentence,
+    quoted the way the borrowed one is quoted, centred with everything else, a size up from
+    the body rather than a size down. Same words, same place — only the type changes.
+  */
   function worryHead(label, belief, heading) {
     var title = label || belief;
     var under = label ? belief : '';
-    return '<div class="worry' + (heading ? '' : ' quiet') + '">' +
+    var solo = !heading && !label && !!belief;
+    var quiet = heading ? '' : ' quiet' + (solo ? ' solo' : '');
+    var name = solo ? '\u201C' + esc(title) + '\u201D' : esc(title);
+    return '<div class="worry' + quiet + '">' +
       (heading ? head('h2', title, 'worry-label')
-               : '<p class="worry-label">' + esc(title) + '</p>') +
+               : '<p class="worry-label">' + name + '</p>') +
       (under ? '<p class="worry-belief wrote">\u201C' + esc(under) + '\u201D</p>' : '') +
     '</div>';
   }
@@ -528,6 +544,45 @@
   }
   function wireBack(target) { on('#back', function () { go(target); }); }
 
+  /*
+    B35, founder's ask: light or dark, "always floating somewhere easy to click". It is drawn
+    by paint(), so it is on every screen without any screen having to remember it, and it is
+    the mirror of the Back chip rather than a new kind of object.
+
+    It says what you would GET, not what you are in: in light it reads "Dark". lib/theme.js
+    owns the choice and applies it from the head of the page; this is only the switch.
+  */
+  function themeChip() {
+    var dark = look.isDark();
+    return '<button class="look" id="look" aria-label="' +
+      esc(dark ? t('look.toLight') : t('look.toDark')) + '">' + markAndWord(dark) + '</button>';
+  }
+
+  function markAndWord(dark) {
+    return '<span class="mark" aria-hidden="true">' + (dark ? '\u2600' : '\u263E') + '</span> ' +
+      esc(dark ? t('look.light') : t('look.dark'));
+  }
+
+  /*
+    DELIBERATELY NOT A REPAINT. Two reasons, and the second is the one that matters: a repaint
+    moves focus to the heading and reads the whole screen out again, and a repaint of the
+    build screen while somebody is half way through a sentence is a repaint they would feel.
+    The colours live in CSS variables on <html>, so changing them changes nothing on this page
+    except the one word on the chip itself.
+  */
+  function wireTheme() {
+    on('#look', function () {
+      look.toggle();
+      var el = q('#look');
+      if (!el) return;
+      var dark = look.isDark();
+      try {
+        el.innerHTML = markAndWord(dark);
+        el.setAttribute('aria-label', dark ? t('look.toLight') : t('look.toDark'));
+      } catch (e) { /* older browser: the colours changed, which is the part that counts */ }
+    });
+  }
+
   /* ---------------------------------------------------------------- the ladder */
 
   /*
@@ -629,6 +684,7 @@
     if (S.stage === 'why' && !whyFor(whyId)) S.stage = 'mine';
     (map[S.stage] || start)();
     wireCrisis();
+    wireTheme();
     wireMenu();
   }
 
@@ -964,10 +1020,19 @@
     return '<div class="chipset" role="group" data-chips="' + esc(attr) +
       '" aria-labelledby="' + id + '"' + (hide ? ' hidden' : '') + '>' +
       '<p class="tiny chips-intro" id="' + id + '">' + esc(intro) + '</p>' +
-      '<div class="chips">' + list.map(function (line, i) {
-        return '<button class="chip" ' + attr + '="' + i + '">' + esc(line) + '</button>';
-      }).join('') + '</div>' +
+      '<div class="chips" data-chiplist="' + esc(attr) + '">' + chipButtons(list, attr) + '</div>' +
     '</div>';
+  }
+
+  /*
+    The buttons alone (B34 D1). Split out of chipRow because the second blank's row is
+    reprinted in place when the first blank changes, and the row's heading — which a screen
+    reader names the group by — has to survive that.
+  */
+  function chipButtons(list, attr) {
+    return list.map(function (line, i) {
+      return '<button class="chip" ' + attr + '="' + i + '">' + esc(line) + '</button>';
+    }).join('');
   }
 
   /* Both blanks, read back off the screen, so nothing typed is lost to a repaint. */
@@ -992,6 +1057,14 @@
   function build() {
     var f = borrowed();
     var ifChips = STARTS.items.map(function (it) { return it.if; });
+    /*
+      B34 D1. The second blank's suggestions are worked out ONCE, here, and the handlers below
+      close over this same list — so a chip can only ever insert the words printed on it. They
+      used to run the lookup again on the tap, which meant that a person who had TYPED the
+      words of a start (the placeholder is one of them, word for word) tapped a chip saying one
+      thing and got another sentence in the box.
+    */
+    var thenChips = chipsFor('thens', draft.ifPart);
     paint( backButton() +
       '<div class="stage">' +
         (f ? worryHead(f.label, '', false) : '') +
@@ -1022,7 +1095,7 @@
               f.beliefs.map(function (b) { return b.belief; }), 'data-b', false)
            /* One row at a time: the blank that has focus, and only while it is still empty. */
            : chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
-             chipRow(t('build.thenChips'), chipsFor('thens', draft.ifPart), 'data-then',
+             chipRow(t('build.thenChips'), thenChips, 'data-then',
                !draft.ifPart.trim() || !!draft.thenPart.trim())) +
         /* Last, and small. A rule read before you have written anything is about somebody else. */
         '<p class="tiny">' + esc(t('build.only')) + '</p>' +
@@ -1047,10 +1120,51 @@
     }
 
     /*
+      One tap on a second-blank suggestion. Wired against whatever list is printed at the time,
+      so what a chip says is always what it puts in the box (B34 D1). Called again by
+      refreshThens() when that list is reprinted.
+    */
+    function wireThens(list) {
+      qa('[data-then]').forEach(function (b) {
+        b.onclick = function () {
+          readBlanks();
+          draft.thenPart = list[Number(b.getAttribute('data-then'))];
+          draft.expect = '';
+          refusal = null;
+          render();
+        };
+      });
+    }
+
+    /*
+      B34 D1, the other half. `startFor()` ran at paint and nowhere else, so a person who
+      TYPED a start's words was shown the general three while somebody who tapped the identical
+      chip was shown the three written for it — and one screen later the plan suggestions
+      matched, because that screen repaints. One journey, two answers to the same lookup.
+
+      So the lookup runs again when the second blank takes focus, which is the moment before
+      anybody can read that row. ONLY THE BUTTONS ARE REWRITTEN — not the screen, not the
+      heading the row is named by, and nothing containing a caret. A repaint here is what would
+      move the caret to the end of the box, which is why typing has never triggered one.
+
+      Like the hiding and showing around it, this is live polish: the fake DOM in tests fires no
+      events, so what a test sees is whatever the paint decided. The invariant that IS tested is
+      the one above — a chip inserts the words printed on it.
+    */
+    function refreshThens() {
+      var holder = q('[data-chiplist="data-then"]');
+      if (!holder || typeof holder.innerHTML !== 'string') return;
+      readBlanks();
+      var list = chipsFor('thens', draft.ifPart);
+      try { holder.innerHTML = chipButtons(list, 'data-then'); } catch (e) { return; }
+      wireThens(list);
+    }
+
+    /*
       Live, and deliberately without a repaint: a repaint here would move the caret to the end
       of the box on every keystroke. The suggestions simply get out of the way.
     */
-    wireChips([['#if', 'data-if'], ['#then', 'data-then']]);
+    wireChips([['#if', 'data-if'], ['#then', 'data-then', refreshThens]]);
 
     qa('[data-if]').forEach(function (b) {
       b.onclick = function () {
@@ -1060,15 +1174,7 @@
         render();
       };
     });
-    qa('[data-then]').forEach(function (b) {
-      b.onclick = function () {
-        readBlanks();
-        draft.thenPart = chipsFor('thens', draft.ifPart)[Number(b.getAttribute('data-then'))];
-        draft.expect = '';
-        refusal = null;
-        render();
-      };
-    });
+    wireThens(thenChips);
     /*
       One of the borrowed item's three. It fills both halves, and it carries the hand-written
       expectation written to go with it (B20) — what you would be braced for, which is not the
@@ -1114,6 +1220,9 @@
     boxes.forEach(function (pair) {
       var box = q(pair[0]);
       var set = q('[data-chips="' + pair[1] + '"]');
+      /* Optional third: something to run before the row is shown, so it is right when it is
+         read. Only the second blank has one — see refreshThens() (B34 D1). */
+      var before = pair[2];
       if (!box) return;
       var show = function (on) {
         if (!set) return;
@@ -1121,6 +1230,7 @@
       };
       box.oninput = function () { show(true); };
       box.onfocus = function () {
+        if (before) before();
         show(true);
         boxes.forEach(function (other) {
           if (other[1] === pair[1]) return;
@@ -1142,6 +1252,10 @@
   function buildDo() {
     var said = sentenceOf(draft.ifPart, draft.thenPart);
     var f = borrowed();
+    /* Worked out once and closed over by the handlers, for the reason build() does it: a chip
+       puts in the box what is printed on it, and cannot drift from it (B34 D1). */
+    var doChips = chipsFor('dos', draft.ifPart);
+    var dropChips = chipsFor('drops', draft.ifPart);
     paint( backButton() +
       '<div class="stage">' +
         /*
@@ -1156,17 +1270,24 @@
         warnBlock() +
         '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
           esc(t('build.doPlaceholder')) + '">' + esc(draft.test) + '</textarea>' +
-        chipRow(t('build.doChips'), chipsFor('dos', draft.ifPart), 'data-do', !!draft.test.trim()) +
+        chipRow(t('build.doChips'), doChips, 'data-do', !!draft.test.trim()) +
         '<p class="lbl drop-label" id="droplbl">' + esc(t('build.dropLabel')) + '</p>' +
         '<p class="sub tight">' + esc(t('build.dropSub')) + '</p>' +
         '<textarea id="drop" class="line" aria-labelledby="droplbl" placeholder="' +
           esc(t('build.dropPlaceholder')) + '">' + esc(draft.drop) + '</textarea>' +
-        chipRow(t('build.dropChips'), chipsFor('drops', draft.ifPart), 'data-drop', true) +
+        chipRow(t('build.dropChips'), dropChips, 'data-drop', true) +
         '<button class="big wide" id="lock">' + esc(t('build.lock')) + '</button>' +
         '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
       '</div>');
 
-    wireBack('build');
+    /*
+      B34 D2, and Back was the only way off this screen that did not do this. Both chip rows
+      and *Lock it in* call readBoxes(); Back went straight to go('build'), so a person who
+      typed a plan, went back one screen to fix a word of the sentence and came forward again
+      found the plan gone — and on a borrowed test found the stock line sitting back in its
+      place, which reads as BETR having overwritten them.
+    */
+    on('#back', function () { readBoxes(); go('build'); });
     var box = q('#do');
     box.focus();
     try { box.setSelectionRange(box.value.length, box.value.length); } catch (e) { /* older browser */ }
@@ -1182,7 +1303,7 @@
     qa('[data-do]').forEach(function (b) {
       b.onclick = function () {
         readBoxes();
-        draft.test = chipsFor('dos', draft.ifPart)[Number(b.getAttribute('data-do'))];
+        draft.test = doChips[Number(b.getAttribute('data-do'))];
         refusal = null;
         render();
       };
@@ -1190,7 +1311,7 @@
     qa('[data-drop]').forEach(function (b) {
       b.onclick = function () {
         readBoxes();
-        draft.drop = chipsFor('drops', draft.ifPart)[Number(b.getAttribute('data-drop'))];
+        draft.drop = dropChips[Number(b.getAttribute('data-drop'))];
         refusal = null;
         render();
       };
@@ -1941,6 +2062,8 @@
         window.scrollTo(0, 0);
         /* Last, so nothing is written back afterwards. The key is gone until the next tap. */
         store.clear();
+        /* And the look, so a wiped BETR and a fresh BETR are the same phone byte for byte. */
+        look.forget();
       });
       on('#no', function () { deleteArmed = false; io.innerHTML = ''; });
     }
