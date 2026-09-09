@@ -1,84 +1,81 @@
 # Start here
 
-**Last refreshed:** 2026-09-09, after B37 was scoped into seven tasks.
+**Last refreshed:** 2026-09-09, after B38 shipped and B39 was measured.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**B28–B35 are built and closed.** 208 tests, no dependencies, nothing requested after load;
-`main` clean and live at `https://betr.trybeup.com`. **No app code has changed since B35** — the
-last two days are research, two proposals and a scope.
+**B38 is built and closed. B39 is half built and the other half is the founder's.** 213 tests,
+no dependencies, nothing requested after load; `main` clean and live at
+`https://betr.trybeup.com`. Two commits today, both pushed.
 
-**The founder said "let's try it out" on 2026-09-09, and B37 is now a programme file** with the
-running order in its §10. Seven tasks, `B38` to `B44`, all scoped, none started.
+**B38 — the `did`, the reframe and the net.** The worked example on the front screen now has a
+fourth beat: what they actually **did**, and how small it was. That is the beat the founder's
+daughter stalled on. Three more things went with it:
 
-**How it got here.** The founder walked the build screen with their eldest daughter. She reached
-*What will you do today?* with no idea what was expected, and when it was explained said **"OH NO
-I can't actually give her a criticism"** and left. Two things are true in the code without her:
-**`examples.js` has no `did`**, so the one screen that teaches by showing skips the beat she
-stuck on; and **`why.js` is keyed to a stock worry id and shown only after a result**, so the
-best writing in the app never reached her.
+- the card is **one voice** now — *They expected · What they did · What actually happened · How
+  sure they were* — the "shown" option the mockup took. `result.*` is untouched, so a person's
+  own result still says *You expected*. **Misha owns which way round; four strings, no code.**
+- **every dare in the loop became a question.** *"Go and do it."* → **"Go and find out."**;
+  *"I'll do it today"* → **"I'll find out today."** BETR never asks anybody to be brave.
+- **the safety net at the lock:** *"Bring back whatever happens. A bad one counts the same as a
+  good one."* Not shown once a test is set aside — B27's rule.
 
-Then two ideas from the founder, both good, both now scoped:
-
-- **The permission problem.** The therapist's blessing is four things and the one BETR cannot
-  have is weakest — Bandura ranks mastery > vicarious > verbal persuasion. BETR supplies the two
-  stronger ones, plus a plan for the bad outcome instead of authority. **And it never asks
-  anybody to be brave: it asks them to find something out.**
-- **The template with holes.** *If I criticise [add a person]*, and her words carried through
-  into three sizes of test on the next screen. **It is B32 with holes in the middle instead of
-  only at the ends.** Not a mode: free text is the same screen with the boxes empty.
-
-**The documents:** `docs/research/12-guiding-the-first-test.md` (sourced),
-`docs/tasks/B36-the-guide.md`, `docs/tasks/B37-the-template-with-holes.md` (**§10 is the running
-order**). **Two mockup canvases**, founder-editable:
-`https://claude.ai/code/artifact/5b7cf7c8-1905-43f2-823f-f813871acfb5` (B36, eight screens) and
-`https://claude.ai/code/artifact/77d1cadb-a55b-4926-8281-ea0a0556d73f` (B37, seven). Working
-files were in a scratchpad, not the repo — re-read an artifact to edit it.
+**B39 — the do screen.** The boxes now grow to their own text, and **no box clips on any road at
+100 / 125 / 150 / 200%.** That was the real bug and it was a **100%** bug on the main road, not a
+125% one. Both explanatory lines went from two rendered lines to one, buying 74px.
 
 ## 2. The next action
 
-**Build `B38`.** One day, depends on nothing, visible immediately, off the template critical
-path: the worked example gains a `did` beat, the loop stops saying *"Go and do it."* and says
-*"Go and find out."*, and one line at the lock says a bad one counts the same as a good one.
-**Measure the front screen at 100% and 125% — it was already at the fold before this added a beat.**
+**Build `B40`.** It depends on nothing, blocks B41/B42/B43, and **must not be done after them.**
+Its whole content is one sentence: *stay `stock` and keep the worry's `id` while the person is on
+the template road, whatever the words say.* It changes nothing a person can see — if anything
+looks different, something is wrong — and **it fails silently with every test passing** if it is
+skipped. Read that file before touching anything.
 
-**Then `B39`**, the 125% fold bug: known since B33, never anybody's, now blocking three things.
+**Then `B41`.** `B42` is blocked by the decision below.
 
-**Then the template run: `B40` → `B41` → `B42` → `B43`.** `B40` is the one to read first and the
-one to get right — **it changes nothing a person can see**, and if anything looks different,
-something is wrong. Its whole content is one sentence: *stay `stock` and keep the worry's `id`
-while the person is on the template road, whatever the words say.* Without it every templated run
-is a stranger to itself, every ladder restarts at ten, and **it fails silently with every test
-passing.** `B43` is the "try it out": the founder doing a real templated test on a real phone,
-twice, and watching one ladder move.
+## 3. The decision that is blocking B42, and it is one question
 
-`B44` is last on purpose — `B42` does most of its rescue job inline, so it teaches.
+**The do screen cannot be made to fit, and the arithmetic is not close.** After B39 the main
+road — a person's own words — has *Lock it in* **47px below the fold at 100%** and **207px below
+at 125%**. Every remaining margin on that screen added together is about 50px. The `do`
+suggestion row alone is **159px, for two suggestions**.
 
-**The rule governing all of it (research §6): the person opens the door.** No screen appears
-because of what somebody typed, rated or did. **A template is inside that line** — a worksheet
-with blanks, whose `do` set is chosen by which template was picked, which is the lookup
-`starts.js` already makes and already defends.
+**Ask the founder one question:** *when there is something in the "and leave out" box, may it
+collapse to a single line showing what it says — "And leave out: 'No checking it just once
+before bed.' — change" — instead of a label, an explanation and a box?*
 
-**And the rule that keeps the content safe: BETR owns the verb, the person owns the nouns.**
-Holes take a person, a thing, a place — never a verb. Rule 4 did not loosen for BETR.
+- **Yes** → saves ~130px at 100%. Fixes the main road at 100%. Does not fix 125%. B42 designs
+  against the collapsed version. **This is the recommendation.**
+- **No** → the screen scrolls at every size and we say so; the work becomes making the scroll
+  obvious. B42 gets harder.
 
-## 3. Waiting on people, not on code
+**Same question, second screen.** B38's new beat cost the front screen its clearance: at 125%,
+*Not sure? Try one of these* now sits **43px behind the menu** where B33 had bought it 32px of
+clear air. Same budget problem, same decision. Both are written up in `docs/tasks/B39-*.md`.
 
-1. **The founder.** Rule 10's third amendment, written down rather than arrived at (B37 §9a).
-   B36 items 6 and 9 are decisions. Start #19, the checking ritual (B34 §6). Which example leads
-   the front screen, and **real or an example**. **The purpose statement**, still saying "you pick
-   a worry", frozen in five places (`B29` has a candidate). **The `HARM` false refusal.**
-   **Change the ad, not the app** (B25).
-2. **Misha, in one ask:** the four nouns (B23 option b), the door order, the 21 chips, B36's tone,
-   the front card's **voice** and the **red strike** through a person's own sentence (B36 §12),
-   **and every skeleton in B41/B43** — where the risk is BETR's voice in somebody's mouth.
+## 4. Waiting on people, not on code
+
+1. **The founder.** **The collapse question in §3, which blocks B42.** Rule 10's third
+   amendment, written down rather than arrived at (B37 §9a). **B36 item 6 — does a half-written
+   test survive?** — is no longer a nicety: tapping *New test* from the do screen wipes the
+   sentence and the plan with no warning, and that button is straddling the menu. B36 items 6
+   and 9. Start #19, the checking ritual (B34 §6). Which example leads the front screen, and
+   **real or an example**. **The purpose statement**, still saying "you pick a worry", frozen in
+   five places (`B29` has a candidate). **The `HARM` false refusal.** **Change the ad, not the
+   app** (B25).
+2. **Misha, in one ask:** **the card's voice and the two reframed lines from B38** (six strings,
+   all flippable), the four nouns (B23 option b), the door order, the 21 chips, B36's tone, and
+   the **red strike** through a person's own sentence (B36 §12b), **and every skeleton in
+   B41/B43** — where the risk is BETR's voice in somebody's mouth.
 3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** — 245
    rows, 154 shipped lines beside 91 proposed, blank score and rewrite columns, reasoned in
-   `docs/candidates-suggestions-batch-1.md`. Also `content/examples.js`, three rewritten
-   `worries.js` sentences, three pairs from B1, B34 §4's `general.thens`, **and B36's strings**.
-   Two questions: is *"the smallest version that could still turn out wrong"* safe to hand
-   somebody with no clinician, and may *A small go* change **who it is with**? **B43 adds ~26.**
+   `docs/candidates-suggestions-batch-1.md`. Also `content/examples.js` (**now +8 rows: four
+   `did` and four `dropped`**), three rewritten `worries.js` sentences, three pairs from B1,
+   B34 §4's `general.thens`, **B36's strings, and B38's four new ones**. Two questions: is *"the
+   smallest version that could still turn out wrong"* safe to hand somebody with no clinician,
+   and may *A small go* change **who it is with**? **B43 adds ~26.**
 4. **A screen-reader pass on a real phone** — the tree was read in B33, **nobody has used it**.
 5. **Q1 (name, trademark, domain)** blocks release and blocks B5 outright.
 
@@ -86,7 +83,7 @@ Holes take a person, a thing, a place — never a verb. Rule 4 did not loosen fo
 owns** the missing medication word list in `guards.js`. **Release conditions:** Misha on
 `places.signedOff`, J1–J3 on a phone, an owner for links and helplines.
 
-## 4. Environment facts
+## 5. Environment facts
 
 | | |
 | --- | --- |
@@ -94,27 +91,31 @@ owns** the missing medication word list in `guards.js`. **Release conditions:** 
 | **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** |
 | Live address | **`https://betr.trybeup.com` — live.** Every push to `main` touching `web/**` publishes it. Cert expires 2026-12-02 |
 
-## 5. Gotchas, live
+## 6. Gotchas, live
 
+- **To measure at 125%, set the font size BEFORE navigating to the screen.** `eval
+  "document.documentElement.style.fontSize='20px'"` then `open`/`tap` your way there. Setting it
+  after measures a screen laid out at the old size — the boxes' heights are set in JS now and
+  keep the old number. Half an hour went into that (B39, `learnings.md`).
+- **`shot` on the front screen catches it mid-reveal** — the card animates over 3.4s and the
+  parts that have not arrived are `opacity:0` with their space reserved, so the picture has a
+  hole in it. `eval "document.getAnimations().forEach(function(a){a.finish();})"` first.
 - **`walk.js` dies silently and a dead walker returns a stale page, not an error** — `start`
   again before believing a surprise. **Its browser is set to DARK**, so BETR opens dark (B35).
-- **`theme.js` loads in the `<head>` before the stylesheet and has to** (else a flash of wrong
-  colour; CSP forbids inlining). **Tapping the look chip must never repaint** — it would throw
-  away a half-typed sentence. **Three roads reach the build screen** (B34 §1): check all three.
-- **The fake DOM in `harness.js` is flat and fires no events**; live behaviour is walked. **A
-  REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners once swallowed the
-  build screen out of `app.js` (`learnings.md`).
-- **The fold is 785px at 100%, 780px at 125%**; `doors.intro` must stay one line. **At 125% the
-  `do` box clips and *Lock it in* sits under the menu** — B39.
+- **`theme.js` loads in the `<head>` before the stylesheet and has to**. **Tapping the look chip
+  must never repaint.** **Three roads reach the build screen** (B34 §1): check all three.
+- **The fake DOM in `harness.js` is flat and fires no events** — `grow()` is a no-op there by
+  design, so box heights are only ever proved on the walker. **A REGION DELETE NEEDS BOTH ENDS
+  CHECKED** (`learnings.md`).
+- **The fold is 785px at 100%, 780px at 125%, 774 at 150%, 720 at 200%.** The whole app's
+  spare room on the do screen is about 50px; do not plan a new row against it without measuring.
 - **Chips are exempt from the capital-letter rule**, by class. **`rate.keyOf()` keys a ladder by
-  `id`**, and rule 5 means a worry's **three predictions share one ladder** — never key on which
-  prediction. **After editing `web/content/*`, `stop` and `start`**: `open` serves a cache.
+  `id`**, and rule 5 means a worry's **three predictions share one ladder**. **After editing
+  `web/content/*`, `stop` and `start`**: `open` serves a cache.
 - **`HABIT`/`BODY` refuse nothing any more**, still hold BETR's own content, and neither catches
   a checking ritual, which rule 4 also forbids. **Help's order is three decisions held by four
-  tests:** crisis, proof, frozen sentence 6, CBT, the nine.
+  tests.**
 - **Every word a person reads is in `web/content/`** — a sentence back in `app.js` fails
-  `i18n.test.js`, and a literal starting mid-tag reads as prose to that sweep. **Use `’` and
-  `“ ”`, never `'` and `"`**: the build fails on a typewriter one, and anything drafted outside
-  `web/content/` arrives wrong.
+  `i18n.test.js`. **Use `’` and `“ ”`, never `'` and `"`**: the build fails on a typewriter one.
 - **`content/zones.js` and `docs/COPY.md` are generated**; never hand-edit. **No helpline number
   is written from memory.**
