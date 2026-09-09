@@ -65,10 +65,10 @@ has not moved. The reviewer still has not read a line.**
    **B47 §6c**, the #07 split draft, with its three pushbacks: *"I'll have a panic attack"* left
    out on purpose, guided-mindfulness answered no (a link lives in `places.js`, never in a test),
    and whether draft B stays the right side of rule 4. Then, still open: **walk J4 and J5 on a
-   phone**, **B36 items 6 and 9** (tapping *New test* from the do screen wipes the sentence with
-   no warning), five answers on *Why it's written like this*, rule 10's third amendment written
-   down (B37 §9a), which example leads the front screen, **the purpose statement** frozen in five
-   places, the **`HARM` false refusal**, and **change the ad, not the app** (B25).
+   phone**, **B36 items 6 and 9** (tapping *New test* wipes the sentence with no warning), five
+   answers on *Why it's written like this*, rule 10's third amendment written down (B37 §9a),
+   which example leads the front screen, **the purpose statement**, the **`HARM` false refusal**,
+   and **change the ad, not the app** (B25).
 2. **Misha, in one ask.** `docs/COPY.md` prints every string in its own block. **Now with B47
    §6c's two new categories** — fourteen sentences nobody has read — **and the `work` door**, if
    §6b goes the rewrite way. Plus B41's two skeletons, B42's three sets of three, B38's six
@@ -98,11 +98,10 @@ has not moved. The reviewer still has not read a line.**
 
 ## 6. Gotchas, live
 
-- **Nothing has been deleted from `worries.js` yet, and an id in a person's record cannot be
-  brought back.** `rate.keyOf()` keys a ladder by `id`. Cull ids, never rename them.
-- **`whats-going-on.js` says four to six worries a door and only the SIX is enforced.**
-  `MAX_PER_DOOR = 6` in `content.js`; there is no floor, so a two-worry door passes the build.
-  The tests will not catch the thing B47 §6b is about.
+- **Nothing is deleted from `worries.js` yet, and an id in a person's record cannot be brought
+  back.** `rate.keyOf()` keys a ladder by `id`. Cull ids, never rename them.
+- **Four to six worries a door, and only the SIX is enforced** (`MAX_PER_DOOR` in `content.js`).
+  There is no floor, so a two-worry door passes the build: the tests miss what B47 §6b is about.
 - **`shows`/`hides` are SUBSTRING checks** and a screen's title is word for word its own link's
   text, so a `hides()` on the title is never true. **Name a sentence only that screen carries.**
 - **`walk.js tap` takes ONE selector and ignores anything after it** — hand it `tap '[data-b="1"]'`.
@@ -113,8 +112,8 @@ has not moved. The reviewer still has not read a line.**
 - **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome and none
   at all in the fake DOM. Put the state in the markup and re-read it on the tap.
 - **`shot` on the front screen catches it mid-reveal** — finish the animations with `eval` first.
-  **`walk.js` dies silently and a dead walker returns a stale page, not an error. Its browser is
-  DARK.** **The fake DOM is flat and ignores `hidden`**; **A REGION DELETE NEEDS BOTH ENDS CHECKED**.
+  **A dead `walk.js` returns a stale page, not an error, and its browser is DARK.** **The fake DOM
+  is flat and ignores `hidden`**; **A REGION DELETE NEEDS BOTH ENDS CHECKED**.
 - **Chips are exempt from the capital-letter rule**, by class — **a size name is not**. **After
   editing `web/content/*`, `stop` and `start`**: `open` serves a cache. **`HABIT`/`BODY` refuse
   nothing a PERSON writes** — they still hold every word BETR writes, B47's included.
