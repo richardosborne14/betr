@@ -8,27 +8,25 @@
 **B43 and B44 are both closed. 250 tests, no dependencies, nothing requested after load;**
 `main` clean and live at `https://betr.trybeup.com`.
 
-**B43 turned out to be the walk, not the build.** B41 shipped the two skeletons and B42 their
-sizes, so every sentence B43 scoped was already in `worries.js`; what had never been done was
-walking B40's road-keyed ladder, B41's gaps and B42's sizes **together**. They work. A person who
-types *my sister* on Monday and *my boss* on Wednesday, picks a different prediction each time
-and a different size each time, gets **one card and one ladder** — *Started 10 · 1st 7 · Now 6 ·
-Down 4 since you started*, each rung carrying its size. Rule 5 holding across everything B40–B42
-added at once, and the acceptance test for the programme.
-
-**B44 added the two teaching screens.** *Too big? Make it smaller* — the normalising line, the
-rule, five dials, a worked shrink using B42's own three names read biggest-first. *Why it’s
-written like this* — five short answers, and the fix for `why.js` never reaching somebody who
-wrote their own. **Three links and no other way in: a test walks a refusal, an empty plan, *More
-sure than before* and a repeat, and asserts neither screen appears** — rule 2 and research §6
-held by a test rather than by a comment.
+**B43 was the walk, not the build** — every sentence it scoped was already shipped, and what had
+never been done was walking B40's road-keyed ladder, B41's gaps and B42's sizes **together**.
+They work: different word in the hole, different prediction, different size, **one card and one
+ladder** (*Started 10 · 1st 7 · Now 6*). **B44 added the two teaching screens**, reached only by
+a link — a test walks a refusal, an empty plan, *More sure than before* and a repeat and asserts
+neither appears, which is rule 2 held by a test rather than a comment.
 
 ## 2. The next action
 
-**Nothing is blocked on code** — everything in §4 waits on a person, and sending the envelope
-comes first. If a session must build: **batch the other nineteen worries' skeletons and sizes**
-(the mechanism is proved; ~13 sentences each, and the reviewer has not agreed to the two we
-have), or **rewrite J1–J3**, behind the app since B19 and now labelled as such.
+**Read [`B45`](tasks/B45-one-road-in.md) first. The founder opened the app on 2026-09-09 and
+said it is confusing as fuck, and he is right.** One build screen is drawn three ways and one do
+screen two ways, decided by a road nobody can see; `worries.js` and `starts.js` are two content
+files describing the same twenty-one things. **The verb constructor he asked to be the default is
+on 2 of 21 worries and unreachable from the front door.** Worst single fact: tapping BETR's own
+suggestion gets the OLD do screen, typing something BETR has never seen gets the NEW one.
+
+**B45 is blocked on two founder answers (§7): where the current mockup is, and whether sizes are
+three sentences or three chips.** Its §6 is the cheap first move — 21 verbs get a hole, no new
+sentence, nothing for the reviewer, half a day — and it answers the actual complaint on its own.
 
 ## 3. Changed on purpose, and measured and left
 
