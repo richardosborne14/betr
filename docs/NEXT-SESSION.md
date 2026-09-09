@@ -30,8 +30,7 @@ day (*"your suggestion for the below the fold problem sounds good, do it"*):
   design: on the borrowed road those words are BETR's, and nobody locks in a sentence of ours
   they never read.
 
-**Both roads now clear the fold at 100% and 125%**, which has not been true on the free-text
-road since B32. 150% and 200% scroll, and always will.
+**Both roads now clear the fold at 100% and 125%** — untrue on the free-text road since B32.
 
 ## 2. The next action
 
