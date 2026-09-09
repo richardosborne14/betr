@@ -143,6 +143,46 @@ test('the export is readable, stable, and holds every result', () => {
   assert.strictEqual(out.results[0].sureOutOfTen, 7);
 });
 
+/*
+  B40's three, and the two halves of what they have to do in a file somebody opens.
+
+  A free-text result has none of them, and its entry has to look EXACTLY as it looked before
+  today — which the key list above is what proves. A templated one carries all three, counted
+  the way a person counts: the second of three predictions is 2, not 1. Nobody outside a
+  program counts from nought, and this file is meant to be read.
+*/
+test('a templated result exports which one it was, what was typed in, and how big', () => {
+  const s = store.blank();
+  s.done.push(Object.assign({}, RESULT, {
+    prediction: 1, slots: { person: 'my sister' }, size: 'A small go'
+  }));
+  s.open.push({
+    rid: 'w1', locked: '2026-09-09T09:00:00.000Z', label: 'Saying no', belief: 'If I say no…',
+    test: 'Say no once.', prediction: 2, slots: { person: 'my boss' }, size: 'The whole thing'
+  });
+  const out = JSON.parse(store.exportJSON(s));
+  assert.strictEqual(out.results[0].prediction, 2);
+  assert.deepStrictEqual(out.results[0].filledIn, { person: 'my sister' });
+  assert.strictEqual(out.results[0].size, 'A small go');
+  assert.strictEqual(out.waiting[0].prediction, 3);
+  assert.deepStrictEqual(out.waiting[0].filledIn, { person: 'my boss' });
+  assert.strictEqual(out.waiting[0].size, 'The whole thing');
+});
+
+/*
+  And the other half: an empty set of holes is not a set of holes. A record whose `slots` is an
+  empty object — which every free-text test has carried since B40 — must not put an empty one
+  into the file, or every export gains a line that means nothing.
+*/
+test('a test with nothing typed into it exports no holes at all', () => {
+  const s = store.blank();
+  s.done.push(Object.assign({}, RESULT, { prediction: null, slots: {}, size: null }));
+  const out = JSON.parse(store.exportJSON(s));
+  assert.ok(!('filledIn' in out.results[0]), 'an empty set of holes reached the file');
+  assert.ok(!('prediction' in out.results[0]));
+  assert.ok(!('size' in out.results[0]));
+});
+
 test('exporting nothing is still valid, readable JSON', () => {
   const out = JSON.parse(store.exportJSON(store.blank()));
   assert.deepStrictEqual(out.results, []);

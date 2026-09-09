@@ -791,3 +791,38 @@ and `content.test.js` had no opinion about any of them: it holds that no two `th
 3. **They were left unfixed on purpose.** `starts.js` is content, the paid CBT reviewer is a
    release condition, and a session editing shipped wording on its own judgement is the thing
    that rule exists to stop. Flagged in the sheet, recorded here, not touched.
+
+---
+
+## B40, 2026-09-09: when identity moves, both ends have to move — and the second end was not the one the task file named
+
+**The task file warned about this and still pointed at the wrong end.** B40 changed what decides
+whether a test belongs to a stock worry: the words the person typed (`sameAsStock()`) until this
+morning, the road they are on (`draft.stock`) after it. The file's trap section said *"`series()`
+and `ladder()` disagreed once before… when identity moves, both ends have to move"* and named the
+ladder. The ladder was fine — `rate.keyOf()` needed no change at all.
+
+**The end that moved was `testFor()` / `dropFor()`**, forty lines from the bottom of `app.js`,
+which nothing in the task file mentions. They look a stock item's plan up **fresh** out of
+`worries.js` rather than replaying what the record stored, so that a corrected sentence in the
+content reaches everybody who repeats that test. Correct, and safe **only** because a plan a
+person had rewritten always belonged to an *own* test, which has no item to look up.
+
+Widen what counts as a stock test — which is the whole of B40 — and that guarantee silently
+inverts. A person who borrows a worry, types her own plan over BETR's, and later taps *Test this
+again* gets **BETR's sentence back and hers thrown away**, on the one screen whose entire job is
+to bring her own test back. Every test passed. Nothing on any screen looked wrong.
+
+**What to take from it, for B41 and for the next one of these:**
+
+1. **"Both ends" is not two ends.** It is every place that asks a record what it is. Grep for the
+   field whose meaning is changing — here `d.id` and `d.source` — and read every hit, including
+   the ones in helper functions nobody thinks of as identity code. `d.id` had five callers; four
+   were fine and the fifth was this.
+2. **A widening is more dangerous than a change.** Nothing about `testFor()` was edited or even
+   read during the main change. It broke because the *set of records it applies to* got bigger,
+   which no diff shows and no test that exercises the old set catches.
+3. **The fix has two halves and the easy mistake is to fix one.** Making the person's words win
+   would have thrown away the reason the lookup exists. `planFor()` asks whether the plan still
+   matches BETR's own words: unchanged means BETR's, looked up fresh; anything else is hers.
+   **Both halves are asserted in the same test**, on purpose.

@@ -59,7 +59,31 @@
     number is here so an exported file says which shape it is, and so the next change has
     something to migrate FROM.
   */
-  var VERSION = 4;
+  /*
+    5 is B40's, 2026-09-09, and it is the SECOND version bump in a row with NO DATA MIGRATION.
+
+    What changed is what a record is allowed to know about itself. Until today, whether a test
+    was one of BETR's or one of the person's own was decided by comparing their words to the
+    stock sentence, letter for letter (app.js sameAsStock). Under the templates B41 builds, a
+    filled-in sentence differs from its skeleton EVERY TIME, by design — so every templated run
+    would have been a stranger to itself, every one would have started at the top of the ladder,
+    and the one number in the product would silently never have moved. So the road decides now,
+    not the words: while the person is on a stock item's road, the record keeps that item's id.
+
+    Three fields ride along with it, and NONE OF THEM KEYS ANYTHING — rate.keyOf() still groups
+    a ladder by the worry's id alone, because a worry's three predictions share one ladder
+    (CLAUDE.md rule 5). They are for redrawing, for "Test this again" coming back with the
+    person's own words in it, and for an export that says what was actually done:
+
+      prediction  which of the item's three it started from, by index, or null
+      slots       what the person typed into a skeleton's holes, name -> words (B41 fills it)
+      size        which of the three sizes the test was done at (B42 fills it)
+
+    Nothing older needs converting, again by design rather than by luck: a v4 record has none of
+    these, every one of them reads as absent, and its ladder draws the rungs it drew yesterday.
+    The number is here so an exported file says which shape it is.
+  */
+  var VERSION = 5;
   var OLD_RATES = { 80: 8, 55: 6, 30: 3, 10: 1 };
 
   /*
@@ -304,7 +328,17 @@
           belief: t.belief || null,
           expected: t.x || null,
           test: t.test || null,
-          leftOut: t.drop || null
+          leftOut: t.drop || null,
+          /*
+            B40's three. `prediction` is 1, 2 or 3 as a person would count them rather than
+            the index the app holds — this file is meant to be read by whoever opens it, and
+            nobody outside a program counts from nought. All three are left out entirely
+            where there is nothing to say, so a free-text test's entry looks exactly as it
+            did before today.
+          */
+          prediction: typeof t.prediction === 'number' ? t.prediction + 1 : undefined,
+          filledIn: t.slots && Object.keys(t.slots).length ? t.slots : undefined,
+          size: t.size || undefined
         };
       }),
       results: (s.done || []).map(function (d) {
@@ -326,7 +360,11 @@
           happened: d.o || null,
           stillSure: d.rateLabel || null,
           stillSureKey: d.move || null,
-          sureOutOfTen: typeof d.level === 'number' ? d.level : null
+          sureOutOfTen: typeof d.level === 'number' ? d.level : null,
+          /* B40's three, as above: counted from one, and absent where there is nothing. */
+          prediction: typeof d.prediction === 'number' ? d.prediction + 1 : undefined,
+          filledIn: d.slots && Object.keys(d.slots).length ? d.slots : undefined,
+          size: d.size || undefined
         };
       })
     }, null, 2);

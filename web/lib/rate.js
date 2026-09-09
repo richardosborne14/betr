@@ -81,6 +81,13 @@
     An own record made before B30 has no id and falls back to its sentence, exactly as it did
     — which is why v4 needed no migration. Do not "tidy" the fallback away; it is somebody's
     ladder.
+
+    B40 (2026-09-09) CHANGED NOTHING HERE, and that is the decision rather than the oversight.
+    Under templates a record's words move while the record stays the same worry, so the tempting
+    change was to key on the worry PLUS which of its three predictions. That is rule 5 inverted:
+    a worry's three predictions share that worry's ONE ladder, so keying on the pair would hand
+    one person three ladders for one belief. The record now carries `prediction` alongside, for
+    redrawing and for the export, and this function does not read it. It must not start to.
   */
   function keyOf(d) {
     if (!d) return 'stock:';

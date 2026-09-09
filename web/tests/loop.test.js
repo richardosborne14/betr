@@ -251,83 +251,187 @@ test('the worry and the sentence being tested are on every screen in between', (
 });
 
 /*
-  B32, AND IT IS THE ONE PLACE A PERSON COULD FEEL THEY HAD LOST A LADDER.
+  B40, 2026-09-09, AND IT REVERSES WHAT THE TEST HERE ASSERTED FOUR DAYS AGO.
 
-  Borrowing is one screen now: the sentence arrives half written and everything is editable.
-  Which of the two kinds of test comes out is decided by the WORDS, not by the road — keep one
-  of the item's three predictions word for word and it is that item, with its ladder; change a
-  word and it is yours, with a ladder of its own.
+  B32's rule was that the WORDS decide which kind of test comes out: keep a borrowed item's
+  prediction letter for letter and it is that item, change one word and it is yours, with a
+  ladder of its own. B40's rule is that the ROAD decides. Stay on a worry's road and the test is
+  that worry's, whatever you type over it.
 
-  So the borrowed item's card has to still be on Your tests afterwards, with its own rungs
-  untouched. If it ever stops being there, a person who edited three words will look as though
-  they deleted their history.
+  The reason is B41, and it is not a preference. A sentence with holes in it — "If I say no to
+  {person} without giving a reason" — differs from its skeleton the moment somebody fills it in,
+  which is the entire point of it. Under the old rule every filled-in test would have been a
+  stranger to itself, every one would have started at the top of the ladder, and the one number
+  in the product would never have moved off its first rung. With every test still passing.
+
+  So the two halves of the old decision are now these two tests, and the second one is the price
+  of the first: because editing no longer takes you out, there has to be a door that does.
 */
-test('editing a borrowed sentence makes it yours, and the borrowed one keeps its ladder', () => {
+test('editing a borrowed sentence keeps it inside the worry, and the ladder goes on moving', () => {
   const f = firstBehind(0);
   const a = boot();
 
-  /* first, the borrowed one, twice, so it has a ladder worth losing */
+  /* first, one of the item's three, word for word */
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
   a.tap('#lock').tap('#nothanks').tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 2);
   a.shows('>7<');
 
-  /* now borrow it again and change the prediction into their own words */
+  /* now the same worry again, with the prediction put in their own words */
   a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
   a.type('#then', 'nobody will even notice I was gone').tap('#next');
   a.tap('#lock').tap('#done');
   a.type('#o', 'Two people asked where I’d been.').tap('#next');
-  /* a sentence of their own starts its own ladder, at the top */
-  a.shows('Started').tap('[data-key]', 1).shows('>9<');
+  /* the same belief, so the ladder carries on from 7 rather than starting again at ten */
+  a.shows(en.s.ladder.lastTime).tap('[data-key]', 1).shows('>6<');
   a.shows('nobody will even notice I was gone');
 
-  /* and the borrowed one is still there, on its own card, on the rung it was on */
-  a.tap('#m-mine').shows('2 tests, done 2 times');
-  a.shows(f.label).shows(f.beliefs[0].belief).shows('>7<');
-  a.shows('nobody will even notice I was gone');
+  /* one worry, one card, one ladder — and the card quotes the newest wording */
+  a.tap('#m-mine').shows('1 test, done 2 times');
+  a.shows(f.label).shows('nobody will even notice I was gone').shows('>6<');
 
   const done = JSON.parse(a.mem['betr.v1']).done;
-  assert.strictEqual(done[0].source, 'stock');
-  assert.strictEqual(done[0].id, f.id);
-  assert.strictEqual(done[1].source, 'own');
-  assert.notStrictEqual(done[1].id, f.id);
+  assert.ok(done.every((d) => d.source === 'stock' && d.id === f.id), 'an edit left the worry');
   /*
     Their sentence, assembled from the half that was already there and the half they wrote —
     and the space after "If I" is dropped where the first half opens with an apostrophe, which
     half the stock sentences do ("If I'm not reachable for an evening").
   */
-  assert.match(done[1].belief, /^If I.*, then nobody will even notice I was gone\.$/);
   assert.strictEqual(done[1].belief,
     'If I\u2019m not reachable for an evening, then nobody will even notice I was gone.');
-});
-
-/*
-  The other half of the same decision: a borrowed test kept word for word IS that test. Same
-  id, same label, same ladder, and B20's hand-written expectation still travelling with the
-  sentence it was written for. Without this the borrow road would quietly orphan a ladder
-  every time somebody came back to it.
-*/
-test('a borrowed test kept word for word is that test, ladder and all', () => {
-  const f = firstBehind(0);
-  const loopIt = (a, said, key) => {
-    a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
-    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
-    a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
-  };
-  const a = boot();
-  loopIt(a, 'Nothing happened.', 1);
-  a.shows('>9<');
-  a.tap('#m-new').tap('#back');
-  loopIt(a, 'Nobody said anything.', 1);
-  a.shows('>8<').shows(f.label);
-
-  a.tap('#m-mine').shows('1 test, done 2 times');
-  const done = JSON.parse(a.mem['betr.v1']).done;
-  assert.ok(done.every((d) => d.source === 'stock' && d.id === f.id), 'a kept sentence lost its item');
+  /* which of the three it started from is recorded, and the second run started from none */
+  assert.strictEqual(done[0].prediction, 0);
+  assert.strictEqual(done[1].prediction, null);
+  /*
+    And an empty set of holes is null rather than an empty object, on every record, so that
+    "no holes" and "older than holes" are one shape to everything that reads it (see filled()).
+  */
+  assert.ok(done.every((d) => d.slots === null), 'an empty set of holes reached a record');
+  /*
+    And the half of B32 that B40 did NOT change: sameAsStock() decides the WORDING still, so a
+    sentence kept letter for letter carries B20's hand-written expectation — what you would be
+    braced for, which is not the same words as the prediction and is better than anything read
+    off it — while one the person has rewritten carries an expectation read off their own words.
+  */
   assert.strictEqual(done[0].x, f.beliefs[0].expect, 'B20’s expectation did not travel');
+  assert.notStrictEqual(done[1].x, f.beliefs[0].expect);
 });
 
 /*
-  Founder, 2026-09-03: the yellow at the end of a report "looks weird/*
+  B40's picture, and the one thing it exists to make true: THREE RUNS OF ONE WORRY IN THREE
+  DIFFERENT SETS OF WORDS DRAW ONE LADDER. This is what B41's skeletons produce every time
+  somebody fills the same hole with a different name, and it is what silently would not have
+  worked. Three rungs going down, on one card, under one label.
+*/
+test('three runs of one worry in different words draw one ladder, not three', () => {
+  const f = firstBehind(0);
+  const a = boot();
+  const run = (words, first) => {
+    if (!first) a.tap('#m-new').tap('#back');
+    a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+    a.type('#then', words).tap('#next').tap('#lock');
+    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+    a.tap('#done').type('#o', 'Nothing much.').tap('#next').tap('[data-key]', 1);
+  };
+  run('my sister will think I’m being difficult', true);
+  run('my boss will think I’m being difficult', false);
+  run('my neighbour will think I’m being difficult', false);
+
+  a.shows('>7<');
+  a.tap('#m-mine').shows('1 test, done 3 times').shows(f.label);
+
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  const rate = require('../lib/rate.js');
+  const groups = rate.series(done);
+  assert.strictEqual(groups.length, 1, 'one worry drew ' + groups.length + ' ladders');
+  assert.deepStrictEqual(groups[0].rungs, [9, 8, 7]);
+  assert.ok(done.every((d) => d.id === f.id && d.source === 'stock'));
+});
+
+/*
+  And the door out, which B40 had to build because editing stopped being one. One plain link,
+  on the borrowed road only, and from that tap the test is theirs: its own id, its own ladder,
+  starting at the top — and the worry's own card sitting where it was with its rungs untouched.
+  That is the one place a person could feel they had lost something, which is why both halves
+  are asserted here.
+*/
+test('write the whole thing myself hands over a genuinely own test, and leaves the worry alone', () => {
+  const f = firstBehind(0);
+  const a = boot();
+
+  /* the worry, once, so it has a ladder that must not move */
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  a.tap('#lock').tap('#nothanks').tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 2);
+  a.shows('>7<');
+
+  /* now borrow it and leave */
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  a.shows(en.s.build.borrowTitle).shows(en.s.build.own);
+  a.tap('#ownit');
+  /* it is the plain build screen now: no worry above it, no three to pick from, no way back in */
+  a.shows(en.s.build.title).hides(en.s.build.borrowTitle);
+  a.hides(en.s.build.borrowChips).hides(en.s.build.own).hides(f.label);
+
+  a.type('#then', 'the whole evening will be ruined').tap('#next').tap('#lock').tap('#done');
+  a.type('#o', 'It was fine.').tap('#next');
+  a.shows(en.s.ladder.started).tap('[data-key]', 1).shows('>9<');
+
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  assert.strictEqual(done[1].source, 'own');
+  assert.notStrictEqual(done[1].id, f.id);
+  /* nothing of the worry's rides along on a test that is nobody's but theirs */
+  assert.strictEqual(done[1].label, null);
+  assert.strictEqual(done[1].prediction, null);
+  assert.strictEqual(done[1].slots, null);
+
+  /* two cards, and the worry is on the rung it was left on */
+  a.tap('#m-mine').shows('2 tests, done 2 times');
+  a.shows(f.label).shows('>7<').shows('the whole evening will be ruined');
+});
+
+/*
+  THE SECOND END OF B40'S IDENTITY CHANGE, and it is the one that would have gone unnoticed.
+
+  "Test this again" looks a stock item's plan up fresh rather than replaying it out of the
+  record, so that a corrected wording in worries.js reaches everyone who repeats it. That was
+  safe while a rewritten plan belonged to an OWN test with no item to look up. Under B40 a test
+  can be filed under a worry with a plan the person typed over — and looking it up fresh would
+  hand BETR's sentence back on the one screen whose entire job is to bring hers back.
+
+  Both halves are asserted here, because fixing one by breaking the other is the easy mistake.
+*/
+test('test this again brings back the plan she wrote, and BETR’s where she wrote none', () => {
+  const f = firstBehind(0);
+  const a = boot();
+
+  /* hers: borrowed, then the plan typed over */
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  a.type('#do', 'Leave it in the kitchen from seven.');
+  a.tap('#dropopen').type('#drop', 'Don’t tell anyone I’m doing it.');
+  a.tap('#lock').tap('#nothanks').tap('#done');
+  a.type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 1);
+  a.tap('#again');
+  a.shows('Leave it in the kitchen from seven.').shows('Don’t tell anyone I’m doing it.');
+  a.hides(f.test);
+
+  /* BETR's: the same worry, plan untouched, so a correction in the list still reaches her */
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  a.tap('[data-b]', 1).tap('#next').tap('#lock').tap('#done');
+  a.type('#o', 'Nothing again.').tap('#next').tap('[data-key]', 1);
+  a.tap('#again').shows(f.test);
+});
+
+/*
+  The free-text road has no way out because it is already out, and offering one would be a
+  puzzle: nothing to leave, nothing to write that you are not already writing.
+*/
+test('the way out is only ever offered on the road that has something to leave', () => {
+  const a = boot().tap('#m-new');
+  a.shows(en.s.build.title).hides(en.s.build.own);
+  a.type('#if', 'say no').type('#then', 'they will mind').tap('#next');
+  a.hides(en.s.build.own);
+});
+
+/*
   Founder, 2026-09-03: the yellow at the end of a report "looks weird, the lines look like
   they're too tightly packed". The highlight is drawn round each line of the inline span with
   6px of padding above and below, so two bands stay apart only while the line height is bigger
@@ -596,6 +700,43 @@ test('your worries opens the pick list until there is one, and the worry after t
   loop(a, 0, 'He said fair enough.', 1);
   a.tap('#m-mine').shows('Your tests').shows('He said fair enough.');
   a.tap('#back').shows(en.s.start.caption);
+});
+
+/*
+  B40's own migration question, and the answer is that there isn't one. A v4 record — written
+  yesterday, by the code that shipped the day before this — has no `prediction`, no `slots` and
+  no `size`, and nothing reads any of the three to draw a ladder. So it draws the rungs it drew
+  yesterday, and it goes on drawing them next to a v5 record of the same worry: ONE ladder, the
+  old result first. If these two ever stopped joining, somebody's history would appear to have
+  restarted the day they updated.
+*/
+test('a v4 record needs no migration, and joins a v5 one on the same ladder', () => {
+  const f = firstBehind(0);
+  const v4 = {
+    v: 4, stage: 'start',
+    done: [{
+      rid: 'a-real-id-from-yesterday-0001', id: f.id, source: 'stock', label: f.label,
+      belief: f.beliefs[0].belief, x: f.beliefs[0].expect, test: f.test, drop: f.drop,
+      o: 'Nothing happened.', move: 'lot', level: 7, rateLabel: 'A lot less sure',
+      when: '2026-09-08T10:00:00.000Z'
+    }]
+  };
+  const a = boot({ 'betr.v1': JSON.stringify(v4) });
+  a.tap('#m-mine').shows('Your tests').shows(f.label).shows('>7<');
+
+  /* the same worry again, today, under the new rule and in words of their own */
+  a.tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  a.type('#then', 'my sister will think I’m being difficult').tap('#next').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'She laughed.').tap('#next');
+  a.shows(en.s.ladder.lastTime).tap('[data-key]', 1).shows('>6<');
+
+  a.tap('#m-mine').shows('1 test, done 2 times');
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  assert.strictEqual(done[0].prediction, undefined, 'a v4 record was rewritten on the way in');
+  const groups = require('../lib/rate.js').series(done);
+  assert.strictEqual(groups.length, 1, 'the update started a second ladder');
+  assert.deepStrictEqual(groups[0].rungs, [7, 6]);
 });
 
 test('a result saved by the version before the ladder still opens, and still counts', () => {

@@ -132,7 +132,15 @@
       the draft rather than in `S` because it is not a preference and it is not a record: a
       draft is let go unlocked (see newTest), and this goes with it.
     */
-    return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '', dropOpen: false };
+    /*
+      B40's two. `prediction` is which of a borrowed item's three the sentence started from,
+      by index, set when one of the chips is tapped and cleared the moment the second half
+      stops being that one's. `slots` is what the person typed into a skeleton's holes, and it
+      is an empty object until B41 puts holes in anything. NEITHER OF THEM KEYS A LADDER — the
+      worry's id does that, and a worry's three predictions share one ladder (rule 5).
+    */
+    return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '',
+             prediction: null, slots: {}, dropOpen: false };
   }
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
   var installEvent = null; /* Android's beforeinstallprompt, if the browser offers one */
@@ -669,6 +677,14 @@
       rid: storeLib.rid(),
       source: d.source, id: d.id, label: d.label, belief: d.belief,
       x: d.x, test: testFor(d), drop: dropFor(d),
+      /*
+        B40. Which of the three it was, and the words the person put in the holes, both come
+        back with it — that is what makes "Test this again" come back with HER words in it
+        rather than with the skeleton's. `size` comes back too, and B42's screen marks it as
+        last time's rather than as the one to pick.
+      */
+      prediction: typeof d.prediction === 'number' ? d.prediction : null,
+      slots: d.slots || null, size: d.size || null,
       from: from || 'mine', editing: false, locked: null, missed: false
     };
     go('plan');
@@ -1154,8 +1170,18 @@
            : chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
              chipRow(t('build.thenChips'), thenChips, 'data-then',
                !draft.ifPart.trim() || !!draft.thenPart.trim())) +
-        /* Last, and small. A rule read before you have written anything is about somebody else. */
-        '<p class="tiny">' + esc(t('build.only')) + '</p>' +
+        /*
+          B40's way out, on the borrowed road only: on the free-text road the person is already
+          writing the whole thing themselves and a link offering it would be a puzzle.
+
+          It shares the last small line's paragraph rather than taking one of its own, which is
+          a measurement and not a preference — a second .tiny block costs 22px of margin plus
+          its own line on a screen that B39 has only just got under the fold at 125%.
+        */
+        '<p class="tiny">' +
+          (f ? '<button id="ownit">' + esc(t('build.own')) + '</button><br>' : '') +
+          esc(t('build.only')) +
+        '</p>' +
       '</div>');
 
     /*
@@ -1186,7 +1212,13 @@
         b.onclick = function () {
           readBlanks();
           draft.thenPart = list[Number(b.getAttribute('data-then'))];
+          /*
+            The second half is somebody else's now, so the prediction it came from and the
+            expectation written for it both go. B40 added the first of those two; they are one
+            fact said twice and they are cleared in the same breath on purpose.
+          */
           draft.expect = '';
+          draft.prediction = null;
           refusal = null;
           render();
         };
@@ -1239,14 +1271,38 @@
     */
     qa('[data-b]').forEach(function (btn) {
       btn.onclick = function () {
-        var b = f.beliefs[Number(btn.getAttribute('data-b'))];
+        var i = Number(btn.getAttribute('data-b'));
+        var b = f.beliefs[i];
         var halves = splitBelief(b.belief);
         draft.ifPart = halves[0];
         draft.thenPart = halves[1];
         draft.expect = b.expect;
+        /* B40: which of the three, so the record and the export can say so. It keys nothing. */
+        draft.prediction = i;
         refusal = null;
         render();
       };
+    });
+
+    /*
+      B40. Leaving the worry's road, and it is one line: forget which item this came from. The
+      words stay in the blanks — the sentence is the person's now, not a thing to retype — and
+      from this tap builtTest() makes an own test with an id and a ladder of its own. Under B41
+      it is also what collapses a printed skeleton back into a plain pair of blanks, because a
+      skeleton is drawn from the borrowed item and there is no longer one.
+
+      The prediction and the holes go with it. A test that is nobody's but theirs cannot be
+      "the second of three", and a record carrying that would make the export say something
+      untrue about what was done.
+    */
+    on('#ownit', function () {
+      readBlanks();
+      draft.stock = null;
+      draft.expect = '';
+      draft.prediction = null;
+      draft.slots = {};
+      refusal = null;
+      render();
     });
 
     on('#next', function () {
@@ -1458,13 +1514,28 @@
   /*
     The test about to be locked in, built from whatever is in the draft.
 
-    TWO KINDS COME OUT OF ONE SCREEN, and which one is decided by the WORDS rather than by
-    where they came from (B32). If somebody borrowed an item and locked in one of its three
-    predictions word for word, this is that item: same `id`, same label, so rate.keyOf() hands
-    them back the ladder they already had. Change so much as the first blank and it is their
-    own test with an id of its own — and the borrowed item's card stays exactly where it was
-    on Your tests, ladder untouched. That is the one place a person could feel they had lost
-    one, which is why the card must still be there; `loop.test.js` proves it.
+    TWO KINDS COME OUT OF ONE SCREEN, AND THE ROAD DECIDES WHICH — not the words. That is
+    B40's one sentence, 2026-09-09, and it reverses what B32 did four days earlier.
+
+    B32's rule was that a borrowed item kept word for word IS that item, and that changing so
+    much as one blank makes it yours, with a ladder of its own. Reasonable on a road where
+    editing meant "this isn't quite my worry". It stops being reasonable the moment a sentence
+    ARRIVES with holes in it: a filled-in skeleton differs from the skeleton every single time,
+    by design, so under B41 every templated run would be a stranger to itself, every one would
+    start at the top, and the belief ladder — the one number in the whole product — would never
+    move off its first rung. Silently, with every test still passing.
+
+    So: while `draft.stock` is set, this is that worry. Same `id`, same label, whatever the
+    words say, because the app already knows where the person is — it printed the sentence they
+    are editing. The only way out is the one plain link on the build screen (see `#ownit`), and
+    from that tap it is an own test with an id of its own, exactly as before.
+
+    THE WORDING IS A SEPARATE QUESTION FROM THE IDENTITY, and sameAsStock() still answers it.
+    Where the sentence is still one of the item's three letter for letter, the record carries
+    that prediction's own wording and B20's hand-written expectation — what you would be braced
+    for, which is better than anything derived from the sentence. Where it is not, the record
+    carries the person's words and an expectation read off them. That has not changed today and
+    is why nothing on the screen looks different.
 
     `id` on an own test is its own, made once and kept: rate.keyOf() groups an own ladder by
     it, so fixing a typo tomorrow does not look like losing your history (B30).
@@ -1475,19 +1546,50 @@
     var same = f ? sameAsStock(f, said) : null;
     return {
       rid: storeLib.rid(),
-      source: same ? 'stock' : 'own',
-      id: same ? f.id : storeLib.rid(),
-      label: same ? f.label : null,
+      source: f ? 'stock' : 'own',
+      id: f ? f.id : storeLib.rid(),
+      label: f ? f.label : null,
       ifPart: draft.ifPart.trim(), thenPart: draft.thenPart.trim(),
       belief: same ? same.belief : said,
       /* B20's hand-written expectation, where the sentence is still B20's sentence. */
       x: same ? same.expect : guards.expectationFrom(said),
       test: draft.test.trim(), drop: draft.drop.trim(),
+      /*
+        B40's three, along for the ride and keying nothing. `prediction` and `slots` only mean
+        anything on a worry's road, so an own test carries neither rather than carrying a stale
+        one from a draft that was borrowed a minute ago.
+      */
+      prediction: f && typeof draft.prediction === 'number' ? draft.prediction : null,
+      slots: f ? filled(draft.slots) : null,
+      size: null,
       from: 'build-do', editing: false, locked: null, missed: false
     };
   }
 
-  /* Which of a borrowed item's three this is, word for word, or null if it is theirs now. */
+  /*
+    A copy of what was typed into a skeleton's holes, or null where nothing was.
+
+    A copy, so a record and the draft it came from cannot edit each other afterwards. Null
+    rather than an empty object, so that "this test had no holes in it" and "this test is older
+    than holes" are the same thing to everything downstream — which is one fewer shape for B41
+    and B42 to remember, and it keeps the export honest for free.
+  */
+  function filled(o) {
+    var out = null;
+    for (var k in o) {
+      if (!Object.prototype.hasOwnProperty.call(o, k)) continue;
+      if (!String(o[k] == null ? '' : o[k]).trim()) continue;
+      (out = out || {})[k] = o[k];
+    }
+    return out;
+  }
+
+  /*
+    Which of a borrowed item's three this is, word for word, or null if the words have moved on.
+
+    Since B40 this decides the WORDING ONLY — which sentence is stored and which expectation
+    travels with it. It stopped deciding whether the test belongs to the worry; see builtTest().
+  */
   function sameAsStock(f, said) {
     var want = flat(said);
     for (var i = 0; i < f.beliefs.length; i++) {
@@ -1695,6 +1797,9 @@
           rid: c.rid || storeLib.rid(),
           id: c.id, source: c.source, label: c.label, belief: c.belief,
           x: c.x, test: c.test, drop: c.drop, o: c.o,
+          /* B40's three, carried from the test in hand. None of them keys this record. */
+          prediction: typeof c.prediction === 'number' ? c.prediction : null,
+          slots: c.slots || null, size: c.size || null,
           move: ch.key, level: rate.next(at, ch.key), rateLabel: t('rate.' + ch.key),
           when: new Date().toISOString()
         });
@@ -1912,18 +2017,31 @@
   }
 
   /*
-    Repeating a test. A stock item is looked up fresh, so a corrected wording in worries.js
-    reaches everyone who repeats it, including anyone whose old result still quotes the
-    wording it had before. A person's own test falls back to what they wrote.
+    Repeating a test, and which plan comes back in the boxes.
+
+    Two things have to be true at once. A corrected wording in worries.js should reach everyone
+    who repeats that item, including anyone whose old result still quotes the wording it had
+    before — so BETR's plan is looked up fresh rather than replayed out of the record. And what
+    a person wrote themselves must come back exactly as they wrote it.
+
+    Until B40 those never met: a plan a person had rewritten belonged to an OWN test, which had
+    no item to look up. Now that the road decides rather than the words, a test can be filed
+    under a worry with a plan the person typed over — and looking that up fresh would hand her
+    BETR's sentence back and quietly throw hers away, on the one screen whose whole job is to
+    bring her own test back. This is the second end of B40's identity change (docs/learnings.md:
+    when identity moves, both ends have to move).
+
+    So: unchanged from BETR's own words means BETR's, looked up fresh. Anything else — including
+    a leave-out line she deliberately emptied — is hers, and comes back as she left it.
   */
-  function testFor(d) {
+  function planFor(d, which) {
     var f = d.id ? content.byId(WORRIES, d.id) : null;
-    return f ? f.test : (d.test || '');
+    var mine = typeof d[which] === 'string' ? d[which] : '';
+    if (!f) return mine;
+    return flat(mine) === flat(f[which]) ? f[which] : mine;
   }
-  function dropFor(d) {
-    var f = d.id ? content.byId(WORRIES, d.id) : null;
-    return f ? f.drop : (d.drop || '');
-  }
+  function testFor(d) { return planFor(d, 'test'); }
+  function dropFor(d) { return planFor(d, 'drop'); }
 
   /* ---------------------------------------------------------------- install */
 

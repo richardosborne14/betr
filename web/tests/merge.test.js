@@ -244,7 +244,7 @@ test('every result the app writes has its own id and the word that was tapped', 
   a.type('#o', 'Nobody minded.').tap('#next').tap('[data-key]', 2);
 
   const saved = JSON.parse(a.mem['betr.v1']);
-  assert.strictEqual(saved.v, 4);
+  assert.strictEqual(saved.v, 5);
   assert.strictEqual(saved.done.length, 2);
   assert.deepStrictEqual(saved.done.map((d) => d.move), ['bit', 'lot']);
   assert.deepStrictEqual(saved.done.map((d) => d.level), [9, 6]);
@@ -310,7 +310,7 @@ test('an exported file carries the id and the tapped word, so two of them can be
   a.tap('#m-help').tap('#export');
 
   const out = JSON.parse(a.valueOf('#dump'));
-  assert.strictEqual(out.version, 4);   /* B30: ifPart/thenPart, and an own test has an id */
+  assert.strictEqual(out.version, 5);   /* B40: the road decides which worry a test belongs to */
   assert.strictEqual(out.results.length, 1);
   const r = out.results[0];
   assert.ok(typeof r.id === 'string' && r.id.length > 15, 'the export has no id on a result');

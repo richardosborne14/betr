@@ -251,6 +251,19 @@ var BETR_STRINGS_EN = {
         is a whole sentence and fills both blanks, so the line says so.
       */
       borrowChips: 'Three ways people usually put this. Tap one to fill it in:',
+      /*
+        B40, 2026-09-09. THE WAY OUT OF A WORRY'S ROAD, and the only one there is.
+
+        Until today a person left by editing: change a word of a borrowed sentence and the test
+        became theirs, with a ladder of its own. That rule cannot survive B41's skeletons, where
+        the sentence arrives with holes and filling them changes the words every single time. So
+        the road is what decides now, and leaving it has to be something a person does on
+        purpose rather than something that happens to them while they type.
+
+        One plain link, under the suggestions, on the borrowed road only. Not a mode, not a
+        toggle, nothing to discover. It says what it does and it costs the 10% one tap (B37 §3).
+      */
+      own: 'Write the whole thing myself',
       next: 'What will you do?',
       /* The second half. The sentence is above it, in the quiet strip, unchanged. */
       doTitle: 'What will you do today?',

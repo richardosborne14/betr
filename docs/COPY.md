@@ -832,6 +832,10 @@ keep it, and put it wherever the sentence needs it.
 
 > Three ways people usually put this. Tap one to fill it in:
 
+**`build.own`**
+
+> Write the whole thing myself
+
 **`build.next`**
 
 > What will you do?
