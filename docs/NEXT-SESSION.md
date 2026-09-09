@@ -17,7 +17,7 @@ seventeen plus one. **A drop carries across both files** — the founder's call,
 
 **The sheet is marked and it is 271 live rows, not 429.** Culled rows say `CULLED — was shipped`
 and carry the reason; start #07's eleven say `REWRITE`; seven rows carry a new `Our flag` saying
-the rewrite on them cannot be applied as written (B47 §4). **The paid reviewer's sheet just got
+the rewrite on them cannot be applied as written, with a suggested line beside it (B47 §4). **The paid reviewer's sheet just got
 a third shorter and every dead row says why it is dead.**
 
 **No content file changed today, and that is the finding, not the shortfall.** See §2.

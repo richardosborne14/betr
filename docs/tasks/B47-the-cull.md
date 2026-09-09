@@ -105,24 +105,97 @@ only because it was never in the reviewed sheet.
 
 ---
 
-## 4. Nine lines that cannot be applied as written
+## 4. Ten lines that cannot be applied as written — and what I would put instead
 
-Not objections to the direction — six are typos or house style, and three are the method.
+Not objections to the direction. Two are typos, two are voice, three are the method, one is
+probably a dropped word, and **two are genuinely somebody else's call and stay questions.**
+The founder's meaning is kept in every one of them.
 
-| Ref | The rewrite | Why it stops here |
+### The three where the method is the problem
+
+| Ref | Shipped now | The founder's | What I'd put |
+| --- | --- | --- | --- |
+| `S08-X2` | Don't keep the list where you can see it. | *Try not to think about your todo list* | **Put the to-do list out of sight before you sit down.** |
+| `G-X4` | Don't check afterwards how it landed. | *Try not to ruminate on what others thought of your action* | **Cut the row.** If something has to be there: *Don't go back and ask how it went.* |
+| `S07-D1` | Set ten minutes and sit with it. Write down the time it eased. | *Plan ten minutes to do a guided mindfulness session* | **Sit somewhere quiet for ten minutes with nothing on, and write down when you first wanted to get up.** |
+
+**Why all three change shape rather than wording.** A *leave out* has to be something a person
+can either do or not do, and **"don't think about it" is not one** — there is no moment where you
+either did it or didn't, and trying not to think about something is the one instruction that
+reliably produces more of it. The founder is right that the shipped line is fussy; the fix is a
+plainer **behaviour**, not a plainer thought. `G-X4` was already ours-to-cut: in the general set
+it reaches everybody whatever they typed, and checking how it landed is not a safety behaviour
+for most of what people will write.
+
+**`S07-D1` is the one worth reading twice.** A guided session is a thing you do *instead of* the
+discomfort — it is the distraction with a better name — and nothing in it is predicted, so
+nothing can turn out to be wrong and the loop moves nothing. But the founder's complaint about
+the shipped line is correct: *"sit with it"* — sit with **what**? The replacement says what the
+person actually does, in words anybody can picture, and still produces the evidence.
+
+### The one that looks like a dropped word
+
+| Ref | Shipped now | The founder's | What I'd put |
+| --- | --- | --- | --- |
+| `S11-X2` | Don't go back to it later. | *Keep making new points arbitrarily* | **Don't keep making new points.** |
+
+As written it tells a person to do the very thing the test is about. With the *Don't* in front it
+is **better than the shipped line** — it names the actual behaviour under *don't get the last
+word*, where "go back to it later" is vaguer. "Arbitrarily" goes because nobody says it.
+
+### The two that are voice, and one of them is an improvement in disguise
+
+| Ref | Shipped now | The founder's | What I'd put |
+| --- | --- | --- | --- |
+| `S11-P2` | it'll get brought up again | *they'll not remember what you said* | **they won't remember what I said** |
+| `S08-D1` | Take two hours off today, and take them properly. | *Take one hour off today and do something just for me* | **Take an hour off today and do something just for yourself.** |
+
+**`S11-P2` is not a slip and I called it one first time.** It is a *different* prediction from the
+shipped line and a better one — the fear under not getting the last word is that your point
+vanishes. It only needs the person fixing: a prediction follows *If I…, then* and is about **me**.
+With it, the founder's three under #11 are better separated than the shipped three: how I look
+(`P1`), whether my point lands (`P2`), whether I stew (`P3`).
+
+**`S08-D1` also shrinks two hours to one, and that should stay** — a smaller first step is the
+right direction for the line a person meets first.
+
+### The two typos
+
+| Ref | The founder's | What I'd put |
 | --- | --- | --- |
-| `S11-X2` | "Keep making new points arbitrarily" | It replaces the **drop** *Don't go back to it later*. A drop is a leave-out; this one tells a person to do the very thing the test is about. Almost certainly a slip |
-| `S08-X2` | "Try not to think about your todo list" | **Thought suppression**, and a drop has to be a behaviour you can either do or not do. "Don't keep the list where you can see it" is the same intent and is checkable |
-| `G-X4` note | "Try not to ruminate on what others thought of your action" | Same problem, and the founder spotted the other half of it — it is an if-then in itself |
-| `S07-D1` | "Plan ten minutes to do a guided mindfulness session" | This turns a **test** into a coping technique. Nothing is predicted and nothing can turn out to be wrong. The note under it asks about recommending free videos — **that is a link, and links live in `places.js` on the Help screen, nowhere else** (rule 1, rule 9) |
-| `S07-P3` | "I'll have a panic attack" | The founder's own note asks the question. It is a real prediction people hold, but it is **BETR** writing it, and `expect` is held to "never a catastrophe" |
-| `S03-D4` | "Admit how bad things really are" | An escalation, and BETR proposing it. This one is genuinely the paid reviewer's |
-| `S11-P2` | "they'll not remember what you said" | A prediction follows *If I…, then* and is about **me**: "…what I said" |
-| `S08-D1` | "…do something just for me" | A `do` is an instruction: "for yourself" |
-| `S04-D1`, `S07-D4` | "at hand it over", "uncomfortabe" | typos |
+| `S04-D1` | *Leave one thing at 'good enough' at hand it over* | **Leave one thing at good enough today and hand it over.** |
+| `S07-D4` | *Wait the uncomfortabe feeling out and see if it goes away* | **Wait the feeling out once today, and write down when it went.** |
 
-Everything else is mechanical and the tests already hold it: `’` not `'`, a capital and a full
-stop on every `do` and `drop`, lowercase on every prediction.
+`S07-D4` lands in draft B of the split (§6c). The founder's version is plainer than both the
+shipped line and my draft's — **"wait it out and see if it goes"** is the whole experiment in six
+words. The only thing added is writing down when, because that is what turns it into evidence
+rather than an impression.
+
+### The two that stay questions
+
+| Ref | Shipped now | The founder's | Where it goes |
+| --- | --- | --- | --- |
+| `S07-P3` | it won't pass on its own | *I'll have a panic attack* | **Keep the shipped line; the founder's goes to the reviewer** |
+| `S03-D4` | Tell one person the part you'd usually leave out. | *Admit how bad things really are* | **Tell one person one thing you've been keeping to yourself.** — and the founder's goes to the reviewer |
+
+**`S07-P3`.** The words are not the problem; **who is saying them** is. Somebody who has panic
+attacks already holds that prediction and can type it into the free box in six words — that box
+is exactly what it is for. Somebody who does not has just been handed the idea by an app, on a
+screen with no clinician behind it. And *"it won't pass on its own"* is already the falsifiable
+core of the same belief without the word. **Keep it, ask the reviewer, and let the person's own
+sentence be the sharp one.** It is now a question on `S07-P3` in the sheet.
+
+**`S03-D4`.** *"How bad things really are"* has no floor — for one person that is a sentence at
+lunch, for another it is a disclosure that cannot be walked back, and BETR is the one proposing
+it. **"Admit"** is the other half: you admit a fault, and the whole point of this category is
+that struggling is not one. The suggested line keeps the founder's move — say the thing you
+normally don't — and puts a floor under it with **one thing**.
+
+### And the mechanical ones, which are not decisions
+
+Everything else in the review is `’` not `'`, a capital and a full stop on every *do* and *drop*,
+lowercase on every prediction, and numbers written as words (`S13-D2`'s *"wait 2 minutes"*
+becomes *two minutes*). The tests already hold all of it.
 
 ---
 
@@ -254,7 +327,7 @@ difference between writing 38 sentences and writing about 30.
 
 ## 8. Done when
 
-- Every marked row in the sheet is applied, refused in §4, or answered in §6
+- Every marked row in the sheet is applied, replaced by §4's suggested line, or answered in §6
 - No door opens onto fewer than four worries, or the founder has said otherwise on `work`
 - `node --test` passes, and `content.test.js`'s hand-held first-worry-per-door list matches
 - Nothing was deleted from `worries.js` without the founder saying so, because an id in a
