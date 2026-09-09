@@ -466,7 +466,15 @@
     if (!f) return;
     draft = blankDraft();
     draft.stock = f.id;
-    draft.ifPart = splitBelief(f.belief)[0];
+    /*
+      B41. Where the worry has a skeleton the first half is ITS words, not the card's — the
+      card sentence is the loose one and is never itself tested, and the skeleton is the exact
+      action all three predictions are about. It is assembled with every hole at its default,
+      so `draft.ifPart` reads properly from the first paint even though nothing is typed in
+      yet, and everything downstream can go on treating it as one string.
+    */
+    draft.ifPart = f.skeleton ? content.fill(f.skeleton.if, {}, f.skeleton.holes)
+                              : splitBelief(f.belief)[0];
     draft.test = f.test;
     draft.drop = f.drop;
     go('build');
@@ -1108,12 +1116,48 @@
     }).join('');
   }
 
-  /* Both blanks, read back off the screen, so nothing typed is lost to a repaint. */
+  /*
+    Both blanks, read back off the screen, so nothing typed is lost to a repaint.
+
+    B41 put a third thing on this screen: on a skeleton road the first half is not one blank
+    but printed words with small ones in them, and the if-half is DERIVED rather than typed.
+    So the holes are read into `draft.slots` and `draft.ifPart` is assembled from them — which
+    means everything downstream (the guard, sentenceOf, the do screen, `#ownit`) goes on
+    reading one field and knows nothing about skeletons.
+  */
   function readBlanks() {
-    var a = q('#if');
+    var sk = skeleton();
+    if (sk) {
+      Object.keys(sk.holes).forEach(function (name) {
+        var el = q('#h-' + name);
+        if (el) draft.slots[name] = el.value;
+      });
+      draft.ifPart = content.fill(sk.if, draft.slots, sk.holes);
+    } else {
+      var a = q('#if');
+      if (a) draft.ifPart = a.value;
+    }
     var b = q('#then');
-    if (a) draft.ifPart = a.value;
     if (b) draft.thenPart = b.value;
+  }
+
+  /* The skeleton of the worry being borrowed, or null — which is most worries and both roads. */
+  function skeleton() {
+    var f = borrowed();
+    return f && f.skeleton ? f.skeleton : null;
+  }
+
+  /*
+    One of a borrowed item's three, with the person's words already in it.
+
+    This is B37's whole idea and it is a string substitution: she types "my sister" once, into
+    the if-half, and it is in all three predictions before she has read them. Nothing chose
+    anything, nothing was ranked, no model ran (rule 2). Where there is no skeleton it hands
+    the sentence back untouched, which is every other worry.
+  */
+  function saidIn(text) {
+    var sk = skeleton();
+    return sk ? content.fill(text, draft.slots, sk.holes) : text;
   }
 
   /*
@@ -1127,8 +1171,49 @@
       esc(value) + '">';
   }
 
+  /*
+    B41. The if-half of a skeleton: the words BETR printed, and a small blank at every hole.
+
+    It is the same two components the rest of the sentence is made of — a `.fixed` span and a
+    `.blank` input — so there is no new control here and nothing to learn. What is new is that
+    there are more of them and they are smaller, which is the whole of B37 §3: "a skeleton is
+    more printed words and smaller blanks."
+
+    A HOLE IS EMPTY, NOT PRE-FILLED, and the word is a greyed placeholder. Two reasons. A real
+    value in a blank set in 800 weight looks like something the person wrote, and she would
+    lock in "somebody" believing it was hers. And nobody is walled for leaving one alone: an
+    empty hole assembles as its own word (content.fill), so the sentence always reads and the
+    un-personalised test is a perfectly good test.
+  */
+  function skeletonHalf(sk) {
+    var out = '<span class="fixed">' + esc(t('build.ifWord')) + '</span>';
+    var last = 0;
+    var re = /\{([a-z][a-z0-9]*)\}/g;
+    var m;
+    while ((m = re.exec(sk.if))) {
+      var before = sk.if.slice(last, m.index).trim();
+      if (before) out += '<span class="fixed">' + esc(before) + '</span>';
+      out += '<input class="blank hole" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" id="h-' +
+        esc(m[1]) + '" data-hole="' + esc(m[1]) + '" aria-label="' +
+        esc(t('build.holeLabel', { word: sk.holes[m[1]] })) + '" placeholder="' +
+        esc(sk.holes[m[1]]) + '" value="' + esc(draft.slots[m[1]] || '') + '">';
+      last = m.index + m[0].length;
+    }
+    var tail = sk.if.slice(last).trim();
+    if (tail) out += '<span class="fixed">' + esc(tail) + '</span>';
+    return '<span class="part skel">' + out + '</span>';
+  }
+
   function build() {
     var f = borrowed();
+    var sk = skeleton();
+    /*
+      B41. The three, with the person's words already substituted in. Worked out ONCE, here,
+      exactly as B34 D1 made the second blank's chips be — the handlers below close over this
+      same list, so a chip can only ever insert the words printed on it. When a hole changes,
+      the row is reprinted and rewired against a fresh list (see refreshBorrow()).
+    */
+    var bChips = f ? f.beliefs.map(function (b) { return saidIn(b.belief); }) : [];
     var ifChips = STARTS.items.map(function (it) { return it.if; });
     /*
       B34 D1. The second blank's suggestions are worked out ONCE, here, and the handlers below
@@ -1151,8 +1236,12 @@
           stranded at the end of the first line with its blank underneath.
         */
         '<p class="sentence">' +
-          '<span class="part"><span class="fixed">' + esc(t('build.ifWord')) + '</span>' +
-            blank('if', t('build.ifLabel'), t('build.ifPlaceholder'), draft.ifPart) + '</span>' +
+          /* B41: printed words with small blanks in them where there is a skeleton, and the
+             one big blank everywhere else. Same components, same sentence, different amount
+             of it already written. */
+          (sk ? skeletonHalf(sk)
+              : '<span class="part"><span class="fixed">' + esc(t('build.ifWord')) + '</span>' +
+                blank('if', t('build.ifLabel'), t('build.ifPlaceholder'), draft.ifPart) + '</span>') +
           '<span class="part"><span class="fixed">' + esc(t('build.thenWord')) + '</span>' +
             blank('then', t('build.thenLabel'), t('build.thenPlaceholder'), draft.thenPart) + '</span>' +
         '</p>' +
@@ -1164,8 +1253,7 @@
           sentence and fills both blanks. Anything else would weld the card's beginning to
           another prediction's ending and produce a sentence nobody wrote.
         */
-        (f ? chipRow(t('build.borrowChips'),
-              f.beliefs.map(function (b) { return b.belief; }), 'data-b', false)
+        (f ? chipRow(t('build.borrowChips'), bChips, 'data-b', false)
            /* One row at a time: the blank that has focus, and only while it is still empty. */
            : chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
              chipRow(t('build.thenChips'), thenChips, 'data-then',
@@ -1196,7 +1284,22 @@
       old one-box screens were, and it pays for it by naming both blanks (see build.ifLabel).
       An empty first blank takes it; a filled one hands over to the second.
     */
-    var first = draft.ifPart.trim() && !draft.thenPart.trim() ? q('#then') : q('#if');
+    /*
+      B41. On a skeleton road there is no `#if` to land in, so focus goes to the first hole
+      that is still empty — the first thing there is to do — and to the second blank once every
+      hole has something in it.
+    */
+    var first;
+    if (sk) {
+      var names = Object.keys(sk.holes);
+      for (var n = 0; n < names.length && !first; n++) {
+        var hole = q('#h-' + names[n]);
+        if (hole && !String(hole.value || '').trim()) first = hole;
+      }
+      if (!first) first = q('#then');
+    } else {
+      first = draft.ifPart.trim() && !draft.thenPart.trim() ? q('#then') : q('#if');
+    }
     if (first && first.focus) {
       first.focus();
       try { first.setSelectionRange(first.value.length, first.value.length); } catch (e) { /* older browser */ }
@@ -1269,19 +1372,67 @@
       expectation written to go with it (B20) — what you would be braced for, which is not the
       same words as the prediction and is better than anything derived from it.
     */
-    qa('[data-b]').forEach(function (btn) {
-      btn.onclick = function () {
-        var i = Number(btn.getAttribute('data-b'));
-        var b = f.beliefs[i];
-        var halves = splitBelief(b.belief);
-        draft.ifPart = halves[0];
-        draft.thenPart = halves[1];
-        draft.expect = b.expect;
-        /* B40: which of the three, so the record and the export can say so. It keys nothing. */
-        draft.prediction = i;
-        refusal = null;
-        render();
-      };
+    /*
+      One of the borrowed item's three. It fills both halves, and it carries the hand-written
+      expectation written to go with it (B20) — what you would be braced for, which is not the
+      same words as the prediction and is better than anything derived from it.
+
+      B41, AND THE ONE PLACE THIS ROW IS NOT LIKE THE OTHER TWO.
+
+      B34 D1's rule is that a chip inserts the words printed on it, and it was written the day
+      a chip ran its lookup again on the tap and put a different SENTENCE in the box from the
+      one it said. That rule is kept here in the part that matters: `data-b` is an index into
+      the item's three and always means the same prediction, so which sentence you get is
+      exactly the one you tapped and no lookup happens.
+
+      What is re-derived on the tap is only the hole substitution, from `draft.slots` read a
+      line earlier — and it has to be. The row is reprinted on every keystroke (refreshBorrow),
+      but a browser that fired no input event would leave a list carrying "somebody" while the
+      blank above it says "my sister", and inserting the stale one would hand her back a
+      sentence about a person she is not testing. Her own word is never a lookup and is never
+      something the app chose; it is the thing she typed, one line above, ten seconds ago.
+
+      The first half is left alone on a skeleton road: it belongs to the holes, and taking the
+      chip's would overwrite her words with a copy of themselves at best.
+    */
+    function wireBorrow() {
+      qa('[data-b]').forEach(function (btn) {
+        btn.onclick = function () {
+          /* The holes first, exactly as the other two rows read the blanks first. */
+          readBlanks();
+          var i = Number(btn.getAttribute('data-b'));
+          var halves = splitBelief(saidIn(f.beliefs[i].belief));
+          if (!sk) draft.ifPart = halves[0];
+          draft.thenPart = halves[1];
+          draft.expect = saidIn(f.beliefs[i].expect);
+          /* B40: which of the three, so the record and the export can say so. It keys nothing. */
+          draft.prediction = i;
+          refusal = null;
+          render();
+        };
+      });
+    }
+    wireBorrow();
+
+    /*
+      B41, AND IT IS THE POINT OF THE WHOLE TASK: she types a name into the if-half once and
+      it is in all three predictions before she has finished reading them.
+
+      Reprinted rather than repainted, for the reason refreshThens() is: a repaint would move
+      the caret to the end of the box on every keystroke. ONLY THE BUTTONS are rewritten, so
+      the row's heading survives — a screen reader names the group by it (B33).
+    */
+    function refreshBorrow() {
+      var holder = q('[data-chiplist="data-b"]');
+      if (!holder || typeof holder.innerHTML !== 'string') return;
+      readBlanks();
+      var list = f.beliefs.map(function (b) { return saidIn(b.belief); });
+      try { holder.innerHTML = chipButtons(list, 'data-b'); } catch (e) { return; }
+      wireBorrow();
+    }
+    qa('[data-hole]').forEach(function (el) {
+      el.oninput = function () { growHole(el); refreshBorrow(); };
+      growHole(el);
     });
 
     /*
@@ -1358,6 +1509,25 @@
       box.style.height = 'auto';
       box.style.height = (box.scrollHeight + 4) + 'px';
     } catch (e) { /* older browser */ }
+  }
+
+  /*
+    B41, and it is B39's lesson applied to a much smaller box.
+
+    A hole sits INSIDE a printed sentence, so it cannot be a fixed width: too narrow and "my
+    father-in-law" scrolls sideways inside a blank three words wide, too wide and "If I say no
+    to ______________ without giving a reason" reads as a gap somebody forgot to close. So it
+    is sized to what is in it, in `ch` so it answers to the person's text size, with a floor
+    that keeps an empty one visibly a gap.
+
+    Guarded on `style` rather than on layout, because the fake DOM has neither: in the tests
+    this is a no-op and the width it would have set is measured on the walker instead.
+  */
+  var HOLE_MIN = 7;
+  function growHole(box) {
+    if (!box || !box.style) return;
+    var text = String(box.value || box.placeholder || '');
+    try { box.style.width = Math.max(HOLE_MIN, text.length + 1) + 'ch'; } catch (e) { /* older browser */ }
   }
 
   function wireChips(boxes) {
@@ -1550,9 +1720,12 @@
       id: f ? f.id : storeLib.rid(),
       label: f ? f.label : null,
       ifPart: draft.ifPart.trim(), thenPart: draft.thenPart.trim(),
-      belief: same ? same.belief : said,
-      /* B20's hand-written expectation, where the sentence is still B20's sentence. */
-      x: same ? same.expect : guards.expectationFrom(said),
+      belief: same ? saidIn(same.belief) : said,
+      /*
+        B20's hand-written expectation, where the sentence is still B20's sentence — and since
+        B41, with her own words in it, because the sentence it was written for has them too.
+      */
+      x: same ? upperFirst(saidIn(same.expect)) : guards.expectationFrom(said),
       test: draft.test.trim(), drop: draft.drop.trim(),
       /*
         B40's three, along for the ride and keying nothing. `prediction` and `slots` only mean
@@ -1574,6 +1747,22 @@
     than holes" are the same thing to everything downstream — which is one fewer shape for B41
     and B42 to remember, and it keeps the export honest for free.
   */
+  /*
+    B41. An expectation that BEGINS with a hole begins with the person's own word, and hers is
+    lowercase far more often than not — "my brother will go quiet, change the subject" is a
+    sentence that starts in the middle of itself, drawn in 800 weight next to what actually
+    happened. `guards.expectationFrom` has capitalised the first letter of a DERIVED expectation
+    since the day it was written; this is that same rule applied to a hand-written one, and it
+    is a no-op on every expectation that starts with a word of BETR's, which is most of them.
+
+    Only the FIRST letter, and only on the expectation. Her words are not otherwise touched: a
+    name she wrote in the middle of a sentence is hers to capitalise or not.
+  */
+  function upperFirst(s) {
+    var text = String(s == null ? '' : s);
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
   function filled(o) {
     var out = null;
     for (var k in o) {
@@ -1589,11 +1778,18 @@
 
     Since B40 this decides the WORDING ONLY — which sentence is stored and which expectation
     travels with it. It stopped deciding whether the test belongs to the worry; see builtTest().
+
+    B41 AND THE ONE THING THAT WOULD HAVE GONE QUIETLY WRONG. It compares against the item's
+    three WITH THE PERSON'S WORDS ALREADY IN THEM, because on a skeleton road every one of them
+    has a `{person}` in it and none would ever have matched a real sentence. The cost of missing
+    that is not a crash: it is that B20's hand-written expectation — the thing she is braced
+    for, written by a person to go with that exact prediction — silently stops travelling on the
+    road templates put most people on, and one read off her own words takes its place.
   */
   function sameAsStock(f, said) {
     var want = flat(said);
     for (var i = 0; i < f.beliefs.length; i++) {
-      if (flat(f.beliefs[i].belief) === want) return f.beliefs[i];
+      if (flat(saidIn(f.beliefs[i].belief)) === want) return f.beliefs[i];
     }
     return null;
   }

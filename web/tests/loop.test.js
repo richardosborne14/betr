@@ -251,6 +251,157 @@ test('the worry and the sentence being tested are on every screen in between', (
 });
 
 /*
+  B41, 2026-09-09. THE SKELETON, AND THE ONE THING IT EXISTS TO DO.
+
+  A worry may carry a skeleton — the if-half as printed words with named holes in it — and what
+  the person types into a hole arrives in ALL THREE predictions before she has finished reading
+  them. Nothing chose anything, nothing was ranked, no model ran (rule 2). It is a string
+  substitution, and it is the closest thing to intelligence this product is allowed to have.
+
+  The carry-through is asserted through a REPAINT here rather than through the keystroke, for
+  the reason every other live behaviour on this screen is: the fake DOM fires no events, so what
+  a test sees is whatever the paint decided (see refreshBorrow, and refreshThens before it). What
+  is proved here is the invariant that matters — the words on a chip are the words in the box.
+*/
+test('a skeleton carries what she types into all three predictions', () => {
+  const f = content.byId(worries, 'no');
+  assert.ok(f.skeleton, 'the "no" worry lost its skeleton');
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+
+  /* before she types anything, the sentence still reads — the hole's own word stands in */
+  a.shows(f.skeleton.holes.person);
+  a.shows('If I say no to somebody without giving a reason, then somebody will think I’m selfish.');
+
+  /* one hole, typed once, and it is in every one of the three */
+  a.type('#h-person', 'my sister').tap('[data-b]', 0);
+  for (const b of f.beliefs) {
+    a.shows(b.belief.split('{person}').join('my sister'));
+  }
+  a.hides('{person}');
+  a.hides('If I say no to somebody');
+});
+
+/*
+  And what a filled-in skeleton locks in as. THIS IS WHAT B40 WAS FOR: the words differ from the
+  skeleton every time, by design, and the test is still that worry — same id, same label, same
+  ladder — with her words in the record and the hole she filled recorded beside them.
+
+  B20's hand-written expectation travels too, and it very nearly did not: `sameAsStock` compares
+  against the item's three, and on this road every one of them has a `{person}` in it, so it
+  matched nothing until it was taught to compare the FILLED sentences. The cost of missing that
+  would not have been a crash — it is that the thing she is braced for, written by a person to
+  go with that exact prediction, quietly stops travelling on the road most people are on.
+*/
+test('a filled-in skeleton locks in as that worry, with her words and her hole recorded', () => {
+  const f = content.byId(worries, 'no');
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 1).tap('#next').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+
+  const cur = JSON.parse(a.mem['betr.v1']).cur;
+  assert.strictEqual(cur.source, 'stock');
+  assert.strictEqual(cur.id, 'no');
+  assert.strictEqual(cur.label, f.label);
+  assert.strictEqual(cur.prediction, 1);
+  assert.deepStrictEqual(cur.slots, { person: 'my sister' });
+  assert.strictEqual(cur.belief, f.beliefs[1].belief.split('{person}').join('my sister'));
+  assert.strictEqual(cur.x, f.beliefs[1].expect.split('{person}').join('my sister'),
+    'B20’s expectation did not travel through the holes');
+
+  /*
+    And an expectation that BEGINS with a hole begins with a capital. Hers is lowercase far
+    more often than not, and "my brother will go quiet, change the subject" is a sentence that
+    starts in the middle of itself — on the result screen, in 800 weight, next to what actually
+    happened. `guards.expectationFrom` has capitalised a DERIVED expectation since the day it
+    was written; this is the same rule on a hand-written one.
+  */
+  const leads = content.byId(worries, 'strug');
+  assert.match(leads.beliefs[0].expect, /^\{person\}/, 'this test needs an expect that leads with a hole');
+  const c = boot();
+  c.tap('#not-sure').tap('[data-door="secret"]').tap('[data-id="strug"]');
+  c.type('#h-person', 'my brother').tap('[data-b]', 0).tap('#next').tap('#lock');
+  if (c.html().indexOf('id="nothanks"') !== -1) c.tap('#nothanks');
+  assert.match(JSON.parse(c.mem['betr.v1']).cur.x, /^My brother will go quiet/);
+  a.shows('my sister').hides('{person}');
+});
+
+/*
+  Three runs of one skeleton with three different names draw ONE ladder. This is B40's picture
+  taken on the road it was built for, and the thing that would have failed silently: each of
+  these sentences differs from the last, and all three are the same belief.
+*/
+test('three fills of one skeleton draw one ladder, and it is the worry’s', () => {
+  const a = boot();
+  const run = (name, first) => {
+    if (!first) a.tap('#m-new').tap('#back');
+    a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+    a.type('#h-person', name).tap('[data-b]', 0).tap('#next').tap('#lock');
+    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+    a.tap('#done').type('#o', 'Nothing much.').tap('#next').tap('[data-key]', 1);
+  };
+  run('my sister', true);
+  run('my boss', false);
+  run('my neighbour', false);
+
+  a.shows('>7<');
+  a.tap('#m-mine').shows('1 test, done 3 times');
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  const groups = require('../lib/rate.js').series(done);
+  assert.strictEqual(groups.length, 1, 'three names drew ' + groups.length + ' ladders');
+  assert.deepStrictEqual(groups[0].rungs, [9, 8, 7]);
+  assert.deepStrictEqual(done.map((d) => d.slots.person), ['my sister', 'my boss', 'my neighbour']);
+});
+
+/*
+  B40's link, on the road it was actually specified for: it COLLAPSES the printed skeleton into
+  one blank holding the assembled sentence. She keeps every word, including the one she typed
+  into the hole, and from that tap it is hers.
+*/
+test('write the whole thing myself collapses a skeleton into one blank, words and all', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my father-in-law').tap('#ownit');
+  a.shows(en.s.build.title).hides(en.s.build.borrowTitle);
+  assert.strictEqual(a.valueOf('#if'), 'say no to my father-in-law without giving a reason');
+  assert.strictEqual(a.html().indexOf('id="h-person"'), -1, 'the holes are still on screen');
+});
+
+/*
+  And the road most people are on did not change. A worry with no skeleton draws the one big
+  blank it always drew, and so does the free-text road — same screen, boxes empty. B41 is more
+  printed words and smaller blanks where there is a skeleton, and nothing at all where there is
+  not; there is no mode, no toggle and no second code path (B37 §3).
+*/
+test('a worry with no skeleton, and the free-text road, are exactly as they were', () => {
+  const plain = content.byId(worries, 'angry');
+  assert.ok(!plain.skeleton, 'this test needs a worry with no skeleton');
+
+  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="angry"]');
+  a.shows('id="if"').hides('data-hole');
+  a.shows(plain.beliefs[0].belief);
+
+  const b = boot().tap('#m-new');
+  b.shows('id="if"').hides('data-hole');
+  b.type('#if', 'say no').type('#then', 'they will mind').tap('#next');
+  b.shows(en.s.build.doTitle);
+});
+
+/*
+  The hard stop runs on what is typed into a hole, exactly as it runs on both boxes — and it has
+  to, because the if-half of a skeleton test is assembled FROM the holes and is never typed
+  anywhere else. If this ever stops firing, the one line BETR refuses has a way round it.
+*/
+test('the one hard stop runs on a hole, the same as on a box', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'the person I told I want to kill myself').tap('#next');
+  a.shows(en.s.refusal.harm);
+  a.hides(en.s.build.doTitle);
+});
+
+/*
   B40, 2026-09-09, AND IT REVERSES WHAT THE TEST HERE ASSERTED FOUR DAYS AGO.
 
   B32's rule was that the WORDS decide which kind of test comes out: keep a borrowed item's

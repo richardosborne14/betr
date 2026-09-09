@@ -310,17 +310,33 @@ var BETR_WORRIES = [
     id: 'no',
     label: 'Saying no without giving a reason',
     belief: 'If I say no and don’t explain, then people will think badly of me.',
+    /*
+      B41's first skeleton, 2026-09-09. NOT YET READ BY MISHA OR THE CBT REVIEWER.
+
+      The three predictions were three slightly different actions before today — "say no and
+      don't explain myself", "turn something down", "give no reason" — and they are one action
+      now, with the same three consequences under it. That is what a skeleton is: the person
+      fills in the action once and every prediction is about the thing she actually did.
+      B20's rule is untouched, because B20's rule was about the CONSEQUENCES being different,
+      and all three still are: thinking badly of her, stopping asking her, taking it as rude.
+    */
+    skeleton: {
+      if: 'say no to {person} without giving a reason',
+      /* The word the sentence uses while the blank is empty. It has to read in every one of
+         the four places {person} appears, which is why it is "somebody" and not "a person". */
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I say no and don’t explain myself, then people will think I’m selfish.',
-        expect: 'There’ll be a pause, and they’ll be a bit off with me afterwards.'
+        belief: 'If I say no to {person} without giving a reason, then {person} will think I’m selfish.',
+        expect: 'There’ll be a pause, and {person} will be a bit off with me afterwards.'
       },
       {
-        belief: 'If I turn something down, then they’ll stop asking me.',
+        belief: 'If I say no to {person} without giving a reason, then {person} will stop asking me.',
         expect: 'I’ll be left out of the next one, and nobody will say why.'
       },
       {
-        belief: 'If I give no reason, then they’ll take it as rude.',
+        belief: 'If I say no to {person} without giving a reason, then {person} will take it as rude.',
         expect: 'They’ll take it personally, and it’ll sit there between us.'
       }
     ],
@@ -383,17 +399,22 @@ var BETR_WORRIES = [
     id: 'strug',
     label: 'Telling someone I’m struggling',
     belief: 'If I let someone see I’m struggling, then it costs me something with them.',
+    /* B41's second skeleton. Same note as `no`: NOT YET READ BY MISHA OR THE CBT REVIEWER. */
+    skeleton: {
+      if: 'tell {person} one true thing I’m finding hard',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I let someone see I’m struggling, then they’ll think less of me.',
-        expect: 'They’ll go quiet, change the subject, and keep a bit of distance after.'
+        belief: 'If I tell {person} one true thing I’m finding hard, then {person} will think less of me.',
+        expect: '{person} will go quiet, change the subject, and keep a bit of distance after.'
       },
       {
-        belief: 'If I say I’m finding this hard, then they’ll wonder what else I can’t manage.',
+        belief: 'If I tell {person} one true thing I’m finding hard, then {person} will wonder what else I can’t manage.',
         expect: 'It’ll come up again the next time something needs doing.'
       },
       {
-        belief: 'If I admit it, then I’ll be the one everybody has to work around.',
+        belief: 'If I tell {person} one true thing I’m finding hard, then I’ll be the one everybody has to work around.',
         expect: 'People will start being careful with me, and I’ll hate it.'
       }
     ],

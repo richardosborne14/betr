@@ -86,6 +86,38 @@ they have to read as one sentence. **A `dos` or a `drops` line is a whole senten
 with a capital. `general` at the top is the short set shown when somebody has written a
 situation we did not think of, which is most of the time.
 
+### The sentences with a gap in them
+
+Two of the worries — *Saying no without giving a reason* and *Telling someone I’m struggling* —
+have a **gap** in them that the person fills in. In the file it looks like `{person}`:
+
+```
+    skeleton: {
+      if: 'say no to {person} without giving a reason',
+      holes: { person: 'somebody' }
+    },
+    beliefs: [
+      { belief: 'If I say no to {person} without giving a reason, then {person} will think I’m selfish.',
+        expect: 'There’ll be a pause, and {person} will be a bit off with me afterwards.' },
+      …
+    ],
+```
+
+**`{person}` is never printed on the screen.** It is where the app puts a small blank. Somebody
+types *my sister* into it once, at the top, and every `{person}` below it says *my sister* —
+which is why all three sentences have to use the same word in the same brackets. `somebody` is
+what the sentence says while the blank is still empty, so nobody is ever stopped for leaving it
+alone.
+
+**Three things the build will stop you on, and you cannot break the app with any of them.**
+Using a `{gap}` you have not listed in `holes`. Listing one and never using it. And changing the
+first half of one of the three sentences so it no longer matches the `if` above — all three have
+to start from the same words, because that is the half the blank is in.
+
+**Changing the words around a gap is completely safe.** Changing `somebody` is safe too, as long
+as the new word still reads in every place `{person}` appears — try saying each sentence out
+loud with it in.
+
 ## Doing it yourself, on github.com
 
 You need no software. This works from a laptop or a phone.

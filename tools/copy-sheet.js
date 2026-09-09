@@ -297,6 +297,25 @@ worries.forEach((f, i) => {
   w('| **test** — the one thing, today | ' + f.test + ' |');
   w('| **drop** — what you leave out | ' + f.drop + ' |');
   w();
+  /*
+    B41. A worry may have a skeleton, and a person reading this file has to be told what the
+    `{person}` in the three sentences below actually is — otherwise it looks like a bug in the
+    app rather than a blank in the sentence. Only the worries that have one print this.
+  */
+  if (f.skeleton) {
+    w('**This one has a blank in it.** On the screen BETR prints the words below and puts a ' +
+      'small gap where the `{...}` is, for the person to write in. Whatever they write appears ' +
+      'in all three sentences underneath, in the same breath. Leave it empty and the sentence ' +
+      'still reads, using the fallback word.');
+    w();
+    w('| | |');
+    w('| --- | --- |');
+    w('| **printed** | If I ' + f.skeleton.if + ' |');
+    Object.keys(f.skeleton.holes).forEach((name) => {
+      w('| **the gap `{' + name + '}`** — its word while it is empty | ' + f.skeleton.holes[name] + ' |');
+    });
+    w();
+  }
   w('The three a person chooses between, in the order they are shown:');
   w();
   w('| | If I ___, then ___ | braced for |');

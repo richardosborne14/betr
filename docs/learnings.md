@@ -826,3 +826,40 @@ to bring her own test back. Every test passed. Nothing on any screen looked wron
    would have thrown away the reason the lookup exists. `planFor()` asks whether the plan still
    matches BETR's own words: unchanged means BETR's, looked up fresh; anything else is hers.
    **Both halves are asserted in the same test**, on purpose.
+
+---
+
+## B41, 2026-09-09: the substitution was the easy half; what it quietly broke was everything that compared a sentence
+
+Templates landed in an afternoon. The rendering was what B37 §3 promised — more printed words and
+smaller blanks, no new component, no second code path. **Every real defect came from the same
+place: code that had been comparing the person's words to BETR's, written when those two things
+could be equal.** Once a sentence arrives with a hole in it they never are.
+
+Three of them, and the shape is identical each time.
+
+1. **`sameAsStock()` matched nothing.** It compares her sentence to the item's three, and on a
+   skeleton road all three carry a `{person}`. So B20's hand-written expectation — the thing she
+   is braced for, written by a person to go with that exact prediction — silently stopped
+   travelling, and one derived from her own words took its place. **Nothing crashed and nothing
+   looked wrong.** The screen still said "You expected"; it just said a worse sentence.
+2. **A chip row went stale.** It is reprinted on every keystroke, so on a real phone the printed
+   word and the typed word are never apart. In the fake DOM, which fires no events, they were —
+   and the chip inserted the word it was printed with rather than the word in the blank above it.
+   The tests caught what a browser never would have.
+3. **An expectation beginning with a hole began in the middle of itself.** `guards.expectationFrom`
+   had capitalised a *derived* expectation since the day it was written. Nobody thought of the
+   hand-written ones, because until today no hand-written one could start with somebody's typing.
+
+**What to take from it.**
+
+- **When content gains a variable, grep for every comparison against that content.** Not every
+  reader — every *comparison*. A reader gets a filled sentence and is fine. A comparison gets a
+  filled sentence on one side and a template on the other, and quietly returns "no".
+- **A defect that turns a good sentence into a worse one is the hardest kind to see**, because
+  every screen still renders, every test still passes, and the thing that got worse is the thing
+  the product exists for. Two of the three above were exactly that.
+- **The fake DOM's refusal to fire events earned its keep.** It is normally a limitation to work
+  around; here it was the only thing that put a stale chip and a fresh blank on screen at once.
+  When a test fails for a reason a browser could not produce, the question is not how to make the
+  test pass — it is whether the code should depend on the event at all. It should not have.

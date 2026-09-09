@@ -832,6 +832,10 @@ keep it, and put it wherever the sentence needs it.
 
 > Three ways people usually put this. Tap one to fill it in:
 
+**`build.holeLabel`**
+
+> Your own word instead of “{word}”
+
 **`build.own`**
 
 > Write the whole thing myself
@@ -1389,13 +1393,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Say “No, I can’t this time” to one small request today. |
 | **drop** — what you leave out | No reason, no apology, no softening it. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I say no to {person} without giving a reason |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I say no and don’t explain myself, then people will think I’m selfish. | There’ll be a pause, and they’ll be a bit off with me afterwards. |
-| 2 | If I turn something down, then they’ll stop asking me. | I’ll be left out of the next one, and nobody will say why. |
-| 3 | If I give no reason, then they’ll take it as rude. | They’ll take it personally, and it’ll sit there between us. |
+| 1 | If I say no to {person} without giving a reason, then {person} will think I’m selfish. | There’ll be a pause, and {person} will be a bit off with me afterwards. |
+| 2 | If I say no to {person} without giving a reason, then {person} will stop asking me. | I’ll be left out of the next one, and nobody will say why. |
+| 3 | If I say no to {person} without giving a reason, then {person} will take it as rude. | They’ll take it personally, and it’ll sit there between us. |
 
 ### 11. Asking someone for help
 
@@ -1446,13 +1457,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Today, tell one person you trust one small, true thing you’re finding hard. |
 | **drop** — what you leave out | Don’t finish it with “but I’m fine”. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} one true thing I’m finding hard |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I let someone see I’m struggling, then they’ll think less of me. | They’ll go quiet, change the subject, and keep a bit of distance after. |
-| 2 | If I say I’m finding this hard, then they’ll wonder what else I can’t manage. | It’ll come up again the next time something needs doing. |
-| 3 | If I admit it, then I’ll be the one everybody has to work around. | People will start being careful with me, and I’ll hate it. |
+| 1 | If I tell {person} one true thing I’m finding hard, then {person} will think less of me. | {person} will go quiet, change the subject, and keep a bit of distance after. |
+| 2 | If I tell {person} one true thing I’m finding hard, then {person} will wonder what else I can’t manage. | It’ll come up again the next time something needs doing. |
+| 3 | If I tell {person} one true thing I’m finding hard, then I’ll be the one everybody has to work around. | People will start being careful with me, and I’ll hate it. |
 
 ### 14. Owning up to a mistake before anyone finds it
 

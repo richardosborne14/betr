@@ -35,6 +35,69 @@
   var BELIEF_FIELDS = ['belief', 'expect'];
 
   /*
+    B41, 2026-09-09. A SKELETON: the if-half printed, with named holes a person fills in.
+
+    A worry may carry `skeleton: { if: 'say no to {person} without giving a reason',
+    holes: { person: 'somebody' } }`. The build screen prints those words and puts a small
+    blank at each `{hole}`; what she types arrives in all three predictions, in the same
+    breath, because they carry the same holes. Nothing chose anything and no model ran — it is
+    a string substitution, and it is the closest thing to intelligence BETR is allowed to have
+    (B37 §2).
+
+    TWO RULES THIS FILE CANNOT CHECK, AND THE REVIEWER HOLDS BOTH.
+
+    1. **BETR owns the verb. The person owns the nouns.** A hole takes a person, a thing, a
+       place — NEVER a verb. Rule 4 did not loosen for BETR on 2026-09-08: a suggested test is
+       BETR proposing, so the action has to be BETR's own content. Let a hole take a verb and
+       somebody can compose a sentence BETR appears to be proposing, which is the single thing
+       that rule exists to prevent.
+    2. **A hole's default word has to read naturally EVERYWHERE its hole appears** — in the
+       if-half and in all three predictions. It is what the sentence says while the blank is
+       still empty, and nobody is walled for leaving one empty. "somebody" survives both
+       "say no to somebody" and "somebody will think I'm being difficult"; "a person" does not.
+
+    What this file DOES check is below, in checkSkeleton(): the shape, that every `{hole}`
+    used is declared and every hole declared is used, that the assembled sentence still comes
+    apart the way the build screen needs, and that the three predictions share the skeleton's
+    if-half word for word — which is what makes the carry-through honest rather than a second
+    sentence that happens to look like the first.
+
+    HOLES ARE NOT ALLOWED IN `test` OR `drop` YET, and that is deliberate rather than an
+    oversight: the plan is pre-filled into the draft at the moment a worry is borrowed, which
+    is before anybody has typed into a hole, and B42 is the task that restructures that screen.
+    A `{hole}` there today would silently print as itself. So it is refused, with a message
+    that says whose job it is.
+  */
+  var SKELETON_FIELDS = ['if', 'holes'];
+  var HOLE = /\{([a-z][a-z0-9]*)\}/g;
+
+  /* Every hole named in a piece of text, in the order it appears, without repeats. */
+  function holesIn(text) {
+    var out = [];
+    String(text == null ? '' : text).replace(HOLE, function (_, name) {
+      if (out.indexOf(name) === -1) out.push(name);
+      return _;
+    });
+    return out;
+  }
+
+  /*
+    A skeleton's text with its holes filled in. `said` is what the person has typed, name to
+    words; anything she has not filled in falls back to the hole's own default, so the sentence
+    always reads and an empty blank never walls anybody. An unknown hole is left as it is
+    rather than blanked, because a sentence with a visible `{oops}` in it is a bug somebody
+    reports and a sentence with a gap in it is a bug nobody notices.
+  */
+  function fill(text, said, holes) {
+    return String(text == null ? '' : text).replace(HOLE, function (whole, name) {
+      var mine = said && typeof said[name] === 'string' ? said[name].trim() : '';
+      if (mine) return mine;
+      var fallback = holes && typeof holes[name] === 'string' ? holes[name] : '';
+      return fallback || whole;
+    });
+  }
+
+  /*
     B19. The cap moved off the list and onto the door. It used to be twelve, because twelve
     was what a person could read on the front screen without scrolling — and the whole list
     was the front screen. Now a door is, and what has to fit on a phone is the four to six
@@ -112,6 +175,7 @@
         problems.push(where + ' lane "' + f.lane + '" is not one of: ' + LANES.join(', '));
       }
 
+      checkSkeleton(f, where, problems);
       checkBeliefs(f, where, problems);
 
       /*
@@ -172,6 +236,99 @@
     }
     if (!m[1].trim()) problems.push(at + ' has nothing between "If I" and ", then": "' + s + '"');
     if (!m[2].trim().replace(/\.$/, '')) problems.push(at + ' says nothing after ", then": "' + s + '"');
+  }
+
+  /*
+    A worry's skeleton, or the absence of one — most worries have none and want none. "Sitting
+    still when I feel restless" has nobody in it (B37 §6); roughly eight to twelve of the
+    twenty-one earn holes, and they are the ones with another person in the test.
+  */
+  function checkSkeleton(f, where, problems) {
+    if (f.skeleton === undefined) return;
+    var sk = f.skeleton;
+    if (!sk || typeof sk !== 'object' || Array.isArray(sk)) {
+      problems.push(where + ' has a skeleton that is not a skeleton');
+      return;
+    }
+    Object.keys(sk).forEach(function (field) {
+      if (SKELETON_FIELDS.indexOf(field) === -1) {
+        problems.push(where + ' skeleton has an extra field "' + field + '": a skeleton is ' +
+          'the printed words and the holes in them, and nothing that could decide anything');
+      }
+    });
+    if (typeof sk.if !== 'string' || !sk.if.trim()) {
+      problems.push(where + ' skeleton is missing if');
+      return;
+    }
+    if (!sk.holes || typeof sk.holes !== 'object' || Array.isArray(sk.holes)) {
+      problems.push(where + ' skeleton is missing holes');
+      return;
+    }
+    var declared = Object.keys(sk.holes);
+    if (!declared.length) {
+      problems.push(where + ' skeleton has no holes in it, so it is just an if-half');
+      return;
+    }
+    declared.forEach(function (name) {
+      if (typeof sk.holes[name] !== 'string' || !sk.holes[name].trim()) {
+        problems.push(where + ' hole "' + name + '" has no word to fall back on, and an empty ' +
+          'blank has to leave a sentence that still reads');
+      }
+    });
+
+    /*
+      Every hole used is declared, and every hole declared is used. The first stops a `{oops}`
+      printing as itself on somebody's phone; the second stops a blank appearing on the screen
+      that changes no sentence anywhere, which is a box that does nothing.
+    */
+    var used = holesIn(sk.if);
+    var sentences = [sk.if];
+    if (Array.isArray(f.beliefs)) {
+      f.beliefs.forEach(function (b) {
+        if (b && typeof b.belief === 'string') { sentences.push(b.belief); }
+        if (b && typeof b.expect === 'string') { sentences.push(b.expect); }
+      });
+    }
+    sentences.forEach(function (text) {
+      holesIn(text).forEach(function (name) { if (used.indexOf(name) === -1) used.push(name); });
+    });
+    used.forEach(function (name) {
+      if (declared.indexOf(name) === -1) problems.push(where + ' uses a hole "{' + name + '}" it never declares');
+    });
+    declared.forEach(function (name) {
+      if (used.indexOf(name) === -1) problems.push(where + ' declares a hole "{' + name + '}" and never uses it');
+    });
+
+    /* B42 owns the plan. A hole there today would print as itself; see the note above. */
+    ['test', 'drop'].forEach(function (field) {
+      if (holesIn(f[field]).length) {
+        problems.push(where + ' puts a hole in ' + field + ', and the plan cannot carry one yet (B42)');
+      }
+    });
+
+    /*
+      The assembled sentence, with every hole at its default, still has to come apart the way
+      the build screen needs — and the three predictions have to share the skeleton's if-half
+      WORD FOR WORD. That last one is what makes the carry-through honest: the person is
+      filling in one action, and all three predictions are consequences of that same action.
+      Let them drift and the chip fills a sentence whose first half is not the one on screen.
+    */
+    splits(fill('If I ' + sk.if + ', then it goes badly.', {}, sk.holes), where + ' skeleton', problems);
+    if (!Array.isArray(f.beliefs)) return;
+    var want = flatten(fill(sk.if, {}, sk.holes));
+    f.beliefs.forEach(function (b, j) {
+      if (!b || typeof b.belief !== 'string') return;
+      var m = fill(b.belief, {}, sk.holes).match(/^If\s+I\s*([\s\S]*?),\s*then\s+/i);
+      if (!m) return;   /* splits() in checkBeliefs already says so */
+      if (flatten(m[1]) !== want) {
+        problems.push(where + ' belief ' + j + ' does not start from the skeleton, so filling a ' +
+          'hole in would change the words above it: "' + m[1].trim() + '"');
+      }
+    });
+  }
+
+  function flatten(s) {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9\u2019 ]+/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
   function checkBeliefs(f, where, problems) {
@@ -474,6 +631,9 @@
     PLACE_FIELDS: PLACE_FIELDS,
     DOOR_FIELDS: DOOR_FIELDS,
     BELIEF_FIELDS: BELIEF_FIELDS,
+    SKELETON_FIELDS: SKELETON_FIELDS,
+    holesIn: holesIn,
+    fill: fill,
     BELIEFS_PER_WORRY: BELIEFS_PER_WORRY,
     MAX_PER_DOOR: MAX_PER_DOOR,
     START_FIELDS: START_FIELDS,

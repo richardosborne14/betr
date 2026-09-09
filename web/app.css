@@ -321,6 +321,20 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
   background:none; border:0; border-block-end:3px solid var(--btn); border-radius:0;
   padding:0 2px 4px; margin:0;
 }
+/*
+  B41, 2026-09-09. A SKELETON'S IF-HALF: more printed words, and smaller blanks.
+
+  The half takes a line of its own (`flex:1 1 100%`) and wraps inside itself, because it is now
+  four or five things rather than two and a `.part` that cannot wrap would squeeze a phrase off
+  the end of a 390px phone. `, then` and its blank stay the `.part` they always were, so the
+  sentence still breaks between its two halves before it breaks anywhere else.
+
+  A hole sizes itself to its contents in JS (growHole), in `ch`, so it answers to the person's
+  text size the way everything else on this screen does. The width here is the floor for a
+  browser that never runs it.
+*/
+.sentence .part.skel { flex:1 1 100%; flex-wrap:wrap; gap:6px 8px; }
+.sentence .blank.hole { flex:0 1 auto; width:7ch; min-width:7ch; }
 .sentence .blank:focus-visible { outline:3px solid var(--btn); outline-offset:4px; }
 .sentence .blank::placeholder { color:var(--ink-3); font-weight:400; opacity:1; }
 

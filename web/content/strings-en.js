@@ -263,6 +263,14 @@ var BETR_STRINGS_EN = {
         One plain link, under the suggestions, on the borrowed road only. Not a mode, not a
         toggle, nothing to discover. It says what it does and it costs the 10% one tap (B37 §3).
       */
+      /*
+        B41, 2026-09-09. What a screen reader says at one of the small blanks inside a printed
+        sentence. The sentence itself is read on the way past, so this only has to say what the
+        blank is FOR — and the honest answer is "the word BETR put there, in your words". The
+        default word is handed in, because it is the one thing that differs hole to hole and it
+        is content rather than code.
+      */
+      holeLabel: 'Your own word instead of “{word}”',
       own: 'Write the whole thing myself',
       next: 'What will you do?',
       /* The second half. The sentence is above it, in the quiet strip, unchanged. */

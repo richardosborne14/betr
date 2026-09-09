@@ -488,3 +488,83 @@ test('every word a person reads uses the typographic apostrophe, not the typewri
   assert.deepStrictEqual(found, [],
     'use ’ and “ ” — every other line in web/content/ does, and a screen with both looks broken');
 });
+
+/* ------------------------------------------------------- B41: skeletons and their holes */
+
+/*
+  A SKELETON IS BETR'S OWN CONTENT, so the rules that hold the twenty-one stock tests hold it
+  too — and two more besides, because a skeleton is the first thing in this product whose final
+  wording is decided partly by somebody else.
+
+  The rule this file CANNOT check is the one the reviewer holds: BETR owns the verb, the person
+  owns the nouns. A hole takes a person, a thing, a place and never a verb, or somebody can
+  compose a sentence BETR appears to be proposing, which is the single thing rule 4 exists to
+  prevent. It is stated in web/lib/content.js and in worries.js, and it is on the reviewer's list.
+*/
+const shipped = () => JSON.parse(JSON.stringify(worries));
+
+test('the skeletons that ship pass every rule, and the two that have one are the two B37 named', () => {
+  assert.deepStrictEqual(content.validateWorries(worries), []);
+  const withHoles = worries.filter((f) => f.skeleton).map((f) => f.id);
+  assert.deepStrictEqual(withHoles, ['no', 'strug'],
+    'a skeleton was added or removed without the reviewer being told');
+});
+
+/*
+  The sentence has to read with NOTHING typed in. Nobody is walled for leaving a blank alone —
+  an empty hole falls back to its own word — so that word is part of the shipped sentence and is
+  held to the same standard as the rest of it: it has to work in every place its hole appears.
+  "somebody" survives both "say no to somebody" and "somebody will think I’m selfish".
+*/
+test('every skeleton reads as a whole sentence before anybody types anything', () => {
+  for (const f of worries.filter((w) => w.skeleton)) {
+    const holes = f.skeleton.holes;
+    for (const b of f.beliefs) {
+      const said = content.fill(b.belief, {}, holes);
+      assert.ok(said.indexOf('{') === -1, f.id + ' leaves a hole showing: ' + said);
+      assert.match(said, /^If I .+, then .+\.$/, f.id + ' does not read as a sentence: ' + said);
+      assert.ok(content.fill(b.expect, {}, holes).indexOf('{') === -1, f.id + ' expect leaves a hole showing');
+    }
+  }
+});
+
+test('a hole used and never declared is refused, and so is one declared and never used', () => {
+  const a = shipped();
+  a.find((f) => f.id === 'no').beliefs[0].belief =
+    'If I say no to {person} without giving a reason, then {nobody} will mind.';
+  assert.ok(content.validateWorries(a).some((p) => /uses a hole "\{nobody\}"/.test(p)));
+
+  const b = shipped();
+  b.find((f) => f.id === 'no').skeleton.holes.thing = 'a thing';
+  assert.ok(content.validateWorries(b).some((p) => /declares a hole "\{thing\}"/.test(p)));
+});
+
+/*
+  The carry-through is only honest while all three predictions start from the SAME action. Let
+  one drift and filling in a hole changes the words above it without changing that prediction —
+  which is a chip that no longer says what it will do.
+*/
+test('a prediction that does not start from the skeleton is refused', () => {
+  const a = shipped();
+  a.find((f) => f.id === 'no').beliefs[1].belief =
+    'If I turn something down, then {person} will stop asking me.';
+  assert.ok(content.validateWorries(a).some((p) => /does not start from the skeleton/.test(p)));
+});
+
+/* B42 owns the plan. A hole there today would print as itself on somebody's phone. */
+test('a hole in the plan is refused until B42 can carry one', () => {
+  const a = shipped();
+  a.find((f) => f.id === 'no').test = 'Say no to {person} once today.';
+  assert.ok(content.validateWorries(a).some((p) => /puts a hole in test/.test(p)));
+});
+
+/* A skeleton is four things and no fifth, for the reason a belief is two and a place is three. */
+test('a skeleton has nowhere to hang a lane, a condition or a second version', () => {
+  const a = shipped();
+  a.find((f) => f.id === 'no').skeleton.lane = 'assertiveness';
+  assert.ok(content.validateWorries(a).some((p) => /skeleton has an extra field/.test(p)));
+
+  const b = shipped();
+  b.find((f) => f.id === 'no').skeleton.holes.person = '';
+  assert.ok(content.validateWorries(b).some((p) => /has no word to fall back on/.test(p)));
+});
