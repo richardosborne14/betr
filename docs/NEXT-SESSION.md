@@ -21,9 +21,8 @@ daughter stalled on. Three more things went with it:
 - **the safety net at the lock:** *"Bring back whatever happens. A bad one counts the same as a
   good one."* Not shown once a test is set aside — B27's rule.
 
-**B39 — the do screen.** The boxes now grow to their own text, and **no box clips on any road at
-100 / 125 / 150 / 200%.** That was the real bug and it was a **100%** bug on the main road, not a
-125% one. Both explanatory lines went from two rendered lines to one, buying 74px.
+**B39 — the do screen.** The boxes now grow to their own text: **no box clips on any road at
+100 / 125 / 150 / 200%.** That was the real bug, and it was a **100%** bug on the main road.
 
 ## 2. The next action
 
