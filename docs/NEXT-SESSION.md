@@ -40,24 +40,22 @@ alone is the option the founder was offered and turned down; culling `worries.js
 two hollow doors on the screen they would next open. The `phone` door is fine — the #07 split
 rescues it, three worries against its own "half the scroll, half not sitting still".
 
-**Then, in order:** the cull itself in one commit with the door refill · the redraft sheet
-(every surviving rewrite, the founder's line beside ours — their choice, §6.4) · #07's two
-categories from B47 §6c once they and Misha have read the draft · **then** B45 §5c, the merge.
+**Then, in order:** the cull in one commit with the door refill · the redraft sheet (every
+surviving rewrite, the founder's line beside ours) · #07's two categories from §6c once they and
+Misha have read the draft · **then** B45 §5c, the merge.
 
 **B45 §5b is on hold and should stay there.** It writes three sizes for nineteen worries; four
 of those worries are now deleted and one becomes two.
 
 ## 3. What the review did NOT cover, and somebody will assume it did
 
-It is **the 245-row version of the sheet**. Marked: every `S01`–`S21` row and the old general
-set. **Not marked: the 159 `W-*` rows — that is `worries.js`, the road most people are actually
-on, all 133 of them added at B46** — nor the ~30 newer general rows (`GW-*`, `GD-*`, B43/B44).
-**Eight worries were never in the reviewed sheet in any form:** `feed` `care` `low` `angry`
-`hear` `joke` `sorry` `drink`.
+It is **the 245-row version**. Marked: every `S01`–`S21` row and the old general set. **Not
+marked: the 159 `W-*` rows — `worries.js`, the road most people are actually on, all 133 added
+at B46** — nor the ~30 newer general rows (`GW-*`, `GD-*`). **Eight worries were never in the
+reviewed sheet at all:** `feed` `care` `low` `angry` `hear` `joke` `sorry` `drink`.
 
-**And the `Accept (1-5)` column is empty on all 429 rows.** Nothing was scored. This reads as
-the founder's editorial pass, not the paid CBT reviewer's clinical one — **so the critical path
-has not moved. The reviewer still has not read a line.**
+**And `Accept (1-5)` is empty on all 429 rows.** Nothing was scored — this reads as the founder's
+editorial pass, not the reviewer's clinical one, **so the critical path has not moved.**
 
 ## 4. Waiting on people, not on code
 
