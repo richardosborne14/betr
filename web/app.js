@@ -125,7 +125,14 @@
   var draft = blankDraft();
 
   function blankDraft() {
-    return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '' };
+    /*
+      `dropOpen` is B39's: whether the leave-out half is a row showing what it says or the box
+      itself. It starts closed on every road, opens when the person taps it, and stays open for
+      the rest of the draft — nobody who has opened it wants it folding up under them. It is on
+      the draft rather than in `S` because it is not a preference and it is not a record: a
+      draft is let go unlocked (see newTest), and this goes with it.
+    */
+    return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '', dropOpen: false };
   }
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
   var installEvent = null; /* Android's beforeinstallprompt, if the browser offers one */
@@ -141,6 +148,12 @@
   var whyId = null;
   var whyBack = 'mine';
   var toSay = null;        /* what the next paint() should read out. Cleared as it is used */
+  /*
+    Which box the next paint of the do screen should land in, or null for its usual one (B39).
+    Consumed once, like toSay: opening the leave-out row, and tapping one of its suggestions,
+    both repaint the whole screen, and focus has to stay where the person is working.
+  */
+  var nextFocus = null;
   /* Which worked example this open is showing (B31). Decided once, at the bottom of the file. */
   var shown = 0;
 
@@ -1018,6 +1031,39 @@
     the `hidden` attribute rather than removed, so the browser's oninput can bring it back
     without a repaint.
   */
+  /*
+    B39, 2026-09-09, the founder's call. THE LEAVE-OUT HALF, FOLDED INTO ONE ROW.
+
+    THE MEASUREMENT THAT MADE IT NECESSARY. On the free-text road — the front door since B32 —
+    *Lock it in* started 105px BELOW THE FOLD at 100% text, not at 125% as the task had it. The
+    label, its line, the box and its suggestion row are about 176px of that; folded they are
+    about 60. After this, and after the two lines on the screen were cut to one line each, the
+    main road clears the fold at 100% for the first time since B32.
+
+    AND THE ONE RULE IT IS BUILT AROUND: IT SHOWS THE WORDS, IT DOES NOT HIDE THEM. On the
+    borrowed road what sits in that box is BETR's, put there by BETR. A plain "add something to
+    leave out" link would let somebody lock in a sentence of ours they had never read, which is
+    a worse thing than a screen that scrolls. So the row carries three things: what this half
+    is, what it currently says, and the way in. The way in is "Change" when there is something
+    there and "Add one" when there is not — never a bare chevron, because a chevron over an
+    empty row says nothing about what it would open.
+
+    It is a `<button>` with block children rather than a link with a field beside it: one tap
+    target, one accessible name reading "And leave out, Change, No checking it just once before
+    bed", and focus lands in the box itself once it is open, which is the announcement.
+  */
+  function foldedDrop(value) {
+    var has = !!value.trim();
+    return '<button class="folded" id="dropopen">' +
+      '<span class="folded-top">' +
+        '<span class="folded-lbl">' + esc(t('build.dropLabel')) + '</span>' +
+        '<span class="folded-go">' + esc(has ? t('build.dropChange') : t('build.dropAdd')) + '</span>' +
+      '</span>' +
+      '<span class="folded-val' + (has ? ' wrote' : ' none') + '">' +
+        esc(has ? value : t('build.dropSub')) + '</span>' +
+    '</button>';
+  }
+
   function chipRow(intro, list, attr, hide) {
     if (!list.length) return '';
     /*
@@ -1299,6 +1345,15 @@
        puts in the box what is printed on it, and cannot drift from it (B34 D1). */
     var doChips = chipsFor('dos', draft.ifPart);
     var dropChips = chipsFor('drops', draft.ifPart);
+    /*
+      Which box this paint is going to land in, worked out BEFORE the markup so the suggestion
+      row belonging to it can be drawn already open (B39). It used to be left to wireChips's
+      `onfocus`, which is right when a person taps a box and wrong on the way in: a programmatic
+      focus does not fire a focus event in every browser, and somebody who had just tapped
+      "Add one" landed in the empty box with its suggestions still hidden — the one moment they
+      are certain to want them. One row at a time either way, which is B30's rule.
+    */
+    var landsIn = nextFocus || '#do';
     paint( backButton() +
       '<div class="stage">' +
         /*
@@ -1313,12 +1368,21 @@
         warnBlock() +
         '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
           esc(t('build.doPlaceholder')) + '">' + esc(draft.test) + '</textarea>' +
-        chipRow(t('build.doChips'), doChips, 'data-do', !!draft.test.trim()) +
-        '<p class="lbl drop-label" id="droplbl">' + esc(t('build.dropLabel')) + '</p>' +
-        '<p class="sub tight">' + esc(t('build.dropSub')) + '</p>' +
-        '<textarea id="drop" class="line" aria-labelledby="droplbl" placeholder="' +
-          esc(t('build.dropPlaceholder')) + '">' + esc(draft.drop) + '</textarea>' +
-        chipRow(t('build.dropChips'), dropChips, 'data-drop', true) +
+        chipRow(t('build.doChips'), doChips, 'data-do',
+          landsIn !== '#do' || !!draft.test.trim()) +
+        /*
+          B39, 2026-09-09, the founder's call. Closed, this half is one row that says what it
+          currently says; open, it is the box and its suggestions, exactly as before. Nothing
+          is hidden either way — see foldedDrop() for why that is the whole point.
+        */
+        (draft.dropOpen
+          ? '<p class="lbl drop-label" id="droplbl">' + esc(t('build.dropLabel')) + '</p>' +
+            '<p class="sub tight">' + esc(t('build.dropSub')) + '</p>' +
+            '<textarea id="drop" class="line" aria-labelledby="droplbl" placeholder="' +
+              esc(t('build.dropPlaceholder')) + '">' + esc(draft.drop) + '</textarea>' +
+            chipRow(t('build.dropChips'), dropChips, 'data-drop',
+              landsIn !== '#drop' || !!draft.drop.trim())
+          : foldedDrop(draft.drop)) +
         '<button class="big wide" id="lock">' + esc(t('build.lock')) + '</button>' +
         '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
       '</div>');
@@ -1331,11 +1395,23 @@
       place, which reads as BETR having overwritten them.
     */
     on('#back', function () { readBoxes(); go('build'); });
-    var box = q('#do');
+    wireChips([['#do', 'data-do'], ['#drop', 'data-drop']]);
+    on('#dropopen', function () { readBoxes(); draft.dropOpen = true; nextFocus = '#drop'; render(); });
+
+    /*
+      Usually the first box, which is what a11y.test.js holds this screen to. `nextFocus` is
+      the exception and it is consumed here: after opening the leave-out row, or tapping one
+      of its suggestions, the person is working in the second box and focus belongs there.
+
+      AFTER wireChips, not before, and that is B39's bug and not a tidy-up. wireChips hangs the
+      show-one-row-at-a-time logic on each box's `onfocus`; focusing before it is wired means
+      the handler never runs, and somebody who had just tapped "Add one" landed in an empty box
+      with its suggestions still hidden — the one moment they are certain to want them.
+    */
+    var box = (nextFocus && q(nextFocus)) || q('#do');
+    nextFocus = null;
     box.focus();
     try { box.setSelectionRange(box.value.length, box.value.length); } catch (e) { /* older browser */ }
-
-    wireChips([['#do', 'data-do'], ['#drop', 'data-drop']]);
 
     function readBoxes() {
       var d = q('#do');
@@ -1356,6 +1432,7 @@
         readBoxes();
         draft.drop = dropChips[Number(b.getAttribute('data-drop'))];
         refusal = null;
+        nextFocus = '#drop';
         render();
       };
     });
@@ -1367,7 +1444,12 @@
       /* The drop is optional, so an empty one is not checked and not refused. */
       if (draft.drop.trim()) {
         var two = guards.checkTest(draft.drop);
-        if (!two.ok) { refuse(two); return; }
+        /*
+          B39: open it first. A refusal over a sentence that is folded into a row is a refusal
+          about words a person cannot edit, and the refusal block is at the top of the screen
+          where the box is not.
+        */
+        if (!two.ok) { draft.dropOpen = true; nextFocus = '#drop'; refuse(two); return; }
       }
       lockIn(builtTest());
     });

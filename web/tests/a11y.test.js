@@ -253,6 +253,8 @@ test('the one accessible name in the app says BETR, and the arrows say nothing',
 test('every box a person types into has a name', () => {
   const a = boot();
   let h = SCREENS['build-do'](boot()).html();
+  /* B39: the leave-out box is behind its folded row now, so it has to be opened to be checked. */
+  h += SCREENS['build-do'](boot()).tap('#dropopen').html();
   h += SCREENS.borrow(boot()).html();
   h += SCREENS.happened(boot()).html();
   /* the one box left on the plan screen, which is now only reached by repeating a test */

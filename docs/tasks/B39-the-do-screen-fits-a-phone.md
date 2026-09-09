@@ -1,9 +1,10 @@
 # B39: The do screen fits a phone — the bug that now blocks three things
 
-**Status:** **HALF BUILT, 2026-09-09, and the other half is a decision the founder has to make.**
-The clipping bug is fixed on every road at every zoom. *Lock it in* is still below the fold, and
-**the measurement found it is worse than this file said** — see "What the measuring found".
-**Confidence:** 9/10 on what was built. The rest is not a fix anybody should pick alone.
+**Status:** **BUILT AND CLOSED, 2026-09-09.** 216 tests green, live on `main`. The founder took
+option 1 the same day — *"your suggestion for the below the fold problem sounds good, do it"* —
+so the leave-out half is one row until it is touched. **Both roads now clear the fold at 100%
+AND 125%**, which has not been true on the free-text road since B32.
+**Confidence:** 9/10. The one point off is 150% and 200%, which scroll and always will.
 **Date opened:** 2026-09-09 · **Part of:** [`B37`](B37-the-template-with-holes.md) §9(e)
 **Depends on:** nothing. **Blocks:** B42, and B36 items 5 and 10b.
 **Two screens since 2026-09-09:** the do screen and, from B38, the front screen — see below.
@@ -157,3 +158,75 @@ under this bug**, and it is already waiting on the founder.
 - ✅ the numbers are in `docs/learnings.md`
 - ⬜ *Lock it in* fully clear of the menu at 125% — **blocked on the decision above**
 - ⬜ the front screen's *Not sure?* button at 125% (B38's regression) — same decision, same screen budget problem, different screen
+
+
+---
+
+## Built, part two: the founder said yes the same day
+
+> *"Your suggestion for the below the fold problem sounds good, do it."* — founder, 2026-09-09
+
+**The leave-out half is one row until it is touched.** Closed it is the label, **what it
+currently says**, and the way in — *Change* when there is something there, *Add one* when there
+is not. Open it is the box, its line and its suggestions, exactly as before, and it stays open
+for the rest of the draft.
+
+**The row shows the words. That is the whole design and not a detail.** On the borrowed road
+what sits in that box is BETR's, put there by BETR. A plain *"add something to leave out"* link
+would let somebody lock in a sentence of ours they had never read, which is a worse thing than
+a screen that scrolls. `loop.test.js` holds the stock sentence to being on the screen, above the
+button that commits it.
+
+### Where it lands, at the moment somebody reaches for *Lock it in*
+
+Measured with the plan in the box, which is the only state that button is ever tapped from.
+Bottom of the button against the top of the fixed menu:
+
+| | 100% (785) | 125% (780) | 150% (774) | 200% (720) |
+| --- | --- | --- | --- | --- |
+| **own words** | 621, **clear by 164** | 686, **clear by 94** | 819, 45 behind | below |
+| **borrowed** | 611, **clear by 174** | 755, **clear by 25** | 933, below | below |
+| *before B39* | *own: 105 behind* | *borrow: 49 behind* | | |
+
+**150% and 200% scroll, and always will** — a form with two boxes does not fit a 390px phone at
+double text. The `.stage` reserves `6rem` at the bottom for exactly this, so the button is fully
+clear once scrolled to; that was measured too and it holds.
+
+### Three things that had to be got right and were not obvious
+
+**1. The suggestions have to be open when the row opens.** They were not, and the cause was
+ordering: `wireChips` hangs the one-row-at-a-time logic on each box's `onfocus`, and the screen
+focused its box *before* wiring. A programmatic focus does not fire a focus event in every
+browser, so somebody who had just tapped *Add one* landed in an empty box with its suggestions
+hidden — the one moment they are certain to want them. Fixed twice over: focus moved after the
+wiring, and the row that the paint is about to land in is now drawn open from the markup
+(`landsIn`), which is deterministic and does not depend on an event at all.
+
+**2. A refused leave-out opens itself.** The refusal block is at the top of the screen and the
+folded row is not a box, so being refused over words you cannot edit would be a wall rather than
+a refusal. `guards.checkTest` failing on the drop sets `dropOpen` before it refuses.
+
+**3. `dropOpen` lives on the draft, not in `S`.** It is not a preference and not a record, and a
+draft is let go unlocked. It also survives Back and forward again, which B34 D2 cares about.
+
+## Done when — all of it
+
+- ✅ no box clips its own text, on both roads, at 100 / 125 / 150 / 200%
+- ✅ *Lock it in* fully clear of the menu at **100% and 125%**, on both roads
+- ✅ 150% / 200% scroll, and the button is fully clear once scrolled — the `6rem` reserve holds
+- ✅ the numbers are in `docs/learnings.md`
+- ⬜ **the front screen at 125% is NOT fixed and cannot be** — see below
+
+## The front screen, and why it is not in this task any more
+
+B38's fourth beat cost the front screen its clearance: at 125% *Not sure? Try one of these* ends
+43px behind the menu, showing a 20px sliver above it. **It was costed and there is nothing to
+take.** Removing the `dropped` line from the card saves 30 and leaves 13; making the ghost a
+plain link saves 38 and leaves 5; both together spend the card's design and the borrow road's
+only affordance to buy eight pixels.
+
+**And the harm is not the same harm.** On the do screen a mis-tap under the button destroyed a
+draft. On the front screen it navigates to *Your tests*, and Back returns. So: **at 125% the
+front screen scrolls a little to reach its second button, and that is the recorded state.** The
+lever if the founder ever wants it back is one of the two above, and both cost more than they
+buy.

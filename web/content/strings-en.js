@@ -265,6 +265,20 @@ var BETR_STRINGS_EN = {
       doChips: 'Or one of these:',
       dropLabel: 'And leave out',
       /*
+        B39, 2026-09-09, the founder's call. THE LEAVE-OUT HALF IS ONE ROW UNTIL IT IS TOUCHED.
+
+        Measured: the label, its line, the box and its suggestion row cost about 176px, and on
+        the free-text road — the front door since B32 — that was most of the reason *Lock it in*
+        started BELOW THE FOLD AT 100%, not at 125%. Collapsed to one row it costs about 60.
+
+        The row SHOWS the words rather than hiding them, and that is the whole design. On the
+        borrowed road what is in that box is BETR's, put there by BETR, and a plain link saying
+        "add something to leave out" would let somebody lock in a sentence of ours they never
+        read. So: the label, what it currently says, and the way to change it.
+      */
+      dropChange: 'Change',
+      dropAdd: 'Add one',
+      /*
         Optional, and it says so in its own line rather than in a note underneath — the note
         was a separate line of small print and it pushed "Lock it in" below the fold.
       */

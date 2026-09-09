@@ -78,7 +78,7 @@ stock list as the front door, which it stopped being on that day.
 | --- | --- | --- | --- |
 | 1 | **Start** | One finished test, shown not described: the prediction, struck through, what actually happened in marker, the ladder from ten to a lower rung. Then *What's yours?* (big) and *Not sure? Try one of these* (ghost), and the trust line. | 1 |
 | 2 | **Build** | *If I ___, then ___* as one sentence, each blank an input, suggestion chips under the active one. One big button *What will you do?* | typing or 2 taps |
-| 3 | **Build · what you'll do** | The sentence in the quiet strip. *What will you do today?* (box, chips), *And leave out* (smaller box, chips, optional), *Lock it in*. | typing |
+| 3 | **Build · what you'll do** | The sentence in the quiet strip. *What will you do today?* (box, chips), then *And leave out* as ONE ROW showing what it currently says, which opens into a box with chips when tapped — optional, and the row shows the words rather than hiding them (B39, 2026-09-09). Then *Lock it in*. | typing |
 | 4 | **Locked** | *Go and do it.* The test repeated. One big button *Done it. Here's what happened.* Small: *Didn't get to it*. | 1 |
 | 5 | **Happened** | One text box. *Just what they said or did. No verdict.* | typing |
 | 6 | **Sure?** | The sentence, quoted, and the rung it is on now. Four buttons: still sure / a bit less / a lot less / not at all. Small, underneath: *more sure than before*. | 1 |

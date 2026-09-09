@@ -338,6 +338,30 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 }
 .chip:hover { border-color:var(--btn); color:var(--ink); }
 .drop-label { margin-top:4px; }
+/*
+  B39, 2026-09-09. The leave-out half, folded into one row.
+
+  It wears the box's own border and radius on purpose: closed, it should read as the box with
+  its contents showing, not as a link that leads somewhere. Three parts, and all three earn
+  their place — what this half is, what it currently says, and the way in. On the borrowed road
+  the middle one is BETR's own sentence, and it is on screen at full size before anybody locks
+  anything in; that is the reason this is a row and not a link (see foldedDrop in app.js).
+*/
+.folded {
+  display:block; width:100%; max-width:560px; margin:0 auto 18px; text-align:start;
+  background:var(--card); border:2px solid var(--edge); border-radius:18px; padding:14px 18px;
+}
+.folded-top { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:4px; }
+.folded-lbl {
+  font-family:var(--display); font-weight:700; font-size:.75rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+/* The way in. Never a bare chevron: over an empty row a chevron says nothing about what it opens. */
+.folded-go { flex:none; font-family:var(--display); font-weight:700; font-size:.9375rem; color:var(--btn); }
+.folded-val { display:block; font-family:var(--body); font-size:1.0625rem; line-height:1.35; color:var(--ink); }
+/* Nothing there yet, so the row says what this half is for instead — the line the box had. */
+.folded-val.none { color:var(--ink-3); }
+.folded:hover { border-color:var(--btn); }
 
 textarea {
   width:100%; max-width:560px; font-family:var(--body); font-size:1.1875rem; line-height:1.4;

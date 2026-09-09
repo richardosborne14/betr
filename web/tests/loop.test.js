@@ -32,7 +32,8 @@ function buildOwn(a, ifPart, thenPart, doIt, dropIt) {
   if (a.html().indexOf('id="if"') === -1) a.tap('#m-new');
   a.type('#if', ifPart).type('#then', thenPart).tap('#next');
   a.type('#do', doIt);
-  if (dropIt !== undefined) a.type('#drop', dropIt);
+  /* B39: the leave-out half is one row until it is tapped, and then it is the box. */
+  if (dropIt !== undefined) a.tap('#dropopen').type('#drop', dropIt);
   a.tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   return a;
@@ -404,6 +405,8 @@ test('the whole thing can be built from the suggestions, with nothing typed', ()
 
   for (const line of starts.items[0].dos) a.shows(line);
   a.tap('[data-do]', 0);
+  /* B39: the leave-out half is a row until it is opened, and its suggestions are behind it. */
+  a.tap('#dropopen');
   for (const line of starts.items[0].drops) a.shows(line);
   a.tap('[data-drop]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
@@ -1013,6 +1016,63 @@ test('the two lines on the do screen each stay one line at 125% text', () => {
   }
 });
 
+/*
+  B39, 2026-09-09, the founder's call. THE LEAVE-OUT HALF IS ONE ROW UNTIL IT IS TOUCHED — AND
+  THE ROW SHOWS THE WORDS.
+
+  This is the one that matters, and it is a trust test rather than a layout test. On the
+  borrowed road what sits in that box is BETR's, put there by BETR. Folding it behind a plain
+  "add something to leave out" link would let somebody lock in a sentence of ours they had
+  never read, which is a worse thing than a screen that scrolls. So the row carries the words
+  themselves, at full size, above the button that commits them.
+*/
+test('the folded leave-out row shows the words it is holding, and BETR’s are BETR’s', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  const stock = firstBehind(0).drop;
+
+  /* folded, and the stock sentence is on the screen in full before anything is locked in */
+  assert.strictEqual(a.html().indexOf('id="drop"'), -1, 'the box is drawn as well as the row');
+  a.shows(en.s.build.dropLabel).shows(stock).shows(en.s.build.dropChange);
+  const h = a.html();
+  assert.ok(h.indexOf(stock) < h.indexOf('id="lock"'),
+    'the words are drawn below the button that commits them');
+
+  /* and opening it is the box, holding the same words, with nothing lost */
+  a.tap('#dropopen');
+  assert.strictEqual(a.valueOf('#drop'), stock, 'opening the row lost what was in it');
+  a.shows(en.s.build.dropSub);
+});
+
+test('the folded row says what the half is for when there is nothing in it yet', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', 'say no without giving a reason')
+    .type('#then', 'they’ll think I’m being difficult').tap('#next');
+  /* no value, so the row says what this half is and offers the way in */
+  a.shows(en.s.build.dropLabel).shows(en.s.build.dropSub).shows(en.s.build.dropAdd);
+  assert.strictEqual(a.html().indexOf(en.s.build.dropChange), -1,
+    'an empty row offers to change something that is not there');
+
+  a.tap('#dropopen').type('#drop', 'Don’t explain myself.').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.shows('Don’t explain myself.');
+});
+
+/*
+  A refusal about words a person cannot see is not a refusal, it is a wall. The refusal block
+  is at the top of the screen and the folded row is not a box, so the guard opens it first.
+*/
+test('a leave-out that is refused opens itself, so the words can be changed', () => {
+  const a = boot();
+  a.tap('#m-new').type('#if', 'say no without giving a reason')
+    .type('#then', 'they’ll think I’m being difficult').tap('#next');
+  a.type('#do', 'Say no to one thing today.');
+  a.tap('#dropopen').type('#drop', 'Don’t tell anyone I want to end it.').tap('#lock');
+  a.shows(en.s.refusal.harm);
+  assert.notStrictEqual(a.html().indexOf('id="drop"'), -1,
+    'the box a person is being refused over is folded away');
+});
+
 test('the brand is BETR everywhere a person reads it, refusals included', () => {
   const a = boot();
   a.shows('BETR');
@@ -1257,7 +1317,8 @@ test('going back to fix the sentence keeps the plan already typed', () => {
   const a = boot();
   a.tap('#m-new').type('#if', 'ask for Friday off')
     .type('#then', 'my boss will think I am not committed').tap('#next');
-  a.type('#do', 'Ask for Friday off in one sentence.').type('#drop', 'No explaining why.');
+  a.type('#do', 'Ask for Friday off in one sentence.');
+  a.tap('#dropopen').type('#drop', 'No explaining why.');
   a.tap('#back').tap('#next');
   assert.strictEqual(a.valueOf('#do'), 'Ask for Friday off in one sentence.');
   assert.strictEqual(a.valueOf('#drop'), 'No explaining why.');

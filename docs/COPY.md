@@ -856,6 +856,14 @@ keep it, and put it wherever the sentence needs it.
 
 > And leave out
 
+**`build.dropChange`**
+
+> Change
+
+**`build.dropAdd`**
+
+> Add one
+
 **`build.dropSub`**
 
 > Optional. It’s what counts.

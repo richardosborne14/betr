@@ -674,7 +674,18 @@ in the walker script.
 lines were cut from two rendered lines to one — 74px back at 125% — the main road was still
 47px over at 100% and 207px over at 125%. **Every remaining margin on that screen added
 together is about 50px.** When the gap is bigger than the sum of the padding, stop trimming: it
-is a content decision, and it belongs to whoever owns the content.
+is a content decision, and it belongs to whoever owns the content. The founder took it the same
+day: the leave-out half became one row until it is touched, and both roads now clear the fold at
+100% and 125% for the first time since B32.
+
+**One thing that fell out of building it, and it will bite again.** `wireChips` hangs the
+show-one-suggestion-row-at-a-time logic on each box's `onfocus`, and the screen called
+`box.focus()` BEFORE the wiring ran. **A programmatic `.focus()` does not reliably fire a focus
+event** — in headless Chrome it sets `document.activeElement` and fires nothing — so the handler
+never ran, and the box a person had just asked for opened with its suggestions hidden. Moving
+the focus call after the wiring fixes it in a real browser; drawing the right row open **from
+the markup** fixes it everywhere, including in the flat fake DOM, and does not depend on an
+event at all. **If a screen's state depends on focus, put it in the markup as well.**
 
 **The measuring recipe, since it is not obvious.** `node tools/walk.js start`, `open`, then:
 
