@@ -1,14 +1,22 @@
 # B47: The cull — the founder's review of the suggestions, turned into work
 
-**Status:** **THE CULL IS APPLIED.** §6b was answered on 2026-09-09 and the deletions went in
-the same day: **twenty-one starts are twelve, twenty-one worries are seventeen**, four `why.js`
-explanations went with their worries, and the doors are refilled. `node --test` passes at 254,
-and the loop was walked in a real browser end to end. **§6c is still a draft nobody but me has
-read**, and it is the only part of B47 left.
+**Status:** **THE CULL IS APPLIED, AND SO IS §7 ITEM 3.** §6b was answered on 2026-09-09 and the
+deletions went in the same day: **twenty-one starts are twelve, twenty-one worries are
+seventeen**, four `why.js` explanations went with their worries, and the doors are refilled.
+**The redraft sheet followed the same day** — [`docs/redraft-sheet.md`](../redraft-sheet.md),
+all 85 of the founder's rewrites side by side with a redraft each, nothing applied. `node --test`
+passes at 254. **Two things are left and both are somebody else's to read**: §6c, and the
+redraft sheet's Mine column.
 **Confidence:** **9/10** on the cull as applied — every deletion was driven off the sheet's own
 `CULLED` marks rather than off this file's prose, and the three cross-file checks (no worry
 behind no door, no explanation without a worry, no door naming a worry that is gone) all pass.
 **6/10 on §6c**, unchanged, because it is new content and nobody but me has read it.
+**8/10 on the redraft sheet.** Every one of the 85 rows was read against what the app actually
+says today rather than against the sheet's `Line` column, four cross-file claims were checked in
+the source (`strings-en.js`'s `shrinkSaid` and `smallest`, the guide's five dials, the *"but I'm
+fine"* in answer four), and every candidate line went through `guards.js`. It is 8 and not 9
+because 23 of the rows are a third line rather than a choice between two, and a third line is an
+opinion — the founder may simply want theirs, and that is a legitimate answer on every one.
 **Date opened:** 2026-09-09 · **Founder's**, returning the review sheet.
 **Blocks:** [`B45`](B45-one-road-in.md) §5b and §5c. See §7 — doing them in the other order
 writes thirty-eight sentences for worries that are about to be deleted.
@@ -378,7 +386,11 @@ difference between writing 38 sentences and writing about 30.
 
 1. ~~**§6b answered** — the `work` door. Nothing is deleted until it is~~ **done 2026-09-09**
 2. ~~The cull, both files in one move, plus the door refill~~ **done 2026-09-09, one commit**
-3. The redraft sheet: every surviving rewrite, the founder's line beside mine, in one document
+3. ~~The redraft sheet: every surviving rewrite, the founder's line beside mine, in one
+   document~~ **done 2026-09-09 — [`docs/redraft-sheet.md`](../redraft-sheet.md)**, all 85
+   rewrite rows, **24 yours · 23 ours · 23 a third line · 8 needing nothing**, plus the four
+   renames as decisions of their own and five findings that only appear when all 85 are laid
+   out together. **Nothing applied; the app is untouched.**
 4. #07's two categories built from §6c, once the founder and Misha have read it
 5. **Then** B45 §5c, the merge, on a list that has stopped moving
 
@@ -392,4 +404,7 @@ difference between writing 38 sentences and writing about 30.
       walked end to end in a real browser
 - [x] Nothing was deleted from `worries.js` without the founder saying so, and the four retired
       ids are written into the file's header so none is ever reused
-- [ ] **§6c** — the #07 split, still a draft, still the only thing left in B47
+- [x] **The redraft sheet exists and is the founder's to read** — `docs/redraft-sheet.md`. Every
+      candidate line was run through `guards.js` (`HABIT` `BODY` `HARM`: no hit), carries the
+      house's `’` and `“ ”`, and follows the capital-and-full-stop rule for its type
+- [ ] **§6c** — the #07 split, still a draft, still the only thing left in B47 that is mine

@@ -1041,3 +1041,31 @@ list's own comment already makes: hold the judgement by hand, in a file, so it f
 only the six enforced. `MIN_PER_DOOR = 4` is now in `content.test.js` with `phone` and `yes`
 named as dated exceptions. **A documented rule that nothing checks is not a rule**, and it took
 a cull to find out which of BETR's stated rules were which.
+
+## 2026-09-09 · Laying 85 lines out side by side found what reading them one at a time could not
+
+The redraft sheet was meant to be transcription — the founder's rewrite, ours, a redraft. Three
+of its five findings only exist because all 85 rows were in one document at once, and none of
+them would have survived doing the rows in batches.
+
+**The founder's rewrites both close and create duplications, and only the whole set shows which.**
+*They'll think I'm weak* fixes a duplication we had flagged for months at #03 — and creates a new
+one, because the same sentence was also given to #15. *They'll think I don't care* went to #04 and
+#13. *And I'll be embarrassed* is the tail of three separate rewrites. Every one of those looks
+correct on its own row.
+
+**And no test catches any of it.** `content.test.js` holds no two `thens` under **one** start;
+two starts may quietly carry the same prediction forever. That is not an oversight to fix with a
+test either — nobody ever sees two starts' predictions at once, so it is invisible to a person.
+The cost is real but indirect: one of three slots spent saying something the person could have
+got elsewhere, and a paid reviewer scoring the same sentence twice.
+
+**A suggestion is not only in `starts.js`.** `strings-en.js`'s `shrinkSaid` performs the *Make it
+smaller* worked example on #01's third prediction, word for word, and `smallest` is one string
+deliberately read on two guide screens. Rewriting a `then` can silently break an example on a
+screen nobody was editing. **Grep the whole of `web/content/` before changing a suggestion.**
+
+**And the sheet's own `Line` column had already rotted.** Five rows were applied to the app on
+2026-09-09 and the CSV still holds the pre-change string. Every row of the redraft sheet was read
+against `starts.js` instead, which is the only reason the *"what the app says now"* column is
+true. **A review artefact stops describing the app the moment the first line is applied.**
