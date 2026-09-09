@@ -10,9 +10,49 @@
     beliefs three of them, and they are the ones a person actually tests. Each is one
             `belief` — a specific "If I ___, then ___" — and one `expect`, the thing they
             are braced for, shown pre-written on the test screen and editable there
-    test    one line, doable today, cheap, legal, reversible, in the person's control
-    drop    the safety behaviour to leave out. Without it the item is not an experiment
+    sizes   three of them, small to big, each one a name and the two sentences that go with
+            it — a `do` and a `drop`. They are what the person picks between on the plan
+            screen, and picking one fills both boxes. Required since B45 §5b
+    test    one line, doable today, cheap, legal, reversible, in the person's control. It is
+            `sizes[0].do` word for word, and content.js fails the build if it drifts
+    drop    the safety behaviour to leave out. Without it the item is not an experiment. It
+            is `sizes[0].drop` word for word, held the same way
     lane    social | assertiveness | perfectionism | urge-timing | rest | sleep
+
+  B45 §5b, 2026-09-09. THREE SIZES ON EVERY WORRY, AND WHY IT WAS FIFTEEN LINES OF CONTENT
+  AND NOT A FEATURE.
+
+  B42 gave two worries three named sizes and left the other fifteen falling through to the
+  generic three in starts.js — "Do it once today, in the smallest version that still counts".
+  Worse than generic: those fifteen arrived on the plan screen with their own `test` already
+  in the box, and a suggestion row gets out of the way the moment the box has words in it. So
+  fifteen of seventeen worries had NO DIAL AT ALL on the screen the dial is for. B46 stopped
+  the row hiding; this is the reason it was ever hidden.
+
+  HOW THE THREE ARE WRITTEN, AND IT IS THE SAME JOB AS THE THREE PREDICTIONS:
+    - they are ONE action, three sizes apart. Not three different actions
+    - WHO IT IS WITH DOES NOT CHANGE between them. Whether the smallest honest version should
+      instead turn that dial is B42's open question and it is the paid reviewer's, with Misha
+      (`W-NO-D1` / `W-ST-D1` in docs/suggestions-review.csv). Nothing here pre-empts it
+    - WHAT IS LEFT OUT GROWS WITH THE STEP. A big go with a small leave-out is not a bigger
+      test, it is a different one
+    - the smallest is the worry's own `test` and `drop`, so there is one wording per worry
+      rather than two, and the reviewer scores it once
+
+  NOT READ BY MISHA OR THE PAID CBT REVIEWER. SIXTY new sentences went in that day — two new
+  sizes on each of fifteen worries, a `do` and a `drop` each — and every one of them is BETR
+  proposing something, which is the half of rule 4 that did not loosen on 2026-09-08. All
+  ninety rows are in docs/suggestions-review.csv as `W-*-D1`…`X3`, beside the predictions
+  they belong to.
+
+  FOURTEEN `test` LINES WERE REWORDED THE SAME DAY, and the reason is one thing: they had to
+  carry the worry's hole. "Set a ten-minute timer" became "Set a timer for {long}", because
+  the small go IS the `test` and a person who has typed "twenty minutes" into the blank
+  cannot be handed a ten-minute timer three sentences later. Every one of them is a `W-*-D1`
+  row. `low` lost more than a hole: "Tell one person you trust" is now "Tell {person}",
+  because she names the person on the screen before this one, and being told to pick somebody
+  she trusts after she has named them is a guard arriving too late to guard anything. If the
+  reviewer wants it back it goes in the hole's own default word, not in the sentence.
 
   Hard rule: no `test` may touch the habit itself — no drink, screen, substance, food
   restriction, body sensation, checking ritual, or anyone's safety. web/tests/content.test.js
@@ -121,7 +161,24 @@ var BETR_WORRIES = [
         expect: 'The whole list will arrive at once, and stopping will have cost me.'
       }
     ],
-    test: 'Set a ten-minute timer and do nothing at all. Notice when it peaks, and whether it drops.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Set a timer for {long} and do nothing at all. Notice when it peaks, and whether it drops.',
+        drop: 'Don’t reach for your phone, and don’t get up to do a task.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Sit with the restlessness for {long} at the moment you’d normally get up and do something about it.',
+        drop: 'Don’t reach for your phone, don’t get up to a task, and don’t start something else instead.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Sit with the restlessness for {long} and let it get as loud as it’s going to get.',
+        drop: 'Nothing at all to break it up: no phone, no tidying, and nothing to do instead.'
+      }
+    ],
+    test: 'Set a timer for {long} and do nothing at all. Notice when it peaks, and whether it drops.',
     drop: 'Don’t reach for your phone, and don’t get up to do a task.',
     lane: 'urge-timing'
   },
@@ -156,7 +213,24 @@ var BETR_WORRIES = [
         expect: 'I’ll be sitting there with nothing to say.'
       }
     ],
-    test: 'Go one day without opening the apps you scroll. At the end, write down what you actually missed.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Go {long} without opening the apps you scroll. At the end, write down what you actually missed.',
+        drop: 'No opening one “just to see if anyone’s messaged me”.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Go {long} without opening them, and don’t ask anyone what you missed either.',
+        drop: 'No opening one to check, and no catching up at the end of it.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Go {long} without opening them, and tell nobody you’re doing it.',
+        drop: 'No warning anyone first, no explaining afterwards, and no scrolling back through it later.'
+      }
+    ],
+    test: 'Go {long} without opening the apps you scroll. At the end, write down what you actually missed.',
     drop: 'No opening one “just to see if anyone’s messaged me”.',
     lane: 'urge-timing'
   },
@@ -190,7 +264,24 @@ var BETR_WORRIES = [
         expect: 'The standard slips, and I don’t get it back.'
       }
     ],
-    test: 'Finish one thing today at good enough and hand it over. Write down the time you stopped.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Finish {thing} today at good enough and hand it over. Write down the time you stopped.',
+        drop: 'No last look through, and no message saying what you’d have done with more time.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Hand over {thing} while you can still see things you’d change.',
+        drop: 'No last look through, no message about the state of it, and no fixing it after you’ve sent it.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Hand over {thing} the moment it does the job, and don’t look at it again.',
+        drop: 'Nothing checked over, nothing apologised for, and nothing put right afterwards.'
+      }
+    ],
+    test: 'Finish {thing} today at good enough and hand it over. Write down the time you stopped.',
     drop: 'No last look through, and no message saying what you’d have done with more time.',
     lane: 'perfectionism'
   },
@@ -219,7 +310,24 @@ var BETR_WORRIES = [
         expect: 'Somebody will make a comment about it, and it’ll stick.'
       }
     ],
-    test: 'Plan two hours of rest today and actually take them. Notice how you feel after.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Plan {long} of rest today and actually take it. Notice how you feel after.',
+        drop: 'No “I’ll just quickly do this one thing” first.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Rest for {long} at the point in the day you’d normally push on through.',
+        drop: 'Nothing finished off first, and nothing made up for later.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Rest for {long} with the list untouched, and let the day end that way.',
+        drop: 'Nothing done first, nothing done after, and no explaining the state of the list to anyone.'
+      }
+    ],
+    test: 'Plan {long} of rest today and actually take it. Notice how you feel after.',
     drop: 'No “I’ll just quickly do this one thing” first.',
     lane: 'rest'
   },
@@ -254,7 +362,24 @@ var BETR_WORRIES = [
         expect: 'It’ll sound odd, and neither of us will know what to say next.'
       }
     ],
-    test: 'Say one specific good thing about somebody today, to their face.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Say one specific good thing about {person} today, to their face.',
+        drop: 'Don’t follow it with one about yourself, and don’t wait around for one back.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Say the good thing you’ve thought about {person} and never said out loud.',
+        drop: 'Don’t make a joke of it, don’t follow it with one about yourself, and don’t wait for one back.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Tell {person} the whole of it, in as many words as it takes, and stop there.',
+        drop: 'No joke, nothing about yourself, and no moving straight on to something else.'
+      }
+    ],
+    test: 'Say one specific good thing about {person} today, to their face.',
     drop: 'Don’t follow it with one about yourself, and don’t wait around for one back.',
     lane: 'social'
   },
@@ -283,7 +408,24 @@ var BETR_WORRIES = [
         expect: 'They’ll ask if I’m all right, and I’ll have to explain myself.'
       }
     ],
-    test: 'Tell one person, today, one specific thing you’re glad about them.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Tell {person}, today, one specific thing you’re glad about them.',
+        drop: 'Don’t turn it into a joke, and don’t move straight on to something else.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Tell {person} why they matter to you, in your own words.',
+        drop: 'Don’t make a joke of it, and don’t change the subject straight after.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Tell {person} the whole of what you’d want them to know, and stay in the conversation after it.',
+        drop: 'No joke, no changing the subject, and no leaving as soon as you’ve said it.'
+      }
+    ],
+    test: 'Tell {person}, today, one specific thing you’re glad about them.',
     drop: 'Don’t turn it into a joke, and don’t move straight on to something else.',
     lane: 'social'
   },
@@ -327,6 +469,8 @@ var BETR_WORRIES = [
     /*
       B42's first three sizes, 2026-09-09. NOT YET READ BY MISHA OR THE CBT REVIEWER, and this
       is the same risk the skeleton above carries: it is BETR's voice in somebody's mouth.
+      B45 §5b gave the other fifteen worries three of their own on the same day; these two
+      were the pattern the fifteen were written against, and they are unchanged.
 
       They are the same one action three sizes apart — who it is with does not change, and what
       is left out grows with the step, because a big go with a small leave-out is not a bigger
@@ -379,7 +523,24 @@ var BETR_WORRIES = [
         expect: 'They’ll help, and be a bit short with me for a while after.'
       }
     ],
-    test: 'Ask one person for one small, specific favour today.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Ask {person} for one small, specific favour today.',
+        drop: 'No “sorry to bother you”, and no offering something back.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Ask {person} for help with something you’d normally push through on your own.',
+        drop: 'No “sorry to bother you”, no explaining why you can’t manage it, and nothing offered back.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Ask {person} for the help you actually need, and let them decide.',
+        drop: 'Nothing softened, no apology for asking, and no making up for it afterwards.'
+      }
+    ],
+    test: 'Ask {person} for one small, specific favour today.',
     drop: 'No “sorry to bother you”, and no offering something back.',
     lane: 'assertiveness'
   },
@@ -416,7 +577,24 @@ var BETR_WORRIES = [
         expect: 'I’ll be the one who isn’t doing well, and that’s what I’ll stay.'
       }
     ],
-    test: 'Tell one person you trust, today, in one sentence, that you’ve been feeling low lately.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Tell {person}, today, in one sentence, that you’ve been feeling low lately.',
+        drop: 'Don’t add that it’s nothing really, and don’t ask whether that was too much.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Tell {person} how long it’s been going on for.',
+        drop: 'Don’t say it’s nothing really, and don’t make it sound more finished than it is.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Tell {person} what it’s actually been like, and let them ask about it.',
+        drop: 'No making light of it, no cutting it short, and no apologising for having said it.'
+      }
+    ],
+    test: 'Tell {person}, today, in one sentence, that you’ve been feeling low lately.',
     drop: 'Don’t add that it’s nothing really, and don’t ask whether that was too much.',
     lane: 'social'
   },
@@ -490,7 +668,24 @@ var BETR_WORRIES = [
         expect: 'It’ll be polite and cold, and I’ll be the one who has to fix it.'
       }
     ],
-    test: 'Say one thing that annoyed you, in one sentence, calmly. Then stop talking.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Tell {person} one thing they’ve done that annoyed you, in one sentence, calmly. Then stop talking.',
+        drop: 'Don’t raise your voice, and don’t bring up a second thing.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Tell {person} about the thing that has annoyed you more than once.',
+        drop: 'Don’t soften it with a joke, and don’t say it’s fine afterwards.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Tell {person} the whole of what annoyed you, and let there be a silence after it.',
+        drop: 'No joke, nothing taken back, and no making up for it later.'
+      }
+    ],
+    test: 'Tell {person} one thing they’ve done that annoyed you, in one sentence, calmly. Then stop talking.',
     drop: 'Don’t raise your voice, and don’t bring up a second thing.',
     lane: 'assertiveness'
   },
@@ -523,7 +718,24 @@ var BETR_WORRIES = [
         expect: 'The conversation will move on, and I’ll stay out of it.'
       }
     ],
-    test: 'Once today, say “you’re right, I hadn’t thought of that” — and then stop.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Once today, tell {person} “you’re right, I hadn’t thought of that” — and then stop.',
+        drop: 'No “but”, and don’t add a point of your own to level it back up.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Tell {person} they’re right about something you’d normally argue.',
+        drop: 'No “but”, nothing of your own added, and no going back to it an hour later.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Tell {person} they’re right, say what changed your mind, and leave it there.',
+        drop: 'No “but”, no point of your own, and no bringing it up again another day.'
+      }
+    ],
+    test: 'Once today, tell {person} “you’re right, I hadn’t thought of that” — and then stop.',
     drop: 'No “but”, and don’t add a point of your own to level it back up.',
     lane: 'social'
   },
@@ -553,7 +765,24 @@ var BETR_WORRIES = [
         expect: 'I’ll come out of it having said nothing at all.'
       }
     ],
-    test: 'In one conversation today, let them finish, then ask one question before you say your bit.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'In one conversation today, let {person} finish, then ask one question before you say your bit.',
+        drop: 'Don’t plan your answer while they’re still talking, and don’t finish their sentence.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Let {person} finish the thing you already disagree with, and ask what they mean by it.',
+        drop: 'Don’t plan your answer while they’re talking, don’t finish their sentence, and don’t jump in at the pause.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Let {person} say the whole thing, ask two questions about it, and only then say your bit.',
+        drop: 'Nothing interrupted, nothing finished for them, and nothing planned while they’re still going.'
+      }
+    ],
+    test: 'In one conversation today, let {person} finish, then ask one question before you say your bit.',
     drop: 'Don’t plan your answer while they’re still talking, and don’t finish their sentence.',
     lane: 'social'
   },
@@ -583,7 +812,24 @@ var BETR_WORRIES = [
         expect: 'It’ll be hard work, and they’ll leave earlier than they would have.'
       }
     ],
-    test: 'In one conversation today, say the plain thing where you’d normally reach for the joke.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'In one conversation with {person} today, say the plain thing where you’d normally reach for the joke.',
+        drop: 'No laughing it off when it gets serious, and no making anyone else the punchline.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Say the plain thing to {person} about something that actually matters to you.',
+        drop: 'No laughing it off, nobody made the punchline, and no lightening it at the end.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Get through a whole conversation with {person} without one joke in it.',
+        drop: 'No joke, no laughing it off, and nothing said to break it up when it gets serious.'
+      }
+    ],
+    test: 'In one conversation with {person} today, say the plain thing where you’d normally reach for the joke.',
     drop: 'No laughing it off when it gets serious, and no making anyone else the punchline.',
     lane: 'social'
   },
@@ -613,7 +859,24 @@ var BETR_WORRIES = [
         expect: 'Their part in it never gets mentioned again.'
       }
     ],
-    test: 'Say sorry to one person today, for one specific thing you did. One sentence.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Say sorry to {person} today, for one specific thing you did. One sentence.',
+        drop: 'Don’t explain what kind of day you were having, and don’t ask whether you’re all right now.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Say sorry to {person} for the thing you’ve been hoping they’d forget.',
+        drop: 'No reasons, and no asking whether you’re all right now.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Say sorry to {person}, say what you’d do differently, and stop there.',
+        drop: 'No reasons, nothing asked for back, and no making up for it afterwards.'
+      }
+    ],
+    test: 'Say sorry to {person} today, for one specific thing you did. One sentence.',
     drop: 'Don’t explain what kind of day you were having, and don’t ask whether you’re all right now.',
     lane: 'social'
   },
@@ -628,7 +891,9 @@ var BETR_WORRIES = [
     belief: 'If I turn up and don’t join in, then it won’t go unnoticed.',
     skeleton: {
       if: 'turn up to {thing} and don’t join in',
-      holes: { thing: 'something' }
+      /* B45 §5b: it was "something", and the small go now reads "Turn up to {thing},
+         order something soft" — two somethings in one sentence. */
+      holes: { thing: 'the next thing' }
     },
     beliefs: [
       {
@@ -646,7 +911,24 @@ var BETR_WORRIES = [
         expect: 'I’ll be counting the minutes and wishing I’d stayed at home.'
       }
     ],
-    test: 'Turn up, order something soft, and count how many people actually say anything.',
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Turn up to {thing}, order something soft, and count how many people actually say anything.',
+        drop: 'Don’t arrive with a reason ready, and don’t hold a glass as cover.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Turn up to {thing} and stay as long as you would have stayed anyway.',
+        drop: 'No reason ready at the door, nothing held as cover, and no leaving when it gets awkward.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Turn up to {thing}, stay to the end, and say plainly that you’re not joining in.',
+        drop: 'No reason ready, nothing in your hand as cover, and no going quiet to get through it.'
+      }
+    ],
+    test: 'Turn up to {thing}, order something soft, and count how many people actually say anything.',
     drop: 'Don’t arrive with a reason ready, and don’t hold a glass as cover.',
     lane: 'social'
   },
@@ -675,6 +957,23 @@ var BETR_WORRIES = [
         belief: 'If I leave at the time I decided and say plainly that I’m going, then I’ll ' +
           'have missed the part everyone remembers.',
         expect: 'They’ll be laughing about something next week and I won’t have been there.'
+      }
+    ],
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Decide before you go what time you’re leaving. At that time, say one sentence and go.',
+        drop: 'Don’t apologise for going, and don’t promise to stay longer next time.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Leave at the point you actually want to go, not at the next gap in the evening.',
+        drop: 'Don’t apologise for going, don’t invent a reason, and don’t promise to stay longer next time.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Leave when you want to, say goodbye once, and go.',
+        drop: 'No apology, no invented reason, and no staying for one more of anything.'
       }
     ],
     test: 'Decide before you go what time you’re leaving. At that time, say one sentence and go.',

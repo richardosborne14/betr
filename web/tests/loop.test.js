@@ -67,7 +67,14 @@ test('a full loop, from the start screen to a result', () => {
   */
   a.tap('[data-id]', 0).shows(firstBehind(0).label).shows(said(firstBehind(0), firstBehind(0).beliefs[0].belief));
   a.tap('[data-b]', 0).tap('#next').shows(firstBehind(0).label).shows(said(firstBehind(0), firstBehind(0).beliefs[0].belief));
-  a.shows(said(firstBehind(0), firstBehind(0).test)).shows(en.s.build.lock);
+  /*
+    B45 §5b, 2026-09-09: every worry has three sizes now, so nothing is in the boxes until
+    one is tapped. A small go IS the worry's own `test` and `drop` — that is the invariant
+    content.test.js holds — so tapping the first one puts exactly those two on screen.
+  */
+  a.shows(en.s.build.lock).shows(said(firstBehind(0), firstBehind(0).sizes[0].do));
+  a.tap('[data-size]', 0);
+  a.shows(said(firstBehind(0), firstBehind(0).test));
   a.shows(said(firstBehind(0), firstBehind(0).drop));
   a.tap('#lock').shows(en.s.locked.title);
   a.tap('#nothanks').tap('#done').shows('What happened?');
@@ -88,7 +95,7 @@ test('a full loop, from the start screen to a result', () => {
 test('what happened keeps the line breaks a person typed, on the result and on the card', () => {
   const written = 'He said fair enough.\n\nThen he made me one as well.';
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', written).tap('#next').tap('[data-key]', 2);
 
   /* One paragraph per paragraph, and the class that lets a browser draw a line break. */
@@ -103,7 +110,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
   /* A single line break inside one paragraph is the stylesheet's job, and stays in the text. */
   const b = boot();
-  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'One line.\nAnd the next.').tap('#next').tap('[data-key]', 2);
   assert.ok(b.html().indexOf('One line.\nAnd the next.') !== -1,
     'a single line break inside a paragraph must survive into the markup');
@@ -115,7 +122,7 @@ test('what happened keeps the line breaks a person typed, on the result and on t
 
 test('the count is completed tests, and "didn’t get to it" costs nothing', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks');
   a.tap('#miss').shows('still here for tomorrow');
   /* not bare "missed": a worry's own test may ask you to write down what you missed. */
   a.hides('you missed').hides('missed a').hides('streak').hides('failed');
@@ -135,7 +142,7 @@ test('the count is completed tests, and "didn’t get to it" costs nothing', () 
 */
 test('putting a test down for the day changes the screen, not just adds a sentence', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks');
   a.shows(en.s.locked.kicker).shows(en.s.locked.title).shows(en.s.locked.miss);
 
   a.tap('#miss');
@@ -155,7 +162,7 @@ test('putting a test down for the day changes the screen, not just adds a senten
 /* Closed and opened again tomorrow, the screen still says it was put down, not still shouting. */
 test('a test put down for today is still put down when the app is opened again', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#miss');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#miss');
 
   /* Reopening lands straight back on the test in hand, in the state it was left in. */
   const again = boot(a.mem);
@@ -225,7 +232,9 @@ test('the prediction a person picks is the one that gets tested, not the first o
   /* the second one, deliberately: the first would pass whether it was carried or not */
   a.tap('[data-b]', 1).tap('#next').shows(said(f, f.beliefs[1].belief));
   a.hides(said(f, f.beliefs[0].belief)).hides(said(f, f.beliefs[2].belief));
-  a.shows(said(f, f.test));
+  /* B45 §5b: three sizes on every worry, so the plan arrives when one is tapped — and the
+     smallest of the three IS this worry's own `test`. */
+  a.tap('[data-size]', 0).shows(said(f, f.test));
 
   a.tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'Nothing happened.').tap('#next').shows(said(f, f.beliefs[1].belief));
@@ -248,7 +257,7 @@ test('the worry and the sentence being tested are on every screen in between', (
   a.tap('#not-sure').tap('[data-door]', 0);
   a.shows(f.label).shows(f.belief);                 /* the list: the loose one */
   a.tap('[data-id]', 0).shows(f.label);             /* choosing which prediction */
-  a.tap('[data-b]', 2).tap('#next');
+  a.tap('[data-b]', 2).tap('#next').tap('[data-size]', 0);
 
   const chosen = said(f, f.beliefs[2].belief);
   a.shows(f.label).shows(chosen);                   /* the plan */
@@ -719,13 +728,13 @@ test('editing a borrowed sentence keeps it inside the worry, and the ladder goes
   const a = boot();
 
   /* first, one of the item's three, word for word */
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
   a.tap('#lock').tap('#nothanks').tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 2);
   a.shows('>7<');
 
   /* now the same worry again, with the prediction put in their own words */
   a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
-  a.type('#then', 'nobody will even notice I was gone').tap('#next');
+  a.type('#then', 'nobody will even notice I was gone').tap('#next').tap('[data-size]', 0);
   a.tap('#lock').tap('#done');
   a.type('#o', 'Two people asked where I’d been.').tap('#next');
   /* the same belief, so the ladder carries on from 7 rather than starting again at ten */
@@ -775,7 +784,7 @@ test('three runs of one worry in different words draw one ladder, not three', ()
   const run = (words, first) => {
     if (!first) a.tap('#m-new').tap('#back');
     a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
-    a.type('#then', words).tap('#next').tap('#lock');
+    a.type('#then', words).tap('#next').tap('[data-size]', 0).tap('#lock');
     if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
     a.tap('#done').type('#o', 'Nothing much.').tap('#next').tap('[data-key]', 1);
   };
@@ -806,7 +815,7 @@ test('write the whole thing myself hands over a genuinely own test, and leaves t
   const a = boot();
 
   /* the worry, once, so it has a ladder that must not move */
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
   a.tap('#lock').tap('#nothanks').tap('#done').type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 2);
   a.shows('>7<');
 
@@ -865,7 +874,7 @@ test('test this again brings back the plan she wrote, and BETR’s where she wro
 
   /* BETR's: the same worry, plan untouched, so a correction in the list still reaches her */
   a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
-  a.tap('[data-b]', 1).tap('#next').tap('#lock').tap('#done');
+  a.tap('[data-b]', 1).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#done');
   a.type('#o', 'Nothing again.').tap('#next').tap('[data-key]', 1);
   a.tap('#again').shows(said(f, f.test));
 });
@@ -1042,7 +1051,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
   seen += a.type('#if', 'say no').type('#then', 'they will mind').tap('#next').html();
   /* and the two screens the ladder lives on, which is where a score would creep in */
   const b = boot();
-  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
+  b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
   b.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
   seen += b.html();
   seen += b.tap('#m-mine').html();
@@ -1055,7 +1064,7 @@ test('none of the phrases that are never used appears anywhere in the app', () =
 
 test('export holds every result, and delete leaves nothing behind', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 2);
   a.tap('#m-help').tap('#export');
   const dump = JSON.parse(a.valueOf('#dump'));
@@ -1083,7 +1092,7 @@ test('it starts cleanly from nothing, from rubbish, and from a half-finished loo
 
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
   a.hides('Not quite? Change it');
   a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
   a.hides('Not quite? Change it');
@@ -1093,7 +1102,7 @@ test('a locked expectation cannot be edited after the test is done', () => {
 
 /* One whole loop, ending on the given re-rate. 0 still / 1 a bit / 2 a lot / 3 not at all / 4 more. */
 function loop(a, item, said, key) {
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('#lock');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   return a;
@@ -1127,7 +1136,7 @@ test('a bad day can go back up, and it is not a red day', () => {
 test('an earlier worry is one tap away, and picks up where its ladder left off', () => {
   const a = boot();
   loop(a, 0, 'He said fair enough.', 2);     /* worry one: 10 → 7 */
-  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#done');
+  a.tap('#other').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#done');
   a.type('#o', 'She just did it.').tap('#next').tap('[data-key]', 1);   /* worry two: 10 → 9 */
 
   a.tap('#m-mine').shows('2 tests, done 2 times');
@@ -1174,7 +1183,7 @@ test('a v4 record needs no migration, and joins a v5 one on the same ladder', ()
 
   /* the same worry again, today, under the new rule and in words of their own */
   a.tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
-  a.type('#then', 'my sister will think I’m being difficult').tap('#next').tap('#lock');
+  a.type('#then', 'my sister will think I’m being difficult').tap('#next').tap('[data-size]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   a.tap('#done').type('#o', 'She laughed.').tap('#next');
   a.shows(en.s.ladder.lastTime).tap('[data-key]', 1).shows('>6<');
@@ -1223,7 +1232,7 @@ test('nothing a person taps, and no heading, calls it a worry', () => {
   a.tap('#not-sure'); sweep();
   a.tap('[data-door]', 0); sweep();
   a.tap('[data-id]', 0); sweep();
-  a.tap('[data-b]', 0).tap('#next'); sweep();
+  a.tap('[data-b]', 0).tap('#next').tap('[data-size]', 0); sweep();
   a.tap('#lock'); sweep();
   a.tap('#nothanks').tap('#done'); sweep();
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();
@@ -1267,6 +1276,7 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   a.tap('#not-sure'); sweep();                               /* what's going on */
   a.tap('[data-door]', 0); sweep();                    /* pick */
   a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'); sweep();                      /* plan */
+  a.tap('[data-size]', 0); sweep();                    /* a size picked, which fills the boxes */
   a.tap('#lock'); sweep();                             /* locked, with the install card */
   a.tap('#nothanks').tap('#done'); sweep();            /* happened */
   a.type('#o', 'He said fair enough.').tap('#next'); sweep();   /* sure */
@@ -1583,7 +1593,7 @@ test('the loop asks somebody to find out, and never dares them', () => {
 test('the safety net is said at the lock, and not to somebody who has set it down', () => {
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0);
-  a.tap('#next').tap('#lock').shows(en.s.locked.title);
+  a.tap('#next').tap('[data-size]', 0).tap('#lock').shows(en.s.locked.title);
   a.shows(en.s.locked.net);
   /* rule 6, out loud, at the moment it matters */
   assert.match(en.s.locked.net, /bad one counts the same/i,
@@ -1630,6 +1640,9 @@ test('the two lines on the do screen each stay one line at 125% text', () => {
 test('the folded leave-out row shows the words it is holding, and BETR’s are BETR’s', () => {
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  /* B45 §5b: nothing is in either box until a size is tapped, and A small go is this worry's
+     own `test` and `drop` — so this is the tap that puts BETR's words in the folded row. */
+  a.tap('[data-size]', 0);
   const stock = said(firstBehind(0), firstBehind(0).drop);
 
   /* folded, and the stock sentence is on the screen in full before anything is locked in */
@@ -1713,6 +1726,7 @@ test('why a worry sticks is offered after a result, on both screens, and never b
   a.tap('#not-sure').hides('Why this one sticks');
   a.tap('[data-door]', 0).hides('Why this one sticks');
   a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').hides('Why this one sticks');
+  a.tap('[data-size]', 0).hides('Why this one sticks');
   a.tap('#lock').hides('Why this one sticks');
 
   a.tap('#nothanks').tap('#done').type('#o', 'He said fair enough.').tap('#next');
@@ -1931,8 +1945,17 @@ test('going back to fix the sentence keeps the plan already typed', () => {
 test('going back does not put the stock plan back over one somebody wrote', () => {
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  /*
+    B45 §5b, 2026-09-09, and the first assertion is the one that changed. It used to read
+    "the borrowed plan should arrive in the box", because BETR pre-filled it. Every worry
+    carries three sizes now, so the box arrives EMPTY and the plan is one tap — which is the
+    dial B46 found nineteen worries did not have. What the walk is actually about is
+    unchanged and is below: her words survive going back and coming forward again.
+  */
+  assert.strictEqual(a.valueOf('#do'), '', 'the box should arrive empty, with the three beside it');
   const stock = said(firstBehind(0), firstBehind(0).test);
-  assert.strictEqual(a.valueOf('#do'), stock, 'the borrowed plan should arrive in the box');
+  a.tap('[data-size]', 0);
+  assert.strictEqual(a.valueOf('#do'), stock, 'A small go should put this worry’s own test in the box');
   a.type('#do', 'My own plan, in my own words.');
   a.tap('#back').tap('#next');
   assert.strictEqual(a.valueOf('#do'), 'My own plan, in my own words.');

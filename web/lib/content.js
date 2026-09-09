@@ -264,7 +264,8 @@
       }
 
       checkSkeleton(f, where, problems);
-      checkSizes(f, where, problems);
+      checkSizes(f, where, problems, true);
+      checkSizes0(f, where, problems);
       checkBeliefs(f, where, problems);
 
       /*
@@ -469,8 +470,23 @@
     is the rule. "Level 2" and "Step 3 of 3" are the same object as a badge, they turn a dial
     into a ladder with a top, and the top of a ladder is somewhere a person can fail to reach.
   */
-  function checkSizes(f, where, problems) {
-    if (f.sizes === undefined) return;
+  function checkSizes(f, where, problems, required) {
+    if (f.sizes === undefined) {
+      /*
+        B45 §5b, 2026-09-09. EVERY WORRY HAS THREE NOW, and it is required rather than
+        optional. Until today fifteen of the seventeen had none and fell through to the
+        general three — which meant the dial on the road most people are on was generic, and
+        worse, `test`/`drop` were pre-filled into the boxes so the row was hidden. B46 fixed
+        the hiding; this fixes the reason it was ever there. A start may still have none:
+        starts.js is merged into this file by B45 §5c and validated by its own rules until
+        then.
+      */
+      if (required) {
+        problems.push(where + ' has no sizes, and every worry has three: the dial is not ' +
+          'something a road either has or does not have');
+      }
+      return;
+    }
     if (!Array.isArray(f.sizes)) {
       problems.push(where + ' has sizes that are not a list');
       return;
@@ -531,6 +547,32 @@
         if (said[key] !== undefined) problems.push(at + ' ' + field + ' says the same thing as size ' + said[key]);
         said[key] = j;
       });
+    });
+  }
+
+  /*
+    B45 §5b, 2026-09-09. THE SMALLEST OF THE THREE IS THE WORRY'S OWN `test` AND `drop`,
+    word for word, and this is what stops one file holding two answers to one question.
+
+    `test` and `drop` are two of the seven parts of a worry (scope §5.2) and they are the
+    only plan the app had before B42. Now that every worry carries three sizes, nothing reads
+    them: prefillPlan() returns the moment a worry has sizes, so a `test` that drifted from
+    its own small go would be a sentence nobody could reach and everybody would keep
+    reviewing. Holding them equal means there is one wording, the reviewer scores it once,
+    and B45 §5c can delete the pair without deciding anything.
+
+    It is checked on worries only. The general set in starts.js has sizes and no `test`.
+  */
+  function checkSizes0(f, where, problems) {
+    if (!Array.isArray(f.sizes) || !f.sizes[0]) return;
+    [['do', 'test'], ['drop', 'drop']].forEach(function (pair) {
+      var mine = f.sizes[0][pair[0]];
+      var theirs = f[pair[1]];
+      if (typeof mine !== 'string' || typeof theirs !== 'string') return;
+      if (mine !== theirs) {
+        problems.push(where + ' has a small go that is not its own ' + pair[1] + ': "' + mine +
+          '" against "' + theirs + '". They are one sentence, and only one of them is ever read');
+      }
     });
   }
 

@@ -1,6 +1,9 @@
 # B45: One road in — collapsing three ways of writing a test into one
 
-**Status:** **SCOPED, not started. No longer blocked** — the founder supplied the current mockup
+**Status:** **§6 and §5d shipped in B46. §5b SHIPPED 2026-09-09 — every worry has its own
+three sizes, and the sixty new sentences are with the reviewer. §5c (one content file) and
+the four screen-shape drifts are what is left.**
+**Status when it was written:** **SCOPED, not started. No longer blocked** — the founder supplied the current mockup
 on 2026-09-09 and it answers both questions the first draft of this file was waiting on.
 **Confidence:** 9/10 in the diagnosis — every number below was measured in a browser today.
 8/10 in the shape of the fix, because the mockup is now the spec rather than my reading of three
@@ -152,6 +155,34 @@ second do variant (two loose suggestions), and the invisible lookup that chooses
 **5b. Every worry gets three sizes, and the sizes get their own holes** (difference 3). 19 × 2
 sentences, plus a second hole name where the size wants one.
 
+> **DONE, 2026-09-09, except the second hole.** Fifteen worries gained three sizes each — the
+> cull had already taken twenty-one to seventeen, and `no` and `strug` had theirs from B42.
+> **Sixty new sentences**, all ninety rows in `docs/suggestions-review.csv` as `W-*-D1`…`X3`.
+> `sizes` is **required** on a worry now (`content.js checkSizes`), and **the smallest of the
+> three is the worry's own `test` and `drop` word for word** (`checkSizes0`), so one worry
+> holds one wording rather than two and §5c can delete the pair without deciding anything.
+> Fourteen `test` lines were reworded to carry the worry's hole; `low` also lost *"one person
+> you trust"*, which is a `W-LOW-D1` question for the reviewer.
+>
+> **THE SECOND HOLE — difference 3 — IS NOT DONE AND IS NOT CONTENT.** The mockup's *Give [my
+> best friend] a little criticism about [a thing]* fills its second blank on the **do** screen,
+> and there is no blank on that screen: `holeRow()` draws inputs by scanning the skeleton's
+> `if`, so a hole used only in a size is declared, validated, and then silently prints its own
+> default for ever. It is a screen change, it belongs with the four in §3, and none of the
+> sixty sentences needs it.
+>
+> **WHAT DID NOT GET WRITTEN IN, ON PURPOSE.** Two lines out of the redraft sheet were listed
+> as inputs to this step and neither could land:
+> - **`S15-D1`, the founder's *"someone you're comfortable with"*.** It changes **who** the
+>   step is with, which is exactly B42's open question (`W-NO-D1` / `W-ST-D1`) and the
+>   reviewer's, with Misha — and on the worry road she has already named the person in the
+>   blank a screen earlier, so a size that renames them contradicts her own words. It lands in
+>   §5c, where `starts.js` #15 has no hole, or as the who-dial once the reviewer rules.
+> - **`S18-D1`, the founder's *"where you're allowed to"*.** The redraft sheet asks them
+>   whether they want it, and says it belongs in `early`'s **small go**. They have not answered,
+>   and shipping it would put *asking permission* into the smallest version of the one test
+>   that is about not asking permission. **One line of `early`, the moment they say yes.**
+
 **5c. `starts.js` and `worries.js` become one file.** Twenty-one things, one shape. The `thens`
 become the three `beliefs`; the `dos`/`drops` pairs are promoted into sizes or dropped. **This is
 the part that needs the reviewer**, because it means choosing, for fifteen overlapping pairs,
@@ -195,7 +226,12 @@ then 5c last. Each is shippable and each leaves the app more coherent than it fo
 
 ## 7. What is still the founder's, and it is now two things rather than two questions
 
-**7a. The fold, on the do screen.** The mockup keeps all three sizes on screen after one is
+**7a. The fold, on the do screen. IT IS NOW ON EVERY WORRY AND NOT ON TWO** (§5b, 2026-09-09).
+Measured on a 390×844 phone at 100% text, on `feed` with *three days* typed into the blank:
+arriving with the three open the page is **1005px against an 844px screen — 161px below the
+fold, and *Lock it in* is not on it.** Tapping one folds the row and the page comes back to
+850px, 6px over. So the trade below is no longer a question about two worries; it is what
+everybody meets. Nothing was changed either way here: B42's fold is still what ships. The mockup keeps all three sizes on screen after one is
 picked and accepts running past the fold. B39 spent a task getting *Lock it in* above it and B42
 folded the three to keep it there. **Both cannot be true.** Measured, at 125% text on a 390×844
 phone: folded, *Lock it in* sits at 574 against a 780 fold; open, it is at 870. The mockup's own
@@ -259,9 +295,41 @@ Both are already in `docs/suggestions-review.csv` as `W-NO-D1` / `W-ST-D1` and i
 | §6 | 21 verbs get a hole | **no** — no new sentence | half a day |
 | 5d | the carried word is marked | **no** | an hour |
 | 3 · 4/5/6/7 | the four screen-shape drifts | no | a day |
-| 5b | 21 items get three sizes with holes | **yes** — ~42 sentences | a day, plus the reviewer |
+| 5b | ~~21~~ 15 items get three sizes | **yes** — 60 sentences, in the sheet | **done 2026-09-09** |
+| 3 · difference 3 | a size's own hole, filled on the do screen | no | still to do, and it is a screen change |
 | 5c | one content file | **yes** — 15 wording choices | two days, plus the reviewer |
 | 5e | the branches go | no | falls out of the above |
 
 **§6 plus 5d answers the founder's actual complaint, in well under a day, with nothing for the
 reviewer.** The rest is the job that makes it stay answered.
+
+
+---
+
+## 11. What §5b actually shipped, 2026-09-09
+
+**Confidence: 8/10.** 9 on the shape — the invariant means one worry cannot hold two answers
+to one question, and the fifteen were written against a pattern the founder has already seen
+twice. **6 on the sentences**, and that is the honest number: sixty of them went in in one
+sitting, nobody but this session has read one, and they are BETR proposing something to
+somebody with no clinician anywhere near them. That is what the ninety sheet rows are for.
+
+| | |
+| --- | --- |
+| Content | 15 worries × 3 sizes. `no` and `strug` untouched — they were the pattern |
+| New sentences | **60** (two new sizes per worry, a `do` and a `drop` each) |
+| Reworded | **14 `test` lines**, to carry the worry's hole. `low` also lost *"one person you trust"* |
+| Changed default | `drink`'s `{thing}` went *"something"* → *"the next thing"*: the small go already says *"order something soft"* |
+| Rules added | `sizes` **required** on a worry; `sizes[0]` **is** the worry's own `test`/`drop`, word for word |
+| Sheet | **+90 rows**, `W-*-D1`…`X3`, inserted beside each worry's predictions. CRLF and BOM intact |
+| Tests | 255 pass (was 254). One assertion was **reversed**: *"most worries have none at all"* is now *every worry has three* |
+
+**What a walk on a phone showed, and it is the thing to look at:** the dial is on the road
+most people are on, and the word she typed into the blank arrives in all three sizes marked —
+*"Go **three days** without opening the apps you scroll"*. That is the founder's canvas note
+about the closest thing to intelligence BETR is allowed to have, on fifteen more worries.
+
+**What this makes dead, and it is deliberate:** `prefillPlan()` now returns on every road, so
+nothing in the app reads a worry's `test` or `drop`. They are held equal to the small go
+rather than deleted, because deleting two of the seven parts of a worry (scope §5.2) is §5c's
+job and it is the founder's list to shorten, not a session's.

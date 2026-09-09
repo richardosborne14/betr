@@ -1,75 +1,74 @@
 # Start here
 
-**Last refreshed:** 2026-09-09, after the redraft sheet went in.
+**Last refreshed:** 2026-09-09, after B45 §5b shipped.
 > What a new session reads to start working. Rewritten, not appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**[`B47`](tasks/B47-the-cull.md)'s cull is applied and its redraft sheet is written.** The cull
-went first — **twenty-one starts are twelve, twenty-one worries are seventeen**, four `why.js`
-explanations went with their worries, the doors refilled. Then §7 item 3, the same day:
-**[`docs/redraft-sheet.md`](redraft-sheet.md)**, all **85** of the founder's rewrites beside the
-line the app says today and a redraft of each — **24 take theirs, 23 keep ours, 23 are a third
-line, 8 need nothing. 254 tests pass; nothing was applied and the app is untouched.**
+**[`B45`](tasks/B45-one-road-in.md) §5b is done: every worry has its own three sizes.** Fifteen
+worries gained them (`no` and `strug` had theirs from B42, and were the pattern). **Sixty new
+sentences**, **+90 rows** in `docs/suggestions-review.csv` as `W-*-D1`…`X3`, sitting beside each
+worry's predictions. **255 tests pass.**
 
-**It is built to be answered on the row**; rows they don't mention are agreed. It also carries
-**the four renames as decisions of their own** (#04 #10 #14 #18, and #04's should wait for the
-merge or it lands on a moving name) and **five findings that only exist because all 85 were laid
-out together** — three duplications the founder's rewrites close, three they would create, one
-that reaches outside `starts.js` into the guide's worked example, and a shape problem in five
-lines that is the same one B47 §4 found in three. **`phone` is still at two and that is recorded,
-not missed** — §6c's #07 split is what takes it to three.
+Two rules went in with it, and they are why this is not just content. **`sizes` is now REQUIRED
+on a worry** — it was optional, and optionality was silently choosing which of two roads a person
+walked (see the new [`learnings.md`](learnings.md) entry; it broke 48 tests in one edit). **And
+the smallest of the three IS the worry's own `test` and `drop`, word for word**, checked by
+`checkSizes0` — so one worry holds one wording, and §5c can delete the pair without deciding
+anything. Fourteen `test` lines were reworded to carry the worry's hole.
+
+**Walked on a phone.** `feed`, with *three days* typed into the blank: all three sizes read *"Go
+**three days** without opening…"*, her word marked. **The fold got worse and it is now everybody's
+problem** — arriving, the page is 1005px against an 844px screen and *Lock it in* is off it;
+tapping a size folds the row back to 850px. That is B45 §7a, and it is the founder's call.
 
 ## 2. The next action
 
-**Both remaining pieces of B47 are somebody else's to read, not a session's to build** — §6c and
-the redraft sheet's Mine column. Nothing in the app changes until one comes back.
+**B45 §5c, the merge** — `starts.js` and `worries.js` become one file, twenty-nine things in one
+shape. It is the last big piece and it **needs the reviewer** for the overlapping pairs. If that
+is too big to start: **difference 3, a size's own hole filled on the do screen** — the mockup's
+*"about [a thing]"*. It is a screen change, not content, it needs nobody, and B45 §5b's note says
+exactly why it cannot be done in the content file alone (`holeRow()` scans the skeleton's `if`).
 
-**So the unblocked work is [`B45`](tasks/B45-one-road-in.md) §5b, three sizes per worry**, and it
-is cheaper than the last file said: the cull took nineteen worries to seventeen. **Two inputs for
-it came out of the redraft sheet** — the founder's *"someone you're comfortable with"*
-(`S15-D1`) is what **A small go** should say for asking for help, and their *"where you're
-allowed to"* (`S18-D1`) is the guard for leaving early, which belongs in a size and not welded
-onto a `do`. **Then:** #07's two categories once §6c is read · **then** B45 §5c, the merge.
+## 3. Two lines that were listed as inputs to §5b and did NOT get written in
 
-## 3. What the review did NOT cover, and somebody will assume it did
+Both are in the task file in full, and both are somebody's decision rather than an oversight.
 
-It was **the 245-row version**: every `S01`–`S21` row and the old general set. **Not marked: the
-`W-*` rows — `worries.js`, the road most people are actually on** — nor the ~30 newer general
-rows (`GW-*`, `GD-*`). **Eight worries were never in it at all:** `feed` `care` `low` `angry`
-`hear` `joke` `sorry` `drink`. **And `Accept (1-5)` is empty on all 428 rows** — nothing scored,
-so this is the founder's editorial pass, not the reviewer's clinical one, **and the critical
-path has not moved.**
+1. **`S15-D1`, the founder's *"someone you're comfortable with"* for asking for help.** It turns
+   the **who** dial, which is exactly B42's open question (`W-NO-D1` / `W-ST-D1`, the reviewer's
+   with Misha) — and on the worry road she has already named the person a screen earlier, so a
+   size that renames them argues with her own words. It lands in §5c or after the reviewer rules.
+2. **`S18-D1`, the founder's *"where you're allowed to"* for leaving early.** The redraft sheet
+   asks them whether they want it and says it belongs in `early`'s **small go**. **They have not
+   answered.** Shipping it would put *asking permission* into the smallest version of the one test
+   that is about not asking permission. **One line of `early`, the moment they say yes.**
 
 ## 4. Waiting on people, not on code
 
-1. **The founder.** **Two things now.** **(a) `docs/redraft-sheet.md`** — read the Mine column,
-   disagree on the row; plus the four renames, and three rows that ask a direct question
-   (`S10-D2`, whether a `do` may say *calmly and clearly*; `S15-P1`, which start gets *they'll
-   think I'm weak*; `S18-D1`, where the *allowed to* guard lives). **(b) B47 §6c**, the #07 split
-   draft, with its three pushbacks: *"I'll have a panic attack"* left out on purpose,
-   guided-mindfulness answered no, and whether draft B stays the right side of rule 4. Then,
-   still open: **walk J4 and J5 on a phone**, **B36 items 6 and 9** (tapping *New test* wipes the
-   sentence with no warning), five answers on *Why it's written like this*, rule 10's third
+1. **The founder.** **(a) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row;
+   plus the four renames, and three rows that ask a direct question (`S10-D2`, whether a `do` may
+   say *calmly and clearly*; `S15-P1`, which start gets *they'll think I'm weak*; `S18-D1`, above).
+   **(b) B47 §6c**, the #07 split draft, with its three pushbacks. **(c) B45 §7a, and it is bigger
+   than it was**: three sizes open put *Lock it in* below the fold on **every** worry now, not two.
+   Then, still open: **walk J4 and J5 on a phone**, **B36 items 6 and 9** (tapping *New test* wipes
+   the sentence with no warning), five answers on *Why it's written like this*, rule 10's third
    amendment (B37 §9a), which example leads the front screen, **the purpose statement**, the
    **`HARM` false refusal**, and **change the ad, not the app** (B25).
 2. **Misha, in one ask.** `docs/COPY.md` prints every string in its own block and is regenerated.
-   **The `yes` door's own line** — *"An answer sent the second the message lands"* was `reply`
-   and is now *"Doing it all yourself rather than asking"*, which is `help`. Nobody has read that
-   sentence. Plus **B47 §6c's two new categories** (fourteen sentences), B41's two skeletons,
-   B42's three sets of three, B38's six strings, B39's *Change* / *Add one*, B40's *Write the
-   whole thing myself*, the four nouns, the door order, the chips, B36's tone, and the **red
-   strike** (B36 §12b). **The redraft sheet is NOT for Misha yet** — it wants the founder's
-   answer first.
-3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** —
-   **269 live rows** of 428, every dead one marked with why, ten carrying `OURS: AGREED
-   2026-09-09` so he scores what the app says now. **Six questions, each on the rows it belongs
-   to:** is *"the smallest version that could still turn out wrong"* safe with no clinician
-   (`GD-R1`); may *A small go* change **who it is with** (`W-NO-D1` / `W-ST-D1`); is the largest
-   step safe as written (`W-NO-D3` / `W-ST-D3`, which hands the length of the thing to the other
-   person); **are the three actually in order** (`G-Z1`); `S07-P3`, where we kept the shipped
-   line rather than write *"I'll have a panic attack"*; and `S03-D4`, whether *"one thing you've
-   been keeping to yourself"* is bounded enough with no clinician behind it.
+   **It just grew by 165 lines: the sixty new size sentences are in it.** Plus **the `yes` door's
+   own line** (*"An answer sent the second the message lands"* was `reply` and is now *"Doing it
+   all yourself rather than asking"*, which is `help` — nobody has read that sentence), B47 §6c's
+   two new categories, B41's two skeletons, B42's three sets of three, B38's six strings, B39's
+   *Change* / *Add one*, B40's *Write the whole thing myself*, the four nouns, the door order, the
+   chips, B36's tone, and the **red strike** (B36 §12b). **The redraft sheet is NOT for Misha yet.**
+3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** — now
+   **359 live rows of 518**, every dead one marked with why. **The ninety new rows are the biggest
+   single block ever added and every one is BETR proposing something to somebody with no clinician
+   near them.** The questions to put on the rows: is the largest step safe as written (`W-*-D3`,
+   and `W-ST-D3` still the one we are least sure of, because it hands the length of the thing to
+   the other person); **are the three actually in order** (`G-Z1`); may *A small go* change **who**
+   it is with (`W-NO-D1` / `W-ST-D1`, and now every `W-*-D1`); `W-LOW-D1`, where *"one person you
+   trust"* came out because she names the person a screen earlier; `S07-P3`; and `S03-D4`.
 4. **A screen-reader pass on a real phone** — B33 read the tree, **nobody has used it**. **Q1
    (name, trademark, domain)** blocks release. **Two API keys — Groq and Anthropic — still need
    rotating**; nobody owns the missing medication word list in `guards.js`. **Release
@@ -80,41 +79,38 @@ path has not moved.**
 
 | | |
 | --- | --- |
-| Repo · stack | `github.com/richardosborne14/betr`, private, `main`; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (254 pass); `node tools/copy-sheet.js` rewrites `docs/COPY.md` |
+| Repo · stack | `github.com/richardosborne14/betr`, private, `main`; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (255 pass); `node tools/copy-sheet.js` rewrites `docs/COPY.md` |
 | **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** Live at **`https://betr.trybeup.com`** — every push to `main` touching `web/**` publishes it; cert expires 2026-12-02 |
-| **The sheet** | `docs/suggestions-review.csv`, 428 rows, **CRLF and a BOM — keep both** or the whole file shows as changed. Columns: `Ref, Where, If I…, Type, Status, Line, Our flag, Accept (1-5), Rewrite, Reviewer notes` |
+| **The sheet** | `docs/suggestions-review.csv`, **518 rows**, **CRLF and a BOM — keep both** or the whole file shows as changed. Columns: `Ref, Where, If I…, Type, Status, Line, Our flag, Accept (1-5), Rewrite, Reviewer notes` |
 
 ## 6. Gotchas, live
 
-- **THE SHEET'S `Line` COLUMN IS NOT WHAT THE APP SAYS.** Five rows were applied on 2026-09-09
-  and the column still holds the old string. **Read `web/content/starts.js`**, not the CSV, when
-  you need to know what a person sees. The redraft sheet was built that way on purpose.
-- **CROSS-START DUPLICATION IS NOT CAUGHT BY ANY TEST.** `content.test.js` holds no two `thens`
-  under **one** start; two starts may quietly carry the same prediction, and three pairs already
-  nearly did. Nobody sees it — the cost is a wasted slot and a reviewer scoring one line twice.
+- **A WALK NOW NEEDS A SIZE TAP.** Nothing is in either box on the plan screen until
+  `[data-size]` is tapped — on **every** worry, not the two that had sizes. Every test helper was
+  changed for it (`borrowed` in `a11y.test.js`, `lockOne` in `menu.test.js`).
+- **`prefillPlan()` NOW RETURNS ON EVERY ROAD**, so nothing in the app reads a worry's `test` or
+  `drop`. They are held equal to the small go by `checkSizes0` rather than deleted; deleting two
+  of the seven parts of a worry is §5c's job.
+- **THE SHEET'S `Line` COLUMN IS NOT WHAT THE APP SAYS** for the older rows. **Read
+  `web/content/`**, not the CSV, when you need to know what a person sees.
+- **CROSS-START DUPLICATION IS NOT CAUGHT BY ANY TEST**, and neither is cross-*worry*: two sizes
+  under **one** worry may not say the same thing, two worries' may.
 - **A rewrite can reach outside `starts.js`** — `strings-en.js`'s `shrinkSaid` quotes `S01-P3`
   word for word, and `smallest` is one string read on two guide screens. **Grep first.**
-- **The four culled ids are retired, never reused** — `phone` `reply` `check` `mist`, in
-  `worries.js`'s header beside `cut`. `rate.keyOf()` keys a person's ladder by `id`.
-- **The door floor exists now.** `MIN_PER_DOOR = 4` in `content.test.js`, `phone` (2) and `yes`
-  (3) named as dated exceptions. **A third exception needs the founder.** **Two count canaries
-  moved with the cull and both carry a note** — `content.test.js` 150→90 suggestion lines,
-  `loop.test.js` 20→12 chips; **move one only for a cull, and say which**. **`lockOne` in
-  `menu.test.js` takes a door index now** — don't re-couple it to the first door.
+- **The four culled ids are retired, never reused** — `phone` `reply` `check` `mist`, beside `cut`.
+  `rate.keyOf()` keys a person's ladder by `id`.
+- **The door floor exists** — `MIN_PER_DOOR = 4`, `phone` (2) and `yes` (3) dated exceptions; a
+  third needs the founder. **Two count canaries** (102 suggestion lines, 12 chips) **move only for
+  a cull, and say which**.
 - **`shows`/`hides` are SUBSTRING checks** and a screen's title is word for word its own link's
-  text, so a `hides()` on the title is never true — **name a sentence only that screen carries**.
-  **`walk.js tap` takes ONE selector** and ignores anything after it: `tap '[data-b="1"]'`.
+  text — **name a sentence only that screen carries**. **`walk.js tap` takes ONE selector.**
 - **Set the font size BEFORE navigating** to measure at 125%. **The fold is 785 / 780 / 774 /
   720px at 100 / 125 / 150 / 200%.** **A WIDENING IS MORE DANGEROUS THAN A CHANGE** (B40); **WHEN
-  CONTENT GAINS A VARIABLE, GREP EVERY COMPARISON AGAINST IT** (B41) — nothing crashes, a
-  sentence rots. **Never depend on an event**: a programmatic `.focus()` fires none in headless
-  Chrome and none at all in the fake DOM.
-- **`shot` on the front screen catches it mid-reveal** — finish the animations with `eval` first.
-  **A dead `walk.js` returns a stale page, not an error, and its browser is DARK.** **The fake DOM
-  is flat and ignores `hidden`**; **A REGION DELETE NEEDS BOTH ENDS CHECKED**. **Chips are exempt
-  from the capital-letter rule**, by class — **a size name is not**. **After editing
-  `web/content/*`, `stop` and `start`**: `open` serves a cache. **`HABIT`/`BODY` refuse nothing a
-  PERSON writes** — they still hold every word BETR writes.
-- **Every word a person reads is in `web/content/`** (a sentence in `app.js` fails
-  `i18n.test.js`). **Use `’` and `“ ”`, never `'` and `"`.** **`content/zones.js` and
-  `docs/COPY.md` are generated**; never hand-edit, and no helpline number is written from memory.
+  CONTENT GAINS A VARIABLE, GREP EVERY COMPARISON AGAINST IT** (B41). **Never depend on an event.**
+- **`shot` on the front screen catches it mid-reveal** — and `getAnimations().finish()` throws on
+  the infinite one; finish them by name or skip it. **A dead `walk.js` returns a stale page, not
+  an error, and its browser is DARK.** **The fake DOM is flat and ignores `hidden`.** **Chips are
+  exempt from the capital-letter rule; a size name is not.** **After editing `web/content/*`,
+  `stop` and `start`**: `open` serves a cache.
+- **Every word a person reads is in `web/content/`.** **Use `’` and `“ ”`, never `'` and `"`.**
+  **`content/zones.js` and `docs/COPY.md` are generated**; no helpline number from memory.

@@ -1229,7 +1229,7 @@ BETR writes into "What you expect" when somebody keeps that sentence word for wo
 | **lane** | urge-timing |
 | **label** — the button | Sitting still when I feel restless |
 | **card sentence** — under the label on the list | If I feel restless, then I can’t just sit with it. |
-| **test** — the one thing, today | Set a ten-minute timer and do nothing at all. Notice when it peaks, and whether it drops. |
+| **test** — the one thing, today | Set a timer for {long} and do nothing at all. Notice when it peaks, and whether it drops. |
 | **drop** — what you leave out | Don’t reach for your phone, and don’t get up to do a task. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1238,6 +1238,16 @@ BETR writes into "What you expect" when somebody keeps that sentence word for wo
 | --- | --- |
 | **printed** | If I sit with the restlessness for {long} |
 | **the gap `{long}`** — its word while it is empty | ten minutes |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Set a timer for {long} and do nothing at all. Notice when it peaks, and whether it drops. | Don’t reach for your phone, and don’t get up to do a task. |
+| 2 | A bigger go | Sit with the restlessness for {long} at the moment you’d normally get up and do something about it. | Don’t reach for your phone, don’t get up to a task, and don’t start something else instead. |
+| 3 | The whole thing | Sit with the restlessness for {long} and let it get as loud as it’s going to get. | Nothing at all to break it up: no phone, no tidying, and nothing to do instead. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1255,7 +1265,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | urge-timing |
 | **label** — the button | A day without checking social media |
 | **card sentence** — under the label on the list | If I stop keeping up with everyone, then I’ll fall out of things. |
-| **test** — the one thing, today | Go one day without opening the apps you scroll. At the end, write down what you actually missed. |
+| **test** — the one thing, today | Go {long} without opening the apps you scroll. At the end, write down what you actually missed. |
 | **drop** — what you leave out | No opening one “just to see if anyone’s messaged me”. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1264,6 +1274,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I go {long} without opening the apps I scroll |
 | **the gap `{long}`** — its word while it is empty | a day |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Go {long} without opening the apps you scroll. At the end, write down what you actually missed. | No opening one “just to see if anyone’s messaged me”. |
+| 2 | A bigger go | Go {long} without opening them, and don’t ask anyone what you missed either. | No opening one to check, and no catching up at the end of it. |
+| 3 | The whole thing | Go {long} without opening them, and tell nobody you’re doing it. | No warning anyone first, no explaining afterwards, and no scrolling back through it later. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1281,7 +1301,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | perfectionism |
 | **label** — the button | Handing something over before it’s perfect |
 | **card sentence** — under the label on the list | If I hand over something that’s only good enough, then it won’t be good enough. |
-| **test** — the one thing, today | Finish one thing today at good enough and hand it over. Write down the time you stopped. |
+| **test** — the one thing, today | Finish {thing} today at good enough and hand it over. Write down the time you stopped. |
 | **drop** — what you leave out | No last look through, and no message saying what you’d have done with more time. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1290,6 +1310,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I hand over {thing} at good enough |
 | **the gap `{thing}`** — its word while it is empty | something |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Finish {thing} today at good enough and hand it over. Write down the time you stopped. | No last look through, and no message saying what you’d have done with more time. |
+| 2 | A bigger go | Hand over {thing} while you can still see things you’d change. | No last look through, no message about the state of it, and no fixing it after you’ve sent it. |
+| 3 | The whole thing | Hand over {thing} the moment it does the job, and don’t look at it again. | Nothing checked over, nothing apologised for, and nothing put right afterwards. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1307,7 +1337,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | rest |
 | **label** — the button | Resting when there’s stuff to do |
 | **card sentence** — under the label on the list | If I rest before everything’s done, then I’ll pay for it. |
-| **test** — the one thing, today | Plan two hours of rest today and actually take them. Notice how you feel after. |
+| **test** — the one thing, today | Plan {long} of rest today and actually take it. Notice how you feel after. |
 | **drop** — what you leave out | No “I’ll just quickly do this one thing” first. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1316,6 +1346,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I rest for {long} while there’s still stuff to do |
 | **the gap `{long}`** — its word while it is empty | two hours |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Plan {long} of rest today and actually take it. Notice how you feel after. | No “I’ll just quickly do this one thing” first. |
+| 2 | A bigger go | Rest for {long} at the point in the day you’d normally push on through. | Nothing finished off first, and nothing made up for later. |
+| 3 | The whole thing | Rest for {long} with the list untouched, and let the day end that way. | Nothing done first, nothing done after, and no explaining the state of the list to anyone. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1333,7 +1373,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Paying someone a compliment |
 | **card sentence** — under the label on the list | If I say something good about someone, then it’ll land wrong. |
-| **test** — the one thing, today | Say one specific good thing about somebody today, to their face. |
+| **test** — the one thing, today | Say one specific good thing about {person} today, to their face. |
 | **drop** — what you leave out | Don’t follow it with one about yourself, and don’t wait around for one back. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1342,6 +1382,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I say one specific good thing to {person} out loud |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Say one specific good thing about {person} today, to their face. | Don’t follow it with one about yourself, and don’t wait around for one back. |
+| 2 | A bigger go | Say the good thing you’ve thought about {person} and never said out loud. | Don’t make a joke of it, don’t follow it with one about yourself, and don’t wait for one back. |
+| 3 | The whole thing | Tell {person} the whole of it, in as many words as it takes, and stop there. | No joke, nothing about yourself, and no moving straight on to something else. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1359,7 +1409,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Telling someone they matter to me |
 | **card sentence** — under the label on the list | If I tell someone what they mean to me, then it’ll be awkward. |
-| **test** — the one thing, today | Tell one person, today, one specific thing you’re glad about them. |
+| **test** — the one thing, today | Tell {person}, today, one specific thing you’re glad about them. |
 | **drop** — what you leave out | Don’t turn it into a joke, and don’t move straight on to something else. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1368,6 +1418,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I tell {person} one specific thing I’m glad about them |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Tell {person}, today, one specific thing you’re glad about them. | Don’t turn it into a joke, and don’t move straight on to something else. |
+| 2 | A bigger go | Tell {person} why they matter to you, in your own words. | Don’t make a joke of it, and don’t change the subject straight after. |
+| 3 | The whole thing | Tell {person} the whole of what you’d want them to know, and stay in the conversation after it. | No joke, no changing the subject, and no leaving as soon as you’ve said it. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1421,7 +1481,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | assertiveness |
 | **label** — the button | Asking someone for help |
 | **card sentence** — under the label on the list | If I ask someone for help, then it costs me something. |
-| **test** — the one thing, today | Ask one person for one small, specific favour today. |
+| **test** — the one thing, today | Ask {person} for one small, specific favour today. |
 | **drop** — what you leave out | No “sorry to bother you”, and no offering something back. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1430,6 +1490,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I ask {person} for one small, specific favour |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Ask {person} for one small, specific favour today. | No “sorry to bother you”, and no offering something back. |
+| 2 | A bigger go | Ask {person} for help with something you’d normally push through on your own. | No “sorry to bother you”, no explaining why you can’t manage it, and nothing offered back. |
+| 3 | The whole thing | Ask {person} for the help you actually need, and let them decide. | Nothing softened, no apology for asking, and no making up for it afterwards. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1447,7 +1517,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Telling someone I’ve been feeling low |
 | **card sentence** — under the label on the list | If I say I’ve been feeling low, then it changes how people treat me. |
-| **test** — the one thing, today | Tell one person you trust, today, in one sentence, that you’ve been feeling low lately. |
+| **test** — the one thing, today | Tell {person}, today, in one sentence, that you’ve been feeling low lately. |
 | **drop** — what you leave out | Don’t add that it’s nothing really, and don’t ask whether that was too much. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1456,6 +1526,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I tell {person} I’ve been feeling low lately |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Tell {person}, today, in one sentence, that you’ve been feeling low lately. | Don’t add that it’s nothing really, and don’t ask whether that was too much. |
+| 2 | A bigger go | Tell {person} how long it’s been going on for. | Don’t say it’s nothing really, and don’t make it sound more finished than it is. |
+| 3 | The whole thing | Tell {person} what it’s actually been like, and let them ask about it. | No making light of it, no cutting it short, and no apologising for having said it. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1509,7 +1589,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | assertiveness |
 | **label** — the button | Telling someone they’ve annoyed me |
 | **card sentence** — under the label on the list | If I say that something’s annoyed me, then it’ll go badly. |
-| **test** — the one thing, today | Say one thing that annoyed you, in one sentence, calmly. Then stop talking. |
+| **test** — the one thing, today | Tell {person} one thing they’ve done that annoyed you, in one sentence, calmly. Then stop talking. |
 | **drop** — what you leave out | Don’t raise your voice, and don’t bring up a second thing. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1518,6 +1598,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I tell {person} one thing they’ve done that annoyed me |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Tell {person} one thing they’ve done that annoyed you, in one sentence, calmly. Then stop talking. | Don’t raise your voice, and don’t bring up a second thing. |
+| 2 | A bigger go | Tell {person} about the thing that has annoyed you more than once. | Don’t soften it with a joke, and don’t say it’s fine afterwards. |
+| 3 | The whole thing | Tell {person} the whole of what annoyed you, and let there be a silence after it. | No joke, nothing taken back, and no making up for it later. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1535,7 +1625,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Letting someone else be right |
 | **card sentence** — under the label on the list | If I let someone else be right, then I lose something. |
-| **test** — the one thing, today | Once today, say “you’re right, I hadn’t thought of that” — and then stop. |
+| **test** — the one thing, today | Once today, tell {person} “you’re right, I hadn’t thought of that” — and then stop. |
 | **drop** — what you leave out | No “but”, and don’t add a point of your own to level it back up. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1544,6 +1634,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I tell {person} they’re right and leave it there |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Once today, tell {person} “you’re right, I hadn’t thought of that” — and then stop. | No “but”, and don’t add a point of your own to level it back up. |
+| 2 | A bigger go | Tell {person} they’re right about something you’d normally argue. | No “but”, nothing of your own added, and no going back to it an hour later. |
+| 3 | The whole thing | Tell {person} they’re right, say what changed your mind, and leave it there. | No “but”, no point of your own, and no bringing it up again another day. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1561,7 +1661,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Letting someone finish without interrupting |
 | **card sentence** — under the label on the list | If I don’t get in quickly, then I lose my place in the conversation. |
-| **test** — the one thing, today | In one conversation today, let them finish, then ask one question before you say your bit. |
+| **test** — the one thing, today | In one conversation today, let {person} finish, then ask one question before you say your bit. |
 | **drop** — what you leave out | Don’t plan your answer while they’re still talking, and don’t finish their sentence. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1570,6 +1670,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I let {person} finish before I say my bit |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | In one conversation today, let {person} finish, then ask one question before you say your bit. | Don’t plan your answer while they’re still talking, and don’t finish their sentence. |
+| 2 | A bigger go | Let {person} finish the thing you already disagree with, and ask what they mean by it. | Don’t plan your answer while they’re talking, don’t finish their sentence, and don’t jump in at the pause. |
+| 3 | The whole thing | Let {person} say the whole thing, ask two questions about it, and only then say your bit. | Nothing interrupted, nothing finished for them, and nothing planned while they’re still going. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1587,7 +1697,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Getting through a conversation without a joke |
 | **card sentence** — under the label on the list | If I’m not the funny one, then people won’t want to talk to me. |
-| **test** — the one thing, today | In one conversation today, say the plain thing where you’d normally reach for the joke. |
+| **test** — the one thing, today | In one conversation with {person} today, say the plain thing where you’d normally reach for the joke. |
 | **drop** — what you leave out | No laughing it off when it gets serious, and no making anyone else the punchline. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1596,6 +1706,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I say the plain thing to {person} where I’d normally reach for the joke |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | In one conversation with {person} today, say the plain thing where you’d normally reach for the joke. | No laughing it off when it gets serious, and no making anyone else the punchline. |
+| 2 | A bigger go | Say the plain thing to {person} about something that actually matters to you. | No laughing it off, nobody made the punchline, and no lightening it at the end. |
+| 3 | The whole thing | Get through a whole conversation with {person} without one joke in it. | No joke, no laughing it off, and nothing said to break it up when it gets serious. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1613,7 +1733,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Apologising without explaining myself |
 | **card sentence** — under the label on the list | If I properly apologise, then it’ll be used against me. |
-| **test** — the one thing, today | Say sorry to one person today, for one specific thing you did. One sentence. |
+| **test** — the one thing, today | Say sorry to {person} today, for one specific thing you did. One sentence. |
 | **drop** — what you leave out | Don’t explain what kind of day you were having, and don’t ask whether you’re all right now. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1622,6 +1742,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I say sorry to {person} for one specific thing I did |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Say sorry to {person} today, for one specific thing you did. One sentence. | Don’t explain what kind of day you were having, and don’t ask whether you’re all right now. |
+| 2 | A bigger go | Say sorry to {person} for the thing you’ve been hoping they’d forget. | No reasons, and no asking whether you’re all right now. |
+| 3 | The whole thing | Say sorry to {person}, say what you’d do differently, and stop there. | No reasons, nothing asked for back, and no making up for it afterwards. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1639,7 +1769,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Turning up and not joining in |
 | **card sentence** — under the label on the list | If I turn up and don’t join in, then it won’t go unnoticed. |
-| **test** — the one thing, today | Turn up, order something soft, and count how many people actually say anything. |
+| **test** — the one thing, today | Turn up to {thing}, order something soft, and count how many people actually say anything. |
 | **drop** — what you leave out | Don’t arrive with a reason ready, and don’t hold a glass as cover. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1647,7 +1777,17 @@ The three a person chooses between, in the order they are shown:
 | | |
 | --- | --- |
 | **printed** | If I turn up to {thing} and don’t join in |
-| **the gap `{thing}`** — its word while it is empty | something |
+| **the gap `{thing}`** — its word while it is empty | the next thing |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Turn up to {thing}, order something soft, and count how many people actually say anything. | Don’t arrive with a reason ready, and don’t hold a glass as cover. |
+| 2 | A bigger go | Turn up to {thing} and stay as long as you would have stayed anyway. | No reason ready at the door, nothing held as cover, and no leaving when it gets awkward. |
+| 3 | The whole thing | Turn up to {thing}, stay to the end, and say plainly that you’re not joining in. | No reason ready, nothing in your hand as cover, and no going quiet to get through it. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1673,6 +1813,16 @@ The three a person chooses between, in the order they are shown:
 | | |
 | --- | --- |
 | **printed** | If I leave at the time I decided and say plainly that I’m going |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Decide before you go what time you’re leaving. At that time, say one sentence and go. | Don’t apologise for going, and don’t promise to stay longer next time. |
+| 2 | A bigger go | Leave at the point you actually want to go, not at the next gap in the evening. | Don’t apologise for going, don’t invent a reason, and don’t promise to stay longer next time. |
+| 3 | The whole thing | Leave when you want to, say goodbye once, and go. | No apology, no invented reason, and no staying for one more of anything. |
 
 The three a person chooses between, in the order they are shown:
 

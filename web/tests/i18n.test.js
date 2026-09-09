@@ -119,6 +119,7 @@ test('a person never reads a key, and never reads an unfilled placeholder', () =
   a.tap('#back').tap('#back').tap('#not-sure').tap('[data-door]', 0); seen += a.html();
   a.tap('[data-id]', 0); seen += a.html();                           /* borrowing one */
   a.tap('[data-b]', 0).tap('#next'); seen += a.html();
+  a.tap('[data-size]', 0); seen += a.html();
   a.tap('#lock'); seen += a.html();
   a.tap('#nothanks').tap('#done'); seen += a.html();
   a.type('#o', 'He said fair enough.').tap('#next'); seen += a.html();

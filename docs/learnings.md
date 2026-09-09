@@ -1069,3 +1069,29 @@ screen nobody was editing. **Grep the whole of `web/content/` before changing a 
 2026-09-09 and the CSV still holds the pre-change string. Every row of the redraft sheet was read
 against `starts.js` instead, which is the only reason the *"what the app says now"* column is
 true. **A review artefact stops describing the app the moment the first line is applied.**
+
+## 2026-09-09 · An optional content field the code branches on is a feature flag wearing a data costume
+
+Giving fifteen worries three sizes each was meant to be content. It changed the behaviour of the
+app on every screen after the pick list, and **broke 48 of 254 tests in one edit** — not because
+anything was wrong, but because `prefillPlan()` reads `if (f.sizes) return;`. `sizes` was
+optional, so *whether a worry had it* silently decided whether the plan arrived pre-filled, which
+decided whether the suggestion row was hidden, which decided whether there was a dial on that
+screen at all. Two worries had one road and fifteen had another, and the only thing choosing
+between them was a field's presence.
+
+**The tell was in B46's own note a day earlier** — "nineteen of twenty-one worries had no dial on
+the do screen" — and it was written as a bug in one line of `buildDo()`. It was not. It was the
+optionality: a field that is present on some items and absent on others *is* a branch, and a
+branch in content is a road nobody drew.
+
+**So when the last item gains an optional field, make it required in the same commit.** `sizes`
+is required on a worry now and `content.js` says so with a sentence rather than a silence. The
+48 failures were the cheap version of finding this out; the expensive version is two roads
+shipping and a walk on a phone that only ever goes down one of them.
+
+**And the second half of the same lesson: two fields that must say the same thing should be
+checked, not remembered.** Nothing reads a worry's `test` or `drop` any more, so they could drift
+from the small go that replaced them and no screen would ever show the difference — while the
+paid reviewer went on scoring both. `checkSizes0` holds them equal in six lines. **Content that
+has become unreachable does not stop costing; it stops being noticed.**

@@ -666,7 +666,7 @@ test('a hole in a worry with no skeleton is refused, because nothing can fill it
   that changed with history would be the app choosing (rule 2) and a score of the person
   besides. checkSizes counts them; this checks that it counts.
 */
-test('a worry offers three sizes or none, and never some other number', () => {
+test('every worry offers three sizes, and never some other number', () => {
   const a = shipped();
   const f = a.find((z) => z.id === 'no');
   assert.strictEqual(f.sizes.length, 3);
@@ -677,9 +677,42 @@ test('a worry offers three sizes or none, and never some other number', () => {
   b.find((z) => z.id === 'no').sizes.pop();
   assert.ok(content.validateWorries(b).some((p) => /offers 2 sizes/.test(p)));
 
-  /* and most worries have none at all, which is not a problem — they fall through to the
-     three generic ones in starts.js, so the dial is on every road either way */
-  assert.ok(shipped().some((z) => z.sizes === undefined));
+  /*
+    B45 §5b, 2026-09-09, and this assertion used to say the opposite. It read "most worries
+    have none at all, which is not a problem — they fall through to the three generic ones in
+    starts.js". Fifteen of the seventeen did, which meant the road most people are on had the
+    generic dial rather than one about the worry in front of them. Every worry has its own
+    three now, and none may lose them.
+  */
+  for (const f of shipped()) {
+    assert.ok(Array.isArray(f.sizes) && f.sizes.length === 3, f.id + ' has no three sizes');
+  }
+  const c = shipped();
+  delete c.find((z) => z.id === 'no').sizes;
+  assert.ok(content.validateWorries(c).some((p) => /has no sizes/.test(p)));
+});
+
+/*
+  B45 §5b. THE SMALLEST OF THE THREE IS THE WORRY'S OWN test AND drop, WORD FOR WORD.
+
+  Nothing reads test/drop any more — prefillPlan() returns the moment a worry has sizes, and
+  every worry has them — so a small go that drifted from its own test would leave one file
+  holding two answers to one question, one of them unreachable and both of them being
+  reviewed. Held equal, there is one wording, and B45 §5c can delete the pair without
+  deciding anything.
+*/
+test('a worry’s small go is its own test and its own leave-out, word for word', () => {
+  for (const f of shipped()) {
+    assert.strictEqual(f.sizes[0].do, f.test, f.id + ': the small go is not its own test');
+    assert.strictEqual(f.sizes[0].drop, f.drop, f.id + ': the small go is not its own drop');
+  }
+  const a = shipped();
+  a.find((z) => z.id === 'no').sizes[0].do = 'Say no to {person} once today, about anything.';
+  assert.ok(content.validateWorries(a).some((p) => /small go that is not its own test/.test(p)));
+
+  const b = shipped();
+  b.find((z) => z.id === 'no').drop = 'Don’t give them a reason.';
+  assert.ok(content.validateWorries(b).some((p) => /small go that is not its own drop/.test(p)));
 });
 
 /*

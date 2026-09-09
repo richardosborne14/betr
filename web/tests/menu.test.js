@@ -21,6 +21,12 @@ const places = require('../content/places.js');
 const en = require('../content/strings-en.js');
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
+/*
+  B45 §5b, 2026-09-09: a worry's `test` may carry holes now — the small go is that sentence
+  word for word, and it is about the thing she typed. What a SCREEN shows is never the raw
+  line, it is that line with the holes at their own default.
+*/
+const said = (f, text) => content.fill(text, {}, (f.skeleton || { holes: {} }).holes);
 
 /*
   Lock a stock worry in and walk away from it, leaving it waiting.
@@ -34,7 +40,7 @@ function lockOne(a, item, door) {
   /* B30: "New test" opens the build screen, so the borrow road starts from the front screen. */
   if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#not-sure');
   if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', door || 0);
-  a.tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('#lock');
+  a.tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   return a;
 }
@@ -47,6 +53,7 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
     () => a.tap('#not-sure'),                       /* what's going on */
     () => a.tap('[data-door]', 0),            /* pick */
     () => a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'),              /* plan */
+    () => a.tap('[data-size]', 0),            /* a size picked, which is what fills the boxes */
     () => a.tap('#lock'),                     /* locked */
     () => a.tap('#nothanks').tap('#done'),    /* happened */
     () => a.type('#o', 'He said fair enough.').tap('#next'),  /* sure */
@@ -93,7 +100,7 @@ test('starting a new test keeps the one you locked in, and it is waiting afterwa
   a.tap('#m-new').shows(en.s.build.title);
 
   /* on the front screen, as one line with a way back in — not a list and not a number */
-  a.tap('#back').shows('On the go').shows(firstBehind().test);
+  a.tap('#back').shows('On the go').shows(said(firstBehind(), firstBehind().test));
   a.hides('1 waiting').hides('overdue');
 
   /* and on Your tests, on its own card, with both ways out of it */
@@ -137,7 +144,7 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
   a.tap('#back').shows('On the go');
 
   const again = boot(a.mem);            /* the same phone, opened again tomorrow */
-  again.shows('On the go').shows(firstBehind().test);
+  again.shows('On the go').shows(said(firstBehind(), firstBehind().test));
   again.tap('#m-mine').tap('[data-notyet]', 0).shows('still here for tomorrow');
   again.shows('On the go');
   /* not bare "missed": a worry's own test may ask you to write down what you missed. */
@@ -345,6 +352,7 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
   rest += b.tap('#not-sure').html();
   rest += b.tap('[data-door]', 0).html();
   rest += b.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
+  rest += b.tap('[data-size]', 0).html();
   rest += b.tap('#lock').html();
   rest += b.tap('#nothanks').tap('#done').html();
   for (const m of rest.matchAll(/href="([^"]+)"/g)) {
@@ -400,6 +408,7 @@ test('ours is on the Help list, never first, and says who made it and what it co
   const b = boot();
   let rest = b.html();
   rest += b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
+  rest += b.tap('[data-size]', 0).html();
   rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
   rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');

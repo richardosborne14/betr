@@ -27,9 +27,15 @@ const content = require('../lib/content.js');
 const worries = require('../content/worries.js');
 const doors = require('../content/whats-going-on.js');
 
-/* The borrow road as far as the plan being in the box, which is where five screens start. */
+/*
+  The borrow road as far as a plan being in the box, which is where five screens start.
+
+  B45 §5b, 2026-09-09: the last tap is what puts it there. Every worry carries three sizes
+  now, so nothing is pre-filled and Lock it in has nothing to lock until one is chosen — which
+  is what the two worries that had sizes already did, and is now the whole road.
+*/
 const borrowed = (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0)
-  .tap('[data-b]', 0).tap('#next');
+  .tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
 const done = (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
   .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
 
@@ -197,7 +203,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
     if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
     a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   };
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
   loop('He said fair enough.', 1);          /* 10 -> 9 */
   a.tap('#again');
   loop('Nobody minded.', 2);                 /* 9 -> 6 */
@@ -224,7 +230,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
 
 test('a bad day is said as a rise, not as a failure', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He went quiet.').tap('#next').tap('[data-key]', 2);       /* 10 -> 7 */
   a.tap('#again').tap('#lock').tap('#done').type('#o', 'He brought it up again.').tap('#next');
   a.tap('[data-key]', 4);                                                 /* 7 -> 8 */
