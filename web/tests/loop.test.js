@@ -1300,7 +1300,12 @@ test('every label a person taps starts with a capital, and the wordmark is BETR'
   chipSweep(c.html());
   c.type('#if', 'say no').type('#then', 'they will mind').tap('#next');
   chipSweep(c.html());
-  assert.ok(chips.length > 20, 'only found ' + chips.length + ' chips to check');
+  /*
+    B47, 2026-09-09: twenty-four until the cull, fifteen after it — twelve `if` chips and the
+    general set's three `thens`. Same canary as the one in content.test.js, same rule about
+    moving it.
+  */
+  assert.ok(chips.length > 12, 'only found ' + chips.length + ' chips to check');
   for (const chip of chips) {
     assert.ok(seen.indexOf(chip) === -1, 'a chip is also drawn as a label somewhere: "' + chip + '"');
   }

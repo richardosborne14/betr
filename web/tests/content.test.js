@@ -56,7 +56,13 @@ test('nothing BETR suggests names the habit, the body, or anyone’s safety', ()
     for (const z of it.sizes || []) lines.push(z.do, z.drop);
     if (it.if) lines.push(it.if);
   }
-  assert.ok(lines.length > 150, 'only ' + lines.length + ' suggestions: the file has shrunk');
+  /*
+    B47, 2026-09-09: this said 150 until the cull, when twenty-one starts became twelve and it
+    dropped to 102. The number is a canary, not a target — it is here so that a start quietly
+    losing its suggestions shows up as a failure rather than as nothing. Move it only when a
+    cull is the reason, and say which one.
+  */
+  assert.ok(lines.length > 90, 'only ' + lines.length + ' suggestions: the file has shrunk');
   for (const line of lines) {
     for (const [kind, list] of [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]]) {
       assert.strictEqual(guards.hit(line, list), null, kind + ' word in "' + line + '"');
@@ -367,7 +373,14 @@ test('no test and no drop line touches the habit itself', () => {
   rather than passing quietly. A worry belongs here only if it can be started today by
   somebody who has nobody free and nothing in the diary.
 */
-const STARTS_TODAY = ['sit', 'phone', 'feed', 'check', 'enough', 'rest', 'reply', 'praise', 'care'];
+/*
+  B47, 2026-09-09. `phone`, `check` and `reply` came off it with the cull. `help` went on the
+  same day, and that is a judgement, not a tidy-up: the cull left the `yes` door leading on
+  "Saying no without giving a reason", which waits on somebody asking you for something, and
+  the founder's call was to lead on "Asking someone for help" instead. It belongs here for the
+  reason `care` and `praise` already do — the person starts it. Nobody has to do anything first.
+*/
+const STARTS_TODAY = ['sit', 'feed', 'enough', 'rest', 'praise', 'care', 'help'];
 
 test('the first worry behind every door can be started on the day it is tapped', () => {
   for (const d of doors.items) {
@@ -381,6 +394,56 @@ test('the first worry behind every door can be started on the day it is tapped',
 test('the starts-today list has not outlived the worries in it', () => {
   for (const id of STARTS_TODAY) {
     assert.ok(content.byId(worries, id), '"' + id + '" is on the starts-today list and is not a worry');
+  }
+});
+
+/*
+  B47, 2026-09-09. THE FLOOR THE FILE ALWAYS CLAIMED AND NEVER HAD.
+
+  whats-going-on.js has said "four to six worries" since B19 and lib/content.js has only ever
+  held the six. There was no floor at all, so a door could quietly fall to two and the build
+  would pass — and the cull did exactly that to one of them. A thin door is not a crash; it is
+  a screen a person opens onto almost nothing, which is the failure B19 built doors to fix.
+
+  The two below the floor are named here rather than allowed everywhere, so each one is a line
+  in a diff with a date and a reason on it, and so that clearing them is a job somebody can
+  see. Do not add a third without the founder: door composition is theirs and Misha's.
+*/
+const MIN_PER_DOOR = 4;
+const THIN_DOORS = {
+  /*
+    Lost `phone` and `reply` in the cull, and there is nothing among the seventeen survivors
+    that belongs behind "On my phone more than I want to be". B47 §6b: the #07 split takes it
+    back to three by turning `sit` into two worries — sitting alone in silence, and not
+    distracting yourself from a feeling — and that draft is with the founder and Misha. This
+    entry goes when the split lands.
+  */
+  phone: 2,
+  /*
+    Lost `reply`. Founder's call, 2026-09-09: leave it at three and lead on `help` rather than
+    borrow two more from the habit door, because five was more to read than the door needed.
+  */
+  yes: 3
+};
+
+test('no door opens onto fewer than four worries, except the ones we have named', () => {
+  for (const d of doors.items) {
+    const n = d.worries.length;
+    if (d.id in THIN_DOORS) {
+      assert.strictEqual(n, THIN_DOORS[d.id], 'the "' + d.id + '" door is a named exception to ' +
+        'the floor and it has changed size: say why, or take it off the list');
+      continue;
+    }
+    assert.ok(n >= MIN_PER_DOOR, 'the "' + d.id + '" door opens onto ' + n + ' worries. A door ' +
+      'is four to six (B19). Refill it, or name it in THIN_DOORS with the reason and the date');
+  }
+});
+
+/* An exception that has outlived its door is a rule nobody is checking any more. */
+test('every named thin door is still a door', () => {
+  for (const id of Object.keys(THIN_DOORS)) {
+    assert.ok(doors.items.some((d) => d.id === id),
+      '"' + id + '" is listed as a thin door and is not a door');
   }
 });
 

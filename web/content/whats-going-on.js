@@ -73,7 +73,7 @@ var BETR_DOORS = {
       id: 'phone',
       label: 'On my phone more than I want to be',
       under: 'Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it.',
-      worries: ['phone', 'feed', 'sit', 'reply']
+      worries: ['feed', 'sit']
     },
     {
       id: 'habit',
@@ -86,7 +86,7 @@ var BETR_DOORS = {
       id: 'work',
       label: 'Never letting myself stop',
       under: 'There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either.',
-      worries: ['rest', 'enough', 'check', 'mist']
+      worries: ['rest', 'enough', 'help', 'no']
     },
     {
       id: 'temper',
@@ -98,13 +98,20 @@ var BETR_DOORS = {
       id: 'secret',
       label: 'Keeping it all to myself',
       under: 'Nobody around you knows the half of it. Not hiding it exactly; it just never seems like the moment.',
-      worries: ['care', 'strug', 'low', 'mist', 'help']
+      worries: ['care', 'strug', 'low', 'help']
     },
     {
       id: 'yes',
       label: 'Going along with things I don’t want to do',
-      under: 'Yes when you meant no. Nothing said when something’s annoyed you. An answer sent the second the message lands.',
-      worries: ['reply', 'no', 'angry', 'help']
+      /*
+        B47, 2026-09-09, AND MISHA HAS NOT READ THIS ONE. The third sentence was "An answer
+        sent the second the message lands", which was `reply`, and `reply` went in the cull —
+        so the door was describing something it no longer had a single test for. The sentence
+        that replaced it is `help`, which is now the first worry behind this door and was not
+        in the line at all. Three sentences, three worries, same job: recognition.
+      */
+      under: 'Yes when you meant no. Nothing said when something’s annoyed you. Doing it all yourself rather than asking.',
+      worries: ['help', 'no', 'angry']
     }
   ]
 };

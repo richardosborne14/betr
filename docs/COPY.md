@@ -4,7 +4,7 @@
 rewritten from the source every time that command runs, so anything typed here is lost.
 Mark it up, send it back, and the change gets made in the file named next to each section.
 
-There are 4 front-screen examples, 21 suggestion starts, 21 to borrow from, 6 doors and 21 explanations in this build.
+There are 4 front-screen examples, 12 suggestion starts, 17 to borrow from, 6 doors and 17 explanations in this build.
 
 | Part | What it is | Which file |
 | --- | --- | --- |
@@ -1092,7 +1092,6 @@ a number on one of them.
 | **then** 2 | they’ll think less of me |
 | **then** 3 | they’ll start treating me carefully |
 | **do** 1 | Tell one person one true sentence about how this week has been. |
-| **do** 2 | Answer “how are you?” honestly, once, today. |
 | **leave out** 1 | Don’t follow it with “but I’m fine”. |
 | **leave out** 2 | Don’t make a joke of it. |
 
@@ -1103,36 +1102,12 @@ a number on one of them.
 | **then** 1 | they’ll spot everything wrong with it |
 | **then** 2 | they’ll think I’ve stopped caring |
 | **then** 3 | it’ll come straight back to me with a list |
-| **do** 1 | Finish one thing at good enough today and hand it over. |
+| **do** 1 | Leave one thing at good enough today and hand it over. |
 | **do** 2 | Stop at the time you planned, and send what you have. |
 | **leave out** 1 | No last read-through. |
 | **leave out** 2 | Don’t say what you’d have done with more time. |
 
-### 5. If I send it without reading it again…
-
-| | |
-| --- | --- |
-| **then** 1 | there’ll be a mistake in it |
-| **then** 2 | it’ll come out blunter than I meant |
-| **then** 3 | I’ll be going back to it all afternoon |
-| **do** 1 | Write one message today, read it once, and send it. |
-| **do** 2 | Send the next email the moment it’s written. |
-| **leave out** 1 | No second read-through. |
-| **leave out** 2 | Don’t go back and edit it after it’s gone. |
-
-### 6. If I don’t answer a message straight away…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll think I don’t care |
-| **then** 2 | they’ll assume I’m annoyed with them |
-| **then** 3 | they’ll stop bothering to message me |
-| **do** 1 | Leave one message a few hours before you answer it. |
-| **do** 2 | Pick one message today and answer it this evening. |
-| **leave out** 1 | Don’t open with “sorry, only just seen this”. |
-| **leave out** 2 | Don’t explain the delay. |
-
-### 7. If I sit still with the restlessness…
+### 5. If I sit still with the restlessness…
 
 | | |
 | --- | --- |
@@ -1144,31 +1119,19 @@ a number on one of them.
 | **leave out** 1 | Don’t pick anything up. |
 | **leave out** 2 | Don’t get up to do a job. |
 
-### 8. If I rest while there’s still stuff to do…
+### 6. If I rest while there’s still stuff to do…
 
 | | |
 | --- | --- |
 | **then** 1 | I’ll feel guilty the whole time |
 | **then** 2 | I won’t start again today |
 | **then** 3 | somebody will think I’ve gone slack |
-| **do** 1 | Take two hours off today, and take them properly. |
+| **do** 1 | Take an hour off today and do something just for yourself. |
 | **do** 2 | Sit down for half an hour with nothing to show for it. |
 | **leave out** 1 | No “I’ll just quickly do this one thing” first. |
-| **leave out** 2 | Don’t keep the list where you can see it. |
+| **leave out** 2 | Put the to-do list out of sight before you sit down. |
 
-### 9. If I go an evening without my phone…
-
-| | |
-| --- | --- |
-| **then** 1 | something will go wrong and nobody will reach me |
-| **then** 2 | I’ll miss something I needed to see |
-| **then** 3 | I won’t know what to do with myself |
-| **do** 1 | Put it in a drawer from eight. In the morning, write down what you actually missed. |
-| **do** 2 | Leave it in another room for one evening. |
-| **leave out** 1 | No checking it “just once” before bed. |
-| **leave out** 2 | Don’t tell anyone in advance where you’ll be. |
-
-### 10. If I say what I actually think…
+### 7. If I say what I actually think…
 
 | | |
 | --- | --- |
@@ -1180,31 +1143,18 @@ a number on one of them.
 | **leave out** 1 | Don’t soften it with a joke. |
 | **leave out** 2 | Don’t apologise for saying it. |
 
-### 11. If I don’t get the last word…
+### 8. If I don’t get the last word…
 
 | | |
 | --- | --- |
 | **then** 1 | they’ll think they’ve won |
-| **then** 2 | it’ll get brought up again |
+| **then** 2 | they won’t remember what I said |
 | **then** 3 | I’ll be going over it all night |
-| **do** 1 | Let one disagreement finish where it finishes today. |
-| **do** 2 | Say your bit once, and stop. |
+| **do** 1 | Say your bit once, and stop. |
 | **leave out** 1 | Don’t send the follow-up message. |
-| **leave out** 2 | Don’t go back to it later. |
+| **leave out** 2 | Don’t keep making new points. |
 
-### 12. If I let somebody see I got it wrong…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll lose confidence in me |
-| **then** 2 | they’ll bring it up again later |
-| **then** 3 | they’ll stop trusting me with things |
-| **do** 1 | Say “I got that wrong” once today, and leave it there. |
-| **do** 2 | Own one mistake before anybody finds it. |
-| **leave out** 1 | Don’t explain how it happened. |
-| **leave out** 2 | Don’t offer to fix it before they ask. |
-
-### 13. If I don’t rush to be early…
+### 9. If I don’t rush to be early…
 
 | | |
 | --- | --- |
@@ -1216,7 +1166,7 @@ a number on one of them.
 | **leave out** 1 | Don’t leave a buffer. |
 | **leave out** 2 | Don’t message ahead to say where you are. |
 
-### 14. If I say something good about somebody…
+### 10. If I say something good about somebody…
 
 | | |
 | --- | --- |
@@ -1224,11 +1174,10 @@ a number on one of them.
 | **then** 2 | they’ll be embarrassed |
 | **then** 3 | they’ll think I want something |
 | **do** 1 | Tell one person one specific thing they did well. |
-| **do** 2 | Say it out loud rather than in a message. |
 | **leave out** 1 | Don’t follow it with a joke. |
 | **leave out** 2 | Don’t add “anyway”. |
 
-### 15. If I ask somebody for help…
+### 11. If I ask somebody for help…
 
 | | |
 | --- | --- |
@@ -1240,31 +1189,7 @@ a number on one of them.
 | **leave out** 1 | Don’t say “if you’ve got a minute”. |
 | **leave out** 2 | Don’t do half of it first. |
 
-### 16. If I stop before it’s finished…
-
-| | |
-| --- | --- |
-| **then** 1 | it’ll never get done |
-| **then** 2 | I’ll have wasted the whole run at it |
-| **then** 3 | somebody will see it half done |
-| **do** 1 | Stop at the hour, mid-thing, and go and do something else. |
-| **do** 2 | End one job today at a point that isn’t the end. |
-| **leave out** 1 | Don’t tidy it up first. |
-| **leave out** 2 | Don’t leave a note saying where you got to. |
-
-### 17. If I go to something on my own…
-
-| | |
-| --- | --- |
-| **then** 1 | I’ll stand there with nobody to talk to |
-| **then** 2 | everyone will notice I came alone |
-| **then** 3 | I’ll want to leave within ten minutes |
-| **do** 1 | Go to one thing today without arranging to meet anybody. |
-| **do** 2 | Stay half an hour, and write down who spoke to you. |
-| **leave out** 1 | Don’t hold your phone. |
-| **leave out** 2 | Don’t line up an excuse to leave. |
-
-### 18. If I leave early and say plainly that I’m going…
+### 12. If I leave early and say plainly that I’m going…
 
 | | |
 | --- | --- |
@@ -1275,42 +1200,6 @@ a number on one of them.
 | **do** 2 | Say goodbye once, and go. |
 | **leave out** 1 | Don’t invent a reason. |
 | **leave out** 2 | Don’t stay for one more of anything. |
-
-### 19. If I don’t check it a second time…
-
-| | |
-| --- | --- |
-| **then** 1 | I’ll have missed something |
-| **then** 2 | it’ll be wrong and I won’t know |
-| **then** 3 | I won’t settle until I’ve looked |
-| **do** 1 | Check once today, and write down the time you stopped wanting to look. |
-| **do** 2 | Lock up once, and walk away. |
-| **leave out** 1 | No second look. |
-| **leave out** 2 | Don’t ask anybody else to check for you. |
-
-### 20. If I let a message sit unread…
-
-| | |
-| --- | --- |
-| **then** 1 | it’ll turn out to be the urgent one |
-| **then** 2 | they’ll see I’ve ignored it |
-| **then** 3 | it’ll pile up and get worse |
-| **do** 1 | Leave one message unopened until this evening. |
-| **do** 2 | Turn the badge off for a day. |
-| **leave out** 1 | Don’t read the preview. |
-| **leave out** 2 | Don’t open it and leave it unanswered. |
-
-### 21. If I get through it without apologising…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll think I don’t care |
-| **then** 2 | it’ll sit between us |
-| **then** 3 | somebody will say something about it |
-| **do** 1 | Get through one small thing today without saying sorry. |
-| **do** 2 | Say “thanks for waiting” instead of “sorry I’m late”, once. |
-| **leave out** 1 | Don’t apologise in the first sentence. |
-| **leave out** 2 | Don’t apologise for not apologising. |
 
 ---
 
@@ -1358,33 +1247,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I sit with the restlessness for {long}, then I’ll be no use for the rest of the day. | I’ll write the day off and get nothing done. |
 | 3 | If I sit with the restlessness for {long}, then everything I’ve been not thinking about will land at once. | The whole list will arrive at once, and stopping will have cost me. |
 
-### 2. Going an evening without my phone
-
-| | |
-| --- | --- |
-| **id** | `phone` |
-| **lane** | urge-timing |
-| **label** — the button | Going an evening without my phone |
-| **card sentence** — under the label on the list | If I’m not reachable for an evening, then something will go wrong. |
-| **test** — the one thing, today | Put it in a drawer from eight o’clock. In the morning, write down what you actually missed. |
-| **drop** — what you leave out | No checking it “just once” before bed. |
-
-**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
-
-| | |
-| --- | --- |
-| **printed** | If I go {long} without my phone |
-| **the gap `{long}`** — its word while it is empty | a whole evening |
-
-The three a person chooses between, in the order they are shown:
-
-| | If I ___, then ___ | braced for |
-| --- | --- | --- |
-| 1 | If I go {long} without my phone, then I’ll miss something that actually needed me. | Something urgent will come in and I’ll have let someone down. |
-| 2 | If I go {long} without my phone, then people will think I’m ignoring them. | There’ll be a short reply in the morning and a bit of an atmosphere. |
-| 3 | If I go {long} without my phone, then I’ll be twitchy the whole time and get nothing out of it anyway. | I’ll spend the evening thinking about the phone instead of using it. |
-
-### 3. A day without checking social media
+### 2. A day without checking social media
 
 | | |
 | --- | --- |
@@ -1410,59 +1273,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I go {long} without opening the apps I scroll, then people will think I’ve gone off them. | Somebody will notice I’ve disappeared and read something into it. |
 | 3 | If I go {long} without opening the apps I scroll, then I’ll have nothing to talk about. | I’ll be sitting there with nothing to say. |
 
-### 4. Not answering a message straight away
-
-| | |
-| --- | --- |
-| **id** | `reply` |
-| **lane** | social |
-| **label** — the button | Not answering a message straight away |
-| **card sentence** — under the label on the list | If I don’t answer a message quickly, then people take it badly. |
-| **test** — the one thing, today | Pick one message today and leave it a few hours before you answer. Notice whether they chase you. |
-| **drop** — what you leave out | Don’t open with “sorry, only just seen this”, and don’t explain the delay. |
-
-**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
-
-| | |
-| --- | --- |
-| **printed** | If I leave a message from {person} a few hours before I answer |
-| **the gap `{person}`** — its word while it is empty | somebody |
-
-The three a person chooses between, in the order they are shown:
-
-| | If I ___, then ___ | braced for |
-| --- | --- | --- |
-| 1 | If I leave a message from {person} a few hours before I answer, then {person} will think I don’t care. | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
-| 2 | If I leave a message from {person} a few hours before I answer, then {person} will assume I’m annoyed. | They’ll ask if everything’s all right, in that careful way. |
-| 3 | If I leave a message from {person} a few hours before I answer, then {person} will stop bothering to message me. | They’ll go to somebody else next time, and I’ll hear about it after. |
-
-### 5. Sending something without checking it again
-
-| | |
-| --- | --- |
-| **id** | `check` |
-| **lane** | perfectionism |
-| **label** — the button | Sending something without checking it again |
-| **card sentence** — under the label on the list | If I send something without going over it again, then it won’t be right. |
-| **test** — the one thing, today | Write one email or message today, read it through once, and send it. |
-| **drop** — what you leave out | No second read-through, and don’t go back to edit it after it’s gone. |
-
-**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
-
-| | |
-| --- | --- |
-| **printed** | If I send {thing} after reading it through once |
-| **the gap `{thing}`** — its word while it is empty | something |
-
-The three a person chooses between, in the order they are shown:
-
-| | If I ___, then ___ | braced for |
-| --- | --- | --- |
-| 1 | If I send {thing} after reading it through once, then there’ll be a mistake in it and I’ll look sloppy. | Someone will spot something, and they’ll think I rushed it. |
-| 2 | If I send {thing} after reading it through once, then it’ll come out blunter than I meant it. | They’ll take it the wrong way and I’ll spend the day fixing it. |
-| 3 | If I send {thing} after reading it through once, then I’ll be thinking about it all afternoon. | I’ll keep going back to it and get nothing else done. |
-
-### 6. Handing something over before it’s perfect
+### 3. Handing something over before it’s perfect
 
 | | |
 | --- | --- |
@@ -1488,7 +1299,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I hand over {thing} at good enough, then it’ll come straight back to me with a list. | I’ll end up doing it twice, and that’s worse than doing it properly. |
 | 3 | If I hand over {thing} at good enough, then that becomes what people expect from me. | The standard slips, and I don’t get it back. |
 
-### 7. Resting when there’s stuff to do
+### 4. Resting when there’s stuff to do
 
 | | |
 | --- | --- |
@@ -1514,7 +1325,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I rest for {long} while there’s still stuff to do, then I won’t start again today. | The afternoon will go, and tomorrow starts further behind. |
 | 3 | If I rest for {long} while there’s still stuff to do, then somebody will think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
 
-### 8. Paying someone a compliment
+### 5. Paying someone a compliment
 
 | | |
 | --- | --- |
@@ -1540,7 +1351,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say one specific good thing to {person} out loud, then {person} will think I want something. | They’ll be polite about it and wait for the ask. |
 | 3 | If I say one specific good thing to {person} out loud, then it’ll come out wrong and make things awkward. | It’ll sound odd, and neither of us will know what to say next. |
 
-### 9. Telling someone they matter to me
+### 6. Telling someone they matter to me
 
 | | |
 | --- | --- |
@@ -1566,7 +1377,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} one specific thing I’m glad about them, then it’ll change how we are with each other. | It’ll be a bit stiff between us afterwards. |
 | 3 | If I tell {person} one specific thing I’m glad about them, then {person} will wonder what’s brought this on. | They’ll ask if I’m all right, and I’ll have to explain myself. |
 
-### 10. Saying no without giving a reason
+### 7. Saying no without giving a reason
 
 | | |
 | --- | --- |
@@ -1602,7 +1413,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say no to {person} without giving a reason, then {person} will stop asking me. | I’ll be left out of the next one, and nobody will say why. |
 | 3 | If I say no to {person} without giving a reason, then {person} will take it as rude. | They’ll take it personally, and it’ll sit there between us. |
 
-### 11. Asking someone for help
+### 8. Asking someone for help
 
 | | |
 | --- | --- |
@@ -1628,7 +1439,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I ask {person} for one small, specific favour, then I’ll be trusted with less. | Next time it’ll go to somebody else, without a word to me. |
 | 3 | If I ask {person} for one small, specific favour, then {person} will say yes and resent it. | They’ll help, and be a bit short with me for a while after. |
 
-### 12. Telling someone I’ve been feeling low
+### 9. Telling someone I’ve been feeling low
 
 | | |
 | --- | --- |
@@ -1654,7 +1465,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} I’ve been feeling low lately, then {person} will start worrying about me. | They’ll check up on me, and I’ll wish I’d never said it. |
 | 3 | If I tell {person} I’ve been feeling low lately, then it’s the thing {person} thinks of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
 
-### 13. Telling someone I’m struggling
+### 10. Telling someone I’m struggling
 
 | | |
 | --- | --- |
@@ -1690,33 +1501,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} one true thing I’m finding hard, then {person} will wonder what else I can’t manage. | It’ll come up again the next time something needs doing. |
 | 3 | If I tell {person} one true thing I’m finding hard, then I’ll be the one everybody has to work around. | People will start being careful with me, and I’ll hate it. |
 
-### 14. Owning up to a mistake before anyone finds it
-
-| | |
-| --- | --- |
-| **id** | `mist` |
-| **lane** | perfectionism |
-| **label** — the button | Owning up to a mistake before anyone finds it |
-| **card sentence** — under the label on the list | If I own up to a mistake, then it counts against me. |
-| **test** — the one thing, today | Tell someone about one small mistake of yours today, before they find it. |
-| **drop** — what you leave out | Don’t bury it in excuses, and don’t wait until you’ve already fixed it. |
-
-**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
-
-| | |
-| --- | --- |
-| **printed** | If I tell {person} about one small mistake of mine before they find it |
-| **the gap `{person}`** — its word while it is empty | somebody |
-
-The three a person chooses between, in the order they are shown:
-
-| | If I ___, then ___ | braced for |
-| --- | --- | --- |
-| 1 | If I tell {person} about one small mistake of mine before they find it, then it’ll be held against me later. | They’ll remember this one, and trust me with less next time. |
-| 2 | If I tell {person} about one small mistake of mine before they find it, then {person} will start looking for others. | Everything I do goes under the microscope after this. |
-| 3 | If I tell {person} about one small mistake of mine before they find it, then {person} will think worse of me than if I’d quietly fixed it. | They’ll be fine to my face, and it’ll go on my record anyway. |
-
-### 15. Telling someone they’ve annoyed me
+### 11. Telling someone they’ve annoyed me
 
 | | |
 | --- | --- |
@@ -1742,7 +1527,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} one thing they’ve done that annoyed me, then {person} will say I’m making something out of nothing. | I’ll come out of it feeling like the unreasonable one. |
 | 3 | If I tell {person} one thing they’ve done that annoyed me, then things will be off between us for days. | It’ll be polite and cold, and I’ll be the one who has to fix it. |
 
-### 16. Letting someone else be right
+### 12. Letting someone else be right
 
 | | |
 | --- | --- |
@@ -1768,7 +1553,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} they’re right and leave it there, then {person} will talk over me from then on. | Next time they won’t even wait for my answer. |
 | 3 | If I tell {person} they’re right and leave it there, then nobody will ask what I think again. | The conversation will move on, and I’ll stay out of it. |
 
-### 17. Letting someone finish without interrupting
+### 13. Letting someone finish without interrupting
 
 | | |
 | --- | --- |
@@ -1794,7 +1579,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I let {person} finish before I say my bit, then I’ll forget what I was going to say. | It’ll go out of my head and I’ll sit there with nothing. |
 | 3 | If I let {person} finish before I say my bit, then {person} will take the whole conversation. | I’ll come out of it having said nothing at all. |
 
-### 18. Getting through a conversation without a joke
+### 14. Getting through a conversation without a joke
 
 | | |
 | --- | --- |
@@ -1820,7 +1605,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say the plain thing to {person} where I’d normally reach for the joke, then it’ll get too serious and {person} will be uncomfortable. | There’ll be a silence, and I’ll be the one who made it. |
 | 3 | If I say the plain thing to {person} where I’d normally reach for the joke, then nobody will bother keeping it going. | It’ll be hard work, and they’ll leave earlier than they would have. |
 
-### 19. Apologising without explaining myself
+### 15. Apologising without explaining myself
 
 | | |
 | --- | --- |
@@ -1846,7 +1631,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say sorry to {person} for one specific thing I did, then {person} will think it was worse than it was. | They’ll decide something’s wrong with me, on the strength of one bad day. |
 | 3 | If I say sorry to {person} for one specific thing I did, then I’ve taken the whole thing on myself. | Their part in it never gets mentioned again. |
 
-### 20. Turning up and not joining in
+### 16. Turning up and not joining in
 
 | | |
 | --- | --- |
@@ -1872,7 +1657,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I turn up to {thing} and don’t join in, then I’ll spoil it for everybody else. | It’ll go a bit flat, and they’ll wish I hadn’t come. |
 | 3 | If I turn up to {thing} and don’t join in, then I won’t enjoy any of it. | I’ll be counting the minutes and wishing I’d stayed at home. |
 
-### 21. Leaving before everyone else does
+### 17. Leaving before everyone else does
 
 | | |
 | --- | --- |
@@ -1927,7 +1712,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **id** | `phone` |
 | **label** | On my phone more than I want to be |
 | **under** | Picking it up without deciding to, and the evening’s gone. Half of it is the scroll. Half is not being able to sit still without it. |
-| **opens onto** | Going an evening without my phone · A day without checking social media · Sitting still when I feel restless · Not answering a message straight away |
+| **opens onto** | A day without checking social media · Sitting still when I feel restless |
 
 ### 2. Something I keep doing more than I mean to
 
@@ -1946,7 +1731,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **id** | `work` |
 | **label** | Never letting myself stop |
 | **under** | There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either. |
-| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Sending something without checking it again · Owning up to a mistake before anyone finds it |
+| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Asking someone for help · Saying no without giving a reason |
 
 ### 4. Taking it out on the people closest to me
 
@@ -1964,7 +1749,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **id** | `secret` |
 | **label** | Keeping it all to myself |
 | **under** | Nobody around you knows the half of it. Not hiding it exactly; it just never seems like the moment. |
-| **opens onto** | Telling someone they matter to me · Telling someone I’m struggling · Telling someone I’ve been feeling low · Owning up to a mistake before anyone finds it · Asking someone for help |
+| **opens onto** | Telling someone they matter to me · Telling someone I’m struggling · Telling someone I’ve been feeling low · Asking someone for help |
 
 ### 6. Going along with things I don’t want to do
 
@@ -1972,8 +1757,8 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | --- | --- |
 | **id** | `yes` |
 | **label** | Going along with things I don’t want to do |
-| **under** | Yes when you meant no. Nothing said when something’s annoyed you. An answer sent the second the message lands. |
-| **opens onto** | Not answering a message straight away · Saying no without giving a reason · Telling someone they’ve annoyed me · Asking someone for help |
+| **under** | Yes when you meant no. Nothing said when something’s annoyed you. Doing it all yourself rather than asking. |
+| **opens onto** | Asking someone for help · Saying no without giving a reason · Telling someone they’ve annoyed me |
 
 ---
 
@@ -1998,16 +1783,6 @@ The closing line is the same under all twelve and lives with the interface, as `
 
 > Doing something works within seconds, every time — and that is the problem. Fast relief is a very good teacher, and what it teaches is that the feeling was on its way somewhere. Ten minutes of nothing is not endurance. It is the only way to see what the feeling does when it is left alone.
 
-### Going an evening without my phone — `phone`
-
-**what** — what the worry is, underneath the situation
-
-> The worry usually isn’t about the phone. It’s about being unreachable — that something will need you in the gap, and that not being there will mean something about you.
-
-**why** — which safety behaviour keeps it from being tested
-
-> Checking once settles it, and settling it is why the question never gets answered. You find out that nothing happened this time, which is not the same as finding out what happens. A whole evening, and a list in the morning of what actually came in, is a real answer either way.
-
 ### A day without checking social media — `feed`
 
 **what** — what the worry is, underneath the situation
@@ -2017,26 +1792,6 @@ The closing line is the same under all twelve and lives with the interface, as `
 **why** — which safety behaviour keeps it from being tested
 
 > Every look closes the gap, and closing it is why the question never gets asked. What you learn is that you are up to date right now, which says nothing about what a day away actually costs. A day away, and a list at the end of it, is the first real number there has been.
-
-### Not answering a message straight away — `reply`
-
-**what** — what the worry is, underneath the situation
-
-> Answering fast can start as being considerate and quietly turn into a rule. Once it’s a rule, a message sitting unanswered stops being a message and starts being evidence of something about you.
-
-**why** — which safety behaviour keeps it from being tested
-
-> The apology at the top of the late reply is what holds it in place. It repairs the silence before anybody has reacted to it, so you never learn whether the silence needed repairing. Leave one, answer plainly, and read what actually comes back.
-
-### Sending something without checking it again — `check`
-
-**what** — what the worry is, underneath the situation
-
-> Checking again is rarely about catching mistakes. It’s about the feeling that turns up when you imagine not checking, and the second read is what makes that feeling go away.
-
-**why** — which safety behaviour keeps it from being tested
-
-> So the relief teaches the wrong thing. Nothing went wrong, and the checking gets the credit for it, which is why one more read never feels optional. The only way to find out what it is actually worth is to send one without it.
 
 ### Handing something over before it’s perfect — `enough`
 
@@ -2117,16 +1872,6 @@ The closing line is the same under all twelve and lives with the interface, as `
 **why** — which safety behaviour keeps it from being tested
 
 > “But I’m fine” at the end is the crutch, and it is a good one — it takes the weight out before anybody has to respond to it. Which means what comes back is a response to the lighter version. Say the true thing, keep it small, and then stop.
-
-### Owning up to a mistake before anyone finds it — `mist`
-
-**what** — what the worry is, underneath the situation
-
-> The dread here is usually about a record rather than a moment. Not that today goes badly, but that it gets written down somewhere and comes back later.
-
-**why** — which safety behaviour keeps it from being tested
-
-> Which is why the fixing and the explaining arrive first. Turn up with it already solved and you find out how people take a solved problem; you learn nothing about how they take you getting something wrong. Say it before it is tidy.
 
 ### Telling someone they’ve annoyed me — `angry`
 

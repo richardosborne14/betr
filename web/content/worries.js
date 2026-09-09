@@ -68,14 +68,20 @@
 
   Three were reworded that day for exactly that reason, and all three moved from a situation
   happening TO the person to an action the person takes, which is the shape a behavioural
-  experiment actually tests: `phone` belief 1 ("If someone can't get hold of me" → "If I don't
-  answer while it's away"), `rest` belief 2 ("If anyone sees me sitting down" → "If I let
-  somebody see me sitting down"), `low` belief 0 ("If they know" → "If I tell them"). The
-  prediction underneath each is unchanged. THE PAID CBT REVIEWER SHOULD READ THESE THREE
-  ALONGSIDE THE REST; they are the only sentences in this file a session has rewritten since B1.
+  experiment actually tests: `rest` belief 2 ("If anyone sees me sitting down" → "If I let
+  somebody see me sitting down"), `low` belief 0 ("If they know" → "If I tell them"), and
+  `phone` belief 1, which went with `phone` in the B47 cull. The prediction underneath each is
+  unchanged. THE PAID CBT REVIEWER SHOULD READ THE TWO SURVIVORS ALONGSIDE THE REST; they are
+  the only sentences left in this file that a session has rewritten since B1.
 
-  `cut` (Saying I'm cutting back) was deleted on 2026-09-03 at the founder's call. Its id is
-  retired, not reused, and its explanation went with it.
+  RETIRED IDS. An id in a person's own record cannot be brought back — `rate.keyOf()` keys a
+  belief ladder by id — so a deleted worry's id is retired, never reused, and its explanation
+  goes with it. `cut` (Saying I'm cutting back) went on 2026-09-03. `phone` (Going an evening
+  without my phone), `reply` (Not answering a message straight away), `check` (Sending
+  something without checking it again) and `mist` (Owning up to a mistake before anyone finds
+  it) went on 2026-09-09, in B47's cull, at the founder's call. Six of them were the same
+  thing said twice — `check` was #05 and #19 in starts.js, `reply` was #06 and #20 — and
+  `phone` was cut because some people do have emergencies.
 
   Every phrase here is written fresh. Nothing is adapted from CCI, Getselfhelp, Therapist Aid,
   Psychology Tools or Beck Institute material; all of them restrict reuse in a product. The
@@ -120,38 +126,11 @@ var BETR_WORRIES = [
     lane: 'urge-timing'
   },
   {
-    id: 'phone',
-    label: 'Going an evening without my phone',
-    belief: 'If I’m not reachable for an evening, then something will go wrong.',
-    skeleton: {
-      if: 'go {long} without my phone',
-      holes: { long: 'a whole evening' }
-    },
-    beliefs: [
-      {
-        belief: 'If I go {long} without my phone, then I’ll miss something that actually ' +
-          'needed me.',
-        expect: 'Something urgent will come in and I’ll have let someone down.'
-      },
-      {
-        belief: 'If I go {long} without my phone, then people will think I’m ignoring them.',
-        expect: 'There’ll be a short reply in the morning and a bit of an atmosphere.'
-      },
-      {
-        belief: 'If I go {long} without my phone, then I’ll be twitchy the whole time and get ' +
-          'nothing out of it anyway.',
-        expect: 'I’ll spend the evening thinking about the phone instead of using it.'
-      }
-    ],
-    test: 'Put it in a drawer from eight o’clock. In the morning, write down what you actually missed.',
-    drop: 'No checking it “just once” before bed.',
-    lane: 'urge-timing'
-  },
-  {
     /*
-      B19. The other half of the phone door. `phone` is about being unreachable — something
-      needs you in the gap. This one is about falling behind everybody else, which is a
-      different prediction and a different evening.
+      B19, and B47 left it carrying the door on its own. It used to be the other half of a
+      pair: `phone` was about being unreachable, this one about falling behind everybody
+      else. `phone` went in the cull, so what is left behind that door is the scroll and not
+      being able to sit still without it — which is what the door's own line already says.
     */
     id: 'feed',
     label: 'A day without checking social media',
@@ -182,67 +161,10 @@ var BETR_WORRIES = [
     lane: 'urge-timing'
   },
   {
-    id: 'reply',
-    label: 'Not answering a message straight away',
-    belief: 'If I don’t answer a message quickly, then people take it badly.',
-    skeleton: {
-      if: 'leave a message from {person} a few hours before I answer',
-      holes: { person: 'somebody' }
-    },
-    beliefs: [
-      {
-        belief: 'If I leave a message from {person} a few hours before I answer, then {person} ' +
-          'will think I don’t care.',
-        expect: 'They’ll go a bit cooler with me, and I’ll have to make it up to them.'
-      },
-      {
-        belief: 'If I leave a message from {person} a few hours before I answer, then {person} ' +
-          'will assume I’m annoyed.',
-        expect: 'They’ll ask if everything’s all right, in that careful way.'
-      },
-      {
-        belief: 'If I leave a message from {person} a few hours before I answer, then {person} ' +
-          'will stop bothering to message me.',
-        expect: 'They’ll go to somebody else next time, and I’ll hear about it after.'
-      }
-    ],
-    test: 'Pick one message today and leave it a few hours before you answer. Notice whether they chase you.',
-    drop: 'Don’t open with “sorry, only just seen this”, and don’t explain the delay.',
-    lane: 'social'
-  },
-  {
-    id: 'check',
-    label: 'Sending something without checking it again',
-    belief: 'If I send something without going over it again, then it won’t be right.',
-    skeleton: {
-      if: 'send {thing} after reading it through once',
-      holes: { thing: 'something' }
-    },
-    beliefs: [
-      {
-        belief: 'If I send {thing} after reading it through once, then there’ll be a mistake ' +
-          'in it and I’ll look sloppy.',
-        expect: 'Someone will spot something, and they’ll think I rushed it.'
-      },
-      {
-        belief: 'If I send {thing} after reading it through once, then it’ll come out blunter ' +
-          'than I meant it.',
-        expect: 'They’ll take it the wrong way and I’ll spend the day fixing it.'
-      },
-      {
-        belief: 'If I send {thing} after reading it through once, then I’ll be thinking about ' +
-          'it all afternoon.',
-        expect: 'I’ll keep going back to it and get nothing else done.'
-      }
-    ],
-    test: 'Write one email or message today, read it through once, and send it.',
-    drop: 'No second read-through, and don’t go back to edit it after it’s gone.',
-    lane: 'perfectionism'
-  },
-  {
     /*
-      B19. `check` is about a mistake getting through. This is about the standard itself —
-      stopping at good enough when nothing is wrong with it. The founder asked for both.
+      B19, and since B47 it is the only one of its pair left. `check` was about a mistake
+      getting through; this is about the standard itself — stopping at good enough when
+      nothing is wrong with it. The founder asked for both in B19 and cut `check` in B47.
     */
     id: 'enough',
     label: 'Handing something over before it’s perfect',
@@ -542,35 +464,6 @@ var BETR_WORRIES = [
     test: 'Tell {person} one true sentence about how this week has been.',
     drop: 'Don’t finish it with “but I’m fine”.',
     lane: 'social'
-  },
-  {
-    id: 'mist',
-    label: 'Owning up to a mistake before anyone finds it',
-    belief: 'If I own up to a mistake, then it counts against me.',
-    skeleton: {
-      if: 'tell {person} about one small mistake of mine before they find it',
-      holes: { person: 'somebody' }
-    },
-    beliefs: [
-      {
-        belief: 'If I tell {person} about one small mistake of mine before they find it, then ' +
-          'it’ll be held against me later.',
-        expect: 'They’ll remember this one, and trust me with less next time.'
-      },
-      {
-        belief: 'If I tell {person} about one small mistake of mine before they find it, then ' +
-          '{person} will start looking for others.',
-        expect: 'Everything I do goes under the microscope after this.'
-      },
-      {
-        belief: 'If I tell {person} about one small mistake of mine before they find it, then ' +
-          '{person} will think worse of me than if I’d quietly fixed it.',
-        expect: 'They’ll be fine to my face, and it’ll go on my record anyway.'
-      }
-    ],
-    test: 'Tell someone about one small mistake of yours today, before they find it.',
-    drop: 'Don’t bury it in excuses, and don’t wait until you’ve already fixed it.',
-    lane: 'perfectionism'
   },
   {
     id: 'angry',

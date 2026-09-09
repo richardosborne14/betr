@@ -1006,3 +1006,38 @@ except laying the two files and the six doors side by side before deleting anyth
 **So: before deleting content, list what points at it.** Here that was two files, six doors and
 `rate.keyOf()`, which keys a person's ladder by `id` — an id that ships and is then culled cannot
 be brought back. Deleting nothing this session was the finding, not the shortfall.
+
+### And the list of what points at it was longer than that
+
+The cull went in the next afternoon and **the "list what points at it" pass above was still one
+item short.** Deleting four worries also took out four `why.js` explanations, three walks in
+`menu.test.js` and `merge.test.js` that indexed `[data-id]` into the *first* door on the
+assumption it held four worries, and two count canaries — `content.test.js` asserting more than
+150 suggestion lines, `loop.test.js` asserting more than 20 chips. Six failing tests, none of
+them where the deletion was.
+
+**The canaries were right and the walks were wrong, and telling them apart is the whole skill.**
+A canary that fires because the file genuinely shrank wants its number moved and a note saying
+which cull moved it. A walk that fires because it hard-coded `[data-door]` 0 wants the coupling
+removed — the menu tests were never about which door you go through. **Lowering a threshold to
+make a suite green is how a cull quietly becomes a regression**, so each of the two moved
+numbers now carries a comment naming B47 and saying a cull is the only reason to move it again.
+
+### The rule that broke was in a different door from the one everybody was watching
+
+B47 spent a page on `work` and `phone`. The cull's actual casualty was **`yes`**, which its own
+§3 table showed falling to three and which nobody flagged — because the breakage was not the
+count. It was that losing `reply` promoted *Saying no without giving a reason* to the top of the
+door, and **the first worry behind every door has to be startable the day it is tapped**
+(scope §5.3c). Saying no waits on somebody asking you for something. So the door a person opens
+first would have led with a test most of them could not run that day.
+
+**A hand-held list is only as good as the thing it is checked against.** `STARTS_TODAY` caught
+it, but only because a *door* is checked against it — had that rule been written about the flat
+worry list it used to be about, the cull would have sailed through. The lesson is the one the
+list's own comment already makes: hold the judgement by hand, in a file, so it fails loudly.
+
+**And the floor got written.** `whats-going-on.js` claimed "four to six" for six months with
+only the six enforced. `MIN_PER_DOOR = 4` is now in `content.test.js` with `phone` and `yes`
+named as dated exceptions. **A documented rule that nothing checks is not a rule**, and it took
+a cull to find out which of BETR's stated rules were which.

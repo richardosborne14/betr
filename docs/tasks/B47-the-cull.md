@@ -1,12 +1,14 @@
 # B47: The cull — the founder's review of the suggestions, turned into work
 
-**Status:** **SCOPED, and the four questions in §6 were answered the same day.** The review is
-saved and the sheet is marked. **Nothing has been deleted from either content file**, and §6b
-says why: the cull is one move and one door cannot be honestly refilled without the founder.
-**Confidence:** **9/10** on the record and the decisions — every number below was read off the
-two content files today, and all 134 review rows matched a `Ref` in the sheet. **9/10 that the
-cull is right to make**; **6/10 on §6c**, the #07 draft, because it is new content and nobody
-but me has read it.
+**Status:** **THE CULL IS APPLIED.** §6b was answered on 2026-09-09 and the deletions went in
+the same day: **twenty-one starts are twelve, twenty-one worries are seventeen**, four `why.js`
+explanations went with their worries, and the doors are refilled. `node --test` passes at 254,
+and the loop was walked in a real browser end to end. **§6c is still a draft nobody but me has
+read**, and it is the only part of B47 left.
+**Confidence:** **9/10** on the cull as applied — every deletion was driven off the sheet's own
+`CULLED` marks rather than off this file's prose, and the three cross-file checks (no worry
+behind no door, no explanation without a worry, no door naming a worry that is gone) all pass.
+**6/10 on §6c**, unchanged, because it is new content and nobody but me has read it.
 **Date opened:** 2026-09-09 · **Founder's**, returning the review sheet.
 **Blocks:** [`B45`](B45-one-road-in.md) §5b and §5c. See §7 — doing them in the other order
 writes thirty-eight sentences for worries that are about to be deleted.
@@ -239,7 +241,49 @@ one. The sheet is marked: **271 rows are still live for the paid reviewer, down 
 
 ---
 
-## 6b. THE REFILL IS THE PROBLEM, AND IT IS WHY NO CODE CHANGED TODAY
+## 6b. THE REFILL — ANSWERED 2026-09-09, AND A THIRD DOOR TURNED UP
+
+**The founder's call: borrow from what is already there.** Neither of the three options below
+was taken, because a fourth was available and nobody had noticed it: **doors already share
+worries.** `sit` sits behind two, `strug` behind two, `no` behind two, `angry` behind two,
+`help` behind two. So `work` was refilled from the surviving seventeen without putting anything
+back, rewriting a label, or dropping a door:
+
+**`work` — Never letting myself stop → `rest`, `enough`, `help`, `no`.** Four again. Asking
+someone for help is handing work over and saying no is not taking more on; both are ways of
+letting yourself stop, and both were already in the product behind other doors.
+
+**AND THE CULL HIT A THIRD DOOR, WHICH §3's TABLE RECORDED AND NOTHING FLAGGED.** `yes` — going
+along with things — loses `reply` and falls to three, and **that broke a rule this file never
+mentioned**: the first worry behind every door has to be one a person can start the day they
+tap it (scope §5.3c, `STARTS_TODAY` in `content.test.js`). With `reply` gone the door led on
+*Saying no without giving a reason*, which waits on somebody asking you for something — the
+exact failure the rule exists to stop. **Founder's call, same day: lead on `help` instead and
+leave the door at three** rather than borrow two more from `habit`, because five was more to
+read than the door needed. `help` went onto `STARTS_TODAY` for the reason `care` and `praise`
+are already on it: the person starts it, nobody has to do anything first.
+
+**`phone` stays at two and that is on the record, not an oversight.** Nothing among the
+seventeen belongs behind *On my phone more than I want to be*. §6c's split is what takes it to
+three, and that draft is still unread.
+
+**Three follow-ons went in with the cull.**
+
+1. **The floor now exists.** `whats-going-on.js` has said "four to six worries" since B19 and
+   `lib/content.js` only ever held the six, so a door could fall to two and the build would
+   pass — which is exactly what happened. `content.test.js` now holds `MIN_PER_DOOR = 4` with
+   `phone` and `yes` named as dated exceptions carrying their reason. A third one needs the
+   founder.
+2. **The `yes` door's own line was describing a deleted worry.** *"An answer sent the second
+   the message lands"* was `reply`. It now reads *"Doing it all yourself rather than asking"*,
+   which is `help` — the door's new first worry, and previously not in the line at all.
+   **MISHA HAS NOT READ THIS SENTENCE.** It is in `docs/COPY.md`.
+3. **Two count canaries moved, and both were doing their job.** The suggestion sweep in
+   `content.test.js` went 150 → 90 (the file holds 102 lines now, down from 150-plus) and the
+   chip sweep in `loop.test.js` went 20 → 12 (fifteen chips now: twelve `if`s and the general
+   set's three `thens`). Both carry a note saying a cull is the only reason to move them.
+
+## 6b-was. THE ARGUMENT AS IT STOOD BEFORE THE ANSWER
 
 Answer 1 says refill the doors before anything ships. **Two of them cannot honestly be refilled
 from what survives**, and the second one is worse than §3 made it look.
@@ -265,10 +309,11 @@ a content job.** Three ways out, and they are not equal:
 | **Rewrite the door** | Make it about resting and handing things over, which is what `rest` and `enough` actually are. **Misha signs off door labels** (B19 release condition), so this is his read |
 | **Five doors** | Drop `work` and move `rest` and `enough` behind others. The biggest change, and the doors were ordered on purpose in B23 |
 
-**Nothing was deleted from either content file today, and that is deliberate.** Culling
-`starts.js` on its own is the option the founder was offered as "only the typed suggestions for
-now" and turned down, and culling `worries.js` on its own leaves two hollow doors on the screen
-the founder would next open on their phone. **The cull is one move, and it needs 6b answered.**
+**Nothing was deleted until this was answered, and that was deliberate.** Culling `starts.js`
+on its own was the option the founder was offered as "only the typed suggestions for now" and
+turned down, and culling `worries.js` on its own leaves hollow doors on the screen the founder
+would next open on their phone. **The cull was one move, and it waited on 6b.** It was answered
+the same afternoon and the whole thing went in together — see §6b above.
 
 ---
 
@@ -331,16 +376,20 @@ both. **Neither of these names a body sensation**, which is the line the old #07
 sentences — and four of those worries are now deleted and one becomes two. Culling first is the
 difference between writing 38 sentences and writing about 30.
 
-1. **§6b answered** — the `work` door. Nothing is deleted until it is
-2. The cull, both files in one move, plus the door refill
+1. ~~**§6b answered** — the `work` door. Nothing is deleted until it is~~ **done 2026-09-09**
+2. ~~The cull, both files in one move, plus the door refill~~ **done 2026-09-09, one commit**
 3. The redraft sheet: every surviving rewrite, the founder's line beside mine, in one document
 4. #07's two categories built from §6c, once the founder and Misha have read it
 5. **Then** B45 §5c, the merge, on a list that has stopped moving
 
 ## 8. Done when
 
-- Every marked row in the sheet is applied, replaced by §4's suggested line, or answered in §6
-- No door opens onto fewer than four worries, or the founder has said otherwise on `work`
-- `node --test` passes, and `content.test.js`'s hand-held first-worry-per-door list matches
-- Nothing was deleted from `worries.js` without the founder saying so, because an id in a
-  person's record cannot be brought back
+- [x] Every `CULLED` row in the sheet is gone from the content files — driven off the sheet's
+      own marks, not off this file's prose. **269 live rows** for the reviewer, from 428
+- [x] No door opens onto fewer than four worries, or is named in `THIN_DOORS` with a reason and
+      a date. `phone` at two and `yes` at three, both on the founder's word
+- [x] `node --test` passes (**254**), the first-worry-per-door list matches, and the loop was
+      walked end to end in a real browser
+- [x] Nothing was deleted from `worries.js` without the founder saying so, and the four retired
+      ids are written into the file's header so none is ever reused
+- [ ] **§6c** — the #07 split, still a draft, still the only thing left in B47

@@ -131,8 +131,7 @@ var BETR_STARTS = {
         'they’ll start treating me carefully'
       ],
       dos: [
-        'Tell one person one true sentence about how this week has been.',
-        'Answer “how are you?” honestly, once, today.'
+        'Tell one person one true sentence about how this week has been.'
       ],
       drops: [
         'Don’t follow it with “but I’m fine”.',
@@ -153,38 +152,6 @@ var BETR_STARTS = {
       drops: [
         'No last read-through.',
         'Don’t say what you’d have done with more time.'
-      ]
-    },
-    {
-      if: 'send it without reading it again',
-      thens: [
-        'there’ll be a mistake in it',
-        'it’ll come out blunter than I meant',
-        'I’ll be going back to it all afternoon'
-      ],
-      dos: [
-        'Write one message today, read it once, and send it.',
-        'Send the next email the moment it’s written.'
-      ],
-      drops: [
-        'No second read-through.',
-        'Don’t go back and edit it after it’s gone.'
-      ]
-    },
-    {
-      if: 'don’t answer a message straight away',
-      thens: [
-        'they’ll think I don’t care',
-        'they’ll assume I’m annoyed with them',
-        'they’ll stop bothering to message me'
-      ],
-      dos: [
-        'Leave one message a few hours before you answer it.',
-        'Pick one message today and answer it this evening.'
-      ],
-      drops: [
-        'Don’t open with “sorry, only just seen this”.',
-        'Don’t explain the delay.'
       ]
     },
     {
@@ -220,22 +187,6 @@ var BETR_STARTS = {
       ]
     },
     {
-      if: 'go an evening without my phone',
-      thens: [
-        'something will go wrong and nobody will reach me',
-        'I’ll miss something I needed to see',
-        'I won’t know what to do with myself'
-      ],
-      dos: [
-        'Put it in a drawer from eight. In the morning, write down what you actually missed.',
-        'Leave it in another room for one evening.'
-      ],
-      drops: [
-        'No checking it “just once” before bed.',
-        'Don’t tell anyone in advance where you’ll be.'
-      ]
-    },
-    {
       if: 'say what I actually think',
       thens: [
         'it’ll turn into a row',
@@ -259,28 +210,11 @@ var BETR_STARTS = {
         'I’ll be going over it all night'
       ],
       dos: [
-        'Let one disagreement finish where it finishes today.',
         'Say your bit once, and stop.'
       ],
       drops: [
         'Don’t send the follow-up message.',
         'Don’t keep making new points.'
-      ]
-    },
-    {
-      if: 'let somebody see I got it wrong',
-      thens: [
-        'they’ll lose confidence in me',
-        'they’ll bring it up again later',
-        'they’ll stop trusting me with things'
-      ],
-      dos: [
-        'Say “I got that wrong” once today, and leave it there.',
-        'Own one mistake before anybody finds it.'
-      ],
-      drops: [
-        'Don’t explain how it happened.',
-        'Don’t offer to fix it before they ask.'
       ]
     },
     {
@@ -313,8 +247,7 @@ var BETR_STARTS = {
         'they’ll think I want something'
       ],
       dos: [
-        'Tell one person one specific thing they did well.',
-        'Say it out loud rather than in a message.'
+        'Tell one person one specific thing they did well.'
       ],
       drops: [
         'Don’t follow it with a joke.',
@@ -338,38 +271,6 @@ var BETR_STARTS = {
       ]
     },
     {
-      if: 'stop before it’s finished',
-      thens: [
-        'it’ll never get done',
-        'I’ll have wasted the whole run at it',
-        'somebody will see it half done'
-      ],
-      dos: [
-        'Stop at the hour, mid-thing, and go and do something else.',
-        'End one job today at a point that isn’t the end.'
-      ],
-      drops: [
-        'Don’t tidy it up first.',
-        'Don’t leave a note saying where you got to.'
-      ]
-    },
-    {
-      if: 'go to something on my own',
-      thens: [
-        'I’ll stand there with nobody to talk to',
-        'everyone will notice I came alone',
-        'I’ll want to leave within ten minutes'
-      ],
-      dos: [
-        'Go to one thing today without arranging to meet anybody.',
-        'Stay half an hour, and write down who spoke to you.'
-      ],
-      drops: [
-        'Don’t hold your phone.',
-        'Don’t line up an excuse to leave.'
-      ]
-    },
-    {
       if: 'leave early and say plainly that I’m going',
       thens: [
         'they’ll take it as a snub',
@@ -383,54 +284,6 @@ var BETR_STARTS = {
       drops: [
         'Don’t invent a reason.',
         'Don’t stay for one more of anything.'
-      ]
-    },
-    {
-      if: 'don’t check it a second time',
-      thens: [
-        'I’ll have missed something',
-        'it’ll be wrong and I won’t know',
-        'I won’t settle until I’ve looked'
-      ],
-      dos: [
-        'Check once today, and write down the time you stopped wanting to look.',
-        'Lock up once, and walk away.'
-      ],
-      drops: [
-        'No second look.',
-        'Don’t ask anybody else to check for you.'
-      ]
-    },
-    {
-      if: 'let a message sit unread',
-      thens: [
-        'it’ll turn out to be the urgent one',
-        'they’ll see I’ve ignored it',
-        'it’ll pile up and get worse'
-      ],
-      dos: [
-        'Leave one message unopened until this evening.',
-        'Turn the badge off for a day.'
-      ],
-      drops: [
-        'Don’t read the preview.',
-        'Don’t open it and leave it unanswered.'
-      ]
-    },
-    {
-      if: 'get through it without apologising',
-      thens: [
-        'they’ll think I don’t care',
-        'it’ll sit between us',
-        'somebody will say something about it'
-      ],
-      dos: [
-        'Get through one small thing today without saying sorry.',
-        'Say “thanks for waiting” instead of “sorry I’m late”, once.'
-      ],
-      drops: [
-        'Don’t apologise in the first sentence.',
-        'Don’t apologise for not apologising.'
       ]
     }
   ]

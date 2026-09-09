@@ -258,7 +258,7 @@ test('a test locked in and finished later is one thing with one id all the way t
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
   /* leave it waiting and go and start something else, which is what B8 made possible */
-  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#next');
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 3).tap('[data-id]', 2).tap('[data-b]', 0).tap('#next');
   const waiting = JSON.parse(a.mem['betr.v1']).open;
   assert.strictEqual(waiting.length, 1);
   const id = waiting[0].rid;
@@ -275,7 +275,7 @@ test('a test locked in and finished later is one thing with one id all the way t
 test('two waiting tests at once have two different ids', () => {
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
-  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 2).tap('[data-b]', 0).tap('#next').tap('#lock');
+  a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 3).tap('[data-id]', 2).tap('[data-b]', 0).tap('#next').tap('#lock');
   a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 1).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('#lock');
   a.tap('#m-mine');
   const open = JSON.parse(a.mem['betr.v1']).open;

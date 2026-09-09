@@ -22,12 +22,18 @@ const en = require('../content/strings-en.js');
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
 
-/* Lock a stock worry in and walk away from it, leaving it waiting. */
-function lockOne(a, item) {
+/*
+  Lock a stock worry in and walk away from it, leaving it waiting.
+
+  B47, 2026-09-09: `door` used to be hard-coded to the first one, and the cull took that door
+  down to two worries, so a walk that wanted four fell off the end of the list. Which door a
+  menu test walks through was never the point of the menu tests — pass one that is big enough.
+*/
+function lockOne(a, item, door) {
   if (a.html().indexOf('id="go"') !== -1) a.tap('#not-sure');   /* already past the front screen, or not */
   /* B30: "New test" opens the build screen, so the borrow road starts from the front screen. */
   if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#not-sure');
-  if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', 0);
+  if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', door || 0);
   a.tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
   return a;
@@ -99,10 +105,11 @@ test('starting a new test keeps the one you locked in, and it is waiting afterwa
 
 test('there is no cap on how many are on the go, and nothing counts them', () => {
   const a = boot();
-  lockOne(a, 0).tap('#m-new');
-  lockOne(a, 1).tap('#m-new');
-  lockOne(a, 2).tap('#m-new');
-  lockOne(a, 3).tap('#m-new');
+  /* Four distinct worries, so through a door that has four (B47). */
+  lockOne(a, 0, 3).tap('#m-new');
+  lockOne(a, 1, 3).tap('#m-new');
+  lockOne(a, 2, 3).tap('#m-new');
+  lockOne(a, 3, 3).tap('#m-new');
   a.tap('#back');                       /* the front screen, with four waiting */
   a.shows('Tests you’ve got on the go');
   const front = a.html();

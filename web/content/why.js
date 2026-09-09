@@ -61,24 +61,6 @@ var BETR_WHY = {
       'without the balancing act and whatever comes back is about you asking.'
   },
 
-  reply: {
-    what: 'Answering fast can start as being considerate and quietly turn into a rule. Once ' +
-      'it’s a rule, a message sitting unanswered stops being a message and starts being ' +
-      'evidence of something about you.',
-    why: 'The apology at the top of the late reply is what holds it in place. It repairs the ' +
-      'silence before anybody has reacted to it, so you never learn whether the silence ' +
-      'needed repairing. Leave one, answer plainly, and read what actually comes back.'
-  },
-
-  check: {
-    what: 'Checking again is rarely about catching mistakes. It’s about the feeling that ' +
-      'turns up when you imagine not checking, and the second read is what makes that ' +
-      'feeling go away.',
-    why: 'So the relief teaches the wrong thing. Nothing went wrong, and the checking gets ' +
-      'the credit for it, which is why one more read never feels optional. The only way to ' +
-      'find out what it is actually worth is to send one without it.'
-  },
-
   sit: {
     what: 'This one is a prediction about a feeling rather than about people: that ' +
       'restlessness climbs and keeps climbing until you do something. It is the hardest ' +
@@ -90,16 +72,6 @@ var BETR_WHY = {
       'the feeling does when it is left alone.'
   },
 
-  phone: {
-    what: 'The worry usually isn’t about the phone. It’s about being unreachable — that ' +
-      'something will need you in the gap, and that not being there will mean something ' +
-      'about you.',
-    why: 'Checking once settles it, and settling it is why the question never gets answered. ' +
-      'You find out that nothing happened this time, which is not the same as finding out ' +
-      'what happens. A whole evening, and a list in the morning of what actually came in, ' +
-      'is a real answer either way.'
-  },
-
   strug: {
     what: 'Of everything on this list, this is the one people tend to be surest about: that ' +
       'being seen having a hard time changes what somebody thinks you are. So it stays in, ' +
@@ -107,14 +79,6 @@ var BETR_WHY = {
     why: '“But I’m fine” at the end is the crutch, and it is a good one — it takes the ' +
       'weight out before anybody has to respond to it. Which means what comes back is a ' +
       'response to the lighter version. Say the true thing, keep it small, and then stop.'
-  },
-
-  mist: {
-    what: 'The dread here is usually about a record rather than a moment. Not that today ' +
-      'goes badly, but that it gets written down somewhere and comes back later.',
-    why: 'Which is why the fixing and the explaining arrive first. Turn up with it already ' +
-      'solved and you find out how people take a solved problem; you learn nothing about ' +
-      'how they take you getting something wrong. Say it before it is tidy.'
   },
 
   angry: {
