@@ -72,25 +72,29 @@ So every templated test is a stranger to itself, every one starts at ten, and **
 ever moves past one rung.** The one number in the product stops working, and it fails silently —
 tests pass, screens render, and the thing the whole app exists to show simply never happens.
 
-**The fix, and it is better than what is there.** Store the test as what it actually is:
+**The fix, corrected 2026-09-09, and it is smaller than this file first said.** The original
+draft here proposed keying the ladder on *template plus which prediction*. **That is wrong, and
+rule 5 says why:** a stock item's three predictions **all share that item's one ladder**. Keying
+on template-plus-prediction would give one worry three ladders — the opposite of the rule.
 
-```
-  { template: 'criticise', prediction: 1, slots: { person: 'my best friend', thing: 'her playlist' } }
-```
+`rate.keyOf()` already does the right thing: `'stock:' + d.id`. So the real fix is one sentence:
 
-**Identity becomes the template plus which prediction. The words become a rendering of that,
-not the thing itself.** Then:
+> **Stay `stock`, and keep the worry's `id`, while the person is on the template road — whatever
+> the words say.** `sameAsStock()`'s word-for-word comparison is what has to go, because the app
+> already knows: it printed the skeleton.
 
-- All three predictions under one template share one ladder — rule 5, which already says a test
-  is one belief and that keying by the sentence is the bug.
-- Fixing a typo, or coming back and picking a different one of the three, keeps the history —
-  which `rate.keyOf()`'s comment already says is the point of keying by id.
-- A person who types over every slot has genuinely made their own, has no template, and gets
-  their own id, exactly as now.
+Then store `prediction` and `slots` alongside — **not to key anything**, but so a record can be
+redrawn, so the export is honest about what was actually done, and so *Test this again* comes
+back with her words in it.
 
-**It is not small.** It touches `store.js` (v5), `rate.js`, `app.js`, the merge and the export,
-and it has to go in **before** the first template, not after — retrofitting identity onto records
-that were saved as strings is the migration this project has twice chosen not to do.
+- Three predictions, one ladder. Fixing a typo or picking a different one of the three keeps the
+  history — which `rate.keyOf()`'s own comment already says is the point of keying by id.
+- Tap *Write the whole thing myself* and you have left the template: own id, own ladder, exactly
+  as today.
+
+**Still not trivial** — it touches `store.js` (v5), `app.js`, merge and export — but it is a
+narrowing of an existing rule rather than a new identity model, and it goes in **before** the
+first template, not after.
 
 ## 5. The rule that keeps it safe: **BETR owns the verb, the person owns the nouns**
 
@@ -190,3 +194,46 @@ programme, ahead of everything except B36 item 1.
 | c | **Misha** | Every skeleton. The risk is BETR's voice in somebody's mouth: *"give her a little criticism"* has to sound like a person or B20's *"sort of matches my worry but not really"* comes back one level up |
 | d | **CBT reviewer** | Whether a graded three-size ladder is safe to hand somebody with no clinician, and whether the small size may change *who it's with* (§6) |
 | e | **Nobody** | The 125% fold bug, still. Three sizes is another row on the screen that already clips |
+
+---
+
+## 10. Scoped into tasks, 2026-09-09 — the founder said *"let's try it out"*
+
+Seven tasks. **B37 is now the programme file**, as B28 was for B29–B33, and this is the order.
+
+| | Task | What it is | Cost | Blocks |
+| --- | --- | --- | --- | --- |
+| 1 | [`B38`](B38-the-did-the-reframe-and-the-net.md) | The `did` on the worked example, dares become questions, one line at the lock | ~1 day | nothing |
+| 2 | [`B39`](B39-the-do-screen-fits-a-phone.md) | The 125% fold bug on the do screen | ~1 day | **B42** |
+| 3 | [`B40`](B40-the-record-knows-which-template.md) | Identity and storage v5. **No visible change** | 1–2 days | **B41, B42, B43** |
+| 4 | [`B41`](B41-a-skeleton-with-holes.md) | The skeleton, the holes, the carry-through | ~2 days | B42, B43 |
+| 5 | [`B42`](B42-three-sizes.md) | Three sizes on the do screen — the dial as content | 1–2 days | B43 |
+| 6 | [`B43`](B43-two-templates-walked.md) | Two templates, walked. **The "try it out"** | ~1 day + review | — |
+| 7 | [`B44`](B44-make-it-smaller-and-why.md) | *Make it smaller* and *Why it's written like this* | ~1 day | — |
+
+**Two readings of the founder's sentence, and they give different first moves.**
+
+- *"Let's try it out"* meaning **see the template working**: skip straight to **B39 → B40 → B41
+  → B42 → B43**. Five or six working days to a founder holding a real templated test on a real
+  phone. B38 and B44 come after.
+- *"Let's try it out"* meaning **start shipping this run's thinking**: **B38 first**, which is a
+  day, is visible tomorrow, and depends on nothing.
+
+**Recommendation: B38, then B39, then the template run.** B38 is a day, it is the cheapest and
+best-evidenced thing in either file, and it goes out while B39's measuring is happening. Nothing
+in it is on the template critical path.
+
+**What is still not a task, and deliberately:**
+
+| | Why it is waiting |
+| --- | --- |
+| B36 item 4, the two nudges | Less needed on the template road — a skeleton cannot be a state or a feeling. Still wanted on the free-text road; small; do it when that road is next touched |
+| B36 item 5, when and where | Behind B39, and B42's dial carries part of it for free |
+| B36 item 6, keep the half-written sentence | A founder decision, still unanswered, and **worth more now** — slots are more work to lose |
+| B36 item 10b, *and if it goes badly?* | Behind B39 |
+| The rest of the templates, 6–10 more | Behind B43 and the reviewer's answer |
+
+**And the decisions that gate content rather than code**, so none of them stops task 1 starting:
+Misha on every skeleton (§9c), the reviewer on the graded three and on whether *A small go* may
+change who it is with (§9d), and rule 10's third amendment written down rather than arrived at
+(§9a).

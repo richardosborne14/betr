@@ -1,7 +1,10 @@
 # B36: *Le guide de prise en main* — telling somebody what is expected, and how small it can be
 
-**Status:** **PROPOSAL. Nothing built.** Six items below, ranked, each costed. Items 1–3 are the
-proposal proper; 4 is small and independent; 5 and 6 are decisions, not builds.
+**Status:** **PROPOSAL, and mostly SCOPED as of 2026-09-09.** Items 1, 7 and 10a became
+[`B38`](B38-the-did-the-reframe-and-the-net.md); item 8 became [`B42`](B42-three-sizes.md);
+items 2 and 3 became [`B44`](B44-make-it-smaller-and-why.md); item 5 is unblocked by
+[`B39`](B39-the-do-screen-fits-a-phone.md). Items 4, 6, 9 and 10b are still here and still open.
+[`B37`](B37-the-template-with-holes.md) §10 holds the running order for all of it.
 **Confidence:** 8/10 in the diagnosis — it is one walk, but every one of the three failures is
 visible in the code without her, and two are provable in one grep. 6/10 in the shape of the fix,
 which is where the founder, Misha and the CBT reviewer come in.
