@@ -103,23 +103,21 @@ has not moved. The reviewer still has not read a line.**
 - **`whats-going-on.js` says four to six worries a door and only the SIX is enforced.**
   `MAX_PER_DOOR = 6` in `content.js`; there is no floor, so a two-worry door passes the build.
   The tests will not catch the thing B47 §6b is about.
-- **`shows`/`hides` are SUBSTRING checks**: a screen's title is word for word its own link's
-  text, so a `hides()` on the title can never be true while the link is drawn. **Name a sentence
-  only the screen itself carries.** (`learnings.md`, B42 and B44.)
+- **`shows`/`hides` are SUBSTRING checks** and a screen's title is word for word its own link's
+  text, so a `hides()` on the title is never true. **Name a sentence only that screen carries.**
 - **`walk.js tap` takes ONE selector and ignores anything after it** — hand it `tap '[data-b="1"]'`.
-- **To measure at 125%, set the font size BEFORE navigating**, then tap your way there. **The
-  fold is 785 / 780 / 774 / 720px at 100 / 125 / 150 / 200%.** Measure the state a person is in.
+- **To measure at 125%, set the font size BEFORE navigating.** **The fold is 785 / 780 / 774 /
+  720px at 100 / 125 / 150 / 200%.** Measure the state a person is actually in.
 - **A WIDENING IS MORE DANGEROUS THAN A CHANGE** (B40); **WHEN CONTENT GAINS A VARIABLE, GREP
   EVERY COMPARISON AGAINST IT** (B41). Nothing crashes, a sentence rots.
-- **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome, the fake
-  DOM none at all. Put the state in the markup and re-read it on the tap.
+- **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome and none
+  at all in the fake DOM. Put the state in the markup and re-read it on the tap.
 - **`shot` on the front screen catches it mid-reveal** — finish the animations with `eval` first.
   **`walk.js` dies silently and a dead walker returns a stale page, not an error. Its browser is
   DARK.** **The fake DOM is flat and ignores `hidden`**; **A REGION DELETE NEEDS BOTH ENDS CHECKED**.
-- **Chips are exempt from the capital-letter rule**, by class — **a size name is not**.
-  **After editing `web/content/*`, `stop` and `start`**: `open` serves a cache.
-  **`HABIT`/`BODY` refuse nothing a PERSON writes any more** — they still hold every word BETR
-  writes, including both guide screens and anything B47 adds.
+- **Chips are exempt from the capital-letter rule**, by class — **a size name is not**. **After
+  editing `web/content/*`, `stop` and `start`**: `open` serves a cache. **`HABIT`/`BODY` refuse
+  nothing a PERSON writes** — they still hold every word BETR writes, B47's included.
 - **Every word a person reads is in `web/content/`** (a sentence in `app.js` fails
   `i18n.test.js`). **Use `’` and `“ ”`, never `'` and `"`.** **`content/zones.js` and
   `docs/COPY.md` are generated**; never hand-edit, and no helpline number is written from memory.
