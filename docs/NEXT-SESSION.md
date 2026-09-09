@@ -44,8 +44,7 @@ rescues it, three worries against its own "half the scroll, half not sitting sti
 surviving rewrite, the founder's line beside ours) · #07's two categories from §6c once they and
 Misha have read the draft · **then** B45 §5c, the merge.
 
-**B45 §5b is on hold and should stay there.** It writes three sizes for nineteen worries; four
-of those worries are now deleted and one becomes two.
+**B45 §5b stays on hold:** it writes three sizes for nineteen worries, four of which are now culled.
 
 ## 3. What the review did NOT cover, and somebody will assume it did
 
