@@ -101,10 +101,9 @@ from the do screen wipes the sentence and the plan with no warning** — B36 ite
   in.** To price one block, hide it with `eval` and re-read the button's rect either side.
 - **A WIDENING IS MORE DANGEROUS THAN A CHANGE** (B40); **WHEN CONTENT GAINS A VARIABLE, GREP
   EVERY COMPARISON AGAINST IT** (B41). Nothing crashes, a sentence rots.
-- **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome (B39) and
-  the fake DOM none at all (B41). Put the state in the markup and re-read it on the tap. And
-  **read the boxes before ANY navigation off the build or do screen** — `readBlanks()` /
-  `readBoxes()` (B34 D2; B44's two links are the newest way off both).
+- **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome (B39),
+  the fake DOM none at all (B41). Put the state in the markup and re-read it on the tap. **Read
+  the boxes before ANY navigation off the build or do screen** (B34 D2).
 - **`shot` on the front screen catches it mid-reveal** — run `eval
   "document.getAnimations().forEach(function(a){a.finish();})"` first. **`walk.js` dies silently
   and a dead walker returns a stale page, not an error. Its browser is DARK**, so BETR opens dark
