@@ -1836,3 +1836,143 @@ test('going back does not put the stock plan back over one somebody wrote', () =
   a.tap('#back').tap('#next');
   assert.strictEqual(a.valueOf('#do'), 'My own plan, in my own words.');
 });
+
+/*
+  ---------------------------------------------------------------- B44, the two guide screens
+
+  "Too big? Make it smaller" and "Why it's written like this". What these hold down is not the
+  wording — that is Misha's and the reviewer's — but the four things that make them legal and
+  make them stay a book rather than a device.
+*/
+
+/* The whole of B44 in one walk: three links, three journeys, and Back to where you were. */
+test('both guide screens open from a link and go back to the screen that opened them', () => {
+  const g = en.s.guide;
+
+  /* 1 — the build screen, free-text road, with half a sentence typed. */
+  const a = boot().tap('#m-new');
+  a.shows(g.writtenLink);
+  a.type('#if', 'say no to Sam').tap('#written');
+  a.shows(g.writtenTitle).shows(g.smallest);
+  a.tap('#back');
+  assert.strictEqual(a.valueOf('#if'), 'say no to Sam',
+    'the guide screen threw away a sentence somebody was half way through');
+
+  /* 2 — the do screen, with half a plan typed. */
+  a.type('#then', 'he will be off with me').tap('#next');
+  a.shows(g.smallerLink);
+  a.type('#do', 'Say no to Sam about Friday.').tap('#smaller');
+  a.shows(g.smallerTitle).shows(g.shrinkSaid);
+  a.tap('#back');
+  assert.strictEqual(a.valueOf('#do'), 'Say no to Sam about Friday.',
+    'the guide screen threw away a plan somebody was half way through');
+
+  /* 3 — Help, for the person who has finished a test and wants to know why it is shaped so. */
+  a.tap('#m-help').shows(g.writtenLink);
+  a.tap('#written').shows(g.writtenTitle);
+  a.tap('#back').shows(en.s.help.cbtTitle);
+});
+
+/*
+  THE REGULATORY LINE, AND IT IS THE ONE TEST HERE THAT IS NOT ABOUT CONVENIENCE.
+
+  A screen that arrives BECAUSE of what somebody typed, rated, refused or repeated is BETR
+  deciding something about that person (research §6) — rule 2, and a medical device. So the
+  only way to either of these is a link somebody chooses to tap, and nothing else: not a
+  refusal, not a second go, not an empty box, not a big number on the ladder.
+*/
+test('neither guide screen ever arrives on its own, whatever a person does', () => {
+  const g = en.s.guide;
+  const a = boot();
+  /*
+    Named by a sentence only the screen itself carries, NOT by its title: the link and the
+    title are the same words, so a title check can never be false while the link is drawn
+    (shows/hides are substring checks — docs/learnings.md).
+  */
+  const clear = () => {
+    assert.ok(a.html().indexOf(g.smallerOpen) === -1 && a.html().indexOf(g.written[0].a) === -1,
+      'a guide screen appeared without anybody asking for it');
+  };
+
+  clear();
+  a.tap('#m-new'); clear();
+  /* Refused: the one thing on this screen that judges anything a person wrote. */
+  a.type('#if', 'kill myself').type('#then', 'everyone will be better off').tap('#next'); clear();
+  a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); clear();
+  /* An empty plan, which is the moment a rescue screen would most want to fire. */
+  a.tap('#lock'); clear();
+  a.type('#do', 'Say no to one thing today.').tap('#lock'); clear();
+  a.tap('#nothanks').tap('#done').type('#o', 'He said fine.').tap('#next'); clear();
+  a.tap('[data-key]', 4); clear();          /* more sure than before — the worst outcome there is */
+  a.tap('#again'); clear();
+  a.tap('#m-mine'); clear();
+  a.tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0); clear();
+  a.tap('[data-b]', 0).tap('#next'); clear();
+});
+
+/*
+  Rule 10. The bottom row is three plain words and B8's amendment says so; a guide screen is a
+  link inside a screen, and a fourth door is the shape the founder overruled their own rule to
+  allow exactly once.
+*/
+test('neither guide screen becomes a fourth door', () => {
+  const a = boot();
+  const row = () => (a.html().match(/id="m-[a-z]+"/g) || []).sort();
+  const before = row();
+  assert.deepStrictEqual(before, ['id="m-help"', 'id="m-mine"', 'id="m-new"']);
+  a.tap('#m-new').tap('#written');
+  assert.deepStrictEqual(row(), before, 'the bottom row changed on a guide screen');
+  a.tap('#back').type('#if', 'say no').type('#then', 'they will mind').tap('#next').tap('#smaller');
+  assert.deepStrictEqual(row(), before, 'the bottom row changed on a guide screen');
+});
+
+/*
+  RULE 4, AND IT DID NOT LOOSEN FOR BETR. The 2026-09-08 amendment freed a PERSON's own test
+  from the habit and body lists; every sentence BETR writes is still held to them, and these
+  two screens are BETR proposing in a way nothing else outside worries.js and starts.js is.
+*/
+test('nothing on either guide screen names the habit, the body or anyone’s safety', () => {
+  const guards = require('../lib/guards.js');
+  const lines = [];
+  const walk = (node) => {
+    if (typeof node === 'string') lines.push(node);
+    else if (node && typeof node === 'object') Object.keys(node).forEach((k) => walk(node[k]));
+  };
+  walk(en.s.guide);
+
+  assert.ok(lines.length >= 20, 'only found ' + lines.length + ' sentences to check');
+  for (const line of lines) {
+    for (const [kind, list] of [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]]) {
+      assert.strictEqual(guards.hit(line, list), null, kind + ' word in "' + line + '"');
+    }
+  }
+});
+
+/*
+  B36 item 3's own instruction: "why you start small" is said once, in one place. Two screens
+  read it and neither carries a second version, so they cannot drift apart by a word.
+*/
+test('the sentence about starting small is one string, read by both screens', () => {
+  const g = en.s.guide;
+  const fifth = g.written[g.written.length - 1];
+  assert.strictEqual(fifth.a, undefined, 'the fifth answer grew a copy of the sentence');
+  assert.strictEqual(fifth.same, 'smallest');
+
+  const a = boot().tap('#m-new');
+  a.tap('#written').shows(g.smallest);
+  a.tap('#back').type('#if', 'say no').type('#then', 'they will mind').tap('#next');
+  a.tap('#smaller').shows(g.smallest);
+});
+
+/*
+  The worked shrink teaches THE CONTROL THE PERSON IS ALREADY HOLDING, so its three steps are
+  B42's three names and not a fourth vocabulary. It is read big to small — the row is drawn
+  small to big, because that is the order somebody chooses in; this is the same dial turned
+  the other way, which is what shrinking is.
+*/
+test('the worked shrink uses the three size names, biggest first', () => {
+  const names = starts.general.sizes.map((z) => z.name);
+  const shrink = en.s.guide.shrink.map((r) => r.name);
+  assert.deepStrictEqual(shrink, names.slice().reverse(),
+    'the shrink invented its own words for the dial, or read it the wrong way round');
+});

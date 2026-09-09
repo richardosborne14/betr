@@ -903,3 +903,35 @@ possible to press it.** Measure the state a person is actually in, not the talle
   with three sizes that would have been BETR picking a rung and calling it a suggestion, so the
   box arrives empty and the three are the choice — which also meant the placeholder had to stop
   being a worked example, because over three named steps a worked example reads as a fourth one.
+
+---
+
+## B44, 2026-09-09: a link's text and its screen's title are the same words, so a test on the title tests nothing
+
+The screens B44 added are reached by a link that says *Why it’s written like this* and lands on
+a screen headed *Why it’s written like this*. The first version of the test that holds the whole
+regulatory line — **neither screen ever appears unless somebody taps the link** — asserted that
+the title was not on the page. It could never be true: the link was on the page, `shows`/`hides`
+are substring checks, and the title is a substring of nothing but itself and the link.
+
+This is B42's prefix finding one turn later and one step worse, because that one broke an
+assertion about a row and this one broke **the assertion that holds rule 2 down**. It failed
+loudly, which is luck rather than design — the walk it does happens to pass through the build
+screen, where the link is drawn.
+
+**The rule.** A test that asks whether a SCREEN is showing must name a sentence that only that
+screen carries — its body, not its heading, and never its own link's words. Anything a person
+can read on the way to a screen is not evidence they arrived.
+
+### And the measurement, which is B42's rule holding for a second task running
+
+**One line of small print is 25px before any margin at all**, and 35 with the trimmed margin
+this one has. On the do screen at 125% that was the difference between *Lock it in* sitting
+14px above the fold and 22px below it, on the free-text road, before anything is in the plan
+box. There was nothing to trim: the link is four words on one line already.
+
+**So the honest answer was to record the state rather than move the link.** It is accepted for
+B42's reason — an empty plan refuses, so the button is inert exactly there — and the alternative
+was putting the link below *Lock it in*, which costs nothing and puts it where the person it is
+for has already stopped reading. **When the cheap fix moves a thing away from the person who
+needs it, the fold measurement is a fact to write down, not an argument to win.**

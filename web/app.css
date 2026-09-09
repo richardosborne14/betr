@@ -140,6 +140,13 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 
 .tiny { font-size:.875rem; color:var(--ink-3); margin-top:22px; max-width:44ch; }
 .tiny button { background:none; border:0; padding:0; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; font-size:.875rem; }
+/*
+  B44. A guide link sitting UNDER the thing it is about, rather than as the last small print
+  on a screen. The .tiny margin is 22px because it separates small print from the screen above
+  it; this one belongs to the box it follows, and on the do screen those 22px are 22px of
+  "Lock it in" moving down. Measured at 125% before it was allowed on that screen.
+*/
+.tiny.under { margin-top:8px; margin-bottom:2px; }
 /* A solid chip, not a floating word: Help is long, and it scrolls underneath this. */
 /*
   The two corner chips. Back has been there since B15; Look is B35's, and it is on every
@@ -543,6 +550,14 @@ textarea.line { min-height:64px; }
 .sheet h3 { font-family:var(--display); font-weight:700; font-size:.875rem; color:var(--ink-2); margin:14px 0 4px; }
 .sheet a { color:var(--btn); text-underline-offset:3px; }
 .sheet ul.places { list-style:none; padding:0; margin:0; }
+/*
+  B44. The dials on "Make it smaller", and the same shape again for the worked shrink. A name
+  in bold and the line after it, one per row: read down the bolds and you have the five things
+  a person can turn, which is the whole of what the screen is teaching.
+*/
+.sheet ul.dials { list-style:none; padding:0; margin:2px 0 10px; }
+.sheet ul.dials li { margin-bottom:7px; line-height:1.4; }
+.sheet ul.dials b { color:var(--ink-2); }
 .sheet ul.places li { margin-bottom:9px; line-height:1.4; }
 .sheet .plain { background:none; border:0; padding:0; font-size:.875rem; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; margin-inline-end:14px; }
 .sheet textarea { font-size:.75rem; min-height:150px; margin-top:10px; }

@@ -10,6 +10,8 @@ never seen the code can follow it and say whether it did what it says.
 - 2026-09-03 - J1 updated for B8: the menu of three, Help in place of *what this is*, and the
   small links that came off the start and result screens. J3 added: the menu, and a test that
   waits for you.
+- 2026-09-09 - **J5 added: the two guide screens** (B44), and its step 6 is the one that
+  matters - neither of them may ever appear on its own.
 - 2026-09-09 - **J4 added: the template road** (B43), and it is the acceptance test for the
   whole programme, not just for one task. **J1, J2 and J3 have not been rewritten since B19,
   and their wording is behind the app** - "Pick a worry", "Saying no without an excuse" and
@@ -176,6 +178,36 @@ bug in this journey.
 whether **you would ever say it**. A sentence that is only nearly yours cannot be disconfirmed:
 the loop runs and moves nothing. If one of them sounds like BETR talking rather than you, write
 it down here - that is the finding this journey exists for.
+
+**Result:** _not yet walked._
+
+**Recorded by:** -
+**Date:** -
+**Notes:** -
+
+---
+
+## J5 - The two guide screens, and the one thing they must never do
+
+**Why it exists:** B44 added two screens that teach - *Too big? Make it smaller* and *Why it's
+written like this*. **Neither may ever appear on its own.** A screen that arrives BECAUSE of
+what somebody typed, rated, refused or repeated is BETR deciding something about that person,
+and that is the line between a book and a medical device. A test holds it; this journey is how
+a person checks it, because a person can try things a test cannot think of.
+
+**Where:** as J4. Do steps 1-6 with the phone's text size turned up two notches as well.
+
+| # | Do this | You should see |
+| --- | --- | --- |
+| 1 | Tap **New test**, and read the bottom of the screen | Two small underlined lines: *Why it's written like this*, then the line about which tests BETR is for. No box, no banner, nothing coloured |
+| 2 | Type half a sentence into the first blank, tap **Why it's written like this** | Five short answers, in the order you meet them. At the bottom, the same line that closes *Why this one sticks*: it is general, and BETR cannot see anything you have written |
+| 3 | Tap **Back** | The build screen, **with your half sentence still in it** |
+| 4 | Finish the sentence, tap **What will you do?**, and look under the three sizes | One small underlined line: *Too big? Make it smaller* |
+| 5 | Type half a plan, tap it, read it, tap **Back** | The five dials, the worked shrink read biggest-first, and then your half plan still in the box |
+| 6 | **Now try to make either screen appear on its own.** Type a test that gets refused. Leave the box empty and tap *Lock it in*. Do a test and answer **More sure than before**. Do the same one three days running. Open the app five times | **Neither screen ever appears.** The only way to either of them is the link, and the link is in the same place every time, whatever you have done. If one ever arrives by itself, stop and write it down: that is the failure this journey exists for |
+| 7 | Tap **Help** and scroll to *What CBT is* | *Why it's written like this* is underneath it, as a plain line. Tap it, then **Back**: you are back on Help, where you were |
+| 8 | Look at the bottom row on both screens | Still three plain words: *Your tests · New test · Help*. No fourth |
+| 9 | Read the worked shrink out loud | Three steps, biggest first, using the same three names the do screen uses: *The whole thing*, *A bigger go*, *A small go*. If they are not the same words, they are teaching a dial that is not the one you are holding |
 
 **Result:** _not yet walked._
 

@@ -782,6 +782,9 @@
       belief: build, 'belief-own': build,
       plan: plan, locked: locked, happened: happened, sure: sure,
       result: result, mine: mine, help: help, where: whereScreen, why: whyScreen,
+      /* B44. Two screens with no state of their own, so a reload lands on either of them
+         and reads correctly — unlike `why`, which knows its worry only in memory. */
+      smaller: smallerScreen, written: writtenScreen,
       about: help   /* what a phone that saw the old "what this is" screen has stored */
     };
     /* Any half-finished loop that lost its item drops back to the start rather than crashing. */
@@ -1456,8 +1459,16 @@
           a measurement and not a preference — a second .tiny block costs 22px of margin plus
           its own line on a screen that B39 has only just got under the fold at 125%.
         */
+        /*
+          B44's link shares this paragraph for the same measured reason B40's does: a second
+          .tiny block costs 22px of margin plus its own line, on a screen B39 has only just
+          got under the fold at 125%. It is drawn on BOTH roads — the free-text road is where
+          somebody most needs it, because why.js can never reach them (it is keyed to a stock
+          worry and only appears after a result), and this screen is the first thing they see.
+        */
         '<p class="tiny">' +
           (f ? '<button id="ownit">' + esc(t('build.own')) + '</button><br>' : '') +
+          guideLink('written', 'writtenLink') + '<br>' +
           esc(t('build.only')) +
         '</p>' +
       '</div>');
@@ -1468,6 +1479,9 @@
       a Back that guessed which would be a Back a person cannot predict.
     */
     wireBack('start');
+    /* Both blanks are read before the screen changes, so a half-written sentence is still
+       there when Back comes home. Same reason Back itself does it (B34 D2). */
+    wireGuide('written', 'written', 'build', readBlanks);
 
     /*
       Focus goes to the first blank, not to the heading — this screen IS the box, the way the
@@ -1833,6 +1847,18 @@
           : chipRow(t('build.doChips'), doChips, 'data-do',
               landsIn !== '#do' || !!draft.test.trim())) +
         /*
+          B44. UNDER THE BOX AND ITS SIZES, WHICH IS WHERE THE PERSON IS WHEN THEY FREEZE.
+
+          Not at the bottom under "Lock it in": somebody who has just pictured the biggest
+          possible version of the thing has stopped reading by then, and B36's whole finding
+          was that they leave from HERE. It costs a line rather than a block — see .under in
+          app.css, which trims the .tiny margin that would otherwise push the button down.
+
+          It is drawn on every paint, whatever is in the box, whatever the size row is doing.
+          A link that appeared when a person hesitated would be BETR reading them (research §6).
+        */
+        '<p class="tiny under">' + guideLink('smaller', 'smallerLink') + '</p>' +
+        /*
           B39, 2026-09-09, the founder's call. Closed, this half is one row that says what it
           currently says; open, it is the box and its suggestions, exactly as before. Nothing
           is hidden either way — see foldedDrop() for why that is the whole point.
@@ -1864,6 +1890,9 @@
     */
     wireChips([['#do', sizes ? 'data-size' : 'data-do'], ['#drop', 'data-drop']]);
     on('#dropopen', function () { readBoxes(); draft.dropOpen = true; nextFocus = '#drop'; render(); });
+    /* Both boxes read first, for the reason Back reads them (B34 D2): a plan somebody has
+       half typed must still be there when they come back from reading about sizes. */
+    wireGuide('smaller', 'smaller', 'build-do', readBoxes);
 
     /*
       Usually the first box, which is what a11y.test.js holds this screen to. `nextFocus` is
@@ -2582,6 +2611,92 @@
   }
 
   /*
+    ------------------------------------------------------ the two guide screens (B44)
+
+    "Too big? Make it smaller" and "Why it's written like this". B36 items 2 and 3, built
+    last on purpose: B42 put three named sizes on the do screen itself, so the shrink stopped
+    being a rescue behind a link and became teaching, which is a better job for it.
+
+    Four rules decide their shape and none is cosmetic.
+
+      1. THEY ARE ONLY EVER REACHED BY A LINK SOMEBODY TAPS. Never triggered, never after a
+         pause, a refusal, a rating or a word anybody typed. A screen that arrives BECAUSE of
+         what a person wrote is BETR deciding something about that person (research §6), and
+         that is rule 2 and a medical device. This is why there is no condition anywhere in
+         either function: the link is drawn on every paint of its screen, unconditionally.
+      2. They read nothing. No S.done, no ladder, no rung, no draft, no worry id — the same
+         line why.js is held to, one level up. Everybody reads the same words forever, which
+         is what keeps them a chapter in a book. `guideBack` is the only state either has, and
+         it is which screen Back returns to, not anything about anybody.
+      3. They are screens, not overlays (rule 10), so paint() moves focus to the heading and
+         a screen reader announces them. And they are NOT a fourth door: a link inside a
+         screen, never a fifth word on the bottom row.
+      4. The link is drawn where the person is when they freeze, and the box is read before
+         the screen changes. That last half is B34 D2's bug: every other way off the do screen
+         calls readBoxes() first, and a link that did not would quietly throw away the sentence
+         somebody had half typed.
+  */
+  var guideBack = 'build';
+
+  /* The link. It is the same object in all three places it appears, and it is never absent. */
+  function guideLink(id, key) {
+    return '<button id="' + id + '">' + esc(t('guide.' + key)) + '</button>';
+  }
+
+  /* One wiring for both, taking the reading-off of any boxes as a callback, so the screen
+     that has boxes cannot forget and the two that do not need not pretend. */
+  function wireGuide(id, stage, from, before) {
+    on('#' + id, function () {
+      if (before) before();
+      guideBack = from;
+      go(stage);
+    });
+  }
+
+  /* Name and line, the shape both lists on the smaller screen share. */
+  function guideList(cls, rows) {
+    return '<ul class="' + cls + '">' + rows.map(function (r) {
+      return '<li><b>' + esc(r.name) + '</b> ' + esc(r.line) + '</li>';
+    }).join('') + '</ul>';
+  }
+
+  function smallerScreen() {
+    paint( backButton() +
+      '<div class="stage"><div class="sheet">' +
+        head('h2', t('guide.smallerTitle')) +
+        '<div class="primer">' +
+          '<p>' + esc(t('guide.smallerOpen')) + '</p>' +
+          '<p>' + esc(t('guide.smallest')) + '</p>' +
+        '</div>' +
+        '<p>' + esc(t('guide.dialsLabel')) + '</p>' +
+        guideList('dials', I.list('guide.dials')) +
+        '<p>' + esc(t('guide.smallerCounts')) + '</p>' +
+        '<h3>' + esc(t('guide.shrinkLabel')) + '</h3>' +
+        '<p class="belief wrote">\u201C' + esc(t('guide.shrinkSaid')) + '\u201D</p>' +
+        guideList('dials', I.list('guide.shrink')) +
+        '<p>' + esc(t('guide.shrinkFoot')) + '</p>' +
+        '<p class="quiet">' + esc(t('why.foot')) + '</p>' +
+      '</div></div>');
+
+    wireBack(guideBack);
+  }
+
+  function writtenScreen() {
+    paint( backButton() +
+      '<div class="stage"><div class="sheet">' +
+        head('h2', t('guide.writtenTitle')) +
+        I.list('guide.written').map(function (e) {
+          /* `same` names the key the answer comes from, so "why you start small" is the one
+             sentence the other screen is built on rather than a second version of it. */
+          return '<h3>' + esc(e.q) + '</h3><p>' + esc(e.a || t('guide.' + e.same)) + '</p>';
+        }).join('') +
+        '<p class="quiet">' + esc(t('why.foot')) + '</p>' +
+      '</div></div>');
+
+    wireBack(guideBack);
+  }
+
+  /*
     Repeating a test, and which plan comes back in the boxes.
 
     Two things have to be true at once. A corrected wording in worries.js should reach everyone
@@ -2769,6 +2884,13 @@
               esc(r.name) + '</a> — ' + esc(r.what) + '</li>';
           }).join('') + '</ul>' +
         '</div>' +
+        /*
+          B44. The primer says what CBT is; this says why BETR's one sentence is shaped the
+          way it is. Under the primer because it is the smaller question, and on Help as well
+          as on the build screen because somebody who has already written a test and wants to
+          know why comes here, not back to a screen they have finished with.
+        */
+        '<p class="tiny under">' + guideLink('written', 'writtenLink') + '</p>' +
 
         '<h2>' + esc(t('help.whatThisTitle')) + '</h2>' +
         '<p>' + esc(purpose()) + '</p>' +
@@ -2804,6 +2926,7 @@
       '</div></div>');
 
     wireBack('start');
+    wireGuide('written', 'written', 'help', null);
     on('#export', showExport);
     on('#wipe', armDelete);
     wireLanguage();

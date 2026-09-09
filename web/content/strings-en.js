@@ -533,6 +533,136 @@ var BETR_STRINGS_EN = {
         'for, and Help has places to find one.'
     },
 
+    /* ------------------------------------------------------------------ the two guide screens */
+
+    /*
+      B44, 2026-09-09. Two screens that teach, reached by a plain link and by nothing else.
+
+      NEITHER OF THEM EVER APPEARS ON ITS OWN. Not after a pause, not after a refusal, not
+      because of a word somebody typed, not on the third time round. That is the regulatory
+      line and not a preference (research §6): a screen that arrives BECAUSE of what a
+      person wrote is BETR deciding something about them, and the whole of rule 2 goes with it.
+      A link they choose to tap is a chapter in a book.
+
+      They were B36 items 2 and 3, where the first one was a rescue: somebody reached "What
+      will you do today?", pictured the biggest possible version, and left. B42 does most of
+      that job on the screen itself now — three named sizes with her own words in them — so
+      these two stopped being the rescue and became the teaching, which is a better job for
+      them. The three sizes turn one dial; `dials` below names the ones they do not turn.
+
+      Every word here is ours (rule 8). CCI's stepladder module is the METHOD, and the method
+      is not protected expression; its sentences are, and not one of them is here.
+
+      NOTHING ON THESE TWO SCREENS MAY NAME THE HABIT, food, weight, the body or anybody's
+      safety. This is BETR proposing, and the 2026-09-08 loosening was about a person's own
+      words only — it did not move one inch of what BETR writes. loop.test.js walks every
+      string in this block through the same three word lists worries.js is held to.
+    */
+    guide: {
+
+      /*
+        SAID ONCE, IN ONE PLACE, AND READ IN TWO (B36 item 3's own instruction). It is the rule
+        the whole of "Make it smaller" is built on, and it is also the fifth answer on "Why
+        it’s written like this" — two screens a person may well reach in either order, and
+        one sentence, so they can never drift apart by a word.
+      */
+      smallest: 'The one to start with is the smallest version that could still turn out ' +
+        'wrong. Smaller than that and nothing can surprise you, and being surprised is the ' +
+        'only part that does anything.',
+
+      /* ---------------------------------------------------- 1 · Too big? Make it smaller */
+
+      smallerLink: 'Too big? Make it smaller',
+      smallerTitle: 'Too big? Make it smaller',
+      /*
+        THE FIRST LINE IS THE WHOLE SCREEN. Somebody who taps this has just thought "I can’t
+        actually do that", and what they need told first is that the thought is the test — not
+        a sign they picked the wrong one, and not something to be talked out of. Every line
+        after it is mechanical.
+      */
+      smallerOpen: 'If you just thought “I can’t actually do that” — that is the sentence ' +
+        'at the top, said out loud. It is the thing being tested. It is not a sign you have ' +
+        'picked the wrong one.',
+      /*
+        Five dials, and the point of listing them is that THREE SIZES ONLY TURN THE SECOND ONE.
+        A person holding B42’s row has one control; this says there are five, and that shrinking
+        is turning one of them rather than doing a watered-down version of the thing.
+      */
+      dialsLabel: 'You don’t water it down. You turn one of these:',
+      dials: [
+        { name: 'Who it’s with.', line: 'Somebody it would matter less with.' },
+        { name: 'How big a thing it is.', line: 'The smallest true version of it.' },
+        { name: 'How long it goes on.', line: 'One sentence, and then on to something else.' },
+        { name: 'When and where.', line: 'A moment you pick, not one that catches you.' },
+        { name: 'How many people are there.', line: 'One person rather than a room.' }
+      ],
+      /*
+        The half that keeps a small one from reading as a lesser one. Rule 5: there is no
+        target, nothing is a warm-up, and a person who picks the smallest twice has done two
+        tests. "That is what tomorrow is for" is the same answer the result screen gives.
+      */
+      smallerCounts: 'A smaller one still counts. Doing something once and getting away with ' +
+        'it is easy to put down to luck — that is what tomorrow is for.',
+      /*
+        THE WORKED SHRINK, AND IT IS READ BIG TO SMALL ON PURPOSE. B42’s row is drawn small to
+        big, because that is the order a person chooses in; this is the same three names read
+        the other way, because shrinking is what the screen is teaching. Same three words in
+        both places, so the control it teaches is the control she is already holding.
+
+        It is an example and it says so, in the same words the front screen’s example uses,
+        and it names nobody. Fixed: everybody who opens this screen reads these three lines,
+        forever, whatever they typed.
+      */
+      shrinkLabel: 'One, shrunk. It is an example, and it is not about you.',
+      shrinkSaid: 'If I say no to somebody without giving a reason, then they’ll be off with ' +
+        'me for days.',
+      shrink: [
+        { name: 'The whole thing', line: 'Say no to the next big thing anybody asks, and say ' +
+          'nothing after it.' },
+        { name: 'A bigger go', line: 'Say no to something you would usually take on, and ' +
+          'don’t offer anything instead.' },
+        { name: 'A small go', line: 'Say no to one small thing today, in one sentence, and ' +
+          'don’t give a reason.' }
+      ],
+      shrinkFoot: 'Only the last one has to happen today. The other two are still there ' +
+        'tomorrow.',
+
+      /* ------------------------------------------------ 2 · Why it’s written like this */
+
+      writtenLink: 'Why it’s written like this',
+      writtenTitle: 'Why it’s written like this',
+      /*
+        Five questions in the order a person meets them, and it is also THE FIX FOR why.js
+        BEING UNREACHABLE TO SOMEBODY WHO WROTE THEIR OWN: that file is keyed to a stock worry
+        id and only appears after a result, so a person on the free-text road never sees a word
+        of it. This one is keyed to nothing, so everybody can reach it, before they have written
+        anything and forever after.
+
+        The founder is owed an answer on whether five is one too many for a screen met that
+        early (B36 item 3). It is a link and not a wall, and a link nobody taps costs nothing.
+      */
+      written: [
+        { q: 'Why “If I”',
+          a: 'Because it has to be something you would do, on a day. “I am …” has no day in ' +
+             'it — nothing either happened or did not, so there is nothing to find out. “If ' +
+             'I …” gives you a Tuesday, and an answer by Tuesday night.' },
+        { q: 'Why it needs a “then”',
+          a: 'Because somebody standing there would have to be able to see it happen. “Then ' +
+             'I’ll feel awful” cannot be settled by anything; you will feel however you feel. ' +
+             '“Then she won’t talk to me for the day” can.' },
+        { q: 'Why you write it down first',
+          a: 'So that afterwards you cannot quietly move it. Everybody moves it. Written down ' +
+             'first, it either happened or it did not.' },
+        { q: 'Why you leave something out',
+          a: 'The bit you always do — the reason, the joke, the “but I’m fine” — is the bit ' +
+             'that gets the credit when it goes fine. Leave it out once, and whatever happens ' +
+             'is about the thing itself.' },
+        /* No `a`. `same` names the key its answer comes from, so the sentence lives in
+           exactly one place and both screens read the same words — see `smallest`. */
+        { q: 'Why you start small', same: 'smallest' }
+      ]
+    },
+
     mine: {
       title: 'Your tests',
       /*

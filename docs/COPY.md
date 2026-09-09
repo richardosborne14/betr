@@ -250,10 +250,6 @@ keep it, and put it wherever the sentence needs it.
 
 > Same again, or a different size:
 
-**`plan.sizeChange`**
-
-> Change
-
 ### Screen 5 — locked in
 
 **`locked.kicker`**
@@ -427,6 +423,86 @@ keep it, and put it wherever the sentence needs it.
 **`why.foot`**
 
 > This is general — it is not about you, and BETR cannot see anything you have written. If you want to understand it properly, that is what a CBT therapist is for, and Help has places to find one.
+
+### Screen 9b — the two guide screens
+
+*B44. "Too big? Make it smaller" and "Why it’s written like this". Reached ONLY by a link somebody taps — never triggered by anything anybody types or does. Fixed content: everybody reads exactly these words, forever.*
+
+**`guide.smallest`**
+
+> The one to start with is the smallest version that could still turn out wrong. Smaller than that and nothing can surprise you, and being surprised is the only part that does anything.
+
+**`guide.smallerLink`**
+
+> Too big? Make it smaller
+
+**`guide.smallerTitle`**
+
+> Too big? Make it smaller
+
+**`guide.smallerOpen`**
+
+> If you just thought “I can’t actually do that” — that is the sentence at the top, said out loud. It is the thing being tested. It is not a sign you have picked the wrong one.
+
+**`guide.dialsLabel`**
+
+> You don’t water it down. You turn one of these:
+
+**`guide.dials`**
+
+> **1.** Who it’s with. — Somebody it would matter less with.
+>
+> **2.** How big a thing it is. — The smallest true version of it.
+>
+> **3.** How long it goes on. — One sentence, and then on to something else.
+>
+> **4.** When and where. — A moment you pick, not one that catches you.
+>
+> **5.** How many people are there. — One person rather than a room.
+
+**`guide.smallerCounts`**
+
+> A smaller one still counts. Doing something once and getting away with it is easy to put down to luck — that is what tomorrow is for.
+
+**`guide.shrinkLabel`**
+
+> One, shrunk. It is an example, and it is not about you.
+
+**`guide.shrinkSaid`**
+
+> If I say no to somebody without giving a reason, then they’ll be off with me for days.
+
+**`guide.shrink`**
+
+> **1.** The whole thing — Say no to the next big thing anybody asks, and say nothing after it.
+>
+> **2.** A bigger go — Say no to something you would usually take on, and don’t offer anything instead.
+>
+> **3.** A small go — Say no to one small thing today, in one sentence, and don’t give a reason.
+
+**`guide.shrinkFoot`**
+
+> Only the last one has to happen today. The other two are still there tomorrow.
+
+**`guide.writtenLink`**
+
+> Why it’s written like this
+
+**`guide.writtenTitle`**
+
+> Why it’s written like this
+
+**`guide.written`**
+
+> **1.** Why “If I” — Because it has to be something you would do, on a day. “I am …” has no day in it — nothing either happened or did not, so there is nothing to find out. “If I …” gives you a Tuesday, and an answer by Tuesday night.
+>
+> **2.** Why it needs a “then” — Because somebody standing there would have to be able to see it happen. “Then I’ll feel awful” cannot be settled by anything; you will feel however you feel. “Then she won’t talk to me for the day” can.
+>
+> **3.** Why you write it down first — So that afterwards you cannot quietly move it. Everybody moves it. Written down first, it either happened or it did not.
+>
+> **4.** Why you leave something out — The bit you always do — the reason, the joke, the “but I’m fine” — is the bit that gets the credit when it goes fine. Leave it out once, and whatever happens is about the thing itself.
+>
+> **5.** Why you start small — The one to start with is the smallest version that could still turn out wrong. Smaller than that and nothing can surprise you, and being surprised is the only part that does anything. *(the same sentence as `smallest`)*
 
 ### Screen 10 — Your worries
 
@@ -891,6 +967,10 @@ keep it, and put it wherever the sentence needs it.
 **`build.sizeOther`**
 
 > Your own
+
+**`build.sizeChange`**
+
+> Change
 
 **`build.dropLabel`**
 

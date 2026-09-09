@@ -56,6 +56,11 @@ const SCREENS = {
   plan: (a) => done(a).tap('#again'),
   mine: (a) => done(a).tap('#m-mine'),
   why: (a) => done(a).tap('[data-why]'),
+  /* B44's two. Both are read, neither is written on, so focus lands on the heading. */
+  smaller: (a) => a.tap('#m-new')
+    .type('#if', 'say no without giving a reason')
+    .type('#then', 'they’ll think I’m being difficult').tap('#next').tap('#smaller'),
+  written: (a) => a.tap('#m-new').tap('#written'),
   help: (a) => a.tap('#m-help'),
   where: (a) => a.tap('#m-help').tap('#where')
 };

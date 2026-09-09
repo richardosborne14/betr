@@ -65,6 +65,10 @@ const SCREENS = [
   ['ordinal', 'Screen 8 — 1st, 2nd, 3rd', ''],
   ['why', 'Screen 9 — "Why this one sticks"',
     'The wording around it. The twelve explanations are under WHY THIS ONE STICKS.'],
+  ['guide', 'Screen 9b — the two guide screens',
+    'B44. "Too big? Make it smaller" and "Why it’s written like this". Reached ONLY by a link ' +
+    'somebody taps — never triggered by anything anybody types or does. Fixed content: ' +
+    'everybody reads exactly these words, forever.'],
   ['mine', 'Screen 10 — Your worries', ''],
   ['install', 'Screen 11 — add to home screen', ''],
   ['crisis', 'Screen 12 — the crisis block',
@@ -81,13 +85,32 @@ const out = [];
 function w(line) { out.push(line === undefined ? '' : line); }
 
 /* A value is a sentence, a list of sentences, or a plural form. Print all three the same way. */
-function value(v, indent) {
+function value(v, indent, ctx) {
   const pad = indent || '';
   if (typeof v === 'string') return [pad + '> ' + v.replace(/\n/g, ' ')];
   if (Array.isArray(v)) {
     const lines = [];
     v.forEach((item, i) => {
-      lines.push(pad + '> **' + (i + 1) + '.** ' + item);
+      /*
+        B44. A list entry can be a row of named fields rather than a bare sentence — the dials
+        and the worked shrink on "Make it smaller" are `{ name, line }`, the five answers on
+        "Why it's written like this" are `{ q, a }`. Printed as-is they came out as
+        "[object Object]", which is a sheet Misha cannot read and cannot correct.
+      */
+      const said = (item && typeof item === 'object')
+        /*
+          `same` names another key in the same block instead of carrying its own words — the
+          fifth answer on "Why it's written like this" IS `guide.smallest`, said once and read
+          twice. Printing the key name would put "smallest" in front of Misha where a sentence
+          belongs, so it is resolved here and marked as shared.
+        */
+        ? Object.keys(item).map((k) => (
+            k === 'same'
+              ? ((ctx && ctx[item[k]]) || item[k]) + ' *(the same sentence as `' + item[k] + '`)*'
+              : item[k]
+          )).join(' — ')
+        : item;
+      lines.push(pad + '> **' + (i + 1) + '.** ' + said);
       if (i < v.length - 1) lines.push(pad + '>');
     });
     return lines;
@@ -104,7 +127,7 @@ function block(obj, prefix) {
     if (isLeaf(v)) {
       w('**`' + key + '`**');
       w();
-      value(v).forEach(w);
+      value(v, '', obj).forEach(w);
       w();
     } else if (v && typeof v === 'object') {
       /* A plural: one/two/few/other. Printed as one entry, because it is one sentence. */
