@@ -95,24 +95,22 @@ from the do screen wipes the sentence and the plan with no warning** — B36 ite
   the screen itself carries.** (`learnings.md`, B42 and B44.)
 - **`walk.js tap` takes ONE selector and ignores anything after it** — `tap '[data-b]' 1` taps
   `data-b="0"` silently. Hand it `tap '[data-b="1"]'` (B40). The harness takes an index.
-- **To measure at 125%, set the font size BEFORE navigating.** `eval
-  "document.documentElement.style.fontSize='20px'"`, then tap your way there. **The fold is
-  785 / 780 / 774 / 720px at 100 / 125 / 150 / 200%.** And **measure the state a person is
-  actually in**: a button below the fold matters as much as it is possible to press it. To price
-  one block, hide it with `eval` and re-read the button's rect either side — that is how B44's
-  table was built.
+- **To measure at 125%, set the font size BEFORE navigating** (`eval
+  "document.documentElement.style.fontSize='20px'"`), then tap your way there. **The fold is
+  785 / 780 / 774 / 720px at 100 / 125 / 150 / 200%.** **Measure the state a person is actually
+  in.** To price one block, hide it with `eval` and re-read the button's rect either side.
 - **A WIDENING IS MORE DANGEROUS THAN A CHANGE** (B40); **WHEN CONTENT GAINS A VARIABLE, GREP
   EVERY COMPARISON AGAINST IT** (B41). Nothing crashes, a sentence rots.
 - **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome (B39) and
   the fake DOM none at all (B41). Put the state in the markup and re-read it on the tap. And
   **read the boxes before ANY navigation off the build or do screen** — `readBlanks()` /
   `readBoxes()` (B34 D2; B44's two links are the newest way off both).
-- **`shot` on the front screen catches it mid-reveal** — it animates over 3.4s; run `eval
+- **`shot` on the front screen catches it mid-reveal** — run `eval
   "document.getAnimations().forEach(function(a){a.finish();})"` first. **`walk.js` dies silently
   and a dead walker returns a stale page, not an error. Its browser is DARK**, so BETR opens dark
-  (B35); **`theme.js` loads in the `<head>` before the stylesheet and has to.** **Three roads
-  reach the build screen** (B34 §1): check all three. **The fake DOM is flat and ignores
-  `hidden`**, and **A REGION DELETE NEEDS BOTH ENDS CHECKED** (`learnings.md`).
+  (B35); **`theme.js` loads in the `<head>` before the stylesheet.** **Three roads reach the build
+  screen** (B34 §1). **The fake DOM is flat and ignores `hidden`**; **A REGION DELETE NEEDS BOTH
+  ENDS CHECKED**.
 - **Chips are exempt from the capital-letter rule**, by class — **a size name is not**, being a
   label on a button. **`rate.keyOf()` keys a ladder by `id`**; a worry's three predictions and
   its three sizes share one ladder. **After editing `web/content/*`, `stop` and `start`**:
