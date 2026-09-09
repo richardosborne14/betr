@@ -101,9 +101,9 @@ owns** the missing medication word list in `guards.js`. **Release conditions:** 
   parts that have not arrived are `opacity:0` with their space reserved, so the picture has a
   hole in it. `eval "document.getAnimations().forEach(function(a){a.finish();})"` first.
 - **`walk.js` dies silently and a dead walker returns a stale page, not an error** — `start`
-  again before believing a surprise. **Its browser is set to DARK**, so BETR opens dark (B35).
-- **`theme.js` loads in the `<head>` before the stylesheet and has to**. **Tapping the look chip
-  must never repaint.** **Three roads reach the build screen** (B34 §1): check all three.
+  again before believing a surprise. **Its browser is DARK**, so BETR opens dark (B35).
+  **`theme.js` loads in the `<head>` before the stylesheet and has to**; tapping the look chip
+  must never repaint. **Three roads reach the build screen** (B34 §1): check all three.
 - **The fake DOM in `harness.js` is flat and fires no events** — `grow()` is a no-op there by
   design, so box heights are only ever proved on the walker. **A REGION DELETE NEEDS BOTH ENDS
   CHECKED** (`learnings.md`).
