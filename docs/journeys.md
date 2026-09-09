@@ -10,6 +10,11 @@ never seen the code can follow it and say whether it did what it says.
 - 2026-09-03 - J1 updated for B8: the menu of three, Help in place of *what this is*, and the
   small links that came off the start and result screens. J3 added: the menu, and a test that
   waits for you.
+- 2026-09-09 - **J4 added: the template road** (B43), and it is the acceptance test for the
+  whole programme, not just for one task. **J1, J2 and J3 have not been rewritten since B19,
+  and their wording is behind the app** - "Pick a worry", "Saying no without an excuse" and
+  "fear" are all gone. Walk J4 first; treat a wording mismatch in J1-J3 as the journey being
+  old, not the app being broken.
 
 ---
 
@@ -117,6 +122,60 @@ menu covering the big button is the failure this journey is looking for.
 | 14 | **With wifi off**, open Help again | The whole screen reads correctly. Nothing missing, nothing loading |
 | 15 | Turn wifi on and tap one link | It opens in your browser. Come back to BETR: everything is where you left it |
 | 16 | Open the network tab and walk the whole app | The page load and its files. Nothing after that, ever |
+
+**Result:** _not yet walked._
+
+**Recorded by:** -
+**Date:** -
+**Notes:** -
+
+---
+
+## J4 - The template road: a skeleton, a gap, a size, twice
+
+**Why it exists:** B41 gave two worries a sentence with a gap in it, B42 gave them three sizes,
+and B40 made the road rather than the words decide which ladder a test belongs to. Each of
+those was walked on its own. **This is the first journey that walks all three at once, and it
+is the acceptance test for the whole programme:** a person types one word into a sentence, is
+offered three predictions and three sizes built out of that word, does the test, comes back,
+does it again differently - and watches **one** ladder move.
+
+**Where:** `https://betr.trybeup.com`, wifi off after it loads. **Do it on a real phone.** Then
+do steps 1-11 again with the phone's text size turned up (Settings - Display - Text Size, up
+two notches); everything must still be reachable.
+
+**Two templates have this road today, and only two:** *Saying no without giving a reason*, and
+*Telling someone I'm struggling*. Every other worry still works the old way, and that is not a
+bug in this journey.
+
+| # | Do this | You should see |
+| --- | --- | --- |
+| 1 | Open it, tap **Not sure? Try one of these** | *What's going on?*, six doors and *None of these - I'll write my own* |
+| 2 | Tap **Going along with things I don't want to do** | Four worries, each with its *If I ..., then ...* under its label |
+| 3 | Tap **Saying no without giving a reason** | *Make it yours.* One sentence with the words **If I**, **say no to**, a box, **without giving a reason**, **, then** and a second box. Under it, three whole predictions - each one already saying *somebody* |
+| 4 | Type **my sister** into the first box | **All three predictions change as you type**, and every *somebody* in them becomes *my sister*. Nothing else on the screen moves |
+| 5 | Tap the second prediction | It drops into the second box, in your words. The other two stay on screen; nothing is greyed out or ticked |
+| 6 | Tap **What will you do?** | Your finished sentence in quotes at the top, under the worry's name. Then *What will you do today?*, an empty box, and **three named steps**: *A small go*, *A bigger go*, *The whole thing* - each a whole sentence with **my sister** already in it. The box is empty: BETR has not picked one |
+| 7 | Tap **A bigger go** | The row of three folds onto the one you picked. *HOW BIG A GO - Change - A bigger go*, the sentence now in the box, and the leave-out that belongs to that size filled in under it. **Lock it in** is on screen without scrolling |
+| 8 | Tap **Change** | The three are back, and the one you had is still the one in the box |
+| 9 | Tap **A bigger go** again, then **Lock it in** | *LOCKED IN. Go and find out.* Your sentence, your leave-out, and *A bad one counts the same as a good one* |
+| 10 | **Go and actually do it.** Come back. Tap **Done it. Here's what happened** | One box, and above it the worry's name and the exact sentence you are testing. No verdict asked for |
+| 11 | Type what happened, tap **Next**, tap **A lot less sure** | Your expectation, what happened, and the ladder: *Started 10*, *Now 7*. Beside it, **the name of the size you did it at** - *A bigger go*. A big **1** |
+| 12 | Tap **New test** at the bottom, then **Back**, then **Not sure? Try one of these**, and come back to **Saying no without giving a reason** | The blank sentence again. **Your last answer is not pre-filled** - this is a new test, not the old one reopened |
+| 13 | Type a **different** name into the gap, tap a **different** prediction, and pick a **different** size | All three sentences rebuild around the new name |
+| 14 | Finish that loop too | *Started 10*, *1st 7*, *Now ...* - **one ladder, three rungs**, each rung carrying the size it was done at and what you wrote. Not two cards, not two ladders |
+| 15 | Tap **Your tests** | **One** card for this worry, however many different names, predictions and sizes you used. *1 test, done 2 times* |
+| 16 | Tap **Why this one sticks** | The worry's own page. It quotes the worry's general sentence, not the one you wrote - that is right; the page is about the worry, not about you |
+| 17 | Go back to the worry and tap **Write the whole thing myself** | Both boxes empty, and no plan carried over. It hands you a genuinely blank test and **leaves the worry's ladder alone** |
+| 18 | Do steps 1-11 again on **Telling someone I'm struggling** (it is behind *Keeping it all to myself*) | The same road. The gap sits in the middle of the sentence this time - *If I tell ___ one true thing I'm finding hard* |
+| 19 | On that one, leave the gap **empty** and tap a prediction | Everything reads *somebody*, and it is a whole sentence. Nothing shows a blank, a placeholder or a brace |
+| 20 | Tap **Help**, then **Export everything** | Each result carries the words you typed into the gap, which prediction you picked, and the name of the size. Nothing carries a score of you |
+| 21 | With wifi off, walk the whole road again | It all works. Open the network tab: the page load and its files, nothing after |
+
+**Read every sentence out loud as you go.** The question is not whether it is correct, it is
+whether **you would ever say it**. A sentence that is only nearly yours cannot be disconfirmed:
+the loop runs and moves nothing. If one of them sounds like BETR talking rather than you, write
+it down here - that is the finding this journey exists for.
 
 **Result:** _not yet walked._
 
