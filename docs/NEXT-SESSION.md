@@ -5,9 +5,9 @@
 
 ## 1. Where we are
 
-**B28–B35 are built and closed.** 208 tests, no dependencies, no build step, nothing requested
-after load. `main` is clean and live at `https://betr.trybeup.com`. **No app code has changed
-since B35** — the last two days are research, two proposals and a scope.
+**B28–B35 are built and closed.** 208 tests, no dependencies, nothing requested after load;
+`main` clean and live at `https://betr.trybeup.com`. **No app code has changed since B35** — the
+last two days are research, two proposals and a scope.
 
 **The founder said "let's try it out" on 2026-09-09, and B37 is now a programme file** with the
 running order in its §10. Seven tasks, `B38` to `B44`, all scoped, none started.
@@ -82,11 +82,11 @@ Holes take a person, a thing, a place — never a verb. Rule 4 did not loosen fo
    Two questions: is *"the smallest version that could still turn out wrong"* safe to hand
    somebody with no clinician, and may *A small go* change **who it is with**? **B43 adds ~26.**
 4. **A screen-reader pass on a real phone** — the tree was read in B33, **nobody has used it**.
-5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.
+5. **Q1 (name, trademark, domain)** blocks release and blocks B5 outright.
 
 **Two API keys pasted in an earlier session — Groq and Anthropic — still need rotating. Nobody
 owns** the missing medication word list in `guards.js`. **Release conditions:** Misha on
-`places.signedOff`; J1–J3 on a phone; an owner for links and helplines.
+`places.signedOff`, J1–J3 on a phone, an owner for links and helplines.
 
 ## 4. Environment facts
 
@@ -107,10 +107,10 @@ owns** the missing medication word list in `guards.js`. **Release conditions:** 
   REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners once swallowed the
   build screen out of `app.js` (`learnings.md`).
 - **The fold is 785px at 100%, 780px at 125%**; `doors.intro` must stay one line. **At 125% the
-  `do` box clips and *Lock it in* sits under the menu** — that is B39.
+  `do` box clips and *Lock it in* sits under the menu** — B39.
 - **Chips are exempt from the capital-letter rule**, by class. **`rate.keyOf()` keys a ladder by
   `id`**, and rule 5 means a worry's **three predictions share one ladder** — never key on which
-  prediction. **After editing `web/content/*`, `stop` and `start`** — `open` serves a cache.
+  prediction. **After editing `web/content/*`, `stop` and `start`**: `open` serves a cache.
 - **`HABIT`/`BODY` refuse nothing any more**, still hold BETR's own content, and neither catches
   a checking ritual, which rule 4 also forbids. **Help's order is three decisions held by four
   tests:** crisis, proof, frozen sentence 6, CBT, the nine.
