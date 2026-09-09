@@ -1,249 +1,249 @@
 ﻿Ref,Where,If I…,Type,Status,Line,Our flag,Accept (1-5),Rewrite,Reviewer notes
 G-P1,general,(any sentence the person typed),prediction,shipped,they’ll think less of me,"OURS: this exact prediction is ALSO at S03-P2 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,
-G-P2,general,(any sentence the person typed),prediction,shipped,they’ll go quiet with me,"OURS: this exact prediction is ALSO at S10-P2 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,
+G-P2,general,(any sentence the person typed),prediction,shipped,they’ll go quiet with me,"OURS: this exact prediction is ALSO at S10-P2 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,they'll go quiet on me,
 G-P3,general,(any sentence the person typed),prediction,shipped,it’ll be held against me later,,,,
-G-P4,general,(any sentence the person typed),prediction,PROPOSED,I won’t settle until it’s dealt with,,,,
+G-P4,general,(any sentence the person typed),prediction,PROPOSED,I won’t settle until it’s dealt with,,,I won't come down until it's sorted,
 G-P5,general,(any sentence the person typed),prediction,PROPOSED,I’ll end up doing it twice,OURS: replaces a line that turned out to be already shipped under start #13.,,,
 G-P6,general,(any sentence the person typed),prediction,PROPOSED,I’ll regret it by the end of the day,,,,
-G-D1,general,(any sentence the person typed),do,shipped,"Do it once today, in the smallest version that still counts.",,,,
-G-D2,general,(any sentence the person typed),do,CUT — no longer in the app,Pick the version of it you could do in the next hour.,OURS: this was one of the two loose “do” suggestions B42 replaced with the three sizes above. Left in the sheet because it is a good line and could come back; it is not live today.,,,
-G-D3,general,(any sentence the person typed),do,PROPOSED,Write down what you expect to happen before you do it.,"OURS: the most useful line here, but the app already asks for a prediction on an earlier screen — may read as being told twice.",,,
-G-D4,general,(any sentence the person typed),do,PROPOSED,"Do it once, at a time you’ve already decided on.",,,,
-G-D5,general,(any sentence the person typed),do,PROPOSED,Do it before you feel ready to.,,,,
-G-D6,general,(any sentence the person typed),do,PROPOSED,Pick a version you can’t quietly undo afterwards.,"OURS: the sharpest line, and the one most likely to push somebody further than they meant to go.",,,
+G-D1,general,(any sentence the person typed),do,shipped,"Do it once today, in the smallest version that still counts.",,,"Try doing it once today, even in a small way.",
+G-D2,general,(any sentence the person typed),do,CUT — no longer in the app,Pick the version of it you could do in the next hour.,OURS: this was one of the two loose “do” suggestions B42 replaced with the three sizes above. Left in the sheet because it is a good line and could come back; it is not live today.,,Try out a simple test within the next hour.,"I'm not sure i like this one, it's hard to rewrite. We're thinking about people who procrastinate, and trying to coax them into taking spontaneous action instead of just letting it slide and forgetting about it. But it's not well worded at all, nor is my rewrite"
+G-D3,general,(any sentence the person typed),do,CULLED — was PROPOSED,Write down what you expect to happen before you do it.,"OURS: the most useful line here, but the app already asks for a prediction on an earlier screen — may read as being told twice.",,,This one is indeed a bit redundant
+G-D4,general,(any sentence the person typed),do,CULLED — was PROPOSED,"Do it once, at a time you’ve already decided on.",,,,"Also a bit redundant, it doesn't commit the user to a written action"
+G-D5,general,(any sentence the person typed),do,CULLED — was PROPOSED,Do it before you feel ready to.,,,,"This sounds like a contradiction in terms, scrap it"
+G-D6,general,(any sentence the person typed),do,CULLED — was PROPOSED,Pick a version you can’t quietly undo afterwards.,"OURS: the sharpest line, and the one most likely to push somebody further than they meant to go.",,,"Yeah this is probably not for someone turning to an app to get help with anxiety or worry, scrap it"
 G-X1,general,(any sentence the person typed),drop,shipped,Don’t explain yourself.,,,,
-G-X2,general,(any sentence the person typed),drop,shipped,Don’t line up a way out first.,,,,
+G-X2,general,(any sentence the person typed),drop,shipped,Don’t line up a way out first.,,,,Don't prepare excuses to get out of it
 G-X3,general,(any sentence the person typed),drop,PROPOSED,Don’t rehearse it beforehand.,,,,
-G-X4,general,(any sentence the person typed),drop,PROPOSED,Don’t check afterwards how it landed.,OURS: WE RECOMMEND CUTTING. Unbounded in the general set it reaches everybody whatever they typed. See §1c and §5.,,,
-G-X5,general,(any sentence the person typed),drop,PROPOSED,Don’t warn anybody that it’s coming.,OURS: WE RECOMMEND CUTTING. Unbounded in the general set it reaches everybody whatever they typed. See §1c and §5.,,,
-G-X6,general,(any sentence the person typed),drop,PROPOSED,Don’t do it at half strength.,,,,
-S01-P1,start #01,say no without giving a reason,prediction,shipped,they’ll think I’m being difficult,,,,
+G-X4,general,(any sentence the person typed),drop,PROPOSED,Don’t check afterwards how it landed.,"OURS: WE RECOMMEND CUTTING. Unbounded in the general set it reaches everybody whatever they typed. See §1c and §5. OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,,"Maybe replace with ""Try not to ruminate on what others thought of your action"" but then that's an IF THEN statement in itself"
+G-X5,general,(any sentence the person typed),drop,PROPOSED,Don’t warn anybody that it’s coming.,OURS: WE RECOMMEND CUTTING. Unbounded in the general set it reaches everybody whatever they typed. See §1c and §5.,,Don't warn people that you're doing a test,
+G-X6,general,(any sentence the person typed),drop,CULLED — was PROPOSED,Don’t do it at half strength.,,,,"Weird sentence, how would they know? Drop it."
+S01-P1,start #01,say no without giving a reason,prediction,shipped,they’ll think I’m being difficult,,,they'll think I'm a difficult person,
 S01-P2,start #01,say no without giving a reason,prediction,shipped,they’ll stop asking me,,,,
-S01-P3,start #01,say no without giving a reason,prediction,shipped,they’ll be off with me for days,,,,
+S01-P3,start #01,say no without giving a reason,prediction,shipped,they’ll be off with me for days,,,they'll avoid me for days,
 S01-D1,start #01,say no without giving a reason,do,shipped,"Say no to one thing today, in one sentence.",,,,
 S01-D2,start #01,say no without giving a reason,do,shipped,Turn down one request without explaining why.,,,,
-S01-X1,start #01,say no without giving a reason,drop,shipped,Don’t give a reason.,,,,
+S01-X1,start #01,say no without giving a reason,drop,shipped,Don’t give a reason.,,,Don't apologise or give an excuse,
 S01-X2,start #01,say no without giving a reason,drop,shipped,Don’t offer to make up for it another way.,,,,
-S01-D3,start #01,say no without giving a reason,do,PROPOSED,"Say no to the next thing you’d normally take on, and stop talking.",,,,
-S01-D4,start #01,say no without giving a reason,do,PROPOSED,Decline one invitation today without offering an alternative date.,,,,
-S01-X3,start #01,say no without giving a reason,drop,PROPOSED,Don’t soften it with “I wish I could”.,,,,
+S01-D3,start #01,say no without giving a reason,do,CULLED — was PROPOSED,"Say no to the next thing you’d normally take on, and stop talking.",,,,"Weird sentence, drop it"
+S01-D4,start #01,say no without giving a reason,do,PROPOSED,Decline one invitation today without offering an alternative date.,,,,"Interesting idea but potentially friendship damaging, perhaps this can be softened or dropped"
+S01-X3,start #01,say no without giving a reason,drop,PROPOSED,Don’t soften it with “I wish I could”.,,,"Don't use white lies, like ""I'd love to but...""",
 S01-X4,start #01,say no without giving a reason,drop,PROPOSED,Don’t check afterwards whether they minded.,,,,
-S02-P1,start #02,ask for what I actually want,prediction,shipped,they’ll say no and I’ll feel stupid,,,,
-S02-P2,start #02,ask for what I actually want,prediction,shipped,they’ll think I’m taking advantage,,,,
-S02-P3,start #02,ask for what I actually want,prediction,shipped,it’ll change how they see me,,,,
+S02-P1,start #02,ask for what I actually want,prediction,shipped,they’ll say no and I’ll feel stupid,,,they'll say no and I'll be embarrassed,
+S02-P2,start #02,ask for what I actually want,prediction,shipped,they’ll think I’m taking advantage,,,they'll think I'm selfish,
+S02-P3,start #02,ask for what I actually want,prediction,shipped,it’ll change how they see me,,,they'll have a bad opinion of me,
 S02-D1,start #02,ask for what I actually want,do,shipped,"Ask for one thing today, straight out.",,,,
 S02-D2,start #02,ask for what I actually want,do,shipped,"Ask once, and don’t soften it.",,,,
 S02-X1,start #02,ask for what I actually want,drop,shipped,Don’t say “only if it’s no trouble”.,,,,
 S02-X2,start #02,ask for what I actually want,drop,shipped,Don’t ask for less than you want.,,,,
-S02-D3,start #02,ask for what I actually want,do,PROPOSED,"Name the thing you want in the first sentence, before the reasons.",,,,
-S02-D4,start #02,ask for what I actually want,do,PROPOSED,"Ask for the whole of it, not the version you think you’ll get.",,,,
-S02-X3,start #02,ask for what I actually want,drop,PROPOSED,Don’t give them an easy way to say no.,,,,
+S02-D3,start #02,ask for what I actually want,do,PROPOSED,"Name the thing you want in the first sentence, before the reasons.",,,Say what you want before you explain why,
+S02-D4,start #02,ask for what I actually want,do,CULLED — was PROPOSED,"Ask for the whole of it, not the version you think you’ll get.",,,,Drop
+S02-X3,start #02,ask for what I actually want,drop,PROPOSED,Don’t give them an easy way to say no.,,,Don't say 'but you don't have to',
 S02-X4,start #02,ask for what I actually want,drop,PROPOSED,Don’t rehearse it more than once.,,,,
-S03-P1,start #03,tell someone I’m struggling,prediction,shipped,they’ll change the subject,,,,
-S03-P2,start #03,tell someone I’m struggling,prediction,shipped,they’ll think less of me,"OURS: this exact prediction is ALSO at G-P1 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,
-S03-P3,start #03,tell someone I’m struggling,prediction,shipped,they’ll start treating me carefully,,,,
-S03-D1,start #03,tell someone I’m struggling,do,shipped,Tell one person one true sentence about how this week has been.,,,,
-S03-D2,start #03,tell someone I’m struggling,do,shipped,"Answer “how are you?” honestly, once, today.",,,,
-S03-X1,start #03,tell someone I’m struggling,drop,shipped,Don’t follow it with “but I’m fine”.,,,,
-S03-X2,start #03,tell someone I’m struggling,drop,shipped,Don’t make a joke of it.,,,,
-S03-D3,start #03,tell someone I’m struggling,do,PROPOSED,Say one thing out loud that you’d normally only think.,,,,
-S03-D4,start #03,tell someone I’m struggling,do,PROPOSED,Tell one person the part you’d usually leave out.,,,,
-S03-X3,start #03,tell someone I’m struggling,drop,PROPOSED,Don’t ask if it was too much afterwards.,,,,
-S03-X4,start #03,tell someone I’m struggling,drop,PROPOSED,Don’t change the subject to them.,,,,
-S04-P1,start #04,hand something over before it’s perfect,prediction,shipped,they’ll spot everything wrong with it,,,,
-S04-P2,start #04,hand something over before it’s perfect,prediction,shipped,they’ll think I’ve stopped caring,,,,
-S04-P3,start #04,hand something over before it’s perfect,prediction,shipped,it’ll come straight back to me with a list,,,,
-S04-D1,start #04,hand something over before it’s perfect,do,shipped,Finish one thing at good enough today and hand it over.,,,,
-S04-D2,start #04,hand something over before it’s perfect,do,shipped,"Stop at the time you planned, and send what you have.",,,,
+S03-P1,start #03,tell someone I’m struggling,prediction,shipped,they’ll change the subject,,,they'll awkwardly change the subject,
+S03-P2,start #03,tell someone I’m struggling,prediction,shipped,they’ll think less of me,"OURS: this exact prediction is ALSO at G-P1 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,they'll think I'm weak,
+S03-P3,start #03,tell someone I’m struggling,prediction,shipped,they’ll start treating me carefully,,,they'll treat me like the poor little victim,
+S03-D1,start #03,tell someone I’m struggling,do,shipped,Tell one person one true sentence about how this week has been.,,,Tell one person one thing you're struggling with,
+S03-D2,start #03,tell someone I’m struggling,do,CULLED — was shipped,"Answer “how are you?” honestly, once, today.",,,,drop
+S03-X1,start #03,tell someone I’m struggling,drop,shipped,Don’t follow it with “but I’m fine”.,,,"Don't add ""but it's no big deal""",
+S03-X2,start #03,tell someone I’m struggling,drop,shipped,Don’t make a joke of it.,,,Don't make jokes to diminish it,
+S03-D3,start #03,tell someone I’m struggling,do,CULLED — was PROPOSED,Say one thing out loud that you’d normally only think.,,,,Drop
+S03-D4,start #03,tell someone I’m struggling,do,PROPOSED,Tell one person the part you’d usually leave out.,"OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,Admit how bad things really are,
+S03-X3,start #03,tell someone I’m struggling,drop,CULLED — was PROPOSED,Don’t ask if it was too much afterwards.,,,,Drop
+S03-X4,start #03,tell someone I’m struggling,drop,PROPOSED,Don’t change the subject to them.,,,Don't quickly change the subject after,
+S04-P1,start #04,hand something over before it’s perfect,prediction,shipped,they’ll spot everything wrong with it,,,they'll immediately see the mistakes,Can we rename the whole If I part to 'send or submit something before it's perfect' so we can merge a few other statement categories here
+S04-P2,start #04,hand something over before it’s perfect,prediction,shipped,they’ll think I’ve stopped caring,,,they'll think I don't care,
+S04-P3,start #04,hand something over before it’s perfect,prediction,shipped,it’ll come straight back to me with a list,,,they'll send me a list of criticisms,
+S04-D1,start #04,hand something over before it’s perfect,do,shipped,Finish one thing at good enough today and hand it over.,"OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,Leave one thing at 'good enough' at hand it over,
+S04-D2,start #04,hand something over before it’s perfect,do,shipped,"Stop at the time you planned, and send what you have.",,,Stop one thing that hits a deadline and send whatever you've done,
 S04-X1,start #04,hand something over before it’s perfect,drop,shipped,No last read-through.,,,,
-S04-X2,start #04,hand something over before it’s perfect,drop,shipped,Don’t say what you’d have done with more time.,,,,
-S04-D3,start #04,hand something over before it’s perfect,do,PROPOSED,Hand it over at the point you’d normally start polishing.,,,,
-S04-D4,start #04,hand something over before it’s perfect,do,PROPOSED,Give it to one person today without a covering note.,,,,
-S04-X3,start #04,hand something over before it’s perfect,drop,PROPOSED,Don’t apologise for the state of it.,,,,
-S04-X4,start #04,hand something over before it’s perfect,drop,PROPOSED,Don’t list what you already know is wrong with it.,,,,
-S05-P1,start #05,send it without reading it again,prediction,shipped,there’ll be a mistake in it,,,,
-S05-P2,start #05,send it without reading it again,prediction,shipped,it’ll come out blunter than I meant,,,,
-S05-P3,start #05,send it without reading it again,prediction,shipped,I’ll be going back to it all afternoon,,,,
-S05-D1,start #05,send it without reading it again,do,shipped,"Write one message today, read it once, and send it.",,,,
-S05-D2,start #05,send it without reading it again,do,shipped,Send the next email the moment it’s written.,,,,
-S05-X1,start #05,send it without reading it again,drop,shipped,No second read-through.,,,,
-S05-X2,start #05,send it without reading it again,drop,shipped,Don’t go back and edit it after it’s gone.,,,,
-S05-D3,start #05,send it without reading it again,do,PROPOSED,Send one message today straight after the last full stop.,,,,
-S05-D4,start #05,send it without reading it again,do,PROPOSED,Reply to one thing in one draft.,,,,
-S05-X3,start #05,send it without reading it again,drop,PROPOSED,Don’t read it back in the sent folder.,,,,
-S05-X4,start #05,send it without reading it again,drop,PROPOSED,Don’t ask anybody to look at it first.,,,,
-S06-P1,start #06,don’t answer a message straight away,prediction,shipped,they’ll think I don’t care,"OURS: this exact prediction is ALSO at S21-P1 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,
-S06-P2,start #06,don’t answer a message straight away,prediction,shipped,they’ll assume I’m annoyed with them,,,,
-S06-P3,start #06,don’t answer a message straight away,prediction,shipped,they’ll stop bothering to message me,,,,
-S06-D1,start #06,don’t answer a message straight away,do,shipped,Leave one message a few hours before you answer it.,,,,
-S06-D2,start #06,don’t answer a message straight away,do,shipped,Pick one message today and answer it this evening.,,,,
-S06-X1,start #06,don’t answer a message straight away,drop,shipped,"Don’t open with “sorry, only just seen this”.",,,,
-S06-X2,start #06,don’t answer a message straight away,drop,shipped,Don’t explain the delay.,,,,
-S06-D3,start #06,don’t answer a message straight away,do,PROPOSED,Answer one message tomorrow instead of tonight.,,,,
-S06-D4,start #06,don’t answer a message straight away,do,PROPOSED,Let one message wait while you finish what you were doing.,,,,
-S06-X3,start #06,don’t answer a message straight away,drop,PROPOSED,Don’t send a holding message to buy time.,,,,
-S06-X4,start #06,don’t answer a message straight away,drop,PROPOSED,Don’t make the reply longer to make up for it.,,,,
-S07-P1,start #07,sit still with the restlessness,prediction,shipped,it’ll build until I have to do something about it,,,,
-S07-P2,start #07,sit still with the restlessness,prediction,shipped,I’ll be no use for the rest of the day,,,,
-S07-P3,start #07,sit still with the restlessness,prediction,shipped,it won’t pass on its own,,,,
-S07-D1,start #07,sit still with the restlessness,do,shipped,Set ten minutes and sit with it. Write down the time it eased.,,,,
-S07-D2,start #07,sit still with the restlessness,do,shipped,"Stay where you are for one urge, and time it.",,,,
-S07-X1,start #07,sit still with the restlessness,drop,shipped,Don’t pick anything up.,,,,
-S07-X2,start #07,sit still with the restlessness,drop,shipped,Don’t get up to do a job.,,,,
-S07-D3,start #07,sit still with the restlessness,do,PROPOSED,"When it comes, stay in the chair and write down the time.",OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,
-S07-D4,start #07,sit still with the restlessness,do,PROPOSED,Wait it out once today without changing anything.,OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,
-S07-X3,start #07,sit still with the restlessness,drop,PROPOSED,Don’t reach for something to look at.,OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,
-S07-X4,start #07,sit still with the restlessness,drop,PROPOSED,Don’t give yourself a job to make it bearable.,OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,
+S04-X2,start #04,hand something over before it’s perfect,drop,shipped,Don’t say what you’d have done with more time.,,,Don't already make excuses about what's wrong,
+S04-D3,start #04,hand something over before it’s perfect,do,CULLED — was PROPOSED,Hand it over at the point you’d normally start polishing.,,,,Drop
+S04-D4,start #04,hand something over before it’s perfect,do,CULLED — was PROPOSED,Give it to one person today without a covering note.,,,,Drop
+S04-X3,start #04,hand something over before it’s perfect,drop,CULLED — was PROPOSED,Don’t apologise for the state of it.,,,,Drop
+S04-X4,start #04,hand something over before it’s perfect,drop,CULLED — was PROPOSED,Don’t list what you already know is wrong with it.,,,,Drop
+S05-P1,start #05,send it without reading it again,prediction,CULLED — was shipped,there’ll be a mistake in it,,,,"I think we should drop the whole 'send it without reading again', it's too similar to hand something over before it's perfect, and seems like a sort of banal problem? To be discussed"
+S05-P2,start #05,send it without reading it again,prediction,CULLED — was shipped,it’ll come out blunter than I meant,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-P3,start #05,send it without reading it again,prediction,CULLED — was shipped,I’ll be going back to it all afternoon,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-D1,start #05,send it without reading it again,do,CULLED — was shipped,"Write one message today, read it once, and send it.",,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-D2,start #05,send it without reading it again,do,CULLED — was shipped,Send the next email the moment it’s written.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-X1,start #05,send it without reading it again,drop,CULLED — was shipped,No second read-through.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-X2,start #05,send it without reading it again,drop,CULLED — was shipped,Don’t go back and edit it after it’s gone.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-D3,start #05,send it without reading it again,do,CULLED — was PROPOSED,Send one message today straight after the last full stop.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-D4,start #05,send it without reading it again,do,CULLED — was PROPOSED,Reply to one thing in one draft.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-X3,start #05,send it without reading it again,drop,CULLED — was PROPOSED,Don’t read it back in the sent folder.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S05-X4,start #05,send it without reading it again,drop,CULLED — was PROPOSED,Don’t ask anybody to look at it first.,,,,"Culled whole: start #05, sent without reading it again (founder, 2026-09-09). Don’t score it."
+S06-P1,start #06,don’t answer a message straight away,prediction,CULLED — was shipped,they’ll think I don’t care,"OURS: this exact prediction is ALSO at S21-P1 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,Again I wonder if we should drop this for V1 to reduce the scope down to important anxieties and not these kind of banal things
+S06-P2,start #06,don’t answer a message straight away,prediction,CULLED — was shipped,they’ll assume I’m annoyed with them,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-P3,start #06,don’t answer a message straight away,prediction,CULLED — was shipped,they’ll stop bothering to message me,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-D1,start #06,don’t answer a message straight away,do,CULLED — was shipped,Leave one message a few hours before you answer it.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-D2,start #06,don’t answer a message straight away,do,CULLED — was shipped,Pick one message today and answer it this evening.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-X1,start #06,don’t answer a message straight away,drop,CULLED — was shipped,"Don’t open with “sorry, only just seen this”.",,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-X2,start #06,don’t answer a message straight away,drop,CULLED — was shipped,Don’t explain the delay.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-D3,start #06,don’t answer a message straight away,do,CULLED — was PROPOSED,Answer one message tomorrow instead of tonight.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-D4,start #06,don’t answer a message straight away,do,CULLED — was PROPOSED,Let one message wait while you finish what you were doing.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-X3,start #06,don’t answer a message straight away,drop,CULLED — was PROPOSED,Don’t send a holding message to buy time.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S06-X4,start #06,don’t answer a message straight away,drop,CULLED — was PROPOSED,Don’t make the reply longer to make up for it.,,,,"Culled whole: start #06, not answering straight away (founder, 2026-09-09). Don’t score it."
+S07-P1,start #07,sit still with the restlessness,prediction,REWRITE — shipped,it’ll build until I have to do something about it,,,my worries will bubble up and drive me crazy (or something like that),This whole category should be rewritten: If I sit still with the restlessness is confusing. More like 'If I sit alone in silence' or something more realistic and every-day
+S07-P2,start #07,sit still with the restlessness,prediction,REWRITE — shipped,I’ll be no use for the rest of the day,,,,drop
+S07-P3,start #07,sit still with the restlessness,prediction,REWRITE — shipped,it won’t pass on its own,,,I'll have a panic attack,Maybe too harsh a test to risk someone actually having a panic attack?
+S07-D1,start #07,sit still with the restlessness,do,REWRITE — shipped,Set ten minutes and sit with it. Write down the time it eased.,,,Plan ten minutes to do a guided mindfulness session,"Maybe in general we should recommend some easy, free videos on YT or whatever free source for guided mindfulness? Headspace quality but free"
+S07-D2,start #07,sit still with the restlessness,do,REWRITE — shipped,"Stay where you are for one urge, and time it.",,,"Next uncomfortable feeling, start a timer and see how long you can sit with it, no distractions","My rewrite probably needs rewriting, but you can see I'm trying to make it more comprehensible for a layperson"
+S07-X1,start #07,sit still with the restlessness,drop,REWRITE — shipped,Don’t pick anything up.,,,Don't distract yourself on purpose,"Category being split in two and rewritten (founder, 2026-09-09). New sentences will replace these; don’t score them."
+S07-X2,start #07,sit still with the restlessness,drop,REWRITE — shipped,Don’t get up to do a job.,,,Don't start a new task to deflect,"Category being split in two and rewritten (founder, 2026-09-09). New sentences will replace these; don’t score them."
+S07-D3,start #07,sit still with the restlessness,do,REWRITE — PROPOSED,"When it comes, stay in the chair and write down the time.",OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,Drop
+S07-D4,start #07,sit still with the restlessness,do,REWRITE — PROPOSED,Wait it out once today without changing anything.,OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,Wait the uncomfortabe feeling out and see if it goes away,"I think I'm maybe mixing up this category, between the concept of sitting calmly alone in silence which is scary for some people, and the concept of not distracting yourself when you have an uncomfortable emotion, so we may need to split these up and rewrite please"
+S07-X3,start #07,sit still with the restlessness,drop,REWRITE — PROPOSED,Don’t reach for something to look at.,OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,"Category being split in two and rewritten (founder, 2026-09-09). New sentences will replace these; don’t score them."
+S07-X4,start #07,sit still with the restlessness,drop,REWRITE — PROPOSED,Don’t give yourself a job to make it bearable.,OURS: the start closest to an interoceptive exposure. Nothing here names a body sensation or asks anybody to bring one on — say if that line is thinner than we think.,,,Drop
 S08-P1,start #08,rest while there’s still stuff to do,prediction,shipped,I’ll feel guilty the whole time,,,,
-S08-P2,start #08,rest while there’s still stuff to do,prediction,shipped,I won’t start again today,,,,
-S08-P3,start #08,rest while there’s still stuff to do,prediction,shipped,somebody will think I’ve gone slack,,,,
-S08-D1,start #08,rest while there’s still stuff to do,do,shipped,"Take two hours off today, and take them properly.",,,,
-S08-D2,start #08,rest while there’s still stuff to do,do,shipped,Sit down for half an hour with nothing to show for it.,,,,
-S08-X1,start #08,rest while there’s still stuff to do,drop,shipped,No “I’ll just quickly do this one thing” first.,,,,
-S08-X2,start #08,rest while there’s still stuff to do,drop,shipped,Don’t keep the list where you can see it.,,,,
-S08-D3,start #08,rest while there’s still stuff to do,do,PROPOSED,"Stop at six today, with the list unfinished.",,,,
-S08-D4,start #08,rest while there’s still stuff to do,do,PROPOSED,Take the break before the work is at a tidy point.,,,,
-S08-X3,start #08,rest while there’s still stuff to do,drop,PROPOSED,Don’t earn it first.,,,,
-S08-X4,start #08,rest while there’s still stuff to do,drop,PROPOSED,Don’t tell anyone what you got done before you stopped.,,,,
-S09-P1,start #09,go an evening without my phone,prediction,shipped,something will go wrong and nobody will reach me,,,,
-S09-P2,start #09,go an evening without my phone,prediction,shipped,I’ll miss something I needed to see,,,,
-S09-P3,start #09,go an evening without my phone,prediction,shipped,I won’t know what to do with myself,,,,
-S09-D1,start #09,go an evening without my phone,do,shipped,"Put it in a drawer from eight. In the morning, write down what you actually missed.",,,,
-S09-D2,start #09,go an evening without my phone,do,shipped,Leave it in another room for one evening.,,,,
-S09-X1,start #09,go an evening without my phone,drop,shipped,No checking it “just once” before bed.,,,,
-S09-X2,start #09,go an evening without my phone,drop,shipped,Don’t tell anyone in advance where you’ll be.,,,,
-S09-D3,start #09,go an evening without my phone,do,PROPOSED,Go out for the evening and leave it at home once.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,
-S09-D4,start #09,go an evening without my phone,do,PROPOSED,Hand it to somebody else until the morning.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,
-S09-X3,start #09,go an evening without my phone,drop,PROPOSED,Don’t leave it face down on the table instead.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,
-S09-X4,start #09,go an evening without my phone,drop,PROPOSED,Don’t set up a way to be reached “just in case”.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,
-S10-P1,start #10,say what I actually think,prediction,shipped,it’ll turn into a row,,,,
-S10-P2,start #10,say what I actually think,prediction,shipped,they’ll go quiet with me,"OURS: this exact prediction is ALSO at G-P2 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,
-S10-P3,start #10,say what I actually think,prediction,shipped,they’ll decide I’m hard work,,,,
-S10-D1,start #10,say what I actually think,do,shipped,"Say the thing you’d normally leave, once, in one sentence.",,,,
-S10-D2,start #10,say what I actually think,do,shipped,Disagree out loud with one person today.,,,,
-S10-X1,start #10,say what I actually think,drop,shipped,Don’t soften it with a joke.,,,,
-S10-X2,start #10,say what I actually think,drop,shipped,Don’t apologise for saying it.,,,,
-S10-D3,start #10,say what I actually think,do,PROPOSED,Give your actual opinion the first time you’re asked today.,,,,
-S10-D4,start #10,say what I actually think,do,PROPOSED,"Say the unpopular half of what you think, once.",,,,
-S10-X3,start #10,say what I actually think,drop,PROPOSED,Don’t start with “this is probably just me”.,,,,
-S10-X4,start #10,say what I actually think,drop,PROPOSED,Don’t take it back if the room goes quiet.,,,,
-S11-P1,start #11,don’t get the last word,prediction,shipped,they’ll think they’ve won,,,,
-S11-P2,start #11,don’t get the last word,prediction,shipped,it’ll get brought up again,,,,
-S11-P3,start #11,don’t get the last word,prediction,shipped,I’ll be going over it all night,,,,
-S11-D1,start #11,don’t get the last word,do,shipped,Let one disagreement finish where it finishes today.,,,,
-S11-D2,start #11,don’t get the last word,do,shipped,"Say your bit once, and stop.",,,,
-S11-X1,start #11,don’t get the last word,drop,shipped,Don’t send the follow-up message.,,,,
-S11-X2,start #11,don’t get the last word,drop,shipped,Don’t go back to it later.,,,,
+S08-P2,start #08,rest while there’s still stuff to do,prediction,shipped,I won’t start again today,,,I'll forget to do something important,
+S08-P3,start #08,rest while there’s still stuff to do,prediction,shipped,somebody will think I’ve gone slack,,,people will think I'm lazy,
+S08-D1,start #08,rest while there’s still stuff to do,do,shipped,"Take two hours off today, and take them properly.","OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,Take one hour off today and do something just for me,
+S08-D2,start #08,rest while there’s still stuff to do,do,shipped,Sit down for half an hour with nothing to show for it.,,,Sit down for half an hour and read for pleasure,
+S08-X1,start #08,rest while there’s still stuff to do,drop,shipped,No “I’ll just quickly do this one thing” first.,,,Don't just do 'one last quick thing' before starting,
+S08-X2,start #08,rest while there’s still stuff to do,drop,shipped,Don’t keep the list where you can see it.,"OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,Try not to think about your todo list,
+S08-D3,start #08,rest while there’s still stuff to do,do,CULLED — was PROPOSED,"Stop at six today, with the list unfinished.",,,,Drop
+S08-D4,start #08,rest while there’s still stuff to do,do,CULLED — was PROPOSED,Take the break before the work is at a tidy point.,,,,Drop
+S08-X3,start #08,rest while there’s still stuff to do,drop,PROPOSED,Don’t earn it first.,,,Don't tell yourself you need to earn it first,
+S08-X4,start #08,rest while there’s still stuff to do,drop,PROPOSED,Don’t tell anyone what you got done before you stopped.,,,Don't make excuses to people around you for the break,
+S09-P1,start #09,go an evening without my phone,prediction,CULLED — was shipped,something will go wrong and nobody will reach me,,,,We should maybe drop this. Some people actually do have emergencies that come up that would require them to be reachable. The whole If statement could be dropped
+S09-P2,start #09,go an evening without my phone,prediction,CULLED — was shipped,I’ll miss something I needed to see,,,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-P3,start #09,go an evening without my phone,prediction,CULLED — was shipped,I won’t know what to do with myself,,,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-D1,start #09,go an evening without my phone,do,CULLED — was shipped,"Put it in a drawer from eight. In the morning, write down what you actually missed.",,,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-D2,start #09,go an evening without my phone,do,CULLED — was shipped,Leave it in another room for one evening.,,,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-X1,start #09,go an evening without my phone,drop,CULLED — was shipped,No checking it “just once” before bed.,,,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-X2,start #09,go an evening without my phone,drop,CULLED — was shipped,Don’t tell anyone in advance where you’ll be.,,,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-D3,start #09,go an evening without my phone,do,CULLED — was PROPOSED,Go out for the evening and leave it at home once.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-D4,start #09,go an evening without my phone,do,CULLED — was PROPOSED,Hand it to somebody else until the morning.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-X3,start #09,go an evening without my phone,drop,CULLED — was PROPOSED,Don’t leave it face down on the table instead.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S09-X4,start #09,go an evening without my phone,drop,CULLED — was PROPOSED,Don’t set up a way to be reached “just in case”.,"OURS: “Don’t set up a way to be reached just in case” is the real safety behaviour, and also the one that could matter for a carer or somebody on call.",,,"Culled whole: start #09, an evening without my phone (founder, 2026-09-09). Don’t score it."
+S10-P1,start #10,say what I actually think,prediction,shipped,it’ll turn into a row,,,it'll start a conflict with someone,Rename the If to 'say what I really think'
+S10-P2,start #10,say what I actually think,prediction,shipped,they’ll go quiet with me,"OURS: this exact prediction is ALSO at G-P2 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,someone will be hurt and go quiet,
+S10-P3,start #10,say what I actually think,prediction,shipped,they’ll decide I’m hard work,,,they'll think I'm a terrible person,
+S10-D1,start #10,say what I actually think,do,shipped,"Say the thing you’d normally leave, once, in one sentence.",,,Say the thing calmly and clearly without any excuses,
+S10-D2,start #10,say what I actually think,do,shipped,Disagree out loud with one person today.,,,Speak up calmly and clearly when you disagree with someone's opinion,
+S10-X1,start #10,say what I actually think,drop,shipped,Don’t soften it with a joke.,,,"Don't say ""But that's just my opinion""",
+S10-X2,start #10,say what I actually think,drop,shipped,Don’t apologise for saying it.,,,Don't apologise or make excuses,
+S10-D3,start #10,say what I actually think,do,CULLED — was PROPOSED,Give your actual opinion the first time you’re asked today.,,,,Drop
+S10-D4,start #10,say what I actually think,do,PROPOSED,"Say the unpopular half of what you think, once.",,,Give your opinion when you think it might be unpopular,
+S10-X3,start #10,say what I actually think,drop,CULLED — was PROPOSED,Don’t start with “this is probably just me”.,,,,Drop
+S10-X4,start #10,say what I actually think,drop,PROPOSED,Don’t take it back if the room goes quiet.,,,Don't pretend you were joking if people disagree,
+S11-P1,start #11,don’t get the last word,prediction,shipped,they’ll think they’ve won,,,I'll seem weak and submissive,
+S11-P2,start #11,don’t get the last word,prediction,shipped,it’ll get brought up again,"OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,they'll not remember what you said,
+S11-P3,start #11,don’t get the last word,prediction,shipped,I’ll be going over it all night,,,I'll not be able to get it out of my mind,
+S11-D1,start #11,don’t get the last word,do,CULLED — was shipped,Let one disagreement finish where it finishes today.,,,,Drop
+S11-D2,start #11,don’t get the last word,do,shipped,"Say your bit once, and stop.",,,"Make your points once, don't repeat them, then stop",
+S11-X1,start #11,don’t get the last word,drop,shipped,Don’t send the follow-up message.,,,Don't send a follow-up text message,
+S11-X2,start #11,don’t get the last word,drop,shipped,Don’t go back to it later.,"OURS: the rewrite on this row cannot be applied as written — see B47 §4. Score the SHIPPED line, not the rewrite.",,Keep making new points arbitrarily,
 S11-D3,start #11,don’t get the last word,do,PROPOSED,Let somebody else close one conversation today.,,,,
-S11-D4,start #11,don’t get the last word,do,PROPOSED,Leave one thing unanswered that you could answer.,,,,
-S11-X3,start #11,don’t get the last word,drop,PROPOSED,Don’t draft the reply you aren’t going to send.,,,,
-S11-X4,start #11,don’t get the last word,drop,PROPOSED,Don’t tell somebody else your side of it.,,,,
-S12-P1,start #12,let somebody see I got it wrong,prediction,shipped,they’ll lose confidence in me,,,,
-S12-P2,start #12,let somebody see I got it wrong,prediction,shipped,they’ll bring it up again later,,,,
-S12-P3,start #12,let somebody see I got it wrong,prediction,shipped,they’ll stop trusting me with things,,,,
-S12-D1,start #12,let somebody see I got it wrong,do,shipped,"Say “I got that wrong” once today, and leave it there.",,,,
-S12-D2,start #12,let somebody see I got it wrong,do,shipped,Own one mistake before anybody finds it.,,,,
-S12-X1,start #12,let somebody see I got it wrong,drop,shipped,Don’t explain how it happened.,,,,
-S12-X2,start #12,let somebody see I got it wrong,drop,shipped,Don’t offer to fix it before they ask.,,,,
-S12-D3,start #12,let somebody see I got it wrong,do,PROPOSED,Tell one person about a mistake they hadn’t noticed.,,,,
-S12-D4,start #12,let somebody see I got it wrong,do,PROPOSED,Correct yourself out loud in front of somebody today.,,,,
-S12-X3,start #12,let somebody see I got it wrong,drop,PROPOSED,Don’t say how tired or busy you were.,,,,
-S12-X4,start #12,let somebody see I got it wrong,drop,PROPOSED,Don’t make up for it with something else the same day.,,,,
-S13-P1,start #13,don’t rush to be early,prediction,shipped,I’ll be late and it’ll look bad,,,,
-S13-P2,start #13,don’t rush to be early,prediction,shipped,they’ll think I don’t take it seriously,,,,
-S13-P3,start #13,don’t rush to be early,prediction,shipped,the whole day will run behind,,,,
-S13-D1,start #13,don’t rush to be early,do,shipped,"Leave at the time it actually takes, once, and write down when you arrived.",,,,
-S13-D2,start #13,don’t rush to be early,do,shipped,"Arrive on time rather than early, once.",,,,
-S13-X1,start #13,don’t rush to be early,drop,shipped,Don’t leave a buffer.,,,,
-S13-X2,start #13,don’t rush to be early,drop,shipped,Don’t message ahead to say where you are.,,,,
-S13-D3,start #13,don’t rush to be early,do,PROPOSED,"Set off at the time you worked out, not ten minutes before.",,,,
-S13-D4,start #13,don’t rush to be early,do,PROPOSED,"Arrive at the time you said you would, once.",,,,
-S13-X3,start #13,don’t rush to be early,drop,PROPOSED,Don’t check the journey time again before you go.,,,,
-S13-X4,start #13,don’t rush to be early,drop,PROPOSED,Don’t build in a spare fifteen minutes at the other end.,,,,
-S14-P1,start #14,say something good about somebody,prediction,shipped,it’ll come out wrong,,,,
-S14-P2,start #14,say something good about somebody,prediction,shipped,they’ll be embarrassed,,,,
-S14-P3,start #14,say something good about somebody,prediction,shipped,they’ll think I want something,,,,
-S14-D1,start #14,say something good about somebody,do,shipped,Tell one person one specific thing they did well.,,,,
-S14-D2,start #14,say something good about somebody,do,shipped,Say it out loud rather than in a message.,,,,
-S14-X1,start #14,say something good about somebody,drop,shipped,Don’t follow it with a joke.,,,,
-S14-X2,start #14,say something good about somebody,drop,shipped,Don’t add “anyway”.,,,,
-S14-D3,start #14,say something good about somebody,do,PROPOSED,Say the compliment you’d normally think and not say.,,,,
-S14-D4,start #14,say something good about somebody,do,PROPOSED,Tell somebody today why their work made a difference.,,,,
-S14-X3,start #14,say something good about somebody,drop,PROPOSED,Don’t make it lighter by exaggerating it.,,,,
-S14-X4,start #14,say something good about somebody,drop,PROPOSED,Don’t move straight on to something else.,,,,
-S15-P1,start #15,ask somebody for help,prediction,shipped,they’ll think I can’t cope,,,,
-S15-P2,start #15,ask somebody for help,prediction,shipped,they’ll say yes and resent it,,,,
-S15-P3,start #15,ask somebody for help,prediction,shipped,they’ll say no,,,,
-S15-D1,start #15,ask somebody for help,do,shipped,Ask one person for one specific thing today.,,,,
-S15-D2,start #15,ask somebody for help,do,shipped,Ask for help with something you could just about manage alone.,,,,
-S15-X1,start #15,ask somebody for help,drop,shipped,Don’t say “if you’ve got a minute”.,,,,
+S11-D4,start #11,don’t get the last word,do,PROPOSED,Leave one thing unanswered that you could answer.,,,"When your group is asked a question, don't answer on purpose",
+S11-X3,start #11,don’t get the last word,drop,CULLED — was PROPOSED,Don’t draft the reply you aren’t going to send.,,,,Drop
+S11-X4,start #11,don’t get the last word,drop,CULLED — was PROPOSED,Don’t tell somebody else your side of it.,,,,Drop
+S12-P1,start #12,let somebody see I got it wrong,prediction,CULLED — was shipped,they’ll lose confidence in me,,,,"Drop the whole category, too similar to submitting something that isn't perfect."
+S12-P2,start #12,let somebody see I got it wrong,prediction,CULLED — was shipped,they’ll bring it up again later,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-P3,start #12,let somebody see I got it wrong,prediction,CULLED — was shipped,they’ll stop trusting me with things,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-D1,start #12,let somebody see I got it wrong,do,CULLED — was shipped,"Say “I got that wrong” once today, and leave it there.",,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-D2,start #12,let somebody see I got it wrong,do,CULLED — was shipped,Own one mistake before anybody finds it.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-X1,start #12,let somebody see I got it wrong,drop,CULLED — was shipped,Don’t explain how it happened.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-X2,start #12,let somebody see I got it wrong,drop,CULLED — was shipped,Don’t offer to fix it before they ask.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-D3,start #12,let somebody see I got it wrong,do,CULLED — was PROPOSED,Tell one person about a mistake they hadn’t noticed.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-D4,start #12,let somebody see I got it wrong,do,CULLED — was PROPOSED,Correct yourself out loud in front of somebody today.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-X3,start #12,let somebody see I got it wrong,drop,CULLED — was PROPOSED,Don’t say how tired or busy you were.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S12-X4,start #12,let somebody see I got it wrong,drop,CULLED — was PROPOSED,Don’t make up for it with something else the same day.,,,,"Culled whole: start #12, letting somebody see I got it wrong (founder, 2026-09-09). Don’t score it."
+S13-P1,start #13,don’t rush to be early,prediction,shipped,I’ll be late and it’ll look bad,,,I'll be late and people will be annoyed,
+S13-P2,start #13,don’t rush to be early,prediction,shipped,they’ll think I don’t take it seriously,,,people will think I don't care,
+S13-P3,start #13,don’t rush to be early,prediction,shipped,the whole day will run behind,,,I'll be late and stressed the whole day,
+S13-D1,start #13,don’t rush to be early,do,shipped,"Leave at the time it actually takes, once, and write down when you arrived.",,,"Leave at the correct time, write down when you actually arrived",
+S13-D2,start #13,don’t rush to be early,do,shipped,"Arrive on time rather than early, once.",,,"When you arrive, wait 2 minutes later than the time before you go in",
+S13-X1,start #13,don’t rush to be early,drop,shipped,Don’t leave a buffer.,,,Don't leave extra early on purpose,
+S13-X2,start #13,don’t rush to be early,drop,shipped,Don’t message ahead to say where you are.,,,Don't send a message to say when you left or that you might be late,
+S13-D3,start #13,don’t rush to be early,do,CULLED — was PROPOSED,"Set off at the time you worked out, not ten minutes before.",,,,Drop
+S13-D4,start #13,don’t rush to be early,do,CULLED — was PROPOSED,"Arrive at the time you said you would, once.",,,,Drop
+S13-X3,start #13,don’t rush to be early,drop,CULLED — was PROPOSED,Don’t check the journey time again before you go.,,,,Drop
+S13-X4,start #13,don’t rush to be early,drop,CULLED — was PROPOSED,Don’t build in a spare fifteen minutes at the other end.,,,,Drop
+S14-P1,start #14,say something good about somebody,prediction,shipped,it’ll come out wrong,,,it'll come out weird and I'll be embarrassed,Rename this category to 'give someone a compliment'
+S14-P2,start #14,say something good about somebody,prediction,shipped,they’ll be embarrassed,,,they'll be embarrassed and avoid me,
+S14-P3,start #14,say something good about somebody,prediction,shipped,they’ll think I want something,,,they'll misunderstand and think I want something,
+S14-D1,start #14,say something good about somebody,do,shipped,Tell one person one specific thing they did well.,,,Tell someone something they objectively did well,
+S14-D2,start #14,say something good about somebody,do,CULLED — was shipped,Say it out loud rather than in a message.,,,,Drop
+S14-X1,start #14,say something good about somebody,drop,shipped,Don’t follow it with a joke.,,,"Don't make a joke, wait for their reply",
+S14-X2,start #14,say something good about somebody,drop,shipped,Don’t add “anyway”.,,,"Don't immediately change the subject, wait for their reply",
+S14-D3,start #14,say something good about somebody,do,CULLED — was PROPOSED,Say the compliment you’d normally think and not say.,,,,Drop
+S14-D4,start #14,say something good about somebody,do,PROPOSED,Tell somebody today why their work made a difference.,,,Tell someone how much something they did helped you,
+S14-X3,start #14,say something good about somebody,drop,CULLED — was PROPOSED,Don’t make it lighter by exaggerating it.,,,,Drop
+S14-X4,start #14,say something good about somebody,drop,CULLED — was PROPOSED,Don’t move straight on to something else.,,,,Drop
+S15-P1,start #15,ask somebody for help,prediction,shipped,they’ll think I can’t cope,,,they'll think I'm weak,
+S15-P2,start #15,ask somebody for help,prediction,shipped,they’ll say yes and resent it,,,they'll say yes out of politeness and secretly be annoyed,
+S15-P3,start #15,ask somebody for help,prediction,shipped,they’ll say no,,,they'll say no and I'll be embarrassed,
+S15-D1,start #15,ask somebody for help,do,shipped,Ask one person for one specific thing today.,,,Ask someone you're comfortable with for help with one thing,
+S15-D2,start #15,ask somebody for help,do,shipped,Ask for help with something you could just about manage alone.,,,Ask someone for help with something you'd normally do alone,
+S15-X1,start #15,ask somebody for help,drop,shipped,Don’t say “if you’ve got a minute”.,,,"Don't say ""If it's not a bother""",
 S15-X2,start #15,ask somebody for help,drop,shipped,Don’t do half of it first.,,,,
-S15-D3,start #15,ask somebody for help,do,PROPOSED,Ask before you’ve tried everything yourself.,,,,
+S15-D3,start #15,ask somebody for help,do,CULLED — was PROPOSED,Ask before you’ve tried everything yourself.,,,,Drop
 S15-D4,start #15,ask somebody for help,do,PROPOSED,Ask one person to take one job off you today.,,,,
 S15-X3,start #15,ask somebody for help,drop,PROPOSED,Don’t promise to make it up to them.,,,,
-S15-X4,start #15,ask somebody for help,drop,PROPOSED,Don’t say you’d have managed anyway.,,,,
-S16-P1,start #16,stop before it’s finished,prediction,shipped,it’ll never get done,,,,
-S16-P2,start #16,stop before it’s finished,prediction,shipped,I’ll have wasted the whole run at it,,,,
-S16-P3,start #16,stop before it’s finished,prediction,shipped,somebody will see it half done,,,,
-S16-D1,start #16,stop before it’s finished,do,shipped,"Stop at the hour, mid-thing, and go and do something else.",,,,
-S16-D2,start #16,stop before it’s finished,do,shipped,End one job today at a point that isn’t the end.,,,,
-S16-X1,start #16,stop before it’s finished,drop,shipped,Don’t tidy it up first.,,,,
-S16-X2,start #16,stop before it’s finished,drop,shipped,Don’t leave a note saying where you got to.,,,,
-S16-D3,start #16,stop before it’s finished,do,PROPOSED,Put it down in the middle of a sentence today.,,,,
-S16-D4,start #16,stop before it’s finished,do,PROPOSED,"Set an alarm and stop when it goes, wherever you are.",,,,
-S16-X3,start #16,stop before it’s finished,drop,PROPOSED,Don’t finish the bit you’re on.,,,,
-S16-X4,start #16,stop before it’s finished,drop,PROPOSED,Don’t plan when you’ll pick it back up.,,,,
-S17-P1,start #17,go to something on my own,prediction,shipped,I’ll stand there with nobody to talk to,,,,
-S17-P2,start #17,go to something on my own,prediction,shipped,everyone will notice I came alone,,,,
-S17-P3,start #17,go to something on my own,prediction,shipped,I’ll want to leave within ten minutes,,,,
-S17-D1,start #17,go to something on my own,do,shipped,Go to one thing today without arranging to meet anybody.,,,,
-S17-D2,start #17,go to something on my own,do,shipped,"Stay half an hour, and write down who spoke to you.",,,,
-S17-X1,start #17,go to something on my own,drop,shipped,Don’t hold your phone.,,,,
-S17-X2,start #17,go to something on my own,drop,shipped,Don’t line up an excuse to leave.,,,,
-S17-D3,start #17,go to something on my own,do,PROPOSED,Turn up somewhere today without telling anybody you’re coming.,,,,
-S17-D4,start #17,go to something on my own,do,PROPOSED,Sit down on your own rather than looking for someone you know.,,,,
-S17-X3,start #17,go to something on my own,drop,PROPOSED,Don’t arrive late enough to slip in.,,,,
-S17-X4,start #17,go to something on my own,drop,PROPOSED,Don’t stand where you can watch the door.,,,,
-S18-P1,start #18,leave early and say plainly that I’m going,prediction,shipped,they’ll take it as a snub,,,,
+S15-X4,start #15,ask somebody for help,drop,CULLED — was PROPOSED,Don’t say you’d have managed anyway.,,,,Drop
+S16-P1,start #16,stop before it’s finished,prediction,CULLED — was shipped,it’ll never get done,,,,This If I category can be removed completely
+S16-P2,start #16,stop before it’s finished,prediction,CULLED — was shipped,I’ll have wasted the whole run at it,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-P3,start #16,stop before it’s finished,prediction,CULLED — was shipped,somebody will see it half done,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-D1,start #16,stop before it’s finished,do,CULLED — was shipped,"Stop at the hour, mid-thing, and go and do something else.",,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-D2,start #16,stop before it’s finished,do,CULLED — was shipped,End one job today at a point that isn’t the end.,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-X1,start #16,stop before it’s finished,drop,CULLED — was shipped,Don’t tidy it up first.,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-X2,start #16,stop before it’s finished,drop,CULLED — was shipped,Don’t leave a note saying where you got to.,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-D3,start #16,stop before it’s finished,do,CULLED — was PROPOSED,Put it down in the middle of a sentence today.,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-D4,start #16,stop before it’s finished,do,CULLED — was PROPOSED,"Set an alarm and stop when it goes, wherever you are.",,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-X3,start #16,stop before it’s finished,drop,CULLED — was PROPOSED,Don’t finish the bit you’re on.,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S16-X4,start #16,stop before it’s finished,drop,CULLED — was PROPOSED,Don’t plan when you’ll pick it back up.,,,,"Culled whole: start #16, stopping before it’s finished (founder, 2026-09-09). Don’t score it."
+S17-P1,start #17,go to something on my own,prediction,CULLED — was shipped,I’ll stand there with nobody to talk to,,,,"This category can be dropped completely, and I'd worry it'd lead to someone going somewhere alone where they're not safe"
+S17-P2,start #17,go to something on my own,prediction,CULLED — was shipped,everyone will notice I came alone,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-P3,start #17,go to something on my own,prediction,CULLED — was shipped,I’ll want to leave within ten minutes,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-D1,start #17,go to something on my own,do,CULLED — was shipped,Go to one thing today without arranging to meet anybody.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-D2,start #17,go to something on my own,do,CULLED — was shipped,"Stay half an hour, and write down who spoke to you.",,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-X1,start #17,go to something on my own,drop,CULLED — was shipped,Don’t hold your phone.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-X2,start #17,go to something on my own,drop,CULLED — was shipped,Don’t line up an excuse to leave.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-D3,start #17,go to something on my own,do,CULLED — was PROPOSED,Turn up somewhere today without telling anybody you’re coming.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-D4,start #17,go to something on my own,do,CULLED — was PROPOSED,Sit down on your own rather than looking for someone you know.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-X3,start #17,go to something on my own,drop,CULLED — was PROPOSED,Don’t arrive late enough to slip in.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S17-X4,start #17,go to something on my own,drop,CULLED — was PROPOSED,Don’t stand where you can watch the door.,,,,"Culled whole: start #17, going to something on my own (founder, 2026-09-09). Don’t score it."
+S18-P1,start #18,leave early and say plainly that I’m going,prediction,shipped,they’ll take it as a snub,,,people will be offended and talk about it,This can be renamed to 'If I leave an event early'
 S18-P2,start #18,leave early and say plainly that I’m going,prediction,shipped,they’ll ask questions I don’t want to answer,,,,
-S18-P3,start #18,leave early and say plainly that I’m going,prediction,shipped,I won’t get asked again,,,,
-S18-D1,start #18,leave early and say plainly that I’m going,do,shipped,"Leave one thing when you want to, and say plainly that you’re off.",,,,
-S18-D2,start #18,leave early and say plainly that I’m going,do,shipped,"Say goodbye once, and go.",,,,
-S18-X1,start #18,leave early and say plainly that I’m going,drop,shipped,Don’t invent a reason.,,,,
-S18-X2,start #18,leave early and say plainly that I’m going,drop,shipped,Don’t stay for one more of anything.,,,,
-S18-D3,start #18,leave early and say plainly that I’m going,do,PROPOSED,"Tell the person nearest you that you’re leaving, and leave.",,,,
-S18-D4,start #18,leave early and say plainly that I’m going,do,PROPOSED,"Go at the time you wanted to go, not when it thins out.",,,,
+S18-P3,start #18,leave early and say plainly that I’m going,prediction,shipped,I won’t get asked again,,,I won't get asked to come anymore,
+S18-D1,start #18,leave early and say plainly that I’m going,do,shipped,"Leave one thing when you want to, and say plainly that you’re off.",,,Leave one event early where you're allowed to,
+S18-D2,start #18,leave early and say plainly that I’m going,do,shipped,"Say goodbye once, and go.",,,Say a cheerful goodbye to everyone and go when you want to,
+S18-X1,start #18,leave early and say plainly that I’m going,drop,shipped,Don’t invent a reason.,,,Don't explain why or give excuses,
+S18-X2,start #18,leave early and say plainly that I’m going,drop,shipped,Don’t stay for one more of anything.,,,Don't give in and 'just stay for one more',
+S18-D3,start #18,leave early and say plainly that I’m going,do,CULLED — was PROPOSED,"Tell the person nearest you that you’re leaving, and leave.",,,,Drop
+S18-D4,start #18,leave early and say plainly that I’m going,do,CULLED — was PROPOSED,"Go at the time you wanted to go, not when it thins out.",,,,Drop
 S18-X3,start #18,leave early and say plainly that I’m going,drop,PROPOSED,Don’t wait for somebody else to leave first.,,,,
-S18-X4,start #18,leave early and say plainly that I’m going,drop,PROPOSED,Don’t promise to come to the next one.,,,,
-S19-P1,start #19,don’t check it a second time,prediction,shipped,I’ll have missed something,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S19-P2,start #19,don’t check it a second time,prediction,shipped,it’ll be wrong and I won’t know,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S19-P3,start #19,don’t check it a second time,prediction,shipped,I won’t settle until I’ve looked,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S19-D1,start #19,don’t check it a second time,do,shipped,"Check once today, and write down the time you stopped wanting to look.","OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S19-D2,start #19,don’t check it a second time,do,shipped,"Lock up once, and walk away.","OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S19-X1,start #19,don’t check it a second time,drop,shipped,No second look.,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S19-X2,start #19,don’t check it a second time,drop,shipped,Don’t ask anybody else to check for you.,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,
-S20-P1,start #20,let a message sit unread,prediction,shipped,it’ll turn out to be the urgent one,,,,
-S20-P2,start #20,let a message sit unread,prediction,shipped,they’ll see I’ve ignored it,,,,
-S20-P3,start #20,let a message sit unread,prediction,shipped,it’ll pile up and get worse,,,,
-S20-D1,start #20,let a message sit unread,do,shipped,Leave one message unopened until this evening.,,,,
-S20-D2,start #20,let a message sit unread,do,shipped,Turn the badge off for a day.,,,,
-S20-X1,start #20,let a message sit unread,drop,shipped,Don’t read the preview.,,,,
-S20-X2,start #20,let a message sit unread,drop,shipped,Don’t open it and leave it unanswered.,,,,
-S20-D3,start #20,let a message sit unread,do,PROPOSED,Leave one thread unopened for a whole day.,,,,
-S20-D4,start #20,let a message sit unread,do,PROPOSED,Let the notification sit there while you carry on.,,,,
-S20-X3,start #20,let a message sit unread,drop,PROPOSED,Don’t guess who it’s from.,,,,
-S20-X4,start #20,let a message sit unread,drop,PROPOSED,Don’t clear the other notifications to feel on top of it.,,,,
-S21-P1,start #21,get through it without apologising,prediction,shipped,they’ll think I don’t care,"OURS: this exact prediction is ALSO at S06-P1 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,
-S21-P2,start #21,get through it without apologising,prediction,shipped,it’ll sit between us,,,,
-S21-P3,start #21,get through it without apologising,prediction,shipped,somebody will say something about it,,,,
-S21-D1,start #21,get through it without apologising,do,shipped,Get through one small thing today without saying sorry.,,,,
-S21-D2,start #21,get through it without apologising,do,shipped,"Say “thanks for waiting” instead of “sorry I’m late”, once.",,,,
-S21-X1,start #21,get through it without apologising,drop,shipped,Don’t apologise in the first sentence.,,,,
-S21-X2,start #21,get through it without apologising,drop,shipped,Don’t apologise for not apologising.,,,,
-S21-D3,start #21,get through it without apologising,do,PROPOSED,Ask your question today without apologising first.,,,,
-S21-D4,start #21,get through it without apologising,do,PROPOSED,Take up somebody’s time once without saying sorry for it.,,,,
-S21-X3,start #21,get through it without apologising,drop,PROPOSED,Don’t swap “sorry” for “just”.,,,,
-S21-X4,start #21,get through it without apologising,drop,PROPOSED,Don’t make your voice smaller instead.,,,,
+S18-X4,start #18,leave early and say plainly that I’m going,drop,CULLED — was PROPOSED,Don’t promise to come to the next one.,,,,Drop
+S19-P1,start #19,don’t check it a second time,prediction,CULLED — was shipped,I’ll have missed something,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,We can drop this whole If I category
+S19-P2,start #19,don’t check it a second time,prediction,CULLED — was shipped,it’ll be wrong and I won’t know,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,"Culled whole: start #19, not checking it a second time (founder, 2026-09-09). Don’t score it."
+S19-P3,start #19,don’t check it a second time,prediction,CULLED — was shipped,I won’t settle until I’ve looked,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,"Culled whole: start #19, not checking it a second time (founder, 2026-09-09). Don’t score it."
+S19-D1,start #19,don’t check it a second time,do,CULLED — was shipped,"Check once today, and write down the time you stopped wanting to look.","OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,"Culled whole: start #19, not checking it a second time (founder, 2026-09-09). Don’t score it."
+S19-D2,start #19,don’t check it a second time,do,CULLED — was shipped,"Lock up once, and walk away.","OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,"Culled whole: start #19, not checking it a second time (founder, 2026-09-09). Don’t score it."
+S19-X1,start #19,don’t check it a second time,drop,CULLED — was shipped,No second look.,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,"Culled whole: start #19, not checking it a second time (founder, 2026-09-09). Don’t score it."
+S19-X2,start #19,don’t check it a second time,drop,CULLED — was shipped,Don’t ask anybody else to check for you.,"OURS: WE PROPOSE THIS WHOLE START COMES OUT. It is a checking ritual, which rule 4 forbids BETR to propose. See §3.",,,"Culled whole: start #19, not checking it a second time (founder, 2026-09-09). Don’t score it."
+S20-P1,start #20,let a message sit unread,prediction,CULLED — was shipped,it’ll turn out to be the urgent one,,,,We can drop this whole If I category
+S20-P2,start #20,let a message sit unread,prediction,CULLED — was shipped,they’ll see I’ve ignored it,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-P3,start #20,let a message sit unread,prediction,CULLED — was shipped,it’ll pile up and get worse,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-D1,start #20,let a message sit unread,do,CULLED — was shipped,Leave one message unopened until this evening.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-D2,start #20,let a message sit unread,do,CULLED — was shipped,Turn the badge off for a day.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-X1,start #20,let a message sit unread,drop,CULLED — was shipped,Don’t read the preview.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-X2,start #20,let a message sit unread,drop,CULLED — was shipped,Don’t open it and leave it unanswered.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-D3,start #20,let a message sit unread,do,CULLED — was PROPOSED,Leave one thread unopened for a whole day.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-D4,start #20,let a message sit unread,do,CULLED — was PROPOSED,Let the notification sit there while you carry on.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-X3,start #20,let a message sit unread,drop,CULLED — was PROPOSED,Don’t guess who it’s from.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S20-X4,start #20,let a message sit unread,drop,CULLED — was PROPOSED,Don’t clear the other notifications to feel on top of it.,,,,"Culled whole: start #20, letting a message sit unread (founder, 2026-09-09). Don’t score it."
+S21-P1,start #21,get through it without apologising,prediction,CULLED — was shipped,they’ll think I don’t care,"OURS: this exact prediction is ALSO at S06-P1 — already-shipped duplication, found while checking our own. Two sources, one prediction.",,,We can drop this whole If I category
+S21-P2,start #21,get through it without apologising,prediction,CULLED — was shipped,it’ll sit between us,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-P3,start #21,get through it without apologising,prediction,CULLED — was shipped,somebody will say something about it,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-D1,start #21,get through it without apologising,do,CULLED — was shipped,Get through one small thing today without saying sorry.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-D2,start #21,get through it without apologising,do,CULLED — was shipped,"Say “thanks for waiting” instead of “sorry I’m late”, once.",,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-X1,start #21,get through it without apologising,drop,CULLED — was shipped,Don’t apologise in the first sentence.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-X2,start #21,get through it without apologising,drop,CULLED — was shipped,Don’t apologise for not apologising.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-D3,start #21,get through it without apologising,do,CULLED — was PROPOSED,Ask your question today without apologising first.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-D4,start #21,get through it without apologising,do,CULLED — was PROPOSED,Take up somebody’s time once without saying sorry for it.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-X3,start #21,get through it without apologising,drop,CULLED — was PROPOSED,Don’t swap “sorry” for “just”.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
+S21-X4,start #21,get through it without apologising,drop,CULLED — was PROPOSED,Don’t make your voice smaller instead.,,,,"Culled whole: start #21, getting through it without apologising (founder, 2026-09-09). Don’t score it."
 W-NO-K1,worry: no,say no to {person} without giving a reason,skeleton,"shipped, UNREVIEWED",say no to {person} without giving a reason,"OURS: B41. {person} is a gap the person types into; while it is empty the whole sentence reads “somebody”. This same stem sits inside all three predictions and all three sizes below, so a word wrong here is wrong nine times.",,,
 W-NO-P1,worry: no,say no to {person} without giving a reason,prediction,"shipped, UNREVIEWED","If I say no to {person} without giving a reason, then {person} will think I’m selfish.",,,,
 W-NO-E1,worry: no,say no to {person} without giving a reason,expect,"shipped, UNREVIEWED","There’ll be a pause, and {person} will be a bit off with me afterwards.",,,,
@@ -301,13 +301,13 @@ W-SIT-P2,worry: sit,sit with the restlessness for {long},prediction,"shipped, UN
 W-SIT-E2,worry: sit,sit with the restlessness for {long},expect,"shipped, UNREVIEWED",I’ll write the day off and get nothing done.,,,,
 W-SIT-P3,worry: sit,sit with the restlessness for {long},prediction,"shipped, UNREVIEWED","If I sit with the restlessness for {long}, then everything I’ve been not thinking about will land at once.",,,,
 W-SIT-E3,worry: sit,sit with the restlessness for {long},expect,"shipped, UNREVIEWED","The whole list will arrive at once, and stopping will have cost me.",,,,
-W-PHONE-K1,worry: phone,go {long} without my phone,skeleton,"shipped, UNREVIEWED",go {long} without my phone,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {long} reads “a whole evening” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
-W-PHONE-P1,worry: phone,go {long} without my phone,prediction,"shipped, UNREVIEWED","If I go {long} without my phone, then I’ll miss something that actually needed me.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
-W-PHONE-E1,worry: phone,go {long} without my phone,expect,"shipped, UNREVIEWED",Something urgent will come in and I’ll have let someone down.,,,,
-W-PHONE-P2,worry: phone,go {long} without my phone,prediction,"shipped, UNREVIEWED","If I go {long} without my phone, then people will think I’m ignoring them.",,,,
-W-PHONE-E2,worry: phone,go {long} without my phone,expect,"shipped, UNREVIEWED",There’ll be a short reply in the morning and a bit of an atmosphere.,,,,
-W-PHONE-P3,worry: phone,go {long} without my phone,prediction,"shipped, UNREVIEWED","If I go {long} without my phone, then I’ll be twitchy the whole time and get nothing out of it anyway.",,,,
-W-PHONE-E3,worry: phone,go {long} without my phone,expect,"shipped, UNREVIEWED",I’ll spend the evening thinking about the phone instead of using it.,,,,
+W-PHONE-K1,worry: phone,go {long} without my phone,skeleton,"CULLED — was shipped, UNREVIEWED",go {long} without my phone,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {long} reads “a whole evening” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
+W-PHONE-P1,worry: phone,go {long} without my phone,prediction,"CULLED — was shipped, UNREVIEWED","If I go {long} without my phone, then I’ll miss something that actually needed me.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
+W-PHONE-E1,worry: phone,go {long} without my phone,expect,"CULLED — was shipped, UNREVIEWED",Something urgent will come in and I’ll have let someone down.,,,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
+W-PHONE-P2,worry: phone,go {long} without my phone,prediction,"CULLED — was shipped, UNREVIEWED","If I go {long} without my phone, then people will think I’m ignoring them.",,,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
+W-PHONE-E2,worry: phone,go {long} without my phone,expect,"CULLED — was shipped, UNREVIEWED",There’ll be a short reply in the morning and a bit of an atmosphere.,,,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
+W-PHONE-P3,worry: phone,go {long} without my phone,prediction,"CULLED — was shipped, UNREVIEWED","If I go {long} without my phone, then I’ll be twitchy the whole time and get nothing out of it anyway.",,,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
+W-PHONE-E3,worry: phone,go {long} without my phone,expect,"CULLED — was shipped, UNREVIEWED",I’ll spend the evening thinking about the phone instead of using it.,,,,"Culled whole: the worry behind start #09 (founder, 2026-09-09). Don’t score it."
 W-FEED-K1,worry: feed,go {long} without opening the apps I scroll,skeleton,"shipped, UNREVIEWED",go {long} without opening the apps I scroll,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {long} reads “a day” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
 W-FEED-P1,worry: feed,go {long} without opening the apps I scroll,prediction,"shipped, UNREVIEWED","If I go {long} without opening the apps I scroll, then I’ll be the only one who hasn’t heard something.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
 W-FEED-E1,worry: feed,go {long} without opening the apps I scroll,expect,"shipped, UNREVIEWED",Someone will mention it and it’ll be obvious I’m out of the loop.,,,,
@@ -315,20 +315,20 @@ W-FEED-P2,worry: feed,go {long} without opening the apps I scroll,prediction,"sh
 W-FEED-E2,worry: feed,go {long} without opening the apps I scroll,expect,"shipped, UNREVIEWED",Somebody will notice I’ve disappeared and read something into it.,,,,
 W-FEED-P3,worry: feed,go {long} without opening the apps I scroll,prediction,"shipped, UNREVIEWED","If I go {long} without opening the apps I scroll, then I’ll have nothing to talk about.",,,,
 W-FEED-E3,worry: feed,go {long} without opening the apps I scroll,expect,"shipped, UNREVIEWED",I’ll be sitting there with nothing to say.,,,,
-W-REPLY-K1,worry: reply,leave a message from {person} a few hours before I answer,skeleton,"shipped, UNREVIEWED",leave a message from {person} a few hours before I answer,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {person} reads “somebody” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
-W-REPLY-P1,worry: reply,leave a message from {person} a few hours before I answer,prediction,"shipped, UNREVIEWED","If I leave a message from {person} a few hours before I answer, then {person} will think I don’t care.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
-W-REPLY-E1,worry: reply,leave a message from {person} a few hours before I answer,expect,"shipped, UNREVIEWED","They’ll go a bit cooler with me, and I’ll have to make it up to them.",,,,
-W-REPLY-P2,worry: reply,leave a message from {person} a few hours before I answer,prediction,"shipped, UNREVIEWED","If I leave a message from {person} a few hours before I answer, then {person} will assume I’m annoyed.",,,,
-W-REPLY-E2,worry: reply,leave a message from {person} a few hours before I answer,expect,"shipped, UNREVIEWED","They’ll ask if everything’s all right, in that careful way.",,,,
-W-REPLY-P3,worry: reply,leave a message from {person} a few hours before I answer,prediction,"shipped, UNREVIEWED","If I leave a message from {person} a few hours before I answer, then {person} will stop bothering to message me.",,,,
-W-REPLY-E3,worry: reply,leave a message from {person} a few hours before I answer,expect,"shipped, UNREVIEWED","They’ll go to somebody else next time, and I’ll hear about it after.",,,,
-W-CHECK-K1,worry: check,send {thing} after reading it through once,skeleton,"shipped, UNREVIEWED",send {thing} after reading it through once,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {thing} reads “something” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
-W-CHECK-P1,worry: check,send {thing} after reading it through once,prediction,"shipped, UNREVIEWED","If I send {thing} after reading it through once, then there’ll be a mistake in it and I’ll look sloppy.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
-W-CHECK-E1,worry: check,send {thing} after reading it through once,expect,"shipped, UNREVIEWED","Someone will spot something, and they’ll think I rushed it.",,,,
-W-CHECK-P2,worry: check,send {thing} after reading it through once,prediction,"shipped, UNREVIEWED","If I send {thing} after reading it through once, then it’ll come out blunter than I meant it.",,,,
-W-CHECK-E2,worry: check,send {thing} after reading it through once,expect,"shipped, UNREVIEWED",They’ll take it the wrong way and I’ll spend the day fixing it.,,,,
-W-CHECK-P3,worry: check,send {thing} after reading it through once,prediction,"shipped, UNREVIEWED","If I send {thing} after reading it through once, then I’ll be thinking about it all afternoon.",,,,
-W-CHECK-E3,worry: check,send {thing} after reading it through once,expect,"shipped, UNREVIEWED",I’ll keep going back to it and get nothing else done.,,,,
+W-REPLY-K1,worry: reply,leave a message from {person} a few hours before I answer,skeleton,"CULLED — was shipped, UNREVIEWED",leave a message from {person} a few hours before I answer,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {person} reads “somebody” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-REPLY-P1,worry: reply,leave a message from {person} a few hours before I answer,prediction,"CULLED — was shipped, UNREVIEWED","If I leave a message from {person} a few hours before I answer, then {person} will think I don’t care.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-REPLY-E1,worry: reply,leave a message from {person} a few hours before I answer,expect,"CULLED — was shipped, UNREVIEWED","They’ll go a bit cooler with me, and I’ll have to make it up to them.",,,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-REPLY-P2,worry: reply,leave a message from {person} a few hours before I answer,prediction,"CULLED — was shipped, UNREVIEWED","If I leave a message from {person} a few hours before I answer, then {person} will assume I’m annoyed.",,,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-REPLY-E2,worry: reply,leave a message from {person} a few hours before I answer,expect,"CULLED — was shipped, UNREVIEWED","They’ll ask if everything’s all right, in that careful way.",,,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-REPLY-P3,worry: reply,leave a message from {person} a few hours before I answer,prediction,"CULLED — was shipped, UNREVIEWED","If I leave a message from {person} a few hours before I answer, then {person} will stop bothering to message me.",,,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-REPLY-E3,worry: reply,leave a message from {person} a few hours before I answer,expect,"CULLED — was shipped, UNREVIEWED","They’ll go to somebody else next time, and I’ll hear about it after.",,,,"Culled whole: the worry behind starts #06 and #20 (founder, 2026-09-09). Don’t score it."
+W-CHECK-K1,worry: check,send {thing} after reading it through once,skeleton,"CULLED — was shipped, UNREVIEWED",send {thing} after reading it through once,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {thing} reads “something” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
+W-CHECK-P1,worry: check,send {thing} after reading it through once,prediction,"CULLED — was shipped, UNREVIEWED","If I send {thing} after reading it through once, then there’ll be a mistake in it and I’ll look sloppy.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
+W-CHECK-E1,worry: check,send {thing} after reading it through once,expect,"CULLED — was shipped, UNREVIEWED","Someone will spot something, and they’ll think I rushed it.",,,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
+W-CHECK-P2,worry: check,send {thing} after reading it through once,prediction,"CULLED — was shipped, UNREVIEWED","If I send {thing} after reading it through once, then it’ll come out blunter than I meant it.",,,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
+W-CHECK-E2,worry: check,send {thing} after reading it through once,expect,"CULLED — was shipped, UNREVIEWED",They’ll take it the wrong way and I’ll spend the day fixing it.,,,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
+W-CHECK-P3,worry: check,send {thing} after reading it through once,prediction,"CULLED — was shipped, UNREVIEWED","If I send {thing} after reading it through once, then I’ll be thinking about it all afternoon.",,,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
+W-CHECK-E3,worry: check,send {thing} after reading it through once,expect,"CULLED — was shipped, UNREVIEWED",I’ll keep going back to it and get nothing else done.,,,,"Culled whole: the worry behind starts #05 and #19 (founder, 2026-09-09). Don’t score it."
 W-ENOUGH-K1,worry: enough,hand over {thing} at good enough,skeleton,"shipped, UNREVIEWED",hand over {thing} at good enough,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {thing} reads “something” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
 W-ENOUGH-P1,worry: enough,hand over {thing} at good enough,prediction,"shipped, UNREVIEWED","If I hand over {thing} at good enough, then people will think I don’t care about it.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
 W-ENOUGH-E1,worry: enough,hand over {thing} at good enough,expect,"shipped, UNREVIEWED",They’ll spot the rough edges and quietly decide I’ve dropped off.,,,,
@@ -371,13 +371,13 @@ W-LOW-P2,worry: low,tell {person} I’ve been feeling low lately,prediction,"shi
 W-LOW-E2,worry: low,tell {person} I’ve been feeling low lately,expect,"shipped, UNREVIEWED","They’ll check up on me, and I’ll wish I’d never said it.",,,,
 W-LOW-P3,worry: low,tell {person} I’ve been feeling low lately,prediction,"shipped, UNREVIEWED","If I tell {person} I’ve been feeling low lately, then it’s the thing {person} thinks of every time they see me.",,,,
 W-LOW-E3,worry: low,tell {person} I’ve been feeling low lately,expect,"shipped, UNREVIEWED","I’ll be the one who isn’t doing well, and that’s what I’ll stay.",,,,
-W-MIST-K1,worry: mist,tell {person} about one small mistake of mine before they find it,skeleton,"shipped, UNREVIEWED",tell {person} about one small mistake of mine before they find it,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {person} reads “somebody” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
-W-MIST-P1,worry: mist,tell {person} about one small mistake of mine before they find it,prediction,"shipped, UNREVIEWED","If I tell {person} about one small mistake of mine before they find it, then it’ll be held against me later.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
-W-MIST-E1,worry: mist,tell {person} about one small mistake of mine before they find it,expect,"shipped, UNREVIEWED","They’ll remember this one, and trust me with less next time.",,,,
-W-MIST-P2,worry: mist,tell {person} about one small mistake of mine before they find it,prediction,"shipped, UNREVIEWED","If I tell {person} about one small mistake of mine before they find it, then {person} will start looking for others.",,,,
-W-MIST-E2,worry: mist,tell {person} about one small mistake of mine before they find it,expect,"shipped, UNREVIEWED",Everything I do goes under the microscope after this.,,,,
-W-MIST-P3,worry: mist,tell {person} about one small mistake of mine before they find it,prediction,"shipped, UNREVIEWED","If I tell {person} about one small mistake of mine before they find it, then {person} will think worse of me than if I’d quietly fixed it.",,,,
-W-MIST-E3,worry: mist,tell {person} about one small mistake of mine before they find it,expect,"shipped, UNREVIEWED","They’ll be fine to my face, and it’ll go on my record anyway.",,,,
+W-MIST-K1,worry: mist,tell {person} about one small mistake of mine before they find it,skeleton,"CULLED — was shipped, UNREVIEWED",tell {person} about one small mistake of mine before they find it,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {person} reads “somebody” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
+W-MIST-P1,worry: mist,tell {person} about one small mistake of mine before they find it,prediction,"CULLED — was shipped, UNREVIEWED","If I tell {person} about one small mistake of mine before they find it, then it’ll be held against me later.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
+W-MIST-E1,worry: mist,tell {person} about one small mistake of mine before they find it,expect,"CULLED — was shipped, UNREVIEWED","They’ll remember this one, and trust me with less next time.",,,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
+W-MIST-P2,worry: mist,tell {person} about one small mistake of mine before they find it,prediction,"CULLED — was shipped, UNREVIEWED","If I tell {person} about one small mistake of mine before they find it, then {person} will start looking for others.",,,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
+W-MIST-E2,worry: mist,tell {person} about one small mistake of mine before they find it,expect,"CULLED — was shipped, UNREVIEWED",Everything I do goes under the microscope after this.,,,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
+W-MIST-P3,worry: mist,tell {person} about one small mistake of mine before they find it,prediction,"CULLED — was shipped, UNREVIEWED","If I tell {person} about one small mistake of mine before they find it, then {person} will think worse of me than if I’d quietly fixed it.",,,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
+W-MIST-E3,worry: mist,tell {person} about one small mistake of mine before they find it,expect,"CULLED — was shipped, UNREVIEWED","They’ll be fine to my face, and it’ll go on my record anyway.",,,,"Culled whole: the worry behind start #12 (founder, 2026-09-09). Don’t score it."
 W-ANGRY-K1,worry: angry,tell {person} one thing they’ve done that annoyed me,skeleton,"shipped, UNREVIEWED",tell {person} one thing they’ve done that annoyed me,"OURS: B46. THE PRINTED VERB, new today — this worry had two empty blanks before. The gap {person} reads “somebody” while it is empty. Three slightly different actions became ONE, which is what a skeleton is — that collapse is the part to judge fresh.",,,
 W-ANGRY-P1,worry: angry,tell {person} one thing they’ve done that annoyed me,prediction,"shipped, UNREVIEWED","If I tell {person} one thing they’ve done that annoyed me, then it’ll turn into an argument.","OURS: the CONSEQUENCE half is the shipped wording, kept word for word wherever it still read; only the action half and the pronouns changed.",,,
 W-ANGRY-E1,worry: angry,tell {person} one thing they’ve done that annoyed me,expect,"shipped, UNREVIEWED","They’ll get defensive, and it’ll turn into a much bigger thing.",,,,

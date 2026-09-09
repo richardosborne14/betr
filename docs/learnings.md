@@ -975,3 +975,34 @@ sentence was on screen; it only stopped working the day a `<span>` landed in the
 The harness gained `text()` / `showsText()` / `hidesText()`. **Assert on what a person reads, not
 on the markup it arrived in** — and if a test asserts on markup, it should be asserting on a
 class, an id or an attribute, never on prose.
+
+---
+
+## B47 — a review comes back against a version of the sheet that no longer exists
+
+`docs/suggestions-review.csv` is regenerated as the app grows; it was 245 rows when it went out
+and 429 when the marked copy came back. **The reflex — save the returned file over ours — would
+have deleted 184 rows, including all 133 of B46's.** The safe move took ten minutes: parse both,
+**merge by `Ref` into the two reviewer columns only**, and print how many refs did not match.
+All 134 matched, which is also the proof the sheet round-tripped through a spreadsheet without
+losing its keys.
+
+**Two things that will bite the next person doing it.** The file is **CRLF with a BOM** — write
+`\n` and every one of the 429 rows shows as changed and the real edit is invisible in the diff.
+And the returned copy's `Line` column arrives **mojibaked** (`’` read as latin-1), which does not
+matter *if you only take the columns the reviewer filled in* — our own text is already correct in
+our own file. **Never take back a column you sent out.**
+
+### The bigger one: a content cull is not a content job
+
+Nine categories were dropped on one reading of one file. But `starts.js` and `worries.js`
+describe the same twenty-one things (B45 §2b), and every worry sits behind a door — so six of
+the nine drops take a rung out of `whats-going-on.js`. **`MAX_PER_DOOR = 6` is enforced and there
+is no floor**, so a door reduced to two worries passes 252 tests and looks fine to everything
+except a person. `work` — *Never letting myself stop* — lost `check` and `mist`, **and the cull
+also took the one remaining item that would have refilled it**, which nothing could have told us
+except laying the two files and the six doors side by side before deleting anything.
+
+**So: before deleting content, list what points at it.** Here that was two files, six doors and
+`rate.keyOf()`, which keys a person's ladder by `id` — an id that ships and is then culled cannot
+be brought back. Deleting nothing this session was the finding, not the shortfall.
