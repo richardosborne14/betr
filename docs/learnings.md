@@ -863,3 +863,43 @@ Three of them, and the shape is identical each time.
   around; here it was the only thing that put a stale chip and a fresh blank on screen at once.
   When a test fails for a reason a browser could not produce, the question is not how to make the
   test pass — it is whether the code should depend on the event at all. It should not have.
+
+## B42, 2026-09-09: a new row on a screen that had only just started fitting is a fold, not a row
+
+**Three sizes is one row of three buttons. It is also 257px at 100% text and 296 at 125%**, and
+it landed on the do screen the day after B39 spent a whole task getting *Lock it in* above the
+fold on that exact screen. First measurement after wiring it up: 862 on a 390x844 phone whose
+fold is 785. B39's bug, back, in under twenty-four hours, put there by the next task in the
+same programme.
+
+**Two things got it back, and only one of them was design.**
+
+1. **Trimming.** The name ran into its own sentence instead of taking a line of its own (−69px),
+   and *One small thing, your pick* came off the size road because the dial's own heading says
+   the same thing better (−47px). That bought 100% and nothing else.
+2. **B39's own answer, applied to the other half of the same screen.** Once one of the three is
+   in the box, the row folds to a line saying which — *HOW BIG A GO · A bigger go · Change* —
+   in the same component the leave-out half already folds into. That is what bought 125%.
+
+**The rule this leaves.** On a screen that fits, a new block is not a block: it is a fold, and
+the question to answer before writing the markup is *what does this row say once it has been
+answered?* Every block on that screen now has an answered state that costs a line — which is
+also why the screen reads better than it did with two boxes and two suggestion rows open.
+
+**And the state a fold has to be honest about.** Before the first pick the row is open and *Lock
+it in* IS below the fold at 125%. That is not the failure B39 fixed, because with an empty plan
+that button refuses; what has to be visible in that state is the three, and the last of them
+ends at 705 against a 780 fold. **A button below the fold matters exactly as much as it is
+possible to press it.** Measure the state a person is actually in, not the tallest one.
+
+### Two smaller ones from the same day
+
+- **Two strings sharing a prefix broke an assertion, not the app.** `sizeLabel` is *How big a
+  go* and `sizeChips` is *How big a go? Any of them counts:*, so `hides(sizeLabel)` was never
+  true while the open row was on screen. The assertion was wrong and the content was right —
+  but `shows`/`hides` are substring checks, and a test that names a string which is a prefix of
+  another string on the same screen is testing nothing.
+- **A pre-filled box is an answer.** The plan used to be pre-filled at `borrow()`. On a worry
+  with three sizes that would have been BETR picking a rung and calling it a suggestion, so the
+  box arrives empty and the three are the choice — which also meant the placeholder had to stop
+  being a worked example, because over three named steps a worked example reads as a fourth one.

@@ -25,6 +25,7 @@ sentence a person reads.
 | --- | --- |
 | **The finished test on the front screen** — the first thing anybody sees | `web/content/examples.js` |
 | **The suggestions under the blanks** on *Set up a test* — the situations, the predictions, the things to do, the things to leave out | `web/content/starts.js` |
+| **How big a go** — the three sizes under *What will you do today?* | `web/content/starts.js` (`general`), or `web/content/worries.js` for one worry's own |
 | One of the ready-made tests you can borrow: its name, its card sentence, its three "If I…, then…", the thing to try, the thing to leave out | `web/content/worries.js` |
 | The six doors on *What's going on?* | `web/content/whats-going-on.js` |
 | "Why this one sticks" — the two paragraphs behind each ready-made one | `web/content/why.js` |
@@ -83,8 +84,37 @@ do, and some things to leave out:
 Two things about the punctuation, and the build will stop you on both. **An `if` and a `then`
 are lowercase**, because the screen prints "If I" before one and ", then" before the other and
 they have to read as one sentence. **A `dos` or a `drops` line is a whole sentence** and starts
-with a capital. `general` at the top is the short set shown when somebody has written a
+with a capital. `general` at the top is the set shown when somebody has written a
 situation we did not think of, which is most of the time.
+
+### Changing how big a go it is
+
+Under *What will you do today?* there are **three sizes**, smallest first. Tapping one fills in
+both the thing to do and the thing to leave out. `general` in `starts.js` carries the three used
+on most tests, and a worry in `worries.js` can carry its own:
+
+```
+    sizes: [
+      { name: 'A small go',
+        do: 'Say no to {person} once today, about something small.',
+        drop: 'Don’t give a reason.' },
+      { name: 'A bigger go',    do: '…', drop: '…' },
+      { name: 'The whole thing', do: '…', drop: '…' }
+    ],
+```
+
+**There have to be exactly three, and the smallest goes first.** The build will stop you at two
+or four; nothing can check the order, so that one is on you — read them top to bottom and make
+sure they get bigger.
+
+**A name can never have a number in it**, and the build will stop you if one does. *Level 2* and
+*Step 3 of 3* turn three choices into a ladder with a top, and a top is somewhere a person can
+feel they have failed to reach. A name starts with a capital, like anything on a button; a `do`
+and a `drop` are whole sentences and start with a capital too.
+
+Nothing else about the three may change: there are always three, they are always in the same
+order, none of them is ever marked as the one to pick, and none ever appears or disappears
+because of what somebody has already done.
 
 ### The sentences with a gap in them
 
@@ -116,7 +146,9 @@ to start from the same words, because that is the half the blank is in.
 
 **Changing the words around a gap is completely safe.** Changing `somebody` is safe too, as long
 as the new word still reads in every place `{person}` appears — try saying each sentence out
-loud with it in.
+loud with it in. **A gap can go in a `test`, a `drop` or one of the three sizes as well**, and
+it works the same way there; the one place it cannot go is the `name` of a size, because that is
+a label on a button rather than a sentence about anybody.
 
 ## Doing it yourself, on github.com
 

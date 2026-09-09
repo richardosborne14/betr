@@ -246,6 +246,14 @@ keep it, and put it wherever the sentence needs it.
 
 > That locks in what you expect, so later you can’t talk yourself out of what actually happened.
 
+**`plan.sizeChips`**
+
+> Same again, or a different size:
+
+**`plan.sizeChange`**
+
+> Change
+
 ### Screen 5 — locked in
 
 **`locked.kicker`**
@@ -722,6 +730,10 @@ keep it, and put it wherever the sentence needs it.
 
 > {when}: {level} out of 10.
 
+**`a11y.rungSize`**
+
+> Done at: {size}.
+
 **`a11y.down`** — one sentence with a number in it. `{n}` is filled in by the app.
 
 > *one:* Down one rung.
@@ -856,9 +868,29 @@ keep it, and put it wherever the sentence needs it.
 
 > Say no to one thing today, in one sentence.
 
+**`build.doOwnPlaceholder`**
+
+> Or put it in your own words.
+
 **`build.doChips`**
 
 > Or one of these:
+
+**`build.sizeChips`**
+
+> How big a go? Any of them counts:
+
+**`build.sizeLast`**
+
+> Last time
+
+**`build.sizeLabel`**
+
+> How big a go
+
+**`build.sizeOther`**
+
+> Your own
 
 **`build.dropLabel`**
 
@@ -930,14 +962,23 @@ gap holds one of these situations, word for word.
 
 An **if** and a **then** are lowercase, because they follow printed words and have to read
 as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.
+So is the **name** of a size, because it is a label on a button.
 
 ### The general set — shown when somebody has written their own situation
 
 | | |
 | --- | --- |
 | **then** | they’ll think less of me · they’ll go quiet with me · it’ll be held against me later |
-| **do** | Do it once today, in the smallest version that still counts. · Pick the version of it you could do in the next hour. |
-| **leave out** | Don’t explain yourself. · Don’t line up a way out first. |
+
+**How big a go.** Three steps, smallest first. Tapping one fills both boxes. Every road
+that has no three of its own lands on these. Never more than three, never fewer, and never
+a number on one of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Do it once today, in the smallest version that still counts. | Don’t explain yourself. |
+| 2 | A bigger go | Do the version of it you would normally talk yourself out of. | Don’t line up a way out first. |
+| 3 | The whole thing | Do the whole thing today, the way you would if you weren’t worried about it. | Don’t soften it, and don’t apologise for it afterwards. |
 
 ### 1. If I say no without giving a reason…
 
@@ -1390,8 +1431,8 @@ The three a person chooses between, in the order they are shown:
 | **lane** | assertiveness |
 | **label** — the button | Saying no without giving a reason |
 | **card sentence** — under the label on the list | If I say no and don’t explain, then people will think badly of me. |
-| **test** — the one thing, today | Say “No, I can’t this time” to one small request today. |
-| **drop** — what you leave out | No reason, no apology, no softening it. |
+| **test** — the one thing, today | Say no to {person} once today, about something small. |
+| **drop** — what you leave out | Don’t give a reason. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
 
@@ -1399,6 +1440,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I say no to {person} without giving a reason |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Say no to {person} once today, about something small. | Don’t give a reason. |
+| 2 | A bigger go | Say no to {person} about something bigger than you would usually refuse. | Don’t give a reason, and don’t offer them anything instead. |
+| 3 | The whole thing | Say no to {person} today, and say nothing after it. | No reason, no apology, and no making up for it later. |
 
 The three a person chooses between, in the order they are shown:
 
@@ -1454,7 +1505,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | social |
 | **label** — the button | Telling someone I’m struggling |
 | **card sentence** — under the label on the list | If I let someone see I’m struggling, then it costs me something with them. |
-| **test** — the one thing, today | Today, tell one person you trust one small, true thing you’re finding hard. |
+| **test** — the one thing, today | Tell {person} one true sentence about how this week has been. |
 | **drop** — what you leave out | Don’t finish it with “but I’m fine”. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1463,6 +1514,16 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I tell {person} one true thing I’m finding hard |
 | **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Tell {person} one true sentence about how this week has been. | Don’t finish it with “but I’m fine”. |
+| 2 | A bigger go | Tell {person} the thing you would normally keep to yourself. | Don’t make a joke of it, and don’t move it on afterwards. |
+| 3 | The whole thing | Tell {person} what you are actually finding hard, and let it be a conversation. | No “but I’m fine”, no joke, and no changing the subject. |
 
 The three a person chooses between, in the order they are shown:
 

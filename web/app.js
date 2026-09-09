@@ -139,8 +139,19 @@
       is an empty object until B41 puts holes in anything. NEITHER OF THEM KEYS A LADDER — the
       worry's id does that, and a worry's three predictions share one ladder (rule 5).
     */
+    /*
+      B42's two. `size` is the NAME of the size the person picked, or null — the name rather
+      than an index, because it is what the export and the ladder row say out loud and because
+      a list of three that gets reworded next month must not silently relabel what somebody
+      already did. It keys nothing either; the worry's id keys the ladder and always has.
+
+      `planned` is whether the plan has been pre-filled into the boxes yet. It used to happen
+      in borrow(), and B42 moved it to the moment the do screen is first opened — see
+      prefillPlan() for why that had to move and what it would have printed if it hadn't.
+    */
     return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '',
-             prediction: null, slots: {}, dropOpen: false };
+             prediction: null, slots: {}, dropOpen: false, size: null, planned: false,
+             sizeOpen: true };
   }
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
   var installEvent = null; /* Android's beforeinstallprompt, if the browser offers one */
@@ -162,6 +173,12 @@
     both repaint the whole screen, and focus has to stay where the person is working.
   */
   var nextFocus = null;
+  /*
+    B42. Whether the three sizes on the repeat screen are showing or folded onto last time's.
+    Not stored, and not on the record: it is which way one screen is drawn, like whyBack, and
+    a person who reloads on it should land on the plan rather than half way into changing it.
+  */
+  var againOpen = false;
   /* Which worked example this open is showing (B31). Decided once, at the bottom of the file. */
   var shown = 0;
 
@@ -475,9 +492,42 @@
     */
     draft.ifPart = f.skeleton ? content.fill(f.skeleton.if, {}, f.skeleton.holes)
                               : splitBelief(f.belief)[0];
-    draft.test = f.test;
-    draft.drop = f.drop;
+    /*
+      B42, 2026-09-09. THE PLAN IS NO LONGER PRE-FILLED HERE, and this is the one piece of code
+      the task had to move. Two things forced it, in this order.
+
+      A plan may carry the same holes the sentence does now — "Say no to {person} once today"
+      — and at this moment nobody has typed into a hole, because the screen with the holes on
+      it has not been drawn. Filling here would put `{person}` in a box, literally, on
+      somebody's phone. So it happens at prefillPlan(), on the way to the do screen, where
+      draft.slots is what she actually wrote.
+
+      And on a worry that carries three SIZES there is no prefill at all any more: the three
+      are the choice, and a box arriving with one of them already in it would be BETR having
+      picked. See buildDo().
+    */
     go('build');
+  }
+
+  /*
+    The plan in the boxes, worked out once, on the way to the screen it is written on.
+
+    Where the worry has three sizes there is nothing to prefill: those three ARE the plan, the
+    person picks one, and a pre-filled box would be the app choosing a rung (B42). Where it has
+    none — nineteen of the twenty-one — BETR's own plan goes in the boxes exactly as it has
+    since B32, with any holes filled from what she typed a screen ago.
+
+    Once only, and `planned` is what makes it once: a person who goes back to fix a word of the
+    sentence and comes forward again must find the plan she typed, not BETR's back on top of it
+    (B34 D2, the same bug from the other end).
+  */
+  function prefillPlan() {
+    var f = borrowed();
+    if (!f || draft.planned) return;
+    draft.planned = true;
+    if (f.sizes) return;
+    draft.test = saidIn(f.test);
+    draft.drop = saidIn(f.drop);
   }
 
   function q(sel) { return app.querySelector(sel); }
@@ -638,12 +688,25 @@
       else spoken += ' ' + t('a11y.same');
     }
 
+    /*
+      B42. Which size it was done at, on the row for that test — "A small go", under the rung
+      it moved to. It is a fact about that test and it is drawn like one: the same quiet line
+      what the person wrote is drawn in, in the same place, never in the number column and
+      never next to the dots. IT IS NOT A GRADE. Nothing compares one row's size with
+      another's, nothing adds them up, and no screen ever says a bigger one would be better.
+
+      Only rows that have one draw it, so a ladder from before today, and every test written
+      from nothing, look exactly as they did yesterday.
+    */
+    if (opts.size) spoken += ' ' + t('a11y.rungSize', { size: opts.size });
+
     return '<div class="rung">' +
         '<span class="when" aria-hidden="true">' + esc(when) + '</span>' +
         '<span class="dots" aria-hidden="true">' + dots + '</span>' +
         '<span class="num" aria-hidden="true">' + level + '</span>' +
         '<span class="sr">' + esc(spoken) + '</span>' +
       '</div>' +
+      (opts.size ? '<p class="said size" aria-hidden="true">' + esc(opts.size) + '</p>' : '') +
       (opts.said ? paras(opts.said, 'said') : '');
   }
 
@@ -672,6 +735,9 @@
         var at = first + i;
         return rung(last ? t('ladder.now') : I.ordinal(at + 1), g.rungs[at], {
           said: said ? r.o : '',
+          /* B42: the size that test was done at, where there is one. Off the result, like
+             everything else on this row, so nothing is looked up and nothing is derived. */
+          size: r.size || '',
           prev: at === 0 ? rate.TOP : g.rungs[at - 1]
         });
       }).join('') +
@@ -695,6 +761,9 @@
       slots: d.slots || null, size: d.size || null,
       from: from || 'mine', editing: false, locked: null, missed: false
     };
+    /* B42: every repeat starts with the row folded on last time's answer. It is not stored,
+       for the reason whyId is not: it is which way a screen is showing, not a preference. */
+    againOpen = false;
     go('plan');
   }
 
@@ -1034,6 +1103,28 @@
     return (start && start[which]) || STARTS.general[which] || [];
   }
 
+  /*
+    B42, 2026-09-09. THE THREE SIZES FOR WHATEVER ROAD THIS IS, or null where the road has
+    none. It is a fallback chain and not a judgement, exactly as chipsFor() is: nothing here
+    depends on what the person has done before, on how many tests they have finished, or on
+    how any of them went. Three, always, in the same order, from the first screen to the
+    fiftieth — see lib/content.js checkSizes for why that is a rule and not a habit.
+
+      the worry's own three   where it has them
+      the start's own three   where one is written for those exact words (none are yet)
+      that start's loose two   where a start matched and has no sizes — its hand-written pair
+                               is about the words she actually typed, which is worth more to
+                               her than a generic dial, and the day it gains three it takes
+                               over with no change to a line of this
+      the general three        every other road, which after the first week is most of them
+  */
+  function sizesFor(f, ifPart) {
+    if (f && f.sizes) return f.sizes;
+    var start = startFor(ifPart);
+    if (start) return start.sizes || null;
+    return STARTS.general.sizes || null;
+  }
+
   /* The item being borrowed from, or null (B32). */
   function borrowed() {
     return draft.stock ? content.byId(WORRIES, draft.stock) : null;
@@ -1088,6 +1179,47 @@
     '</button>';
   }
 
+  /*
+    B42, AND IT IS B39's ROW APPLIED TO THE OTHER HALF OF THE SAME SCREEN — for the same reason
+    and after the same measurement.
+
+    Open, the three sizes are 257px at 100% text and 296 at 125%, and they put *Lock it in* at
+    925 on a 390x844 phone whose fold is 780. That is precisely the failure B39 spent a day
+    removing, and the answer it found is the one that works here: once the question is answered,
+    the row says what the answer is instead of asking again.
+
+    NOTHING IS TAKEN AWAY, WHICH IS B42's FIRST RULE. The row is folded, not gone: it says which
+    size is in the box, and *Change* opens all three again in the order they were always in.
+    That is the difference between a rung a person can get back to in one tap and a rung the app
+    has decided they are past.
+
+    AND IT IS ONLY FOLDED ONCE THERE IS AN ANSWER. Before the first pick it is open, and *Lock
+    it in* does sit below the fold at 125% — which is not B39's failure, because with an empty
+    plan that button refuses. What has to be visible in that state is the three, and it is.
+  */
+  function foldedSize(name) {
+    return '<button class="folded" id="sizeopen">' +
+      '<span class="folded-top">' +
+        '<span class="folded-lbl">' + esc(t('build.sizeLabel')) + '</span>' +
+        '<span class="folded-go">' + esc(t('build.sizeChange')) + '</span>' +
+      '</span>' +
+      '<span class="folded-val wrote">' + esc(name) + '</span>' +
+    '</button>';
+  }
+
+  /*
+    Which of the three is in the box, by index, or -1. It is answered off the WORDS rather than
+    off `draft.size`, and that is deliberate: a person who came back through Back, or who typed
+    one of them out by hand, is looking at the same sentence either way and the screen should
+    say the same thing about it.
+  */
+  function pickedSize(lines, said) {
+    var want = flat(said);
+    if (!want) return -1;
+    for (var i = 0; i < lines.length; i++) if (flat(lines[i]) === want) return i;
+    return -1;
+  }
+
   function chipRow(intro, list, attr, hide) {
     if (!list.length) return '';
     /*
@@ -1114,6 +1246,64 @@
     return list.map(function (line, i) {
       return '<button class="chip" ' + attr + '="' + i + '">' + esc(line) + '</button>';
     }).join('');
+  }
+
+  /*
+    B42, 2026-09-09. THE DIAL: three named steps, small to big, each one a whole sentence.
+
+    It is the same row the suggestions are drawn in — a heading and a set of buttons — and the
+    only differences are that each button carries its own name, and that tapping one fills both
+    boxes rather than one. That is deliberate: the founder's small / medium / big arrives as
+    three sentences a person can read rather than as three words they have to interpret, which
+    is the whole of B36 item 8 and B37 §8.
+
+    WHAT IS NOT HERE, AND EACH OF THESE IS A RULE RATHER THAN AN OVERSIGHT (B42):
+
+    - no number on any of them, not "1 of 3", not a step count, not a bar. A number on a size
+      is a level and a level is a point; B36 §9 has 38 studies and 8,110 people on why there
+      are none of those here, and it would be a score of the person besides
+    - none is marked as recommended, suggested, usual or "most people". Three plain buttons
+    - none is ever disabled, greyed, hidden or unlocked by anything that happened before. A
+      rung that appears because the last one went well is the app choosing (rule 2)
+    - nothing is remembered ABOUT the person here. The `last` mark on the repeat screen says
+      what was done last time and is a fact about that test, not a grade of anybody
+  */
+  function sizeRow(sizes, lines, hide) {
+    return '<div class="chipset sizes" role="group" data-chips="data-size" aria-labelledby="chips-sizes"' +
+      (hide ? ' hidden' : '') + '>' +
+      '<p class="tiny chips-intro" id="chips-sizes">' + esc(t('build.sizeChips')) + '</p>' +
+      '<div class="chips" data-chiplist="data-size">' + sizeButtons(sizes, lines, null) + '</div>' +
+    '</div>';
+  }
+
+  /*
+    The buttons alone. `marked` is a size name to mark as the one done last time, or null —
+    only the repeat screen passes one, and it is a note about the last test rather than
+    anything about what to do next. The mark is a word, never a tick and never a highlight,
+    because a highlighted option is a recommended option.
+  */
+  function sizeButtons(sizes, lines, marked) {
+    return sizes.map(function (z, i) {
+      var mine = marked && flat(marked) === flat(z.name);
+      return '<button class="chip size" data-size="' + i + '">' +
+        '<b class="size-name">' + esc(z.name) + '</b>' +
+        /* The space is not decoration: without it the row's accessible name runs the two
+           together — "The whole thingLast time" — and the mark is read as part of the name. */
+        (mine ? ' <span class="size-last">' + esc(t('build.sizeLast')) + '</span>' : '') +
+        ' <span class="size-do">' + esc(lines[i]) + '</span>' +
+      '</button>';
+    }).join('');
+  }
+
+  /*
+    Is this sentence one of BETR's own, word for word? It answers one question and no other:
+    whether the app may replace it. BETR's content may be replaced by BETR's content; a
+    sentence a person wrote may not be touched by anything except the person.
+  */
+  function ours(said, lines) {
+    var want = flat(said);
+    for (var i = 0; i < lines.length; i++) if (flat(lines[i]) === want) return true;
+    return false;
   }
 
   /*
@@ -1452,6 +1642,9 @@
       draft.expect = '';
       draft.prediction = null;
       draft.slots = {};
+      /* B42: and the size. A test that is nobody's but theirs was not "the small one of
+         BETR's three", and a record saying so would make the export say something untrue. */
+      draft.size = null;
       refusal = null;
       render();
     });
@@ -1462,6 +1655,8 @@
       if (!one.ok) { refuse(one); return; }
       var two = guards.checkPart(draft.thenPart, 'then');
       if (!two.ok) { refuse(two); return; }
+      /* B42: the plan goes in the boxes here, where the holes are known. See prefillPlan(). */
+      prefillPlan();
       go('build-do');
     });
   }
@@ -1569,8 +1764,17 @@
     var f = borrowed();
     /* Worked out once and closed over by the handlers, for the reason build() does it: a chip
        puts in the box what is printed on it, and cannot drift from it (B34 D1). */
-    var doChips = chipsFor('dos', draft.ifPart);
-    var dropChips = chipsFor('drops', draft.ifPart);
+    /*
+      B42. Three named sizes where the road has them, and the loose pair where it does not.
+      Both lists are worked out here and closed over by the handlers below, which is B34 D1's
+      rule and matters more on a skeleton road: a chip carries the person's own word in it,
+      and a list re-derived on the tap could hand back the one it was printed with.
+    */
+    var sizes = sizesFor(f, draft.ifPart);
+    var doChips = sizes ? sizes.map(function (z) { return saidIn(z.do); })
+                        : chipsFor('dos', draft.ifPart);
+    var dropChips = sizes ? sizes.map(function (z) { return saidIn(z.drop); })
+                          : chipsFor('drops', draft.ifPart);
     /*
       Which box this paint is going to land in, worked out BEFORE the markup so the suggestion
       row belonging to it can be drawn already open (B39). It used to be left to wireChips's
@@ -1580,6 +1784,9 @@
       are certain to want them. One row at a time either way, which is B30's rule.
     */
     var landsIn = nextFocus || '#do';
+    /* B42. Which of the three is in the box, worked out before the markup for the reason
+       `landsIn` is: the row belonging to it has to be right on the paint a person lands on. */
+    var picked = sizes ? pickedSize(doChips, draft.test) : -1;
     paint( backButton() +
       '<div class="stage">' +
         /*
@@ -1590,12 +1797,41 @@
         */
         worryHead(f ? f.label : '', said, false) +
         head('h2', t('build.doTitle')) +
-        '<p class="sub tight">' + esc(t('build.doSub')) + '</p>' +
+        /*
+          B42, AND IT IS A MEASUREMENT. "One small thing, your pick" cost 47px on a screen the
+          three sizes had just put 77px below the fold at 100% text — and on the size road it
+          says a worse version of what the row underneath says better: how big a go, and that
+          nobody but the person picks. So it stays on the road with the loose suggestions,
+          where nothing else says it, and goes where the dial is.
+        */
+        (sizes ? '' : '<p class="sub tight">' + esc(t('build.doSub')) + '</p>') +
         warnBlock() +
+        /*
+          B42. THE PLACEHOLDER IS NOT A FOURTH SUGGESTION. "Say no to one thing today, in one
+          sentence" is a good line to show somebody staring at an empty box with nothing under
+          it; over three named sizes it reads as a plan already in the box, and it competes
+          with the very three it is sitting on top of. So on the size road the box asks for
+          her words instead, which is the one thing the three cannot offer.
+        */
         '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
-          esc(t('build.doPlaceholder')) + '">' + esc(draft.test) + '</textarea>' +
-        chipRow(t('build.doChips'), doChips, 'data-do',
-          landsIn !== '#do' || !!draft.test.trim()) +
+          esc(t(sizes ? 'build.doOwnPlaceholder' : 'build.doPlaceholder')) + '">' +
+          esc(draft.test) + '</textarea>' +
+        /*
+          B42, AND IT IS WHY THE DIAL IS NOT SUBJECT TO B30's ONE-ROW-AT-A-TIME RULE IN FULL.
+
+          A suggestion row gets out of the way the moment there are words in the box, because
+          it has done its job. Three sizes have not: a person who taps "A small go" and wants
+          "A bigger go" instead would find the dial gone, which is a rung taken away, and
+          B42's first rule is that no rung is ever taken away. So the row stays while the box
+          holds one of OUR OWN three, and goes the moment she writes something of her own.
+        */
+        (sizes
+          ? (picked !== -1 && !draft.sizeOpen
+              ? foldedSize(sizes[picked].name)
+              : sizeRow(sizes, doChips,
+                  landsIn !== '#do' || (!!draft.test.trim() && picked === -1)))
+          : chipRow(t('build.doChips'), doChips, 'data-do',
+              landsIn !== '#do' || !!draft.test.trim())) +
         /*
           B39, 2026-09-09, the founder's call. Closed, this half is one row that says what it
           currently says; open, it is the box and its suggestions, exactly as before. Nothing
@@ -1621,7 +1857,12 @@
       place, which reads as BETR having overwritten them.
     */
     on('#back', function () { readBoxes(); go('build'); });
-    wireChips([['#do', 'data-do'], ['#drop', 'data-drop']]);
+    /*
+      B42: on the size road the row belonging to the first box is the dial, so that is the one
+      that gets out of the way when the person moves to the leave-out. Hand wireChips the wrong
+      name here and B30's one-row-at-a-time quietly stops holding on the road most people take.
+    */
+    wireChips([['#do', sizes ? 'data-size' : 'data-do'], ['#drop', 'data-drop']]);
     on('#dropopen', function () { readBoxes(); draft.dropOpen = true; nextFocus = '#drop'; render(); });
 
     /*
@@ -1649,10 +1890,35 @@
       b.onclick = function () {
         readBoxes();
         draft.test = doChips[Number(b.getAttribute('data-do'))];
+        draft.size = null;   /* a loose suggestion is not a size, and must not be filed as one */
         refusal = null;
         render();
       };
     });
+    /*
+      B42. One size, and it fills BOTH boxes — a size is a step and the leave-out that belongs
+      to it, and a big go with a small leave-out is not a bigger test but a different one.
+
+      EXCEPT where the leave-out is hers. If she has written her own, it stays: a size is
+      BETR's content and may replace BETR's content, and it may never quietly delete a sentence
+      a person wrote. What is stored is the size's NAME, and it says which rung was picked and
+      nothing about the person (B42; rule 5).
+    */
+    qa('[data-size]').forEach(function (b) {
+      b.onclick = function () {
+        readBoxes();
+        var i = Number(b.getAttribute('data-size'));
+        draft.test = doChips[i];
+        if (!draft.drop.trim() || ours(draft.drop, dropChips)) draft.drop = dropChips[i];
+        draft.size = sizes[i].name;
+        /* Answered, so the row folds to say what the answer is — see foldedSize(). It reopens
+           on Change and folds again on the next pick, so it always tracks the box. */
+        draft.sizeOpen = false;
+        refusal = null;
+        render();
+      };
+    });
+    on('#sizeopen', function () { readBoxes(); draft.sizeOpen = true; render(); });
     qa('[data-drop]').forEach(function (b) {
       b.onclick = function () {
         readBoxes();
@@ -1734,7 +2000,18 @@
       */
       prediction: f && typeof draft.prediction === 'number' ? draft.prediction : null,
       slots: f ? filled(draft.slots) : null,
-      size: null,
+      /*
+        B42. The name of the size she picked, and nothing if she picked none — which is every
+        test written from nothing and every one from before today. It is a fact about this
+        test: which of the three steps was taken. It is never totalled, never compared across
+        worries, and it keys nothing (rule 5; rate.keyOf still groups by the worry's id).
+
+        It survives her editing the sentence afterwards, on purpose. She picked the rung; a
+        word changed in BETR's wording of it does not make it a different rung, and clearing
+        it there would mean the export could only ever say what was done by somebody who
+        typed nothing.
+      */
+      size: draft.test.trim() ? (draft.size || null) : null,
       from: 'build-do', editing: false, locked: null, missed: false
     };
   }
@@ -1862,6 +2139,7 @@
           '<p class="lbl">' + esc(t('plan.today')) + '</p>' +
           '<p class="do wrote">' + esc(c.test) + '</p>' +
           '<p class="line wrote">' + tHtml('plan.line', { drop: '<b>' + esc(c.drop) + '</b>' }) + '</p>' +
+          sizeLine(c) +
           '<p class="lbl">' + esc(t('plan.expectLabel')) + '</p>' +
           (c.editing
             ? '<textarea id="x" class="short" aria-label="' + esc(t('plan.expectLabel')) + '">' +
@@ -1869,11 +2147,13 @@
             : '<p class="expect wrote">' + esc(c.x) + '</p><button class="edit" id="xedit">' +
               esc(t('plan.edit')) + '</button>') +
         '</div>' +
+        sizeAgain(c) +
         '<button class="big wide" id="lock">' + esc(t('plan.lock')) + '</button>' +
         '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
       '</div>');
     /* Back goes where they actually came from, not back into a half-finished entry. */
     wireBack(c.from || 'belief');
+    wireSizeAgain(c);
     on('#xedit', function () { c.editing = true; save(); render(); q('#x').focus(); });
     on('#xdone', function () { c.x = q('#x').value.trim() || c.x; c.editing = false; save(); render(); });
     on('#lock', function () {
@@ -1881,6 +2161,95 @@
       c.locked = new Date().toISOString();
       askToPersist();
       go('locked');
+    });
+  }
+
+  /*
+    B42, ON A REPEAT. The same three, with last time marked — and marked is the whole of it.
+
+    Doing something once and getting away with it is easy to put down to luck, so SAME AGAIN
+    IS A REAL ANSWER and the screen has to let it be one. There is no nudge upward: the three
+    are in the same order they always are, none is highlighted, none is recommended, and the
+    mark on one of them says what happened last time rather than what to do next.
+
+    It is drawn only where there are three to draw — the worry has its own, or she picked from
+    the general three last time and there is a size on the record to mark. A test somebody
+    wrote from nothing and planned themselves gets no row: BETR has nothing to offer it that
+    would not be BETR proposing a plan for a test it did not write (B44 is the task that asks
+    whether it should).
+  */
+  function sizesOn(d) {
+    var f = d && d.id ? content.byId(WORRIES, d.id) : null;
+    if (f && f.sizes) return f.sizes;
+    return d && d.size ? (STARTS.general.sizes || null) : null;
+  }
+
+  /*
+    FOLDED UNTIL IT IS ASKED FOR, AND FOLDED INTO THE CARD RATHER THAN NEXT TO IT.
+
+    Open, the three cost 277px and put "I'll find out today" at 919 on a 390x844 phone whose
+    fold is 785 — and this screen, unlike the build screen, ALWAYS has an answer already: the
+    plan she is carrying, at the size she did it at. So it says which that is and offers to
+    change it, in one line, INSIDE the plan card next to the sentence it is about. A folded row
+    of its own, the shape B39 used, cost 81px here; a line inside the card costs about 26,
+    because a card that is already there has no second margin to pay.
+
+    Nothing is taken away: Change opens all three, in the order they are always in, with last
+    time marked. "Your own" is what it says where the plan is not one of the three — a test
+    from before today, or one she wrote herself — and the three are still one tap away.
+  */
+  function sizeLine(c) {
+    var sizes = sizesOn(c);
+    if (!sizes || againOpen) return '';
+    var at = pickedSize(sizes.map(function (z) { return z.name; }), c.size || '');
+    return '<p class="size-line">' + esc(t('build.sizeLabel')) + ': <b>' +
+      esc(at === -1 ? t('build.sizeOther') : sizes[at].name) + '</b> ' +
+      '<button class="edit" id="sizeopen">' + esc(t('build.sizeChange')) + '</button></p>';
+  }
+
+  function sizeAgain(c) {
+    var sizes = sizesOn(c);
+    if (!sizes) return '';
+    if (!againOpen) return '';
+    return '<div class="chipset sizes" role="group" aria-labelledby="chips-again">' +
+      '<p class="tiny chips-intro" id="chips-again">' + esc(t('plan.sizeChips')) + '</p>' +
+      '<div class="chips">' + sizeButtons(sizes, sizes.map(function (z) {
+        return content.fill(z.do, c.slots || {}, holesOn(c));
+      }), c.size) + '</div>' +
+    '</div>';
+  }
+
+  /* The holes of the worry a record belongs to, so a size reads with her own words in it on
+     the way back. An own test and a worry with no skeleton both have none, and fill() then
+     hands the sentence back untouched. */
+  function holesOn(d) {
+    var f = d && d.id ? content.byId(WORRIES, d.id) : null;
+    return f && f.skeleton ? f.skeleton.holes : {};
+  }
+
+  function wireSizeAgain(c) {
+    var sizes = sizesOn(c);
+    if (!sizes) return;
+    on('#sizeopen', function () {
+      if (c.editing) { c.x = q('#x').value.trim() || c.x; c.editing = false; }
+      againOpen = true;
+      save();
+      render();
+    });
+    qa('[data-size]').forEach(function (b) {
+      b.onclick = function () {
+        if (c.editing) { c.x = q('#x').value.trim() || c.x; c.editing = false; }
+        var z = sizes[Number(b.getAttribute('data-size'))];
+        var holes = holesOn(c);
+        c.test = content.fill(z.do, c.slots || {}, holes);
+        c.drop = content.fill(z.drop, c.slots || {}, holes);
+        c.size = z.name;
+        /* Answered, so it folds again and says what the answer is — the row always tracks
+           the plan above it rather than latching open. */
+        againOpen = false;
+        save();
+        render();
+      };
     });
   }
 
@@ -2230,11 +2599,22 @@
     So: unchanged from BETR's own words means BETR's, looked up fresh. Anything else — including
     a leave-out line she deliberately emptied — is hers, and comes back as she left it.
   */
+  /*
+    B42, AND IT IS THE COMPARISON THAT WOULD HAVE GONE QUIETLY WRONG THIS TIME (learnings.md:
+    when content gains a variable, grep every comparison against it).
+
+    A worry's plan may carry a `{person}` from today. Compared raw, BETR's own sentence with a
+    hole in it can never equal the filled one in the record, so every repeat of a templated
+    test would fall through to "hers" — harmless — but the moment it DIDN'T, on a record with
+    no plan stored, the fallback would hand somebody a box with `{person}` printed in it.
+    So both sides are filled from the slots that record carries before either is looked at.
+  */
   function planFor(d, which) {
     var f = d.id ? content.byId(WORRIES, d.id) : null;
     var mine = typeof d[which] === 'string' ? d[which] : '';
     if (!f) return mine;
-    return flat(mine) === flat(f[which]) ? f[which] : mine;
+    var betr = f.skeleton ? content.fill(f[which], d.slots || {}, f.skeleton.holes) : f[which];
+    return flat(mine) === flat(betr) ? betr : mine;
   }
   function testFor(d) { return planFor(d, 'test'); }
   function dropFor(d) { return planFor(d, 'drop'); }

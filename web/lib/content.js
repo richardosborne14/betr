@@ -35,6 +35,39 @@
   var BELIEF_FIELDS = ['belief', 'expect'];
 
   /*
+    B42, 2026-09-09. THREE SIZES: the dial, as content rather than as a control.
+
+    A worry may carry `sizes` — three, in the order small to big, each one a name and the two
+    sentences that go with it:
+
+      sizes: [ { name: 'A small go', do: 'Say no to {person} once today…',
+                                     drop: 'Don’t give a reason.' }, … ]
+
+    They are the founder's small / medium / big (B36 item 8) arriving as three concrete
+    sentences instead of three abstract sizes, which is better: a rung you can read is a rung
+    you can pick. Tapping one fills BOTH boxes, because a size is a do and a leave-out
+    together — a big go with a small leave-out is not a bigger test, it is a different one.
+
+    THREE, ALWAYS, AND THE RULES BELOW ARE WHY THIS FILE COUNTS THEM.
+
+    - No rung is ever offered BECAUSE a previous one went well, and none is ever taken away.
+      Availability that depended on what somebody had already done would be the app choosing
+      (rule 2), and it would be a score of the person besides.
+    - NO NUMBER ON A SIZE, EVER, and that is checked here rather than left to good manners:
+      a digit in a name is a level, and a level is a point. B36 §9 — 38 studies and 8,110
+      people, and gamification predicted neither the outcome nor whether anybody kept going.
+    - A size is three fields and no fourth, for the reason a belief is two and a place is
+      three (research §5.2): with nowhere to hang a lane or a condition, which size a person
+      is offered can never be decided for them by anything they have entered or done.
+
+    WHAT THIS FILE CANNOT CHECK, AND THE REVIEWER HOLDS IT: that they are actually in order,
+    smallest first. A list of three in the wrong order still validates and would hand somebody
+    "The whole thing" under the heading of a small go.
+  */
+  var SIZES_PER_WORRY = 3;
+  var SIZE_FIELDS = ['name', 'do', 'drop'];
+
+  /*
     B41, 2026-09-09. A SKELETON: the if-half printed, with named holes a person fills in.
 
     A worry may carry `skeleton: { if: 'say no to {person} without giving a reason',
@@ -62,11 +95,14 @@
     if-half word for word — which is what makes the carry-through honest rather than a second
     sentence that happens to look like the first.
 
-    HOLES ARE NOT ALLOWED IN `test` OR `drop` YET, and that is deliberate rather than an
-    oversight: the plan is pre-filled into the draft at the moment a worry is borrowed, which
-    is before anybody has typed into a hole, and B42 is the task that restructures that screen.
-    A `{hole}` there today would silently print as itself. So it is refused, with a message
-    that says whose job it is.
+    HOLES ARE ALLOWED IN THE PLAN SINCE B42, 2026-09-09, and the ban that used to sit here is
+    worth remembering rather than deleting. Until that day a `{hole}` in `test` or `drop` was
+    refused, because the plan was pre-filled into the draft at the moment a worry was borrowed
+    — before anybody had typed into a hole — so it would have printed as itself on somebody's
+    phone. B42 moved that prefill to the screen the plan is actually written on, where the
+    holes are known, and lifted the ban in the same breath. THE REFUSAL THAT REPLACED IT is
+    below: a `{hole}` anywhere in a worry that has NO skeleton, which is the same bug with
+    nothing to fill it from.
   */
   var SKELETON_FIELDS = ['if', 'holes'];
   var HOLE = /\{([a-z][a-z0-9]*)\}/g;
@@ -139,7 +175,17 @@
     typed or done. It is decided by one thing — whether the first blank holds, word for word,
     one of the `if` lines — and that is a lookup rather than a judgement (research §5.2).
   */
-  var START_FIELDS = ['if', 'thens', 'dos', 'drops'];
+  /*
+    B42, 2026-09-09, and it is a change to the general set only. `sizes` — the three named
+    steps a person picks between on the plan screen — replaced the general `dos` and `drops`,
+    which were two loose suggestions with no dial in them. THE TWENTY-ONE STARTS KEPT THEIRS:
+    each of those pairs was hand-written for that exact if-half, which is more use to somebody
+    who tapped it than a generic small/bigger/whole, and the day a start gains its own three
+    sizes it takes over with no change to any of this. `sizes` is optional on a start and
+    required on the general set, which is the one every other road falls through to.
+  */
+  var START_FIELDS = ['if', 'thens', 'dos', 'drops', 'sizes'];
+  var START_REQUIRED = ['if', 'thens', 'dos', 'drops'];
   var START_LISTS = ['thens', 'dos', 'drops'];
   var OURS = 'trybeup.com';
   var SHORTENERS = ['bit.ly', 't.co', 'tinyurl.com', 'goo.gl', 'ow.ly', 'buff.ly', 'rebrand.ly', 'lnkd.in'];
@@ -176,7 +222,22 @@
       }
 
       checkSkeleton(f, where, problems);
+      checkSizes(f, where, problems);
       checkBeliefs(f, where, problems);
+
+      /*
+        B42. A `{hole}` anywhere in a worry that has no skeleton, which is the bug the old
+        ban on holes in the plan was really about: there is nothing to fill it from, so it
+        prints as itself on somebody's phone. checkSkeleton() holds the ones that DO have a
+        skeleton to every hole being declared; this holds the other nineteen to having none.
+      */
+      if (!f.skeleton) {
+        ['belief', 'test', 'drop', 'label'].forEach(function (field) {
+          if (typeof f[field] === 'string' && holesIn(f[field]).length) {
+            problems.push(where + ' puts a hole in ' + field + ' and has no skeleton to fill it from');
+          }
+        });
+      }
 
       /*
         The rule that never bends for BETR'S OWN CONTENT: no stock test, and no stock drop
@@ -289,6 +350,29 @@
         if (b && typeof b.expect === 'string') { sentences.push(b.expect); }
       });
     }
+    /*
+      B42. The plan and the three sizes are in this list from today, and the reason to say so
+      out loud is that adding a place a hole may appear is the change that goes quietly wrong:
+      every one of these is filled through content.fill at paint time, so a hole named here
+      and nowhere declared would print as itself, and a hole declared and used only here would
+      have passed as unused a day ago.
+    */
+    ['test', 'drop'].forEach(function (field) {
+      if (typeof f[field] === 'string') sentences.push(f[field]);
+    });
+    if (Array.isArray(f.sizes)) {
+      f.sizes.forEach(function (z) {
+        if (!z) return;
+        if (typeof z.do === 'string') sentences.push(z.do);
+        if (typeof z.drop === 'string') sentences.push(z.drop);
+        /* A name is a label, not a sentence about anybody: a hole in one would put a
+           person's word on a button, which is not what a size is for. */
+        if (typeof z.name === 'string' && holesIn(z.name).length) {
+          problems.push(where + ' puts a hole in a size name, and a name is a label rather ' +
+            'than a sentence about anybody');
+        }
+      });
+    }
     sentences.forEach(function (text) {
       holesIn(text).forEach(function (name) { if (used.indexOf(name) === -1) used.push(name); });
     });
@@ -297,13 +381,6 @@
     });
     declared.forEach(function (name) {
       if (used.indexOf(name) === -1) problems.push(where + ' declares a hole "{' + name + '}" and never uses it');
-    });
-
-    /* B42 owns the plan. A hole there today would print as itself; see the note above. */
-    ['test', 'drop'].forEach(function (field) {
-      if (holesIn(f[field]).length) {
-        problems.push(where + ' puts a hole in ' + field + ', and the plan cannot carry one yet (B42)');
-      }
     });
 
     /*
@@ -329,6 +406,79 @@
 
   function flatten(s) {
     return String(s || '').toLowerCase().replace(/[^a-z0-9\u2019 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  /*
+    B42. The three sizes, or the absence of them — most worries have none yet and fall through
+    to the three generic ones in starts.js, so the dial is on every road either way.
+
+    A NUMBER IS THE ONE THING A NAME MAY NOT CONTAIN. Everything else here is shape; that one
+    is the rule. "Level 2" and "Step 3 of 3" are the same object as a badge, they turn a dial
+    into a ladder with a top, and the top of a ladder is somewhere a person can fail to reach.
+  */
+  function checkSizes(f, where, problems) {
+    if (f.sizes === undefined) return;
+    if (!Array.isArray(f.sizes)) {
+      problems.push(where + ' has sizes that are not a list');
+      return;
+    }
+    if (f.sizes.length !== SIZES_PER_WORRY) {
+      problems.push(where + ' offers ' + f.sizes.length + ' sizes, and it has to be ' +
+        SIZES_PER_WORRY + ': three, always, from the first screen to the fiftieth');
+    }
+    var said = {};
+    f.sizes.forEach(function (z, j) {
+      var at = where + ' size ' + j;
+      if (!z || typeof z !== 'object' || Array.isArray(z)) { problems.push(at + ' is not a size'); return; }
+      Object.keys(z).forEach(function (field) {
+        if (SIZE_FIELDS.indexOf(field) === -1) {
+          problems.push(at + ' has an extra field "' + field + '": a size is a name and the ' +
+            'two sentences that go with it, and nothing that could decide anything');
+        }
+      });
+      SIZE_FIELDS.forEach(function (field) {
+        if (typeof z[field] !== 'string' || !z[field].trim()) problems.push(at + ' is missing ' + field);
+      });
+      if (typeof z.name === 'string') {
+        if (/[0-9]/.test(z.name)) {
+          problems.push(at + ' has a number in its name ("' + z.name + '"), and a number on a ' +
+            'size is a level, a level is a point, and there are none of those here (B36 §9)');
+        }
+        /* Founder, 2026-09-03: nothing a person taps is all-lowercase. A size name is a
+           label on a button and is not exempt the way a sentence fragment on a chip is. */
+        if (/^[a-z]/.test(z.name)) problems.push(at + ' name starts lowercase, and it is a label');
+      }
+      /*
+        Both halves are whole sentences a person could act on, so both start with a capital —
+        the same rule a `dos` or a `drops` line in starts.js is held to, for the same reason.
+        And both are BETR PROPOSING SOMETHING, so both go through the three word lists exactly
+        as the twenty-one stock tests do. Rule 4 loosened what a PERSON may write on
+        2026-09-08 and loosened not one word of what BETR writes.
+      */
+      ['do', 'drop'].forEach(function (field) {
+        var line = z[field];
+        if (typeof line !== 'string' || !line.trim()) return;
+        if (!/^[A-Z\u201C]/.test(line)) {
+          problems.push(at + ' ' + field + ' does not start with a capital, and it is a whole sentence');
+        }
+        [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]].forEach(function (pair) {
+          var word = guards.hit(line, pair[1]);
+          if (word) {
+            problems.push(at + ' ' + field + ' names something BETR may never propose (' +
+              pair[0] + ': "' + word + '")');
+          }
+        });
+      });
+      /* Two sizes that say the same thing are one size and a wasted tap — and worse here than
+         on a suggestion row, because the whole point of three is that they are different sizes
+         of the same step. */
+      ['name', 'do'].forEach(function (field) {
+        if (typeof z[field] !== 'string') return;
+        var key = field + ':' + flatten(z[field]);
+        if (said[key] !== undefined) problems.push(at + ' ' + field + ' says the same thing as size ' + said[key]);
+        said[key] = j;
+      });
+    });
   }
 
   function checkBeliefs(f, where, problems) {
@@ -383,7 +533,20 @@
     if (!starts.general || typeof starts.general !== 'object') {
       problems.push('starts.js has no general set, so a sentence BETR did not write gets nothing');
     } else {
-      checkStartLists('the general set', starts.general, problems);
+      /*
+        B42. The general set is `thens` and `sizes` now — its two loose `dos` became the three
+        named sizes, so the road most people are on has the dial on it. It is checked against
+        the lists it actually has rather than against all three, and its sizes are required:
+        every road with no sizes of its own falls through to these.
+      */
+      checkStartLists('the general set', starts.general, ['thens'], problems);
+      ['dos', 'drops'].forEach(function (field) {
+        if (field in starts.general) {
+          problems.push('the general set still has "' + field + '"; B42 replaced both with sizes');
+        }
+      });
+      if (!starts.general.sizes) problems.push('the general set has no sizes, so a road with none of its own has no dial');
+      checkSizes(starts.general, 'the general set', problems);
       if ('if' in starts.general) problems.push('the general set has an "if"; it is the one with no start');
     }
 
@@ -392,15 +555,17 @@
       var where = 'start ' + i + ' (' + ((it && it.if) || 'no if') + ')';
       if (!it || typeof it !== 'object' || Array.isArray(it)) { problems.push(where + ' is not a start'); return; }
 
-      START_FIELDS.forEach(function (field) {
+      START_REQUIRED.forEach(function (field) {
         if (!(field in it)) problems.push(where + ' is missing ' + field);
       });
       Object.keys(it).forEach(function (field) {
         if (START_FIELDS.indexOf(field) === -1) {
-          problems.push(where + ' has an extra field "' + field + '": a start is four fields, so ' +
-            'that which suggestions a person is offered can never be decided for them');
+          problems.push(where + ' has an extra field "' + field + '": a start is four fields and ' +
+            'an optional three sizes, so that which suggestions a person is offered can never ' +
+            'be decided for them');
         }
       });
+      checkSizes(it, where, problems);
 
       if (typeof it.if !== 'string' || !it.if.trim()) {
         problems.push(where + ' has no if');
@@ -412,14 +577,14 @@
         seen[flat] = where;
       }
 
-      checkStartLists(where, it, problems);
+      checkStartLists(where, it, START_LISTS, problems);
     });
 
     return problems;
   }
 
-  function checkStartLists(where, set, problems) {
-    START_LISTS.forEach(function (field) {
+  function checkStartLists(where, set, fields, problems) {
+    fields.forEach(function (field) {
       var list = set[field];
       if (!Array.isArray(list) || !list.length) { problems.push(where + ' has no ' + field); return; }
       var said = {};
@@ -632,6 +797,8 @@
     DOOR_FIELDS: DOOR_FIELDS,
     BELIEF_FIELDS: BELIEF_FIELDS,
     SKELETON_FIELDS: SKELETON_FIELDS,
+    SIZE_FIELDS: SIZE_FIELDS,
+    SIZES_PER_WORRY: SIZES_PER_WORRY,
     holesIn: holesIn,
     fill: fill,
     BELIEFS_PER_WORRY: BELIEFS_PER_WORRY,

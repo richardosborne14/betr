@@ -283,7 +283,42 @@ var BETR_STRINGS_EN = {
       */
       doSub: 'One small thing, your pick.',
       doPlaceholder: 'Say no to one thing today, in one sentence.',
+      /*
+        B42. What the box says while the three sizes are under it. The other placeholder is a
+        worked example, and over three named steps a worked example reads as a fourth one —
+        or worse, as a plan already in the box. This one asks for the thing the three cannot
+        give her, and says plainly that they are optional.
+      */
+      doOwnPlaceholder: 'Or put it in your own words.',
       doChips: 'Or one of these:',
+      /*
+        B42, 2026-09-09. THE DIAL, and every word of this line is doing a job.
+
+        "How big" is the founder's small / medium / big said in the way a person would say it.
+        "Any of them counts" is the half that has to be there: the smallest is not a warm-up
+        for the real one, and a person who picks it twice has done two tests. There is no
+        number in it, nothing is called a level, and nothing says which one to pick — see
+        app.js sizeRow() for the four things that are deliberately absent from this row.
+      */
+      sizeChips: 'How big a go? Any of them counts:',
+      /*
+        The mark on the repeat screen, on the one that was done last time. It says what
+        happened, not what to do: same again is a real answer, because doing something once
+        and getting away with it is easy to put down to luck.
+      */
+      sizeLast: 'Last time',
+      /* The folded row's label, once one of the three is in the box. Same shape as the
+         leave-out's: what this half is, what it currently says, and the way back in. */
+      sizeLabel: 'How big a go',
+      /*
+        What the folded row says on a repeat of a test that was never done at one of the three
+        — one from before B42, or one whose plan the person wrote themselves. The three are
+        still one tap away and nothing is missing; this only has to name what is in the plan.
+      */
+      sizeOther: 'Your own',
+      /* The way back to the three, on both screens that fold them: the row on the build screen
+         and the line inside the plan card on a repeat. One word doing one job in both places. */
+      sizeChange: 'Change',
       dropLabel: 'And leave out',
       /*
         B39, 2026-09-09, the founder's call. THE LEAVE-OUT HALF IS ONE ROW UNTIL IT IS TOUCHED.
@@ -386,7 +421,13 @@ var BETR_STRINGS_EN = {
       */
       lock: 'I’ll find out today',
       lockNote: 'That locks in what you expect, so later you can’t talk yourself out of what ' +
-        'actually happened.'
+        'actually happened.',
+      /*
+        B42. The three sizes again, on the way back into something already tested. "Same
+        again" leads on purpose: it is a real answer and the screen should not read as though
+        the point were to work up to something.
+      */
+      sizeChips: 'Same again, or a different size:'
     },
 
     /*
@@ -679,6 +720,9 @@ var BETR_STRINGS_EN = {
       /* The same group on the front screen's worked example, in that card's voice (B38). */
       ladderPlainExample: 'How sure they were it goes badly. Ten is completely sure, one is not sure at all.',
       rung: '{when}: {level} out of 10.',
+      /* B42. Which size that test was done at, read out after the rung it moved to. A fact
+         about the test; there is nothing here that compares one row with another. */
+      rungSize: 'Done at: {size}.',
       down: { one: 'Down one rung.', other: 'Down {n} rungs.' },
       up: { one: 'Up one rung.', other: 'Up {n} rungs.' },
       same: 'No change.',

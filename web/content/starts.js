@@ -21,8 +21,12 @@
     dos    what a person might actually do about it. Full sentences, today, cheap, reversible
     drops  the safety behaviour to leave out. Full sentences. Research §2.3: dropping it is
            what makes the difference between a test and a day
-  `general` is the same four fields with no `if`: the short set shown when the blank holds
-  something we did not write, which after the first week will be most of the time.
+    sizes  B42: three named steps, small to big, each a `name`, a `do` and the `drop` that
+           belongs with it. Tapping one fills both boxes. Optional on a start and REQUIRED on
+           `general`, because every road with no sizes of its own falls through to those
+  `general` is the set shown when the blank holds something we did not write, which after the
+  first week will be most of the time. It has no `if`, and since B42 it has `thens` and
+  `sizes` and no loose `dos` or `drops`: the two it used to carry became the three.
 
   THE RULES THAT TRAVEL WITH IT (web/tests/content.test.js holds every one)
     - every `if` starts lowercase; every `dos` and `drops` line is a sentence with a capital
@@ -57,13 +61,32 @@ var BETR_STARTS = {
       'they’ll go quiet with me',
       'it’ll be held against me later'
     ],
-    dos: [
-      'Do it once today, in the smallest version that still counts.',
-      'Pick the version of it you could do in the next hour.'
-    ],
-    drops: [
-      'Don’t explain yourself.',
-      'Don’t line up a way out first.'
+    /*
+      B42, 2026-09-09. THE DIAL ON THE ROAD MOST PEOPLE ARE ON. These three replaced the two
+      loose `dos` and two loose `drops` the general set used to carry, and they are the same
+      sentences turned into a dial: a name, a whole step, and the leave-out that belongs to
+      that step. Every road with no sizes of its own falls through to these, so the three are
+      always there — never four, never two, never one that appears because the last one went
+      well. See lib/content.js checkSizes for what that costs and why.
+
+      Small to big, in that order, and nothing here is numbered.
+    */
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Do it once today, in the smallest version that still counts.',
+        drop: 'Don’t explain yourself.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Do the version of it you would normally talk yourself out of.',
+        drop: 'Don’t line up a way out first.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Do the whole thing today, the way you would if you weren’t worried about it.',
+        drop: 'Don’t soften it, and don’t apologise for it afterwards.'
+      }
     ]
   },
 

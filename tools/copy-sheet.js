@@ -245,14 +245,28 @@ w('gap holds one of these situations, word for word.');
 w();
 w('An **if** and a **then** are lowercase, because they follow printed words and have to read');
 w('as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.');
+w('So is the **name** of a size, because it is a label on a button.');
 w();
 w('### The general set — shown when somebody has written their own situation');
 w();
 w('| | |');
 w('| --- | --- |');
 w('| **then** | ' + starts.general.thens.join(' · ') + ' |');
-w('| **do** | ' + starts.general.dos.join(' · ') + ' |');
-w('| **leave out** | ' + starts.general.drops.join(' · ') + ' |');
+w();
+/*
+  B42. The general set's two loose suggestions became three named sizes, and a person reading
+  this file has to see them as a set of three rather than as six loose lines — the name, the
+  step and the leave-out that belongs with it are one thing to change or leave alone.
+*/
+w('**How big a go.** Three steps, smallest first. Tapping one fills both boxes. Every road');
+w('that has no three of its own lands on these. Never more than three, never fewer, and never');
+w('a number on one of them.');
+w();
+w('| | how big | what you’d do | what you’d leave out |');
+w('| --- | --- | --- | --- |');
+starts.general.sizes.forEach((z, j) => {
+  w('| ' + (j + 1) + ' | ' + z.name + ' | ' + z.do + ' | ' + z.drop + ' |');
+});
 w();
 starts.items.forEach((it, i) => {
   w('### ' + (i + 1) + '. If I ' + it.if + '…');
@@ -313,6 +327,23 @@ worries.forEach((f, i) => {
     w('| **printed** | If I ' + f.skeleton.if + ' |');
     Object.keys(f.skeleton.holes).forEach((name) => {
       w('| **the gap `{' + name + '}`** — its word while it is empty | ' + f.skeleton.holes[name] + ' |');
+    });
+    w();
+  }
+  /*
+    B42. The three sizes, where a worry has them. Printed before the three predictions because
+    that is the order somebody changing the words would want them: how big a go is one dial,
+    which prediction is yours is another, and they are separate things.
+  */
+  if (f.sizes) {
+    w('**How big a go.** Three steps, smallest first, shown on the screen after the sentence.');
+    w('Tapping one fills both boxes. Three, always — never a fourth, never one that appears');
+    w('because the last one went well, and never a number on any of them.');
+    w();
+    w('| | how big | what you’d do | what you’d leave out |');
+    w('| --- | --- | --- | --- |');
+    f.sizes.forEach((z, j) => {
+      w('| ' + (j + 1) + ' | ' + z.name + ' | ' + z.do + ' | ' + z.drop + ' |');
     });
     w();
   }

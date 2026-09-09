@@ -286,6 +286,14 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 .plan .do { font-family:var(--display); font-weight:800; font-size:clamp(1.4375rem,5vw,1.9375rem); line-height:1.12; letter-spacing:-.015em; margin:0 0 18px; }
 .plan .line { font-size:1.125rem; color:var(--ink-2); margin:0 0 14px; }
 .plan .line b { color:var(--ink); font-weight:700; }
+/*
+  B42. Which size this plan is, on one line inside the card, with the way back to the three.
+  Inside rather than beside: a card that is already drawn has no second margin to pay, and 26px
+  is what this costs against 81 for a row of its own on a screen that does not fit at 125%.
+*/
+.plan .size-line { font-size:.9375rem; color:var(--ink-3); margin:0 0 14px; }
+.plan .size-line b { color:var(--ink-2); font-weight:700; }
+.plan .size-line .edit { margin-inline-start:6px; }
 .plan .expect { background:var(--soft); color:var(--soft-ink); border-radius:12px; padding:12px 14px; font-size:1.0625rem; margin:0 0 6px; }
 .edit { background:none; border:0; padding:0; font-size:.875rem; color:var(--ink-3); text-decoration:underline; text-underline-offset:3px; }
 
@@ -351,6 +359,41 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
   color:var(--ink-2); text-align:start;
 }
 .chip:hover { border-color:var(--btn); color:var(--ink); }
+/*
+  B42, 2026-09-09. THE DIAL: three named steps, small to big, stacked so each can be read.
+
+  A suggestion chip is a fragment and sits inline with its neighbours; a size is a whole step
+  and a name for it, so it takes the full width and the three stack. They are the same object
+  otherwise — same border, same radius, same hover — because they are the same kind of thing to
+  tap and a second style of button would be a second thing to learn.
+
+  Nothing here marks one of them out. No accent border, no fill, no order badge, no number:
+  three identical buttons in a fixed order, which is what app.js sizeRow() says out loud and
+  what web/tests/loop.test.js holds the row to. `.size-last` is the one exception and it is a
+  word rather than a colour — "Last time", quiet, on the repeat screen only.
+*/
+/*
+  THE NAME RUNS INTO ITS OWN SENTENCE, and that is a measurement rather than a preference.
+  On its own line each of these cost 87px and *Lock it in* finished at 862 on a 390x844 phone
+  — below the fold at 100% text, which is precisely the failure B39 spent a day removing. Run
+  together they cost 64, and the name is still the first thing read because it is the only
+  bold thing on the row.
+*/
+.chipset.sizes .chips { flex-direction:column; gap:10px; }
+.chip.size { display:block; width:100%; border-radius:18px; padding:10px 14px; line-height:1.3; }
+.size-name {
+  font-family:var(--display); font-weight:800; font-size:.9375rem; color:var(--ink);
+  letter-spacing:-.01em;
+}
+.size-last {
+  font-family:var(--display); font-weight:700; font-size:.6875rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); margin-inline-start:6px;
+}
+.size-do { font-size:.9375rem; color:var(--ink-2); }
+.chip.size:hover .size-do { color:var(--ink); }
+/* On the ladder, under the rung it belongs to, in the same quiet line what was written is
+   drawn in. It is a fact about that test and never a mark against anybody (B42). */
+.said.size { margin-bottom:4px; font-family:var(--display); font-weight:700; }
 .drop-label { margin-top:4px; }
 /*
   B39, 2026-09-09. The leave-out half, folded into one row.

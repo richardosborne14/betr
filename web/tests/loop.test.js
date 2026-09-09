@@ -20,6 +20,9 @@ const doors = require('../content/whats-going-on.js');
 const content = require('../lib/content.js');
 const why = require('../content/why.js');
 const en = require('../content/strings-en.js');
+/* B42: the three sizes on the free-text road live here, and every road with none of its own
+   falls through to them. Required at the top because more than one walk below reads them. */
+const starts = require('../content/starts.js');
 const labelOf = (id) => content.byId(worries, id).label;
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0]);
@@ -297,7 +300,10 @@ test('a filled-in skeleton locks in as that worry, with her words and her hole r
   const f = content.byId(worries, 'no');
   const a = boot();
   a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
-  a.type('#h-person', 'my sister').tap('[data-b]', 1).tap('#next').tap('#lock');
+  /* B42: the plan box arrives empty on a worry that carries three sizes, and one of the
+     three is the tap that fills it. Nothing is pre-filled, because a pre-filled box would be
+     BETR having picked a rung. */
+  a.type('#h-person', 'my sister').tap('[data-b]', 1).tap('#next').tap('[data-size]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
 
   const cur = JSON.parse(a.mem['betr.v1']).cur;
@@ -321,7 +327,7 @@ test('a filled-in skeleton locks in as that worry, with her words and her hole r
   assert.match(leads.beliefs[0].expect, /^\{person\}/, 'this test needs an expect that leads with a hole');
   const c = boot();
   c.tap('#not-sure').tap('[data-door="secret"]').tap('[data-id="strug"]');
-  c.type('#h-person', 'my brother').tap('[data-b]', 0).tap('#next').tap('#lock');
+  c.type('#h-person', 'my brother').tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
   if (c.html().indexOf('id="nothanks"') !== -1) c.tap('#nothanks');
   assert.match(JSON.parse(c.mem['betr.v1']).cur.x, /^My brother will go quiet/);
   a.shows('my sister').hides('{person}');
@@ -337,7 +343,7 @@ test('three fills of one skeleton draw one ladder, and it is the worry’s', () 
   const run = (name, first) => {
     if (!first) a.tap('#m-new').tap('#back');
     a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
-    a.type('#h-person', name).tap('[data-b]', 0).tap('#next').tap('#lock');
+    a.type('#h-person', name).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
     if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
     a.tap('#done').type('#o', 'Nothing much.').tap('#next').tap('[data-key]', 1);
   };
@@ -386,6 +392,207 @@ test('a worry with no skeleton, and the free-text road, are exactly as they were
   b.shows('id="if"').hides('data-hole');
   b.type('#if', 'say no').type('#then', 'they will mind').tap('#next');
   b.shows(en.s.build.doTitle);
+});
+
+/* ------------------------------------------------------- B42: three sizes, the dial as content */
+
+/*
+  THE DIAL, ON BOTH ROADS. Three named steps, small to big, each a sentence a person can read
+  before they pick it — the founder's small / medium / big arriving as content rather than as a
+  control (B36 item 8, B37 §8).
+
+  Tapping one fills BOTH boxes, because a size is a step and the leave-out that belongs to it:
+  a big go with a small leave-out is not a bigger test, it is a different one.
+*/
+test('three sizes are on the worry road and the free-text road, and one fills both boxes', () => {
+  const f = content.byId(worries, 'no');
+  assert.strictEqual(f.sizes.length, 3, 'this test needs a worry with three sizes');
+
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
+  a.shows(en.s.build.sizeChips);
+  /* all three, in the file's order, with her word already in every one of them */
+  for (const z of f.sizes) {
+    a.shows(z.name).shows(z.do.split('{person}').join('my sister'));
+  }
+  a.hides('{person}');
+  /* the box is empty until she picks: a pre-filled one would be BETR having picked a rung */
+  assert.strictEqual(a.valueOf('#do'), '');
+
+  a.tap('[data-size]', 1);
+  assert.strictEqual(a.valueOf('#do'), f.sizes[1].do.split('{person}').join('my sister'));
+  a.shows(f.sizes[1].drop.split('{person}').join('my sister'));
+
+  /* and the free-text road gets the general three, on a sentence BETR did not write */
+  const b = boot().tap('#m-new');
+  b.type('#if', 'leave the washing up until the morning').type('#then', 'it will still be there');
+  b.tap('#next').shows(en.s.build.sizeChips);
+  for (const z of starts.general.sizes) b.shows(z.name).shows(z.do);
+  b.tap('[data-size]', 0);
+  assert.strictEqual(b.valueOf('#do'), starts.general.sizes[0].do);
+});
+
+/*
+  B42's rules, and every one of them is a rule because some other product broke it.
+
+  Three, always, from the first screen to the fiftieth: no rung appears BECAUSE the last one
+  went well, none is taken away, none is greyed out, none is numbered, and none is marked as
+  the one to pick. A rung that depends on history is the app choosing (rule 2); a number on a
+  size is a level and a level is a point (B36 §9 — 38 studies, 8,110 people, and gamification
+  predicted neither the outcome nor whether anybody kept going).
+*/
+test('no size is ever hidden, greyed, numbered or recommended, however many are done', () => {
+  const f = content.byId(worries, 'no');
+  const a = boot();
+  const run = (which, first) => {
+    if (!first) a.tap('#m-new').tap('#back');
+    a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+    a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
+    /* the same three, in the same order, on every one of these runs */
+    for (const z of f.sizes) a.shows(z.name);
+    const row = a.html().match(/data-chiplist="data-size">([\s\S]*?)<\/div>/);
+    assert.ok(row, 'no size row on run');
+    assert.strictEqual((row[1].match(/<button/g) || []).length, 3, 'not three sizes');
+    assert.ok(!/disabled|aria-disabled|aria-pressed|recommended|suggested/.test(row[1]),
+      'a size was marked or taken away: ' + row[1]);
+    assert.ok(!/[0-9]/.test(row[1].replace(/data-size="[0-9]"/g, '')), 'a number reached a size');
+    a.tap('[data-size]', which).tap('#lock');
+    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+    a.tap('#done').type('#o', 'Nothing much.').tap('#next').tap('[data-key]', 1);
+  };
+  run(2, true);
+  run(0, false);
+  run(0, false);
+  /* three tests of one worry, one ladder, and picking the small one twice cost nothing */
+  a.tap('#m-mine').shows('1 test, done 3 times').shows('>7<');
+});
+
+/*
+  What is recorded is WHICH SIZE IT WAS DONE AT, and that is a fact about the test rather than
+  a grade of the person. It shows on that test's ladder row and in the export, it keys nothing
+  — rate.keyOf still groups a ladder by the worry's id, so three sizes of one worry are one
+  ladder (rule 5) — and it is never totalled, averaged or compared with another row's.
+*/
+test('the size is on the ladder row and in the export, and it keys nothing', () => {
+  const f = content.byId(worries, 'no');
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'She said fine.').tap('#next').tap('[data-key]', 1);
+
+  /* the result screen's ladder says it, and says it out loud */
+  a.shows(f.sizes[0].name);
+  assert.match(a.html(), new RegExp(en.s.a11y.rungSize.replace('{size}', f.sizes[0].name)));
+  a.tap('#m-mine').shows(f.sizes[0].name);
+
+  const saved = JSON.parse(a.mem['betr.v1']);
+  assert.strictEqual(saved.done[0].size, f.sizes[0].name);
+  const out = JSON.parse(require('../lib/store.js').exportJSON(saved));
+  assert.strictEqual(out.results[0].size, f.sizes[0].name);
+
+  /* and a test written from nothing carries none, so its ladder looks exactly as it did */
+  const b = boot();
+  buildOwn(b, 'ask for Friday off', 'my boss will mind', 'Ask once.', 'Don’t explain.');
+  b.tap('#done').type('#o', 'She said fine.').tap('#next').tap('[data-key]', 1);
+  assert.strictEqual(JSON.parse(b.mem['betr.v1']).done[0].size, null);
+  b.hides(en.s.a11y.rungSize.split('{size}')[0]);
+});
+
+/*
+  ON A REPEAT: the same three, with last time marked, and no nudge upward.
+
+  Same again is a real answer and the screen has to let it be one — doing something once and
+  getting away with it is easy to put down to luck. So the mark says what was done last time
+  rather than what to do next, the order never changes, and picking the same one again is one
+  tap and costs nothing.
+*/
+test('test this again offers the same three with last time marked, and same again is an answer', () => {
+  const f = content.byId(worries, 'no');
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next').tap('[data-size]', 2).tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'Nothing much.').tap('#next').tap('[data-key]', 1);
+
+  /*
+    Folded onto last time's answer to begin with — this screen always has one, and open it put
+    the button that ends it 134px below the fold. Change opens all three, marked.
+  */
+  a.tap('#again').shows(en.s.build.sizeLabel).shows(f.sizes[2].name).hides(en.s.plan.sizeChips);
+  a.tap('#sizeopen').shows(en.s.plan.sizeChips).shows(en.s.build.sizeLast);
+  /* all three, in the same order, and her word still in them */
+  for (const z of f.sizes) a.shows(z.name).shows(z.do.split('{person}').join('my sister'));
+  /* the mark is on the one she did, and on no other */
+  const row = a.html().match(/<div class="chips">([\s\S]*?)<\/div><\/div>/);
+  assert.ok(row, 'no size row on the repeat screen');
+  assert.strictEqual((row[1].match(new RegExp(en.s.build.sizeLast, 'g')) || []).length, 1);
+  assert.ok(row[1].indexOf(f.sizes[2].name) < row[1].indexOf(en.s.build.sizeLast));
+
+  /* same again is one tap, and a smaller one is the same one tap: neither is nudged */
+  a.tap('[data-size]', 0).shows(f.sizes[0].do.split('{person}').join('my sister'));
+  a.shows(en.s.build.sizeLabel).shows(f.sizes[0].name).hides(en.s.plan.sizeChips);
+  a.tap('#lock').tap('#done').type('#o', 'Fine again.').tap('#next').tap('[data-key]', 0);
+  const done = JSON.parse(a.mem['betr.v1']).done;
+  assert.deepStrictEqual(done.map((d) => d.size), [f.sizes[2].name, f.sizes[0].name]);
+  assert.strictEqual(require('../lib/rate.js').series(done).length, 1, 'two sizes drew two ladders');
+});
+
+/*
+  A size is BETR's content and may replace BETR's content. It may never quietly delete a
+  sentence a person wrote — which on this screen is the leave-out, the one box somebody is
+  most likely to have put their own words in before picking how big a go to have.
+*/
+test('picking a size never deletes a leave-out somebody wrote themselves', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
+  a.tap('#dropopen').type('#drop', 'Don’t text her about it afterwards.');
+  a.tap('[data-size]', 0);
+  assert.strictEqual(a.valueOf('#drop'), 'Don’t text her about it afterwards.');
+  /* and one of BETR's own is replaced, because that is BETR's to change */
+  const f = content.byId(worries, 'no');
+  a.tap('#sizeopen').tap('[data-size]', 2);
+  assert.strictEqual(a.valueOf('#drop'), 'Don’t text her about it afterwards.');
+  a.type('#drop', f.sizes[2].drop.split('{person}').join('my sister'));
+  a.tap('#sizeopen').tap('[data-size]', 0);
+  assert.strictEqual(a.valueOf('#drop'), f.sizes[0].drop.split('{person}').join('my sister'));
+});
+
+/*
+  B42, AND IT IS B39'S ROW ON THE OTHER HALF OF THE SAME SCREEN. Open, the three cost 257px at
+  100% text and put *Lock it in* at 925 on a phone whose fold is 780. Once one of them is in
+  the box the row says which, and *Change* opens all three again — folded, not gone, which is
+  the difference between a rung one tap away and a rung the app has decided somebody is past.
+*/
+test('the size row folds to say which one is picked, and Change opens all three again', () => {
+  const f = content.byId(worries, 'no');
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
+  /* open to begin with: nothing has been answered yet */
+  a.shows(en.s.build.sizeChips).shows(f.sizes[2].do.split('{person}').join('my sister'));
+
+  a.tap('[data-size]', 1);
+  a.shows('id="sizeopen"').shows(f.sizes[1].name).hides(en.s.build.sizeChips);
+  /* and the one it says is the one in the box */
+  assert.strictEqual(a.valueOf('#do'), f.sizes[1].do.split('{person}').join('my sister'));
+  /* the other two are one tap away, in the order they were always in */
+  a.tap('#sizeopen').shows(en.s.build.sizeChips);
+  for (const z of f.sizes) a.shows(z.name);
+  a.tap('[data-size]', 0).shows(f.sizes[0].name).hides(en.s.build.sizeChips);
+  a.shows(en.s.build.sizeLabel);
+
+  /*
+    And words of her own take the row out of the way: it is not folded, because there is no
+    size in the box to name, and it is not open, because it has nothing to say about a sentence
+    she wrote. It carries `hidden`, which is how every suggestion row on this screen gets out
+    of the way — the fake DOM here is flat and ignores it, so this reads the attribute.
+  */
+  a.tap('#sizeopen').type('#do', 'Say no to her about the car.').tap('#dropopen');
+  a.hides('id="sizeopen"');
+  assert.match(a.html(), /data-chips="data-size"[^>]* hidden/, 'the row is still on screen');
 });
 
 /*
@@ -522,7 +729,10 @@ test('write the whole thing myself hands over a genuinely own test, and leaves t
   a.shows(en.s.build.title).hides(en.s.build.borrowTitle);
   a.hides(en.s.build.borrowChips).hides(en.s.build.own).hides(f.label);
 
-  a.type('#then', 'the whole evening will be ruined').tap('#next').tap('#lock').tap('#done');
+  /* B42: and the plan does not come with her. Leaving the worry's road leaves BETR's plan
+     for it behind, exactly as the free-text road has always started empty — so this is one of
+     the general three, not that worry's. */
+  a.type('#then', 'the whole evening will be ruined').tap('#next').tap('[data-size]', 0).tap('#lock').tap('#done');
   a.type('#o', 'It was fine.').tap('#next');
   a.shows(en.s.ladder.started).tap('[data-key]', 1).shows('>9<');
 
@@ -650,7 +860,6 @@ test('a test built from nothing goes straight from the sentence to locked in', (
   person who taps their way through never sees a box they had to think of words for.
 */
 test('the whole thing can be built from the suggestions, with nothing typed', () => {
-  const starts = require('../content/starts.js');
   const a = boot().tap('#m-new');
 
   a.tap('[data-if]', 0).shows(starts.items[0].if);
@@ -676,7 +885,6 @@ test('the whole thing can be built from the suggestions, with nothing typed', ()
   that (CLAUDE.md rule 2): whether a suggestion is offered may never depend on a judgement.
 */
 test('a sentence BETR did not write gets the general suggestions, not a guess', () => {
-  const starts = require('../content/starts.js');
   const a = boot().tap('#m-new');
   a.type('#if', 'let the washing up wait until the morning').tap('[data-then]', 0);
   a.shows(starts.general.thens[0]);
@@ -1563,8 +1771,6 @@ test('delete everything takes the look with it, so a wiped phone is a fresh phon
 });
 
 /* ------------------------------------------------- B34: the suggestions say what they do */
-
-const starts = require('../content/starts.js');
 
 /* The words printed on one chip, read back off the screen. */
 function chipText(a, attr, i) {

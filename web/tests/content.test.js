@@ -25,17 +25,21 @@ test('every suggestion under a blank reads as part of the sentence and is safe t
 });
 
 /*
-  A start has four fields and no fifth, the way a place on Help has three and an explanation
-  has two. The missing fifth is the point: with nowhere to hang a lane, a condition or a
-  second version, which suggestions a person is offered can never be decided by anything they
-  entered. It is decided by whether the first blank matches a start word for word, and if a
-  future session adds fuzzy matching, that is the rule it would be breaking (research §5.2).
+  A start has four fields and an optional three sizes, the way a place on Help has three and
+  an explanation has two. What is missing is the point: with nowhere to hang a lane, a
+  condition or a second version, which suggestions a person is offered can never be decided by
+  anything they entered. It is decided by whether the first blank matches a start word for
+  word, and if a future session adds fuzzy matching, that is the rule it would be breaking
+  (research §5.2).
+
+  B42 changed the general set and nothing else: its two loose `dos` and two loose `drops`
+  became three named sizes, which is the dial on the road most people are on.
 */
 test('a suggestion can never be aimed at a person', () => {
   const fields = new Set();
   for (const it of starts.items) Object.keys(it).forEach((k) => fields.add(k));
   assert.deepStrictEqual([...fields].sort(), ['dos', 'drops', 'if', 'thens']);
-  assert.deepStrictEqual(Object.keys(starts.general).sort(), ['dos', 'drops', 'thens']);
+  assert.deepStrictEqual(Object.keys(starts.general).sort(), ['sizes', 'thens']);
   assert.ok(!/\blane\b|\bwhen\b|\bscore\b|\bif_?match/i.test(Object.keys(starts).join(' ')));
 });
 
@@ -47,7 +51,9 @@ test('a suggestion can never be aimed at a person', () => {
 test('nothing BETR suggests names the habit, the body, or anyone’s safety', () => {
   const lines = [];
   for (const it of starts.items.concat([starts.general])) {
-    for (const f of ['thens', 'dos', 'drops']) lines.push(...it[f]);
+    for (const f of ['thens', 'dos', 'drops']) if (it[f]) lines.push(...it[f]);
+    /* B42's three, on the general set today and on any start that grows them tomorrow. */
+    for (const z of it.sizes || []) lines.push(z.do, z.drop);
     if (it.if) lines.push(it.if);
   }
   assert.ok(lines.length > 150, 'only ' + lines.length + ' suggestions: the file has shrunk');
@@ -551,11 +557,116 @@ test('a prediction that does not start from the skeleton is refused', () => {
   assert.ok(content.validateWorries(a).some((p) => /does not start from the skeleton/.test(p)));
 });
 
-/* B42 owns the plan. A hole there today would print as itself on somebody's phone. */
-test('a hole in the plan is refused until B42 can carry one', () => {
+/*
+  B42 lifted the ban and put a narrower one in its place. A hole in the plan is fine now — the
+  prefill moved to the screen where the holes are known — but a hole in a worry with NO
+  skeleton is the same bug the old ban was really about: there is nothing to fill it from, so
+  it prints as itself on somebody's phone.
+*/
+test('a hole in a worry with no skeleton is refused, because nothing can fill it', () => {
   const a = shipped();
-  a.find((f) => f.id === 'no').test = 'Say no to {person} once today.';
-  assert.ok(content.validateWorries(a).some((p) => /puts a hole in test/.test(p)));
+  a.find((f) => f.id === 'help').test = 'Ask {person} for one thing today.';
+  assert.ok(content.validateWorries(a).some((p) => /no skeleton to fill it from/.test(p)));
+
+  /* and a hole in the plan of a worry that HAS one is accepted, which is what shipped today */
+  assert.deepStrictEqual(content.validateWorries(shipped()), []);
+  assert.ok(/\{person\}/.test(shipped().find((f) => f.id === 'no').test));
+
+  /* an undeclared one is still refused wherever it appears, plan included */
+  const b = shipped();
+  b.find((f) => f.id === 'no').drop = 'Don’t explain it to {stranger}.';
+  assert.ok(content.validateWorries(b).some((p) => /never declares/.test(p)));
+});
+
+/* ------------------------------------------------- B42: three sizes, and the rules on them */
+
+/*
+  Three, always. Not two because one was hard to write, not four because a fourth occurred to
+  somebody, and never a number that depends on what a person has already done — availability
+  that changed with history would be the app choosing (rule 2) and a score of the person
+  besides. checkSizes counts them; this checks that it counts.
+*/
+test('a worry offers three sizes or none, and never some other number', () => {
+  const a = shipped();
+  const f = a.find((z) => z.id === 'no');
+  assert.strictEqual(f.sizes.length, 3);
+  f.sizes.push({ name: 'One more', do: 'Do it twice.', drop: 'Don’t explain.' });
+  assert.ok(content.validateWorries(a).some((p) => /offers 4 sizes/.test(p)));
+
+  const b = shipped();
+  b.find((z) => z.id === 'no').sizes.pop();
+  assert.ok(content.validateWorries(b).some((p) => /offers 2 sizes/.test(p)));
+
+  /* and most worries have none at all, which is not a problem — they fall through to the
+     three generic ones in starts.js, so the dial is on every road either way */
+  assert.ok(shipped().some((z) => z.sizes === undefined));
+});
+
+/*
+  NO NUMBER ON A SIZE, EVER, and it is checked rather than left to good manners. "Level 2" and
+  "Step 3 of 3" are the same object as a badge: they turn a dial into a ladder with a top, and
+  the top of a ladder is somewhere a person can fail to reach. B36 §9 — 38 studies and 8,110
+  people, and gamification predicted neither the outcome nor whether anybody kept going.
+*/
+test('a size is never numbered, and its name is a label rather than a sentence fragment', () => {
+  const a = shipped();
+  a.find((z) => z.id === 'no').sizes[0].name = 'Level 1';
+  assert.ok(content.validateWorries(a).some((p) => /number in its name/.test(p)));
+
+  /* founder, 2026-09-03: nothing a person taps is all-lowercase, and a size name is a label */
+  const b = shipped();
+  b.find((z) => z.id === 'no').sizes[0].name = 'a small go';
+  assert.ok(content.validateWorries(b).some((p) => /name starts lowercase/.test(p)));
+
+  /* a person's word belongs in the sentence, never on the button */
+  const c = shipped();
+  c.find((z) => z.id === 'no').sizes[0].name = 'A small go with {person}';
+  assert.ok(content.validateWorries(c).some((p) => /hole in a size name/.test(p)));
+
+  /* and nothing shipped is numbered */
+  for (const f of shipped()) {
+    for (const z of f.sizes || []) assert.ok(!/[0-9]/.test(z.name), 'numbered size: ' + z.name);
+  }
+  for (const z of starts.general.sizes) assert.ok(!/[0-9]/.test(z.name), 'numbered size: ' + z.name);
+});
+
+/*
+  A size is a name and the two sentences that go with it, and no fourth field — the same rule
+  a belief has two, a place three and a skeleton two, and for the same reason: with nowhere to
+  hang a lane or a condition, which size a person is offered can never be decided for them by
+  anything they entered or did (research §5.2).
+*/
+test('a size has nowhere to hang a condition, and both halves are BETR proposing something', () => {
+  const a = shipped();
+  a.find((z) => z.id === 'no').sizes[0].after = 'two tests';
+  assert.ok(content.validateWorries(a).some((p) => /has an extra field "after"/.test(p)));
+
+  /* both halves go through the three word lists exactly as a stock test does */
+  const b = shipped();
+  b.find((z) => z.id === 'no').sizes[0].do = 'Have one drink first.';
+  assert.ok(content.validateWorries(b).some((p) => /may never propose/.test(p)));
+
+  /* two that say the same thing are one size and a wasted tap */
+  const c = shipped();
+  c.find((z) => z.id === 'no').sizes[1].do = c.find((z) => z.id === 'no').sizes[0].do;
+  assert.ok(content.validateWorries(c).some((p) => /says the same thing as size 0/.test(p)));
+});
+
+/*
+  The general set is where every road with no sizes of its own lands, so it must have three.
+  B42 replaced its two loose `dos` and two loose `drops` with them; the twenty-one starts kept
+  theirs, because a pair hand-written for that exact if-half is worth more to somebody who
+  tapped it than a generic small / bigger / whole.
+*/
+test('the general set carries the three sizes every other road falls through to', () => {
+  assert.strictEqual(starts.general.sizes.length, 3);
+  assert.ok(!('dos' in starts.general) && !('drops' in starts.general));
+  for (const it of starts.items) assert.ok(it.dos.length && it.drops.length);
+  for (const z of starts.general.sizes) {
+    assert.match(z.name, /^[A-Z]/);
+    assert.match(z.do, /^[A-Z\u201C]/);
+    assert.match(z.drop, /^[A-Z\u201C]/);
+  }
 });
 
 /* A skeleton is four things and no fifth, for the reason a belief is two and a place is three. */

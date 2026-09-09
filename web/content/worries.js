@@ -340,8 +340,34 @@ var BETR_WORRIES = [
         expect: 'They’ll take it personally, and it’ll sit there between us.'
       }
     ],
-    test: 'Say “No, I can’t this time” to one small request today.',
-    drop: 'No reason, no apology, no softening it.',
+    /*
+      B42's first three sizes, 2026-09-09. NOT YET READ BY MISHA OR THE CBT REVIEWER, and this
+      is the same risk the skeleton above carries: it is BETR's voice in somebody's mouth.
+
+      They are the same one action three sizes apart — who it is with does not change, and what
+      is left out grows with the step, because a big go with a small leave-out is not a bigger
+      test, it is a different one. Whether the smallest honest version should instead change
+      WHO it is with is B42's open question and it is the reviewer's, with Misha.
+    */
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Say no to {person} once today, about something small.',
+        drop: 'Don’t give a reason.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Say no to {person} about something bigger than you would usually refuse.',
+        drop: 'Don’t give a reason, and don’t offer them anything instead.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Say no to {person} today, and say nothing after it.',
+        drop: 'No reason, no apology, and no making up for it later.'
+      }
+    ],
+    test: 'Say no to {person} once today, about something small.',
+    drop: 'Don’t give a reason.',
     lane: 'assertiveness'
   },
   {
@@ -418,7 +444,25 @@ var BETR_WORRIES = [
         expect: 'People will start being careful with me, and I’ll hate it.'
       }
     ],
-    test: 'Today, tell one person you trust one small, true thing you’re finding hard.',
+    /* B42's second three. Same note as `no`: NOT YET READ BY MISHA OR THE CBT REVIEWER. */
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Tell {person} one true sentence about how this week has been.',
+        drop: 'Don’t finish it with “but I’m fine”.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Tell {person} the thing you would normally keep to yourself.',
+        drop: 'Don’t make a joke of it, and don’t move it on afterwards.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Tell {person} what you are actually finding hard, and let it be a conversation.',
+        drop: 'No “but I’m fine”, no joke, and no changing the subject.'
+      }
+    ],
+    test: 'Tell {person} one true sentence about how this week has been.',
     drop: 'Don’t finish it with “but I’m fine”.',
     lane: 'social'
   },
