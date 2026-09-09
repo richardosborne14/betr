@@ -147,7 +147,7 @@ var BETR_STARTS = {
         'it’ll come straight back to me with a list'
       ],
       dos: [
-        'Finish one thing at good enough today and hand it over.',
+        'Leave one thing at good enough today and hand it over.',
         'Stop at the time you planned, and send what you have.'
       ],
       drops: [
@@ -211,12 +211,12 @@ var BETR_STARTS = {
         'somebody will think I’ve gone slack'
       ],
       dos: [
-        'Take two hours off today, and take them properly.',
+        'Take an hour off today and do something just for yourself.',
         'Sit down for half an hour with nothing to show for it.'
       ],
       drops: [
         'No “I’ll just quickly do this one thing” first.',
-        'Don’t keep the list where you can see it.'
+        'Put the to-do list out of sight before you sit down.'
       ]
     },
     {
@@ -255,7 +255,7 @@ var BETR_STARTS = {
       if: 'don’t get the last word',
       thens: [
         'they’ll think they’ve won',
-        'it’ll get brought up again',
+        'they won’t remember what I said',
         'I’ll be going over it all night'
       ],
       dos: [
@@ -264,7 +264,7 @@ var BETR_STARTS = {
       ],
       drops: [
         'Don’t send the follow-up message.',
-        'Don’t go back to it later.'
+        'Don’t keep making new points.'
       ]
     },
     {

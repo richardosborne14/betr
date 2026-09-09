@@ -15,12 +15,17 @@ behind them (`check` `reply` `phone` `mist`), thirty-four single lines, and **st
 two and rewritten**. Twenty-one starts become twelve plus two; twenty-one worries become
 seventeen plus one. **A drop carries across both files** — the founder's call, one list, one cull.
 
-**The sheet is marked and it is 271 live rows, not 429.** Culled rows say `CULLED — was shipped`
+**The sheet is marked and it is 270 live rows, not 429.** Culled rows say `CULLED — was shipped`
 and carry the reason; start #07's eleven say `REWRITE`; seven rows carry a new `Our flag` saying
 the rewrite on them cannot be applied as written, with a suggested line beside it (B47 §4). **The paid reviewer's sheet just got
 a third shorter and every dead row says why it is dead.**
 
-**No content file changed today, and that is the finding, not the shortfall.** See §2.
+**Ten rewrites we could not apply as written now have an agreed line, and five of them are
+live** (B47 §4): `starts.js` #04, #08 ×2 and #11 ×2. One row is cut (`G-X4`), two fold into the
+#07 split, one is the agreed wording for the merge, and `S07-P3` — *"I'll have a panic attack"* —
+**stays a question for the reviewer rather than a line in the app**, with the founder's agreement.
+
+**Nothing else in the content files changed, and that is the finding, not the shortfall.** See §2.
 
 ## 2. The next action
 
@@ -70,12 +75,14 @@ has not moved. The reviewer still has not read a line.**
    strings, B39's *Change* / *Add one*, B40's *Write the whole thing myself*, the four nouns,
    the door order, the 21 chips, B36's tone, and the **red strike** (B36 §12b).
 3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** — and
-   it is a better ask than it was this morning: **271 live rows**, dead ones marked and
-   explained. **Four questions, each on the rows it belongs to:** is *"the smallest version that
+   it is a better ask than it was this morning: **270 live rows**, dead ones marked and
+   explained, and ten carrying `OURS: AGREED 2026-09-09` so he scores what the app says now. **Four questions, each on the rows it belongs to:** is *"the smallest version that
    could still turn out wrong"* safe with no clinician (`GD-R1`); may *A small go* change **who
    it is with** (`W-NO-D1` / `W-ST-D1`); is the largest step safe as written (`W-NO-D3` /
    `W-ST-D3`, and `W-ST-D3` hands the length of the thing to the other person); and **are the
-   three actually in order** (`G-Z1`). **Add a fifth: `S07-P3`, the panic-attack prediction.**
+   three actually in order** (`G-Z1`). **Two more, both added 2026-09-09:** `S07-P3`, where we
+   kept the shipped line rather than write *"I'll have a panic attack"*, and `S03-D4`, whether
+   *"one thing you've been keeping to yourself"* is bounded enough with no clinician behind it.
 4. **A screen-reader pass on a real phone** — B33 read the tree, **nobody has used it**.
    **Q1 (name, trademark, domain)** blocks release. **Two API keys — Groq and Anthropic — still
    need rotating**; nobody owns the missing medication word list in `guards.js`. **Release

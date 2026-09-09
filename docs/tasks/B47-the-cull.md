@@ -107,9 +107,20 @@ only because it was never in the reviewed sheet.
 
 ## 4. Ten lines that cannot be applied as written — and what I would put instead
 
-Not objections to the direction. Two are typos, two are voice, three are the method, one is
-probably a dropped word, and **two are genuinely somebody else's call and stay questions.**
-The founder's meaning is kept in every one of them.
+**APPROVED IN FULL BY THE FOUNDER, 2026-09-09, and five of them are live.** Two are typos, two
+are voice, three are the method, one is probably a dropped word, and **two stay questions for
+the reviewer.** The founder's meaning is kept in every one of them.
+
+| What happened | Which |
+| --- | --- |
+| **Applied to `starts.js` and live now** | `S04-D1` `S08-D1` `S08-X2` `S11-P2` `S11-X2` |
+| **Cut from the sheet** | `G-X4` |
+| **Folded into the #07 split** (§6c) | `S07-D1` `S07-D4` |
+| **Agreed wording, goes in at the merge** (the line was PROPOSED, never shipped) | `S03-D4` |
+| **Shipped line stays; the founder's version is now a question on the row** | `S07-P3` |
+
+The five live ones carry `OURS: AGREED 2026-09-09 and LIVE` in the sheet's `Our flag`, so the
+reviewer scores what the app says rather than what it used to say.
 
 ### The three where the method is the problem
 
@@ -276,7 +287,7 @@ both. **Neither of these names a body sensation**, which is the line the old #07
 | then… | everything I've been putting off thinking about will arrive at once |
 | then… | I won't last five minutes |
 | then… | I'll feel worse afterwards than I did before |
-| do | Sit somewhere quiet for ten minutes today with nothing on. |
+| do | Sit somewhere quiet for ten minutes with nothing on, and write down when you first wanted to get up. |
 | do | Sit down with the telly, the radio and your phone off, once today. |
 | leave out | Don't put anything on in the background. |
 | leave out | Don't give yourself a job to do while you sit. |
@@ -289,17 +300,18 @@ both. **Neither of these names a body sensation**, which is the line the old #07
 | then… | it'll still be there hours later |
 | then… | somebody will be able to tell |
 | do | The next time you feel bad, start a timer and write down when it eased. |
-| do | Wait a quarter of an hour before you do anything about it, once today. |
+| do | Wait the feeling out once today, and write down when it went. |
 | leave out | Don't pick your phone up to take the edge off. |
 | leave out | Don't find yourself a job to do. |
 
 **Three things about this draft the founder and Misha should push back on.**
 
-1. **"I'll have a panic attack" is not in it.** It was the founder's own rewrite and their own
-   question — *"maybe too harsh a test to risk someone actually having a panic attack?"* It is a
-   real prediction people hold. It is also **BETR** writing it, on a screen with no clinician
-   behind it, and `expect` is held to "never a catastrophe". **This one is the paid reviewer's**,
-   and it is now a question on `S07-P3` in the sheet rather than a line in the app.
+1. **"I'll have a panic attack" is not in it, and the founder agreed to that on 2026-09-09.**
+   It is a real prediction people hold. It is also **BETR** writing it, on a screen with no
+   clinician behind it, and `expect` is held to "never a catastrophe" — while somebody who does
+   fear one can type it into the free box in six words, which is what that box is for. Draft B's
+   *"it'll still be there hours later"* carries the falsifiable half. **It is now a question on
+   `S07-P3` for the reviewer, not a line in the app.**
 2. **The guided-mindfulness idea is answered, and the answer is no — but only in this half.**
    *"Plan ten minutes to do a guided mindfulness session"* turns a **test** into a coping
    technique: nothing is predicted, so nothing can turn out to be wrong, and the loop moves
