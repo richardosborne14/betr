@@ -43,8 +43,7 @@ path: the worked example gains a `did` beat, the loop stops saying *"Go and do i
 *"Go and find out."*, and one line at the lock says a bad one counts the same as a good one.
 **Measure the front screen at 100% and 125% — it was already at the fold before this added a beat.**
 
-**Then `B39`**, the 125% fold bug: known since B33, never anybody's, and now blocking three
-things. Measure before choosing a fix.
+**Then `B39`**, the 125% fold bug: known since B33, never anybody's, now blocking three things.
 
 **Then the template run: `B40` → `B41` → `B42` → `B43`.** `B40` is the one to read first and the
 one to get right — **it changes nothing a person can see**, and if anything looks different,
@@ -54,8 +53,7 @@ is a stranger to itself, every ladder restarts at ten, and **it fails silently w
 passing.** `B43` is the "try it out": the founder doing a real templated test on a real phone,
 twice, and watching one ladder move.
 
-`B44` (*Make it smaller*, *Why it's written like this*) is last on purpose — `B42` does most of
-its rescue job inline, so it becomes teaching rather than rescue.
+`B44` is last on purpose — `B42` does most of its rescue job inline, so it teaches.
 
 **The rule governing all of it (research §6): the person opens the door.** No screen appears
 because of what somebody typed, rated or did. **A template is inside that line** — a worksheet
