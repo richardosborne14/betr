@@ -33,8 +33,8 @@ Then two ideas from the founder, both good, both now scoped:
 `docs/tasks/B36-the-guide.md`, `docs/tasks/B37-the-template-with-holes.md` (**§10 is the running
 order**). **Two mockup canvases**, founder-editable:
 `https://claude.ai/code/artifact/5b7cf7c8-1905-43f2-823f-f813871acfb5` (B36, eight screens) and
-`https://claude.ai/code/artifact/77d1cadb-a55b-4926-8281-ea0a0556d73f` (B37, seven screens).
-Working files were in a session scratchpad, not the repo — re-read an artifact to edit it.
+`https://claude.ai/code/artifact/77d1cadb-a55b-4926-8281-ea0a0556d73f` (B37, seven). Working
+files were in a scratchpad, not the repo — re-read an artifact to edit it.
 
 ## 2. The next action
 
@@ -75,13 +75,12 @@ Holes take a person, a thing, a place — never a verb. Rule 4 did not loosen fo
 2. **Misha, in one ask:** the four nouns (B23 option b), the door order, the 21 chips, B36's tone,
    the front card's **voice** and the **red strike** through a person's own sentence (B36 §12),
    **and every skeleton in B41/B43** — where the risk is BETR's voice in somebody's mouth.
-3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** —
-   245 rows, 154 shipped lines beside 91 proposed, blank score and rewrite columns;
-   `docs/candidates-suggestions-batch-1.md` is the reasoning. Also `content/examples.js`, three
-   rewritten `worries.js` sentences, three pairs from B1, B34 §4's `general.thens`, **and B36's
-   strings**. Two questions with it: is *"the smallest version that could still turn out wrong"*
-   safe to hand somebody with no clinician, and may *A small go* change **who it is with**?
-   **B43 adds about 26 more sentences on top.**
+3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** — 245
+   rows, 154 shipped lines beside 91 proposed, blank score and rewrite columns, reasoned in
+   `docs/candidates-suggestions-batch-1.md`. Also `content/examples.js`, three rewritten
+   `worries.js` sentences, three pairs from B1, B34 §4's `general.thens`, **and B36's strings**.
+   Two questions: is *"the smallest version that could still turn out wrong"* safe to hand
+   somebody with no clinician, and may *A small go* change **who it is with**? **B43 adds ~26.**
 4. **A screen-reader pass on a real phone** — the tree was read in B33, **nobody has used it**.
 5. **Q1 (name, trademark, domain)** is open, blocks release and blocks B5 outright.
 
@@ -101,10 +100,9 @@ owns** the missing medication word list in `guards.js`. **Release conditions:** 
 
 - **`walk.js` dies silently and a dead walker returns a stale page, not an error** — `start`
   again before believing a surprise. **Its browser is set to DARK**, so BETR opens dark (B35).
-- **`theme.js` loads in the `<head>` before the stylesheet and has to** (else a flash of the
-  wrong colour; CSP forbids inlining). **Tapping the look chip must never repaint** — it would
-  throw away a half-typed sentence. **Three roads reach the build screen with three suggestion
-  sets** (B34 §1): check all.
+- **`theme.js` loads in the `<head>` before the stylesheet and has to** (else a flash of wrong
+  colour; CSP forbids inlining). **Tapping the look chip must never repaint** — it would throw
+  away a half-typed sentence. **Three roads reach the build screen** (B34 §1): check all three.
 - **The fake DOM in `harness.js` is flat and fires no events**; live behaviour is walked. **A
   REGION DELETE NEEDS BOTH ENDS CHECKED** — cutting between comment banners once swallowed the
   build screen out of `app.js` (`learnings.md`).
@@ -117,8 +115,8 @@ owns** the missing medication word list in `guards.js`. **Release conditions:** 
   a checking ritual, which rule 4 also forbids. **Help's order is three decisions held by four
   tests:** crisis, proof, frozen sentence 6, CBT, the nine.
 - **Every word a person reads is in `web/content/`** — a sentence back in `app.js` fails
-  `i18n.test.js`, and a literal starting mid-tag reads as prose to that sweep.
-- **Use `’` and `“ ”`, never `'` and `"`** — the build fails on a typewriter one, and anything
-  drafted outside `web/content/` arrives wrong.
+  `i18n.test.js`, and a literal starting mid-tag reads as prose to that sweep. **Use `’` and
+  `“ ”`, never `'` and `"`**: the build fails on a typewriter one, and anything drafted outside
+  `web/content/` arrives wrong.
 - **`content/zones.js` and `docs/COPY.md` are generated**; never hand-edit. **No helpline number
   is written from memory.**
