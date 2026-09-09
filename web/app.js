@@ -521,6 +521,29 @@
     sentence and comes forward again must find the plan she typed, not BETR's back on top of it
     (B34 D2, the same bug from the other end).
   */
+  /*
+    B46, 2026-09-09, AND IT IS B42'S OWN RULE FINISHED RATHER THAN A NEW ONE.
+
+    B42 said it in one line: "a pre-filled box is BETR having picked". It applied that to the
+    two worries that had three sizes of their own and left the other nineteen pre-filling from
+    `test`/`drop` — which meant those nineteen reached the do screen with a plan already in the
+    box, and the suggestion row therefore HIDDEN, because a row gets out of the way the moment
+    the box has words in it.
+
+    The consequence was the one the founder walked into: **nineteen of twenty-one worries had
+    no dial on the do screen at all.** Two showed three named sizes; the rest showed a finished
+    plan nobody had chosen. It is the same disease as the build screen had, one screen later.
+
+    THE PREFILL STAYS. Taking it away would drop those nineteen onto `general`'s three, and a
+    worry's own plan is better than the general one because it is about that worry — "Tell one
+    person you trust, today, in one sentence, that you've been feeling low lately" says more
+    than "Do it once today, in the smallest version that still counts". Turning all nineteen
+    into three sizes of their own is B45 §5b, thirty-eight sentences, and the reviewer's.
+
+    What changed instead is one line in buildDo(): a box holding BETR'S OWN pre-filled plan no
+    longer counts as "words of her own", so the row of three stays on screen beside it. She has
+    a plan for this worry AND the dial, on every road, which is what she had on neither.
+  */
   function prefillPlan() {
     var f = borrowed();
     if (!f || draft.planned) return;
@@ -1223,7 +1246,7 @@
     return -1;
   }
 
-  function chipRow(intro, list, attr, hide) {
+  function chipRow(intro, list, attr, hide, html) {
     if (!list.length) return '';
     /*
       The row is a named GROUP, and its name is the line already printed above it (B33). Read
@@ -1236,7 +1259,7 @@
     return '<div class="chipset" role="group" data-chips="' + esc(attr) +
       '" aria-labelledby="' + id + '"' + (hide ? ' hidden' : '') + '>' +
       '<p class="tiny chips-intro" id="' + id + '">' + esc(intro) + '</p>' +
-      '<div class="chips" data-chiplist="' + esc(attr) + '">' + chipButtons(list, attr) + '</div>' +
+      '<div class="chips" data-chiplist="' + esc(attr) + '">' + chipButtons(list, attr, html) + '</div>' +
     '</div>';
   }
 
@@ -1245,9 +1268,12 @@
     reprinted in place when the first blank changes, and the row's heading — which a screen
     reader names the group by — has to survive that.
   */
-  function chipButtons(list, attr) {
+  function chipButtons(list, attr, html) {
     return list.map(function (line, i) {
-      return '<button class="chip" ' + attr + '="' + i + '">' + esc(line) + '</button>';
+      /* `html` is the same line with the person's own words marked (B46). Absent — every row
+         off the skeleton road — the line is simply escaped, which is what it always was. */
+      return '<button class="chip" ' + attr + '="' + i + '">' +
+        (html ? html[i] : esc(line)) + '</button>';
     }).join('');
   }
 
@@ -1271,11 +1297,11 @@
     - nothing is remembered ABOUT the person here. The `last` mark on the repeat screen says
       what was done last time and is a fact about that test, not a grade of anybody
   */
-  function sizeRow(sizes, lines, hide) {
+  function sizeRow(sizes, lines, hide, html) {
     return '<div class="chipset sizes" role="group" data-chips="data-size" aria-labelledby="chips-sizes"' +
       (hide ? ' hidden' : '') + '>' +
       '<p class="tiny chips-intro" id="chips-sizes">' + esc(t('build.sizeChips')) + '</p>' +
-      '<div class="chips" data-chiplist="data-size">' + sizeButtons(sizes, lines, null) + '</div>' +
+      '<div class="chips" data-chiplist="data-size">' + sizeButtons(sizes, lines, null, html) + '</div>' +
     '</div>';
   }
 
@@ -1285,7 +1311,7 @@
     anything about what to do next. The mark is a word, never a tick and never a highlight,
     because a highlighted option is a recommended option.
   */
-  function sizeButtons(sizes, lines, marked) {
+  function sizeButtons(sizes, lines, marked, html) {
     return sizes.map(function (z, i) {
       var mine = marked && flat(marked) === flat(z.name);
       return '<button class="chip size" data-size="' + i + '">' +
@@ -1293,7 +1319,9 @@
         /* The space is not decoration: without it the row's accessible name runs the two
            together — "The whole thingLast time" — and the mark is read as part of the name. */
         (mine ? ' <span class="size-last">' + esc(t('build.sizeLast')) + '</span>' : '') +
-        ' <span class="size-do">' + esc(lines[i]) + '</span>' +
+        /* B46: her words marked here too. Screen 3 of the canvas is the same trick a second
+           time — the word arrives in a size she has not read yet. */
+        ' <span class="size-do">' + (html ? html[i] : esc(lines[i])) + '</span>' +
       '</button>';
     }).join('');
   }
@@ -1354,6 +1382,29 @@
   }
 
   /*
+    B46. The same sentence, as markup, with the words SHE typed marked where they land.
+
+    This is the half of B37's idea that was never built. The substitution worked from B41 and
+    it worked silently: she filled one blank, three sentences underneath became sentences about
+    her sister, and nothing on the screen acknowledged that anything had happened. Marking them
+    is the difference between a mechanic and a magic trick.
+
+    It marks what the person typed and never a hole's own default word — see fillParts() for
+    why that is the line and not a preference. Off the skeleton road there is nothing to mark
+    and this is exactly esc(), which is why it can be used on every chip unconditionally.
+
+    B34 D1 is untouched: the characters shown are the characters inserted. The plain list is
+    still what a tap hands to the box; this only decides how the same list is drawn.
+  */
+  function saidHtml(text) {
+    var sk = skeleton();
+    if (!sk) return esc(text);
+    return content.fillParts(text, draft.slots, sk.holes).map(function (part) {
+      return part.carried ? '<span class="carried">' + esc(part.text) + '</span>' : esc(part.text);
+    }).join('');
+  }
+
+  /*
     One gap in the sentence. Every static attribute is in the first fragment on purpose:
     i18n.test.js reads the string literals out of this file looking for prose, and a fragment
     that starts mid-tag reads as two English words with a space between them.
@@ -1407,6 +1458,9 @@
       the row is reprinted and rewired against a fresh list (see refreshBorrow()).
     */
     var bChips = f ? f.beliefs.map(function (b) { return saidIn(b.belief); }) : [];
+    /* B46. The same three, drawn with her own word marked wherever it landed. Screens 1 → 2 of
+       the canvas: she fills one hole and it arrives in all three before she has read them. */
+    var bMarks = f ? f.beliefs.map(function (b) { return saidHtml(b.belief); }) : [];
     var ifChips = STARTS.items.map(function (it) { return it.if; });
     /*
       B34 D1. The second blank's suggestions are worked out ONCE, here, and the handlers below
@@ -1446,7 +1500,7 @@
           sentence and fills both blanks. Anything else would weld the card's beginning to
           another prediction's ending and produce a sentence nobody wrote.
         */
-        (f ? chipRow(t('build.borrowChips'), bChips, 'data-b', false)
+        (f ? chipRow(t('build.borrowChips'), bChips, 'data-b', false, bMarks)
            /* One row at a time: the blank that has focus, and only while it is still empty. */
            : chipRow(t('build.ifChips'), ifChips, 'data-if', !!draft.ifPart.trim()) +
              chipRow(t('build.thenChips'), thenChips, 'data-then',
@@ -1631,7 +1685,10 @@
       if (!holder || typeof holder.innerHTML !== 'string') return;
       readBlanks();
       var list = f.beliefs.map(function (b) { return saidIn(b.belief); });
-      try { holder.innerHTML = chipButtons(list, 'data-b'); } catch (e) { return; }
+      /* B46. Reprinted marked, so the mark tracks the keystroke rather than the last paint —
+         the whole point is that she watches her word arrive. */
+      var marks = f.beliefs.map(function (b) { return saidHtml(b.belief); });
+      try { holder.innerHTML = chipButtons(list, 'data-b', marks); } catch (e) { return; }
       wireBorrow();
     }
     qa('[data-hole]').forEach(function (el) {
@@ -1789,6 +1846,10 @@
                         : chipsFor('dos', draft.ifPart);
     var dropChips = sizes ? sizes.map(function (z) { return saidIn(z.drop); })
                           : chipsFor('drops', draft.ifPart);
+    /* B46. Her word marked in the sizes too — screen 3 of the canvas, where it arrives in a
+       sentence she has not read yet. Null off the skeleton road, where nothing was carried. */
+    var doMarks = sizes ? sizes.map(function (z) { return saidHtml(z.do); }) : null;
+    var dropMarks = sizes ? sizes.map(function (z) { return saidHtml(z.drop); }) : null;
     /*
       Which box this paint is going to land in, worked out BEFORE the markup so the suggestion
       row belonging to it can be drawn already open (B39). It used to be left to wireChips's
@@ -1801,6 +1862,9 @@
     /* B42. Which of the three is in the box, worked out before the markup for the reason
        `landsIn` is: the row belonging to it has to be right on the paint a person lands on. */
     var picked = sizes ? pickedSize(doChips, draft.test) : -1;
+    /* B46. Is what is in the box BETR's own pre-filled plan for this worry, untouched? Then it
+       is not hers, and the three stay beside it. The moment she edits a word of it, it is. */
+    var betrs = !!(f && !f.sizes && draft.test.trim() && flat(draft.test) === flat(saidIn(f.test)));
     paint( backButton() +
       '<div class="stage">' +
         /*
@@ -1842,8 +1906,15 @@
         (sizes
           ? (picked !== -1 && !draft.sizeOpen
               ? foldedSize(sizes[picked].name)
+              /*
+                B46. A row gets out of the way when the box holds WORDS OF HER OWN — and a plan
+                BETR pre-filled is not that. Nineteen of the twenty-one worries arrive here with
+                their own `test` already in the box (prefillPlan), which counted as hers, which
+                hid the row, which is why those nineteen had no dial on this screen at all while
+                two had three named sizes. `betrs` is the one-line difference.
+              */
               : sizeRow(sizes, doChips,
-                  landsIn !== '#do' || (!!draft.test.trim() && picked === -1)))
+                  landsIn !== '#do' || (!!draft.test.trim() && picked === -1 && !betrs), doMarks))
           : chipRow(t('build.doChips'), doChips, 'data-do',
               landsIn !== '#do' || !!draft.test.trim())) +
         /*
@@ -1869,7 +1940,7 @@
             '<textarea id="drop" class="line" aria-labelledby="droplbl" placeholder="' +
               esc(t('build.dropPlaceholder')) + '">' + esc(draft.drop) + '</textarea>' +
             chipRow(t('build.dropChips'), dropChips, 'data-drop',
-              landsIn !== '#drop' || !!draft.drop.trim())
+              landsIn !== '#drop' || !!draft.drop.trim(), dropMarks)
           : foldedDrop(draft.drop)) +
         '<button class="big wide" id="lock">' + esc(t('build.lock')) + '</button>' +
         '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +

@@ -509,11 +509,21 @@ test('every word a person reads uses the typographic apostrophe, not the typewri
 */
 const shipped = () => JSON.parse(JSON.stringify(worries));
 
-test('the skeletons that ship pass every rule, and the two that have one are the two B37 named', () => {
+test('every worry that ships has a skeleton, and all of them pass every rule', () => {
   assert.deepStrictEqual(content.validateWorries(worries), []);
-  const withHoles = worries.filter((f) => f.skeleton).map((f) => f.id);
-  assert.deepStrictEqual(withHoles, ['no', 'strug'],
-    'a skeleton was added or removed without the reviewer being told');
+  const without = worries.filter((f) => !f.skeleton).map((f) => f.id);
+  /*
+    B46, 2026-09-09. This used to assert exactly ['no', 'strug'] — the two B37 named — because a
+    skeleton was the exception. THE VERB CONSTRUCTOR IS THE DEFAULT NOW (the founder's ask), so
+    the assertion is the other way round: not one worry may ship without one, or nineteen people
+    out of twenty-one get the screen this task existed to delete.
+  */
+  assert.deepStrictEqual(without, [],
+    'a worry shipped with no printed verb: ' + without.join(', '));
+  /* And a hole is optional — some actions have no noun anybody could supply (see lib/content.js). */
+  const holeless = worries.filter((f) => !Object.keys(f.skeleton.holes).length).map((f) => f.id);
+  assert.deepStrictEqual(holeless, ['early'],
+    'a skeleton gained or lost its holes without the reviewer being told: ' + holeless.join(', '));
 });
 
 /*
@@ -565,7 +575,14 @@ test('a prediction that does not start from the skeleton is refused', () => {
 */
 test('a hole in a worry with no skeleton is refused, because nothing can fill it', () => {
   const a = shipped();
-  a.find((f) => f.id === 'help').test = 'Ask {person} for one thing today.';
+  /* B46: every worry ships with a skeleton now, so one is taken away to make the case. */
+  const f = a.find((x) => x.id === 'help');
+  delete f.skeleton;
+  f.beliefs = f.beliefs.map((b) => ({
+    belief: b.belief.split('{person}').join('somebody'),
+    expect: b.expect.split('{person}').join('somebody')
+  }));
+  f.test = 'Ask {person} for one thing today.';
   assert.ok(content.validateWorries(a).some((p) => /no skeleton to fill it from/.test(p)));
 
   /* and a hole in the plan of a worry that HAS one is accepted, which is what shipped today */

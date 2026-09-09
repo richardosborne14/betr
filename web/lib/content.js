@@ -134,6 +134,48 @@
   }
 
   /*
+    B46, 2026-09-09. THE SAME SUBSTITUTION, TAKEN APART SO A SCREEN CAN SHOW IT.
+
+    fill() returns a finished string, and until today that was the whole of it: a person typed
+    "my sister" into one blank, three sentences underneath quietly became sentences about her
+    sister, and NOTHING ON SCREEN SAID SO. The mechanic that the founder's canvas calls "the
+    closest thing to intelligence BETR is allowed to have" was invisible at the one moment it
+    could have explained itself.
+
+    So this returns the same text as a list of pieces, each marked with whether it is a word
+    the PERSON put there. The caller wraps those and nothing else.
+
+      carried: true   she typed this, and it is appearing somewhere she did not type it
+      carried: false  BETR's printed words, or a hole's own default word
+
+    A DEFAULT IS NEVER CARRIED, and that is the line rather than a nicety. Highlighting
+    "somebody" would tell a person they had said something they had not, on a screen whose only
+    job is to show her her own words coming back — and it would make BETR's content look like
+    hers, which is the one direction that must never be blurred.
+
+    fillParts(x).map(text).join('') === fill(x), and content.test.js holds it, because the
+    moment those two disagree a chip shows one sentence and inserts another (B34 D1).
+  */
+  function fillParts(text, said, holes) {
+    var src = String(text == null ? '' : text);
+    /* Its own regex object: HOLE is /g and shared, and a half-finished exec() on it would
+       leave lastIndex somewhere the next caller does not expect. */
+    var re = new RegExp(HOLE.source, 'g');
+    var out = [];
+    var last = 0;
+    var m;
+    while ((m = re.exec(src))) {
+      if (m.index > last) out.push({ text: src.slice(last, m.index), carried: false });
+      var mine = said && typeof said[m[1]] === 'string' ? said[m[1]].trim() : '';
+      var fallback = holes && typeof holes[m[1]] === 'string' ? holes[m[1]] : '';
+      out.push({ text: mine || fallback || m[0], carried: !!mine });
+      last = m.index + m[0].length;
+    }
+    if (last < src.length) out.push({ text: src.slice(last), carried: false });
+    return out;
+  }
+
+  /*
     B19. The cap moved off the list and onto the door. It used to be twelve, because twelve
     was what a person could read on the front screen without scrolling — and the whole list
     was the front screen. Now a door is, and what has to fit on a phone is the four to six
@@ -326,10 +368,21 @@
       return;
     }
     var declared = Object.keys(sk.holes);
-    if (!declared.length) {
-      problems.push(where + ' skeleton has no holes in it, so it is just an if-half');
-      return;
-    }
+    /*
+      B46, 2026-09-09, AND IT IS A LOOSENING, ON PURPOSE.
+
+      This used to refuse a skeleton with no holes — "so it is just an if-half" — and that was
+      right while a skeleton was the exception. It is the default now, and the default's point
+      is the PRINTED VERB, not the hole. Some worries have nobody and nothing in them: leaving
+      at the time you decided is one action with no noun anybody could supply, and demanding a
+      hole would have got a made-up one.
+
+      What matters is that the SCREEN is identical either way — printed words, and a blank for
+      the second half — so a person cannot tell which kind she is on. Everything below still
+      applies: a hole that is declared must be used, a hole that is used must be declared, and
+      every prediction must start from the skeleton. A skeleton with no holes simply has none
+      of those to check.
+    */
     declared.forEach(function (name) {
       if (typeof sk.holes[name] !== 'string' || !sk.holes[name].trim()) {
         problems.push(where + ' hole "' + name + '" has no word to fall back on, and an empty ' +
@@ -801,6 +854,7 @@
     SIZES_PER_WORRY: SIZES_PER_WORRY,
     holesIn: holesIn,
     fill: fill,
+    fillParts: fillParts,
     BELIEFS_PER_WORRY: BELIEFS_PER_WORRY,
     MAX_PER_DOOR: MAX_PER_DOOR,
     START_FIELDS: START_FIELDS,

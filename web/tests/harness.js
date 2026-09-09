@@ -196,7 +196,23 @@ function boot(seed, env) {
     /* Read a box back. The export lands in a textarea's value, not in the markup. */
     valueOf(sel) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); return el.value; },
     shows(s) { assert.ok(api.html().indexOf(s) !== -1, 'not on screen: ' + s + '\non: ' + api.html().slice(0, 300)); return api; },
-    hides(s) { assert.ok(api.html().indexOf(s) === -1, 'still on screen: ' + s); return api; }
+    hides(s) { assert.ok(api.html().indexOf(s) === -1, 'still on screen: ' + s); return api; },
+    /*
+      B46. The screen with its tags taken off, so a sentence can be asserted whole even where
+      part of it is wrapped in something.
+
+      This exists because marking the carried word (B46) split every sentence carrying a hole
+      into three nodes, and forty tests were asserting on raw markup — which had always been
+      the fragile way to ask "is this sentence on screen", and only stopped working the day a
+      span landed in the middle of one. Tags come off with no separator, which is what makes
+      "…to <span>my sister</span> without…" read back as one sentence.
+
+      `shows`/`hides` still exist and still read markup: use them for a class, an id or an
+      attribute. Use these two for anything a person reads.
+    */
+    text() { return api.html().replace(/<[^>]*>/g, ''); },
+    showsText(s) { assert.ok(api.text().indexOf(s) !== -1, 'not on screen: ' + s + '\nscreen reads: ' + api.text().slice(0, 400)); return api; },
+    hidesText(s) { assert.ok(api.text().indexOf(s) === -1, 'still on screen: ' + s); return api; }
   };
   return api;
 }

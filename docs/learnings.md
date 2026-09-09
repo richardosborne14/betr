@@ -935,3 +935,43 @@ B42's reason — an empty plan refuses, so the button is inert exactly there —
 was putting the link below *Lock it in*, which costs nothing and puts it where the person it is
 for has already stopped reading. **When the cheap fix moves a thing away from the person who
 needs it, the fold measurement is a fact to write down, not an argument to win.**
+
+---
+
+## B46, 2026-09-09: a rule that was right when a thing was the exception is wrong when it becomes the default
+
+Three separate rules had to be inverted the day the verb constructor stopped being a special
+case and became how every worry works. **None of them was wrong when it was written.**
+
+1. **`lib/content.js` refused a skeleton with no holes** — *"so it is just an if-half"*. Right
+   while a skeleton existed to carry a hole; wrong once its point was the PRINTED VERB. Some
+   actions have no noun anybody could supply, and demanding one would have got a made-up one.
+2. **A test asserted exactly `['no', 'strug']` have skeletons**, so that one could not be added
+   or removed without the reviewer being told. It was a good guard and it was guarding the
+   wrong direction: what the founder opened the app and could not find was the nineteen that
+   had none.
+3. **`prefillPlan()` filled the plan box on nineteen worries, which hid the row of three sizes**,
+   because a row gets out of the way when the box holds words of her own. BETR's own pre-filled
+   plan is not that. Two worries had a dial and nineteen did not, and nothing said so.
+
+**The rule this leaves.** When something goes from exception to default, grep for every rule
+that was written to protect the exception — a validator that refuses the general case, a test
+that asserts the small list, a condition that treats "already filled in" as "chosen by her".
+They fail in three different ways: (1) fails the build loudly, (2) fails a test loudly, (3)
+**fails nothing at all and quietly removes a control from nineteen screens.** Only the third one
+matters, and it is the one no test was ever going to find.
+
+### And: a substitution nobody can see is a magic trick, not a mechanic
+
+The carry-through worked from B41 and worked **in silence**. She typed one word and three
+sentences underneath became sentences about her sister, with nothing on screen acknowledging
+that anything had happened. It took `fillParts()` — the same substitution returned as pieces —
+and one CSS rule to turn it into the thing the founder's canvas had drawn all along.
+
+**The cost, and it is the honest half:** marking split every sentence carrying a hole across
+three DOM nodes, and roughly forty assertions were checking for those sentences in **raw
+markup**. `shows('If I say no to my sister…')` had always been the fragile way to ask whether a
+sentence was on screen; it only stopped working the day a `<span>` landed in the middle of one.
+The harness gained `text()` / `showsText()` / `hidesText()`. **Assert on what a person reads, not
+on the markup it arrived in** — and if a test asserts on markup, it should be asserting on a
+class, an id or an attribute, never on prose.

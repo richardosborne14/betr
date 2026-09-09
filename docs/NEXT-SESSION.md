@@ -5,45 +5,44 @@
 
 ## 1. Where we are
 
-**B43 and B44 are both closed. 250 tests, no dependencies, nothing requested after load;**
-`main` clean and live at `https://betr.trybeup.com`.
+**B46 is built and closed** — 252 tests, no dependencies, nothing requested after load; `main`
+clean and live at `https://betr.trybeup.com`. It is the first half of
+[`B45`](tasks/B45-one-road-in.md), which is the plan for un-tangling three roads into one, and
+it answers the founder's actual complaint.
 
-**B43 was the walk, not the build** — every sentence it scoped was already shipped, and what had
-never been done was walking B40's road-keyed ladder, B41's gaps and B42's sizes **together**.
-They work: different word in the hole, different prediction, different size, **one card and one
-ladder** (*Started 10 · 1st 7 · Now 6*). **B44 added the two teaching screens**, reached only by
-a link — a test walks a refusal, an empty plan, *More sure than before* and a repeat and asserts
-neither appears, which is rule 2 held by a test rather than a comment.
+**The verb constructor is the default.** Every one of the twenty-one worries prints its verb —
+*If I* `ask` **[somebody]** `for one small, specific favour` **, then** [ ___ ]. It was on two.
+Nineteen new skeletons and fifty-seven predictions, and the method is why that is not
+seventy-six new sentences: **the consequence half of every prediction is kept word for word**
+and only the pronoun becomes the hole. What changed is the action half — three slightly
+different actions become one, which is what a skeleton is, and **that collapse is the only part
+a reviewer judges fresh**. Fifteen take `{person}`, five take `{thing}`/`{long}`, one takes
+nothing (*leaving at the time you decided* has no noun anybody could supply) — and **the screen
+is identical either way**, which is the point.
+
+**And the substitution is visible at last.** `content.fillParts()` returns the same text as
+pieces, each marked for whether the PERSON put it there; `saidHtml()` wraps those and nothing
+else. A hole's own default word is **never** marked — highlighting *somebody* would tell her she
+had said something she had not. **The dial is on every road too:** nineteen worries arrived with
+their plan pre-filled, which counted as words of her own, which hid the row of three sizes. One
+line fixed it and the prefill stays, so she has a plan *and* the dial.
 
 ## 2. The next action
 
-**Read [`B45`](tasks/B45-one-road-in.md) first.** One build screen is drawn three ways and one do
-screen two ways, decided by a road nobody can see; `worries.js` and `starts.js` are two content
-files describing the same twenty-one things. **The verb constructor is on 2 of 21 worries and
-unreachable from the front door.** Worst fact: tapping BETR's own suggestion gets the OLD do
-screen; typing something BETR has never seen gets the NEW one.
+**B45 §5b — nineteen worries need three sizes of their own.** The dial is present everywhere
+now, but on nineteen roads it is `general`'s generic three; a worry's own would be about that
+worry. **38 sentences, and the reviewer's.** After that, B45 §3's remaining screen-shape drifts
+(the plan as a sentence with holes; the button below the suggestions; the repeat screen).
 
-**The founder supplied the current mockup and it is now the spec** —
-`https://claude.ai/code/artifact/77d1cadb-a55b-4926-8281-ea0a0556d73f`, *The template with holes*,
-seven screens and four notes. **Where B45 and that canvas disagree, the canvas wins.** B45 §3
-lists the nine ways the app has drifted from it; two of the seven screens are already shipped and
-right (B40's one ladder, and *there is no mode to leave*).
-
-**Start with B45 §6 plus 5d: 21 verbs get a hole, and `content.fill()` marks the word it carried.**
-No new sentence, nothing for the reviewer, well under a day, and together they are the demo — a
-person types a word once and can see where it went. **§7a is the founder's and it is a real
-trade:** the mockup keeps all three sizes on screen after a pick and accepts the fold; B39 and
-B42 folded them to keep *Lock it in* above it (574 vs 870 at 125%).
+**Send the envelope first.** `docs/suggestions-review.csv` is **429 rows** — B46 alone put in
+133, and nobody has read one of them.
 
 ## 3. Changed on purpose, and measured and left
 
-**B44's link cost 35px and one fold state got worse.** It sits **under the do box and its sizes**,
-because that is where somebody who has just pictured the biggest possible version is looking. On
-a start item's road at 125%, with nothing yet in the plan box, *Lock it in* went from 14px above
-the fold to 22px below it — accepted for B42's reason only (an empty plan refuses, so the button
-is inert exactly there) and it comes back up the moment anything is in the box. **After a pick
-every road clears at 125% with room.** B44's task file has the table; B45 §7a reopens the whole
-question, because the mockup does not fold at all.
+**B44's link cost 35px, and on a start item's road at 125% with an empty plan box *Lock it in*
+went from 14px above the fold to 22px below it** — accepted for B42's reason only (an empty plan
+refuses, so the button is inert exactly there). **B45 §7a reopens the whole question anyway,
+because the mockup does not fold at all** and B46 has just put a size row on nineteen more roads.
 
 Still live: the escape link behind the menu at 125%, the front screen's 20px sliver, the clipped
 second placeholder, `#ownit` below the fold on the 125% skeleton screen, and **tapping *New test*
@@ -65,9 +64,8 @@ from the do screen wipes the sentence and the plan with no warning** — B36 ite
    *Write the whole thing myself*, B42's *How big a go? Any of them counts*, the four nouns
    (B23 option b), the door order, the 21 chips, B36's tone, and the **red strike** (B36 §12b).
 3. **The paid CBT reviewer, still the critical path. Send `docs/suggestions-review.csv`** —
-   **295 rows now**, up from 245: B43 put in the two templates' 26 sentences plus the three size
-   names and the `general` size lines that had never reached the sheet, and B44 put in 18 more
-   for the guide screens. `G-D2` is marked **CUT** — it stopped shipping at B42 and a reviewer
+   **429 rows now**, up from 245: B43 put in 32, B44 18, and **B46 put in 133** — every new
+   skeleton and every prediction under it. `G-D2` is marked **CUT** — it stopped shipping at B42 and a reviewer
    scoring a line that is not live is the sheet wasting the critical path. **Four questions, each
    on the rows it belongs to:** is *"the smallest version that could still turn out wrong"* safe
    for somebody with no clinician (`GD-R1`); may *A small go* change **who it is with**

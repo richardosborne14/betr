@@ -367,6 +367,22 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 }
 .chip:hover { border-color:var(--btn); color:var(--ink); }
 /*
+  B46, 2026-09-09. A WORD SHE TYPED, APPEARING SOMEWHERE SHE DID NOT TYPE IT.
+
+  The substitution has worked since B41 and it worked in silence: she filled one blank and
+  three sentences underneath quietly became sentences about her sister, with nothing on screen
+  saying so. This marks the landing.
+
+  It is the `.expect` treatment — the soft panel, in both themes — shrunk to fit inside a line
+  of running text, because it is the same idea in both places: this bit is yours. Deliberately
+  not a colour of its own and not a border: it must read as a highlight on a sentence, never as
+  a control somebody could tap, and it sits inside buttons.
+
+  Nothing marks a hole's own default word. See lib/content.js fillParts() for why that is the
+  line: highlighting "somebody" would tell a person she had said something she had not.
+*/
+.carried { background:var(--soft); color:var(--soft-ink); border-radius:5px; padding:0 4px; }
+/*
   B42, 2026-09-09. THE DIAL: three named steps, small to big, stacked so each can be read.
 
   A suggestion chip is a fragment and sits inline with its neighbours; a size is a whole step

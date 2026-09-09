@@ -1343,13 +1343,20 @@ BETR writes into "What you expect" when somebody keeps that sentence word for wo
 | **test** — the one thing, today | Set a ten-minute timer and do nothing at all. Notice when it peaks, and whether it drops. |
 | **drop** — what you leave out | Don’t reach for your phone, and don’t get up to do a task. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I sit with the restlessness for {long} |
+| **the gap `{long}`** — its word while it is empty | ten minutes |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I sit with the restlessness, then it’ll build until I have to do something about it. | By about the fifth minute I’ll be up and doing something else. |
-| 2 | If I don’t do something with the feeling, then I’ll be no use for the rest of the day. | I’ll write the day off and get nothing done. |
-| 3 | If I stop and do nothing, then everything I’ve been not thinking about will land at once. | The whole list will arrive at once, and stopping will have cost me. |
+| 1 | If I sit with the restlessness for {long}, then it’ll build until I have to do something about it. | By about the fifth minute I’ll be up and doing something else. |
+| 2 | If I sit with the restlessness for {long}, then I’ll be no use for the rest of the day. | I’ll write the day off and get nothing done. |
+| 3 | If I sit with the restlessness for {long}, then everything I’ve been not thinking about will land at once. | The whole list will arrive at once, and stopping will have cost me. |
 
 ### 2. Going an evening without my phone
 
@@ -1362,13 +1369,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Put it in a drawer from eight o’clock. In the morning, write down what you actually missed. |
 | **drop** — what you leave out | No checking it “just once” before bed. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I go {long} without my phone |
+| **the gap `{long}`** — its word while it is empty | a whole evening |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I don’t check tonight, then I’ll miss something that actually needed me. | Something urgent will come in and I’ll have let someone down. |
-| 2 | If I don’t answer while it’s away, then they’ll think I’m ignoring them. | There’ll be a short reply in the morning and a bit of an atmosphere. |
-| 3 | If I put it away, then I’ll be twitchy all evening and get nothing out of it anyway. | I’ll spend two hours thinking about the phone instead of using them. |
+| 1 | If I go {long} without my phone, then I’ll miss something that actually needed me. | Something urgent will come in and I’ll have let someone down. |
+| 2 | If I go {long} without my phone, then people will think I’m ignoring them. | There’ll be a short reply in the morning and a bit of an atmosphere. |
+| 3 | If I go {long} without my phone, then I’ll be twitchy the whole time and get nothing out of it anyway. | I’ll spend the evening thinking about the phone instead of using it. |
 
 ### 3. A day without checking social media
 
@@ -1381,13 +1395,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Go one day without opening the apps you scroll. At the end, write down what you actually missed. |
 | **drop** — what you leave out | No opening one “just to see if anyone’s messaged me”. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I go {long} without opening the apps I scroll |
+| **the gap `{long}`** — its word while it is empty | a day |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I don’t look today, then I’ll be the only one who hasn’t heard something. | Someone will mention it and it’ll be obvious I’m out of the loop. |
-| 2 | If I go quiet for a day, then people will think I’ve gone off them. | Somebody will notice I’ve disappeared and read something into it. |
-| 3 | If I stop looking, then I’ll have nothing to talk about. | I’ll be sitting there with nothing to say. |
+| 1 | If I go {long} without opening the apps I scroll, then I’ll be the only one who hasn’t heard something. | Someone will mention it and it’ll be obvious I’m out of the loop. |
+| 2 | If I go {long} without opening the apps I scroll, then people will think I’ve gone off them. | Somebody will notice I’ve disappeared and read something into it. |
+| 3 | If I go {long} without opening the apps I scroll, then I’ll have nothing to talk about. | I’ll be sitting there with nothing to say. |
 
 ### 4. Not answering a message straight away
 
@@ -1400,13 +1421,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Pick one message today and leave it a few hours before you answer. Notice whether they chase you. |
 | **drop** — what you leave out | Don’t open with “sorry, only just seen this”, and don’t explain the delay. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I leave a message from {person} a few hours before I answer |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I leave a message a few hours, then they’ll think I don’t care. | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
-| 2 | If I don’t answer straight away, then they’ll assume I’m annoyed with them. | They’ll ask if everything’s all right, in that careful way. |
-| 3 | If I take my time replying, then they’ll stop bothering to message me. | They’ll go to somebody else next time, and I’ll hear about it after. |
+| 1 | If I leave a message from {person} a few hours before I answer, then {person} will think I don’t care. | They’ll go a bit cooler with me, and I’ll have to make it up to them. |
+| 2 | If I leave a message from {person} a few hours before I answer, then {person} will assume I’m annoyed. | They’ll ask if everything’s all right, in that careful way. |
+| 3 | If I leave a message from {person} a few hours before I answer, then {person} will stop bothering to message me. | They’ll go to somebody else next time, and I’ll hear about it after. |
 
 ### 5. Sending something without checking it again
 
@@ -1419,13 +1447,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Write one email or message today, read it through once, and send it. |
 | **drop** — what you leave out | No second read-through, and don’t go back to edit it after it’s gone. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I send {thing} after reading it through once |
+| **the gap `{thing}`** — its word while it is empty | something |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I send it without a second read, then there’ll be a mistake in it and I’ll look sloppy. | Someone will spot something, and they’ll think I rushed it. |
-| 2 | If I don’t read it twice, then it’ll come out blunter than I meant it. | They’ll take it the wrong way and I’ll spend the day fixing it. |
-| 3 | If I send it as it is, then I’ll be thinking about it all afternoon. | I’ll keep going back to it and get nothing else done. |
+| 1 | If I send {thing} after reading it through once, then there’ll be a mistake in it and I’ll look sloppy. | Someone will spot something, and they’ll think I rushed it. |
+| 2 | If I send {thing} after reading it through once, then it’ll come out blunter than I meant it. | They’ll take it the wrong way and I’ll spend the day fixing it. |
+| 3 | If I send {thing} after reading it through once, then I’ll be thinking about it all afternoon. | I’ll keep going back to it and get nothing else done. |
 
 ### 6. Handing something over before it’s perfect
 
@@ -1438,13 +1473,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Finish one thing today at good enough and hand it over. Write down the time you stopped. |
 | **drop** — what you leave out | No last look through, and no message saying what you’d have done with more time. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I hand over {thing} at good enough |
+| **the gap `{thing}`** — its word while it is empty | something |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I hand in something that’s only good enough, then they’ll think I don’t care about it. | They’ll spot the rough edges and quietly decide I’ve dropped off. |
-| 2 | If I stop before it’s right, then it’ll come straight back to me with a list. | I’ll end up doing it twice, and that’s worse than doing it properly. |
-| 3 | If I let this one go at good enough, then that becomes what people expect from me. | The standard slips, and I don’t get it back. |
+| 1 | If I hand over {thing} at good enough, then people will think I don’t care about it. | They’ll spot the rough edges and quietly decide I’ve dropped off. |
+| 2 | If I hand over {thing} at good enough, then it’ll come straight back to me with a list. | I’ll end up doing it twice, and that’s worse than doing it properly. |
+| 3 | If I hand over {thing} at good enough, then that becomes what people expect from me. | The standard slips, and I don’t get it back. |
 
 ### 7. Resting when there’s stuff to do
 
@@ -1457,13 +1499,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Plan two hours of rest today and actually take them. Notice how you feel after. |
 | **drop** — what you leave out | No “I’ll just quickly do this one thing” first. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I rest for {long} while there’s still stuff to do |
+| **the gap `{long}`** — its word while it is empty | two hours |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I rest while there’s still stuff to do, then I’ll feel guilty the whole time. | I’ll sit there thinking about the list and get nothing out of it. |
-| 2 | If I stop now, then I won’t start again today. | The afternoon will go, and tomorrow starts further behind. |
-| 3 | If I let somebody see me sitting down, then they’ll think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
+| 1 | If I rest for {long} while there’s still stuff to do, then I’ll feel guilty the whole time. | I’ll sit there thinking about the list and get nothing out of it. |
+| 2 | If I rest for {long} while there’s still stuff to do, then I won’t start again today. | The afternoon will go, and tomorrow starts further behind. |
+| 3 | If I rest for {long} while there’s still stuff to do, then somebody will think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
 
 ### 8. Paying someone a compliment
 
@@ -1476,13 +1525,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Say one specific good thing about somebody today, to their face. |
 | **drop** — what you leave out | Don’t follow it with one about yourself, and don’t wait around for one back. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I say one specific good thing to {person} out loud |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I say something good and nothing comes back, then it’ll look like I was fishing for one. | There’ll be an odd beat, and I’ll wish I’d kept it to myself. |
-| 2 | If I compliment someone out of nowhere, then they’ll think I want something. | They’ll be polite about it and wait for the ask. |
-| 3 | If I say it out loud, then it’ll come out wrong and make things awkward. | It’ll sound odd, and neither of us will know what to say next. |
+| 1 | If I say one specific good thing to {person} out loud, then it’ll look like I was fishing for one back. | There’ll be an odd beat, and I’ll wish I’d kept it to myself. |
+| 2 | If I say one specific good thing to {person} out loud, then {person} will think I want something. | They’ll be polite about it and wait for the ask. |
+| 3 | If I say one specific good thing to {person} out loud, then it’ll come out wrong and make things awkward. | It’ll sound odd, and neither of us will know what to say next. |
 
 ### 9. Telling someone they matter to me
 
@@ -1495,13 +1551,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Tell one person, today, one specific thing you’re glad about them. |
 | **drop** — what you leave out | Don’t turn it into a joke, and don’t move straight on to something else. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} one specific thing I’m glad about them |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I tell someone what they mean to me, then they won’t say it back. | They’ll laugh it off, and I’ll wish I hadn’t said it. |
-| 2 | If I say something that serious, then it’ll change how we are with each other. | It’ll be a bit stiff between us afterwards. |
-| 3 | If I tell them, then they’ll wonder what’s brought this on. | They’ll ask if I’m all right, and I’ll have to explain myself. |
+| 1 | If I tell {person} one specific thing I’m glad about them, then {person} won’t say it back. | They’ll laugh it off, and I’ll wish I hadn’t said it. |
+| 2 | If I tell {person} one specific thing I’m glad about them, then it’ll change how we are with each other. | It’ll be a bit stiff between us afterwards. |
+| 3 | If I tell {person} one specific thing I’m glad about them, then {person} will wonder what’s brought this on. | They’ll ask if I’m all right, and I’ll have to explain myself. |
 
 ### 10. Saying no without giving a reason
 
@@ -1550,13 +1613,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Ask one person for one small, specific favour today. |
 | **drop** — what you leave out | No “sorry to bother you”, and no offering something back. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I ask {person} for one small, specific favour |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I ask someone for help, then I become a burden to them. | They’ll do it, and quietly file me under people who can’t cope. |
-| 2 | If I admit I can’t do it on my own, then I’ll be trusted with less. | Next time it’ll go to somebody else, without a word to me. |
-| 3 | If I ask, then they’ll say yes and resent it. | They’ll help, and be a bit short with me for a while after. |
+| 1 | If I ask {person} for one small, specific favour, then I become a burden to {person}. | They’ll do it, and quietly file me under people who can’t cope. |
+| 2 | If I ask {person} for one small, specific favour, then I’ll be trusted with less. | Next time it’ll go to somebody else, without a word to me. |
+| 3 | If I ask {person} for one small, specific favour, then {person} will say yes and resent it. | They’ll help, and be a bit short with me for a while after. |
 
 ### 12. Telling someone I’ve been feeling low
 
@@ -1569,13 +1639,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Tell one person you trust, today, in one sentence, that you’ve been feeling low lately. |
 | **drop** — what you leave out | Don’t add that it’s nothing really, and don’t ask whether that was too much. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} I’ve been feeling low lately |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I tell someone I’ve been feeling low, then they won’t know what to do with it. | They’ll say something kind, change the subject, and be careful around me after. |
-| 2 | If I say it out loud, then they’ll start worrying about me. | They’ll check up on me, and I’ll wish I’d never said it. |
-| 3 | If I tell them, then it’s the thing they think of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
+| 1 | If I tell {person} I’ve been feeling low lately, then {person} won’t know what to do with it. | They’ll say something kind, change the subject, and be careful around me after. |
+| 2 | If I tell {person} I’ve been feeling low lately, then {person} will start worrying about me. | They’ll check up on me, and I’ll wish I’d never said it. |
+| 3 | If I tell {person} I’ve been feeling low lately, then it’s the thing {person} thinks of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
 
 ### 13. Telling someone I’m struggling
 
@@ -1624,13 +1701,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Tell someone about one small mistake of yours today, before they find it. |
 | **drop** — what you leave out | Don’t bury it in excuses, and don’t wait until you’ve already fixed it. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} about one small mistake of mine before they find it |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I admit I got something wrong, then it’ll be held against me later. | They’ll remember this one, and trust me with less next time. |
-| 2 | If I tell them before they find it, then they’ll start looking for others. | Everything I do goes under the microscope after this. |
-| 3 | If I own up, then they’ll think worse of me than if I’d quietly fixed it. | They’ll be fine to my face, and it’ll go on my record anyway. |
+| 1 | If I tell {person} about one small mistake of mine before they find it, then it’ll be held against me later. | They’ll remember this one, and trust me with less next time. |
+| 2 | If I tell {person} about one small mistake of mine before they find it, then {person} will start looking for others. | Everything I do goes under the microscope after this. |
+| 3 | If I tell {person} about one small mistake of mine before they find it, then {person} will think worse of me than if I’d quietly fixed it. | They’ll be fine to my face, and it’ll go on my record anyway. |
 
 ### 15. Telling someone they’ve annoyed me
 
@@ -1643,13 +1727,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Say one thing that annoyed you, in one sentence, calmly. Then stop talking. |
 | **drop** — what you leave out | Don’t raise your voice, and don’t bring up a second thing. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} one thing they’ve done that annoyed me |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I tell someone they’ve annoyed me, then it’ll turn into an argument. | They’ll get defensive, and it’ll turn into a much bigger thing. |
-| 2 | If I bring it up, then they’ll say I’m making something out of nothing. | I’ll come out of it feeling like the unreasonable one. |
-| 3 | If I say it, then things will be off between us for days. | It’ll be polite and cold, and I’ll be the one who has to fix it. |
+| 1 | If I tell {person} one thing they’ve done that annoyed me, then it’ll turn into an argument. | They’ll get defensive, and it’ll turn into a much bigger thing. |
+| 2 | If I tell {person} one thing they’ve done that annoyed me, then {person} will say I’m making something out of nothing. | I’ll come out of it feeling like the unreasonable one. |
+| 3 | If I tell {person} one thing they’ve done that annoyed me, then things will be off between us for days. | It’ll be polite and cold, and I’ll be the one who has to fix it. |
 
 ### 16. Letting someone else be right
 
@@ -1662,13 +1753,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Once today, say “you’re right, I hadn’t thought of that” — and then stop. |
 | **drop** — what you leave out | No “but”, and don’t add a point of your own to level it back up. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} they’re right and leave it there |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about. | They’ll take it as a win, and I’ll go down in their estimation. |
-| 2 | If I give ground once, then they’ll talk over me from then on. | Next time they won’t even wait for my answer. |
-| 3 | If I say they’re right, then nobody will ask what I think again. | The conversation will move on, and I’ll stay out of it. |
+| 1 | If I tell {person} they’re right and leave it there, then I’ll look like I don’t know what I’m talking about. | They’ll take it as a win, and I’ll go down in their estimation. |
+| 2 | If I tell {person} they’re right and leave it there, then {person} will talk over me from then on. | Next time they won’t even wait for my answer. |
+| 3 | If I tell {person} they’re right and leave it there, then nobody will ask what I think again. | The conversation will move on, and I’ll stay out of it. |
 
 ### 17. Letting someone finish without interrupting
 
@@ -1681,13 +1779,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | In one conversation today, let them finish, then ask one question before you say your bit. |
 | **drop** — what you leave out | Don’t plan your answer while they’re still talking, and don’t finish their sentence. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I let {person} finish before I say my bit |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying. | The conversation will move on without me and I’ll have missed my go. |
-| 2 | If I wait for them to finish, then I’ll forget what I was going to say. | It’ll go out of my head and I’ll sit there with nothing. |
-| 3 | If I let them run on, then they’ll take the whole conversation. | I’ll come out of it having said nothing at all. |
+| 1 | If I let {person} finish before I say my bit, then I’ll look like I’ve got nothing worth saying. | The conversation will move on without me and I’ll have missed my go. |
+| 2 | If I let {person} finish before I say my bit, then I’ll forget what I was going to say. | It’ll go out of my head and I’ll sit there with nothing. |
+| 3 | If I let {person} finish before I say my bit, then {person} will take the whole conversation. | I’ll come out of it having said nothing at all. |
 
 ### 18. Getting through a conversation without a joke
 
@@ -1700,13 +1805,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | In one conversation today, say the plain thing where you’d normally reach for the joke. |
 | **drop** — what you leave out | No laughing it off when it gets serious, and no making anyone else the punchline. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I say the plain thing to {person} where I’d normally reach for the joke |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I haven’t got something funny ready, then I’ll be dull and people will drift off. | The conversation will go flat, and they’ll find someone else to talk to. |
-| 2 | If I say the plain thing, then it’ll get too serious and they’ll be uncomfortable. | There’ll be a silence, and I’ll be the one who made it. |
-| 3 | If I’m not the one keeping it light, then nobody will bother. | It’ll be hard work, and they’ll leave earlier than they would have. |
+| 1 | If I say the plain thing to {person} where I’d normally reach for the joke, then I’ll be dull and {person} will drift off. | The conversation will go flat, and they’ll find someone else to talk to. |
+| 2 | If I say the plain thing to {person} where I’d normally reach for the joke, then it’ll get too serious and {person} will be uncomfortable. | There’ll be a silence, and I’ll be the one who made it. |
+| 3 | If I say the plain thing to {person} where I’d normally reach for the joke, then nobody will bother keeping it going. | It’ll be hard work, and they’ll leave earlier than they would have. |
 
 ### 19. Apologising without explaining myself
 
@@ -1719,13 +1831,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Say sorry to one person today, for one specific thing you did. One sentence. |
 | **drop** — what you leave out | Don’t explain what kind of day you were having, and don’t ask whether you’re all right now. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I say sorry to {person} for one specific thing I did |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I properly apologise for how I acted, then they’ll hold it over me from now on. | They’ll accept it, and then bring it up the next time we disagree. |
-| 2 | If I say sorry with no explanation, then they’ll think it was worse than it was. | They’ll decide something’s wrong with me, on the strength of one bad day. |
-| 3 | If I apologise first, then I’ve taken the whole thing on myself. | Their part in it never gets mentioned again. |
+| 1 | If I say sorry to {person} for one specific thing I did, then {person} will hold it over me from now on. | They’ll accept it, and then bring it up the next time we disagree. |
+| 2 | If I say sorry to {person} for one specific thing I did, then {person} will think it was worse than it was. | They’ll decide something’s wrong with me, on the strength of one bad day. |
+| 3 | If I say sorry to {person} for one specific thing I did, then I’ve taken the whole thing on myself. | Their part in it never gets mentioned again. |
 
 ### 20. Turning up and not joining in
 
@@ -1738,13 +1857,20 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Turn up, order something soft, and count how many people actually say anything. |
 | **drop** — what you leave out | Don’t arrive with a reason ready, and don’t hold a glass as cover. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I turn up to {thing} and don’t join in |
+| **the gap `{thing}`** — its word while it is empty | something |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I turn up and don’t join in, then everyone will notice and ask me why. | Someone will say something, and then the whole table will be looking at me. |
-| 2 | If I’m the only one sitting it out, then I’ll spoil it for everybody else. | It’ll go a bit flat, and they’ll wish I hadn’t come. |
-| 3 | If I go and sit it out, then I won’t enjoy any of it. | I’ll be counting the minutes and wishing I’d stayed at home. |
+| 1 | If I turn up to {thing} and don’t join in, then everyone will notice and ask me why. | Someone will say something, and then the whole table will be looking at me. |
+| 2 | If I turn up to {thing} and don’t join in, then I’ll spoil it for everybody else. | It’ll go a bit flat, and they’ll wish I hadn’t come. |
+| 3 | If I turn up to {thing} and don’t join in, then I won’t enjoy any of it. | I’ll be counting the minutes and wishing I’d stayed at home. |
 
 ### 21. Leaving before everyone else does
 
@@ -1757,13 +1883,19 @@ The three a person chooses between, in the order they are shown:
 | **test** — the one thing, today | Decide before you go what time you’re leaving. At that time, say one sentence and go. |
 | **drop** — what you leave out | Don’t apologise for going, and don’t promise to stay longer next time. |
 
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I leave at the time I decided and say plainly that I’m going |
+
 The three a person chooses between, in the order they are shown:
 
 | | If I ___, then ___ | braced for |
 | --- | --- | --- |
-| 1 | If I leave while it’s still going, then they’ll think I’m boring and stop asking me. | Someone will try to talk me into staying, and I’ll feel like I’ve let them down. |
-| 2 | If I go first, then they’ll talk about me once I’ve gone. | There’ll be a comment about it, and I’ll hear it repeated later. |
-| 3 | If I leave before the end, then I’ll have missed the part everyone remembers. | They’ll be laughing about something next week and I won’t have been there. |
+| 1 | If I leave at the time I decided and say plainly that I’m going, then people will think I’m boring and stop asking me. | Someone will try to talk me into staying, and I’ll feel like I’ve let them down. |
+| 2 | If I leave at the time I decided and say plainly that I’m going, then they’ll talk about me once I’ve gone. | There’ll be a comment about it, and I’ll hear it repeated later. |
+| 3 | If I leave at the time I decided and say plainly that I’m going, then I’ll have missed the part everyone remembers. | They’ll be laughing about something next week and I won’t have been there. |
 
 ---
 

@@ -26,6 +26,12 @@ const starts = require('../content/starts.js');
 const labelOf = (id) => content.byId(worries, id).label;
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0]);
+/*
+  B46. Every worry has a printed verb and most have a hole, so what a SCREEN shows is never the
+  raw sentence out of the file — it is that sentence with the holes filled. With nothing typed
+  they fill with their own default word, which is what these tests see.
+*/
+const said = (f, text) => content.fill(text, {}, (f.skeleton || { holes: {} }).holes);
 
 /*
   B30. Building a test from nothing: the two blanks, then what you'll do. Six taps' worth of
@@ -59,10 +65,10 @@ test('a full loop, from the start screen to a result', () => {
     predictions as chips; tapping one of those fills both blanks. What has to carry from here
     to the result is the label it is filed under and the exact sentence being tested.
   */
-  a.tap('[data-id]', 0).shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
-  a.tap('[data-b]', 0).tap('#next').shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
-  a.shows(firstBehind(0).test).shows(en.s.build.lock);
-  a.shows(firstBehind(0).drop);
+  a.tap('[data-id]', 0).shows(firstBehind(0).label).shows(said(firstBehind(0), firstBehind(0).beliefs[0].belief));
+  a.tap('[data-b]', 0).tap('#next').shows(firstBehind(0).label).shows(said(firstBehind(0), firstBehind(0).beliefs[0].belief));
+  a.shows(said(firstBehind(0), firstBehind(0).test)).shows(en.s.build.lock);
+  a.shows(said(firstBehind(0), firstBehind(0).drop));
   a.tap('#lock').shows(en.s.locked.title);
   a.tap('#nothanks').tap('#done').shows('What happened?');
   a.type('#o', 'He said fair enough and got his own coffee.');
@@ -141,7 +147,7 @@ test('putting a test down for the day changes the screen, not just adds a senten
 
   /* The command softened, and what is waiting for tomorrow is still on the screen. */
   a.shows(en.s.locked.restDone).hides(en.s.locked.done);
-  a.shows(firstBehind(0).test).shows(firstBehind(0).drop);
+  a.shows(said(firstBehind(0), firstBehind(0).test)).shows(said(firstBehind(0), firstBehind(0).drop));
 
   a.tap('#done').shows(en.s.happened.title);
 });
@@ -214,20 +220,20 @@ test('the prediction a person picks is the one that gets tested, not the first o
     own. What they are braced for is no longer printed under each, because the sentence is
     assembled above them as they choose; it still travels, and the last lines prove it.
   */
-  for (const b of f.beliefs) a.shows(b.belief);
+  for (const b of f.beliefs) a.showsText(said(f, b.belief));
 
   /* the second one, deliberately: the first would pass whether it was carried or not */
-  a.tap('[data-b]', 1).tap('#next').shows(f.beliefs[1].belief);
-  a.hides(f.beliefs[0].belief).hides(f.beliefs[2].belief);
-  a.shows(f.test);
+  a.tap('[data-b]', 1).tap('#next').shows(said(f, f.beliefs[1].belief));
+  a.hides(said(f, f.beliefs[0].belief)).hides(said(f, f.beliefs[2].belief));
+  a.shows(said(f, f.test));
 
   a.tap('#lock').tap('#nothanks').tap('#done');
-  a.type('#o', 'Nothing happened.').tap('#next').shows(f.beliefs[1].belief);
-  a.tap('[data-key]', 1).shows(f.beliefs[1].belief).shows(f.beliefs[1].expect);
+  a.type('#o', 'Nothing happened.').tap('#next').shows(said(f, f.beliefs[1].belief));
+  a.tap('[data-key]', 1).shows(said(f, f.beliefs[1].belief)).shows(said(f, f.beliefs[1].expect));
 
   /* and doing it again tomorrow keeps the sentence they chose, without asking twice */
-  a.tap('#again').shows(f.beliefs[1].belief).hides(f.beliefs[0].belief);
-  a.tap('#m-mine').shows(f.beliefs[1].belief);
+  a.tap('#again').shows(said(f, f.beliefs[1].belief)).hides(said(f, f.beliefs[0].belief));
+  a.tap('#m-mine').shows(said(f, f.beliefs[1].belief));
 });
 
 /*
@@ -244,7 +250,7 @@ test('the worry and the sentence being tested are on every screen in between', (
   a.tap('[data-id]', 0).shows(f.label);             /* choosing which prediction */
   a.tap('[data-b]', 2).tap('#next');
 
-  const chosen = f.beliefs[2].belief;
+  const chosen = said(f, f.beliefs[2].belief);
   a.shows(f.label).shows(chosen);                   /* the plan */
   a.tap('#lock').shows(f.label).shows(chosen);      /* locked in */
   a.tap('#nothanks').tap('#done').shows(f.label).shows(chosen);          /* what happened */
@@ -274,15 +280,79 @@ test('a skeleton carries what she types into all three predictions', () => {
 
   /* before she types anything, the sentence still reads — the hole's own word stands in */
   a.shows(f.skeleton.holes.person);
-  a.shows('If I say no to somebody without giving a reason, then somebody will think I’m selfish.');
+  a.showsText('If I say no to somebody without giving a reason, then somebody will think I’m selfish.');
+  /* and NOTHING is marked, because she has not typed anything yet (B46) */
+  assert.strictEqual(a.html().indexOf('class="carried"'), -1,
+    'a default word was marked as if she had typed it');
 
   /* one hole, typed once, and it is in every one of the three */
   a.type('#h-person', 'my sister').tap('[data-b]', 0);
   for (const b of f.beliefs) {
-    a.shows(b.belief.split('{person}').join('my sister'));
+    a.showsText(b.belief.split('{person}').join('my sister'));
   }
-  a.hides('{person}');
-  a.hides('If I say no to somebody');
+  a.hidesText('{person}');
+  a.hidesText('If I say no to somebody');
+});
+
+/*
+  B46, 2026-09-09, AND IT IS THE HALF OF B37 THAT WAS NEVER BUILT.
+
+  The substitution above has worked since B41 and it worked in silence: she filled one blank,
+  three sentences underneath became sentences about her sister, and nothing on screen said so.
+  The founder's canvas calls the substitution "the closest thing to intelligence BETR is allowed
+  to have" and marks every landing with a highlight. This is that.
+
+  Two halves, and the second is the one that matters: BETR's own default word is NEVER marked.
+  Highlighting "somebody" would tell a person she had said something she had not, on the one
+  screen whose whole job is to show her her own words coming back.
+*/
+test('the word she typed is marked wherever it lands, and a default word never is', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+
+  const marks = () => (a.html().match(/<span class="carried">([^<]*)<\/span>/g) || [])
+    .map((m) => m.replace(/<[^>]*>/g, ''));
+
+  assert.deepStrictEqual(marks(), [], 'nothing is hers yet, so nothing may be marked');
+
+  /*
+    Typed, then a tap to repaint. In a real browser the row is reprinted on the keystroke
+    (refreshBorrow); the fake DOM fires no events at all, so the tap is what stands in for one
+    — docs/learnings.md, "never depend on an event".
+  */
+  a.type('#h-person', 'my sister').tap('[data-b]', 0);
+  const onBuild = marks();
+  assert.ok(onBuild.length >= 3, 'only ' + onBuild.length + ' marks across three predictions');
+  for (const m of onBuild) assert.strictEqual(m, 'my sister');
+
+  /* and again on the next screen, in three sizes she has not read yet */
+  a.tap('#next');
+  const onDo = marks();
+  assert.ok(onDo.length >= 3, 'her word is not marked in the sizes');
+  for (const m of onDo) assert.strictEqual(m, 'my sister');
+});
+
+/*
+  B34 D1 through B46's change: a chip may only insert the words printed on it. Marking splits
+  the printed sentence across three nodes, so the guarantee is now "the text of the button",
+  and this is what holds those two together.
+*/
+test('a marked chip still inserts exactly the words drawn on it', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  /* typed, then repainted by a tap, so the row on screen carries her word and its marks */
+  a.type('#h-person', 'my sister').tap('[data-b]', 0);
+
+  const drawn = (a.html().match(/<button class="chip" data-b="1">([\s\S]*?)<\/button>/) || [])[1];
+  assert.ok(drawn, 'could not find the second prediction chip');
+  const asText = drawn.replace(/<[^>]*>/g, '');
+  assert.ok(asText.indexOf('<') === -1 && asText.indexOf('my sister') !== -1);
+
+  a.tap('[data-b]', 1);
+  /* the printed sentence is "If I <ifPart>, then <thenPart>" — both halves came off that
+     button and nothing else did */
+  assert.ok(asText.indexOf(a.valueOf('#then')) !== -1,
+    'the chip inserted a second half it did not print: ' + asText + ' → ' + a.valueOf('#then'));
 });
 
 /*
@@ -380,16 +450,35 @@ test('write the whole thing myself collapses a skeleton into one blank, words an
   printed words and smaller blanks where there is a skeleton, and nothing at all where there is
   not; there is no mode, no toggle and no second code path (B37 §3).
 */
-test('a worry with no skeleton, and the free-text road, are exactly as they were', () => {
-  const plain = content.byId(worries, 'angry');
-  assert.ok(!plain.skeleton, 'this test needs a worry with no skeleton');
+/*
+  B46, 2026-09-09, AND THIS TEST USED TO ASSERT THE OPPOSITE.
 
-  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="angry"]');
-  a.shows('id="if"').hides('data-hole');
-  a.shows(plain.beliefs[0].belief);
+  It was called "a worry with no skeleton, and the free-text road, are exactly as they were",
+  and it held down the promise that B41 changed only two of the twenty-one. That promise is what
+  the founder opened the app and could not find: nineteen worries handed a person a screen headed
+  *Make it yours* with two empty blanks and nothing in them.
 
+  So it is now the other way round. THE PRINTED VERB IS THE DEFAULT, and the one wide blank is
+  the exit — the screen you get when you have said none of these fits, and nowhere else.
+*/
+test('every worry prints a verb, and only the write-your-own road has one wide blank', () => {
+  /* the write-your-own road, and it is the only place a wide blank is left */
+  const own = boot().tap('#m-new');
+  own.shows('id="if"').hides('data-hole');
+
+  for (const door of doors.items) {
+    for (const id of door.worries) {
+      const f = content.byId(worries, id);
+      const a = boot().tap('#not-sure').tap('[data-door="' + door.id + '"]').tap('[data-id="' + id + '"]');
+      a.hides('id="if"');
+      assert.ok(a.html().indexOf('class="part skel"') !== -1, id + ' has no printed verb');
+      /* the first prediction, printed with the holes standing on their own words */
+      a.showsText(said(f, f.beliefs[0].belief));
+    }
+  }
+
+  /* and the wide-blank road still walks all the way through */
   const b = boot().tap('#m-new');
-  b.shows('id="if"').hides('data-hole');
   b.type('#if', 'say no').type('#then', 'they will mind').tap('#next');
   b.shows(en.s.build.doTitle);
 });
@@ -414,15 +503,15 @@ test('three sizes are on the worry road and the free-text road, and one fills bo
   a.shows(en.s.build.sizeChips);
   /* all three, in the file's order, with her word already in every one of them */
   for (const z of f.sizes) {
-    a.shows(z.name).shows(z.do.split('{person}').join('my sister'));
+    a.shows(z.name).showsText(z.do.split('{person}').join('my sister'));
   }
-  a.hides('{person}');
+  a.hidesText('{person}');
   /* the box is empty until she picks: a pre-filled one would be BETR having picked a rung */
   assert.strictEqual(a.valueOf('#do'), '');
 
   a.tap('[data-size]', 1);
   assert.strictEqual(a.valueOf('#do'), f.sizes[1].do.split('{person}').join('my sister'));
-  a.shows(f.sizes[1].drop.split('{person}').join('my sister'));
+  a.showsText(f.sizes[1].drop.split('{person}').join('my sister'));
 
   /* and the free-text road gets the general three, on a sentence BETR did not write */
   const b = boot().tap('#m-new');
@@ -572,7 +661,7 @@ test('the size row folds to say which one is picked, and Change opens all three 
   a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
   a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
   /* open to begin with: nothing has been answered yet */
-  a.shows(en.s.build.sizeChips).shows(f.sizes[2].do.split('{person}').join('my sister'));
+  a.shows(en.s.build.sizeChips).showsText(f.sizes[2].do.split('{person}').join('my sister'));
 
   a.tap('[data-size]', 1);
   a.shows('id="sizeopen"').shows(f.sizes[1].name).hides(en.s.build.sizeChips);
@@ -655,7 +744,7 @@ test('editing a borrowed sentence keeps it inside the worry, and the ladder goes
     half the stock sentences do ("If I'm not reachable for an evening").
   */
   assert.strictEqual(done[1].belief,
-    'If I\u2019m not reachable for an evening, then nobody will even notice I was gone.');
+    said(f, 'If I ' + f.skeleton.if + ', then nobody will even notice I was gone.'));
   /* which of the three it started from is recorded, and the second run started from none */
   assert.strictEqual(done[0].prediction, 0);
   assert.strictEqual(done[1].prediction, null);
@@ -670,8 +759,8 @@ test('editing a borrowed sentence keeps it inside the worry, and the ladder goes
     braced for, which is not the same words as the prediction and is better than anything read
     off it — while one the person has rewritten carries an expectation read off their own words.
   */
-  assert.strictEqual(done[0].x, f.beliefs[0].expect, 'B20’s expectation did not travel');
-  assert.notStrictEqual(done[1].x, f.beliefs[0].expect);
+  assert.strictEqual(done[0].x, said(f, f.beliefs[0].expect), 'B20’s expectation did not travel');
+  assert.notStrictEqual(done[1].x, said(f, f.beliefs[0].expect));
 });
 
 /*
@@ -772,13 +861,13 @@ test('test this again brings back the plan she wrote, and BETR’s where she wro
   a.type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 1);
   a.tap('#again');
   a.shows('Leave it in the kitchen from seven.').shows('Don’t tell anyone I’m doing it.');
-  a.hides(f.test);
+  a.hides(said(f, f.test));
 
   /* BETR's: the same worry, plan untouched, so a correction in the list still reaches her */
   a.tap('#m-new').tap('#back').tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
   a.tap('[data-b]', 1).tap('#next').tap('#lock').tap('#done');
   a.type('#o', 'Nothing again.').tap('#next').tap('[data-key]', 1);
-  a.tap('#again').shows(f.test);
+  a.tap('#again').shows(said(f, f.test));
 });
 
 /*
@@ -1045,7 +1134,7 @@ test('an earlier worry is one tap away, and picks up where its ladder left off',
   a.shows(labelOf(doors.items[0].worries[1])).shows(labelOf(doors.items[0].worries[0]));
 
   /* the older one is the second card, and going again keeps its rung rather than starting over */
-  a.tap('[data-again]', 1).shows(firstBehind(0).test);
+  a.tap('[data-again]', 1).shows(said(firstBehind(0), firstBehind(0).test));
   a.tap('#lock').tap('#done').type('#o', 'Nothing happened.').tap('#next');
   a.shows('Last time').shows('>7<');
   a.tap('[data-key]', 1).shows('>6<');
@@ -1075,7 +1164,7 @@ test('a v4 record needs no migration, and joins a v5 one on the same ladder', ()
     v: 4, stage: 'start',
     done: [{
       rid: 'a-real-id-from-yesterday-0001', id: f.id, source: 'stock', label: f.label,
-      belief: f.beliefs[0].belief, x: f.beliefs[0].expect, test: f.test, drop: f.drop,
+      belief: said(f, f.beliefs[0].belief), x: said(f, f.beliefs[0].expect), test: said(f, f.test), drop: said(f, f.drop),
       o: 'Nothing happened.', move: 'lot', level: 7, rateLabel: 'A lot less sure',
       when: '2026-09-08T10:00:00.000Z'
     }]
@@ -1290,11 +1379,18 @@ test('an empty blank is refused on both roads, and the words are not taken away'
   a.type('#if', 'say no without giving a reason').tap('#next').shows(en.s.refusal.emptyBelief);
   assert.strictEqual(a.valueOf('#if'), 'say no without giving a reason');
 
-  /* and on the borrow road, where the first blank arrives filled and the second does not */
+  /*
+    And on the worry road, where B46 means the first half is not a blank at all: it is printed
+    words with small holes in them, and the sentence already reads with nothing typed. So the
+    refusal is only ever about the SECOND half — and it must not take a hole she has filled.
+  */
+  const f = firstBehind(0);
+  const hole = Object.keys(f.skeleton.holes)[0];
   const b = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
-  assert.ok(b.valueOf('#if'), 'the borrowed sentence did not fill the first blank');
-  b.tap('#next').shows(en.s.refusal.emptyBelief);
-  assert.ok(b.valueOf('#if'), 'the refusal took the borrowed half away');
+  b.hides('id="if"').shows('class="part skel"');
+  b.type('#h-' + hole, 'my brother').tap('#next').shows(en.s.refusal.emptyBelief);
+  assert.strictEqual(b.valueOf('#h-' + hole), 'my brother',
+    'the refusal took back the word she put in the hole');
 
   /* the second half's box, which is a plan rather than a prediction */
   b.tap('[data-b]', 0).tap('#next').type('#do', '').tap('#lock').shows(en.s.refusal.emptyTest);
@@ -1529,7 +1625,7 @@ test('the two lines on the do screen each stay one line at 125% text', () => {
 test('the folded leave-out row shows the words it is holding, and BETR’s are BETR’s', () => {
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
-  const stock = firstBehind(0).drop;
+  const stock = said(firstBehind(0), firstBehind(0).drop);
 
   /* folded, and the stock sentence is on the screen in full before anything is locked in */
   assert.strictEqual(a.html().indexOf('id="drop"'), -1, 'the box is drawn as well as the row');
@@ -1676,7 +1772,7 @@ test('a borrowed test keeps the label-and-quote strip it was drawn for', () => {
   assert.match(h, /<div class="worry quiet">/);
   assert.ok(h.indexOf('worry quiet solo') === -1, 'a labelled test was drawn as the solo one');
   assert.ok(h.indexOf('<p class="worry-label">' + f.label + '</p>') !== -1, 'the label went missing');
-  assert.ok(h.indexOf('class="worry-belief wrote">“' + f.beliefs[0].belief) !== -1);
+  assert.ok(h.indexOf('class="worry-belief wrote">“' + said(f, f.beliefs[0].belief)) !== -1);
 });
 
 /* ------------------------------------------------------- light and dark (B35) */
@@ -1830,7 +1926,7 @@ test('going back to fix the sentence keeps the plan already typed', () => {
 test('going back does not put the stock plan back over one somebody wrote', () => {
   const a = boot();
   a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
-  const stock = firstBehind(0).test;
+  const stock = said(firstBehind(0), firstBehind(0).test);
   assert.strictEqual(a.valueOf('#do'), stock, 'the borrowed plan should arrive in the box');
   a.type('#do', 'My own plan, in my own words.');
   a.tap('#back').tap('#next');

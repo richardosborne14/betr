@@ -23,6 +23,9 @@ const assert = require('node:assert');
 const { boot } = require('./harness.js');
 
 const en = require('../content/strings-en.js');
+const content = require('../lib/content.js');
+const worries = require('../content/worries.js');
+const doors = require('../content/whats-going-on.js');
 
 /* The borrow road as far as the plan being in the box, which is where five screens start. */
 const borrowed = (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0)
@@ -79,7 +82,20 @@ test('every screen has one heading, and focus lands on it when the screen change
       B32: the borrow road arrives with the first blank already filled, so focus goes to the
       second — the one thing only the person can say (B20).
     */
-    const wanted = { build: 'if', borrow: 'then', 'build-do': 'do', happened: 'o' }[name] || 'top';
+    /*
+      B46. Every worry has a printed verb now, so the borrow road lands on the FIRST EMPTY HOLE
+      — the first thing there is to do — and only falls back to the second blank where the
+      skeleton has no holes at all. Derived rather than hard-coded, so it keeps meaning
+      something when the content changes.
+    */
+    const firstBehindDoor = content.byId(worries, doors.items[0].worries[0]);
+    const holeNames = Object.keys((firstBehindDoor.skeleton || { holes: {} }).holes);
+    const wanted = {
+      build: 'if',
+      borrow: holeNames.length ? 'h-' + holeNames[0] : 'then',
+      'build-do': 'do',
+      happened: 'o'
+    }[name] || 'top';
     assert.strictEqual(a.focusedId(), wanted, 'focus did not move on the way to ' + name);
   }
 });

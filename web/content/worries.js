@@ -94,17 +94,24 @@ var BETR_WORRIES = [
     id: 'sit',
     label: 'Sitting still when I feel restless',
     belief: 'If I feel restless, then I can’t just sit with it.',
+    skeleton: {
+      if: 'sit with the restlessness for {long}',
+      holes: { long: 'ten minutes' }
+    },
     beliefs: [
       {
-        belief: 'If I sit with the restlessness, then it’ll build until I have to do something about it.',
+        belief: 'If I sit with the restlessness for {long}, then it’ll build until I have to ' +
+          'do something about it.',
         expect: 'By about the fifth minute I’ll be up and doing something else.'
       },
       {
-        belief: 'If I don’t do something with the feeling, then I’ll be no use for the rest of the day.',
+        belief: 'If I sit with the restlessness for {long}, then I’ll be no use for the rest ' +
+          'of the day.',
         expect: 'I’ll write the day off and get nothing done.'
       },
       {
-        belief: 'If I stop and do nothing, then everything I’ve been not thinking about will land at once.',
+        belief: 'If I sit with the restlessness for {long}, then everything I’ve been not ' +
+          'thinking about will land at once.',
         expect: 'The whole list will arrive at once, and stopping will have cost me.'
       }
     ],
@@ -116,18 +123,24 @@ var BETR_WORRIES = [
     id: 'phone',
     label: 'Going an evening without my phone',
     belief: 'If I’m not reachable for an evening, then something will go wrong.',
+    skeleton: {
+      if: 'go {long} without my phone',
+      holes: { long: 'a whole evening' }
+    },
     beliefs: [
       {
-        belief: 'If I don’t check tonight, then I’ll miss something that actually needed me.',
+        belief: 'If I go {long} without my phone, then I’ll miss something that actually ' +
+          'needed me.',
         expect: 'Something urgent will come in and I’ll have let someone down.'
       },
       {
-        belief: 'If I don’t answer while it’s away, then they’ll think I’m ignoring them.',
+        belief: 'If I go {long} without my phone, then people will think I’m ignoring them.',
         expect: 'There’ll be a short reply in the morning and a bit of an atmosphere.'
       },
       {
-        belief: 'If I put it away, then I’ll be twitchy all evening and get nothing out of it anyway.',
-        expect: 'I’ll spend two hours thinking about the phone instead of using them.'
+        belief: 'If I go {long} without my phone, then I’ll be twitchy the whole time and get ' +
+          'nothing out of it anyway.',
+        expect: 'I’ll spend the evening thinking about the phone instead of using it.'
       }
     ],
     test: 'Put it in a drawer from eight o’clock. In the morning, write down what you actually missed.',
@@ -143,17 +156,24 @@ var BETR_WORRIES = [
     id: 'feed',
     label: 'A day without checking social media',
     belief: 'If I stop keeping up with everyone, then I’ll fall out of things.',
+    skeleton: {
+      if: 'go {long} without opening the apps I scroll',
+      holes: { long: 'a day' }
+    },
     beliefs: [
       {
-        belief: 'If I don’t look today, then I’ll be the only one who hasn’t heard something.',
+        belief: 'If I go {long} without opening the apps I scroll, then I’ll be the only one ' +
+          'who hasn’t heard something.',
         expect: 'Someone will mention it and it’ll be obvious I’m out of the loop.'
       },
       {
-        belief: 'If I go quiet for a day, then people will think I’ve gone off them.',
+        belief: 'If I go {long} without opening the apps I scroll, then people will think I’ve ' +
+          'gone off them.',
         expect: 'Somebody will notice I’ve disappeared and read something into it.'
       },
       {
-        belief: 'If I stop looking, then I’ll have nothing to talk about.',
+        belief: 'If I go {long} without opening the apps I scroll, then I’ll have nothing to ' +
+          'talk about.',
         expect: 'I’ll be sitting there with nothing to say.'
       }
     ],
@@ -165,17 +185,24 @@ var BETR_WORRIES = [
     id: 'reply',
     label: 'Not answering a message straight away',
     belief: 'If I don’t answer a message quickly, then people take it badly.',
+    skeleton: {
+      if: 'leave a message from {person} a few hours before I answer',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I leave a message a few hours, then they’ll think I don’t care.',
+        belief: 'If I leave a message from {person} a few hours before I answer, then {person} ' +
+          'will think I don’t care.',
         expect: 'They’ll go a bit cooler with me, and I’ll have to make it up to them.'
       },
       {
-        belief: 'If I don’t answer straight away, then they’ll assume I’m annoyed with them.',
+        belief: 'If I leave a message from {person} a few hours before I answer, then {person} ' +
+          'will assume I’m annoyed.',
         expect: 'They’ll ask if everything’s all right, in that careful way.'
       },
       {
-        belief: 'If I take my time replying, then they’ll stop bothering to message me.',
+        belief: 'If I leave a message from {person} a few hours before I answer, then {person} ' +
+          'will stop bothering to message me.',
         expect: 'They’ll go to somebody else next time, and I’ll hear about it after.'
       }
     ],
@@ -187,17 +214,24 @@ var BETR_WORRIES = [
     id: 'check',
     label: 'Sending something without checking it again',
     belief: 'If I send something without going over it again, then it won’t be right.',
+    skeleton: {
+      if: 'send {thing} after reading it through once',
+      holes: { thing: 'something' }
+    },
     beliefs: [
       {
-        belief: 'If I send it without a second read, then there’ll be a mistake in it and I’ll look sloppy.',
+        belief: 'If I send {thing} after reading it through once, then there’ll be a mistake ' +
+          'in it and I’ll look sloppy.',
         expect: 'Someone will spot something, and they’ll think I rushed it.'
       },
       {
-        belief: 'If I don’t read it twice, then it’ll come out blunter than I meant it.',
+        belief: 'If I send {thing} after reading it through once, then it’ll come out blunter ' +
+          'than I meant it.',
         expect: 'They’ll take it the wrong way and I’ll spend the day fixing it.'
       },
       {
-        belief: 'If I send it as it is, then I’ll be thinking about it all afternoon.',
+        belief: 'If I send {thing} after reading it through once, then I’ll be thinking about ' +
+          'it all afternoon.',
         expect: 'I’ll keep going back to it and get nothing else done.'
       }
     ],
@@ -213,17 +247,24 @@ var BETR_WORRIES = [
     id: 'enough',
     label: 'Handing something over before it’s perfect',
     belief: 'If I hand over something that’s only good enough, then it won’t be good enough.',
+    skeleton: {
+      if: 'hand over {thing} at good enough',
+      holes: { thing: 'something' }
+    },
     beliefs: [
       {
-        belief: 'If I hand in something that’s only good enough, then they’ll think I don’t care about it.',
+        belief: 'If I hand over {thing} at good enough, then people will think I don’t care ' +
+          'about it.',
         expect: 'They’ll spot the rough edges and quietly decide I’ve dropped off.'
       },
       {
-        belief: 'If I stop before it’s right, then it’ll come straight back to me with a list.',
+        belief: 'If I hand over {thing} at good enough, then it’ll come straight back to me ' +
+          'with a list.',
         expect: 'I’ll end up doing it twice, and that’s worse than doing it properly.'
       },
       {
-        belief: 'If I let this one go at good enough, then that becomes what people expect from me.',
+        belief: 'If I hand over {thing} at good enough, then that becomes what people expect ' +
+          'from me.',
         expect: 'The standard slips, and I don’t get it back.'
       }
     ],
@@ -235,17 +276,24 @@ var BETR_WORRIES = [
     id: 'rest',
     label: 'Resting when there’s stuff to do',
     belief: 'If I rest before everything’s done, then I’ll pay for it.',
+    skeleton: {
+      if: 'rest for {long} while there’s still stuff to do',
+      holes: { long: 'two hours' }
+    },
     beliefs: [
       {
-        belief: 'If I rest while there’s still stuff to do, then I’ll feel guilty the whole time.',
+        belief: 'If I rest for {long} while there’s still stuff to do, then I’ll feel guilty ' +
+          'the whole time.',
         expect: 'I’ll sit there thinking about the list and get nothing out of it.'
       },
       {
-        belief: 'If I stop now, then I won’t start again today.',
+        belief: 'If I rest for {long} while there’s still stuff to do, then I won’t start ' +
+          'again today.',
         expect: 'The afternoon will go, and tomorrow starts further behind.'
       },
       {
-        belief: 'If I let somebody see me sitting down, then they’ll think I’m not pulling my weight.',
+        belief: 'If I rest for {long} while there’s still stuff to do, then somebody will ' +
+          'think I’m not pulling my weight.',
         expect: 'Somebody will make a comment about it, and it’ll stick.'
       }
     ],
@@ -263,17 +311,24 @@ var BETR_WORRIES = [
     id: 'praise',
     label: 'Paying someone a compliment',
     belief: 'If I say something good about someone, then it’ll land wrong.',
+    skeleton: {
+      if: 'say one specific good thing to {person} out loud',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I say something good and nothing comes back, then it’ll look like I was fishing for one.',
+        belief: 'If I say one specific good thing to {person} out loud, then it’ll look like ' +
+          'I was fishing for one back.',
         expect: 'There’ll be an odd beat, and I’ll wish I’d kept it to myself.'
       },
       {
-        belief: 'If I compliment someone out of nowhere, then they’ll think I want something.',
+        belief: 'If I say one specific good thing to {person} out loud, then {person} will ' +
+          'think I want something.',
         expect: 'They’ll be polite about it and wait for the ask.'
       },
       {
-        belief: 'If I say it out loud, then it’ll come out wrong and make things awkward.',
+        belief: 'If I say one specific good thing to {person} out loud, then it’ll come out ' +
+          'wrong and make things awkward.',
         expect: 'It’ll sound odd, and neither of us will know what to say next.'
       }
     ],
@@ -285,17 +340,24 @@ var BETR_WORRIES = [
     id: 'care',
     label: 'Telling someone they matter to me',
     belief: 'If I tell someone what they mean to me, then it’ll be awkward.',
+    skeleton: {
+      if: 'tell {person} one specific thing I’m glad about them',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I tell someone what they mean to me, then they won’t say it back.',
+        belief: 'If I tell {person} one specific thing I’m glad about them, then {person} ' +
+          'won’t say it back.',
         expect: 'They’ll laugh it off, and I’ll wish I hadn’t said it.'
       },
       {
-        belief: 'If I say something that serious, then it’ll change how we are with each other.',
+        belief: 'If I tell {person} one specific thing I’m glad about them, then it’ll change ' +
+          'how we are with each other.',
         expect: 'It’ll be a bit stiff between us afterwards.'
       },
       {
-        belief: 'If I tell them, then they’ll wonder what’s brought this on.',
+        belief: 'If I tell {person} one specific thing I’m glad about them, then {person} will ' +
+          'wonder what’s brought this on.',
         expect: 'They’ll ask if I’m all right, and I’ll have to explain myself.'
       }
     ],
@@ -374,17 +436,24 @@ var BETR_WORRIES = [
     id: 'help',
     label: 'Asking someone for help',
     belief: 'If I ask someone for help, then it costs me something.',
+    skeleton: {
+      if: 'ask {person} for one small, specific favour',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I ask someone for help, then I become a burden to them.',
+        belief: 'If I ask {person} for one small, specific favour, then I become a burden to ' +
+          '{person}.',
         expect: 'They’ll do it, and quietly file me under people who can’t cope.'
       },
       {
-        belief: 'If I admit I can’t do it on my own, then I’ll be trusted with less.',
+        belief: 'If I ask {person} for one small, specific favour, then I’ll be trusted with ' +
+          'less.',
         expect: 'Next time it’ll go to somebody else, without a word to me.'
       },
       {
-        belief: 'If I ask, then they’ll say yes and resent it.',
+        belief: 'If I ask {person} for one small, specific favour, then {person} will say yes ' +
+          'and resent it.',
         expect: 'They’ll help, and be a bit short with me for a while after.'
       }
     ],
@@ -403,17 +472,25 @@ var BETR_WORRIES = [
     id: 'low',
     label: 'Telling someone I’ve been feeling low',
     belief: 'If I say I’ve been feeling low, then it changes how people treat me.',
+    skeleton: {
+      if: 'tell {person} I’ve been feeling low lately',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I tell someone I’ve been feeling low, then they won’t know what to do with it.',
-        expect: 'They’ll say something kind, change the subject, and be careful around me after.'
+        belief: 'If I tell {person} I’ve been feeling low lately, then {person} won’t know ' +
+          'what to do with it.',
+        expect: 'They’ll say something kind, change the subject, and be careful around me ' +
+          'after.'
       },
       {
-        belief: 'If I say it out loud, then they’ll start worrying about me.',
+        belief: 'If I tell {person} I’ve been feeling low lately, then {person} will start ' +
+          'worrying about me.',
         expect: 'They’ll check up on me, and I’ll wish I’d never said it.'
       },
       {
-        belief: 'If I tell them, then it’s the thing they think of every time they see me.',
+        belief: 'If I tell {person} I’ve been feeling low lately, then it’s the thing {person} ' +
+          'thinks of every time they see me.',
         expect: 'I’ll be the one who isn’t doing well, and that’s what I’ll stay.'
       }
     ],
@@ -470,17 +547,24 @@ var BETR_WORRIES = [
     id: 'mist',
     label: 'Owning up to a mistake before anyone finds it',
     belief: 'If I own up to a mistake, then it counts against me.',
+    skeleton: {
+      if: 'tell {person} about one small mistake of mine before they find it',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I admit I got something wrong, then it’ll be held against me later.',
+        belief: 'If I tell {person} about one small mistake of mine before they find it, then ' +
+          'it’ll be held against me later.',
         expect: 'They’ll remember this one, and trust me with less next time.'
       },
       {
-        belief: 'If I tell them before they find it, then they’ll start looking for others.',
+        belief: 'If I tell {person} about one small mistake of mine before they find it, then ' +
+          '{person} will start looking for others.',
         expect: 'Everything I do goes under the microscope after this.'
       },
       {
-        belief: 'If I own up, then they’ll think worse of me than if I’d quietly fixed it.',
+        belief: 'If I tell {person} about one small mistake of mine before they find it, then ' +
+          '{person} will think worse of me than if I’d quietly fixed it.',
         expect: 'They’ll be fine to my face, and it’ll go on my record anyway.'
       }
     ],
@@ -492,17 +576,24 @@ var BETR_WORRIES = [
     id: 'angry',
     label: 'Telling someone they’ve annoyed me',
     belief: 'If I say that something’s annoyed me, then it’ll go badly.',
+    skeleton: {
+      if: 'tell {person} one thing they’ve done that annoyed me',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I tell someone they’ve annoyed me, then it’ll turn into an argument.',
+        belief: 'If I tell {person} one thing they’ve done that annoyed me, then it’ll turn ' +
+          'into an argument.',
         expect: 'They’ll get defensive, and it’ll turn into a much bigger thing.'
       },
       {
-        belief: 'If I bring it up, then they’ll say I’m making something out of nothing.',
+        belief: 'If I tell {person} one thing they’ve done that annoyed me, then {person} will ' +
+          'say I’m making something out of nothing.',
         expect: 'I’ll come out of it feeling like the unreasonable one.'
       },
       {
-        belief: 'If I say it, then things will be off between us for days.',
+        belief: 'If I tell {person} one thing they’ve done that annoyed me, then things will ' +
+          'be off between us for days.',
         expect: 'It’ll be polite and cold, and I’ll be the one who has to fix it.'
       }
     ],
@@ -518,17 +609,24 @@ var BETR_WORRIES = [
     id: 'right',
     label: 'Letting someone else be right',
     belief: 'If I let someone else be right, then I lose something.',
+    skeleton: {
+      if: 'tell {person} they’re right and leave it there',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I agree someone else has the better point, then I’ll look like I don’t know what I’m talking about.',
+        belief: 'If I tell {person} they’re right and leave it there, then I’ll look like I ' +
+          'don’t know what I’m talking about.',
         expect: 'They’ll take it as a win, and I’ll go down in their estimation.'
       },
       {
-        belief: 'If I give ground once, then they’ll talk over me from then on.',
+        belief: 'If I tell {person} they’re right and leave it there, then {person} will talk ' +
+          'over me from then on.',
         expect: 'Next time they won’t even wait for my answer.'
       },
       {
-        belief: 'If I say they’re right, then nobody will ask what I think again.',
+        belief: 'If I tell {person} they’re right and leave it there, then nobody will ask ' +
+          'what I think again.',
         expect: 'The conversation will move on, and I’ll stay out of it.'
       }
     ],
@@ -541,17 +639,24 @@ var BETR_WORRIES = [
     id: 'hear',
     label: 'Letting someone finish without interrupting',
     belief: 'If I don’t get in quickly, then I lose my place in the conversation.',
+    skeleton: {
+      if: 'let {person} finish before I say my bit',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I don’t get in quickly, then I’ll look like I’ve got nothing worth saying.',
+        belief: 'If I let {person} finish before I say my bit, then I’ll look like I’ve got ' +
+          'nothing worth saying.',
         expect: 'The conversation will move on without me and I’ll have missed my go.'
       },
       {
-        belief: 'If I wait for them to finish, then I’ll forget what I was going to say.',
+        belief: 'If I let {person} finish before I say my bit, then I’ll forget what I was ' +
+          'going to say.',
         expect: 'It’ll go out of my head and I’ll sit there with nothing.'
       },
       {
-        belief: 'If I let them run on, then they’ll take the whole conversation.',
+        belief: 'If I let {person} finish before I say my bit, then {person} will take the ' +
+          'whole conversation.',
         expect: 'I’ll come out of it having said nothing at all.'
       }
     ],
@@ -564,17 +669,24 @@ var BETR_WORRIES = [
     id: 'joke',
     label: 'Getting through a conversation without a joke',
     belief: 'If I’m not the funny one, then people won’t want to talk to me.',
+    skeleton: {
+      if: 'say the plain thing to {person} where I’d normally reach for the joke',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I haven’t got something funny ready, then I’ll be dull and people will drift off.',
+        belief: 'If I say the plain thing to {person} where I’d normally reach for the joke, ' +
+          'then I’ll be dull and {person} will drift off.',
         expect: 'The conversation will go flat, and they’ll find someone else to talk to.'
       },
       {
-        belief: 'If I say the plain thing, then it’ll get too serious and they’ll be uncomfortable.',
+        belief: 'If I say the plain thing to {person} where I’d normally reach for the joke, ' +
+          'then it’ll get too serious and {person} will be uncomfortable.',
         expect: 'There’ll be a silence, and I’ll be the one who made it.'
       },
       {
-        belief: 'If I’m not the one keeping it light, then nobody will bother.',
+        belief: 'If I say the plain thing to {person} where I’d normally reach for the joke, ' +
+          'then nobody will bother keeping it going.',
         expect: 'It’ll be hard work, and they’ll leave earlier than they would have.'
       }
     ],
@@ -587,17 +699,24 @@ var BETR_WORRIES = [
     id: 'sorry',
     label: 'Apologising without explaining myself',
     belief: 'If I properly apologise, then it’ll be used against me.',
+    skeleton: {
+      if: 'say sorry to {person} for one specific thing I did',
+      holes: { person: 'somebody' }
+    },
     beliefs: [
       {
-        belief: 'If I properly apologise for how I acted, then they’ll hold it over me from now on.',
+        belief: 'If I say sorry to {person} for one specific thing I did, then {person} will ' +
+          'hold it over me from now on.',
         expect: 'They’ll accept it, and then bring it up the next time we disagree.'
       },
       {
-        belief: 'If I say sorry with no explanation, then they’ll think it was worse than it was.',
+        belief: 'If I say sorry to {person} for one specific thing I did, then {person} will ' +
+          'think it was worse than it was.',
         expect: 'They’ll decide something’s wrong with me, on the strength of one bad day.'
       },
       {
-        belief: 'If I apologise first, then I’ve taken the whole thing on myself.',
+        belief: 'If I say sorry to {person} for one specific thing I did, then I’ve taken the ' +
+          'whole thing on myself.',
         expect: 'Their part in it never gets mentioned again.'
       }
     ],
@@ -614,17 +733,23 @@ var BETR_WORRIES = [
     id: 'drink',
     label: 'Turning up and not joining in',
     belief: 'If I turn up and don’t join in, then it won’t go unnoticed.',
+    skeleton: {
+      if: 'turn up to {thing} and don’t join in',
+      holes: { thing: 'something' }
+    },
     beliefs: [
       {
-        belief: 'If I turn up and don’t join in, then everyone will notice and ask me why.',
+        belief: 'If I turn up to {thing} and don’t join in, then everyone will notice and ask me ' +
+          'why.',
         expect: 'Someone will say something, and then the whole table will be looking at me.'
       },
       {
-        belief: 'If I’m the only one sitting it out, then I’ll spoil it for everybody else.',
+        belief: 'If I turn up to {thing} and don’t join in, then I’ll spoil it for everybody ' +
+          'else.',
         expect: 'It’ll go a bit flat, and they’ll wish I hadn’t come.'
       },
       {
-        belief: 'If I go and sit it out, then I won’t enjoy any of it.',
+        belief: 'If I turn up to {thing} and don’t join in, then I won’t enjoy any of it.',
         expect: 'I’ll be counting the minutes and wishing I’d stayed at home.'
       }
     ],
@@ -637,17 +762,25 @@ var BETR_WORRIES = [
     id: 'early',
     label: 'Leaving before everyone else does',
     belief: 'If I leave early, then it costs me something with them.',
+    skeleton: {
+      if: 'leave at the time I decided and say plainly that I’m going',
+      holes: {}
+    },
     beliefs: [
       {
-        belief: 'If I leave while it’s still going, then they’ll think I’m boring and stop asking me.',
-        expect: 'Someone will try to talk me into staying, and I’ll feel like I’ve let them down.'
+        belief: 'If I leave at the time I decided and say plainly that I’m going, then people ' +
+          'will think I’m boring and stop asking me.',
+        expect: 'Someone will try to talk me into staying, and I’ll feel like I’ve let them ' +
+          'down.'
       },
       {
-        belief: 'If I go first, then they’ll talk about me once I’ve gone.',
+        belief: 'If I leave at the time I decided and say plainly that I’m going, then they’ll ' +
+          'talk about me once I’ve gone.',
         expect: 'There’ll be a comment about it, and I’ll hear it repeated later.'
       },
       {
-        belief: 'If I leave before the end, then I’ll have missed the part everyone remembers.',
+        belief: 'If I leave at the time I decided and say plainly that I’m going, then I’ll ' +
+          'have missed the part everyone remembers.',
         expect: 'They’ll be laughing about something next week and I won’t have been there.'
       }
     ],
