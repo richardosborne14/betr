@@ -254,8 +254,13 @@ var BETR_STRINGS_EN = {
       next: 'What will you do?',
       /* The second half. The sentence is above it, in the quiet strip, unchanged. */
       doTitle: 'What will you do today?',
-      /* Short on purpose: at 125% text every line here pushes "Lock it in" behind the menu. */
-      doSub: 'One thing, today. Small and entirely up to you.',
+      /*
+        Short on purpose: at 125% text every line here pushes "Lock it in" behind the menu.
+        B39, 2026-09-09, measured it — this ran to TWO lines at 125% and cost 36px of a screen
+        that was already 279px over. One line, and it keeps the half that matters: the size,
+        and that nobody but the person picks it.
+      */
+      doSub: 'One small thing, your pick.',
       doPlaceholder: 'Say no to one thing today, in one sentence.',
       doChips: 'Or one of these:',
       dropLabel: 'And leave out',
@@ -263,7 +268,7 @@ var BETR_STRINGS_EN = {
         Optional, and it says so in its own line rather than in a note underneath — the note
         was a separate line of small print and it pushed "Lock it in" below the fold.
       */
-      dropSub: 'Leaving it out is what makes it count. Optional.',
+      dropSub: 'Optional. It’s what counts.',
       dropPlaceholder: 'Don’t give a reason.',
       dropChips: 'Or one of these:',
       lock: 'Lock it in',

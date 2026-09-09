@@ -842,7 +842,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.doSub`**
 
-> One thing, today. Small and entirely up to you.
+> One small thing, your pick.
 
 **`build.doPlaceholder`**
 
@@ -858,7 +858,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.dropSub`**
 
-> Leaving it out is what makes it count. Optional.
+> Optional. It’s what counts.
 
 **`build.dropPlaceholder`**
 

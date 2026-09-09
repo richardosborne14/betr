@@ -990,6 +990,29 @@ test('the safety net is said at the lock, and not to somebody who has set it dow
     'the net is still on the screen after somebody set the test down for today');
 });
 
+/*
+  B39, 2026-09-09. THE FOLD BUDGET ON THE DO SCREEN, WRITTEN DOWN SO IT CANNOT BE SPENT BY
+  ACCIDENT.
+
+  `What will you do today?` is the most crowded screen in BETR and the one B42 wants to put
+  three more rows on. Measured on the walker at 390×844: at 125% text every road overflows,
+  and *Lock it in* starts below the fold on the free-text road at 100% — the main road since
+  B32. The two explanatory lines on it were each running to TWO lines at 125% and cost 74px
+  between them; one line each got that back.
+
+  This is the same guard `doors.intro` has had since B23, for the same reason: the sentence is
+  the cheapest thing to change and it is also the easiest thing to lengthen without measuring.
+  28 characters is one line at 125% text in a 350px column at `.sub`'s 1.25rem. If you need
+  more than that, MEASURE the screen — do not just raise the number.
+*/
+test('the two lines on the do screen each stay one line at 125% text', () => {
+  for (const key of ['doSub', 'dropSub']) {
+    assert.ok(en.s.build[key].length <= 28,
+      'build.' + key + ' is ' + en.s.build[key].length + ' characters and will wrap at 125%: ' +
+      en.s.build[key]);
+  }
+});
+
 test('the brand is BETR everywhere a person reads it, refusals included', () => {
   const a = boot();
   a.shows('BETR');

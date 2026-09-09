@@ -652,6 +652,30 @@ for the whole app's worth of additions, and the front screen and the do screen h
 spent theirs. Before adding a beat anywhere, measure first and decide what comes off, because
 the answer at the end will be a design decision and not a padding value.
 
+## A box shorter than its own contents, and a measurement that lied (2026-09-09, B39)
+
+**The bug B33 recorded as a 125% bug was there at 100%, on the main road.** *What will you do
+today?* reserved 92px for a box and BETR's own pre-filled sentence needed 112 — so the last
+line of a sentence somebody was about to lock in sat inside a textarea scrollbar. Nobody had
+measured it at 100% because the task that found it was about 125%.
+
+**And a second one: the free-text road had never been measured at all.** *Lock it in* started
+105px below the fold at 100% on road A — the front door since B32 — because both boxes are
+empty there, so the `do` chip row is open, and **that row is 159px for two suggestions**.
+
+**The measurement method itself had a bug worth writing down.** Setting
+`document.documentElement.style.fontSize` and then reading heights measures a screen that was
+LAID OUT AT THE OLD SIZE — any box whose height was set in JS keeps the old number, because
+nothing repainted. Set the size FIRST, then navigate to the screen, then measure. Doing it the
+other way round showed the boxes not growing at 125% and sent half an hour after a bug that was
+in the walker script.
+
+**And the answer at the end was not a number.** After the boxes were fixed and both explanatory
+lines were cut from two rendered lines to one — 74px back at 125% — the main road was still
+47px over at 100% and 207px over at 125%. **Every remaining margin on that screen added
+together is about 50px.** When the gap is bigger than the sum of the padding, stop trimming: it
+is a content decision, and it belongs to whoever owns the content.
+
 **The measuring recipe, since it is not obvious.** `node tools/walk.js start`, `open`, then:
 
     node tools/walk.js eval "document.documentElement.style.fontSize='20px'; JSON.stringify({

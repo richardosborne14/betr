@@ -1227,6 +1227,37 @@
     The fake DOM in tests fires no events, so what a test sees is whatever the paint decided.
     That is deliberate: the paint is the state a person lands on, and the rest is live polish.
   */
+  /*
+    B39, 2026-09-09. A BOX THAT WAS SHORTER THAN ITS OWN CONTENTS.
+
+    Measured on the walker, on the borrow road: at 100% text the `do` box reserves 92px of
+    room and BETR's own pre-filled sentence needs 112, so the last line of a sentence somebody
+    is about to lock in sits inside a scrollbar they have no reason to look for. At 125% it is
+    165 into 99. At 200%, 351 into 138. IT WAS NEVER A ZOOM BUG — the zoom only made it
+    bigger, and it was there at 100% on the road most people take.
+
+    So the box grows to what is in it. The `min-height` in the stylesheet stays as the floor,
+    because an empty box still has to look like something you write in, and this only ever
+    adds. `+4` is the two borders: `box-sizing` is border-box and `scrollHeight` is not.
+
+    It is guarded on the type of `scrollHeight` rather than on anything else, because the fake
+    DOM in `harness.js` is flat and has no layout at all: in the tests this is a no-op, and
+    the height it would have set is measured on the walker instead.
+  */
+  function grow(box) {
+    /*
+      TEXTAREAS ONLY. The build screen's two blanks are `<input type="text">` and go through
+      the same wiring; an input's scrollHeight is its own single line, so this would set an
+      inline height on it for no reason and drift by the border on every keystroke.
+    */
+    if (!box || box.tagName !== 'TEXTAREA') return;
+    if (typeof box.scrollHeight !== 'number') return;
+    try {
+      box.style.height = 'auto';
+      box.style.height = (box.scrollHeight + 4) + 'px';
+    } catch (e) { /* older browser */ }
+  }
+
   function wireChips(boxes) {
     boxes.forEach(function (pair) {
       var box = q(pair[0]);
@@ -1239,7 +1270,8 @@
         if (!set) return;
         try { set.hidden = !on || !!box.value.trim(); } catch (e) { /* older browser */ }
       };
-      box.oninput = function () { show(true); };
+      grow(box);
+      box.oninput = function () { grow(box); show(true); };
       box.onfocus = function () {
         if (before) before();
         show(true);
