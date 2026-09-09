@@ -17,28 +17,33 @@ neither appears, which is rule 2 held by a test rather than a comment.
 
 ## 2. The next action
 
-**Read [`B45`](tasks/B45-one-road-in.md) first. The founder opened the app on 2026-09-09 and
-said it is confusing as fuck, and he is right.** One build screen is drawn three ways and one do
+**Read [`B45`](tasks/B45-one-road-in.md) first.** One build screen is drawn three ways and one do
 screen two ways, decided by a road nobody can see; `worries.js` and `starts.js` are two content
-files describing the same twenty-one things. **The verb constructor he asked to be the default is
-on 2 of 21 worries and unreachable from the front door.** Worst single fact: tapping BETR's own
-suggestion gets the OLD do screen, typing something BETR has never seen gets the NEW one.
+files describing the same twenty-one things. **The verb constructor is on 2 of 21 worries and
+unreachable from the front door.** Worst fact: tapping BETR's own suggestion gets the OLD do
+screen; typing something BETR has never seen gets the NEW one.
 
-**B45 is blocked on two founder answers (§7): where the current mockup is, and whether sizes are
-three sentences or three chips.** Its §6 is the cheap first move — 21 verbs get a hole, no new
-sentence, nothing for the reviewer, half a day — and it answers the actual complaint on its own.
+**The founder supplied the current mockup and it is now the spec** —
+`https://claude.ai/code/artifact/77d1cadb-a55b-4926-8281-ea0a0556d73f`, *The template with holes*,
+seven screens and four notes. **Where B45 and that canvas disagree, the canvas wins.** B45 §3
+lists the nine ways the app has drifted from it; two of the seven screens are already shipped and
+right (B40's one ladder, and *there is no mode to leave*).
+
+**Start with B45 §6 plus 5d: 21 verbs get a hole, and `content.fill()` marks the word it carried.**
+No new sentence, nothing for the reviewer, well under a day, and together they are the demo — a
+person types a word once and can see where it went. **§7a is the founder's and it is a real
+trade:** the mockup keeps all three sizes on screen after a pick and accepts the fold; B39 and
+B42 folded them to keep *Lock it in* above it (574 vs 870 at 125%).
 
 ## 3. Changed on purpose, and measured and left
 
-**One fold state got worse and it is written down rather than explained away.** B44's link is
-one line of small print, 35px with its trimmed margin, and it sits **under the do box and its
-sizes** because that is where somebody who has just pictured the biggest possible version is
-looking. On a start item's road at 125%, with nothing yet in the plan box, *Lock it in* went
-from 14px above the fold to 22px below it. Accepted for B42's reason and no other — an empty
-plan refuses, so the button is inert exactly there — and it comes back up the moment anything
-is in the box. **After a pick, every road clears at 125% with room** (574 against 780 on the
-worry road; the free-text road costs nothing at all, because the row hides and gives the space
-back). B44's task file has the whole table.
+**B44's link cost 35px and one fold state got worse.** It sits **under the do box and its sizes**,
+because that is where somebody who has just pictured the biggest possible version is looking. On
+a start item's road at 125%, with nothing yet in the plan box, *Lock it in* went from 14px above
+the fold to 22px below it — accepted for B42's reason only (an empty plan refuses, so the button
+is inert exactly there) and it comes back up the moment anything is in the box. **After a pick
+every road clears at 125% with room.** B44's task file has the table; B45 §7a reopens the whole
+question, because the mockup does not fold at all.
 
 Still live: the escape link behind the menu at 125%, the front screen's 20px sliver, the clipped
 second placeholder, `#ownit` below the fold on the 125% skeleton screen, and **tapping *New test*
@@ -69,9 +74,9 @@ from the do screen wipes the sentence and the plan with no warning** — B36 ite
    (`W-NO-D1` / `W-ST-D1`, B42's open one); is the largest step safe as written (`W-NO-D3` /
    `W-ST-D3`, and `W-ST-D3` is the one we are least sure of — it hands the length of the thing
    to the other person); and **are the three actually in order** (`G-Z1`) — no test can check that.
-4. **A screen-reader pass on a real phone** — B33 read the tree, **nobody has used it**, and
-   B41, B42 and B44 have all added things since. **Q1 (name, trademark, domain)** blocks release.
-5. **Two API keys — Groq and Anthropic — still need rotating**; nobody owns the missing
+4. **A screen-reader pass on a real phone** — B33 read the tree, **nobody has used it**, and B41,
+   B42 and B44 have all added things since. **Q1 (name, trademark, domain)** blocks release.
+   **Two API keys — Groq and Anthropic — still need rotating**; nobody owns the missing
    medication word list in `guards.js`. **Release conditions:** Misha on `places.signedOff`,
    J1–J5 on a phone, an owner for links and helplines.
 
@@ -96,8 +101,8 @@ from the do screen wipes the sentence and the plan with no warning** — B36 ite
   actually in**: a button below the fold matters as much as it is possible to press it. To price
   one block, hide it with `eval` and re-read the button's rect either side — that is how B44's
   table was built.
-- **A WIDENING IS MORE DANGEROUS THAN A CHANGE** (B40) and **WHEN CONTENT GAINS A VARIABLE, GREP
-  EVERY COMPARISON AGAINST IT** (B41), both in `learnings.md`: nothing crashes, a sentence rots.
+- **A WIDENING IS MORE DANGEROUS THAN A CHANGE** (B40); **WHEN CONTENT GAINS A VARIABLE, GREP
+  EVERY COMPARISON AGAINST IT** (B41). Nothing crashes, a sentence rots.
 - **Never depend on an event**: a programmatic `.focus()` fires none in headless Chrome (B39) and
   the fake DOM none at all (B41). Put the state in the markup and re-read it on the tap. And
   **read the boxes before ANY navigation off the build or do screen** — `readBlanks()` /
