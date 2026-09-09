@@ -59,7 +59,7 @@ test('a full loop, from the start screen to a result', () => {
   a.tap('[data-b]', 0).tap('#next').shows(firstBehind(0).label).shows(firstBehind(0).beliefs[0].belief);
   a.shows(firstBehind(0).test).shows(en.s.build.lock);
   a.shows(firstBehind(0).drop);
-  a.tap('#lock').shows('Go and do it.');
+  a.tap('#lock').shows(en.s.locked.title);
   a.tap('#nothanks').tap('#done').shows('What happened?');
   a.type('#o', 'He said fair enough and got his own coffee.');
   a.tap('#next').shows('Still think that’s what happens?');
@@ -890,11 +890,104 @@ test('the worked example is complete in the markup, and only delayed by the styl
 
   const css = fs.readFileSync(path.join(__dirname, '..', 'app.css'), 'utf8');
   const block = css.slice(css.indexOf('@media (prefers-reduced-motion: no-preference)'));
-  for (const rule of ['.example .you', '.example .late', '.example .ladder .last']) {
+  assert.ok(h.indexOf(examples[0].did) !== -1, 'what they did is not in the markup at all');
+  for (const rule of ['.example .you', '.example .mid', '.example .late', '.example .ladder .last']) {
     assert.ok(block.indexOf(rule) !== -1, rule + ' is not inside the reduced-motion block');
     assert.ok(css.indexOf(rule) >= css.indexOf('@media (prefers-reduced-motion: no-preference)'),
       rule + ' also animates outside the reduced-motion block');
   }
+});
+
+/*
+  B38, 2026-09-09. THE BEAT THE CARD USED TO SKIP.
+
+  The founder walked the build screen with their eldest daughter. She reached "What will you do
+  today?" with no idea what was expected of her, and when it was explained said "OH NO I can't
+  actually give her a criticism" and left. The one screen in BETR that teaches by showing went
+  prediction → what happened, skipping the exact beat she stalled on: what somebody actually
+  did, and how small it was.
+
+  This holds the beat down and holds its SIZE down, because the size is the lesson. A `did`
+  that grows into a paragraph would teach the opposite of what it is here to teach.
+*/
+test('the worked example shows what they actually did, and it is one small line', () => {
+  const examples = require('../content/examples.js');
+  const a = boot();
+  const ex = examples[0];
+
+  a.shows(en.s.example.did).shows(ex.did);
+  if (ex.dropped) a.shows(ex.dropped);
+
+  /* The order is the order it happened: the prediction, the doing, then what happened. */
+  const h = a.html();
+  assert.ok(h.indexOf(ex.prediction) < h.indexOf(ex.did),
+    'the doing is drawn above the prediction it belongs to');
+  assert.ok(h.indexOf(ex.did) < h.indexOf(ex.happened),
+    'the doing is drawn after what happened, which is not the order anybody lived it');
+});
+
+/*
+  B36 §12a, made into a test on 2026-09-09. The card borrowed `result.*` for its labels, and
+  with two of them that read fine. A third makes the card say YOU, then THEY. Either voice is
+  a decision Misha owns; two voices in one card is not a decision, it is a bug. This does not
+  say which way round it goes — it says the card picks one and keeps it all the way down.
+*/
+test('the worked example is in one voice from top to bottom', () => {
+  const labels = [en.s.example.expected, en.s.example.did, en.s.result.happened,
+                  en.s.example.ladderLabel, en.s.a11y.ladderPlainExample];
+  for (const label of labels) {
+    assert.ok(!/\b(you|your|you’re|you've|you’ve)\b/i.test(label),
+      'the example card says "' + label + '" over somebody else’s test, next to a "they" label');
+  }
+  /* And the person's own result screen keeps the second person, which is right there. */
+  assert.match(en.s.result.expected, /\byou\b/i,
+    'a person’s own result stopped being about them');
+});
+
+/*
+  B38, item 7, and research/12 §9.1. BETR NEVER ASKS ANYBODY TO BE BRAVE. IT ASKS THEM TO FIND
+  SOMETHING OUT.
+
+  A dare needs permission from somebody with authority, which BETR has not got and must not
+  fake — the founder's own words were that a therapist gives "the feeling of a safety net, of
+  someone of authority and knowledge told me to". A question needs no permission from anyone.
+  That is the one structural advantage a behavioural-experiment app has over an exposure app,
+  and the loop was not using it: it said "Go and do it."
+
+  This sweeps the words a person reads at the two moments they are being asked for something.
+*/
+test('the loop asks somebody to find out, and never dares them', () => {
+  const dares = [/^go and do it/i, /^do it\b/i, /\bbe brave\b/i, /\bpush yourself\b/i,
+                 /\bface your\b/i, /\bconfront\b/i, /\bchallenge yourself\b/i, /\byou must\b/i];
+  for (const said of [en.s.locked.title, en.s.plan.lock, en.s.locked.done, en.s.locked.restDone,
+                      en.s.build.lock, en.s.build.doTitle, en.s.build.doSub]) {
+    for (const dare of dares) {
+      assert.ok(!dare.test(said), 'the loop dares somebody: “' + said + '”');
+    }
+  }
+});
+
+/*
+  B36 §10a. The therapist's safety net is not their authority — Bandura ranks verbal
+  persuasion third of four — it is that a bad outcome has already been thought about and is
+  not a disaster. That is a thing an app can hold, and it is one sentence said at the moment
+  it matters: on the screen where somebody has just locked a test in.
+
+  It is NOT on the rest screen. B27 item 1: once a person has said they didn't get to it, this
+  screen stops asking them for things, and a promise about tomorrow's outcome is a thing.
+*/
+test('the safety net is said at the lock, and not to somebody who has set it down', () => {
+  const a = boot();
+  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0);
+  a.tap('#next').tap('#lock').shows(en.s.locked.title);
+  a.shows(en.s.locked.net);
+  /* rule 6, out loud, at the moment it matters */
+  assert.match(en.s.locked.net, /bad one counts the same/i,
+    'the net stopped saying the thing that makes it a net');
+
+  a.tap('#nothanks').tap('#miss').shows(en.s.locked.restTitle);
+  assert.ok(a.html().indexOf(en.s.locked.net) === -1,
+    'the net is still on the screen after somebody set the test down for today');
 });
 
 test('the brand is BETR everywhere a person reads it, refusals included', () => {

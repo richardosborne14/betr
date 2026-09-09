@@ -31,6 +31,14 @@
 
   THE SHAPE
     prediction  one sentence, "If I ___, then ___", exactly as a person's own is stored
+    did         what they actually did. ONE short sentence, and the whole lesson is in how
+                small it is — B38, 2026-09-09. The founder's daughter reached "What will you
+                do today?" with no idea what was expected of her and said "OH NO I can't
+                actually give her a criticism". The screen that teaches by showing was
+                skipping the exact beat she stalled on. A novice reads this line and knows
+                what size the thing is: one sentence, not a confession
+    dropped     optional, and it is the safety behaviour left out — the bit that makes the
+                test a test. Quieter than `did` on the card, because it is the second half
     happened    what actually happened. At most two short sentences: the beat between them is
                 most of the effect, and it is the one place two is allowed
     from        where the ladder started. Ten, always — that is the premise (scope §3)
@@ -49,24 +57,32 @@ var BETR_EXAMPLES = [
   {
     /* The mockup's. Founder saw it on 2026-09-08 and said "I love it" of the screen. */
     prediction: 'If I tell my dad I’m struggling, then he’ll change the subject.',
+    did: 'Told him one true sentence.',
+    dropped: 'Didn’t add “but I’m fine”.',
     happened: 'He went quiet. Then he said “Me too.”',
     from: 10,
     to: 6
   },
   {
     prediction: 'If I ask for the day off, then my boss will think I’m not committed.',
+    did: 'Asked for one Friday off.',
+    dropped: 'Didn’t explain why.',
     happened: 'She said “fine” and went back to her screen.',
     from: 10,
     to: 7
   },
   {
     prediction: 'If I say no without giving a reason, then they’ll be off with me for weeks.',
+    did: 'Said no to one thing.',
+    dropped: 'Didn’t offer to make up for it.',
     happened: 'He said “that’s all right” and asked somebody else.',
     from: 10,
     to: 8
   },
   {
     prediction: 'If I let the silence go on, then they’ll think I’ve got nothing to say.',
+    did: 'Let one pause run on.',
+    dropped: 'Didn’t fill the gap.',
     happened: 'She filled it herself, and told me something she never had before.',
     from: 10,
     to: 7

@@ -638,6 +638,31 @@ bounding rect, not by taste, and every one of them changed the plan:
 the words.** Three of the four fixes were a shorter sentence rather than a CSS change, and a
 sentence is the cheapest thing in this app to change.
 
+**B38 made it five of six (2026-09-09), and this time the budget ran out.** Adding one beat to
+the front screen's worked example — a label, a line and an optional second line — cost **110px
+at 125% text on a card that had 32px of clearance.** Two of the fixes were shorter sentences
+again: *"Told him one true sentence about my week."* → *"Told him one true sentence."* saved 28px
+by dropping to one line, and the safety-net line on the locked screen lost a clause for the same
+reason. The rest came out of the card: `margin-bottom` 26→16, `padding` 20px 18px→18px.
+
+**What is worth writing down is where it stopped.** Even after all of that, *Not sure? Try one
+of these* ends 43px behind the menu at 125%. **A beat is not a sentence — you cannot trim your
+way out of one.** The budget on a 390×844 screen at 125% is roughly *one label plus two lines*
+for the whole app's worth of additions, and the front screen and the do screen have both now
+spent theirs. Before adding a beat anywhere, measure first and decide what comes off, because
+the answer at the end will be a design decision and not a padding value.
+
+**The measuring recipe, since it is not obvious.** `node tools/walk.js start`, `open`, then:
+
+    node tools/walk.js eval "document.documentElement.style.fontSize='20px'; JSON.stringify({
+      go: document.querySelector('#go').getBoundingClientRect().bottom,
+      menuTop: document.querySelector('.menu,nav,footer').getBoundingClientRect().top })"
+
+20px is 125% of the 16px root. It survives a `tap` but **not an `open`**, so set it again after
+navigating. And `shot` catches the front screen **mid-reveal** — the card animates over 3.4
+seconds and the parts that have not arrived are `opacity:0` with space reserved, so the picture
+shows a hole. `eval "document.getAnimations().forEach(function(a){a.finish();})"` first.
+
 ## The gate scored 100% on the sentences I showed it and 70% on the ones I did not (2026-09-08, B35)
 
 The founder asked for LLM-written suggestions on *What will you do today?*, because *"a CBT

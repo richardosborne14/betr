@@ -93,13 +93,27 @@ test('every worked example is the same shape a person’s own result will be', (
   assert.ok(examples.length >= 1 && examples.length <= 4,
     'up to four: more is a gallery, and one per open stops being predictable');
   for (const ex of examples) {
-    assert.deepStrictEqual(Object.keys(ex).sort(), ['from', 'happened', 'prediction', 'to'],
-      'an example is four fields, so there is nowhere to aim one at a person');
+    const keys = Object.keys(ex).sort().filter((k) => k !== 'dropped');
+    assert.deepStrictEqual(keys, ['did', 'from', 'happened', 'prediction', 'to'],
+      'an example is five fields and an optional sixth, so there is nowhere to aim one at a person');
 
     assert.match(ex.prediction, /^If I .+, then .+\.$/,
       'the prediction is not the shape the build screen makes: ' + ex.prediction);
     assert.strictEqual((ex.prediction.match(/[.!?]/g) || []).length, 1,
       'the prediction is more than one sentence: ' + ex.prediction);
+
+    /*
+      B38, and this is the assertion the whole beat exists for. The founder's daughter stalled
+      at "What will you do today?" because nothing had shown her how small the doing is. A
+      `did` that runs to two sentences teaches the opposite of what it is here to teach, and
+      it is also 26px of a card that has 32px of clearance at 125% text.
+    */
+    for (const field of ['did'].concat(ex.dropped ? ['dropped'] : [])) {
+      assert.strictEqual((ex[field].match(/[.!?](\s|$)/g) || []).length, 1,
+        field + ' is more than one sentence: ' + ex[field]);
+      assert.ok(ex[field].length <= 60, field + ' is not a small step said small: ' + ex[field]);
+      assert.ok(!/^If I /.test(ex[field]), field + ' is another prediction, not a doing: ' + ex[field]);
+    }
 
     /* Two is allowed here and only here: the beat between them is most of the effect. */
     assert.ok((ex.happened.match(/[.!?”]\s/g) || []).length <= 1,
@@ -119,7 +133,8 @@ test('nothing in a worked example names the habit, the body, anyone’s safety, 
   const BANNED = ['digital cbt', 'improve your mental health', 'treats', 'reduces symptoms',
                   'tracks your anxiety', 'irrational', 'streak', 'most people', 'on average'];
   for (const ex of examples) {
-    for (const field of ['prediction', 'happened']) {
+    for (const field of ['prediction', 'did', 'dropped', 'happened']) {
+      if (!ex[field]) continue;
       const said = ex[field];
       for (const [kind, list] of [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]]) {
         assert.strictEqual(guards.hit(said, list), null, kind + ' word in the example: ' + said);

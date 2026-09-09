@@ -41,16 +41,24 @@ the app).
 ### Changing the example on the front screen
 
 `web/content/examples.js` holds up to four, and a person sees one per open, in order. Each one
-is four lines:
+is six lines:
 
 ```
   {
     prediction: 'If I tell my dad I’m struggling, then he’ll change the subject.',
+    did: 'Told him one true sentence.',
+    dropped: 'Didn’t add “but I’m fine”.',
     happened: 'He went quiet. Then he said “Me too.”',
     from: 10,
     to: 6
   },
 ```
+
+`did` is what the person actually went and did, and **it has to stay small** — one short
+sentence, under sixty characters, and the tests will refuse a longer one. That is the whole
+job of the line: somebody reading it should think *I could do that*, not *I could never*.
+`dropped` is the safety thing they left out, and it is optional; leave the line off if there
+isn't one.
 
 `from` is always 10 — that is where everything starts — and `to` is where it landed, between 1
 and 9. **To change which one leads, move it to the top of the list.** The caption above it,

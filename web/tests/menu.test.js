@@ -83,7 +83,7 @@ test('every door on the menu works from every screen', () => {
 
 test('starting a new test keeps the one you locked in, and it is waiting afterwards', () => {
   const a = boot();
-  lockOne(a, 0).shows('Go and do it.');
+  lockOne(a, 0).shows(en.s.locked.title);
   a.tap('#m-new').shows(en.s.build.title);
 
   /* on the front screen, as one line with a way back in — not a list and not a number */

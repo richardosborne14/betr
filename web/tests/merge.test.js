@@ -223,7 +223,7 @@ test('and the app itself continues an old phone’s ladder from where it was', (
   const a = boot(v2());
   a.shows('>6<');
   /* the second card with a ladder on it: the first is the worry tested most recently */
-  a.tap('[data-again]', 1).shows('I’ll do it today');
+  a.tap('[data-again]', 1).shows(en.s.plan.lock);
   a.tap('#lock').tap('#done');
   a.type('#o', 'He shrugged and said no problem.').tap('#next');
   /* the re-rate is offered from 6, where that belief actually sits */

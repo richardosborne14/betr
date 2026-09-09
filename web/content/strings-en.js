@@ -136,6 +136,34 @@ var BETR_STRINGS_EN = {
         'does that. The loop still works; nothing will be here tomorrow.'
     },
 
+    /*
+      B38, 2026-09-09. THE WORKED EXAMPLE HAS ITS OWN LABELS NOW, AND THAT IS A VOICE
+      DECISION, NOT A TIDY-UP.
+
+      The card on the front screen borrowed `result.*` for its labels, and with two of them
+      — "You expected" and "What actually happened" — that read fine. B38 adds a third beat,
+      what they actually did, and the moment there are three the card says YOU, then THEY,
+      then nothing. B36 §12a: either the card is something you are SHOWN or something you
+      are INVITED INTO; two voices in one card is not an option.
+
+      This takes the SHOWN option, which is the one the mockup the founder saw takes. The
+      card is somebody else's finished test, captioned "What one test looks like", and it
+      reads as one all the way down. `result.*` is untouched, because on a person's own
+      result screen "You expected" is exactly right.
+
+      MISHA OWNS WHICH WAY ROUND THIS GOES. Flipping it back is these three strings and the
+      a11y one under them; no code moves either way.
+    */
+    example: {
+      expected: 'They expected',
+      /*
+        The beat the whole of B38 exists for. Short label, because what has to be read is the
+        line under it — one sentence, and small enough that a person thinks "I could do that".
+      */
+      did: 'What they did',
+      ladderLabel: 'How sure they were it goes badly'
+    },
+
     /* What is on the go. Never a tally, never an age, never a count (B8). */
     waiting: {
       onTheGo: 'On the go.',
@@ -308,7 +336,15 @@ var BETR_STRINGS_EN = {
       expectLabel: 'What you expect',
       edit: 'Not quite? Change it',
       editDone: 'Done',
-      lock: 'I’ll do it today',
+      /*
+        B38, 2026-09-09. Was "I’ll do it today". BETR never asks anybody to be brave; it asks
+        them to find something out. A dare needs permission from somebody with authority, which
+        BETR has not got and cannot fake. A question needs none — nobody needs authorisation to
+        go and find out what happens. That is the one structural advantage a behavioural-
+        experiment app has over an exposure app, and the loop was not using it
+        (research/12 §9.1; B36 §7, item 7).
+      */
+      lock: 'I’ll find out today',
       lockNote: 'That locks in what you expect, so later you can’t talk yourself out of what ' +
         'actually happened.'
     },
@@ -323,7 +359,17 @@ var BETR_STRINGS_EN = {
     */
     locked: {
       kicker: 'Locked in',
-      title: 'Go and do it.',
+      /* B38: was "Go and do it." See plan.lock above for why every dare in the loop is a
+         question now. This is the last screen somebody reads before they go out and do it. */
+      title: 'Go and find out.',
+      /*
+        B38, 2026-09-09, and it is the whole of B36 §10a. The therapist's safety net is not
+        their authority — it is that a bad outcome has already been thought about and is not
+        a disaster. A person with no therapist can still have that, and it is one sentence
+        said at the moment it matters. It is rule 6 (no verdicts) out loud, on the screen
+        where somebody is about to risk something.
+      */
+      net: 'Bring back whatever happens. A bad one counts the same as a good one.',
       missed: 'No problem. It’s still here for tomorrow. Smaller counts, too.',
       done: 'Done it. Here’s what happened',
       miss: 'Didn’t get to it',
@@ -590,6 +636,8 @@ var BETR_STRINGS_EN = {
     a11y: {
       ladder: 'How sure you are that: “{belief}”. Ten is completely sure, one is not sure at all.',
       ladderPlain: 'How sure you are it goes badly. Ten is completely sure, one is not sure at all.',
+      /* The same group on the front screen's worked example, in that card's voice (B38). */
+      ladderPlainExample: 'How sure they were it goes badly. Ten is completely sure, one is not sure at all.',
       rung: '{when}: {level} out of 10.',
       down: { one: 'Down one rung.', other: 'Down {n} rungs.' },
       up: { one: 'Up one rung.', other: 'Up {n} rungs.' },

@@ -734,16 +734,27 @@
     var ex = EXAMPLES[exampleIndex()];
     if (!ex) return '';
     return '<div class="result example">' +
-        '<p class="lbl">' + esc(t('result.expected')) + '</p>' +
+        '<p class="lbl">' + esc(t('example.expected')) + '</p>' +
         '<p class="you"><span class="wrote">' + esc(ex.prediction) + '</span></p>' +
+        /*
+          B38, 2026-09-09. The beat a newcomer stalls on, and the only one the card used to
+          skip: what they actually did. It is drawn plain — not struck through like the
+          prediction, not marker-penned like what happened — because it is neither a thing
+          that turned out wrong nor the surprise. It is the size of the step, and the size is
+          the lesson. `dropped` is optional and quieter: it is the second half of the same
+          beat, not a fourth one.
+        */
+        '<p class="lbl mid">' + esc(t('example.did')) + '</p>' +
+        '<p class="did mid wrote">' + esc(ex.did) + '</p>' +
+        (ex.dropped ? '<p class="did dropped mid wrote">' + esc(ex.dropped) + '</p>' : '') +
         '<p class="lbl late">' + esc(t('result.happened')) + '</p>' +
         '<p class="real late"><span class="wrote">' + esc(ex.happened) + '</span></p>' +
-        '<p class="lbl">' + esc(t('result.ladderLabel')) + '</p>' +
+        '<p class="lbl">' + esc(t('example.ladderLabel')) + '</p>' +
         /*
           Named with the plain line, not with the example's own sentence: this ladder belongs
           to a worked example and quoting it back would read as somebody's record.
         */
-        '<div class="ladder" role="group" aria-label="' + esc(t('a11y.ladderPlain')) + '">' +
+        '<div class="ladder" role="group" aria-label="' + esc(t('a11y.ladderPlainExample')) + '">' +
           rung(t('ladder.started'), ex.from, {}) +
           '<div class="last">' + rung(t('ladder.now'), ex.to, { prev: ex.from }) + '</div>' +
         '</div>' +
@@ -1487,6 +1498,12 @@
         head('h2', rest ? t('locked.restTitle') : t('locked.title')) +
         '<p class="sub wrote">' + esc(c.test) + '<br><b>' + esc(c.drop) + '</b></p>' +
         (rest ? '<div class="note">' + esc(t('locked.missed')) + '</div>' : '') +
+        /*
+          B38 / B36 §10a. Only in the non-rest state: a person who has just put the test down
+          for today is not about to find anything out, and B27's whole lesson was that this
+          screen stops issuing things once they have declined.
+        */
+        (rest ? '' : '<p class="net">' + esc(t('locked.net')) + '</p>') +
         (offerInstall ? installBlock() : '') +
         '<button class="big wide" id="done">' +
           esc(rest ? t('locked.restDone') : t('locked.done')) + '</button>' +
