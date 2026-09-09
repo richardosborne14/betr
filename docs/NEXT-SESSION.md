@@ -117,5 +117,5 @@ owns** the missing medication word list in `guards.js`. **Release conditions:** 
   tests.**
 - **Every word a person reads is in `web/content/`** — a sentence back in `app.js` fails
   `i18n.test.js`. **Use `’` and `“ ”`, never `'` and `"`**: the build fails on a typewriter one.
-- **`content/zones.js` and `docs/COPY.md` are generated**; never hand-edit. **No helpline number
-  is written from memory.**
+- **`content/zones.js` and `docs/COPY.md` are generated**; never hand-edit. No helpline number
+  is written from memory.
