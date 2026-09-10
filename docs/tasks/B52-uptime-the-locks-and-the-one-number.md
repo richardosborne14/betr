@@ -389,3 +389,38 @@ somebody will want to reply to it.
 **Confidence: 8/10.** Everything in §1 and §2 was read off the live server and live DNS today.
 The 2 is §4.3 and §5c: both put something slightly nearer the promise than it sits today, and
 both are judgement calls that belong to the founder rather than to me.
+
+---
+
+## 9. One thing the address decides for us, now that it is decided
+
+**Founder, 2026-09-10: `betr.trybeup.com` is production. Not a stopgap.** That closes half of
+scope Q1 (the trademark and the name itself are untouched) and it removes the "1" from B3's
+confidence score, which was only ever "this is a borrowed subdomain".
+
+Two consequences, neither of them an argument against the decision, both of them things nobody
+has said out loud yet.
+
+**1. BETR's trust story now permanently rests on two accounts that are not BETR's.** The GoDaddy
+account that holds `trybeup.com` and the DigitalOcean account that holds the droplet. Whoever
+controls either one controls what a person loads when they type our name. That is not a reason
+to move; it *is* the reason §4.6 and §4.1 are on this list and are not optional. **The domain
+security items stop being hygiene and become the product's foundation.**
+
+**2. The address says "TrybeUP" out loud, and rule 9 says we don't — until B6's gate opens.**
+The link goes in the Instagram bio, under every post, in the store listing, and in every Reddit
+reply. `docs/posting-on-social.md` §1 already puts it in the bio without noticing this.
+
+**This is almost certainly fine and it is the founder's call, not a rule breach to fix.** Rule 9
+bans TrybeUP being *promoted* outside the small print — never first, never a button, never
+styled apart, no deep link, no campaign parameter, no referral code. **A URL is none of those
+things**, and rule 9's own reasoning cuts the same way: research 08 is full of people who felt
+sold to, and *having said it up front is the entire difference between honest and sneaky*. An
+address that quietly carries the lineage is closer to honest than a bare name would be.
+
+**But say so on purpose.** The one thing to avoid is a curious person discovering the connection
+by reading a URL when the pinned post could have told them. `posting-on-social.md` already puts
+*"Made by the people behind TrybeUP"* in the pinned post; **that line now does double duty and
+must not be dropped**, because the address makes the question inevitable.
+
+**Nothing to build. One line for the founder to agree with, and B7/B6 to note.**
