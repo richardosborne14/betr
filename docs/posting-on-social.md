@@ -171,6 +171,12 @@ needs writing from scratch.
 For the two-parters, the app's own predictions are already written — `sit`, `feed`, `enough`
 and `rest` each carry three, and every one of them is a post.
 
+**When you want more than eight:** [`example-tests-bank.md`](example-tests-bank.md) holds
+twenty-four finished tests — the four on BETR's front screen and twenty more, one per worry,
+each built on a prediction the app already carries so you can film the real screen. Read its §1
+before posting any of them: the caption is what keeps a result card an example rather than a
+testimonial.
+
 ---
 
 ## 4. Actually making the image
