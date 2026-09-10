@@ -43,6 +43,19 @@ on a cull of the twelve). **Do not build B51 §5 before §9's three people have 
 
 ## 3. Waiting on people, not on code
 
+0. **NEW, 2026-09-10, and it is not the main line: [`B52`](tasks/B52-uptime-the-locks-and-the-one-number.md).**
+   The founder asked, before the first Instagram posts, how uptime, security and usage are
+   handled. **A pitch, nothing built, eleven decisions in its §6.** Found on the live droplet
+   that day: **TrybeUP's dev Postgres (5433), dev API (8001) and dev auth (9997) are open to
+   the whole internet**, no firewall, no rate limit anywhere, no swap, a kernel reboot pending,
+   **no HSTS on `betr.trybeup.com`, no CAA record**, and **no uptime monitoring of any kind**.
+   The recommendation is an hourly **integrity** check in our own repo (the build hash on the
+   page against `main` — the only thing that would ever catch a tampered publish), Better Stack
+   free for the down alarm, HSTS, and **2FA + registrar lock at GoDaddy**, which is the highest
+   consequence and lowest cost item on the list. **The blind daily tally is offered and
+   recommended against for now** — it would cost the `what.airplane` sentence. **Cloudflare:
+   no**, and §4.7 says why. A session picking this up starts with §6, not §1.
+
 1. **The founder.** **(a) NEW, B51 §9.3:** on the stock road, does B20's hand-written
    expectation stay **pre-filled**, or become a **greyed example** so every road asks the same
    question? **(b) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row; plus
