@@ -121,8 +121,15 @@ function find(el, sel) { return findAll(el, sel)[0] || null; }
   B35 added a third: `dark: true` is a phone whose system is set to dark. Left out it is a
   light phone, which is what `matchMedia` returning false has always meant here.
 */
+/* Lehmer, period 2^31-2: repeatable across runs, and never twice the same number in a test. */
+function prng(seed) {
+  let n = seed;
+  return () => (n = (n * 16807) % 2147483647) / 2147483647;
+}
+
 function boot(seed, env) {
   env = env || {};
+  const listeners = {};
   const timeZone = 'timeZone' in env ? env.timeZone : 'Europe/London';
   const languages = 'languages' in env ? env.languages : ['en'];
   const root = makeEl('app');
@@ -152,9 +159,29 @@ function boot(seed, env) {
     document: {
       documentElement: html,
       getElementById: (id) => (id === 'say' ? live : root),
-      querySelector: (s) => (s.indexOf('betr-build') !== -1 ? { getAttribute: () => 'dev' } : null)
+      querySelector: (s) => (s.indexOf('betr-build') !== -1 ? { getAttribute: () => 'dev' } : null),
+      /*
+        B31's second half: a standalone PWA that is closed and reopened without being torn
+        down comes back through visibilitychange, not through a page load. api.reopen() below
+        is that gesture, and without these three lines the app's listener has nowhere to land.
+      */
+      visibilityState: 'visible',
+      addEventListener: (type, fn) => { (listeners[type] = listeners[type] || []).push(fn); }
     },
-    Date, JSON, Math, String, Array, Object, RegExp, Error
+    /*
+      Seeded, so a run is repeatable. The app reaches for Math.random in two places and both
+      need to be predictable here: which worked example a phone with nothing stored opens on,
+      and rid()'s fallback — the sandbox has no `crypto`, so every record's id comes from this.
+      A fixed number would give every record the SAME id and dedupe would eat them, so it is a
+      sequence rather than a constant. It starts low, so a fresh phone opens on the first
+      example and every test written before today still knows which card it is looking at.
+
+      env.randomSeed is a DIFFERENT PHONE, not a different run: two people installing BETR on
+      the same day do not share a random sequence, and the whole point of the change is that
+      they do not open on the same card.
+    */
+    Math: Object.assign(Object.create(Math), { random: prng('randomSeed' in env ? env.randomSeed : 1) }),
+    Date, JSON, String, Array, Object, RegExp, Error
   };
   box.self = box;
   box.window = box;
@@ -212,7 +239,18 @@ function boot(seed, env) {
     */
     text() { return api.html().replace(/<[^>]*>/g, ''); },
     showsText(s) { assert.ok(api.text().indexOf(s) !== -1, 'not on screen: ' + s + '\nscreen reads: ' + api.text().slice(0, 400)); return api; },
-    hidesText(s) { assert.ok(api.text().indexOf(s) === -1, 'still on screen: ' + s); return api; }
+    hidesText(s) { assert.ok(api.text().indexOf(s) === -1, 'still on screen: ' + s); return api; },
+    /*
+      Closed and reopened WITHOUT being torn down — the ordinary way a phone hands a standalone
+      PWA back. Distinct from boot(a.mem), which is the cold start.
+    */
+    reopen() {
+      box.document.visibilityState = 'hidden';
+      for (const fn of listeners.visibilitychange || []) fn();
+      box.document.visibilityState = 'visible';
+      for (const fn of listeners.visibilitychange || []) fn();
+      return api;
+    }
   };
   return api;
 }

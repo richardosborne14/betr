@@ -1883,6 +1883,82 @@ test('the worked example is in one voice from top to bottom', () => {
 });
 
 /*
+  B31, amended 2026-09-10 — WHICH example, across a close and an open.
+
+  The founder reported that it never changed. It didn't, for two reasons that look like one:
+
+    1. save() removes the key for a store with nothing else in it, so on a fresh install the
+       open counter never survived the close. Every open was open zero and every open was the
+       first card. It cycled perfectly the moment anything else was stored, which is exactly
+       why nobody caught it — a walkthrough always has something stored by the time it looks.
+    2. Closing a standalone PWA often does not tear the page down. iOS hands the same page
+       back, nothing re-runs, and no amount of fixing (1) would have changed the card.
+
+  Both are held here. The promise that a phone storing nothing LEAVES nothing is held too,
+  and it is the reason the first card is random rather than remembered.
+*/
+const exs = require('../content/examples.js');
+const cardOn = (a) => exs.findIndex((e) => a.html().indexOf(e.prediction) !== -1);
+
+test('a phone with nothing stored does not open on the same worked example every time', () => {
+  const landed = new Set();
+  for (let seed = 1; seed <= 60; seed++) {
+    landed.add(cardOn(boot({}, { randomSeed: seed * 26591 })));
+  }
+  assert.ok(landed.size > 1,
+    'every fresh install opens on the same card: the counter is not surviving the close');
+  assert.ok(!landed.has(-1), 'a fresh install opened on no worked example at all');
+});
+
+test('a phone that has stored nothing still stores nothing, however many times it opens', () => {
+  let mem = {};
+  for (let i = 0; i < 5; i++) mem = Object.assign({}, boot(mem).mem);
+  assert.deepStrictEqual(Object.keys(mem), [],
+    'opening BETR wrote a record for somebody who has never used it');
+});
+
+test('closing and reopening without a page load steps to the next worked example', () => {
+  const a = boot({});
+  const seen = [cardOn(a)];
+  for (let i = 0; i < exs.length; i++) { a.reopen(); seen.push(cardOn(a)); }
+  for (let i = 1; i < seen.length; i++) {
+    assert.notStrictEqual(seen[i], seen[i - 1],
+      'reopening handed back the card it was already showing');
+  }
+  /* All the way round, so a reopen is a step through the deck and not a jump about in it. */
+  assert.strictEqual(seen[exs.length], seen[0], 'the deck does not come back round');
+});
+
+test('coming back mid-test does not swap the card, or the screen, underneath somebody', () => {
+  const a = boot({});
+  const was = cardOn(a);
+  a.tap('#pick');                                    /* off the front screen and into the loop */
+  const mid = a.html();
+  a.reopen();
+  assert.strictEqual(a.html(), mid, 'coming back mid-loop repainted the screen');
+  a.tap('#back');
+  assert.strictEqual(cardOn(a), was,
+    'walking back to the front screen swapped the card under somebody');
+});
+
+test('once anything is stored, the worked example cycles in order across cold starts', () => {
+  const a = boot({});
+  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0)
+   .tap('#next').tap('[data-size]', 0).tap('#lock');
+  let mem = Object.assign({}, a.mem);
+  const counts = [];
+  for (let i = 0; i < 4; i++) {
+    const b = boot(mem);
+    counts.push(JSON.parse(b.mem['betr.v1']).seen);
+    mem = Object.assign({}, b.mem);
+  }
+  for (let i = 1; i < counts.length; i++) {
+    assert.strictEqual(counts[i], counts[i - 1] + 1,
+      'the open counter stopped surviving a close for somebody who has used BETR');
+  }
+});
+
+/*
   B38, item 7, and research/12 §9.1. BETR NEVER ASKS ANYBODY TO BE BRAVE. IT ASKS THEM TO FIND
   SOMETHING OUT.
 

@@ -9,9 +9,19 @@
 ## 0. What you asked, and the answer
 
 **The app's front screen has four.** They live in
-[`web/content/examples.js`](../web/content/examples.js) and the app shows **one per open**,
-cycling in order — first open the dad one, second open the day-off one, and so on. Not random,
-so you can predict which one a phone will show when you are filming it.
+[`web/content/examples.js`](../web/content/examples.js) and the app shows **one per open**.
+
+**Fixed 2026-09-10, after you reported it never changed.** It didn't, and there were two
+reasons. BETR writes nothing at all for somebody who has never used it — so on a fresh install
+the "which one next" count was thrown away every time you closed it, and every open was the
+first card. And closing a home-screen app usually doesn't shut it down; the phone hands the same
+page back, so nothing runs again anyway. Both are fixed:
+
+- **Close it and open it** — you get the next one, every time, all the way round the four.
+- **A phone that has never had a test locked in** opens on a random one of the four.
+- **Once you've locked in a test**, it cycles in order, so you can say in advance which is next.
+- **Coming back to a test you were halfway through** doesn't swap anything — you get the screen
+  you left.
 
 **Four is a deliberate cap, not an accident.** A test in
 [`web/tests/content.test.js`](../web/tests/content.test.js) fails the build at five, with the

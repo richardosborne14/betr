@@ -93,3 +93,34 @@ The screen never says how far anybody else's will move, and the number belongs t
 - [x] With reduced motion, the finished card is there on paint (held by a test)
 - [ ] **125% text** — B33 walks it
 - [ ] **The founder has read the example on a phone and said which one**
+
+## Amended 2026-09-10 — it never cycled, and there were two reasons
+
+**Founder's report:** *"Can you make sure they cycle when you close and reopen the PWA."* They
+did not. Confidence 9/10 on the fix; both causes are reproduced in tests that fail on the old code.
+
+1. **`save()` throws the counter away on a phone with nothing else stored.** `isEmpty()`
+   deliberately ignores `seen` so a never-used or just-wiped BETR leaves nothing behind — which
+   also means `seen` is removed with the rest of the record on every open. Every open was open
+   zero, and every open was the first card. It cycled correctly the moment anything else was
+   stored, which is exactly why no walkthrough caught it.
+2. **Closing a standalone PWA usually does not tear the page down.** iOS hands the same page
+   back, so nothing at the bottom of `app.js` ran a second time. Fixing (1) alone would have
+   changed nothing on the founder's phone.
+
+**What it does now, and the promise is untouched — nothing is written for a person who has
+stored nothing:**
+
+- Nothing stored → the counter **starts somewhere random**, so two cold starts usually differ.
+- A reopen (`visibilitychange` → visible, and only on the front screen) → **the next one**,
+  which is a guarantee a random cold start cannot make.
+- Anything stored → still a **counter**, still predictable, still in order.
+- Mid-loop → **nothing swaps**, which is the rule the counter existed for in the first place.
+
+`web/tests/harness.js` gained `api.reopen()` — a close-and-open that is *not* a page load —
+and a seeded `Math.random`, because the sandbox has no `crypto` and `rid()` falls back to it.
+
+**Still the founder's, and now it has a second half:** which example leads, whether it is real or
+an example — and **whether four stays four.** `docs/example-tests-bank.md` §4 has twenty more
+written and checked; taking any of them into the app means raising the cap, and the reason for
+the cap is in `content.test.js`.

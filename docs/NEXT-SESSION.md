@@ -1,43 +1,41 @@
 # Start here
 
-**Last refreshed:** 2026-09-10, 4th session — **[`B51`](tasks/B51-the-second-question.md) §5 built, walked and pushed. 274 tests pass.** Rewritten, never appended to. Cap: 120 lines.
+**Last refreshed:** 2026-09-10, 5th session — **the front screen's worked example cycles again, and there is a bank of 24 for the reels. 279 tests pass.** Rewritten, never appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**The loop asks a second question now, and it asks it on the screen a first test actually reaches.** The founder wrote *"If I
-post my app on social media, then people will say it's rubbish"* and asked what happens when the prediction comes true. Nothing
-did: the result screen struck their own sentence through against itself.
+**This session, on the founder's report: the front screen's worked example never changed.** Two causes, one symptom. `save()` removes the key for a
+store with nothing else in it and `isEmpty()` ignores `seen`, so on a **fresh install** the open counter was written and thrown away every time; it
+cycled correctly the moment anything else was stored, which is why no walkthrough caught it. And **closing a standalone PWA does not tear the page
+down** — iOS hands the same page back, so nothing at the bottom of `app.js` ran again either. Both fixed: a phone storing nothing starts on a
+**random** card (nothing is written, the no-trace promise is untouched), a reopen steps to the **next** via `visibilitychange`, and coming back
+mid-loop still swaps nothing. `harness.js` gained `api.reopen()` and a seeded `Math.random`; five tests, two of which fail on the old code. **New:
+[`docs/example-tests-bank.md`](example-tests-bank.md)** — 24 finished tests for the reels, the app's four plus twenty built on its own predictions
+and run through its guards. Its §4 holds one founder call: **whether four on the front screen stays four.**
 
-**B51's spec named the wrong screen, and walking it made the hole bigger.** `plan()` — the screen holding the second field `x` —
-has **exactly one caller, `again()`**. So a first test was never asked anything at all: `guards.expectationFrom` cut the *If I
-…, then* off the person's own sentence, stored the tail, and showed it back for the first time on the result. The read-only echo
-with *Not quite? Change it* that B51 §2 described is the **repeat** screen.
+**Before that, [`B51`](tasks/B51-the-second-question.md) §5: the loop asks a second question, on the screen a first test actually reaches.** B51's
+spec named the wrong screen — `plan()` has exactly one caller, `again()` — so a first test was never asked anything at all; the read-only echo B51
+§2 describes is the **repeat** screen. Shipped: *plan.expectLabel* = **"And what would that mean for you?"** (founder's pick of four, **Misha
+unread**), a box under it on **both** the build and repeat screens, the app's own expectation **greyed inside the box on every road** (founder's
+§9.3 call), an **empty box locking in that greyed sentence**, the **one hard stop** running on the box, and the box growing to fit. No new blank, no
+new screen, no new tap, no store change.
 
-**What shipped:** *plan.expectLabel* is **"And what would that mean for you?"** (the founder's pick of four; **Misha unread**),
-with a box under it on **both** the build screen and the repeat screen. The app's own expectation is **greyed inside the box**
-on every road, stock included (the founder's §9.3 call). **An empty box locks in that greyed sentence**, so nothing that worked
-before can stop working. **The one hard stop runs on the box.** The box **grows to fit what is greyed in it**. No new blank, no
-new screen, no new tap, **no store change**.
-
-**Read [`B51`](tasks/B51-the-second-question.md) §12 and §13 before touching any of it.** §13 is what is knowingly left, and item
-1 is that **the reviewer's three questions are unanswered and the founder chose to ship ahead of them.** If (a) comes back *no*,
-this comes out again, and `docs/00-scope.md` §9 gains a named limit instead.
+**Read [`B51`](tasks/B51-the-second-question.md) §12 and §13 before touching any of it.** §13 is what is knowingly left, and item 1 is that **the
+reviewer's three questions are unanswered and the founder chose to ship ahead of them.** If (a) comes back *no*, this comes out again and
+`docs/00-scope.md` §9 gains a named limit instead.
 
 ## 2. The next action — the first is code, the rest are not
-1. **The other nineteen worries' size holes.** Sixty sentences, an hour, one question: *"are there already words standing in for
-   something a person would name?"* Where yes it is free, the way `no`'s was; **where no, leave it** — inventing one is BETR
-   proposing a sentence.
-2. **`happened.placeholder` — *"He said 'fair enough' and got his own coffee."*** The **last frozen worked example in the app**,
-   on every worry, and that box has **no suggestions under it**. Decide it on purpose (B49 §8.4) — one string, the founder's.
-3. **The bottom row's *New test* still opens the two empty blanks** — the exit, on every screen; fine while free
-   text was the entrance, a question since B50. One line, and it is the founder's.
-4. **[`B51`](tasks/B51-the-second-question.md) §8, the post, is not started.** The correction pair the app now
-   makes room for is the pair the post needs. **Written once, not twice.**
-5. **B45 §3 difference 7** — the repeat screen. Half shipped; its "all three open" half collides with difference 4,
-   closed as a **no**.
-
-**Do NOT take difference 4** (closed) or **difference 6** (the chip row is 382–1050px; it waits on a cull of the
-twelve). **Do not re-read the 60 `W-*-E` rows before the reviewer answers (b)** — B51 §13.2, their question.
+1. **The other nineteen worries' size holes.** Sixty sentences, an hour, one question: *"are there already words standing in for something a person
+   would name?"* Where yes it is free, the way `no`'s was; **where no, leave it** — inventing one is BETR proposing a sentence.
+2. **`happened.placeholder` — *"He said 'fair enough' and got his own coffee."*** The **last frozen worked example in the app**, on every worry, and
+   that box has **no suggestions under it**. Decide it on purpose (B49 §8.4) — one string, the founder's.
+3. **The bottom row's *New test* still opens the two empty blanks** — the exit, on every screen; fine while free text was the entrance, a question
+   since B50. One line, and it is the founder's.
+4. **[`B51`](tasks/B51-the-second-question.md) §8, the post, is not started.** The correction pair the app now makes room for is the pair the post
+   needs. **Written once, not twice.**
+5. **B45 §3 difference 7** — the repeat screen. Half shipped; its "all three open" half collides with difference 4, closed as a **no**.
+**Do NOT take difference 4** (closed) or **difference 6** (the chip row is 382–1050px; it waits on a cull of the twelve). **Do not re-read the 60
+`W-*-E` rows before the reviewer answers (b)** — B51 §13.2, their question.
 
 ## 3. Waiting on people, not on code
 

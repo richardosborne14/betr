@@ -1325,3 +1325,23 @@ landed on the answer box — its size, its colour and its margin — and looked 
 **A class named after a shape (`.line`, `.short`) will be reused on a different tag sooner or
 later.** Scope the descendant rule to the tag it was always about — `.plan p.line` — the moment
 a second kind of element joins the container.
+
+## 2026-09-10 — A counter that never survives, because "empty" means "delete the key"
+
+The front screen's worked example was meant to step on every open, and the founder reported it
+never changed. It stepped correctly in every test and in every walkthrough. The reason is one
+line in `store.js`: `save()` calls `removeItem` when `isEmpty(state)` — and `isEmpty()`
+deliberately ignores `seen`, the open counter, so that a phone which has never been used leaves
+nothing behind. **On a fresh install the counter was written and immediately thrown away.** It
+worked the moment anything else was stored, which is why a walkthrough never sees it: by the
+time you look, you have locked in a test.
+
+**Any field the emptiness check ignores is a field that does not persist on its own.** That is
+not a bug in `isEmpty()` — it is the promise working — but the field's own comment has to say
+so, and the feature has to work without it.
+
+The second half is worse, because no amount of fixing the first would have shown up:
+**closing a standalone PWA usually does not tear the page down.** iOS hands the same page back
+and nothing at the bottom of `app.js` runs again. Anything that is supposed to happen "on open"
+needs `visibilitychange` as well as a page load, and the harness needed an `api.reopen()` to
+tell the two apart. Test both, or you have tested the rarer one.

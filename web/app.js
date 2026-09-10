@@ -905,9 +905,21 @@
 
     `S.seen` is deliberately NOT counted by store.isEmpty(). A BETR that has never been used,
     and one that has just been wiped, must leave nothing at all behind — and which example
-    comes next is not something a person would miss. The cost is that somebody with nothing
-    else stored sees the first one every time, which is the right way round anyway: the first
-    one is the one the founder chose to lead with.
+    comes next is not something a person would miss.
+
+    AMENDED 2026-09-10, founder's report: "make sure they cycle when you close and reopen".
+    They did not, and the cost above was the whole reason. save() REMOVES the key for a store
+    with nothing else in it, so on a fresh install `seen` never survived the close: every open
+    was open zero and every open was the first example. It cycled correctly the moment
+    anything else was stored, which is why it looked right in a walkthrough and wrong on a
+    phone somebody had only just installed.
+
+    The promise stays — nothing is written for a person who has stored nothing. So where there
+    is nothing to remember the counter STARTS somewhere random instead, and where there is, it
+    still cycles in order. One line, no new stored field, and no key on a virgin phone.
+
+    Random has a one-in-four chance of repeating a card across two cold starts. The step on
+    resume below is what makes the founder's actual gesture — close it, open it — never repeat.
   */
   function exampleIndex() {
     if (!EXAMPLES.length) return 0;
@@ -3525,9 +3537,34 @@
     somebody. It writes through save(), which for a person with nothing else stored is a
     no-op — see exampleIndex() for why that is the right way round.
   */
-  shown = typeof S.seen === 'number' && S.seen === S.seen ? S.seen : 0;
+  shown = typeof S.seen === 'number' && S.seen === S.seen && S.seen > 0
+    ? S.seen
+    : Math.floor(Math.random() * (EXAMPLES.length || 1));
   S.seen = shown + 1;
   save();
+
+  /*
+    And the other half of "close and reopen", which is not a page load at all.
+
+    A standalone PWA is often NOT torn down when somebody closes it: iOS in particular keeps
+    the page alive and hands the same one back on the next open. Nothing above runs a second
+    time, so the card never changed however many times the founder closed it. Coming back to
+    the front is the same gesture as opening, so it gets the same step — and a step is never a
+    repeat, which a fresh cold start cannot promise.
+
+    ONLY ON THE FRONT SCREEN. Coming back mid-loop must not swap the card underneath somebody,
+    and that is the rule the counter exists to keep (see exampleIndex). Somebody who backgrounds
+    the app halfway through a test and comes back finds the screen they left.
+  */
+  if (document && typeof document.addEventListener === 'function') {
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible' || S.stage !== 'start') return;
+      shown += 1;
+      S.seen = shown + 1;
+      save();
+      render();
+    });
+  }
 
   applyLanguage();
   render();
