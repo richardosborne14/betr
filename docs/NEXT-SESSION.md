@@ -45,12 +45,11 @@ twelve). **Do not re-read the 60 `W-*-E` rows before the reviewer answers (b)** 
    **A pitch, nothing built, eleven decisions in its §6, most of them the founder's.** Found live that day: **three TrybeUP dev
    ports open to the internet**, no firewall, no rate limit, no HSTS, no CAA, **no uptime monitoring at all**.
 
-1. **The founder.** **(a) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row; plus four renames and three
-   questions (`S10-D2`, `S15-P1`, `S18-D1`). **(b) B47 §6c.** **(c) `ontime` is the weakest fit of the twenty behind the `work`
-   door.** **(d) `happened.placeholder`, above.** Then: walk J4 and J5 on a phone, B36 items 6 and 9, five answers on *Why it's
-   written like this*, rule 10's third amendment (B37 §9a), which example leads the front screen **and whether four stays four**
-   (`docs/example-tests-bank.md` §4 — twenty more are written and checked, for the reels), **the purpose statement**, the
-   **`HARM` false refusal**, **B25**. *(B51 §9.3 is answered and shipped, with two more calls taken the same day.)*
+1. **The founder.** **(a) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row; plus four renames and three questions
+   (`S10-D2`, `S15-P1`, `S18-D1`). **(b) B47 §6c.** **(c) `ontime` is the weakest fit of the twenty behind the `work` door.** **(d)
+   `happened.placeholder`, above.** Then: walk J4 and J5 on a phone, B36 items 6 and 9, five answers on *Why it's written like this*, rule
+   10's third amendment (B37 §9a), which example leads the front screen **and whether four stays four** (`example-tests-bank.md` §4), **the
+   purpose statement**, the **`HARM` false refusal**, **B25**. *(B51 §9.3 is answered and shipped, with two more calls taken the same day.)*
 2. **Misha, in one ask.** `docs/COPY.md` is regenerated. **NEW AND ALREADY LIVE: `plan.expectLabel`, *"And what would that mean
    for you?"*** — shipped unread, the way B49's two grey lines were, and it is on the last screen before *Lock it in* on
    **every** road; the other three drafts are in B51 §9.1. Still unread: **four strings** — `build.doOwnPlaceholder`,
