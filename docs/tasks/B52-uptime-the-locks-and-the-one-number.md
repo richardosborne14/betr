@@ -1,6 +1,6 @@
 # B52: Uptime, the locks on the front door, and the only number we can honestly have
 
-**Status:** **§5c is BUILT AND LIVE — the tally, 2026-09-10, on the founder's instruction ("just to know
+**Status:** **§5c is BUILT AND LIVE, and extended the same day by §11 (two counts) — the tally, 2026-09-10, on the founder's instruction ("just to know
 how many people have viewed the page, no other data about it, just the pure number, even if
 it's bots"). §10 is what was built.** Everything else is still a pitch. All findings were
 checked on the live server and the live DNS on 2026-09-10; no number or setting is from memory.
@@ -570,3 +570,95 @@ the right uid and a confusing name, so it is written down here.
 **Confidence: 9/10.** Built, run in the real image, mutation-tested, walked on the screen, and
 now verified on the live address. The 1 is that nobody but us has opened the page yet, so the
 first real day's number is still ahead.
+
+---
+
+## 11. The second count — "can it exclude bots?", 2026-09-10
+
+The founder read §10 and asked: *"So there's no way that count can represent the 'real' opens
+that day, excluding known bot IPs?"*
+
+### The answer to the question as asked: no, and it should stay no
+
+**BETR is never told who is asking.** TrybeUP's block passes it `Host` and `X-Forwarded-Proto`
+and nothing else — no `X-Real-IP`, no `X-Forwarded-For` — so every request arrives looking like
+it came from the proxy. **There is no address in BETR's server to compare against any list**,
+and putting one there would undo the cleanest checkable fact the product has.
+
+**And a "known bot IP list" is not a real thing.** Google, Bing and OpenAI publish their crawler
+ranges; those are the polite ones. The bulk of automated traffic comes out of ordinary AWS,
+Azure and residential-proxy ranges that are indistinguishable from a person on their phone. A
+list like that is stale the week after it is written, and **a filter you cannot trust is worse
+than no filter, because you believe the number.**
+
+### What was built instead: two counts, by what the thing calls itself
+
+The founder chose **two numbers rather than one** — neither of which pretends to be people.
+
+| File | Holds |
+| --- | --- |
+| `2026-09-10.log` | every open, exactly as before |
+| `2026-09-10.nobots.log` | the opens that did not say they were a robot |
+
+Both hold a row of `1`s. The user agent is **read, compared to a fixed list in this repo, and
+thrown away** — it is never written anywhere, which is why the Help sentence says *written
+down* rather than *seen*. Nothing is fetched at runtime to keep the list current; a test fails
+the build if a `resolver`, a `proxy_pass` or a scripting module ever appears in that file.
+
+The entry that will matter most in practice: **Meta fetches every link shared on Instagram and
+WhatsApp** to build the preview card. Without this, that would land in the number every time a
+post travels.
+
+**Checked against real user-agent strings, in the real image:**
+
+| | Counted as a person | Counted at all |
+| --- | --- | --- |
+| iPhone Safari, desktop Chrome | ✅ | ✅ |
+| Googlebot, GPTBot, Meta's link fetcher, `curl`, an uptime monitor, no user agent at all | ❌ | ✅ |
+| `app.js` from a real browser | ❌ | ❌ |
+
+Eight requests in: `1 1 1 1 1 1 1 1` in one file, `1 1` in the other.
+
+### The guard this produced, and it is the best thing in B52
+
+`tests/deploy.test.js` now holds `deploy/nginx.conf` to an **allow-list of what it may read at
+all** — `$uri`, `$time_iso8601`, `$http_user_agent`, and the four variables built from them.
+Anything else fails the build, named individually where it helps: the address, the referrer, the
+query string, how long somebody stayed.
+
+**An allow-list, not a ban-list, and that is the point:** a ban-list is only as good as the
+imagination of whoever wrote it. Adding a variable to that set is a decision about the promise
+and belongs to the founder, not to a refactor. Mutation-checked, like the rest:
+
+| Change somebody might make | Result |
+| --- | --- |
+| Deciding robots by address (`map $remote_addr $betr_bot`) | ❌ 2 tests fail |
+| Reading the address anywhere at all, even in a header | ❌ build fails |
+| The second count quietly becoming a copy of the first | ❌ build fails |
+| Dropping Meta's link fetcher from the list | ❌ build fails |
+| Renaming the log format | ❌ build fails |
+
+*(A variable named in a **comment** does not fail — comments are stripped before the scan. That
+was checked too, so nobody discovers it by accident later.)*
+
+### What is still true, and must not be forgotten
+
+1. **"Not robots" means "did not say it was a robot."** A scraper that lies lands in that
+   column, and most of them lie. **It is a floor on robots, not a truth about people.**
+2. **Both numbers are opens, not people.** One person opening it five times is five, in both.
+3. **The gap between the two columns is roughly the crawlers and link-preview fetchers**, and
+   watching that gap change shape is itself information.
+
+### The sentence changed a second time, the same day
+
+> *…Loading this page is the only thing any server ever sees. We keep two counts — how many
+> times the page was opened each day, and how many of those were not robots — and nothing else.
+> Nothing about you is written down: not your address, not your browser, not even the time of
+> day.*
+
+**"not even the time of day" is exact, and was chosen over "not the time":** the *day* is
+recorded, in the name of the file. The time of day is recorded nowhere. Walked on the Help
+screen at 390×844 at normal size and at 200% text: renders, no sideways scroll.
+
+**Confidence: 9/10.** The 1 is the honest limit of user-agent filtering, which is stated on the
+number itself every time it is read rather than hidden in this file.

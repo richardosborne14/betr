@@ -890,20 +890,30 @@ var BETR_STRINGS_EN = {
       */
       free: 'BETR is free. No ads, no subscription, nothing to buy, and nothing to unlock.',
       /*
-        B52, 2026-09-10, founder's call. This said "and we keep no record of it" until the
-        day the tally was built, and the tally is the reason it changed: the sentence and the
-        server setting have to move together or one of them is a lie. What the server keeps
-        is a "1" per page open in a file named for the day — no address, no browser, no
-        referrer, no clock time, nothing that is about a person. `tests/deploy.test.js` holds
-        the server to exactly that, and this sentence is why those tests exist.
+        B52, 2026-09-10, founder's call, and it changed twice that day. It said "and we keep
+        no record of it" until the tally was built; then the founder asked whether the count
+        could exclude robots, so a second count was added and this changed again. The
+        sentence and the server setting move together or one of them is a lie.
+
+        What the server keeps is two files of "1"s, named for the day: every open, and every
+        open that did not say it was a robot. No address — BETR is not even told one — no
+        referrer, no clock time. The user agent is READ to tell the two counts apart and is
+        never written anywhere, which is why this says "written down" rather than "seen".
+
+        "not even the time of day" is exact and was chosen over "not the time": the DAY is
+        recorded, in the name of the file. The time of day is not recorded at all.
+
+        `tests/deploy.test.js` holds the server to an allow-list of what it may read at all,
+        and this sentence is why those tests exist.
 
         Frozen sentence 8 is untouched and still exactly true: it is about what a person
         WRITES, and nothing a person writes has ever left their phone.
       */
       airplane: 'Turn on airplane mode. Everything still works, because nothing here ever ' +
         'needed the internet. Loading this page is the only thing any server ever sees. We ' +
-        'keep a count of how many times it was opened each day, and nothing else — no ' +
-        'address, no browser, nothing that could ever be traced to you.',
+        'keep two counts — how many times the page was opened each day, and how many of ' +
+        'those were not robots — and nothing else. Nothing about you is written down: not ' +
+        'your address, not your browser, not even the time of day.',
       proofResults: 'results on this phone',
       proofAccounts: 'accounts',
       proofSent: 'sent to us, ever',

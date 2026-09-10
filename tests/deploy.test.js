@@ -57,14 +57,15 @@ test('nothing about a visit is written down, except the mark that counts it', ()
   assert.ok(directives.length > 0, 'deploy/nginx.conf must say what it does with access logs');
 
   const writing = directives.filter((d) => d !== 'access_log off;');
-  assert.strictEqual(writing.length, 1,
-    'exactly one access_log may write anything at all — the B52 tally. Found: ' +
-    JSON.stringify(writing));
+  assert.strictEqual(writing.length, 2,
+    'exactly two access_logs may write anything at all — every open, and every open that ' +
+    'did not say it was a robot. Found: ' + JSON.stringify(writing));
 
-  /* The one that writes. Every part of it is load-bearing, so every part is asserted. */
-  assert.strictEqual(writing[0],
+  /* Both lines are load-bearing in every part, so every part is asserted. */
+  assert.deepStrictEqual(writing, [
     'access_log /var/log/betr/$betr_day.log betr_tally if=$betr_page;',
-    'the tally line is quoted in the Help screen sentence and in B52; it may not drift');
+    'access_log /var/log/betr/$betr_day.nobots.log betr_tally if=$betr_human;'
+  ], 'the tally lines are described on the Help screen and in B52; they may not drift');
 
   assert.match(compose, /max-size:\s*"1m"/, 'Docker must not keep an unbounded copy either');
   assert.match(conf, /error_log\s+\S+\s+crit;/,
@@ -108,7 +109,7 @@ test('the only thing in the tally path is the day', () => {
     .map((m) => m[1])
     .filter((v) => v.includes('$'))
     .flatMap((v) => [...v.matchAll(/\$(\w+)/g)].map((m) => m[1]));
-  assert.deepStrictEqual(vars, ['betr_day'],
+  assert.deepStrictEqual(vars, ['betr_day', 'betr_day'],
     'the only variable allowed in a log path is the day. Found: ' + vars.join(', '));
 });
 
@@ -134,6 +135,89 @@ test('only the page is counted, not the files it pulls in', () => {
   const fallback = rules.find((r) => r[0] === 'default');
   assert.ok(fallback && fallback[1] === '0',
     'anything not named must count for nothing — the default is 0');
+});
+
+/*
+  THE ONE THAT MATTERS MOST.
+
+  The founder asked whether the count could exclude bots by their address. It cannot, and
+  this is what makes that answer permanent rather than a promise: BETR is handed no address
+  (TrybeUP's block passes Host and X-Forwarded-Proto and nothing else), and this config may
+  not read one even if it were. Everything nginx knows about a request is a variable, so the
+  rule is an allow-list of variables, not a ban-list of bad ones — a ban-list is only as good
+  as the imagination of whoever wrote it.
+
+  Adding a variable to this list is a decision about the promise, not a refactor. If a future
+  session needs one, it goes to the founder first.
+*/
+test('the server may read only these things about a request, and nothing else', () => {
+  const allowed = new Set([
+    /* what a request is for — the page, or not the page */
+    'uri',
+    /* the day, for the file name */
+    'time_iso8601',
+    /* what the thing calls itself, to tell a robot from a person. Read, never written. */
+    'http_user_agent',
+    /* our own, derived from the three above */
+    'betr_day', 'betr_page', 'betr_bot', 'betr_human', 'ymd'
+  ]);
+
+  const code = conf.split('\n').map((l) => l.replace(/#.*$/, '')).join('\n');
+  const used = new Set([...code.matchAll(/\$(\w+)/g)].map((m) => m[1]));
+  const extra = [...used].filter((v) => !allowed.has(v)).sort();
+
+  assert.deepStrictEqual(extra, [],
+    'deploy/nginx.conf started reading something new about a request: ' + extra.join(', ') +
+    '. That is a decision about what BETR knows, and it belongs to the founder.');
+
+  /* Named individually, so the failure says the thing rather than a variable name. */
+  for (const [v, why] of [
+    ['remote_addr', 'the address of the person asking'],
+    ['binary_remote_addr', 'the address of the person asking'],
+    ['http_x_forwarded_for', 'the address of the person asking'],
+    ['http_x_real_ip', 'the address of the person asking'],
+    ['http_referer', 'where they came from'],
+    ['args', 'what was on the end of the link they followed'],
+    ['request_time', 'how long they were here']
+  ]) {
+    assert.ok(!used.has(v), 'BETR must never read ' + why + ' ($' + v + ')');
+  }
+});
+
+/*
+  The second count. It is a floor on robots rather than a truth about people: a robot that
+  lies about what it is gets counted as a person, and most scrapers lie. What this test
+  holds is narrower and is the part that could go wrong quietly — that the decision is made
+  from the user agent alone, and that the user agent is never written down.
+*/
+test('a robot is told apart by what it calls itself, and by nothing else', () => {
+  const bot = conf.match(/map\s+(\S+)\s+\$betr_bot\s*\{([\s\S]*?)\n    \}/);
+  assert.ok(bot, '$betr_bot must be a map, where what it reads can be read');
+  assert.strictEqual(bot[1], '$http_user_agent',
+    'the only thing that may decide this is what the thing calls itself. Found: ' + bot[1]);
+
+  assert.match(bot[2], /^\s*default\s+0;/m,
+    'anything that does not match the list is counted as a person');
+  assert.match(bot[2], /^\s*""\s+1;/m,
+    'a request with no user agent at all is not a browser');
+
+  /* The joined condition: it is the page AND it did not say it was a robot. */
+  const human = conf.match(/map\s+"([^"]+)"\s+\$betr_human\s*\{([\s\S]*?)\n    \}/);
+  assert.ok(human, '$betr_human must be a map');
+  assert.strictEqual(human[1], '$betr_page:$betr_bot',
+    'the second count is the page and not-a-robot, in that order');
+  assert.match(human[2], /"1:0"\s+1;/, 'counted only when it is the page and not a robot');
+  assert.match(human[2], /^\s*default\s+0;/m, 'everything else counts for nothing');
+
+  /* The list is ours and it never goes anywhere to update itself. */
+  assert.ok(!/resolver|proxy_pass|geoip|njs|js_import/.test(conf),
+    'nothing may be fetched at runtime to support this — the list is fixed, in this repo');
+
+  for (const known of ['facebookexternalhit', 'bot', 'headless', 'curl']) {
+    assert.ok(bot[2].includes(known),
+      'the list must still catch ' + known + ' — Meta fetches every link shared on ' +
+      'Instagram and WhatsApp, and that would otherwise land in the number');
+  }
 });
 
 /*
