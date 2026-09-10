@@ -889,9 +889,21 @@ var BETR_STRINGS_EN = {
         by something happening elsewhere, and menu.test.js only checks that it is present.
       */
       free: 'BETR is free. No ads, no subscription, nothing to buy, and nothing to unlock.',
+      /*
+        B52, 2026-09-10, founder's call. This said "and we keep no record of it" until the
+        day the tally was built, and the tally is the reason it changed: the sentence and the
+        server setting have to move together or one of them is a lie. What the server keeps
+        is a "1" per page open in a file named for the day — no address, no browser, no
+        referrer, no clock time, nothing that is about a person. `tests/deploy.test.js` holds
+        the server to exactly that, and this sentence is why those tests exist.
+
+        Frozen sentence 8 is untouched and still exactly true: it is about what a person
+        WRITES, and nothing a person writes has ever left their phone.
+      */
       airplane: 'Turn on airplane mode. Everything still works, because nothing here ever ' +
-        'needed the internet. Loading this page is the only thing any server ever sees, and ' +
-        'we keep no record of it.',
+        'needed the internet. Loading this page is the only thing any server ever sees. We ' +
+        'keep a count of how many times it was opened each day, and nothing else — no ' +
+        'address, no browser, nothing that could ever be traced to you.',
       proofResults: 'results on this phone',
       proofAccounts: 'accounts',
       proofSent: 'sent to us, ever',

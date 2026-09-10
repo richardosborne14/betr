@@ -690,7 +690,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`help.airplane`**
 
-> Turn on airplane mode. Everything still works, because nothing here ever needed the internet. Loading this page is the only thing any server ever sees, and we keep no record of it.
+> Turn on airplane mode. Everything still works, because nothing here ever needed the internet. Loading this page is the only thing any server ever sees. We keep a count of how many times it was opened each day, and nothing else — no address, no browser, nothing that could ever be traced to you.
 
 **`help.proofResults`**
 

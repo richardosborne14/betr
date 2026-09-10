@@ -1,7 +1,9 @@
 # B52: Uptime, the locks on the front door, and the only number we can honestly have
 
-**Status:** **Pitch. Nothing built.** Everything below was checked on the live server and the
-live DNS on 2026-09-10; no number or setting in it is from memory.
+**Status:** **§5c is BUILT — the tally, 2026-09-10, on the founder's instruction ("just to know
+how many people have viewed the page, no other data about it, just the pure number, even if
+it's bots"). §10 is what was built.** Everything else is still a pitch. All findings were
+checked on the live server and the live DNS on 2026-09-10; no number or setting is from memory.
 **Confidence:** 8/10 on the findings, which are all first-hand. 7/10 on the Cloudflare
 recommendation, which is a judgement call and is argued rather than asserted.
 **Date opened:** 2026-09-10 · **Asked for by:** the founder, before the first Instagram posts
@@ -319,7 +321,9 @@ and it invites a question the current one closes.** Note this is *not* one of th
 sentences, so it is yours to change: frozen sentence 8 is about what a person *writes*, and that
 stays true either way.
 
-**Recommendation: don't buy it yet.** The sentence is worth more than the number while the
+**Recommendation at the time of writing was: don't buy it yet. The founder read that and said build it, the same day** — the number is wanted before the first Instagram post, not after it. Overruled knowingly; see §10. What follows is the argument as it stood.
+
+**~~Recommendation: don't buy it yet.~~** The sentence is worth more than the number while the
 number is small and Instagram is telling you the same thing. **Revisit the day you cannot tell
 whether anyone is coming back** — that is the one question this answers and nothing else does.
 The change is about an hour's work whenever you want it; nothing is lost by waiting, except the
@@ -424,3 +428,129 @@ by reading a URL when the pinned post could have told them. `posting-on-social.m
 must not be dropped**, because the address makes the question inevitable.
 
 **Nothing to build. One line for the founder to agree with, and B7/B6 to note.**
+
+---
+
+## 10. What was built — the tally, 2026-09-10
+
+**The founder's words:** *"Can we have the blind tally please? Just to know how many people have
+viewed the page, no other data about it, just the pure number (even if it's bots or whatever I
+guess?)"* — asked for **before** the uptime and security work, which is why it went first.
+
+### What the server now keeps
+
+**A "1".** That is the whole line written when somebody opens the page. Not a shortened address,
+not a hashed one, not a browser, not a referrer, not a clock time. You can `cat` the file and
+see a row of ones.
+
+**The date is in the file name, never in a line.** What exists on disk is a set of files called
+`2026-09-10.log`, each holding a row of `1`s. **That makes it a daily total by construction
+rather than by promise:** the per-visit record does not exist to be kept, aggregated,
+correlated, leaked or subpoenaed later, because it was never written.
+
+Five lines of nginx, in `deploy/nginx.conf`, in BETR's own repo where anyone can read them:
+
+```nginx
+map $time_iso8601 $betr_day  { "~^(?<ymd>\d{4}-\d{2}-\d{2})"  $ymd;  default unknown; }
+map $uri          $betr_page { default 0;  /index.html 1;  /  1; }
+log_format betr_tally '1';
+access_log /var/log/betr/$betr_day.log betr_tally if=$betr_page;
+```
+
+`$uri` is the *final* URI, after nginx resolves `/` to the index, so `/` and `/index.html` are
+one thing and are counted exactly once. `if=$betr_page` is why `app.js`, the stylesheet and
+every icon count for nothing: **one open is one mark.**
+
+### Proved before it went near the droplet
+
+Run locally in the same `nginx:alpine` image the server runs, against a real container:
+
+| Asked for | Counted? |
+| --- | --- |
+| `/` | ✅ once |
+| `/index.html` | ✅ once |
+| `/?utm_source=instagram` | ✅ once — **a query string cannot inflate or distinguish anything; `$uri` excludes it** |
+| A returning visitor's revalidation (304) | ✅ once |
+| A `HEAD` request | ✅ once |
+| `/app.js` | ❌ never |
+| A 404 | ❌ never |
+
+The file after seven such requests: `1 1 1 1 1 1 1`. Eight bytes.
+
+### The tests, and they were mutation-checked rather than trusted
+
+`tests/deploy.test.js` now holds the server to exactly this, and each of these was proved to
+**fail** by making the change it forbids:
+
+| Change somebody might make | Result |
+| --- | --- |
+| An address in the log format (`'$remote_addr'`) | ❌ build fails |
+| A clock time in the file name (`$time_iso8601.log`) | ❌ build fails |
+| Counting an asset as a page open | ❌ build fails |
+| Dropping the `if=` so everything is logged | ❌ build fails |
+
+**283 tests pass.** The guard is not "the tally exists"; it is **"the tally can never quietly
+become anything else"**, which is the only part worth testing.
+
+### The sentence changed in the same commit
+
+`help.airplane` in `web/content/strings-en.js` said *"…and we keep no record of it."* It now
+reads:
+
+> *Turn on airplane mode. Everything still works, because nothing here ever needed the internet.
+> Loading this page is the only thing any server ever sees. We keep a count of how many times it
+> was opened each day, and nothing else — no address, no browser, nothing that could ever be
+> traced to you.*
+
+Walked on the Help screen at 390×844 at normal size and at 200% text: renders, no sideways
+scroll, no overflow. `docs/00-scope.md` Q5a and `docs/learnings.md` were updated in the same
+commit, because both quoted the old sentence as the thing to say.
+
+**Two sentences were checked and deliberately NOT changed, so nobody re-litigates them later:**
+
+- **Frozen sentence 8** — *"Everything you write stays on this device. There is no account, no
+  server, and nothing is sent to us or anyone else."* It is about what a person **writes**, and
+  nothing a person writes has ever left their phone. Untouched, still exactly true, and it is
+  frozen (rule 7) so it could not have been changed here anyway.
+- **`0 B sent to us, ever`**, the proof counter directly under the airplane line. Still true:
+  the tally changed what we **keep**, not what is **sent**. The sentence that covers keeping is
+  the one that changed.
+
+### How the founder sees the number
+
+**A button, not a command.** On github.com: the Actions tab → *How many times the page has been
+opened* → **Run workflow**. `.github/workflows/views.yml` reads the folder over the existing
+deploy key and prints a total and a day-by-day table into the run summary. It only reads;
+nothing in it can change a count or delete a day.
+
+### Four things that are true about this number and should stay written down
+
+1. **It counts opens, not people.** One person opening it five times is five.
+2. **Bots are in it, by decision** — and note we *could* not exclude them: excluding a bot means
+   reading who is asking, and we do not read who is asking. The founder accepted this in the
+   asking.
+3. **Anything that asks for the page counts, including us.** So when §3's uptime monitor is
+   built, **point it at `/app.js`, never at the page**, or it adds one every three minutes. The
+   hourly integrity check must fetch the page to read the build hash, so it will add ~24 a day;
+   that is known, constant, and worth subtracting.
+4. **Offline opens never count.** Somebody who installed it to their home screen and uses it on
+   the train is invisible here, which is the correct behaviour and also means **the number is a
+   floor, not a total**.
+
+### Still to do on the droplet — the one part that needs a person
+
+The deploy account deliberately cannot restart its own container (B3), and `/var/log/betr` does
+not exist yet. Three commands, once:
+
+```
+mkdir -p /var/log/betr && chown 101:121 /var/log/betr && chmod 750 /var/log/betr
+cd /opt/betr && docker compose up -d
+```
+
+`101` is the `nginx` user *inside* the container, which is what opens the file; `121` is the
+`betr` group, which is how the read-only workflow above can see it. Until this is run the site
+is unaffected and the tally simply does not exist — the workflow says so in plain words rather
+than showing a zero.
+
+**Confidence: 9/10.** Built, run in the real image, mutation-tested, and walked on the screen.
+The 1 is that it has not yet run on the droplet.

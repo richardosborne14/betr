@@ -187,11 +187,14 @@ understand or when a decision was reversed.
   worth naming: it cannot restart its own container, so a change to `deploy/nginx.conf` needs one
   manual `docker compose up -d`. The workflow goes red rather than letting the repo and the live
   server quietly disagree.
-- **A promise printed on a screen is a server setting somewhere.** *"Loading this page is the
-  only thing any server ever sees, and we keep no record of it"* is `access_log off` in two
-  places and a capped Docker log driver in a third. It is asserted in `tests/deploy.test.js` for
-  the same reason the wordmark is: the sentence and the setting have to fail together, or one
-  day the sentence will be alone.
+- **A promise printed on a screen is a server setting somewhere.** What the Help screen says
+  about what a server keeps is `access_log` in two places and a capped Docker log driver in a
+  third. It is asserted in `tests/deploy.test.js` for the same reason the wordmark is: the
+  sentence and the setting have to fail together, or one day the sentence will be alone.
+  **This is not theoretical — it happened on 2026-09-10 (B52), in the good direction.** The
+  founder asked for a count of page opens; the setting changed, so the sentence changed in the
+  same commit, and the tests were rewritten to hold the new one just as tightly. **The rule is
+  not "never change the sentence". It is "never let them disagree for even one deploy."**
 
 ## 2026-09-03 — words out of the code, and out loud (B15)
 

@@ -1,0 +1,94 @@
+name: How many times the page has been opened
+
+# B52. The founder asked for one number and this is where it is read.
+#
+# There is nothing to install and nothing to log into: open this repo on github.com, the
+# Actions tab, this workflow, "Run workflow". The numbers appear in the run's summary a few
+# seconds later. It is a button, not a command.
+#
+# What it reads is a folder of files on the droplet called 2026-09-10.log, each one holding a
+# row of "1"s — one per page open, written by BETR's own nginx. There is nothing in a line, so
+# there is nothing here that could be about a person: no address, no browser, no referrer, no
+# clock time. See deploy/nginx.conf, and tests/deploy.test.js, which fails the build if that
+# ever stops being true.
+#
+# It only reads. Nothing here can change the count or delete a day.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  count:
+    name: Read the tally
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.BETR_SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: ssh-keyscan -H ${{ secrets.BETR_SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Count the marks
+        run: |
+          set -e
+
+          # One line per day: the date, a space, the number of marks in that day's file.
+          raw=$(ssh ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }} '
+            if [ ! -d /var/log/betr ]; then echo "NODIR"; exit 0; fi
+            for f in /var/log/betr/*.log; do
+              [ -e "$f" ] || continue
+              printf "%s %s\n" "$(basename "$f" .log)" "$(wc -l < "$f" | tr -d " ")"
+            done')
+
+          {
+            echo "# How many times the page has been opened"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$raw" = "NODIR" ]; then
+            {
+              echo "**The tally folder does not exist on the server yet.**"
+              echo
+              echo 'That means the server is still running the config from before B52. Somebody'
+              echo 'has to run `cd /opt/betr && docker compose up -d` on the droplet once — the'
+              echo 'deploy account deliberately cannot restart its own container.'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if [ -z "$raw" ]; then
+            echo 'The tally is running and nobody has opened the page yet. Nothing has been lost — a day with no opens has no file.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          total=$(printf '%s\n' "$raw" | awk '{s+=$2} END {print s+0}')
+          days=$(printf '%s\n' "$raw" | wc -l | tr -d ' ')
+          today=$(date -u +%Y-%m-%d)
+          todays=$(printf '%s\n' "$raw" | awk -v d="$today" '$1==d {print $2}')
+
+          {
+            echo "## $total in total"
+            echo
+            echo "Across $days day(s) the page has been open at all. Today so far: **${todays:-0}**."
+            echo
+            echo '| Day | Opened |'
+            echo '| --- | ---: |'
+            printf '%s\n' "$raw" | sort -r | head -60 | while read -r d n; do
+              echo "| $d | $n |"
+            done
+            echo
+            echo '### What this number is, and is not'
+            echo
+            echo '- It counts **opens of the page**, not people. One person opening it five times is five.'
+            echo '- **Bots are in it.** Not counting a bot would mean reading who is asking, and we do not read who is asking.'
+            echo '- A returning visitor counts again; somebody using it offline, after installing it, does not count at all.'
+            echo '- Anything that asks for the page counts, **including us**. Point an uptime monitor at `/app.js`, never at the page, or it will add one every few minutes.'
+            echo '- It cannot tell anybody — us included — who, how many people, whether anyone came back, where they came from, or whether they got past the first screen.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          printf '%s\n' "$raw" | sort -r
+          echo "TOTAL $total"

@@ -27,6 +27,11 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /var/www/betr:/var/www/betr:ro
+      # The tally (B52). The one writable path this container has, and the only place BETR
+      # writes anything at all. It holds files named for a date, each holding a row of "1"s
+      # — one per page open. Nothing in a line, so there is nothing in it to protect.
+      # It is NOT inside /var/www, so it is never served to anybody.
+      - /var/log/betr:/var/log/betr
     # nginx's own logging is off in nginx.conf; this stops Docker keeping a copy of the
     # little that is left, so there is no record of a visit at either layer.
     logging:

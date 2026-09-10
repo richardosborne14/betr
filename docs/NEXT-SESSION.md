@@ -39,35 +39,37 @@ reviewer's three questions are unanswered and the founder chose to ship ahead of
 
 ## 3. Waiting on people, not on code
 
-0. **A second track: [`B52`](tasks/B52-uptime-the-locks-and-the-one-number.md)** — uptime, security and usage, asked for before the first Instagram posts.
-   **A pitch, nothing built, eleven decisions in its §6, most of them the founder's.** Found live that day: **three TrybeUP dev
-   ports open to the internet**, no firewall, no rate limit, no HSTS, no CAA, **no uptime monitoring at all**.
+0. **[`B52`](tasks/B52-uptime-the-locks-and-the-one-number.md) — uptime, security, the one number. **§5c is BUILT**: the tally, on the founder's
+   instruction, overruling the recommendation to wait. A `1` per page open, in a file named for the day; nothing in a line. Five lines of
+   nginx, mutation-tested; `help.airplane` changed in the same commit. **One droplet step is left and it needs a person** (§10, last block).
+   The rest is still a pitch — **three TrybeUP dev ports open to the internet**, no firewall, no rate limit, no HSTS, no CAA, **no uptime
+   monitoring at all**, eleven decisions in its §6. **Point any monitor at `/app.js`, never at the page**, or it counts itself.
 
 1. **The founder.** **(a) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row; plus four renames and three questions
    (`S10-D2`, `S15-P1`, `S18-D1`). **(b) B47 §6c.** **(c) `ontime` is the weakest fit of the twenty behind the `work` door.** **(d)
    `happened.placeholder`, above.** Then: walk J4 and J5 on a phone, B36 items 6 and 9, five answers on *Why it's written like this*, rule
    10's third amendment (B37 §9a), which example leads the front screen **and whether four stays four** (`example-tests-bank.md` §4), **the
-   purpose statement**, the **`HARM` false refusal**, **B25**. *(B51 §9.3 is answered and shipped, with two more calls taken the same day.)*
-2. **Misha, in one ask.** `docs/COPY.md` is regenerated. **NEW AND ALREADY LIVE: `plan.expectLabel`, *"And what would that mean
-   for you?"*** — shipped unread, the way B49's two grey lines were, and it is on the last screen before *Lock it in* on
-   **every** road; the other three drafts are in B51 §9.1. Still unread: **four strings** — `build.doOwnPlaceholder`,
-   `build.dropPlaceholder`, `start.borrow` (*Find yours*), `start.go` (*Write my own*). Otherwise unchanged: **the three new
-   worries** (`want`, `think`, `ontime` — 39 sentences), the sixty size sentences, **the `yes` door's own line, which names
-   three worries and has five**, B47 §6c, B41's skeletons, B42's sizes, B38's six strings, B39's *Change* / *Add one*, B40's
-   *Write the whole thing myself*, the four nouns, the door order, the chips, B36's tone, the **red strike**. **The redraft
-   sheet is not.** *(`plan.edit` and `plan.editDone` are deleted — the edit button went with B51.)*
-3. **The paid CBT reviewer, the critical path, and now overdue in a new way. Send `docs/suggestions-review.csv`** — **295 live
-   rows of 557**, plus **B51 §9.2's three, the biggest thing we have asked them, and the app has shipped ahead of the answer**:
-   is a second, cost-level prediction right for a tool with nobody in it, or does it invite rumination; should the **60 `W-*-E`
-   rows** follow one rule (cost, never the event again — `W-SIT-E1` predicts the event again and is now greyed under a question
-   only the cost answers); confirm Theory A/B and the survival experiment as B51 §7 states them. Standing: is the largest step
-   safe (`W-*-D3`; **`W-THINK-D3` and `W-ONTIME-D3` least sure**, beside `W-ST-D3`); are the three in order (`G-Z1`); may *A
-   small go* change **who** it is with (every `W-*-D1`); `W-LOW-D1`; `S07-P3`; `S03-D4`.
-4. **A screen-reader AND CONTRAST pass on a real phone** — B33 read the tree, **nobody has used it**, and B51 adds one:
-   **`--ink-3` on `--card` is about 3:1**, and the greyed sentence now carries what gets **stored**, not just an instruction
-   (B51 §13.4). **Q1's name and trademark still block release; its address half was answered 2026-09-10 — `betr.trybeup.com` IS production.** **Two API keys — Groq and Anthropic — need rotating**; nobody
-   owns `guards.js`'s medication list. **Release:** Misha on `places.signedOff` and six door lines, J1–J5 on a phone, an owner
-   for links. **`docs/journeys.md` J1 is stale** beyond the two rows B51 fixed.
+   purpose statement**, the **`HARM` false refusal**, **B25**. *(B51 §9.3 is answered and shipped, with two more calls taken the same
+   day.)*
+2. **Misha, in one ask.** `docs/COPY.md` is regenerated. **NEW AND ALREADY LIVE: `plan.expectLabel`, *"And what would that mean for
+   you?"*** — shipped unread, the way B49's two grey lines were, and it is on the last screen before *Lock it in* on **every** road; the
+   other three drafts are in B51 §9.1. Still unread: **four strings** — `build.doOwnPlaceholder`, `build.dropPlaceholder`, `start.borrow`
+   (*Find yours*), `start.go` (*Write my own*). Otherwise unchanged: **the three new worries** (`want`, `think`, `ontime` — 39 sentences),
+   the sixty size sentences, **the `yes` door's own line, which names three worries and has five**, B47 §6c, B41's skeletons, B42's sizes,
+   B38's six strings, B39's *Change* / *Add one*, B40's *Write the whole thing myself*, the four nouns, the door order, the chips, B36's
+   tone, the **red strike**. **The redraft sheet is not.** *(`plan.edit` and `plan.editDone` are deleted — the edit button went with B51.)*
+3. **The paid CBT reviewer, the critical path, and now overdue in a new way. Send `docs/suggestions-review.csv`** — **295 live rows of
+   557**, plus **B51 §9.2's three, the biggest thing we have asked them, and the app has shipped ahead of the answer**: is a second,
+   cost-level prediction right for a tool with nobody in it, or does it invite rumination; should the **60 `W-*-E` rows** follow one rule
+   (cost, never the event again — `W-SIT-E1` predicts the event again and is now greyed under a question only the cost answers); confirm
+   Theory A/B and the survival experiment as B51 §7 states them. Standing: is the largest step safe (`W-*-D3`; **`W-THINK-D3` and
+   `W-ONTIME-D3` least sure**, beside `W-ST-D3`); are the three in order (`G-Z1`); may *A small go* change **who** it is with (every
+   `W-*-D1`); `W-LOW-D1`; `S07-P3`; `S03-D4`.
+4. **A screen-reader AND CONTRAST pass on a real phone** — B33 read the tree, **nobody has used it**, and B51 adds one: **`--ink-3` on
+   `--card` is about 3:1**, and the greyed sentence now carries what gets **stored**, not just an instruction (B51 §13.4). **Q1's name and
+   trademark still block release; its address half was answered 2026-09-10 — `betr.trybeup.com` IS production.** **Two API keys — Groq and
+   Anthropic — need rotating**; nobody owns `guards.js`'s medication list. **Release:** Misha on `places.signedOff` and six door lines,
+   J1–J5 on a phone, an owner for links. **`docs/journeys.md` J1 is stale** beyond the two rows B51 fixed.
 
 ## 4. Environment facts
 

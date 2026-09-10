@@ -314,10 +314,15 @@ The answer is architectural first and verbal second.
 server, and nothing is sent to us or anyone else.* That sentence must be literally true. A
 crash reporter would make it the BetterHelp shape in miniature.
 
-**Q5a. Hosting the web version.** A page load is the one thing a server ever sees. Options:
-a static host with access logs off; GitHub Pages (logs are GitHub's); our own nginx with
-logging disabled. Whichever it is, *what this is* should say: *Loading this page is the only
-thing any server ever sees, and we keep no record of it.*
+**Q5a. Hosting the web version. *Answered: B3, then amended by B52 on 2026-09-10.*** Our own
+nginx, on our own droplet, serving a folder. **The server keeps exactly one thing, by the
+founder's decision: a count of page opens** — a "1" per open, in a file named for the day, with
+no address, no browser, no referrer and no clock time anywhere in it. Bots are counted, because
+not counting a bot would mean reading who is asking. *What this is* says so in those words:
+*Loading this page is the only thing any server ever sees. We keep a count of how many times it
+was opened each day, and nothing else — no address, no browser, nothing that could ever be
+traced to you.* `tests/deploy.test.js` fails the build if the setting and the sentence part
+company.
 
 **Q5b. Should the web version exist at all, or only the store apps?** The web version is the
 zero-friction entry the ad needs and the thing a Reddit reply can link to. The store apps are
