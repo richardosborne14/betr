@@ -485,9 +485,31 @@ var BETR_STRINGS_EN = {
       today: 'Today',
       /* {drop} is the person's own words, in bold. Keep it where the sentence needs it. */
       line: '{drop} That’s the bit that makes it count.',
-      expectLabel: 'What you expect',
-      edit: 'Not quite? Change it',
-      editDone: 'Done',
+      /*
+        B51, 2026-09-10, THE FOUNDER'S PICK OF FOUR, AND MISHA HAS NOT READ IT.
+
+        It was a LABEL — "What you expect" — over prose the app had already written, and the
+        two roads filled that prose differently: a stock sentence kept word for word carried
+        B20's hand-written expectation, and everything else carried
+        `guards.expectationFrom`, which strips the "If I …, then" and hands the tail back.
+        On the founder's own sentence that came out as "People will say it's rubbish" — their
+        own words, under a label that reads like a question. They nodded at it and tapped on,
+        and said afterwards they had not said the whole truth about how it would FEEL.
+
+        A label can be answered by what is already under it. A QUESTION CANNOT, and only the
+        cost answers this one: "people will say it's rubbish" is not a thing that would mean
+        something for you, it is the thing that happens. That is the whole fix, and it needs
+        no detection and no judgement about whether an answer was good enough — which is the
+        device line, cleanly (rule 2). See B51 §4.
+
+        The other three drafted: "If that happens, what happens to you?" · "What are you
+        braced for?" (worries.js's own phrase for the field) · "If they do, what's the bit
+        you're dreading?" — the last breaks on a worry with nobody in it.
+
+        NEVER "was it really that bad?" and never an argument with a true prediction. Both
+        are verdicts and rule 6 refuses them; B51 §6 is why.
+      */
+      expectLabel: 'And what would that mean for you?',
       /*
         B38, 2026-09-09. Was "I’ll do it today". BETR never asks anybody to be brave; it asks
         them to find something out. A dare needs permission from somebody with authority, which

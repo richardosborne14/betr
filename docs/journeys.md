@@ -37,8 +37,8 @@ must work with them off. If anything fails, that is the finding.
 | --- | --- | --- |
 | 1 | Open it | *Sure it'll go badly?*, one big blue button, and one line: no account, no AI, nothing leaves your phone |
 | 2 | Tap **Pick a worry** | Twelve worries as big buttons, *Something else* last, and a line about what is deliberately absent |
-| 3 | Tap **Saying no without an excuse** | *Today:* one thing to do. Underneath in bold: *No reason, no apology, no softening it.* Then *What you expect*, already written, with *not quite? change it* |
-| 4 | Tap **not quite? change it**, edit it, tap **done** | Your words, in the blue box |
+| 3 | Tap **Saying no without an excuse** | *Today:* one thing to do. Underneath in bold: *No reason, no apology, no softening it.* Then **And what would that mean for you?** and a box, empty, with what BETR would have expected greyed inside it (B51) |
+| 4 | Type what it would actually cost you, or leave the box alone | Either way it locks in: your words if you wrote any, the greyed sentence if you did not. **There is no *not quite? change it* any more** — the answer is a box from the first paint |
 | 5 | Tap **I'll do it today** | *Go and do it.* The test again. A card offering **Add to home screen** |
 | 6 | Tap **Not now** / **Got it** | The card goes and does not come back |
 | 7 | Tap **Didn't get to it** | *No problem. It's still here for tomorrow. Smaller counts, too.* No red, no "you missed", nothing lost |

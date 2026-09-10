@@ -1249,3 +1249,79 @@ node tools/walk.js eval 'JSON.stringify({scrollW:document.documentElement.scroll
 
 Equal is right. Anything else is a phone that scrolls sideways.
 
+
+## 2026-09-10 — A screen is not where the code says it is; it is where a caller sends you
+
+B51 was written from a reading of the code and it named the wrong screen. The task said the
+second field — `x`, *What you expect* — was "on the plan screen", which is true, and drew the
+whole fix from there. **`plan()` has exactly one caller: `again()`.** So the plan screen is the
+REPEAT screen, and on a first test nobody ever saw the field at all: the app derived an
+expectation off the person's own sentence, stored it, and showed it to them for the first time
+on the result. The founder's own walk-through went straight from *Lock it in* to *Go and find
+out*.
+
+**One grep would have found it — `grep -n "go('plan')" web/app.js`, one hit — and reading the
+screen function would not, however carefully.** A screen function tells you what it draws. It
+does not tell you who arrives, or whether anybody does.
+
+**So: before specifying a change to a screen, walk to it.** `node tools/walk.js` from the front
+door, on the road the person actually takes, and count the taps. The difference between "turn a
+label into a question" and "there is no question on this road" is the difference between a
+one-line change and the task.
+
+The suite could not have caught it either, and this is the same shape as B50's reversed
+buttons: 269 tests walked through `plan()` by calling `again()` first, so every one of them saw
+a screen that a first-time person never reaches. **A test that navigates to a screen proves the
+screen works. It proves nothing at all about whether anyone gets there.**
+
+## 2026-09-10 — A test that asserts a string is gone dies silently the day the string goes
+
+`a locked expectation cannot be edited after the test is done` asserted
+`hides('Not quite? Change it')` on two screens. B51 deleted the edit button, so from that
+moment the test passed by checking that a string which exists nowhere in the app was not on
+screen. Green, meaningless, and it would have stayed that way for ever.
+
+**An absence assertion has to name something that still exists somewhere.** The rewrite asserts
+`shows('id="x"')` on the screen the box belongs to and `hides('id="x"')` on the five after it —
+so the day the box moves, one half or the other fails.
+
+**And the general rule that came out of the same afternoon: mutate the code back and watch the
+new test fail, before you write the commit message.** Five new tests, five one-line mutations —
+put the value back in the box, delete the fallback, delete the guard — and each failed exactly
+the one that was meant to catch it. It takes four minutes and it is the only thing that
+distinguishes a test from a comment.
+
+## 2026-09-10 — A placeholder cannot be scrolled, and `resize:none` means nobody can fix it
+
+BETR's textareas are `resize:none`, so a box too short for its contents is a box a person can do
+nothing about. That was survivable while a box held either nothing or the person's own words,
+which scroll. It stopped being survivable the moment a placeholder carried something worth
+reading: on B51's repeat screen the greyed sentence is last time's answer, and *"I'll decide I'm
+not a warm person and stop asking her for anything."* came out as two and a half lines with the
+third sliced through the middle. **Placeholder text does not scroll, at all, by any gesture.**
+
+Measuring it needs a trick, because `scrollHeight` on an empty textarea does not count the
+placeholder: borrow it into `value` for one frame, read the height, put it back. Answer in `em`
+and not px, for `growSaid`'s reason — a person who turns their text up afterwards needs a box
+that turns up with it.
+
+## 2026-09-10 — A made-up custom property does not fail, it just disappears
+
+`.plan textarea { background: var(--bg) }` — and there is no `--bg` in `app.css`; the page colour
+is `--ground`. Nothing errored, nothing logged, no test failed. The box came out **transparent**,
+which on a card of the same colour looks exactly like a box that was meant to be flat. Found by
+reading `getComputedStyle(...).backgroundColor` back in the walker and seeing `rgba(0, 0, 0, 0)`.
+
+**Read a new colour back off the live page, once.** One `eval` in the walker, and it is the only
+way to tell "styled the way I meant" from "styled with nothing".
+
+## 2026-09-10 — Two classes beat one class and one tag, and CSS says so quietly
+
+B51 put a `textarea class="line"` inside the plan card, which already had
+`.plan .line { font-size:1.125rem; color:var(--ink-2); margin:0 0 14px }` for the leave-out
+paragraph. `.plan .line` is (0,2,0) and `textarea.line` is (0,1,1), so the paragraph's styling
+landed on the answer box — its size, its colour and its margin — and looked deliberate.
+
+**A class named after a shape (`.line`, `.short`) will be reused on a different tag sooner or
+later.** Scope the descendant rule to the tag it was always about — `.plan p.line` — the moment
+a second kind of element joins the container.

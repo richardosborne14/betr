@@ -151,7 +151,20 @@
       out, because the three ARE the plan and a box arriving with one of them in it would be
       BETR having picked (rule 2). The boxes start empty on every road.
     */
+    /*
+      B51's one field, 2026-09-10. What the person answered to "And what would that mean for
+      you?" — the COST, the half of a prediction the app used to derive rather than ask for.
+
+      It starts empty and stays empty until somebody types in it, and an empty one is not a
+      gap: `builtTest` falls back to the expectation the app would have written anyway, which
+      is the very sentence greyed in the box. So no road that worked before this task can stop
+      working, and nobody is dared or gated into answering (B51 §5.4).
+
+      It is NOT cleared by `#ownit`, or by picking a different prediction, for the reason
+      `test` and `drop` are not: those clear BETR's own content, and this is hers.
+    */
     return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '',
+             x: '',
              prediction: null, slots: {}, dropOpen: false, size: null,
              sizeOpen: true };
   }
@@ -772,7 +785,7 @@
       */
       prediction: typeof d.prediction === 'number' ? d.prediction : null,
       slots: d.slots || null, size: d.size || null,
-      from: from || 'mine', editing: false, locked: null, missed: false
+      from: from || 'mine', locked: null, missed: false
     };
     /* B42: every repeat starts with the row folded on last time's answer. It is not stored,
        for the reason whyId is not: it is which way a screen is showing, not a preference. */
@@ -1977,6 +1990,43 @@
     } catch (e) { /* older browser */ }
   }
 
+  /*
+    B51. THE ANSWER BOX GROWS TO WHATEVER IS IN IT — INCLUDING WHAT IS ONLY GREYED IN IT.
+
+    `textarea { resize:none }`, so a box that is too short for its own contents is a box a
+    person cannot do anything about. That was survivable while every box held either nothing
+    or her own words, which she can scroll. It stopped being survivable the moment a box got a
+    PLACEHOLDER worth reading: a placeholder cannot be scrolled at all, and on the repeat
+    screen it is last time's answer in her words — "I'll decide I'm not a warm person and stop
+    asking her for anything." came out as two and a half lines with the last one sliced through
+    the middle.
+
+    The measurement borrows the placeholder into `value` for one frame, which is the only way
+    `scrollHeight` counts it. The answer is in `em` and not px for growSaid's reason: a person
+    who turns their text up afterwards must get a box that turns up with it.
+  */
+  function growAnswer(box) {
+    if (!box || !box.style) return;
+    try {
+      var borrowed = false;
+      if (!box.value && box.placeholder) { box.value = box.placeholder; borrowed = true; }
+      box.style.height = 'auto';
+      var tall = box.scrollHeight;
+      if (borrowed) box.value = '';
+      if (!tall) { box.style.removeProperty('height'); return; }
+      var px = parseFloat(window.getComputedStyle(box).fontSize) || 16;
+      box.style.height = (tall / px).toFixed(2) + 'em';
+    } catch (e) { /* older browser, or a box that is not on the page yet */ }
+  }
+
+  /* The one box that does it, wired the same way on both screens that draw it. */
+  function wireAnswer() {
+    var box = q('#x');
+    if (!box) return;
+    growAnswer(box);
+    box.oninput = function () { growAnswer(box); };
+  }
+
   function wireChips(boxes) {
     boxes.forEach(function (pair) {
       var box = q(pair[0]);
@@ -2205,6 +2255,34 @@
             chipRow(t('build.dropChips'), dropChips, 'data-drop',
               landsIn !== '#drop' || !!draft.drop.trim(), dropMarks)
           : foldedDrop(draft.drop)) +
+        /*
+          B51, 2026-09-10, AND IT IS THE ONE SCREEN A FIRST TEST ACTUALLY REACHES.
+
+          There has been a second field since the beginning — `x`, "What you expect" — and it
+          is drawn on the plan screen, which `go('plan')` is only ever called for by `again()`.
+          So on a FIRST test nobody was ever asked: the app derived the expectation off the
+          person's own sentence, stored it, and showed it to them for the first time on the
+          result. The founder walked their own test into that hole and asked what the loop does
+          when the prediction comes true; the answer was nothing, because both halves of the
+          result screen were the same sentence.
+
+          So the question goes here, under the leave-out, on the last screen before Lock it in.
+          Not a new screen and not a new blank in "If I ___, then ___" — rule 10 is untouched,
+          and the tap count does not move.
+
+          UNFOLDED, DELIBERATELY, AND IT COSTS THE FOLD. A folded row is what the leave-out
+          got in B39 and it is right for a thing that is optional and understood; a question
+          nobody has been asked before folds up into something to nod past, which is the exact
+          failure this task exists to fix. `textarea.line` rather than `.short` — one sentence,
+          64px, the leave-out's own height — is what pays for it.
+
+          EMPTY IS A REAL ANSWER. See blankDraft's `x` and builtTest: the box greys the
+          sentence the app would have written, and leaving it alone stores that sentence. BETR
+          dares nobody and gates nobody (rule 5).
+        */
+        '<p class="ask" id="xlbl">' + esc(t('plan.expectLabel')) + '</p>' +
+        '<textarea id="x" class="line" aria-labelledby="xlbl" placeholder="' +
+          esc(expectationNow()) + '">' + esc(draft.x) + '</textarea>' +
         '<button class="big wide" id="lock">' + esc(t('build.lock')) + '</button>' +
         '<p class="tiny">' + esc(t('plan.lockNote')) + '</p>' +
       '</div>');
@@ -2223,6 +2301,7 @@
       name here and B30's one-row-at-a-time quietly stops holding on the road most people take.
     */
     wireChips([['#do', 'data-size'], ['#drop', 'data-drop']]);
+    wireAnswer();
     on('#dropopen', function () { readBoxes(); draft.dropOpen = true; nextFocus = '#drop'; render(); });
     /* Both boxes read first, for the reason Back reads them (B34 D2): a plan somebody has
        half typed must still be there when they come back from reading about sizes. */
@@ -2280,8 +2359,13 @@
     function readBoxes() {
       var d = q('#do');
       var r = q('#drop');
+      /* B51's third box, read for the same reason as the other two: a chip tap, Back, or a
+         trip to "Make it smaller" repaints this screen, and a sentence she wrote about how it
+         would feel must still be there afterwards (B34 D2). */
+      var e = q('#x');
       if (d) draft.test = d.value;
       if (r) draft.drop = r.value;
+      if (e) draft.x = e.value;
       readPlanHoles();
     }
     /*
@@ -2332,6 +2416,22 @@
         */
         if (!two.ok) { draft.dropOpen = true; nextFocus = '#drop'; refuse(two); return; }
       }
+      /*
+        B51, AND IT IS THE PART OF THIS TASK THAT IS NOT ABOUT CBT.
+
+        The new box asks what it would MEAN for her, which is the box in the whole app most
+        likely to be answered with the sentence rule 4 stops — the founder's own example of
+        what must still be refused is "If I kill myself everyone will be better off". Every
+        other free box in the loop is guarded; a third one that was not would be a hole opened
+        by the task that closed a different one.
+
+        Empty is not checked and not refused, exactly as the leave-out is not: it is optional
+        and the app has an answer for it either way (rule 5, and B51 §5.4).
+      */
+      if (draft.x.trim()) {
+        var three = guards.checkTest(draft.x);
+        if (!three.ok) { refuse(three); return; }
+      }
       lockIn(builtTest());
     });
   }
@@ -2380,7 +2480,11 @@
         B20's hand-written expectation, where the sentence is still B20's sentence — and since
         B41, with her own words in it, because the sentence it was written for has them too.
       */
-      x: same ? upperFirst(saidIn(same.expect)) : guards.expectationFrom(said),
+      /*
+        B51. Hers if she wrote one, and otherwise the sentence that was greyed in the box she
+        left empty — so what is locked in is always what she last read, and never a surprise.
+      */
+      x: draft.x.trim() || expectationNow(),
       test: draft.test.trim(), drop: draft.drop.trim(),
       /*
         B40's three, along for the ride and keying nothing. `prediction` and `slots` only mean
@@ -2401,8 +2505,24 @@
         typed nothing.
       */
       size: draft.test.trim() ? (draft.size || null) : null,
-      from: 'build-do', editing: false, locked: null, missed: false
+      from: 'build-do', locked: null, missed: false
     };
+  }
+
+  /*
+    WHAT THE APP WOULD EXPECT, IF SHE SAID NOTHING — the greyed example in B51's box, and the
+    fallback the record takes when she leaves it empty. One function, read twice, because a
+    grey line that does not match what gets stored is a lie a test would never catch.
+
+    The two halves are the two roads and they are B20 and `guards.expectationFrom` exactly as
+    they were before this task; the only thing that changed today is that the answer is now
+    printed in grey UNDER a question rather than in black under a label (B51 §2).
+  */
+  function expectationNow() {
+    var said = sentenceOf(draft.ifPart, draft.thenPart);
+    var f = borrowed();
+    var same = f ? sameAsStock(f, said) : null;
+    return same ? upperFirst(saidIn(same.expect)) : guards.expectationFrom(said);
   }
 
   /*
@@ -2529,12 +2649,22 @@
           '<p class="do wrote">' + esc(c.test) + '</p>' +
           '<p class="line wrote">' + tHtml('plan.line', { drop: '<b>' + esc(c.drop) + '</b>' }) + '</p>' +
           sizeLine(c) +
-          '<p class="lbl">' + esc(t('plan.expectLabel')) + '</p>' +
-          (c.editing
-            ? '<textarea id="x" class="short" aria-label="' + esc(t('plan.expectLabel')) + '">' +
-              esc(c.x) + '</textarea><button class="edit" id="xdone">' + esc(t('plan.editDone')) + '</button>'
-            : '<p class="expect wrote">' + esc(c.x) + '</p><button class="edit" id="xedit">' +
-              esc(t('plan.edit')) + '</button>') +
+          /*
+            B51, 2026-09-10. THE SAME QUESTION AS THE BUILD SCREEN, IN THE SAME SHAPE.
+
+            It was a soft panel of prose with "Not quite? Change it" beside it, and it read as
+            a thing already decided — which on the derived road it was not: it was the person's
+            own sentence with the "If I …, then" cut off it. Two states, an edit button and
+            `c.editing` all went, because there is nothing to edit when the answer is a
+            question nobody has been asked yet.
+
+            Last time's answer is what is greyed, so a repeat carries it forward untouched if
+            she says nothing, and typing over it is one tap rather than two. That is the same
+            rule as the first test: what is in grey is what gets stored.
+          */
+          '<p class="ask" id="xlbl">' + esc(t('plan.expectLabel')) + '</p>' +
+          '<textarea id="x" class="line" aria-labelledby="xlbl" placeholder="' +
+            esc(c.x) + '"></textarea>' +
         '</div>' +
         sizeAgain(c) +
         '<button class="big wide" id="lock">' + esc(t('plan.lock')) + '</button>' +
@@ -2543,10 +2673,9 @@
     /* Back goes where they actually came from, not back into a half-finished entry. */
     wireBack(c.from || 'belief');
     wireSizeAgain(c);
-    on('#xedit', function () { c.editing = true; save(); render(); q('#x').focus(); });
-    on('#xdone', function () { c.x = q('#x').value.trim() || c.x; c.editing = false; save(); render(); });
+    wireAnswer();
     on('#lock', function () {
-      if (c.editing) { c.x = q('#x').value.trim() || c.x; c.editing = false; }
+      readX(c);
       c.locked = new Date().toISOString();
       askToPersist();
       go('locked');
@@ -2616,18 +2745,29 @@
     return f ? f.skeleton.holes : {};
   }
 
+  /*
+    B51. The repeat screen's box, read back before anything repaints it — the same reason
+    build-do's readBoxes() exists (B34 D2). An empty box leaves what she is already carrying
+    alone, which is the sentence greyed in it, so tapping Change and coming back cannot lose
+    an answer and cannot invent one either.
+  */
+  function readX(c) {
+    var box = q('#x');
+    if (box) c.x = String(box.value || '').trim() || c.x;
+  }
+
   function wireSizeAgain(c) {
     var sizes = sizesOn(c);
     if (!sizes) return;
     on('#sizeopen', function () {
-      if (c.editing) { c.x = q('#x').value.trim() || c.x; c.editing = false; }
+      readX(c);
       againOpen = true;
       save();
       render();
     });
     qa('[data-size]').forEach(function (b) {
       b.onclick = function () {
-        if (c.editing) { c.x = q('#x').value.trim() || c.x; c.editing = false; }
+        readX(c);
         var z = sizes[Number(b.getAttribute('data-size'))];
         var holes = holesOn(c);
         c.test = content.fill(z.do, c.slots || {}, holes);

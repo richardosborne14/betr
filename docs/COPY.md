@@ -228,15 +228,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`plan.expectLabel`**
 
-> What you expect
-
-**`plan.edit`**
-
-> Not quite? Change it
-
-**`plan.editDone`**
-
-> Done
+> And what would that mean for you?
 
 **`plan.lock`**
 

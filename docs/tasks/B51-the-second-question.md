@@ -1,6 +1,12 @@
 # B51: the second question, and the mistake worth posting
 
-**Status:** **OPEN — specified, not built.** Nothing in `web/` has changed.
+**Status:** **§5 DONE AND SHIPPED, 2026-09-10.** §8 (the post) is not started and is still
+open. §9's founder call was taken; §9.1's wording shipped as a draft; **§9.2's three questions
+for the paid reviewer are unanswered and the founder chose to ship ahead of them.**
+**Confidence: 9/10 on the code** — 274 tests pass, every one of the five new ones was checked
+against the old behaviour by mutating it back (§12), and all four roads were walked in Chrome
+at 100/125/150/200% in both themes. **7/10 on the one sentence**, because Misha has not read
+it. See §13 for what is knowingly left.
 **Date opened:** 2026-09-10 · **The founder's ask**, in their own words, after doing a test of
 their own: *"What if that's actually true, because my app is rubbish? … it's definitely a hole
 in our method."* And, on reading the diagnosis: *"as a user, even as someone who knows CBT, I
@@ -10,7 +16,6 @@ happens."*
 [`B31`](B31-the-front-screen.md) (the plan screen), [`B20`](B20-three-worries-under-one.md) (the
 60 hand-written expectations), [`B7`](B7-distribution-and-the-ad.md) and
 [`posting-on-social.md`](../posting-on-social.md) (§8 below).
-**Confidence in the diagnosis: 9/10. In the wording: not yet mine to have — see §9.**
 
 ---
 
@@ -32,6 +37,16 @@ reductions in over-prediction need many episodes of disconfirmation, while **one
 turns out worse than predicted drives the next prediction dramatically up.**
 
 ## 2. The finding: the field is there, and it asks nothing
+
+> **CORRECTED ON BUILD, 2026-09-10, AND IT MADE THE HOLE BIGGER.** Everything below about the
+> echo is true. What this section got wrong is WHERE. `plan()` — the screen holding `x` — is
+> reached by exactly one caller, `again()`, so **a first test never saw the second field at
+> all.** The founder's own road was: two blanks → *What will you do?* → a size → **Lock it in**
+> → **Go and find out**, and `x` was derived in silence, stored, and shown for the first time
+> on the result screen. The read-only echo with *Not quite? Change it* described below is the
+> **repeat** screen. So the fix was not "turn a label into a question on one screen"; it was
+> "ask the question on the screen a first test actually reaches, and make the repeat match".
+> Walked and reproduced end to end before a line was changed. §5 below is amended in place.
 
 There is already a second field. It is called `x`, it is labelled **What you expect**, and on the
 plan screen it is read-only prose with a *Not quite? Change it* button beside it
@@ -95,32 +110,49 @@ It is also the device line, cleanly: **asking everyone the same fixed question i
 book. Judging whether *your* answer was good enough is a system that assesses you.** The fix
 that needs no AI is the fix that is allowed to ship.
 
-## 5. What changes — the spec
+## 5. What changes — the spec, as amended by §2's correction and BUILT
 
-**One screen. No new step, no new blank in *If I ___, then ___*, and no change to the record.**
-Rule 10 is not amended: the sentence keeps its two blanks and the plan screen keeps its shape.
+**No new step, no new blank in *If I ___, then ___*, and no change to the record.** Rule 10 is
+not amended and the tap count does not move. The one thing the original spec got wrong is that
+this is **two screens, not one** — the same question, in the same shape, on the build screen a
+first test reaches and on the repeat screen `again()` opens.
 
-1. **`plan.expectLabel` stops being a label and becomes a question.** Draft, and it is only a
-   draft: **"If that happens, what happens to you?"** Three more drafted in §9 for Misha.
-2. **On the derived road, the echo stops being the answer and becomes the greyed example under
-   the box** — the exact pattern [`B48`](B48-the-greyed-example-belongs-to-this-worry.md) and
-   [`B49`](B49-the-grey-lines-and-a-size-of-its-own.md) built for the other two boxes, including
-   B49's lesson that a grey line must name its own box and point down. The machinery exists.
-3. **The box is a textarea from the start on that road**, not read-only prose with an edit
-   button. There is nothing to edit when nothing has been written.
-4. **An empty answer never blocks *I'll find out today*.** BETR does not dare anybody and does
-   not gate anybody. **Empty falls back to today's echo**, which makes this change strictly
-   additive: no road that works now can stop working.
-5. **On the stock road, B20's hand-written expectation stays pre-filled and editable, as now** —
-   subject to §9's question about whether the good ones should become examples too.
+1. **`plan.expectLabel` stops being a label and becomes a question.** Shipped as
+   **"And what would that mean for you?"** — the founder's pick of the four in §9.1, on
+   2026-09-10. Misha has not read it.
+2. **The app's own expectation stops being the answer and becomes the greyed example IN the
+   box** — `placeholder`, which is the mechanism [`B48`](B48-the-greyed-example-belongs-to-this-worry.md)
+   and [`B49`](B49-the-grey-lines-and-a-size-of-its-own.md) actually used. Not "under the box":
+   there is nothing under this box to point down at, so B49's name-the-box-and-point-down shape
+   does not apply and B48's derive-an-example one does.
+3. **The box is a textarea from the first paint, on every road.** `c.editing`, `#xedit`,
+   `#xdone`, `plan.edit` and `plan.editDone` are gone: there is nothing to edit when the answer
+   is a question nobody has been asked yet.
+4. **An empty answer never blocks the lock.** BETR dares nobody and gates nobody. **Empty falls
+   back to exactly the sentence that was greyed in the box** — one rule, both screens, so what
+   is stored is always what she last read. Strictly additive: no road that worked before can
+   stop working, and `an empty answer is a real answer` in `loop.test.js` is that in one walk.
+5. **On the stock road, B20's hand-written expectation is a greyed example too** — **the
+   founder's call, 2026-09-10, §9.3**, taken in favour of the pre-fill. Every road now asks the
+   same question and every answer in a record is the person's own or the app's, never a mixture
+   of the two by road.
+6. **NEW, and it is not a CBT decision: the one hard stop runs on this box.** It is the box in
+   the app most likely to be answered with the sentence rule 4 refuses — the founder's own
+   example is *"If I kill myself everyone will be better off"* — and a third free box with no
+   guard would be a hole opened by the task that closed a different one. Empty is not checked,
+   the same as the leave-out. `guards.checkTest`, the same wall and the same crisis lines.
+7. **NEW: the box grows to fit what is greyed in it.** `textarea { resize:none }`, and a
+   placeholder cannot be scrolled, so on the repeat screen a hand-written answer came out
+   sliced through the third line. `growAnswer()` borrows the placeholder into `value` for one
+   frame to measure it, and answers in `em` for `growSaid`'s reason.
 
 **No store change.** The answer *is* `x`. Nothing new is written, no version key moves, `merge.js`
 is untouched, and the result screen already prints `x` under *You expected*
-([`app.js:2784`](../../web/app.js#L2784)).
+([`app.js:2784`](../../web/app.js#L2784)). `draft.x` is the only new field and a draft is not a
+record. `editing` stopped being written to records, and nothing ever read it but `plan()`.
 
-**Tests:** `loop.test.js` walks it and must assert the question, the class of the grey line and
-the fallback when the box is left empty. Per B50's lesson: **navigating by id proves nothing
-about what a person reads** — assert the words.
+**Tests:** five new walks in `loop.test.js`, and one rewritten. Per B50's lesson they assert
+the words a person reads, not the ids. §12 records the mutation each one was checked against.
 
 ## 6. What must never be said
 
@@ -181,22 +213,29 @@ The correction pair the post needs is the worked example the app needs:
 There is a real property here worth using: **the founder would be posting the app while testing
 whether posting the app goes badly**, and that is the honest version rather than a gimmick.
 
-## 9. Who decides what, and nothing ships before they do
+## 9. Who decides what — ANSWERED, 2026-09-10, except the reviewer
 
-1. **Misha — the words.** `plan.expectLabel` becomes a question, and it is on the screen every
-   person reaches. Drafted, none preferred: *"If that happens, what happens to you?"* ·
-   *"And what would that mean for you?"* · *"If they do, what's the bit you're dreading?"* ·
-   *"What are you braced for?"* — the last is the phrase `worries.js` already uses to describe
-   the field to itself. **None is one of the frozen sentences** (research §10) — checked.
+1. **Misha — the words. STILL UNREAD.** `plan.expectLabel` is a question now, and §2's
+   correction makes it more exposed than this section thought, not less: it is on the last
+   screen before *Lock it in*, on every road, including the first test a person ever writes.
+   The founder picked **"And what would that mean for you?"** from the four on 2026-09-10, and
+   the precedent for shipping it unread is B49's two grey lines. The other three, unused:
+   *"If that happens, what happens to you?"* · *"If they do, what's the bit you're dreading?"*
+   (breaks on a worry with nobody in it — `sit`) · *"What are you braced for?"* — the phrase
+   `worries.js` already uses to describe the field to itself. **None is one of the frozen
+   sentences** (research §10) — checked. **It is in `docs/COPY.md` with the rest.**
 2. **The paid CBT reviewer — the shape**, because this changes what a test *is*. Three questions:
    (a) is a second, cost-level prediction right for an unguided tool with nobody in it, or does
    it invite rumination? (b) should the 60 `W-*-E` rows be re-written to a single rule — cost,
    never the event again — or is the mix in §3 correct and deliberate? (c) confirm Theory A/B and
    the survival experiment as §7 states them.
-3. **The founder — one call:** on the stock road, does B20's hand-written expectation stay
-   **pre-filled** (§5.5, cheap, no road changes) or does it become a **greyed example** like the
-   derived one, so that every road asks the same question and every answer is the person's? The
-   second is more consistent and costs 20 worries a re-read.
+3. **The founder — ANSWERED 2026-09-10: the greyed example.** Every road asks the same
+   question and every answer is the person's. **The 20 worries × 3 `expect` lines have NOT been
+   re-read against their new job** — that is §13 and it is the reviewer's (b) as well.
+   They also took two more calls on the day, both put with the screens drawn and the numbers
+   measured: **where the question goes on a first test** (a third box on the build screen, over
+   routing the first test through the repeat screen for a seventh tap, or fixing the repeat
+   screen alone and leaving a first test unasked), and **shipping ahead of the reviewer**.
 
 ## 10. Not in this task
 
@@ -210,5 +249,68 @@ whether posting the app goes badly**, and that is the honest version rather than
 ## 11. Confidence
 
 **9/10 on the diagnosis** — the echo is verified in the code and reproduced on the founder's own
-sentence. **Not scored on the build**, because nothing is built and the two people who decide the
-wording and the shape have not seen it.
+sentence, and §2's correction was found the same way, by walking it. **9/10 on the build**, see
+§12. **7/10 on the one sentence**, because Misha has not read it.
+
+## 12. What was built, and how each test was checked
+
+**Six files.** `web/content/strings-en.js` (one string rewritten, two deleted),
+`web/app.js`, `web/app.css`, `web/tests/loop.test.js`, `web/tests/a11y.test.js`, and
+`docs/COPY.md` regenerated. `docs/journeys.md` J1 steps 3–4 named a button that no longer
+exists; both were rewritten. **No content file changed and no sentence of BETR's was written**
+— the question is the only new string, and the greyed examples are sentences that already
+existed and were already being stored.
+
+| in the code | what it is |
+| --- | --- |
+| `draft.x` | the person's answer, empty until typed in, never cleared by `#ownit` or a chip |
+| `expectationNow()` | lifted out of `builtTest`, so the grey line and the record are ONE lookup |
+| `growAnswer()` / `wireAnswer()` | the box grows to fit its own placeholder, in `em` |
+| `readX(c)` | the repeat screen's box, read back before any repaint |
+| `.ask` | a question drawn as one — see below |
+| `.plan p.line` | was `.plan .line`, and a two-class selector was landing on `textarea.line` |
+
+**The question is not drawn as a `.lbl`.** It was, in the first build, and it landed directly
+under **AND LEAVE OUT** in the same uppercase, starting with the same word — two section
+headers, not a header and a question. B51's entire finding is that a label can be answered by
+whatever is already under it and a question cannot, so drawing the question in the label style
+gave half of it back. Sentence case, display face, full `--ink`. Not an `<h2>`: the screen's
+own question is still *What will you do today?*
+
+**Every new test was checked by mutating the code back and watching it fail.** A green suite
+proves nothing about a screen nobody read (B50), and a test that cannot fail is worse than no
+test — the one this task rewrote had been asserting the absence of *"Not quite? Change it"*,
+a string that stopped existing when the edit button did.
+
+| test | the mutation it caught |
+| --- | --- |
+| asks what it would cost | put the expectation back in the box as a value |
+| an empty answer is a real answer | `x: draft.x.trim()` — no fallback |
+| the greyed answer on a worry | the same prefill mutation |
+| the one hard stop | deleted the `checkTest` on the box |
+| a repeat greys last time's answer | put the value back on the repeat screen |
+
+**Measured on a 390×844 phone, both themes.** *Lock it in* sits at **647–710** depending on the
+road, against a fold of 785 — above it, once a size is picked. **With the three sizes still
+open it is at 825, which is 40px below the fold and is the price of this task**, stated to the
+founder before the call and accepted. No sideways scroll at 100/125/150/200%.
+
+## 13. What is knowingly left
+
+1. **The reviewer's three questions (§9.2) are unanswered and the app shipped anyway** — the
+   founder's call, on the grounds that the change is strictly additive. If (a) comes back *no*,
+   this comes out again, and §10's last line still stands: it becomes a named limit in the
+   scope instead.
+2. **The 60 `W-*-E` rows have not been re-read against their new job.** §3's finding stands
+   untouched: `W-SIT-E1` predicts the event again and is now greyed under a question only the
+   cost answers. That is reviewer question (b) and it is the biggest single content job left.
+3. **Misha has not read the question**, and it is the one sentence on the last screen before
+   the lock.
+4. **`--ink-3` on `--card` is about 3:1.** The greyed sentence carries what will be STORED, not
+   just an instruction, which is more weight than any other placeholder in the app puts on that
+   colour. It goes to the outstanding screen-reader-and-contrast pass, not into this task.
+5. **§8, the post, is not started.** It is the same content in the other place and it should
+   still be written once. The correction pair the app now makes room for is the pair the post
+   needs.
+6. **`docs/journeys.md` J1 is stale beyond the two rows this task fixed** — it still says *Pick
+   a worry*, *Sure it'll go badly?* and *I'll do it today*, all of which changed before today.

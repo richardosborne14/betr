@@ -284,12 +284,13 @@ test('every box a person types into has a name', () => {
   h += SCREENS['build-do'](boot()).tap('#dropopen').html();
   h += SCREENS.borrow(boot()).html();
   h += SCREENS.happened(boot()).html();
-  /* the one box left on the plan screen, which is now only reached by repeating a test */
+  /* B51: the expectation box on the repeat screen, which is the only thing go('plan') is
+     reached for. It is a box from the first paint now, so there is no edit button to tap. */
   const r = boot();
   r.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
   r.type('#do', 'Put it in a drawer from eight.').tap('#lock').tap('#nothanks').tap('#done');
   r.type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 1);
-  h += r.tap('#again').tap('#xedit').html();
+  h += r.tap('#again').html();
   h += boot().tap('#m-help').tap('#export').html();
 
   h += SCREENS.build(boot()).html();

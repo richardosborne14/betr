@@ -1297,12 +1297,129 @@ test('it starts cleanly from nothing, from rubbish, and from a half-finished loo
     .shows(en.s.start.caption);
 });
 
+/*
+  B51, 2026-09-10, AND WHAT IT CLOSES WAS INVISIBLE TO EVERY TEST IN THIS FILE.
+
+  There has been a second field since the beginning — `x`, labelled "What you expect" — and it
+  is drawn by plan(), which `go('plan')` is only ever called for by again(). So a FIRST test
+  was never asked anything at all: the app ran `guards.expectationFrom` over the person's own
+  sentence, cut the "If I …, then" off the front, stored the tail and showed it back on the
+  result. The founder wrote "If I post my app on social media, then people will say it's
+  rubbish" and the result screen struck through "People will say it's rubbish" — their own
+  words, against their own words, with nothing to learn either way.
+
+  These five walk the fix. The question is on the screen a first test reaches, it is a QUESTION
+  and not a label, what stands in the box is GREY, and an empty box still locks in.
+*/
+test('the loop asks what it would cost, on the screen a first test reaches', () => {
+  const a = boot().tap('#m-new');
+  a.type('#if', 'post my app on social media').type('#then', 'people will say it’s rubbish');
+  a.tap('#next');
+
+  /* Asked, in the words a person reads — not by the id of the box (B50's lesson). */
+  a.showsText(en.s.plan.expectLabel);
+  /* And the app's own answer is GREY and in the box, not black and above it. */
+  a.shows('placeholder="People will say it’s rubbish."');
+  assert.strictEqual(a.valueOf('#x'), '', 'the box arrived with an answer already in it');
+
+  a.type('#do', 'Post the link once, with no caveat underneath it.');
+  a.type('#x', 'I’ll feel like a fraud and quietly take it down.');
+  a.tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'Two people replied. Neither said it was rubbish.');
+  a.tap('#next').tap('[data-key]', 1);
+
+  /*
+    THE WHOLE OF THE GAIN IS ON THIS SCREEN. What is struck through is the cost she named,
+    against what happened — not the sentence she was already carrying, said back to her.
+  */
+  a.showsText('I’ll feel like a fraud and quietly take it down.');
+  assert.match(a.said(), /You expected: I’ll feel like a fraud and quietly take it down\./);
+});
+
+test('an empty answer is a real answer, and locks in what the app would have said', () => {
+  const a = boot().tap('#m-new');
+  a.type('#if', 'post my app on social media').type('#then', 'people will say it’s rubbish');
+  a.tap('#next').type('#do', 'Post the link once.').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'Nobody said anything.').tap('#next').tap('[data-key]', 1);
+
+  /*
+    Nothing typed, nothing gated, nothing dared (rule 5) — and what is recorded is the exact
+    sentence that was greyed in the box she left alone, which is why this task could not break
+    a road that already worked.
+  */
+  assert.match(a.said(), /You expected: People will say it’s rubbish\./);
+});
+
+test('on a worry, the greyed answer is the hand-written one and the box is still empty', () => {
+  const f = firstBehind(0);
+  const a = boot().tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 1).tap('#next');
+
+  /*
+    The founder's B51 §9.3 call: B20's expectation is an EXAMPLE on this road too, not a
+    prefill, so every road asks the same question and every answer in the record is hers. It
+    still travels through the holes — B41's near miss, and sameAsStock is why.
+  */
+  const wrote = said(f, f.beliefs[1].expect);
+  a.shows('placeholder="' + wrote.charAt(0).toUpperCase() + wrote.slice(1) + '"');
+  assert.strictEqual(a.valueOf('#x'), '', 'BETR put its own words in the box');
+  a.showsText(en.s.plan.expectLabel);
+});
+
+test('the one hard stop is on the cost box too, and it does not take the words away', () => {
+  const a = boot().tap('#m-new');
+  a.type('#if', 'tell them how I really feel').type('#then', 'they’ll go quiet on me');
+  a.tap('#next').type('#do', 'Say the one true sentence and stop talking.');
+
+  /*
+    Rule 4's one wall, on the box most likely to meet it: this is where somebody says what it
+    would MEAN for them. The founder's own example of what must still be refused.
+  */
+  a.type('#x', 'If I kill myself everyone will be better off').tap('#lock');
+  a.shows('can’t help with that one').shows('call your local emergency number');
+  a.hidesText(en.s.locked.title);
+  assert.strictEqual(a.valueOf('#x'), 'If I kill myself everyone will be better off',
+    'a refusal took her words out of the box');
+
+  a.type('#x', 'I’ll decide there’s no point telling anybody anything.').tap('#lock');
+  a.showsText(en.s.locked.title);
+});
+
+test('a repeat asks the same question, and greys what was said last time', () => {
+  const a = boot().tap('#m-new');
+  a.type('#if', 'post my app on social media').type('#then', 'people will say it’s rubbish');
+  a.tap('#next').type('#do', 'Post the link once.');
+  a.type('#x', 'I’ll feel like a fraud and quietly take it down.').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'Nobody minded.').tap('#next').tap('[data-key]', 1);
+
+  a.tap('#again');
+  a.showsText(en.s.plan.expectLabel);
+  a.shows('placeholder="I’ll feel like a fraud and quietly take it down."');
+  assert.strictEqual(a.valueOf('#x'), '', 'last time’s answer arrived as an answer, not an example');
+
+  /* Left alone, it carries forward: an empty box changes nothing, here as on the build screen. */
+  a.tap('#lock').tap('#done').type('#o', 'Nothing again.').tap('#next').tap('[data-key]', 1);
+  assert.match(a.said(), /You expected: I’ll feel like a fraud and quietly take it down\./);
+});
+
+/*
+  B51 rewrote this one. It used to assert that "Not quite? Change it" was not on screen after
+  the lock — and that button went with the edit state, so from the day it did the test passed
+  by asserting the absence of a string that exists nowhere in the app. It is the box that must
+  not be there: what was expected is fixed the moment "Lock it in" is tapped, and every screen
+  from there to the result reads it rather than offering it.
+*/
 test('a locked expectation cannot be edited after the test is done', () => {
   const a = boot();
-  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
-  a.hides('Not quite? Change it');
-  a.tap('#nothanks').tap('#done').type('#o', 'She said yes.').tap('#next').tap('[data-key]', 1);
-  a.hides('Not quite? Change it');
+  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 1).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
+  a.shows('id="x"');
+  a.tap('#lock').hides('id="x"');
+  a.tap('#nothanks').hides('id="x"');
+  a.tap('#done').hides('id="x"');
+  a.type('#o', 'She said yes.').tap('#next').hides('id="x"');
+  a.tap('[data-key]', 1).hides('id="x"');
 });
 
 /* ------------------------------------------------------- the ladder, and getting back to a worry */
