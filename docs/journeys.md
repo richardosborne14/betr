@@ -12,6 +12,10 @@ never seen the code can follow it and say whether it did what it says.
   waits for you.
 - 2026-09-09 - **J5 added: the two guide screens** (B44), and its step 6 is the one that
   matters - neither of them may ever appear on its own.
+- 2026-09-10 - **J4 updated for B45 §5c and B49.** Its "two templates have this road and only
+  two" was two tasks out of date; every worry has it. Steps 6a-6c (a size's own gap, on
+  *Saying no*) and 19a (the leave-out's greyed example) are new. **J1, J2 and J3 are still
+  behind the app and still have not been rewritten.**
 - 2026-09-09 - **J4 added: the template road** (B43), and it is the acceptance test for the
   whole programme, not just for one task. **J1, J2 and J3 have not been rewritten since B19,
   and their wording is behind the app** - "Pick a worry", "Saying no without an excuse" and
@@ -146,9 +150,13 @@ does it again differently - and watches **one** ladder move.
 do steps 1-11 again with the phone's text size turned up (Settings - Display - Text Size, up
 two notches); everything must still be reachable.
 
-**Two templates have this road today, and only two:** *Saying no without giving a reason*, and
-*Telling someone I'm struggling*. Every other worry still works the old way, and that is not a
-bug in this journey.
+**Every worry has this road, since B45 §5c (2026-09-10).** All twenty print a verb and most have
+a gap in it; there is no second shape and no worry that “still works the old way”. If two screens
+on two worries look like different kinds of screen, that is the bug this journey is looking for.
+
+**One worry has a second gap, and only one:** *Saying no without giving a reason* carries
+`{thing}` in its smallest step, filled on the **plan** screen rather than the build screen
+(B49). Steps 6a–6c below are that, and they are the only steps that apply to one worry.
 
 | # | Do this | You should see |
 | --- | --- | --- |
@@ -157,12 +165,15 @@ bug in this journey.
 | 3 | Tap **Saying no without giving a reason** | *Make it yours.* One sentence with the words **If I**, **say no to**, a box, **without giving a reason**, **, then** and a second box. Under it, three whole predictions - each one already saying *somebody* |
 | 4 | Type **my sister** into the first box | **All three predictions change as you type**, and every *somebody* in them becomes *my sister*. Nothing else on the screen moves |
 | 5 | Tap the second prediction | It drops into the second box, in your words. The other two stay on screen; nothing is greyed out or ticked |
-| 6 | Tap **What will you do?** | Your finished sentence in quotes at the top, under the worry's name. Then *What will you do today?*, an empty box, and **three named steps**: *A small go*, *A bigger go*, *The whole thing* - each a whole sentence with **my sister** already in it. The box is empty: BETR has not picked one |
+| 6 | Tap **What will you do?** | Your finished sentence in quotes at the top, under the worry's name. Then *What will you do today?*, an empty box saying *Write what you'll do, or start from one of the three below* - **and the three are directly below it** - and **three named steps**: *A small go*, *A bigger go*, *The whole thing* - each a whole sentence with **my sister** already in it. The box is empty: BETR has not picked one |
+| 6a | **On this worry only:** tap **A small go** instead | The plan is not a box — it is the sentence itself, *Say no to* **my sister** *once today, about* ___ ., with **my sister** highlighted and a small blank at the end. The blank is **empty**, and the word *something small* sits in it greyed out |
+| 6b | Type **the Saturday thing** into that blank | The sentence reads *Say no to my sister once today, about the Saturday thing.* The full stop stays right after the word. **Lock it in** is on screen without scrolling |
+| 6c | Tap **Change** | The three are back **and the box is back**, with *Say no to my sister once today, about the Saturday thing.* in it, editable. Nothing you typed was lost getting there |
 | 7 | Tap **A bigger go** | The row of three folds onto the one you picked. *HOW BIG A GO - Change - A bigger go*, the sentence now in the box, and the leave-out that belongs to that size filled in under it. **Lock it in** is on screen without scrolling |
 | 8 | Tap **Change** | The three are back, and the one you had is still the one in the box |
 | 9 | Tap **A bigger go** again, then **Lock it in** | *LOCKED IN. Go and find out.* Your sentence, your leave-out, and *A bad one counts the same as a good one* |
 | 10 | **Go and actually do it.** Come back. Tap **Done it. Here's what happened** | One box, and above it the worry's name and the exact sentence you are testing. No verdict asked for |
-| 11 | Type what happened, tap **Next**, tap **A lot less sure** | Your expectation, what happened, and the ladder: *Started 10*, *Now 7*. Beside it, **the name of the size you did it at** - *A bigger go*. A big **1** |
+| 11 | Type what happened, tap **Next**, tap **A lot less sure** | Your expectation, what happened, and the ladder: *Started 10*, *Now 7*. Beside it, **the name of the size you did it at** - *A bigger go*. A big **1**. (If you did step 6b, that rung reads *A small go · the Saturday thing* - the size **and** the word you put in the gap) |
 | 12 | Tap **New test** at the bottom, then **Back**, then **Not sure? Try one of these**, and come back to **Saying no without giving a reason** | The blank sentence again. **Your last answer is not pre-filled** - this is a new test, not the old one reopened |
 | 13 | Type a **different** name into the gap, tap a **different** prediction, and pick a **different** size | All three sentences rebuild around the new name |
 | 14 | Finish that loop too | *Started 10*, *1st 7*, *Now ...* - **one ladder, three rungs**, each rung carrying the size it was done at and what you wrote. Not two cards, not two ladders |
@@ -171,6 +182,7 @@ bug in this journey.
 | 17 | Go back to the worry and tap **Write the whole thing myself** | Both boxes empty, and no plan carried over. It hands you a genuinely blank test and **leaves the worry's ladder alone** |
 | 18 | Do steps 1-11 again on **Telling someone I'm struggling** (it is behind *Keeping it all to myself*) | The same road. The gap sits in the middle of the sentence this time - *If I tell ___ one true thing I'm finding hard* |
 | 19 | On that one, leave the gap **empty** and tap a prediction | Everything reads *somebody*, and it is a whole sentence. Nothing shows a blank, a placeholder or a brace |
+| 19a | Open the **And leave out** row on any worry that is not *Saying no* | The greyed example in that box says *Write what you'll leave out, or start from one of the three below* - **never** a leave-out belonging to another worry. If it says *Don't give a reason* on anything but *Saying no*, B49 has come undone |
 | 20 | Tap **Help**, then **Export everything** | Each result carries the words you typed into the gap, which prediction you picked, and the name of the size. Nothing carries a score of you |
 | 21 | With wifi off, walk the whole road again | It all works. Open the network tab: the page load and its files, nothing after |
 

@@ -519,9 +519,24 @@ var BETR_WORRIES = [
     */
     skeleton: {
       if: 'say no to {person} without giving a reason',
-      /* The word the sentence uses while the blank is empty. It has to read in every one of
-         the four places {person} appears, which is why it is "somebody" and not "a person". */
-      holes: { person: 'somebody' }
+      /*
+        The word the sentence uses while the blank is empty. It has to read in every one of
+        the four places {person} appears, which is why it is "somebody" and not "a person".
+
+        B49, 2026-09-10. {thing} IS THE FIRST HOLE THAT IS NOT IN THE IF-HALF, and it is the
+        founder's canvas row 3 built on one worry before it goes on twenty. It appears in the
+        small go and nowhere else, so there is no blank for it on the build screen — she fills
+        it on the plan screen, in the sentence itself, once she has picked that size.
+
+        NO SENTENCE WAS WRITTEN FOR IT. "about something small" was already the words; the hole
+        is those words made tappable, and with it empty the small go reads exactly as it read
+        yesterday. That is why nothing here is a new row for the reviewer.
+
+        IT DOES NOT GO IN THE OTHER TWO. A hole carries ONE default word for the whole worry,
+        and "about something small" is not what the bigger go says — putting {thing} there
+        would rewrite a sentence rather than open it.
+      */
+      holes: { person: 'somebody', thing: 'something small' }
     },
     beliefs: [
       {
@@ -551,7 +566,7 @@ var BETR_WORRIES = [
     sizes: [
       {
         name: 'A small go',
-        do: 'Say no to {person} once today, about something small.',
+        do: 'Say no to {person} once today, about {thing}.',
         drop: 'Don’t give a reason.'
       },
       {
@@ -565,7 +580,7 @@ var BETR_WORRIES = [
         drop: 'No reason, no apology, and no making up for it later.'
       }
     ],
-    test: 'Say no to {person} once today, about something small.',
+    test: 'Say no to {person} once today, about {thing}.',
     drop: 'Don’t give a reason.',
     lane: 'assertiveness'
   },

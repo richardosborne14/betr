@@ -449,6 +449,44 @@
     });
 
     /*
+      B49, 2026-09-10. A HOLE THAT IS NOT IN THE IF-HALF HAS EXACTLY ONE PLACE ITS BLANK IS
+      DRAWN, AND THAT IS A SIZE'S PLAN SENTENCE.
+
+      Every other hole is filled on the build screen, where skeletonHalf() puts a blank at each
+      one it finds in `if`. A hole that is only ever used somewhere else has no blank there —
+      and until today it was declared, validated, and then silently printed its own default word
+      for ever, which is B45 §5b's finding written down. app.js draws a blank for one on the
+      plan screen, in the sentence, once that size is picked; there is nowhere it draws one in a
+      prediction, in an expectation, or in a leave-out. So those may not carry one.
+
+      `test` and `drop` are exempt because they are not a second place: content.js already holds
+      them equal to sizes[0]'s two, word for word (checkSizes0).
+    */
+    var inIf = holesIn(sk.if);
+    var elsewhere = [];
+    if (Array.isArray(f.beliefs)) {
+      f.beliefs.forEach(function (b) {
+        if (!b) return;
+        ['belief', 'expect'].forEach(function (field) {
+          if (typeof b[field] === 'string') elsewhere.push([b[field], 'a prediction']);
+        });
+      });
+    }
+    if (Array.isArray(f.sizes)) {
+      f.sizes.forEach(function (z) {
+        if (z && typeof z.drop === 'string') elsewhere.push([z.drop, 'a size’s leave-out']);
+      });
+    }
+    elsewhere.forEach(function (pair) {
+      holesIn(pair[0]).forEach(function (name) {
+        if (inIf.indexOf(name) !== -1) return;
+        problems.push(where + ' puts the hole "{' + name + '}" in ' + pair[1] + ' without ' +
+          'putting it in the if-half, and there is no screen that would ever draw a blank ' +
+          'for it: it would print "' + sk.holes[name] + '" for ever');
+      });
+    });
+
+    /*
       The assembled sentence, with every hole at its default, still has to come apart the way
       the build screen needs — and the three predictions have to share the skeleton's if-half
       WORD FOR WORD. That last one is what makes the carry-through honest: the person is

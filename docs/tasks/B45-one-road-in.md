@@ -4,8 +4,13 @@
 2026-09-10 (§12). §5c SHIPPED 2026-09-10 — `starts.js` is gone, there is one content file,
 and `startFor()` went with it (§13). §7a ANSWERED 2026-09-10: the fold stays, so §3's
 difference 4 is CLOSED as a no. §3's difference 9 is STRUCK — it was never a drift
-([`B48`](B48-the-greyed-example-belongs-to-this-worry.md)). What is left of §3 is
-differences 3, 5, 6 and 7.**
+([`B48`](B48-the-greyed-example-belongs-to-this-worry.md)).
+**§3's differences 3, 5 and 8 are BUILT ON ONE WORRY, 2026-09-10
+([`B49`](B49-the-grey-lines-and-a-size-of-its-own.md)), the founder's call over the
+recommendation** — `no` carries `{thing}`, the plan is that sentence with a blank in it, and the
+rung reads *A small go · the Saturday thing*. **Nineteen worries have no such hole and that is
+sixty sentences for the reviewer, not a session's.** What is left of §3 is differences 6 and 7,
+and the other nineteen worries' content.**
 **Status when it was written:** **SCOPED, not started. No longer blocked** — the founder supplied the current mockup
 on 2026-09-09 and it answers both questions the first draft of this file was waiting on.
 **Confidence:** 9/10 in the diagnosis — every number below was measured in a browser today.
@@ -104,12 +109,12 @@ the design B45 §4 argues for, and the canvas note already says it in one line.
 | --- | --- | --- |
 | **1** | **Every** worry's sentence is a printed verb with a hole in it — *If I* `criticise` **[a person]** | **2 of 21.** The other nineteen show two empty blanks under a heading that says *Make it yours* |
 | **2** | **The carried word is marked.** A soft blue highlight wherever a word she typed appears somewhere she did not type it. The canvas note calls this *"the closest thing to intelligence BETR is allowed to have"* | `content.fill()` returns plain text. The substitution happens **invisibly** — the one moment the mechanic could explain itself, and nothing on screen says anything happened |
-| **3** | **The three sizes carry holes of their own** — *Give [my best friend] a little criticism about* **[a thing]** — and she fills the second one on the do screen | A size can only reuse the belief's holes. There is no second hole anywhere |
+| **3** | **The three sizes carry holes of their own** — *Give [my best friend] a little criticism about* **[a thing]** — and she fills the second one on the do screen | **BUILT 2026-09-10 ([`B49`](B49-the-grey-lines-and-a-size-of-its-own.md)), ON ONE WORRY.** `no`'s small go is *Say no to {person} once today, about {thing}* and the blank is on the plan screen. `content.js` refuses a hole outside the if-half anywhere but a size's `do`, so the silent road §5b describes cannot be built by accident again. **The other nineteen need sixty sentences and they are the reviewer's** |
 | **4** | **After she picks a size, all three stay on screen**, with the chosen one filled in above them | B42 **folds** the three onto one line — *HOW BIG A GO · A bigger go · Change* |
-| **5** | The plan is **a sentence with editable holes** | The plan is a plain textarea |
+| **5** | The plan is **a sentence with editable holes** | **BUILT 2026-09-10 (B49), WHERE THERE IS A HOLE TO EDIT.** Difference 5 and difference 3 were one job: with no hole of its own a size's sentence has nothing editable in it that was not already typed a screen earlier, so the plan is the sentence exactly where the canvas's is — on a size with a hole — and the box everywhere else. `Change` is the way back to free text and it was already there |
 | **6** | *What will you do?* sits **at the bottom**, under the suggestions and the safety line | It sits **above** the suggestions |
 | **7** | The repeat screen is *"Same again, or a notch up? — your choice, every time"*, with **all three open** and one marked *Last time* | A plan card, an expectation editor, and the three folded into a line |
-| **8** | A rung on *Your tests* reads **A small go · about [her playlist]** — the size *and* the word she put in the hole | The size name only |
+| **8** | A rung on *Your tests* reads **A small go · about [her playlist]** — the size *and* the word she put in the hole | **BUILT 2026-09-10 (B49).** *A small go · the Saturday thing* for the eye, *“Done at: A small go, the Saturday thing.”* for the ear — the canvas's middle dot is not read aloud in the middle of somebody's own words. The canvas's *“about”* is not carried: it belongs to the sentence, not to the word |
 | ~~**9**~~ | ~~The hole shows **a placeholder noun in the blank** — *a person*, *a thing* — so an empty sentence still reads~~ | ~~Our hole is an empty input; the default word only appears in the rendered predictions below it~~ **NOT A DRIFT AND NEVER WAS — struck 2026-09-10 ([`B48`](B48-the-greyed-example-belongs-to-this-worry.md) §6).** `skeletonHalf()` has printed the hole's word as a greyed placeholder since B41, and B41's comment argues for a placeholder over a value. **This row was read off the canvas and not off the screen.** |
 
 > **DIFFERENCE 4 IS CLOSED, 2026-09-10, AND IT IS A NO.** Asked of the founder with both
@@ -177,6 +182,12 @@ sentences, plus a second hole name where the size wants one.
 > holds one wording rather than two and §5c can delete the pair without deciding anything.
 > Fourteen `test` lines were reworded to carry the worry's hole; `low` also lost *"one person
 > you trust"*, which is a `W-LOW-D1` question for the reviewer.
+>
+> **DONE 2026-09-10 ON ONE WORRY — [`B49`](B49-the-grey-lines-and-a-size-of-its-own.md).** The
+> screen change below is built and `no` has the first one. **The nineteen are still open, and
+> they are content**: read the sixty with the founder and Misha and see which already have words
+> standing in for something a person would name. Where they do it is free, the way `no`'s was —
+> *about something small* became `{thing}` and not one word on the screen changed.
 >
 > **THE SECOND HOLE — difference 3 — IS NOT DONE AND IS NOT CONTENT.** The mockup's *Give [my
 > best friend] a little criticism about [a thing]* fills its second blank on the **do** screen,
@@ -362,6 +373,12 @@ rather than deleted, because deleting two of the seven parts of a worry (scope �
 job and it is the founder's list to shorten, not a session's.
 
 ---
+
+> **ANSWERED 2026-09-10 by [`B49`](B49-the-grey-lines-and-a-size-of-its-own.md), and the
+> founder chose the wording.** Both grey lines on that screen were wrong, not one: the plan box
+> said “or” above the three, and the leave-out box next to it was printing the worry `no`'s own
+> leave-out on all twenty. They now name the box and point down, in the same shape. Misha still
+> has to read them.
 
 ## 12. What §5e shipped, 2026-09-10 — one do screen
 

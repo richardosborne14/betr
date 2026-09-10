@@ -105,7 +105,7 @@ somebody who wrote a situation of their own:
 ```
     sizes: [
       { name: 'A small go',
-        do: 'Say no to {person} once today, about something small.',
+        do: 'Say no to {person} once today, about {thing}.',
         drop: 'Don’t give a reason.' },
       { name: 'A bigger go',    do: '…', drop: '…' },
       { name: 'The whole thing', do: '…', drop: '…' }
@@ -127,8 +127,8 @@ because of what somebody has already done.
 
 ### The sentences with a gap in them
 
-Two of the worries — *Saying no without giving a reason* and *Telling someone I’m struggling* —
-have a **gap** in them that the person fills in. In the file it looks like `{person}`:
+**Every worry** has a first half the app prints, and most of them have a **gap** in it that the
+person fills in. In the file it looks like `{person}`:
 
 ```
     skeleton: {
@@ -155,9 +155,23 @@ to start from the same words, because that is the half the blank is in.
 
 **Changing the words around a gap is completely safe.** Changing `somebody` is safe too, as long
 as the new word still reads in every place `{person}` appears — try saying each sentence out
-loud with it in. **A gap can go in a `test`, a `drop` or one of the three sizes as well**, and
-it works the same way there; the one place it cannot go is the `name` of a size, because that is
-a label on a button rather than a sentence about anybody.
+loud with it in.
+
+**A gap that is in the `if` line can be used anywhere in that worry** — any of the three
+predictions, the `expect` under one, the `test`, the `drop`, or any of the three sizes. It is the
+same blank in all of them.
+
+**A gap that is NOT in the `if` line is different, and there is one rule about it.** It may only
+be used in the `do` of a size — the sentence that becomes the plan. That is where the app draws
+a blank for it: once somebody picks that size, the plan is that sentence with a gap in it, and
+they fill it in there. *Saying no without giving a reason* has one: `{thing}`, which is the
+*about something small* in its smallest step. Put a gap that is not in the `if` line anywhere
+else — a prediction, an `expect`, a size's `drop` — and **the build will stop you**, because
+there would be no screen anywhere that lets anybody fill it in, and it would print its
+stand-in word for ever.
+
+The one place no gap can go at all is the `name` of a size, because that is a label on a button
+rather than a sentence about anybody.
 
 ## Doing it yourself, on github.com
 

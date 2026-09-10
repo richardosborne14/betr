@@ -934,7 +934,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.doOwnPlaceholder`**
 
-> Or put it in your own words.
+> Write what you’ll do, or start from one of the three below.
 
 **`build.sizeChips`**
 
@@ -974,7 +974,7 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.dropPlaceholder`**
 
-> Don’t give a reason.
+> Write what you’ll leave out, or start from one of the three below.
 
 **`build.dropChips`**
 
@@ -1348,7 +1348,7 @@ The three a person chooses between, in the order they are shown:
 | **lane** | assertiveness |
 | **label** — the button | Saying no without giving a reason |
 | **card sentence** — under the label on the list | If I say no and don’t explain, then people will think badly of me. |
-| **test** — the one thing, today | Say no to {person} once today, about something small. |
+| **test** — the one thing, today | Say no to {person} once today, about {thing}. |
 | **drop** — what you leave out | Don’t give a reason. |
 
 **This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
@@ -1357,6 +1357,7 @@ The three a person chooses between, in the order they are shown:
 | --- | --- |
 | **printed** | If I say no to {person} without giving a reason |
 | **the gap `{person}`** — its word while it is empty | somebody |
+| **the gap `{thing}`** — its word while it is empty | something small |
 
 **How big a go.** Three steps, smallest first, shown on the screen after the sentence.
 Tapping one fills both boxes. Three, always — never a fourth, never one that appears
@@ -1364,7 +1365,7 @@ because the last one went well, and never a number on any of them.
 
 | | how big | what you’d do | what you’d leave out |
 | --- | --- | --- | --- |
-| 1 | A small go | Say no to {person} once today, about something small. | Don’t give a reason. |
+| 1 | A small go | Say no to {person} once today, about {thing}. | Don’t give a reason. |
 | 2 | A bigger go | Say no to {person} about something bigger than you would usually refuse. | Don’t give a reason, and don’t offer them anything instead. |
 | 3 | The whole thing | Say no to {person} today, and say nothing after it. | No reason, no apology, and no making up for it later. |
 

@@ -1189,3 +1189,63 @@ the first draft without `readBlanks()`, and worked — because its first two cal
 call `readBlanks()` a line above. The third didn't, and the function silently recomputed the
 answer it already had. **Not a crash, not a test failure: the right function called at the right
 moment returning yesterday's answer.** The precondition is now the first line of the function.
+
+---
+
+## 2026-09-10 — the same fault twice in one day, and a unit that lies about how wide words are
+
+**B49.** [`B48`](tasks/B48-the-greyed-example-belongs-to-this-worry.md) removed one frozen
+example that belonged to the worry `no` and was printed on all twenty. **Hours later the box on
+the next screen was doing exactly the same thing** — `build.dropPlaceholder` was `no`'s own
+`sizes[0].drop`, *“Don’t give a reason.”*, greyed into the leave-out box on every worry and on
+the free-text road, directly above three that were right.
+
+**A fault class does not have one instance.** B48's session fixed the one it found, wrote down
+why it was wrong, and did not go looking for its siblings — and its sibling was one screen along,
+in the same shape, findable in one command:
+
+```
+grep -n "[Pp]laceholder" web/content/strings-en.js
+```
+
+then read each one against `web/content/worries.js`. Three of the five turned out to be a worry's
+own sentence; two of them were deliberate and documented, one was not. **When you fix a string
+that was wrong because content moved around it, check every string of the same kind before you
+close the task.** The check is one grep and it takes five minutes.
+
+**And the same is true of what fixes them.** The two boxes on the plan screen were fixed
+*differently* from B48's blank, on purpose and with the reason written into the string: a blank
+inside a sentence shows the SHAPE of what goes in it, and a textarea sitting on three whole
+suggestions must not show a fourth (B42). Two different-looking answers to one fault class is
+fine. What is not fine is not noticing there was a class.
+
+### `ch` is the width of a “0”, and prose is not made of noughts
+
+`growHole()` has sized the build screen's blanks in `ch` since B41 and it looks right there,
+because a flex row with a gap absorbs the slack. Put the same blank **inside a sentence** and it
+does not: *“something small”* got a blank **26% wider than the words in it** (207px against
+149px), which left the sentence's own full stop floating a centimetre off the end of the word and
+was enough to push the blank onto a line of its own on a 390px phone.
+
+**`ch` over-estimates lowercase prose by about a quarter.** Where it matters, measure: a hidden
+span with the box's own computed font, `getBoundingClientRect().width`, and **write the answer
+back in `em`, never px**, so it still answers to the person's text size. Guard on `box.style` the
+way `growHole` does and the fake DOM in the tests is a no-op.
+
+### And then cap it, because a blank sized to its contents has no ceiling
+
+At 200% text with *“the thing on Saturday afternoon”* in it, the measured blank was **562px
+inside a 350px card**: `document.documentElement.scrollWidth` 602 against a 390px viewport — the
+whole page scrolling sideways, which is the one thing a phone screen may never do. **Anything
+sized from content needs a `max-width`**, and the number is not 100%: at exactly 100% the blank
+fills the line and the sentence's punctuation is orphaned alone on the next one.
+`calc(100% - .7em)` leaves room for the full stop.
+
+**The check is one line and it belongs in every walk at 200%:**
+
+```
+node tools/walk.js eval 'JSON.stringify({scrollW:document.documentElement.scrollWidth, innerW:innerWidth})'
+```
+
+Equal is right. Anything else is a phone that scrolls sideways.
+

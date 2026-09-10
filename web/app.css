@@ -443,6 +443,49 @@ h2 { font-family:var(--display); font-weight:800; font-size:clamp(1.75rem,6vw,2.
 .folded-val.none { color:var(--ink-3); }
 .folded:hover { border-color:var(--btn); }
 
+/*
+  B49, 2026-09-10. THE PLAN AS THE SENTENCE IT IS, where the size it came from has a hole of
+  its own — the founder's canvas row 3, on one worry.
+
+  It is the box it replaces, to the pixel it can be: same border, same radius, same card, same
+  padding, same font size. A person who picks a size on `no` and a person who picks one on
+  `rest` are looking at the same object in the same place, and only one of them has a gap in it.
+
+  Inline flow rather than the build screen's flex, and that is the whole reason it is a class of
+  its own: a sentence with a full stop after the last hole ("about ___.") needs the stop up
+  against the blank, and a flex row with a gap puts it a space away, floating. `pre-wrap` keeps
+  the sentence's own spacing exactly as the content file wrote it.
+
+  The blank is the build screen's blank at this screen's size: no box, an underline in the
+  button colour, and it grows to its contents in JS (growHole) so it answers to the person's
+  text size. `ch` here is the floor for a browser that never runs it.
+*/
+.plan-said {
+  width:100%; max-width:560px; margin:0 0 18px; text-align:start;
+  font-family:var(--body); font-size:1.1875rem; line-height:1.9; color:var(--ink);
+  white-space:pre-wrap;
+  padding:16px 18px; border:2px solid var(--edge); border-radius:18px; background:var(--card);
+}
+.plan-said .blank {
+  font:inherit; font-weight:700; color:var(--ink); width:7ch; min-width:4em;
+  background:none; border:0; border-block-end:3px solid var(--btn); border-radius:0;
+  padding:0 2px 2px; margin:0;
+  /*
+    AND THIS LINE IS THE ONE THAT WAS MEASURED. growSaid() sizes the blank to the words in it,
+    and at 200% text "the thing on Saturday afternoon" is 562px inside a 350px card — the page
+    itself starts scrolling sideways, which is the one thing a phone screen may never do. Capped
+    it takes a line of its own and the words scroll inside it, which is B41's trade on the build
+    screen made again here and for the same reason.
+
+    NOT 100%, and the .7em is the full stop. A blank that fills the line exactly leaves the
+    sentence's own punctuation stranded alone on the next one — "about ____" then "." — which
+    at 200% text is what a long word does every time.
+  */
+  max-width:calc(100% - .7em);
+}
+.plan-said .blank:focus-visible { outline:3px solid var(--btn); outline-offset:4px; }
+.plan-said .blank::placeholder { color:var(--ink-3); font-weight:400; opacity:1; }
+
 textarea {
   width:100%; max-width:560px; font-family:var(--body); font-size:1.1875rem; line-height:1.4;
   padding:16px 18px; border:2px solid var(--edge); border-radius:18px;

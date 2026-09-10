@@ -672,7 +672,21 @@
       Only rows that have one draw it, so a ladder from before today, and every test written
       from nothing, look exactly as they did yesterday.
     */
-    if (opts.size) spoken += ' ' + t('a11y.rungSize', { size: opts.size });
+    /*
+      B49, 2026-09-10. AND THE WORD SHE PUT IN THE SIZE'S OWN HOLE, WHERE THERE IS ONE.
+
+      The founder's canvas row 8: a rung reads *A small go · about her playlist*, the size AND
+      the thing it was about — because three rungs all saying "A small go" is three rows that
+      look like the same test done three times, and they were not. It is still a fact about that
+      test and never a grade: nothing compares one row's word with another's.
+
+      Two spellings of one line and that is not a decoration. The eye gets a middle dot, which
+      is the canvas's; the ear gets a comma, because a screen reader saying "middle dot" in the
+      middle of somebody's own words is worse than not reading it at all.
+    */
+    if (opts.size) {
+      spoken += ' ' + t('a11y.rungSize', { size: opts.size + (opts.word ? ', ' + opts.word : '') });
+    }
 
     return '<div class="rung">' +
         '<span class="when" aria-hidden="true">' + esc(when) + '</span>' +
@@ -680,7 +694,8 @@
         '<span class="num" aria-hidden="true">' + level + '</span>' +
         '<span class="sr">' + esc(spoken) + '</span>' +
       '</div>' +
-      (opts.size ? '<p class="said size" aria-hidden="true">' + esc(opts.size) + '</p>' : '') +
+      (opts.size ? '<p class="said size" aria-hidden="true">' + esc(opts.size) +
+        (opts.word ? ' · ' + esc(opts.word) : '') + '</p>' : '') +
       (opts.said ? paras(opts.said, 'said') : '');
   }
 
@@ -712,10 +727,34 @@
           /* B42: the size that test was done at, where there is one. Off the result, like
              everything else on this row, so nothing is looked up and nothing is derived. */
           size: r.size || '',
+          /* B49: and the word she put in that size's own hole, where the size has one. Off the
+             record, like the size beside it — nothing is looked up about the person. */
+          word: sizeWord(r),
           prev: at === 0 ? rate.TOP : g.rungs[at - 1]
         });
       }).join('') +
     '</div>';
+  }
+
+  /*
+    B49. What she typed into the hole that belongs to the size a result was done at, or ''.
+
+    Every other hole is in the sentence a rung already carries; this one is only ever in the
+    plan, so without it two rungs a week apart read identically and the ladder loses the one
+    fact that told them apart. It is derived from the same two things the plan screen derived
+    the blank from — the worry's skeleton and that size's sentence — so a result written before
+    any size had a hole simply has nothing to say and says nothing.
+  */
+  function sizeWord(r) {
+    if (!r || !r.size || !r.slots || !r.id) return '';
+    var f = content.byId(WORRIES, r.id);
+    if (!f) return '';
+    var z = null;
+    f.sizes.forEach(function (s) { if (flat(s.name) === flat(r.size)) z = s; });
+    if (!z) return '';
+    return ownHoles(f.skeleton, z).map(function (name) {
+      return String(r.slots[name] || '').trim();
+    }).filter(Boolean).join(', ');
   }
 
   /* Set up a repeat of something already tested. Stock wording is looked up fresh. */
@@ -1892,6 +1931,41 @@
     try { box.style.width = Math.max(HOLE_MIN, text.length + 1) + 'ch'; } catch (e) { /* older browser */ }
   }
 
+  /*
+    B49. A HOLE INSIDE PROSE IS SIZED TO THE WORDS IN IT, MEASURED RATHER THAN GUESSED.
+
+    growHole() sizes the build screen's holes in `ch`, which is the width of a "0" — and a "0"
+    is half again as wide as an average lowercase letter, so "something small" got a blank 26%
+    wider than the words in it. In a flex row that reads as a gap; in a SENTENCE it leaves the
+    full stop after the hole floating a centimetre off the end of the word, and on a 390px phone
+    it is enough to push the blank onto a line of its own.
+
+    So the words are measured, in the blank's own font, and the answer is turned back into `em`
+    before it is written down — never px — so it still answers to the person's text size the way
+    everything else on these screens does. Guarded on `style` for the same reason growHole is:
+    the fake DOM in the tests has neither a style nor a layout, and this is a no-op there.
+  */
+  var SAID_MIN = 4;
+  function growSaid(box) {
+    if (!box || !box.style) return;
+    var text = String(box.value || box.placeholder || '');
+    try {
+      var cs = window.getComputedStyle(box);
+      var probe = document.createElement('span');
+      probe.style.font = cs.font;
+      probe.style.letterSpacing = cs.letterSpacing;
+      probe.style.position = 'absolute';
+      probe.style.visibility = 'hidden';
+      probe.style.whiteSpace = 'pre';
+      probe.textContent = text;
+      document.body.appendChild(probe);
+      var wide = probe.getBoundingClientRect().width;
+      probe.parentNode.removeChild(probe);
+      var px = parseFloat(cs.fontSize) || 16;
+      box.style.width = Math.max(SAID_MIN, (wide + 4) / px).toFixed(2) + 'em';
+    } catch (e) { /* older browser */ }
+  }
+
   function wireChips(boxes) {
     boxes.forEach(function (pair) {
       var box = q(pair[0]);
@@ -1925,6 +1999,77 @@
         });
       };
     });
+  }
+
+  /*
+    B49, 2026-09-10. THE HOLES A SIZE HAS THAT THE SENTENCE ABOVE IT NEVER OFFERED.
+
+    Every hole in a skeleton's if-half gets a blank on the build screen (skeletonHalf). B45 §5b
+    found the gap and left it open: a hole used ONLY inside a size is declared, validated, and
+    then prints its own default word for ever, because nothing on the plan screen draws a blank
+    for it. That is the founder's canvas row 3 — *Give my best friend a little criticism about
+    [a thing]* — and the thing it needs is a blank in the plan.
+
+    So this is the list of names to draw one for, and it is worked out from the content rather
+    than declared anywhere: the holes in THIS size's plan sentence that were not in the if-half.
+    Off the skeleton road, and on a size that has none of its own, it is empty and the screen is
+    exactly the screen it was — which is what makes this one worry rather than a second road.
+
+    lib/content.js refuses a hole outside the if-half anywhere but a size's `do`, so this list
+    is the whole of what could ever need a blank here.
+  */
+  function ownHoles(sk, z) {
+    if (!sk || !z || typeof z.do !== 'string') return [];
+    var inIf = content.holesIn(sk.if);
+    var out = [];
+    content.holesIn(z.do).forEach(function (name) {
+      if (inIf.indexOf(name) === -1 && out.indexOf(name) === -1) out.push(name);
+    });
+    return out;
+  }
+
+  /*
+    B49. The plan as the sentence it is, with a blank at the hole that belongs to it.
+
+    IT IS THE SAME TWO COMPONENTS AS THE BUILD SCREEN'S SENTENCE and nothing new to learn: the
+    printed words, and a small blank at the gap. What differs is which holes are blanks. The
+    ones she filled a screen ago are printed as her own words, MARKED (B46) — editing them here
+    would leave the sentence at the top of this screen saying something else, and two sentences
+    that disagree about what she is doing is worse than one she cannot re-edit here. Back is one
+    tap away and it is where that word lives.
+
+    A HOLE IS EMPTY, NOT PRE-FILLED, for B41's two reasons unchanged: a real value in a blank
+    reads as something the person wrote, and an untouched hole assembles as its own word, so the
+    sentence always reads and *Say no to my sister once today, about something small* is a
+    perfectly good plan.
+
+    The way back to writing the whole thing herself is *Change* on the row underneath: it opens
+    the three and the box comes back with these words in it, editable, which is where they were
+    before this existed.
+  */
+  function planSaid(sk, text, own) {
+    var out = '';
+    var last = 0;
+    var re = /\{([a-z][a-z0-9]*)\}/g;
+    var m;
+    while ((m = re.exec(text))) {
+      out += esc(text.slice(last, m.index));
+      var name = m[1];
+      if (own.indexOf(name) !== -1) {
+        /* Every static attribute in one fragment, for the reason blank() says: i18n.test.js
+           reads the string literals out of this file looking for prose. */
+        out += '<input class="blank hole" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" id="p-' +
+          esc(name) + '" data-plan="' + esc(name) + '" aria-label="' +
+          esc(t('build.holeLabel', { word: sk.holes[name] })) + '" placeholder="' +
+          esc(sk.holes[name]) + '" value="' + esc(draft.slots[name] || '') + '">';
+      } else {
+        var typed = String(draft.slots[name] || '').trim();
+        out += typed ? '<span class="carried">' + esc(typed) + '</span>' : esc(sk.holes[name]);
+      }
+      last = m.index + m[0].length;
+    }
+    out += esc(text.slice(last));
+    return '<p class="plan-said">' + out + '</p>';
   }
 
   /*
@@ -1967,6 +2112,14 @@
     /* B42. Which of the three is in the box, worked out before the markup for the reason
        `landsIn` is: the row belonging to it has to be right on the paint a person lands on. */
     var picked = pickedSize(doChips, draft.test);
+    /*
+      B49. The holes this plan has of its own, and there are only any of them once one of the
+      three is picked and the row has folded onto it. While the three are open the question on
+      the screen is still which size, and a blank in a sentence nobody has chosen yet would be
+      a fourth thing to answer before the first one has been.
+    */
+    var sk = skeleton();
+    var own = picked === -1 || draft.sizeOpen ? [] : ownHoles(sk, sizes[picked]);
     paint( backButton() +
       '<div class="stage">' +
         /*
@@ -1992,9 +2145,17 @@
           with the very three it is sitting on top of. So on the size road the box asks for
           her words instead, which is the one thing the three cannot offer.
         */
-        '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
-          esc(t('build.doOwnPlaceholder')) + '">' +
-          esc(draft.test) + '</textarea>' +
+        /*
+          B49. Where the picked size carries a hole of its own, the plan IS that sentence with
+          a blank in it — the founder's canvas, on one worry. Everywhere else it is the box it
+          has always been, and a person cannot tell there are two, because the one she is
+          looking at is the only one on the screen.
+        */
+        (own.length
+          ? planSaid(sk, sizes[picked].do, own)
+          : '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
+            esc(t('build.doOwnPlaceholder')) + '">' +
+            esc(draft.test) + '</textarea>') +
         /*
           B42, AND IT IS WHY THE DIAL IS NOT SUBJECT TO B30's ONE-ROW-AT-A-TIME RULE IN FULL.
 
@@ -2066,16 +2227,51 @@
       the handler never runs, and somebody who had just tapped "Add one" landed in an empty box
       with its suggestions still hidden — the one moment they are certain to want them.
     */
+    /*
+      B49: with the plan drawn as a sentence there is no `#do` to land in, so focus goes to the
+      first hole that is still empty — the first thing there is to do — exactly as it does on
+      the build screen. Guarded rather than assumed: this used to be the one box that was always
+      there, and a screen with none of them must not throw.
+    */
     var box = (nextFocus && q(nextFocus)) || q('#do');
+    for (var n = 0; n < own.length && !box; n++) {
+      var hole = q('#p-' + own[n]);
+      if (hole && !String(hole.value || '').trim()) box = hole;
+    }
+    if (!box && own.length) box = q('#p-' + own[0]);
     nextFocus = null;
-    box.focus();
-    try { box.setSelectionRange(box.value.length, box.value.length); } catch (e) { /* older browser */ }
+    if (box && box.focus) {
+      box.focus();
+      try { box.setSelectionRange(box.value.length, box.value.length); } catch (e) { /* older browser */ }
+    }
+
+    /*
+      B49. The holes of the plan sentence, read back into the draft and the sentence reassembled
+      from them — which is what the box's `value` was doing a line above, said the other way
+      round. `draft.test` stays one plain string, so the guard, the lock, the record and every
+      screen after this one go on reading one field and know nothing about holes.
+    */
+    function readPlanHoles() {
+      if (!own.length) return;
+      own.forEach(function (name) {
+        var el = q('#p-' + name);
+        if (el) draft.slots[name] = el.value;
+      });
+      draft.test = content.fill(sizes[picked].do, draft.slots, sk.holes);
+    }
+    qa('[data-plan]').forEach(function (el) {
+      growSaid(el);
+      /* No repaint on a keystroke, for the reason the second blank never had one (B34 D1): a
+         repaint here is what would move the caret to the end of the word she is typing. */
+      el.oninput = function () { growSaid(el); readPlanHoles(); };
+    });
 
     function readBoxes() {
       var d = q('#do');
       var r = q('#drop');
       if (d) draft.test = d.value;
       if (r) draft.drop = r.value;
+      readPlanHoles();
     }
     /*
       B42. One size, and it fills BOTH boxes — a size is a step and the leave-out that belongs

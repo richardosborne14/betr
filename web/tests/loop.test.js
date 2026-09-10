@@ -310,7 +310,7 @@ test('a skeleton carries what she types into all three predictions', () => {
   /* one hole, typed once, and it is in every one of the three */
   a.type('#h-person', 'my sister').tap('[data-b]', 0);
   for (const b of f.beliefs) {
-    a.showsText(b.belief.split('{person}').join('my sister'));
+    a.showsText(content.fill(b.belief, { person: 'my sister' }, f.skeleton.holes));
   }
   a.hidesText('{person}');
   a.hidesText('If I say no to somebody');
@@ -404,8 +404,8 @@ test('a filled-in skeleton locks in as that worry, with her words and her hole r
   assert.strictEqual(cur.label, f.label);
   assert.strictEqual(cur.prediction, 1);
   assert.deepStrictEqual(cur.slots, { person: 'my sister' });
-  assert.strictEqual(cur.belief, f.beliefs[1].belief.split('{person}').join('my sister'));
-  assert.strictEqual(cur.x, f.beliefs[1].expect.split('{person}').join('my sister'),
+  assert.strictEqual(cur.belief, content.fill(f.beliefs[1].belief, { person: 'my sister' }, f.skeleton.holes));
+  assert.strictEqual(cur.x, content.fill(f.beliefs[1].expect, { person: 'my sister' }, f.skeleton.holes),
     'B20’s expectation did not travel through the holes');
 
   /*
@@ -525,15 +525,15 @@ test('three sizes are on the worry road and the free-text road, and one fills bo
   a.shows(en.s.build.sizeChips);
   /* all three, in the file's order, with her word already in every one of them */
   for (const z of f.sizes) {
-    a.shows(z.name).showsText(z.do.split('{person}').join('my sister'));
+    a.shows(z.name).showsText(content.fill(z.do, { person: 'my sister' }, f.skeleton.holes));
   }
   a.hidesText('{person}');
   /* the box is empty until she picks: a pre-filled one would be BETR having picked a rung */
   assert.strictEqual(a.valueOf('#do'), '');
 
   a.tap('[data-size]', 1);
-  assert.strictEqual(a.valueOf('#do'), f.sizes[1].do.split('{person}').join('my sister'));
-  a.showsText(f.sizes[1].drop.split('{person}').join('my sister'));
+  assert.strictEqual(a.valueOf('#do'), content.fill(f.sizes[1].do, { person: 'my sister' }, f.skeleton.holes));
+  a.showsText(content.fill(f.sizes[1].drop, { person: 'my sister' }, f.skeleton.holes));
 
   /* and the free-text road gets the general three, on a sentence BETR did not write */
   const b = boot().tap('#m-new');
@@ -634,7 +634,7 @@ test('test this again offers the same three with last time marked, and same agai
   a.tap('#again').shows(en.s.build.sizeLabel).shows(f.sizes[2].name).hides(en.s.plan.sizeChips);
   a.tap('#sizeopen').shows(en.s.plan.sizeChips).shows(en.s.build.sizeLast);
   /* all three, in the same order, and her word still in them */
-  for (const z of f.sizes) a.shows(z.name).shows(z.do.split('{person}').join('my sister'));
+  for (const z of f.sizes) a.shows(z.name).shows(content.fill(z.do, { person: 'my sister' }, f.skeleton.holes));
   /* the mark is on the one she did, and on no other */
   const row = a.html().match(/<div class="chips">([\s\S]*?)<\/div><\/div>/);
   assert.ok(row, 'no size row on the repeat screen');
@@ -642,7 +642,7 @@ test('test this again offers the same three with last time marked, and same agai
   assert.ok(row[1].indexOf(f.sizes[2].name) < row[1].indexOf(en.s.build.sizeLast));
 
   /* same again is one tap, and a smaller one is the same one tap: neither is nudged */
-  a.tap('[data-size]', 0).shows(f.sizes[0].do.split('{person}').join('my sister'));
+  a.tap('[data-size]', 0).shows(content.fill(f.sizes[0].do, { person: 'my sister' }, f.skeleton.holes));
   a.shows(en.s.build.sizeLabel).shows(f.sizes[0].name).hides(en.s.plan.sizeChips);
   a.tap('#lock').tap('#done').type('#o', 'Fine again.').tap('#next').tap('[data-key]', 0);
   const done = JSON.parse(a.mem['betr.v1']).done;
@@ -666,9 +666,107 @@ test('picking a size never deletes a leave-out somebody wrote themselves', () =>
   const f = content.byId(worries, 'no');
   a.tap('#sizeopen').tap('[data-size]', 2);
   assert.strictEqual(a.valueOf('#drop'), 'Don’t text her about it afterwards.');
-  a.type('#drop', f.sizes[2].drop.split('{person}').join('my sister'));
+  a.type('#drop', content.fill(f.sizes[2].drop, { person: 'my sister' }, f.skeleton.holes));
   a.tap('#sizeopen').tap('[data-size]', 0);
-  assert.strictEqual(a.valueOf('#drop'), f.sizes[0].drop.split('{person}').join('my sister'));
+  assert.strictEqual(a.valueOf('#drop'), content.fill(f.sizes[0].drop, { person: 'my sister' }, f.skeleton.holes));
+});
+
+/*
+  B49, 2026-09-10. A SIZE'S OWN HOLE, FILLED ON THE PLAN SCREEN.
+
+  The founder's canvas row 3, and B45 §5b left it open with the reason written down: `holeRow`
+  draws blanks by scanning the skeleton's if-half, so a hole used ONLY inside a size was
+  declared, validated, and then printed its own default word for ever. `no`'s small go carries
+  {thing} — "about something small" made tappable, not a sentence anybody rewrote — and this is
+  the one worry it is built on before it goes on twenty.
+
+  What has to hold: the blank is there, it is EMPTY (a pre-filled one reads as her words), the
+  sentence still reads with nothing in it, what she types comes through to the locked-in test,
+  and the nineteen worries with no such hole still get the box they always had.
+*/
+test('a size with a hole of its own is filled in the plan, and the plan is a sentence', () => {
+  const f = content.byId(worries, 'no');
+  const small = f.sizes[0];
+  assert.ok(content.holesIn(small.do).indexOf('thing') !== -1,
+    'this test needs a size with a hole the if-half does not have');
+  assert.strictEqual(content.holesIn(f.skeleton.if).indexOf('thing'), -1,
+    '{thing} is in the if-half now, and this is testing the other kind of hole');
+
+  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
+
+  /* while the three are open there is no blank: the question on the screen is still which size */
+  a.hides('data-plan="thing"');
+  a.tap('[data-size]', 0);
+
+  /* picked, and the plan is the sentence with a gap in it rather than a box */
+  a.shows('data-plan="thing"').hides('id="do"');
+  assert.strictEqual(a.valueOf('#p-thing'), '', 'the hole arrived with a word already in it');
+  /* the word she typed a screen ago is printed, and marked, and not editable here */
+  a.shows('class="carried">my sister');
+  /* and the hole's own word stands in, as an example, so the sentence reads untouched */
+  a.shows('placeholder="' + f.skeleton.holes.thing + '"');
+
+  /* what she puts in it is what gets locked in */
+  a.type('#p-thing', 'the Saturday thing').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  const cur = JSON.parse(a.mem['betr.v1']).cur;
+  assert.strictEqual(cur.test, 'Say no to my sister once today, about the Saturday thing.');
+  assert.strictEqual(cur.slots.thing, 'the Saturday thing', 'the word did not travel with the test');
+  assert.strictEqual(cur.size, small.name);
+});
+
+test('a size with no hole of its own is still the box it always was', () => {
+  const f = content.byId(worries, 'no');
+  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next').tap('[data-size]', 1);
+  a.shows('id="do"').hides('data-plan=');
+  assert.strictEqual(a.valueOf('#do'), content.fill(f.sizes[1].do, { person: 'my sister' }, f.skeleton.holes));
+
+  /* and the nineteen with no hole anywhere in their sizes are untouched on every size */
+  const b = boot().tap('#not-sure').tap('[data-door="work"]').tap('[data-id="rest"]');
+  b.tap('[data-b]', 0).tap('#next');
+  for (let i = 0; i < 3; i += 1) {
+    if (i) b.tap('#sizeopen');
+    b.tap('[data-size]', i).shows('id="do"').hides('data-plan=');
+  }
+});
+
+test('Change gives back the box, with the words she filled in still in it', () => {
+  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
+  a.type('#p-thing', 'the Saturday thing').tap('#sizeopen');
+  /* the way back to writing the whole thing herself, and nothing of hers was lost getting there */
+  a.shows('id="do"');
+  assert.strictEqual(a.valueOf('#do'), 'Say no to my sister once today, about the Saturday thing.');
+});
+
+/*
+  The hard stop is the one line BETR refuses, and it has to run on every way of getting words
+  into the plan. This one is new, so it is the newest way round it.
+*/
+test('the one hard stop runs on a size’s own hole', () => {
+  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
+  a.type('#p-thing', 'the night I wanted to kill myself').tap('#lock');
+  a.shows(en.s.refusal.harm);
+  a.hides(en.s.locked.kicker);
+});
+
+/*
+  B49, the canvas's row 8. Three rungs all reading "A small go" are three rows that look like
+  the same test done three times, and they were not — the word she put in the hole is the thing
+  that told them apart, and it was only ever in the plan.
+*/
+test('a rung carries the word she put in the size’s own hole', () => {
+  const a = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
+  a.type('#p-thing', 'the Saturday thing').tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  a.tap('#done').type('#o', 'She said fine and asked somebody else.').tap('#next').tap('[data-key]', 1);
+  a.shows('A small go · the Saturday thing');
+  /* and the ear gets it too, without a middle dot read out in the middle of her own words */
+  a.shows(en.s.a11y.rungSize.split('{size}').join('A small go, the Saturday thing'));
 });
 
 /*
@@ -683,12 +781,12 @@ test('the size row folds to say which one is picked, and Change opens all three 
   a.tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
   a.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
   /* open to begin with: nothing has been answered yet */
-  a.shows(en.s.build.sizeChips).showsText(f.sizes[2].do.split('{person}').join('my sister'));
+  a.shows(en.s.build.sizeChips).showsText(content.fill(f.sizes[2].do, { person: 'my sister' }, f.skeleton.holes));
 
   a.tap('[data-size]', 1);
   a.shows('id="sizeopen"').shows(f.sizes[1].name).hides(en.s.build.sizeChips);
   /* and the one it says is the one in the box */
-  assert.strictEqual(a.valueOf('#do'), f.sizes[1].do.split('{person}').join('my sister'));
+  assert.strictEqual(a.valueOf('#do'), content.fill(f.sizes[1].do, { person: 'my sister' }, f.skeleton.holes));
   /* the other two are one tap away, in the order they were always in */
   a.tap('#sizeopen').shows(en.s.build.sizeChips);
   for (const z of f.sizes) a.shows(z.name);
@@ -1047,7 +1145,7 @@ test('the do screen has the same three sizes whether a suggestion was tapped, ty
   /* 3. borrowed: the same worry through the door, with her word in the hole */
   const c = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
   c.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
-  for (const z of f.sizes) c.shows(z.name).showsText(z.do.split('{person}').join('my sister'));
+  for (const z of f.sizes) c.shows(z.name).showsText(content.fill(z.do, { person: 'my sister' }, f.skeleton.holes));
   sizeRow(c);
 
   /* every road: three named steps, and an empty box, because BETR has not picked one */
@@ -2052,6 +2150,62 @@ test('the greyed example in the second blank is one of the three under it', () =
   for (const line of thensOf(front[0])) {
     assert.notStrictEqual(hintOf(c), line, 'the example is still the old frozen one');
   }
+});
+
+/*
+  B49, 2026-09-10. THE SAME FAULT, ONE SCREEN LATER, AND IT LIVED IN THE LEAVE-OUT BOX.
+
+  `build.dropPlaceholder` was "Don’t give a reason." — the worry `no`'s own leave-out, word for
+  word, greyed into that box on all twenty worries and on the free-text road. B48's argument
+  applies unchanged: a person types the greyed words out rather than tapping the three under
+  them, so a frozen example belonging to one worry is a wrong answer offered to nineteen.
+
+  It is not fixed the way B48 fixed the second blank. That was a blank inside a sentence, where
+  an example shows the SHAPE of what goes in it; this is a textarea sitting on three whole
+  sentences, and B42 already ruled on that shape for the plan box above it — over three named
+  suggestions a worked example reads as a fourth one. So both boxes name themselves and point
+  down at the three, and this holds them to it.
+*/
+const greyOf = (a, id) => {
+  const m = a.html().match(new RegExp('<textarea[^>]*\\bid="' + id + '"[^>]*>'));
+  assert.ok(m, 'no ' + id + ' box on screen');
+  const p = m[0].match(/placeholder="([^"]*)"/);
+  assert.ok(p, 'the ' + id + ' box has no example in it');
+  return p[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+};
+
+test('neither grey line on the plan screen is a sentence BETR wrote for one worry', () => {
+  const ours = [];
+  for (const w of worries) for (const z of w.sizes) ours.push(said(w, z.do), said(w, z.drop));
+  for (const z of general.sizes) ours.push(z.do, z.drop);
+  for (const grey of [en.s.build.doOwnPlaceholder, en.s.build.dropPlaceholder]) {
+    for (const line of ours) {
+      assert.notStrictEqual(grey, line,
+        'a grey example on the plan screen is one worry’s own sentence, shown on all of them');
+    }
+  }
+  /* Two boxes, one screen: they have to ask for the same thing in the same shape, or the
+     second one reads as a different kind of question from the first. */
+  for (const grey of [en.s.build.doOwnPlaceholder, en.s.build.dropPlaceholder]) {
+    assert.match(grey, /^Write what you’ll .*below\.$/,
+      'the two boxes on the plan screen no longer say it in the same shape');
+  }
+});
+
+test('the leave-out box on one worry does not grey out another worry’s leave-out', () => {
+  const no = worries.find((w) => w.id === 'no');
+  /* A worry that is not `no`, reached the way a person reaches it, with the leave-out opened
+     before a size is picked — which is the one state where that box is empty enough to read. */
+  const a = boot().tap('#not-sure').tap('[data-door="work"]').tap('[data-id="rest"]')
+    .tap('[data-b]', 0).tap('#next').tap('#dropopen');
+  const grey = greyOf(a, 'drop');
+  for (const z of no.sizes) {
+    assert.notStrictEqual(grey, said(no, z.drop),
+      'the leave-out box still shows the worry `no`’s own words on another worry');
+  }
+  assert.strictEqual(grey, en.s.build.dropPlaceholder, 'the leave-out box lost its example');
+  /* And the plan box beside it says the same thing in the same shape. */
+  assert.strictEqual(greyOf(a, 'do'), en.s.build.doOwnPlaceholder, 'the plan box lost its example');
 });
 
 test('a suggestion puts in the box exactly the words printed on it', () => {

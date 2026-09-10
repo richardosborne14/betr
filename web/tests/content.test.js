@@ -677,9 +677,40 @@ test('a hole used and never declared is refused, and so is one declared and neve
     'If I say no to {person} without giving a reason, then {nobody} will mind.';
   assert.ok(content.validateWorries(a).some((p) => /uses a hole "\{nobody\}"/.test(p)));
 
+  /* `no` uses {person} and, since B49, {thing} — so the never-used example has to be a third. */
   const b = shipped();
-  b.find((f) => f.id === 'no').skeleton.holes.thing = 'a thing';
-  assert.ok(content.validateWorries(b).some((p) => /declares a hole "\{thing\}"/.test(p)));
+  b.find((f) => f.id === 'no').skeleton.holes.place = 'a place';
+  assert.ok(content.validateWorries(b).some((p) => /declares a hole "\{place\}"/.test(p)));
+});
+
+/*
+  B49, 2026-09-10. WHERE A HOLE MAY BE USED, AND IT IS NOT ANYWHERE.
+
+  Every hole in the if-half gets a blank on the build screen. A hole that is NOT in the if-half
+  gets one on the plan screen, in the sentence of the size that uses it — and that is the only
+  other blank there is. Put one in a prediction, an expectation or a size's leave-out and it is
+  declared, validated, and then prints its own default word for ever with nowhere to change it.
+  That is B45 §5b's finding, and it is a rule now rather than a paragraph.
+*/
+test('a hole outside the if-half may only be used in a size’s plan sentence', () => {
+  const no = 'without putting it in the if-half';
+
+  const a = shipped();
+  const w = a.find((f) => f.id === 'no');
+  w.skeleton.holes.mood = 'a mood';
+  w.beliefs[0].expect = 'There’ll be a pause, and {person} will be {mood} with me afterwards.';
+  assert.ok(content.validateWorries(a).some((p) => p.indexOf(no) !== -1),
+    'a hole in an expectation with no blank anywhere was allowed');
+
+  const b = shipped();
+  const x = b.find((f) => f.id === 'no');
+  x.skeleton.holes.mood = 'a mood';
+  x.sizes[1].drop = 'Don’t give a reason, and don’t be {mood} about it.';
+  assert.ok(content.validateWorries(b).some((p) => p.indexOf(no) !== -1),
+    'a hole in a size’s leave-out with no blank anywhere was allowed');
+
+  /* And the one place it IS allowed stays allowed: `no`'s own {thing}, in its small go. */
+  assert.deepStrictEqual(content.validateWorries(shipped()), []);
 });
 
 /*

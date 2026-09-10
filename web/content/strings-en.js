@@ -320,8 +320,22 @@ var BETR_STRINGS_EN = {
         The placeholder it replaced was a worked example, and over three named steps a worked
         example reads as a fourth one, or worse as a plan already in the box. This one asks for
         the thing the three cannot give her, and says plainly that they are optional.
+
+        B49, 2026-09-10, THE FOUNDER'S CALL, AND IT IS THE ORDER THAT WAS WRONG. It said
+        "Or put it in your own words." — and it sits ABOVE the three it is saying "or" about,
+        so the sentence answered a question the screen had not asked yet. It now names the box
+        first and points down at the three second, which is the order a person reads them in,
+        and its partner on the leave-out box says the same thing in the same shape.
+
+        NOT MISHA'S YET — this line and dropPlaceholder are two drafts chosen off a pair of
+        options, and they are in docs/COPY.md with the rest of his list.
+
+        ONE SEAM, KNOWN AND ACCEPTED: B30's one-row-at-a-time rule hides the three while the
+        person is working in the leave-out box, so an untouched plan box can say "below" with
+        nothing below it. The row comes back the moment the box is tapped, which is the moment
+        anybody would act on the sentence.
       */
-      doOwnPlaceholder: 'Or put it in your own words.',
+      doOwnPlaceholder: 'Write what you’ll do, or start from one of the three below.',
       /*
         B42, 2026-09-09. THE DIAL, and every word of this line is doing a job.
 
@@ -370,7 +384,25 @@ var BETR_STRINGS_EN = {
         was a separate line of small print and it pushed "Lock it in" below the fold.
       */
       dropSub: 'Optional. It’s what counts.',
-      dropPlaceholder: 'Don’t give a reason.',
+      /*
+        B49, 2026-09-10, AND IT IS B48's FAULT ONE BOX LATER.
+
+        This said "Don’t give a reason." — which is the worry `no`'s own leave-out, word for
+        word, printed in this box on all twenty worries and on the free-text road. On the other
+        nineteen it was a leave-out for an act nobody on the screen was doing, greyed out
+        directly above three that were right, and B34 D1 is what comes of that: people type the
+        greyed words out instead of tapping the ones underneath.
+
+        B48 fixed the same thing in the second blank by DERIVING it. This box is not that box:
+        it is a textarea sitting on three whole sentences, which is the shape B42 already ruled
+        on for the plan box above — over three named suggestions a worked example reads as a
+        fourth one. So this one matches the plan box instead: name the box, point down at the
+        three. The founder chose the pair together on 2026-09-10.
+
+        loop.test.js holds it to two things: no worry's own sentence may be printed here, and
+        the two boxes on this screen say it in the same shape.
+      */
+      dropPlaceholder: 'Write what you’ll leave out, or start from one of the three below.',
       dropChips: 'Or one of these:',
       lock: 'Lock it in',
       /*
