@@ -270,6 +270,20 @@ w('An **if** and a **then** are lowercase, because they follow printed words and
 w('as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.');
 w('So is the **name** of a size, because it is a label on a button.');
 w();
+/*
+  B45 §5e, 2026-09-10. Every start still carries a pair of loose `dos` and `drops` and NOTHING
+  DRAWS THEM. They are printed here anyway, marked, because this file is what Misha reads and a
+  line that vanished without being decided about is worse than a line marked parked — but they
+  are marked hard, because asking somebody to weigh the tone of a sentence nobody will see is
+  the one thing this file must never do.
+*/
+w('**Two rows in each situation below are marked *(parked)*.** They were the two suggestions');
+w('under *What will you do today?* until 2026-09-10, and every route through the app now shows');
+w('the three sizes above instead. Nothing draws them. They are still printed here because nine');
+w('of these twelve situations are the same act as a ready-made worry, and which of the two');
+w('wordings survives is a decision with the reviewer that has not been made. **Nobody needs to');
+w('read a parked line for tone.**');
+w();
 w('### The general set — shown when somebody has written their own situation');
 w();
 w('| | |');
@@ -297,8 +311,8 @@ starts.items.forEach((it, i) => {
   w('| | |');
   w('| --- | --- |');
   it.thens.forEach((line, j) => w('| **then** ' + (j + 1) + ' | ' + line + ' |'));
-  it.dos.forEach((line, j) => w('| **do** ' + (j + 1) + ' | ' + line + ' |'));
-  it.drops.forEach((line, j) => w('| **leave out** ' + (j + 1) + ' | ' + line + ' |'));
+  it.dos.forEach((line, j) => w('| **do** ' + (j + 1) + ' *(parked)* | ' + line + ' |'));
+  it.drops.forEach((line, j) => w('| **leave out** ' + (j + 1) + ' *(parked)* | ' + line + ' |'));
   w();
 });
 

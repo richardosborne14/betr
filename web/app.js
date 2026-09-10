@@ -145,12 +145,13 @@
       a list of three that gets reworded next month must not silently relabel what somebody
       already did. It keys nothing either; the worry's id keys the ladder and always has.
 
-      `planned` is whether the plan has been pre-filled into the boxes yet. It used to happen
-      in borrow(), and B42 moved it to the moment the do screen is first opened — see
-      prefillPlan() for why that had to move and what it would have printed if it hadn't.
+      There is no `planned` here any more. It existed to pre-fill BETR's own plan into the
+      boxes exactly once; B45 §5b gave every worry three sizes and B45 §5e took the prefill
+      out, because the three ARE the plan and a box arriving with one of them in it would be
+      BETR having picked (rule 2). The boxes start empty on every road.
     */
     return { ifPart: '', thenPart: '', test: '', drop: '', stock: null, expect: '',
-             prediction: null, slots: {}, dropOpen: false, size: null, planned: false,
+             prediction: null, slots: {}, dropOpen: false, size: null,
              sizeOpen: true };
   }
   var refusal = null;      /* the last guard refusal, shown once and cleared on the next tap */
@@ -493,64 +494,14 @@
     draft.ifPart = f.skeleton ? content.fill(f.skeleton.if, {}, f.skeleton.holes)
                               : splitBelief(f.belief)[0];
     /*
-      B42, 2026-09-09. THE PLAN IS NO LONGER PRE-FILLED HERE, and this is the one piece of code
-      the task had to move. Two things forced it, in this order.
-
-      A plan may carry the same holes the sentence does now — "Say no to {person} once today"
-      — and at this moment nobody has typed into a hole, because the screen with the holes on
-      it has not been drawn. Filling here would put `{person}` in a box, literally, on
-      somebody's phone. So it happens at prefillPlan(), on the way to the do screen, where
-      draft.slots is what she actually wrote.
-
-      And on a worry that carries three SIZES there is no prefill at all any more: the three
-      are the choice, and a box arriving with one of them already in it would be BETR having
-      picked. See buildDo().
+      B42, 2026-09-09, AND FINISHED IN B45 §5e: THE PLAN IS NEVER PRE-FILLED. The three sizes
+      ARE the choice, and a box arriving with one of them already in it would be BETR having
+      picked a rung (rule 2). B42 moved the prefill from here to the do screen, where the holes
+      are known; B45 §5b gave every worry three sizes, which made it unreachable; and this task
+      took the last of it out. Nothing now reads a worry's `test` or `drop` — they are held
+      word for word equal to its small go by checkSizes0 until §5c deletes the pair.
     */
     go('build');
-  }
-
-  /*
-    The plan in the boxes, worked out once, on the way to the screen it is written on.
-
-    Where the worry has three sizes there is nothing to prefill: those three ARE the plan, the
-    person picks one, and a pre-filled box would be the app choosing a rung (B42). Where it has
-    none — nineteen of the twenty-one — BETR's own plan goes in the boxes exactly as it has
-    since B32, with any holes filled from what she typed a screen ago.
-
-    Once only, and `planned` is what makes it once: a person who goes back to fix a word of the
-    sentence and comes forward again must find the plan she typed, not BETR's back on top of it
-    (B34 D2, the same bug from the other end).
-  */
-  /*
-    B46, 2026-09-09, AND IT IS B42'S OWN RULE FINISHED RATHER THAN A NEW ONE.
-
-    B42 said it in one line: "a pre-filled box is BETR having picked". It applied that to the
-    two worries that had three sizes of their own and left the other nineteen pre-filling from
-    `test`/`drop` — which meant those nineteen reached the do screen with a plan already in the
-    box, and the suggestion row therefore HIDDEN, because a row gets out of the way the moment
-    the box has words in it.
-
-    The consequence was the one the founder walked into: **nineteen of twenty-one worries had
-    no dial on the do screen at all.** Two showed three named sizes; the rest showed a finished
-    plan nobody had chosen. It is the same disease as the build screen had, one screen later.
-
-    THE PREFILL STAYS. Taking it away would drop those nineteen onto `general`'s three, and a
-    worry's own plan is better than the general one because it is about that worry — "Tell one
-    person you trust, today, in one sentence, that you've been feeling low lately" says more
-    than "Do it once today, in the smallest version that still counts". Turning all nineteen
-    into three sizes of their own is B45 §5b, thirty-eight sentences, and the reviewer's.
-
-    What changed instead is one line in buildDo(): a box holding BETR'S OWN pre-filled plan no
-    longer counts as "words of her own", so the row of three stays on screen beside it. She has
-    a plan for this worry AND the dial, on every road, which is what she had on neither.
-  */
-  function prefillPlan() {
-    var f = borrowed();
-    if (!f || draft.planned) return;
-    draft.planned = true;
-    if (f.sizes) return;
-    draft.test = saidIn(f.test);
-    draft.drop = saidIn(f.drop);
   }
 
   function q(sel) { return app.querySelector(sel); }
@@ -1123,32 +1074,59 @@
     return null;
   }
 
-  /* The four chip sets, each falling back to the general one. */
-  function chipsFor(which, ifPart) {
+  /*
+    The second blank's three suggestions: the ones written for those exact words where a start
+    matches them, and the general three everywhere else.
+
+    B45 §5e, 2026-09-10. IT SERVED FOUR SETS AND IT SERVES ONE. `dos` and `drops` were the do
+    screen's other shape — two loose suggestions where the rest of the app shows three named
+    sizes — and that shape is gone (see sizesFor). The word-for-word lookup itself stays until
+    the two content files are one (§5c); what went with the shape is its power to decide WHICH
+    SCREEN a person gets.
+  */
+  function thensFor(ifPart) {
     var start = startFor(ifPart);
-    return (start && start[which]) || STARTS.general[which] || [];
+    return (start && start.thens) || STARTS.general.thens || [];
   }
 
   /*
-    B42, 2026-09-09. THE THREE SIZES FOR WHATEVER ROAD THIS IS, or null where the road has
-    none. It is a fallback chain and not a judgement, exactly as chipsFor() is: nothing here
-    depends on what the person has done before, on how many tests they have finished, or on
-    how any of them went. Three, always, in the same order, from the first screen to the
-    fiftieth — see lib/content.js checkSizes for why that is a rule and not a habit.
+    B42, 2026-09-09. THE THREE SIZES FOR WHATEVER ROAD THIS IS, AND THERE IS ALWAYS A ROAD.
 
-      the worry's own three   where it has them
+    It is a fallback chain and not a judgement, exactly as thensFor() is: nothing here depends
+    on what the person has done before, on how many tests they have finished, or on how any of
+    them went. Three, always, in the same order, from the first screen to the fiftieth — see
+    lib/content.js checkSizes for why that is a rule and not a habit.
+
+      the worry's own three   every worry has three (checkSizes, required since B45 §5b)
       the start's own three   where one is written for those exact words (none are yet)
-      that start's loose two   where a start matched and has no sizes — its hand-written pair
-                               is about the words she actually typed, which is worth more to
-                               her than a generic dial, and the day it gains three it takes
-                               over with no change to a line of this
-      the general three        every other road, which after the first week is most of them
+      the general three       every other road — and `sizes` is REQUIRED on the general set,
+                              so this function cannot hand back nothing
+
+    B45 §5e, 2026-09-10, AND IT IS THE FIX FOR THE WORST SINGLE FACT IN B45 §2.
+
+    It used to stop at a matched start and hand back that start's two LOOSE suggestions,
+    reaching the general three only when nothing matched at all. The result was exactly
+    backwards, and it is not something anybody could have predicted from the screen:
+
+      tapping one of BETR's own twelve suggestions got you the OLD do screen — two loose
+      lines, no names, no dial. Typing something BETR had never seen got you the three
+      named sizes.
+
+    The same act — "say no without giving a reason" — had a dial on the worry road, where it
+    is the worry `no`, and none on the front door, where it is start #01.
+
+    So a matched start with no sizes of its own falls through to the general three like every
+    other road, and the do screen has one shape from every direction. WHAT THAT COSTS IS REAL
+    AND IT IS NOT HIDDEN: those twelve starts each carry a hand-written pair about those exact
+    words, and until §5c merges them into the worries they duplicate, that road gets the
+    generic dial instead of its own sentence. One shape everywhere is worth more than a better
+    sentence on one road in twelve — a screen that changes shape for reasons a person cannot
+    see is not a screen anybody can learn.
   */
   function sizesFor(f, ifPart) {
     if (f && f.sizes) return f.sizes;
     var start = startFor(ifPart);
-    if (start) return start.sizes || null;
-    return STARTS.general.sizes || null;
+    return (start && start.sizes) || STARTS.general.sizes;
   }
 
   /* The item being borrowed from, or null (B32). */
@@ -1469,7 +1447,7 @@
       words of a start (the placeholder is one of them, word for word) tapped a chip saying one
       thing and got another sentence in the box.
     */
-    var thenChips = chipsFor('thens', draft.ifPart);
+    var thenChips = thensFor(draft.ifPart);
     paint( backButton() +
       '<div class="stage">' +
         (f ? worryHead(f.label, '', false) : '') +
@@ -1605,7 +1583,7 @@
       var holder = q('[data-chiplist="data-then"]');
       if (!holder || typeof holder.innerHTML !== 'string') return;
       readBlanks();
-      var list = chipsFor('thens', draft.ifPart);
+      var list = thensFor(draft.ifPart);
       try { holder.innerHTML = chipButtons(list, 'data-then'); } catch (e) { return; }
       wireThens(list);
     }
@@ -1726,8 +1704,6 @@
       if (!one.ok) { refuse(one); return; }
       var two = guards.checkPart(draft.thenPart, 'then');
       if (!two.ok) { refuse(two); return; }
-      /* B42: the plan goes in the boxes here, where the holes are known. See prefillPlan(). */
-      prefillPlan();
       go('build-do');
     });
   }
@@ -1836,20 +1812,20 @@
     /* Worked out once and closed over by the handlers, for the reason build() does it: a chip
        puts in the box what is printed on it, and cannot drift from it (B34 D1). */
     /*
-      B42. Three named sizes where the road has them, and the loose pair where it does not.
-      Both lists are worked out here and closed over by the handlers below, which is B34 D1's
-      rule and matters more on a skeleton road: a chip carries the person's own word in it,
-      and a list re-derived on the tap could hand back the one it was printed with.
+      B42. Three named sizes, and since B45 §5e there are three on EVERY road — sizesFor()
+      cannot hand back nothing. Both lists are worked out here and closed over by the handlers
+      below, which is B34 D1's rule and matters more on a skeleton road: a chip carries the
+      person's own word in it, and a list re-derived on the tap could hand back the one it was
+      printed with.
     */
     var sizes = sizesFor(f, draft.ifPart);
-    var doChips = sizes ? sizes.map(function (z) { return saidIn(z.do); })
-                        : chipsFor('dos', draft.ifPart);
-    var dropChips = sizes ? sizes.map(function (z) { return saidIn(z.drop); })
-                          : chipsFor('drops', draft.ifPart);
+    var doChips = sizes.map(function (z) { return saidIn(z.do); });
+    var dropChips = sizes.map(function (z) { return saidIn(z.drop); });
     /* B46. Her word marked in the sizes too — screen 3 of the canvas, where it arrives in a
-       sentence she has not read yet. Null off the skeleton road, where nothing was carried. */
-    var doMarks = sizes ? sizes.map(function (z) { return saidHtml(z.do); }) : null;
-    var dropMarks = sizes ? sizes.map(function (z) { return saidHtml(z.drop); }) : null;
+       sentence she has not read yet. Off the skeleton road nothing was carried and saidHtml()
+       is exactly esc(), which is why it can be worked out unconditionally. */
+    var doMarks = sizes.map(function (z) { return saidHtml(z.do); });
+    var dropMarks = sizes.map(function (z) { return saidHtml(z.drop); });
     /*
       Which box this paint is going to land in, worked out BEFORE the markup so the suggestion
       row belonging to it can be drawn already open (B39). It used to be left to wireChips's
@@ -1861,10 +1837,7 @@
     var landsIn = nextFocus || '#do';
     /* B42. Which of the three is in the box, worked out before the markup for the reason
        `landsIn` is: the row belonging to it has to be right on the paint a person lands on. */
-    var picked = sizes ? pickedSize(doChips, draft.test) : -1;
-    /* B46. Is what is in the box BETR's own pre-filled plan for this worry, untouched? Then it
-       is not hers, and the three stay beside it. The moment she edits a word of it, it is. */
-    var betrs = !!(f && !f.sizes && draft.test.trim() && flat(draft.test) === flat(saidIn(f.test)));
+    var picked = pickedSize(doChips, draft.test);
     paint( backButton() +
       '<div class="stage">' +
         /*
@@ -1882,7 +1855,6 @@
           nobody but the person picks. So it stays on the road with the loose suggestions,
           where nothing else says it, and goes where the dial is.
         */
-        (sizes ? '' : '<p class="sub tight">' + esc(t('build.doSub')) + '</p>') +
         warnBlock() +
         /*
           B42. THE PLACEHOLDER IS NOT A FOURTH SUGGESTION. "Say no to one thing today, in one
@@ -1892,7 +1864,7 @@
           her words instead, which is the one thing the three cannot offer.
         */
         '<textarea id="do" class="short" aria-labelledby="top" placeholder="' +
-          esc(t(sizes ? 'build.doOwnPlaceholder' : 'build.doPlaceholder')) + '">' +
+          esc(t('build.doOwnPlaceholder')) + '">' +
           esc(draft.test) + '</textarea>' +
         /*
           B42, AND IT IS WHY THE DIAL IS NOT SUBJECT TO B30's ONE-ROW-AT-A-TIME RULE IN FULL.
@@ -1903,20 +1875,10 @@
           B42's first rule is that no rung is ever taken away. So the row stays while the box
           holds one of OUR OWN three, and goes the moment she writes something of her own.
         */
-        (sizes
-          ? (picked !== -1 && !draft.sizeOpen
-              ? foldedSize(sizes[picked].name)
-              /*
-                B46. A row gets out of the way when the box holds WORDS OF HER OWN — and a plan
-                BETR pre-filled is not that. Nineteen of the twenty-one worries arrive here with
-                their own `test` already in the box (prefillPlan), which counted as hers, which
-                hid the row, which is why those nineteen had no dial on this screen at all while
-                two had three named sizes. `betrs` is the one-line difference.
-              */
-              : sizeRow(sizes, doChips,
-                  landsIn !== '#do' || (!!draft.test.trim() && picked === -1 && !betrs), doMarks))
-          : chipRow(t('build.doChips'), doChips, 'data-do',
-              landsIn !== '#do' || !!draft.test.trim())) +
+        (picked !== -1 && !draft.sizeOpen
+          ? foldedSize(sizes[picked].name)
+          : sizeRow(sizes, doChips,
+              landsIn !== '#do' || (!!draft.test.trim() && picked === -1), doMarks)) +
         /*
           B44. UNDER THE BOX AND ITS SIZES, WHICH IS WHERE THE PERSON IS WHEN THEY FREEZE.
 
@@ -1959,7 +1921,7 @@
       that gets out of the way when the person moves to the leave-out. Hand wireChips the wrong
       name here and B30's one-row-at-a-time quietly stops holding on the road most people take.
     */
-    wireChips([['#do', sizes ? 'data-size' : 'data-do'], ['#drop', 'data-drop']]);
+    wireChips([['#do', 'data-size'], ['#drop', 'data-drop']]);
     on('#dropopen', function () { readBoxes(); draft.dropOpen = true; nextFocus = '#drop'; render(); });
     /* Both boxes read first, for the reason Back reads them (B34 D2): a plan somebody has
        half typed must still be there when they come back from reading about sizes. */
@@ -1986,15 +1948,6 @@
       if (d) draft.test = d.value;
       if (r) draft.drop = r.value;
     }
-    qa('[data-do]').forEach(function (b) {
-      b.onclick = function () {
-        readBoxes();
-        draft.test = doChips[Number(b.getAttribute('data-do'))];
-        draft.size = null;   /* a loose suggestion is not a size, and must not be filed as one */
-        refusal = null;
-        render();
-      };
-    });
     /*
       B42. One size, and it fills BOTH boxes — a size is a step and the leave-out that belongs
       to it, and a big go with a small leave-out is not a bigger test but a different one.

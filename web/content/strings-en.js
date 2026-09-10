@@ -276,21 +276,25 @@ var BETR_STRINGS_EN = {
       /* The second half. The sentence is above it, in the quiet strip, unchanged. */
       doTitle: 'What will you do today?',
       /*
-        Short on purpose: at 125% text every line here pushes "Lock it in" behind the menu.
-        B39, 2026-09-09, measured it — this ran to TWO lines at 125% and cost 36px of a screen
-        that was already 279px over. One line, and it keeps the half that matters: the size,
-        and that nobody but the person picks it.
+        B45 §5e, 2026-09-10. THREE STRINGS LEFT HERE, and they were the other do screen.
+
+        `doSub` ("One small thing, your pick."), `doPlaceholder` ("Say no to one thing today,
+        in one sentence.") and `doChips` ("Or one of these:") belonged to the shape of this
+        screen that had two loose suggestions on it instead of three named sizes. That shape is
+        gone from every road, so nothing draws them and nobody is asked to read them.
+
+        `doSub` is the one worth knowing about: the founder's current mockup DOES put a line
+        under this heading — "One thing, today. Pick the size." — and B42 took ours off the
+        size road as a measurement, 47px on a screen that was already over. If it comes back it
+        comes back as a new sentence with a fresh measurement, not as this one restored.
       */
-      doSub: 'One small thing, your pick.',
-      doPlaceholder: 'Say no to one thing today, in one sentence.',
       /*
-        B42. What the box says while the three sizes are under it. The other placeholder is a
-        worked example, and over three named steps a worked example reads as a fourth one —
-        or worse, as a plan already in the box. This one asks for the thing the three cannot
-        give her, and says plainly that they are optional.
+        B42. What the box says while the three sizes are under it — which is now every road.
+        The placeholder it replaced was a worked example, and over three named steps a worked
+        example reads as a fourth one, or worse as a plan already in the box. This one asks for
+        the thing the three cannot give her, and says plainly that they are optional.
       */
       doOwnPlaceholder: 'Or put it in your own words.',
-      doChips: 'Or one of these:',
       /*
         B42, 2026-09-09. THE DIAL, and every word of this line is doing a job.
 

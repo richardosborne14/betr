@@ -1095,3 +1095,22 @@ checked, not remembered.** Nothing reads a worry's `test` or `drop` any more, so
 from the small go that replaced them and no screen would ever show the difference — while the
 paid reviewer went on scoring both. `checkSizes0` holds them equal in six lines. **Content that
 has become unreachable does not stop costing; it stops being noticed.**
+
+**One day later, the same field did it again one level down — and this one had shipped.** `sizes`
+is optional on a *start*, and no start has any. So `sizesFor()` matched a start, found no sizes,
+and drew the do screen's other shape: two loose suggestions instead of the three named steps.
+Which meant **tapping one of BETR's own twelve suggestions got the old screen and typing something
+BETR had never seen got the new one** — exactly backwards, on the front door, with the same act
+(*say no without giving a reason*) carrying a dial on the worry road and none here.
+
+Nobody wrote that rule. It fell out of a fallback chain that stopped at the first *match* rather
+than at the first *answer*, and it had been live since B42. **A fallback chain that can return
+nothing is a branch; a fallback chain that ends in something required is a lookup.** The fix was
+four lines: fall through a matched-but-empty start to the general three, which `content.js` makes
+required, so the function cannot hand back nothing and the screen cannot have a second shape.
+
+**What made it invisible for a day is worth more than the fix.** Every test passed, both screens
+rendered, and the walk that found B45 §5b's dial went down the worry road, where it was right.
+The way it surfaced at all was reading `sizesFor()` next to the screen instead of next to its own
+tests. **When one function decides which of two screens a person gets, walk every road into it in
+one sitting** — the new test that pins this walks three and asserts they are the same screen.

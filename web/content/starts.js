@@ -24,6 +24,22 @@
     sizes  B42: three named steps, small to big, each a `name`, a `do` and the `drop` that
            belongs with it. Tapping one fills both boxes. Optional on a start and REQUIRED on
            `general`, because every road with no sizes of its own falls through to those
+
+  NO SCREEN DRAWS `dos` OR `drops` ANY MORE (B45 §5e, 2026-09-10). READ THIS BEFORE EDITING ONE.
+
+  They were the plan screen's other shape: two loose suggestions where the rest of the app
+  shows three named sizes. Which shape a person got was decided by whether their first blank
+  matched an `if` here word for word — so tapping one of BETR's own twelve suggestions got the
+  old screen and typing something BETR had never seen got the new one, which is exactly
+  backwards and is B45 §2's "worst single fact". Every road now falls through to `general.sizes`
+  or a worry's own three, and the loose row is not drawn anywhere.
+
+  The twenty-four sentences are still HERE, and still held to the three word lists by
+  validateStarts, because they are B45 §5c's raw material: nine of these twelve starts are the
+  same act as a worry in worries.js, and §5c decides for each overlapping pair which wording
+  survives. That is the reviewer's call with the founder, not a session's, so nothing was
+  thrown away. Until then: changing a line here changes nothing a person sees. `thens` and `if`
+  still do.
   `general` is the set shown when the blank holds something we did not write, which after the
   first week will be most of the time. It has no `if`, and since B42 it has `thens` and
   `sizes` and no loose `dos` or `drops`: the two it used to carry became the three.

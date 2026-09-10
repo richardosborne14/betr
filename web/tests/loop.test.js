@@ -965,16 +965,74 @@ test('the whole thing can be built from the suggestions, with nothing typed', ()
   for (const line of starts.items[0].thens) a.shows(line);
   a.tap('[data-then]', 0).tap('#next');
 
-  for (const line of starts.items[0].dos) a.shows(line);
-  a.tap('[data-do]', 0);
-  /* B39: the leave-out half is a row until it is opened, and its suggestions are behind it. */
-  a.tap('#dropopen');
-  for (const line of starts.items[0].drops) a.shows(line);
-  a.tap('[data-drop]', 0).tap('#lock');
+  /*
+    B45 §5e: three named sizes here, not the two loose lines this start carries — see the test
+    below for why that swap is the point rather than a detail. One tap fills BOTH boxes, so the
+    leave-out never has to be opened by somebody tapping their way through.
+  */
+  for (const z of starts.general.sizes) a.shows(z.name).shows(z.do);
+  a.tap('[data-size]', 0);
+  a.tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
 
-  a.shows(en.s.locked.title).shows(starts.items[0].dos[0]).shows(starts.items[0].drops[0]);
+  a.shows(en.s.locked.title)
+    .shows(starts.general.sizes[0].do).shows(starts.general.sizes[0].drop);
   a.shows('If I ' + starts.items[0].if + ', then ' + starts.items[0].thens[0] + '.');
+});
+
+/*
+  B45 §5e, 2026-09-10, AND IT IS B45 §2's "WORST SINGLE FACT" NAILED DOWN SO IT CANNOT COME
+  BACK.
+
+  The do screen had two shapes and the invisible thing that chose between them was a word-for-
+  word lookup into starts.js. Every start has a hand-written pair of loose `dos`; none has
+  three sizes. So sizesFor() stopped at a matched start, found no sizes, and drew the OLD
+  screen — while a sentence BETR had never seen fell through to `general` and drew the new one.
+
+    TAPPING ONE OF BETR'S OWN SUGGESTIONS GOT THE OLD SCREEN.
+    TYPING SOMETHING BETR HAD NEVER SEEN GOT THE NEW ONE.
+
+  Exactly backwards, on the front door, and the same act had a dial on the worry road and none
+  here: start #01 IS the worry `no`, which has carried three sizes since B42.
+
+  This walks all three roads into the same screen and holds them to the same shape. It is the
+  §9 acceptance test in miniature: a person cannot tell, from this screen, which road they came
+  in on.
+*/
+test('the do screen has the same three sizes whether a suggestion was tapped, typed or borrowed', () => {
+  const sizeRow = (a) => {
+    const row = a.html().match(/data-chiplist="data-size">([\s\S]*?)<\/div>/);
+    assert.ok(row, 'no size row on this road at all');
+    assert.strictEqual((row[1].match(/<button/g) || []).length, 3, 'not three sizes');
+    return row[1];
+  };
+
+  /* 1. tapped: BETR's own first suggestion, word for word */
+  const a = boot().tap('#m-new').tap('[data-if]', 0).tap('[data-then]', 0).tap('#next');
+  for (const z of starts.general.sizes) a.shows(z.name).shows(z.do);
+  sizeRow(a);
+  /* and the loose pair that used to be this screen is nowhere on it */
+  for (const line of starts.items[0].dos) a.hides(line);
+  assert.strictEqual(a.html().indexOf('data-do='), -1, 'the old loose row is still being drawn');
+
+  /* 2. typed: the same start's words, typed out rather than tapped (B34 D1's case) */
+  const b = boot().tap('#m-new');
+  b.type('#if', starts.items[0].if).type('#then', 'they will be off with me').tap('#next');
+  for (const z of starts.general.sizes) b.shows(z.name).shows(z.do);
+  sizeRow(b);
+
+  /* 3. borrowed: the same act as the worry `no`, which has three of its own */
+  const f = content.byId(worries, 'no');
+  const c = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
+  c.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
+  for (const z of f.sizes) c.shows(z.name).showsText(z.do.split('{person}').join('my sister'));
+  sizeRow(c);
+
+  /* every road: three named steps, and an empty box, because BETR has not picked one */
+  for (const road of [a, b, c]) {
+    road.shows(en.s.build.sizeChips);
+    assert.strictEqual(road.valueOf('#do'), '', 'a box arrived with a plan already in it');
+  }
 });
 
 /*
@@ -1574,7 +1632,7 @@ test('the loop asks somebody to find out, and never dares them', () => {
   const dares = [/^go and do it/i, /^do it\b/i, /\bbe brave\b/i, /\bpush yourself\b/i,
                  /\bface your\b/i, /\bconfront\b/i, /\bchallenge yourself\b/i, /\byou must\b/i];
   for (const said of [en.s.locked.title, en.s.plan.lock, en.s.locked.done, en.s.locked.restDone,
-                      en.s.build.lock, en.s.build.doTitle, en.s.build.doSub]) {
+                      en.s.build.lock, en.s.build.doTitle, en.s.build.doOwnPlaceholder]) {
     for (const dare of dares) {
       assert.ok(!dare.test(said), 'the loop dares somebody: “' + said + '”');
     }
@@ -1619,8 +1677,13 @@ test('the safety net is said at the lock, and not to somebody who has set it dow
   28 characters is one line at 125% text in a 350px column at `.sub`'s 1.25rem. If you need
   more than that, MEASURE the screen — do not just raise the number.
 */
-test('the two lines on the do screen each stay one line at 125% text', () => {
-  for (const key of ['doSub', 'dropSub']) {
+test('the lines on the do screen each stay one line at 125% text', () => {
+  /*
+    B45 §5e: `doSub` was the other one and it is gone with the screen shape it belonged to.
+    The budget it was measured against has NOT gone — if a line comes back under this heading
+    (the founder's mockup has one), it comes in here and is measured the same way.
+  */
+  for (const key of ['dropSub']) {
     assert.ok(en.s.build[key].length <= 28,
       'build.' + key + ' is ' + en.s.build[key].length + ' characters and will wrap at 125%: ' +
       en.s.build[key]);
@@ -1887,6 +1950,18 @@ test('delete everything takes the look with it, so a wiped phone is a fresh phon
 
 /* ------------------------------------------------- B34: the suggestions say what they do */
 
+/*
+  The sentence printed on one size, read back off the screen. A size button is a name, an
+  optional "Last time" mark and the sentence, each in its own span, so chipText's "everything
+  up to the closing tag" cannot be used on it.
+*/
+function sizeText(a, i) {
+  const m = a.html().match(new RegExp('data-size="' + i + '">[\\s\\S]*?size-do">([^<]*)<'));
+  assert.ok(m, 'no size ' + i + ' on screen');
+  return m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
 /* The words printed on one chip, read back off the screen. */
 function chipText(a, attr, i) {
   const m = a.html().match(new RegExp(attr + '="' + i + '">([^<]*)</button>'));
@@ -1912,12 +1987,16 @@ test('a suggestion puts in the box exactly the words printed on it', () => {
   a.shows(said);
 });
 
-/* The same invariant on the second screen, where the plan and the drop are chosen. */
+/*
+  The same invariant on the second screen, where the plan and the drop are chosen. Since B45
+  §5e that row is the three named sizes on every road, so the words are read out of the size's
+  own `.size-do` span rather than off a plain chip.
+*/
 test('a plan suggestion puts in the box exactly the words printed on it', () => {
   const a = boot();
   a.tap('#m-new').type('#if', starts.items[0].if).type('#then', 'they will be off with me').tap('#next');
-  const plan = chipText(a, 'data-do', 0);
-  a.tap('[data-do]', 0);
+  const plan = sizeText(a, 0);
+  a.tap('[data-size]', 0);
   assert.strictEqual(a.valueOf('#do'), plan);
 });
 

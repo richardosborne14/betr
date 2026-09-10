@@ -24,7 +24,7 @@ sentence a person reads.
 | If you want to change… | The file |
 | --- | --- |
 | **The finished test on the front screen** — the first thing anybody sees | `web/content/examples.js` |
-| **The suggestions under the blanks** on *Set up a test* — the situations, the predictions, the things to do, the things to leave out | `web/content/starts.js` |
+| **The suggestions under the blanks** on *Set up a test* — the situations and the predictions | `web/content/starts.js` |
 | **How big a go** — the three sizes under *What will you do today?* | `web/content/starts.js` (`general`), or `web/content/worries.js` for one worry's own |
 | One of the ready-made tests you can borrow: its name, its card sentence, its three "If I…, then…", the thing to try, the thing to leave out | `web/content/worries.js` |
 | The six doors on *What's going on?* | `web/content/whats-going-on.js` |
@@ -69,8 +69,7 @@ result of yours, that caption is the thing that has to change to say so.
 
 ### Changing a suggestion chip
 
-`web/content/starts.js` is a list of situations, each with three predictions, some things to
-do, and some things to leave out:
+`web/content/starts.js` is a list of situations, each with three predictions:
 
 ```
     {
@@ -81,11 +80,18 @@ do, and some things to leave out:
     },
 ```
 
-Two things about the punctuation, and the build will stop you on both. **An `if` and a `then`
-are lowercase**, because the screen prints "If I" before one and ", then" before the other and
-they have to read as one sentence. **A `dos` or a `drops` line is a whole sentence** and starts
-with a capital. `general` at the top is the set shown when somebody has written a
+One thing about the punctuation, and the build will stop you on it. **An `if` and a `then` are
+lowercase**, because the screen prints "If I" before one and ", then" before the other and they
+have to read as one sentence. `general` at the top is the set shown when somebody has written a
 situation we did not think of, which is most of the time.
+
+**`dos` and `drops` are still in that file and nothing on any screen shows them.** They used to
+be the two suggestions under *What will you do today?*, and since 2026-09-10 every route through
+the app shows the **three sizes** instead — see the next section, which is the part to edit.
+They are being kept because nine of these twelve situations are the same act as one of the
+ready-made worries, and deciding which of the two wordings survives is a job with the reviewer
+that has not been done yet. **Changing a `dos` or a `drops` line today changes nothing anybody
+sees.**
 
 ### Changing how big a go it is
 

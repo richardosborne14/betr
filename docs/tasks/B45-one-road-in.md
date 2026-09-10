@@ -1,8 +1,9 @@
 # B45: One road in — collapsing three ways of writing a test into one
 
 **Status:** **§6 and §5d shipped in B46. §5b SHIPPED 2026-09-09 — every worry has its own
-three sizes, and the sixty new sentences are with the reviewer. §5c (one content file) and
-the four screen-shape drifts are what is left.**
+three sizes. §5e's core SHIPPED 2026-09-10 — the do screen has ONE shape on every road, and
+§2's "worst single fact" is gone (see §12). §5c (one content file) and the four screen-shape
+drifts are what is left.**
 **Status when it was written:** **SCOPED, not started. No longer blocked** — the founder supplied the current mockup
 on 2026-09-09 and it answers both questions the first draft of this file was waiting on.
 **Confidence:** 9/10 in the diagnosis — every number below was measured in a browser today.
@@ -58,6 +59,10 @@ gets is decided by a road they cannot see.
 It is exactly backwards, nobody could predict it, and it is not a bug anybody wrote: it falls
 out of `sizesFor()` looking up `starts.js`, where **0 of 21 items have sizes**, before falling
 through to `general`, which does.
+
+> **FIXED 2026-09-10 — §12.** A matched start with no sizes of its own falls through to the
+> general three like every other road. The second do variant is gone from the code, and
+> `loop.test.js` walks all three roads into that screen and holds them to one shape.
 
 ## 2b. And underneath, two content files describing the same twenty-one things
 
@@ -197,6 +202,14 @@ understands** — it is the entire mechanic, currently invisible.
 loses its fallthrough, `chipsFor('dos'|'drops')` goes, and `startFor()` — the invisible lookup in
 §2 — goes with it.
 
+> **MOSTLY DONE, 2026-09-10 — see §12.** `buildDo()` lost its branch, `sizesFor()` lost its
+> fallthrough, `chipsFor()` became `thensFor()` and serves one set, and `prefillPlan()` and
+> `draft.planned` went with them. **`startFor()` is still there**, because it still decides
+> which three predictions the second blank offers — it cannot go until `starts.js` and
+> `worries.js` are one file. What it lost is its power to decide which SCREEN a person gets.
+> `build()` still has its branch: the free-text road has one wide blank where the worry road
+> has a printed verb, and that is §4's "exit, not entrance" rather than a drift.
+
 ---
 
 ## 6. The cheap first move, and it is genuinely cheap
@@ -333,3 +346,78 @@ about the closest thing to intelligence BETR is allowed to have, on fifteen more
 nothing in the app reads a worry's `test` or `drop`. They are held equal to the small go
 rather than deleted, because deleting two of the seven parts of a worry (scope §5.2) is §5c's
 job and it is the founder's list to shorten, not a session's.
+
+---
+
+## 12. What §5e shipped, 2026-09-10 — one do screen
+
+**Confidence: 9/10.** 9 rather than 10 for one reason and it is a content reason, written out
+below: twelve roads lost a hand-written pair of sentences and got the generic three instead.
+The shape is not in doubt — three roads were walked into that screen in a browser and a test
+now walks all three and asserts they are the same screen.
+
+### What was actually wrong
+
+`sizesFor()` was a fallback chain that **stopped at the first match rather than at the first
+answer**:
+
+    if (f && f.sizes) return f.sizes;          the worry's own three
+    var start = startFor(ifPart);
+    if (start) return start.sizes || null;     ← a matched start, and NO start has sizes
+    return STARTS.general.sizes || null;
+
+So a matched start returned `null`, and `buildDo()` drew its other shape. Walked in Chrome
+before the change, on the front door: tapping suggestion #01, *say no without giving a reason*,
+gave **two loose lines, no names, no dial** — while the same act on the worry road (`no`) gave
+three named sizes, and typing something BETR had never seen gave the general three.
+
+**And the old screen had a second fault visible in the screenshot:** its placeholder was
+*"Say no to one thing today, in one sentence."* — word for word the first suggestion under it.
+A plan that appears to be already in the box, sitting on top of the two it duplicates.
+
+### What changed
+
+| | |
+| --- | --- |
+| `sizesFor()` | falls through a matched-but-empty start to `general.sizes`, which `content.js` makes **required** — so it cannot return nothing, and the screen cannot have a second shape |
+| `buildDo()` | one branch instead of two: one list of three, one row, one handler, one placeholder |
+| `chipsFor()` | is `thensFor()`. It served four chip sets and serves one — the second blank's predictions |
+| `prefillPlan()`, `draft.planned`, `betrs` | **gone.** All three were provably dead once every worry had sizes (§5b); the boxes start empty on every road, because the three ARE the plan |
+| `build.doSub`, `build.doPlaceholder`, `build.doChips` | deleted. They were the other screen's words and nothing drew them |
+| `starts.js` | **no data change.** Its `dos`/`drops` are still there, still held to the three word lists, and a header block says plainly that no screen draws them |
+| Tests | 256 pass (was 255). One new, two rewritten |
+
+### Measured, 390×844, after
+
+| | *Lock it in* | fold | page |
+| --- | --- | --- | --- |
+| tapped suggestion, 100% | 695–777 | 785 | 950 |
+| tapped suggestion, 125% | 860–950 | 780 | 1186 |
+| typed own words, 125% | 827–917 | 780 | 1153 |
+
+**This does not create a new fold problem, it finishes an old one.** §7a already says the three
+open put *Lock it in* below the fold on every worry; the last road that was not on that footing
+is now on it. **§7a is unchanged as a question and bigger as a fact: it is every road now.**
+
+### What it cost, and it is real
+
+Twelve starts each carry a hand-written pair — *"Say no to one thing today, in one sentence."*
+— about the exact words the person tapped. That pair is no longer drawn, so those roads get
+*"Do it once today, in the smallest version that still counts."* instead. **A better sentence on
+one road in twelve is worth less than one shape on all of them** — a screen that changes shape
+for reasons a person cannot see is not a screen anybody can learn — but the sentence really was
+better, and §5c is what gets it back: nine of the twelve starts are the same act as a worry that
+already has three sizes of its own.
+
+**Nothing was thrown away.** The 24 sentences stay in `starts.js` as §5c's raw material, and the
+45 sheet rows that said `shipped` now say `CUT — no longer in the app`, each with the reason on
+the row (the same status B42 used for the general set's two). `docs/COPY.md` prints them marked
+***(parked)*** with a paragraph saying nobody needs to read a parked line for tone, and
+`docs/changing-the-words.md` no longer tells the founder that editing one changes a screen.
+
+### One thing seen and not changed, because it is a sentence and not a screen
+
+The box's placeholder on arrival is **"Or put it in your own words."** — and it now sits *above*
+the three it is saying "or" about, on every road. The founder's canvas has *"Write what you'll
+do, or start from one of the three below."* in that box, which reads in the right order.
+**One string, Misha's and the founder's, and it would be a one-line change.**
