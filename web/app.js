@@ -1121,6 +1121,69 @@
   }
 
   /*
+    B48, 2026-09-10. THE GREYED EXAMPLE IN THE SECOND BLANK, AND IT BELONGS TO THIS WORRY.
+
+    It was one frozen string — `build.thenPlaceholder`, "somebody will think I'm selfish" —
+    printed on every road on every worry. That string is the worry `no`'s first prediction, and
+    it is right on exactly one screen in the app: the front door before anybody has tapped
+    anything, where the blank above it reads as `no`'s sentence too and the two greyed halves
+    are one whole example.
+
+    Everywhere else it was a sentence about a different worry. Walked in Chrome:
+
+      the worry road, `think`   If I tell [somebody] what I actually think,
+                                then "somebody will think I'm selfish"
+      the front door, chip #5   If I sit with the restlessness for ten minutes,
+                                then "somebody will think I'm selfish"
+
+    Neither is one of the three offered directly underneath, and the second is not a sentence
+    anybody would write. **This is B34 D1 with the placeholder as the cause.** That bug is
+    about a person who TYPES the greyed words instead of tapping — strings-en.js says so where
+    the two placeholders are defined — and typing these got her a prediction BETR wrote for
+    another act, on a road where it was never offered.
+
+    So the hint is the then-half of the FIRST of the three currently under the blank, whichever
+    road this is. It is one lookup with one answer, not a fourth prediction from nowhere.
+
+    IT CANNOT HAND BACK NOTHING, and for the same reason sizesFor() cannot: `checkThens` makes
+    `thens` required and non-empty on the general set, and three `beliefs` are required on every
+    worry. There is no fallback here because there is nothing to fall back from.
+  */
+  function thenHint() {
+    var f = borrowed();
+    /* Her own word, carried, exactly as the three chips below carry it — repainted from
+       draft.slots on every keystroke by refreshBorrow(). */
+    if (f) return splitBelief(saidIn(f.beliefs[0].belief))[1];
+    /*
+      Nothing typed yet, so the blank above is reading as its own greyed example. The two
+      halves have to be the two halves of ONE sentence — the first chip's — which is what
+      loop.test.js has held about the frozen pair since §5c. Deriving it from `ifPlaceholder`
+      rather than repeating `thenPlaceholder` is how that stays true when the front door's
+      first suggestion changes: both halves move together, from the content, on their own.
+    */
+    var said = draft.ifPart.trim() ? draft.ifPart : t('build.ifPlaceholder');
+    return thensFor(said)[0];
+  }
+
+  /*
+    The hint, repainted without repainting the screen. Setting a placeholder moves no caret,
+    so this can run on a keystroke where a render() cannot — the reason refreshThens() and
+    refreshBorrow() exist at all.
+  */
+  function paintThenHint() {
+    var box = q('#then');
+    if (!box) return;
+    /*
+      The blanks first, and it is not optional. The hint is worked out from `draft.ifPart`,
+      and typing does not repaint — so without this the answer is whatever the last paint
+      decided and the keystroke that called it changes nothing. Both callers happen to read
+      the blanks a line earlier; the one that did not was the one that was silently wrong.
+    */
+    readBlanks();
+    try { box.placeholder = thenHint(); } catch (e) { /* older browser */ }
+  }
+
+  /*
     B42, 2026-09-09. THE THREE SIZES FOR WHATEVER ROAD THIS IS, AND THERE IS ALWAYS A ROAD.
 
     It is a fallback chain and not a judgement, exactly as thensFor() is: nothing here depends
@@ -1519,7 +1582,7 @@
               : '<span class="part"><span class="fixed">' + esc(t('build.ifWord')) + '</span>' +
                 blank('if', t('build.ifLabel'), t('build.ifPlaceholder'), draft.ifPart) + '</span>') +
           '<span class="part"><span class="fixed">' + esc(t('build.thenWord')) + '</span>' +
-            blank('then', t('build.thenLabel'), t('build.thenPlaceholder'), draft.thenPart) + '</span>' +
+            blank('then', t('build.thenLabel'), thenHint(), draft.thenPart) + '</span>' +
         '</p>' +
         '<button class="big wide" id="next">' + esc(t('build.next')) + '</button>' +
         /*
@@ -1637,13 +1700,16 @@
       var list = thensFor(draft.ifPart);
       try { holder.innerHTML = chipButtons(list, 'data-then'); } catch (e) { return; }
       wireThens(list);
+      /* B48. The row and the greyed example in the box are one answer to one lookup, so they
+         are worked out in the same breath and can never say two different things. */
+      paintThenHint();
     }
 
     /*
       Live, and deliberately without a repaint: a repaint here would move the caret to the end
       of the box on every keystroke. The suggestions simply get out of the way.
     */
-    wireChips([['#if', 'data-if'], ['#then', 'data-then', refreshThens]]);
+    wireChips([['#if', 'data-if', null, paintThenHint], ['#then', 'data-then', refreshThens]]);
 
     qa('[data-if]').forEach(function (b) {
       b.onclick = function () {
@@ -1719,6 +1785,9 @@
       var marks = f.beliefs.map(function (b) { return saidHtml(b.belief); });
       try { holder.innerHTML = chipButtons(list, 'data-b', marks); } catch (e) { return; }
       wireBorrow();
+      /* B48. Her word lands in the greyed example too. It is the first of the three she is
+         reading right there, so it moves with them or it is a fourth sentence. */
+      paintThenHint();
     }
     qa('[data-hole]').forEach(function (el) {
       el.oninput = function () { growHole(el); refreshBorrow(); };
@@ -1830,13 +1899,22 @@
       /* Optional third: something to run before the row is shown, so it is right when it is
          read. Only the second blank has one — see refreshThens() (B34 D1). */
       var before = pair[2];
+      /*
+        B48. Optional fourth: something to run on every keystroke, and only the FIRST blank
+        has one. A row of suggestions is hidden while the box above it is being typed in, so
+        it can wait until focus. The greyed example in the OTHER blank is not hidden — it is
+        on screen the whole time — and what it should say depends on what is being typed here.
+        Left until focus it spends the whole of her sentence saying something about a
+        different act, which is the whole of what B48 is fixing.
+      */
+      var typing = pair[3];
       if (!box) return;
       var show = function (on) {
         if (!set) return;
         try { set.hidden = !on || !!box.value.trim(); } catch (e) { /* older browser */ }
       };
       grow(box);
-      box.oninput = function () { grow(box); show(true); };
+      box.oninput = function () { grow(box); show(true); if (typing) typing(); };
       box.onfocus = function () {
         if (before) before();
         show(true);

@@ -2009,11 +2009,49 @@ function chipText(a, attr, i) {
   differently for two people who put the same sentence in the same box — which is B34 D1 with
   the content, rather than the code, as the cause. Both files can move; they cannot move apart.
 */
-test('the placeholders are the first suggestion, word for word', () => {
+/*
+  B48, 2026-09-10. AND THE SECOND HALF IS NO LONGER A STRING TO CHECK, IT IS A SCREEN TO READ.
+
+  `build.thenPlaceholder` is deleted. A frozen second half is only ever right beside a frozen
+  first half, and the first half stops being frozen the moment anybody taps a chip or opens a
+  worry — so on nineteen worries and on eleven of the twelve front-door chips, the greyed
+  example in the second blank was a prediction written for a different act and offered by
+  nothing on the screen. This asserts what a person actually sees, on all three roads.
+*/
+test('the first blank suggests a sentence a chip offers', () => {
   assert.strictEqual(en.s.build.ifPlaceholder, plainly(front[0]),
     'the first blank suggests a sentence no chip offers');
-  assert.strictEqual(en.s.build.thenPlaceholder, thensOf(front[0])[0],
-    'the second blank suggests a prediction the first suggestion does not carry');
+});
+
+const hintOf = (a) => {
+  const m = a.html().match(/<input[^>]*\bid="then"[^>]*>/);
+  assert.ok(m, 'no second blank on screen');
+  const p = m[0].match(/placeholder="([^"]*)"/);
+  assert.ok(p, 'the second blank has no example in it');
+  return p[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+};
+
+test('the greyed example in the second blank is one of the three under it', () => {
+  /* Arriving at the front door, nothing typed: the two greyed halves are one sentence, and
+     it is the first chip's — which is what the deleted string used to say by hand. */
+  const a = boot().tap('#m-new');
+  assert.strictEqual(hintOf(a), thensOf(front[0])[0],
+    'the two greyed halves are not the same sentence');
+
+  /* Tapping any other one of the twelve. This is where the frozen string was wrong: the row
+     below became that worry's three and the example in the box did not move. */
+  const b = boot().tap('#m-new').tap('[data-if]', 4);
+  assert.strictEqual(hintOf(b), thensOf(front[4])[0],
+    'the example is a prediction the sentence above it does not carry');
+
+  /* And the worry road, where nineteen of twenty were showing `no`'s. */
+  const c = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="think"]');
+  const think = worries.find((w) => w.id === 'think');
+  assert.strictEqual(hintOf(c), thensOf(think)[0],
+    'a borrowed worry offers an example belonging to another worry');
+  for (const line of thensOf(front[0])) {
+    assert.notStrictEqual(hintOf(c), line, 'the example is still the old frozen one');
+  }
 });
 
 test('a suggestion puts in the box exactly the words printed on it', () => {

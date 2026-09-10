@@ -1145,3 +1145,47 @@ hand-written plan lines and left them on the generic three. Pointing the lookup 
 gave all twelve a real dial back, and not one sentence was written to do it — the sentences were
 already there, on the other side of the fork. **When two files describe one thing, the fix is
 usually not new content; it is deciding which of the two you already had is the real one.**
+
+---
+
+## 2026-09-10 — A frozen string is only ever right beside another frozen string
+
+**B48.** The second blank on the build screen carried a hand-written example — *"somebody will
+think I'm selfish"* — chosen the day before to be word for word the first suggestion under it.
+That pairing was true on one screen: the front door, before anybody taps anything, where the
+blank above it is also showing its own frozen example. **At the first tap the sentence above it
+changes and the sentence below it does not**, and from then on the person is being shown a
+prediction BETR wrote for a different act, on 19 of 20 worries and 11 of the 12 front-door chips.
+
+**Nobody wrote that bug; it was written into existence by content moving.** The string was
+correct when it was set. What made it wrong is that the thing it was paired with became dynamic
+around it — which is B41's skeletons and B45 §5c's merge, both of which did the right thing.
+
+- **If a string only reads correctly next to something the app computes, the app has to compute
+  it too.** The fix derives the hint from `build.ifPlaceholder` instead of repeating it, so both
+  halves move together the day the front door is reordered. **A pair held equal by a test is a
+  pair waiting to be held equal by the code.**
+- **A placeholder is where B34 D1 comes in, not a decoration.** People type the greyed words out
+  instead of tapping them — that is why the rule exists — so the placeholder is subject to every
+  rule the suggestions under it are subject to. It was the one control on that screen B46's
+  carried-word marking had never reached.
+- **`node --test` passing, twice, proves nothing about a screen nobody looked at.** This was
+  found by opening the app and reading it, on the way to doing something else. Both wrong
+  screens were shipped, tested and walked the day before by a walk that went down the one road
+  where the string was right.
+
+### Two traps that cost the time
+
+**`walk.js` cannot fire a focus event.** `el.focus()` from `walk.js eval` moves `document.
+activeElement` and **does not dispatch `focus`** in headless Chrome, and `walk.js type` focuses
+the box the same way. So anything wired to `onfocus` — `refreshThens()`, which is B34 D1's whole
+live half — looks completely dead from a walk, and has apparently never been walked. **To walk
+it, call the handler: `eval 'document.querySelector("#then").onfocus()'`.** `tap` uses
+`el.click()` and has the same hole. Twenty minutes went into "why is my fix not applied" when the
+fix was applied and the event was not.
+
+**A function that depends on state must read that state itself.** `paintThenHint()` shipped in
+the first draft without `readBlanks()`, and worked — because its first two callers happened to
+call `readBlanks()` a line above. The third didn't, and the function silently recomputed the
+answer it already had. **Not a crash, not a test failure: the right function called at the right
+moment returning yesterday's answer.** The precondition is now the first line of the function.

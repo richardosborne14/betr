@@ -2,8 +2,10 @@
 
 **Status:** **§6 and §5d shipped in B46. §5b SHIPPED 2026-09-09. §5e's core SHIPPED
 2026-09-10 (§12). §5c SHIPPED 2026-09-10 — `starts.js` is gone, there is one content file,
-and `startFor()` went with it (§13). What is left is the four screen-shape drifts in §3, and
-§7a, which is the founder's.**
+and `startFor()` went with it (§13). §7a ANSWERED 2026-09-10: the fold stays, so §3's
+difference 4 is CLOSED as a no. §3's difference 9 is STRUCK — it was never a drift
+([`B48`](B48-the-greyed-example-belongs-to-this-worry.md)). What is left of §3 is
+differences 3, 5, 6 and 7.**
 **Status when it was written:** **SCOPED, not started. No longer blocked** — the founder supplied the current mockup
 on 2026-09-09 and it answers both questions the first draft of this file was waiting on.
 **Confidence:** 9/10 in the diagnosis — every number below was measured in a browser today.
@@ -108,7 +110,14 @@ the design B45 §4 argues for, and the canvas note already says it in one line.
 | **6** | *What will you do?* sits **at the bottom**, under the suggestions and the safety line | It sits **above** the suggestions |
 | **7** | The repeat screen is *"Same again, or a notch up? — your choice, every time"*, with **all three open** and one marked *Last time* | A plan card, an expectation editor, and the three folded into a line |
 | **8** | A rung on *Your tests* reads **A small go · about [her playlist]** — the size *and* the word she put in the hole | The size name only |
-| **9** | The hole shows **a placeholder noun in the blank** — *a person*, *a thing* — so an empty sentence still reads | Our hole is an empty input; the default word only appears in the rendered predictions below it |
+| ~~**9**~~ | ~~The hole shows **a placeholder noun in the blank** — *a person*, *a thing* — so an empty sentence still reads~~ | ~~Our hole is an empty input; the default word only appears in the rendered predictions below it~~ **NOT A DRIFT AND NEVER WAS — struck 2026-09-10 ([`B48`](B48-the-greyed-example-belongs-to-this-worry.md) §6).** `skeletonHalf()` has printed the hole's word as a greyed placeholder since B41, and B41's comment argues for a placeholder over a value. **This row was read off the canvas and not off the screen.** |
+
+> **DIFFERENCE 4 IS CLOSED, 2026-09-10, AND IT IS A NO.** Asked of the founder with both
+> screens drawn side by side; they chose **the fold**. The three tuck away after one is picked,
+> *Lock it in* stays above the fold, and the *Change* link is the answer to "no rung is ever
+> taken away" — it shows the words, it does not hide them (B39). **The canvas is overruled on
+> this one row, on purpose, by the person whose canvas it is.** §7a below is settled; do not
+> "restore" the open three. Recorded in [`B48`](B48-the-greyed-example-belongs-to-this-worry.md) §5.
 
 **Difference 4 is a real collision and not a drift.** B39 spent a whole task getting *Lock it in*
 above the fold on that screen, and B42 folded the three because open they cost 257px and put the
@@ -239,7 +248,12 @@ then 5c last. Each is shippable and each leaves the app more coherent than it fo
 
 ## 7. What is still the founder's, and it is now two things rather than two questions
 
-**7a. The fold, on the do screen. IT IS NOW ON EVERY WORRY AND NOT ON TWO** (§5b, 2026-09-09).
+**7a. ANSWERED 2026-09-10, AND THE ANSWER IS THE FOLD.** The founder was shown both screens and
+chose the one that ships: **after somebody picks a size, the other two tuck away**, and *Lock it
+in* stays above the fold. B39's task holds, B42's fold holds, difference 4 is closed as a no.
+Everything below is the record of the trade, kept because the canvas still draws the other one.
+
+**7a, as it stood. The fold, on the do screen. IT IS NOW ON EVERY WORRY AND NOT ON TWO** (§5b, 2026-09-09).
 Measured on a 390×844 phone at 100% text, on `feed` with *three days* typed into the blank:
 arriving with the three open the page is **1005px against an 844px screen — 161px below the
 fold, and *Lock it in* is not on it.** Tapping one folds the row and the page comes back to

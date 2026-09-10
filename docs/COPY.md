@@ -896,10 +896,6 @@ keep it, and put it wherever the sentence needs it.
 
 > say no to somebody without giving a reason
 
-**`build.thenPlaceholder`**
-
-> somebody will think I’m selfish
-
 **`build.ifChips`**
 
 > Or start from one of these:

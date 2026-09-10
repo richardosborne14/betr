@@ -249,9 +249,21 @@ var BETR_STRINGS_EN = {
         after it, and loop.test.js fails the build if they drift apart again. They changed
         because the content moved, not because anybody rewrote them, and they are in
         docs/COPY.md for Misha with everything else.
+
+        B48, 2026-09-10, AND THERE IS ONLY ONE OF THEM LEFT. `thenPlaceholder` is deleted.
+
+        A frozen second half could only ever be right beside a frozen first half, and the
+        first half stops being frozen the moment anybody taps a chip or opens a worry — on
+        every road but one it went on saying "somebody will think I'm selfish" under a
+        sentence about something else entirely. It is worked out from the content now
+        (app.js thenHint), from THIS blank's first suggestion, which is what the sentence
+        below was already promising it was.
+
+        So this one stays and its partner goes, and the promise in changing-the-words.md holds:
+        every string in this file is a string somebody can see. Edit this line and the second
+        blank's example follows it, because the second blank's example is derived from it.
       */
       ifPlaceholder: 'say no to somebody without giving a reason',
-      thenPlaceholder: 'somebody will think I’m selfish',
       ifChips: 'Or start from one of these:',
       thenChips: 'Or one of these:',
       /*
