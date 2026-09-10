@@ -12,6 +12,8 @@ never seen the code can follow it and say whether it did what it says.
   waits for you.
 - 2026-09-09 - **J5 added: the two guide screens** (B44), and its step 6 is the one that
   matters - neither of them may ever appear on its own.
+- 2026-09-10 - **The two front-screen buttons swapped** (B50): *Find yours* is the big one and
+  opens the doors; *Write my own* is the ghost under it. J4 step 1 follows it.
 - 2026-09-10 - **J4 updated for B45 §5c and B49.** Its "two templates have this road and only
   two" was two tasks out of date; every worry has it. Steps 6a-6c (a size's own gap, on
   *Saying no*) and 19a (the leave-out's greyed example) are new. **J1, J2 and J3 are still
@@ -160,7 +162,7 @@ on two worries look like different kinds of screen, that is the bug this journey
 
 | # | Do this | You should see |
 | --- | --- | --- |
-| 1 | Open it, tap **Not sure? Try one of these** | *What's going on?*, six doors and *None of these - I'll write my own* |
+| 1 | Open it, tap **Find yours** — the big button | *What's going on?*, six doors and *None of these - I'll write my own* |
 | 2 | Tap **Going along with things I don't want to do** | Four worries, each with its *If I ..., then ...* under its label |
 | 3 | Tap **Saying no without giving a reason** | *Make it yours.* One sentence with the words **If I**, **say no to**, a box, **without giving a reason**, **, then** and a second box. Under it, three whole predictions - each one already saying *somebody* |
 | 4 | Type **my sister** into the first box | **All three predictions change as you type**, and every *somebody* in them becomes *my sister*. Nothing else on the screen moves |
@@ -174,7 +176,7 @@ on two worries look like different kinds of screen, that is the bug this journey
 | 9 | Tap **A bigger go** again, then **Lock it in** | *LOCKED IN. Go and find out.* Your sentence, your leave-out, and *A bad one counts the same as a good one* |
 | 10 | **Go and actually do it.** Come back. Tap **Done it. Here's what happened** | One box, and above it the worry's name and the exact sentence you are testing. No verdict asked for |
 | 11 | Type what happened, tap **Next**, tap **A lot less sure** | Your expectation, what happened, and the ladder: *Started 10*, *Now 7*. Beside it, **the name of the size you did it at** - *A bigger go*. A big **1**. (If you did step 6b, that rung reads *A small go · the Saturday thing* - the size **and** the word you put in the gap) |
-| 12 | Tap **New test** at the bottom, then **Back**, then **Not sure? Try one of these**, and come back to **Saying no without giving a reason** | The blank sentence again. **Your last answer is not pre-filled** - this is a new test, not the old one reopened |
+| 12 | Tap **New test** at the bottom, then **Back**, then **Find yours**, and come back to **Saying no without giving a reason** | The blank sentence again. **Your last answer is not pre-filled** - this is a new test, not the old one reopened |
 | 13 | Type a **different** name into the gap, tap a **different** prediction, and pick a **different** size | All three sentences rebuild around the new name |
 | 14 | Finish that loop too | *Started 10*, *1st 7*, *Now ...* - **one ladder, three rungs**, each rung carrying the size it was done at and what you wrote. Not two cards, not two ladders |
 | 15 | Tap **Your tests** | **One** card for this worry, however many different names, predictions and sizes you used. *1 test, done 2 times* |

@@ -907,20 +907,31 @@
         '<div class="kicker">' + esc(t('brand')) + '</div>' +
         head('h1', t('start.caption'), 'caption') +
         exampleCard() +
-        '<button class="big pulse" id="go">' + esc(t('start.go')) +
+        /*
+          B50, 2026-09-10, the founder's call — AND IT IS B45 §4's LAST UNSHIPPED ROW.
+
+          These two were the other way round from B28 until today: the big button opened two
+          empty blanks and the ready-made list was the ghost underneath. B45 §4's one journey
+          has said since 2026-09-09 that the front screen's big button opens *What's going on?*
+          and that writing your own is "an exit, not the entrance" — the road, not the door.
+          Nobody had moved the buttons to match.
+
+          The arrow moves with the big button, because it is what says which one is the road.
+        */
+        '<button class="big pulse" id="pick">' + esc(t('start.borrow')) +
           ' <span class="arrow" aria-hidden="true">→</span></button>' +
-        '<p class="row"><button class="ghost" id="not-sure">' + esc(t('start.borrow')) + '</button></p>' +
+        '<p class="row"><button class="ghost" id="go">' + esc(t('start.go')) + '</button></p>' +
         waitingBlock() +
         '<p class="tiny">' + esc(t('start.promise')) + '</p>' +
         (storageOk ? '' : '<p class="tiny">' + esc(t('start.noStorage')) + '</p>') +
       '</div>');
-    /* The main road: their own sentence, from nothing. */
-    on('#go', newTest);
     /*
-      One tap aside, and it is the whole of what the doors and the stock list are now: things
-      to borrow (B32). It was the way in until 2026-09-08.
+      The road: the doors, and the ready-made worry behind one of them. It was the way in
+      until 2026-09-08, a ghost until 2026-09-10, and it is the way in again (B50).
     */
-    on('#not-sure', function () { S.filter = null; go('doors'); });
+    on('#pick', function () { S.filter = null; go('doors'); });
+    /* The exit, one tap aside: their own sentence, from nothing, owned end to end (B45 §4). */
+    on('#go', newTest);
     wireWaiting();
   }
 

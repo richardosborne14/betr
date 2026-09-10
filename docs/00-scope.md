@@ -23,14 +23,15 @@ this paragraph described on the day it was written.*
 
 A free thing on your phone. It opens on one finished test — somebody's prediction, struck
 through, what actually happened next to it, and the ladder that moved. Then one big button:
-*What's yours?* You write one sentence with two gaps in it — *If I ___, then ___* — typing or
-tapping a suggestion into either. You say what you'll do about it today and what you'll leave
-out, and tap *Lock it in.* You go and do it. You come back, type one sentence about what
-happened, and tap one of four words for how sure you still are. It shows you your prediction
-with a line through it, what actually happened underneath, and that belief coming down a
-ten-rung ladder test by test — and offers the same test again tomorrow. If you do not know what
-to write, *Not sure? Try one of these* opens a short list to borrow from and change. No account.
-No server. No AI. Nothing leaves the phone.
+*Find yours.* You pick the situation that is yours off a short list, and it hands you one
+sentence with two gaps in it — *If I ___, then ___* — already half written, to type over or tap
+a suggestion into. You say what you'll do about it today and what you'll leave out, and tap
+*Lock it in.* You go and do it. You come back, type one sentence about what happened, and tap
+one of four words for how sure you still are. It shows you your prediction with a line through
+it, what actually happened underneath, and that belief coming down a ten-rung ladder test by
+test — and offers the same test again tomorrow. If none of the list is yours, *Write my own*
+hands you the same sentence with both gaps empty. No account. No server. No AI. Nothing leaves
+the phone.
 
 **The purpose statement in §10 and in the app still describes the old way in** ("you pick a
 worry about how people will react"). It is frozen (rule 7) and identical in five places, so
@@ -78,7 +79,7 @@ stock list as the front door, which it stopped being on that day.
 
 | # | Screen | What's on it | Taps |
 | --- | --- | --- | --- |
-| 1 | **Start** | One finished test, shown not described: the prediction, struck through, what actually happened in marker, the ladder from ten to a lower rung. Then *What's yours?* (big) and *Not sure? Try one of these* (ghost), and the trust line. | 1 |
+| 1 | **Start** | One finished test, shown not described: the prediction, struck through, what actually happened in marker, the ladder from ten to a lower rung. Then *Find yours* (big, to the doors) and *Write my own* (ghost, to the build screen), and the trust line. **They swapped places on 2026-09-10 (B50)**: the ready-made road is the road, and writing your own is the exit — which is what B45 §4's one journey had said since 2026-09-09. | 1 |
 | 2 | **Build** | *If I ___, then ___* as one sentence, each blank an input, suggestion chips under the active one. One big button *What will you do?* | typing or 2 taps |
 | 3 | **Build · what you'll do** | The sentence in the quiet strip. *What will you do today?* (box, chips), then *And leave out* as ONE ROW showing what it currently says, which opens into a box with chips when tapped — optional, and the row shows the words rather than hiding them (B39, 2026-09-09). Then *Lock it in*. | typing |
 | 4 | **Locked** | *Go and do it.* The test repeated. One big button *Done it. Here's what happened.* Small: *Didn't get to it*. | 1 |

@@ -36,9 +36,9 @@ const said = (f, text) => content.fill(text, {}, (f.skeleton || { holes: {} }).h
   menu test walks through was never the point of the menu tests — pass one that is big enough.
 */
 function lockOne(a, item, door) {
-  if (a.html().indexOf('id="go"') !== -1) a.tap('#not-sure');   /* already past the front screen, or not */
+  if (a.html().indexOf('id="go"') !== -1) a.tap('#pick');   /* already past the front screen, or not */
   /* B30: "New test" opens the build screen, so the borrow road starts from the front screen. */
-  if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#not-sure');
+  if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#pick');
   if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', door || 0);
   a.tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
@@ -50,7 +50,7 @@ function lockOne(a, item, door) {
 test('the menu is on every screen, and it is exactly three plain words', () => {
   const a = boot();
   const stops = [
-    () => a.tap('#not-sure'),                       /* what's going on */
+    () => a.tap('#pick'),                       /* what's going on */
     () => a.tap('[data-door]', 0),            /* pick */
     () => a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'),              /* plan */
     () => a.tap('[data-size]', 0),            /* a size picked, which is what fills the boxes */
@@ -75,9 +75,9 @@ test('the menu is on every screen, and it is exactly three plain words', () => {
 test('every door on the menu works from every screen', () => {
   const from = [
     (a) => a,                                                     /* the start screen */
-    (a) => a.tap('#not-sure'),                                          /* what's going on */
-    (a) => a.tap('#not-sure').tap('[data-door]', 0),                    /* pick */
-    (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'),  /* plan */
+    (a) => a.tap('#pick'),                                          /* what's going on */
+    (a) => a.tap('#pick').tap('[data-door]', 0),                    /* pick */
+    (a) => a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'),  /* plan */
     (a) => lockOne(a, 0),                                         /* locked */
     (a) => lockOne(a, 0).tap('#done'),                            /* happened */
     (a) => a.tap('#m-new')                                        /* the build screen */
@@ -153,7 +153,7 @@ test('a test that is waiting survives a reload, and "didn’t get to it" costs i
 
 test('an unfinished test that was never locked in is simply let go', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').shows(en.s.build.lock);
+  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').shows(en.s.build.lock);
   a.tap('#m-new').tap('#back');
   a.hides('On the go');
 });
@@ -349,7 +349,7 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
   /* everywhere else in the app: nothing but the crisis numbers */
   const b = boot();
   let rest = b.html();
-  rest += b.tap('#not-sure').html();
+  rest += b.tap('#pick').html();
   rest += b.tap('[data-door]', 0).html();
   rest += b.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
   rest += b.tap('[data-size]', 0).html();
@@ -407,7 +407,7 @@ test('ours is on the Help list, never first, and says who made it and what it co
   /* and it is not on the front screen, in the loop, in the result, or on the menu */
   const b = boot();
   let rest = b.html();
-  rest += b.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
+  rest += b.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
   rest += b.tap('[data-size]', 0).html();
   rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
   rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
@@ -452,7 +452,7 @@ test('if door one still promises places for alcohol and drugs, Help has them', (
   inside the app, not as a link, so the rule that only Help carries links is untouched.
 */
 test('tapping door one\'s note opens Help, and lands on the places it promised', () => {
-  const a = boot().tap('#not-sure');
+  const a = boot().tap('#pick');
   a.shows('data-note=');
   a.tap('[data-note]');
   a.shows(places.groups[0].items[0].url);
@@ -466,7 +466,7 @@ test('tapping door one\'s note opens Help, and lands on the places it promised',
     'the note opened Help but left them at the top of it');
 
   /* it moved inside the app: the note itself is not a link out */
-  const doors = boot().tap('#not-sure').html();
+  const doors = boot().tap('#pick').html();
   const note = doors.slice(doors.indexOf('doornote'), doors.indexOf('doornote') + 400);
   assert.ok(note.indexOf('href=') === -1, 'the note is a link out, not a move inside the app');
 });

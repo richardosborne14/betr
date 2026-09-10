@@ -124,12 +124,26 @@ var BETR_STRINGS_EN = {
       */
       caption: 'What one test looks like',
       /*
-        The big button. It used to say "Pick a worry", then "Start a test"; it asks the
-        question instead now, because the card above it has just shown somebody else's.
+        THE TWO BUTTONS SWAPPED PLACES ON 2026-09-10 (B50), the founder's call, and the words
+        went with them. `borrow` is the big one now and `go` is the ghost underneath it.
+
+        The key names are left alone on purpose: `go` is still the road that starts from
+        nothing and `borrow` is still the one that starts from BETR's list. What changed is
+        which of them a person meets first, and B45 §4 had already said which that should be.
+
+        `go` was "Pick a worry", then "Start a test", then "What’s yours?" — the question, asked
+        because the card above it had just shown somebody else's. It is "Write my own" now,
+        because it is no longer the question the screen is asking; it is the way out of the
+        question. **NOT MISHA'S YET**, either of them.
       */
-      go: 'What’s yours?',
-      /* One tap aside, and never the main road: the stock list, as things to borrow (B32). */
-      borrow: 'Not sure? Try one of these',
+      go: 'Write my own',
+      /*
+        The big button, and it opens *What’s going on?*. It kept the possessive the old big
+        button had — a person is looking for the one that is theirs, and the six doors are
+        where that search starts. What it lost is "Not sure?", which named the person rather
+        than the thing and only made sense while this was the smaller of the two.
+      */
+      borrow: 'Find yours',
       /* The trust line, with the human half first. §9.2: airplane mode is the proof. */
       promise: 'Nobody sees this but you. No account, no AI, nothing leaves your phone.',
       noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +

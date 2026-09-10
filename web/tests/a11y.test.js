@@ -34,7 +34,7 @@ const doors = require('../content/whats-going-on.js');
   now, so nothing is pre-filled and Lock it in has nothing to lock until one is chosen — which
   is what the two worries that had sizes already did, and is now the whole road.
 */
-const borrowed = (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0)
+const borrowed = (a) => a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0)
   .tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
 const done = (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
   .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
@@ -42,15 +42,15 @@ const done = (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
 /* Every screen there is, and the taps that get to it from a fresh start. */
 const SCREENS = {
   start: (a) => a,
-  doors: (a) => a.tap('#not-sure'),
-  pick: (a) => a.tap('#not-sure').tap('[data-door]', 0),
+  doors: (a) => a.tap('#pick'),
+  pick: (a) => a.tap('#pick').tap('[data-door]', 0),
   /* B30: the way in, and the two halves of it */
   build: (a) => a.tap('#m-new'),
   'build-do': (a) => a.tap('#m-new')
     .type('#if', 'say no without giving a reason')
     .type('#then', 'they’ll think I’m being difficult').tap('#next'),
   /* B32: the same two screens, opened from the borrow list with the blanks filled */
-  borrow: (a) => a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0),
+  borrow: (a) => a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0),
   /*
     The loop, from the borrow road. `borrowed` is that road as far as Lock it in; `plan` is
     NOT on it any more — since B30 the build screen goes straight to locked, and the plan
@@ -166,7 +166,7 @@ test('a refusal is read out, because the heading has not changed', () => {
   assert.strictEqual(b.said(), en.s.refusal.harm);
 
   /* And a blank that is empty on the borrow road, where the first one arrives filled in. */
-  const c = boot().tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0);
+  const c = boot().tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0);
   c.tap('#next');
   assert.strictEqual(c.said(), en.s.refusal.emptyBelief);
 });
@@ -190,7 +190,7 @@ test('a note that appears in place is read out, and costs nothing either way', (
 
 test('the live region is empty on an ordinary screen change, so nothing is said twice', () => {
   const a = boot();
-  a.tap('#not-sure');
+  a.tap('#pick');
   assert.strictEqual(a.said(), '', 'the heading was announced as well as focused');
 });
 
@@ -203,7 +203,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
     if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
     a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
   };
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
+  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
   loop('He said fair enough.', 1);          /* 10 -> 9 */
   a.tap('#again');
   loop('Nobody minded.', 2);                 /* 9 -> 6 */
@@ -230,7 +230,7 @@ test('a rung says the rung, out of ten, and which way it moved — and no total'
 
 test('a bad day is said as a rise, not as a failure', () => {
   const a = boot();
-  a.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
+  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
   a.type('#o', 'He went quiet.').tap('#next').tap('[data-key]', 2);       /* 10 -> 7 */
   a.tap('#again').tap('#lock').tap('#done').type('#o', 'He brought it up again.').tap('#next');
   a.tap('[data-key]', 4);                                                 /* 7 -> 8 */
@@ -263,7 +263,7 @@ test('lang and dir follow the language, and survive a reload', () => {
 test('the one accessible name in the app says BETR, and the arrows say nothing', () => {
   const a = boot();
   let h = a.html();
-  h += a.tap('#not-sure').html();
+  h += a.tap('#pick').html();
   h += a.tap('[data-door]', 0).html();
   h += a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
   h += a.tap('#m-help').html();
@@ -286,7 +286,7 @@ test('every box a person types into has a name', () => {
   h += SCREENS.happened(boot()).html();
   /* the one box left on the plan screen, which is now only reached by repeating a test */
   const r = boot();
-  r.tap('#not-sure').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
+  r.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
   r.type('#do', 'Put it in a drawer from eight.').tap('#lock').tap('#nothanks').tap('#done');
   r.type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 1);
   h += r.tap('#again').tap('#xedit').html();

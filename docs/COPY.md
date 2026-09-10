@@ -108,11 +108,11 @@ keep it, and put it wherever the sentence needs it.
 
 **`start.go`**
 
-> What’s yours?
+> Write my own
 
 **`start.borrow`**
 
-> Not sure? Try one of these
+> Find yours
 
 **`start.promise`**
 
