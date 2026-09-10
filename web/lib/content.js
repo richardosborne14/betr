@@ -226,9 +226,10 @@
     sizes it takes over with no change to any of this. `sizes` is optional on a start and
     required on the general set, which is the one every other road falls through to.
   */
-  var START_FIELDS = ['if', 'thens', 'dos', 'drops', 'sizes'];
-  var START_REQUIRED = ['if', 'thens', 'dos', 'drops'];
-  var START_LISTS = ['thens', 'dos', 'drops'];
+  /* B45 §5c, 2026-09-10. The general set is what is left of starts.js: the fallback the two
+     blanks and the plan screen offer when the first blank holds a sentence BETR did not
+     write. It has no `if`, because it is the one with no start. */
+  var GENERAL_FIELDS = ['thens', 'sizes'];
   var OURS = 'trybeup.com';
   var SHORTENERS = ['bit.ly', 't.co', 'tinyurl.com', 'goo.gl', 'ow.ly', 'buff.ly', 'rebrand.ly', 'lnkd.in'];
 
@@ -343,12 +344,22 @@
   }
 
   /*
-    A worry's skeleton, or the absence of one — most worries have none and want none. "Sitting
-    still when I feel restless" has nobody in it (B37 §6); roughly eight to twelve of the
-    twenty-one earn holes, and they are the ones with another person in the test.
+    A worry's skeleton, and since B45 §5c EVERY WORRY HAS ONE. It was optional through B41 and
+    B42, when two worries had one and fifteen did not, and the app had two build screens
+    because of it: a printed verb with a blank in it on two roads, two empty blanks on the
+    rest. §4's one journey is the verb constructor by default, so the absence of a skeleton is
+    not a variant a person can be handed any more — it is a worry that cannot be drawn.
+
+    Holes are still optional. `early` has none — "leave at the time I decided and say plainly
+    that I'm going" has nobody in it — and that is a whole skeleton with nothing to fill, not
+    half of one. The SCREEN is the same either way, which is what makes it one journey.
   */
   function checkSkeleton(f, where, problems) {
-    if (f.skeleton === undefined) return;
+    if (f.skeleton === undefined) {
+      problems.push(where + ' has no skeleton, and every worry has one since B45 §5c: the ' +
+        'printed verb is the build screen, not a variant of it');
+      return;
+    }
     var sk = f.skeleton;
     if (!sk || typeof sk !== 'object' || Array.isArray(sk)) {
       problems.push(where + ' has a skeleton that is not a skeleton');
@@ -612,106 +623,94 @@
     The suggestion chips. Two things are being kept true here and they pull in opposite
     directions, which is why both are spelled out.
 
-    First, they have to READ as part of the sentence: an `if` follows the printed words "If I"
-    and a `then` follows ", then", so both are lowercase fragments, while a `dos` or a `drops`
-    line is a whole sentence a person could act on and starts with a capital.
+    First, they have to READ as part of the sentence: a `then` follows the printed ", then",
+    so it is a lowercase fragment and never a sentence of its own.
 
     Second, they are BETR PROPOSING SOMETHING. Rule 4 as amended 2026-09-08 loosened what a
     person may write for themselves and loosened nothing about what BETR writes, so every one
     of these goes through the same three word lists the twenty-one stock tests do.
   */
-  function validateStarts(starts) {
+  function validateGeneral(general) {
     var problems = [];
-    if (!starts || !Array.isArray(starts.items) || !starts.items.length) {
-      return ['starts.js is empty'];
+    if (!general || typeof general !== 'object' || Array.isArray(general)) {
+      return ['there is no general set, so a sentence BETR did not write gets nothing'];
     }
-    if (!starts.general || typeof starts.general !== 'object') {
-      problems.push('starts.js has no general set, so a sentence BETR did not write gets nothing');
-    } else {
-      /*
-        B42. The general set is `thens` and `sizes` now — its two loose `dos` became the three
-        named sizes, so the road most people are on has the dial on it. It is checked against
-        the lists it actually has rather than against all three, and its sizes are required:
-        every road with no sizes of its own falls through to these.
-      */
-      checkStartLists('the general set', starts.general, ['thens'], problems);
-      ['dos', 'drops'].forEach(function (field) {
-        if (field in starts.general) {
-          problems.push('the general set still has "' + field + '"; B42 replaced both with sizes');
-        }
-      });
-      if (!starts.general.sizes) problems.push('the general set has no sizes, so a road with none of its own has no dial');
-      checkSizes(starts.general, 'the general set', problems);
-      if ('if' in starts.general) problems.push('the general set has an "if"; it is the one with no start');
-    }
-
-    var seen = {};
-    starts.items.forEach(function (it, i) {
-      var where = 'start ' + i + ' (' + ((it && it.if) || 'no if') + ')';
-      if (!it || typeof it !== 'object' || Array.isArray(it)) { problems.push(where + ' is not a start'); return; }
-
-      START_REQUIRED.forEach(function (field) {
-        if (!(field in it)) problems.push(where + ' is missing ' + field);
-      });
-      Object.keys(it).forEach(function (field) {
-        if (START_FIELDS.indexOf(field) === -1) {
-          problems.push(where + ' has an extra field "' + field + '": a start is four fields and ' +
-            'an optional three sizes, so that which suggestions a person is offered can never ' +
-            'be decided for them');
-        }
-      });
-      checkSizes(it, where, problems);
-
-      if (typeof it.if !== 'string' || !it.if.trim()) {
-        problems.push(where + ' has no if');
-      } else {
-        if (/^[A-Z]/.test(it.if)) problems.push(where + ' starts with a capital, and it follows the printed "If I"');
-        if (/[.!?]$/.test(it.if)) problems.push(where + ' ends in a full stop, and the sentence carries on after it');
-        var flat = it.if.toLowerCase().trim();
-        if (seen[flat]) problems.push(where + ' is the same start as ' + seen[flat]);
-        seen[flat] = where;
+    checkThens('the general set', general, problems);
+    Object.keys(general).forEach(function (field) {
+      if (GENERAL_FIELDS.indexOf(field) === -1) {
+        problems.push('the general set has an extra field "' + field + '": it is three ' +
+          'predictions and three sizes, and nothing that could decide which of them a ' +
+          'person is shown');
       }
-
-      checkStartLists(where, it, START_LISTS, problems);
     });
-
+    if (!general.sizes) {
+      problems.push('the general set has no sizes, so a road with none of its own has no dial');
+    }
+    checkSizes(general, 'the general set', problems);
     return problems;
   }
 
-  function checkStartLists(where, set, fields, problems) {
-    fields.forEach(function (field) {
-      var list = set[field];
-      if (!Array.isArray(list) || !list.length) { problems.push(where + ' has no ' + field); return; }
-      var said = {};
-      list.forEach(function (line, j) {
-        var at = where + ' ' + field + ' ' + j;
-        if (typeof line !== 'string' || !line.trim()) { problems.push(at + ' is empty'); return; }
+  /*
+    B45 §5c, 2026-09-10. THE FRONT DOOR'S TWELVE, AND IT IS A LIST OF IDS AND NOTHING ELSE.
 
-        /*
-          A `then` follows ", then" and so is lowercase — except for "I", which is a capital
-          in English wherever it stands and is how half of these have to begin. A plan is a
-          sentence of its own and starts like one.
-        */
-        if (field === 'thens') {
-          if (/^[A-Z]/.test(line) && !/^I(\b|['\u2019])/.test(line)) {
-            problems.push(at + ' starts with a capital, and it follows the printed ", then"');
-          }
-        } else if (!/^[A-Z\u201C]/.test(line)) {
-          problems.push(at + ' does not start with a capital, and it is a whole sentence');
+    It used to be twelve items in starts.js, each with an `if`, three `thens` and four plan
+    lines of its own — nine of them describing an act that was already a worry, in different
+    words. The sentences are the worries' now; this is only which of them the first blank
+    offers, and in what order.
+
+    So the one thing to check is that it points at worries that exist and does not point at
+    one twice. Everything a person reads through it is validated as a worry.
+  */
+  function validateFront(front, worries) {
+    var problems = [];
+    if (!Array.isArray(front) || !front.length) {
+      return ['there is no front-door list, so the first blank has no suggestions under it'];
+    }
+    var seen = {};
+    front.forEach(function (id, i) {
+      var where = 'front-door suggestion ' + i + ' (' + id + ')';
+      if (typeof id !== 'string' || !id.trim()) { problems.push(where + ' is not an id'); return; }
+      if (seen[id] !== undefined) {
+        problems.push(where + ' is the same worry as suggestion ' + seen[id] + ', so one tap is wasted');
+      }
+      seen[id] = i;
+      var f = byId(worries, id);
+      if (!f) {
+        problems.push(where + ' is not a worry, so the chip prints nothing');
+      } else if (!f.skeleton) {
+        problems.push(where + ' has no skeleton, so there is no sentence to put in the blank');
+      }
+    });
+    return problems;
+  }
+
+  function checkThens(where, set, problems) {
+    var list = set.thens;
+    if (!Array.isArray(list) || !list.length) { problems.push(where + ' has no thens'); return; }
+    var said = {};
+    list.forEach(function (line, j) {
+      var at = where + ' thens ' + j;
+      if (typeof line !== 'string' || !line.trim()) { problems.push(at + ' is empty'); return; }
+
+      /*
+        A `then` follows ", then" and so is lowercase — except for "I", which is a capital in
+        English wherever it stands and is how half of these have to begin.
+      */
+      if (/^[A-Z]/.test(line) && !/^I(\b|['\u2019])/.test(line)) {
+        problems.push(at + ' starts with a capital, and it follows the printed ", then"');
+      }
+
+      /* Two that say the same thing are one suggestion and a wasted tap. */
+      var flat = line.toLowerCase().replace(/[^a-z ]+/g, ' ').split(/\s+/).filter(Boolean).sort().join(' ');
+      if (said[flat] !== undefined) problems.push(at + ' says the same thing as thens ' + said[flat]);
+      said[flat] = j;
+
+      /* BETR proposing it, so the three lists apply exactly as they do to a stock test. */
+      [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]].forEach(function (pair) {
+        var word = guards.hit(line, pair[1]);
+        if (word) {
+          problems.push(at + ' names something BETR may never propose (' + pair[0] + ': "' + word + '")');
         }
-
-        /* Two that say the same thing are one suggestion and a wasted tap. */
-        var flat = line.toLowerCase().replace(/[^a-z ]+/g, ' ').split(/\s+/).filter(Boolean).sort().join(' ');
-        if (said[flat] !== undefined) problems.push(at + ' says the same thing as ' + field + ' ' + said[flat]);
-        said[flat] = j;
-
-        /* BETR proposing it, so the three lists apply exactly as they do to a stock test. */
-        [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]].forEach(function (pair) {
-          var word = guards.hit(line, pair[1]);
-          if (word) {
-            problems.push(at + ' names something BETR may never propose (' + pair[0] + ': "' + word + '")');
-          }
-        });
       });
     });
   }
@@ -899,10 +898,11 @@
     fillParts: fillParts,
     BELIEFS_PER_WORRY: BELIEFS_PER_WORRY,
     MAX_PER_DOOR: MAX_PER_DOOR,
-    START_FIELDS: START_FIELDS,
+    GENERAL_FIELDS: GENERAL_FIELDS,
     byId: byId,
     validateWorries: validateWorries,
-    validateStarts: validateStarts,
+    validateGeneral: validateGeneral,
+    validateFront: validateFront,
     validateDoors: validateDoors,
     validatePlaces: validatePlaces,
     WHY_FIELDS: WHY_FIELDS,

@@ -16,13 +16,26 @@ const path = require('node:path');
   what these walks are actually about is that the right worry is on the right screen.
 */
 const worries = require('../content/worries.js');
+/*
+  B45 §5c, 2026-09-10. THE TWO CONTENT FILES ARE ONE, and these three are what starts.js used
+  to hand a test for free. A worry is stored with `{holes}` in it; what the front door prints
+  is the same sentence with every hole at its own default word, because on that road there is
+  no blank to have typed one into.
+*/
+const general = worries.general;
+const front = worries.front.map((id) => worries.find((w) => w.id === id));
+const plainly = (f) => f.skeleton.if.replace(/\{([a-z]+)\}/g, (_, h) => f.skeleton.holes[h]);
+const filled = (f, text) => text.replace(/\{([a-z]+)\}/g, (_, h) => f.skeleton.holes[h]);
+const thensOf = (f) => f.beliefs.map((b) => filled(f, b.belief).match(/, then ([\s\S]*)\.$/)[1]);
+const sizesOf = (f) => f.sizes.map((z) => ({
+  name: z.name, do: filled(f, z.do), drop: filled(f, z.drop)
+}));
 const doors = require('../content/whats-going-on.js');
 const content = require('../lib/content.js');
 const why = require('../content/why.js');
 const en = require('../content/strings-en.js');
 /* B42: the three sizes on the free-text road live here, and every road with none of its own
    falls through to them. Required at the top because more than one walk below reads them. */
-const starts = require('../content/starts.js');
 const labelOf = (id) => content.byId(worries, id).label;
 /* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
 const firstBehind = (n) => content.byId(worries, doors.items[n || 0].worries[0]);
@@ -526,9 +539,9 @@ test('three sizes are on the worry road and the free-text road, and one fills bo
   const b = boot().tap('#m-new');
   b.type('#if', 'leave the washing up until the morning').type('#then', 'it will still be there');
   b.tap('#next').shows(en.s.build.sizeChips);
-  for (const z of starts.general.sizes) b.shows(z.name).shows(z.do);
+  for (const z of general.sizes) b.shows(z.name).shows(z.do);
   b.tap('[data-size]', 0);
-  assert.strictEqual(b.valueOf('#do'), starts.general.sizes[0].do);
+  assert.strictEqual(b.valueOf('#do'), general.sizes[0].do);
 });
 
 /*
@@ -960,24 +973,26 @@ test('a test built from nothing goes straight from the sentence to locked in', (
 test('the whole thing can be built from the suggestions, with nothing typed', () => {
   const a = boot().tap('#m-new');
 
-  a.tap('[data-if]', 0).shows(starts.items[0].if);
-  /* the second blank's suggestions are that start's, not the general ones */
-  for (const line of starts.items[0].thens) a.shows(line);
+  a.tap('[data-if]', 0).shows(plainly(front[0]));
+  /* B45 §5c: the second blank's suggestions are that WORRY's three predictions, not the
+     general ones — the first chip is the worry `no`, which the front door used to describe
+     a second time in its own words. */
+  for (const line of thensOf(front[0])) a.shows(line);
   a.tap('[data-then]', 0).tap('#next');
 
   /*
-    B45 §5e: three named sizes here, not the two loose lines this start carries — see the test
-    below for why that swap is the point rather than a detail. One tap fills BOTH boxes, so the
-    leave-out never has to be opened by somebody tapping their way through.
+    B45 §5e: three named sizes here, not the two loose lines a start used to carry. B45 §5c:
+    and they are this worry's OWN three, because the words in the blank are its words. One tap
+    fills BOTH boxes, so the leave-out never has to be opened by somebody tapping through.
   */
-  for (const z of starts.general.sizes) a.shows(z.name).shows(z.do);
+  const zs = sizesOf(front[0]);
+  for (const z of zs) a.showsText(z.name).showsText(z.do);
   a.tap('[data-size]', 0);
   a.tap('#lock');
   if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
 
-  a.shows(en.s.locked.title)
-    .shows(starts.general.sizes[0].do).shows(starts.general.sizes[0].drop);
-  a.shows('If I ' + starts.items[0].if + ', then ' + starts.items[0].thens[0] + '.');
+  a.shows(en.s.locked.title).showsText(zs[0].do).showsText(zs[0].drop);
+  a.showsText('If I ' + plainly(front[0]) + ', then ' + thensOf(front[0])[0] + '.');
 });
 
 /*
@@ -985,7 +1000,7 @@ test('the whole thing can be built from the suggestions, with nothing typed', ()
   BACK.
 
   The do screen had two shapes and the invisible thing that chose between them was a word-for-
-  word lookup into starts.js. Every start has a hand-written pair of loose `dos`; none has
+  word lookup into starts.js. Every start had a hand-written pair of loose `dos`; none had
   three sizes. So sizesFor() stopped at a matched start, found no sizes, and drew the OLD
   screen — while a sentence BETR had never seen fell through to `general` and drew the new one.
 
@@ -1007,22 +1022,29 @@ test('the do screen has the same three sizes whether a suggestion was tapped, ty
     return row[1];
   };
 
+  /*
+    B45 §5c, AND IT IS THE SAME WORRY DOWN ALL THREE. The front door's first suggestion IS the
+    worry `no`; until the merge it was a second description of it in another file, with its own
+    predictions and no sizes at all. So all three roads below now hand back `no`'s own three
+    steps — the first two with the hole at its default word, the third with hers in it.
+  */
+  const f = content.byId(worries, 'no');
+  const own = sizesOf(f);
+
   /* 1. tapped: BETR's own first suggestion, word for word */
   const a = boot().tap('#m-new').tap('[data-if]', 0).tap('[data-then]', 0).tap('#next');
-  for (const z of starts.general.sizes) a.shows(z.name).shows(z.do);
+  for (const z of own) a.showsText(z.name).showsText(z.do);
   sizeRow(a);
-  /* and the loose pair that used to be this screen is nowhere on it */
-  for (const line of starts.items[0].dos) a.hides(line);
+  /* and the loose row that used to be this screen is nowhere on it */
   assert.strictEqual(a.html().indexOf('data-do='), -1, 'the old loose row is still being drawn');
 
-  /* 2. typed: the same start's words, typed out rather than tapped (B34 D1's case) */
+  /* 2. typed: the same words, typed out rather than tapped (B34 D1's case) */
   const b = boot().tap('#m-new');
-  b.type('#if', starts.items[0].if).type('#then', 'they will be off with me').tap('#next');
-  for (const z of starts.general.sizes) b.shows(z.name).shows(z.do);
+  b.type('#if', plainly(f)).type('#then', 'they will be off with me').tap('#next');
+  for (const z of own) b.showsText(z.name).showsText(z.do);
   sizeRow(b);
 
-  /* 3. borrowed: the same act as the worry `no`, which has three of its own */
-  const f = content.byId(worries, 'no');
+  /* 3. borrowed: the same worry through the door, with her word in the hole */
   const c = boot().tap('#not-sure').tap('[data-door="yes"]').tap('[data-id="no"]');
   c.type('#h-person', 'my sister').tap('[data-b]', 0).tap('#next');
   for (const z of f.sizes) c.shows(z.name).showsText(z.do.split('{person}').join('my sister'));
@@ -1043,9 +1065,9 @@ test('the do screen has the same three sizes whether a suggestion was tapped, ty
 test('a sentence BETR did not write gets the general suggestions, not a guess', () => {
   const a = boot().tap('#m-new');
   a.type('#if', 'let the washing up wait until the morning').tap('[data-then]', 0);
-  a.shows(starts.general.thens[0]);
-  /* items[1], not items[0]: the first start's first prediction is also the placeholder. */
-  for (const line of starts.items[1].thens) a.hides(line);
+  a.shows(general.thens[0]);
+  /* front[1], not front[0]: the first suggestion's first prediction is also the placeholder. */
+  for (const line of thensOf(front[1])) a.hides(line);
 });
 
 test('a person’s own test can be repeated tomorrow, and back goes to the result', () => {
@@ -1976,12 +1998,27 @@ function chipText(a, attr, i) {
   the general three, while the tap handler ran the lookup AGAIN and handed back the start's
   three. The chip said one thing and put another in the box.
 
-  The placeholder in the first blank is one of the starts word for word, so typing it is not a
-  contrived case; it is the case. Whichever three are on screen, a chip inserts its own words.
+  The placeholder in the first blank is the first suggestion word for word, so typing it is not
+  a contrived case; it is the case. Whichever three are on screen, a chip inserts its own words.
 */
+/*
+  B45 §5c, 2026-09-10. THE GREYED-OUT WORDS AND THE FIRST CHIP ARE ONE SENTENCE.
+
+  A placeholder is an example of what goes in the blank, and somebody types it out rather than
+  tapping it. If it is not word for word one of BETR's own, the lookup underneath it answers
+  differently for two people who put the same sentence in the same box — which is B34 D1 with
+  the content, rather than the code, as the cause. Both files can move; they cannot move apart.
+*/
+test('the placeholders are the first suggestion, word for word', () => {
+  assert.strictEqual(en.s.build.ifPlaceholder, plainly(front[0]),
+    'the first blank suggests a sentence no chip offers');
+  assert.strictEqual(en.s.build.thenPlaceholder, thensOf(front[0])[0],
+    'the second blank suggests a prediction the first suggestion does not carry');
+});
+
 test('a suggestion puts in the box exactly the words printed on it', () => {
   const a = boot();
-  a.tap('#m-new').type('#if', starts.items[0].if);
+  a.tap('#m-new').type('#if', plainly(front[0]));
   const said = chipText(a, 'data-then', 0);
   a.tap('[data-then]', 0).tap('#next');
   a.shows(said);
@@ -1994,7 +2031,7 @@ test('a suggestion puts in the box exactly the words printed on it', () => {
 */
 test('a plan suggestion puts in the box exactly the words printed on it', () => {
   const a = boot();
-  a.tap('#m-new').type('#if', starts.items[0].if).type('#then', 'they will be off with me').tap('#next');
+  a.tap('#m-new').type('#if', plainly(front[0])).type('#then', 'they will be off with me').tap('#next');
   const plan = sizeText(a, 0);
   a.tap('[data-size]', 0);
   assert.strictEqual(a.valueOf('#do'), plan);
@@ -2132,7 +2169,7 @@ test('neither guide screen becomes a fourth door', () => {
 /*
   RULE 4, AND IT DID NOT LOOSEN FOR BETR. The 2026-09-08 amendment freed a PERSON's own test
   from the habit and body lists; every sentence BETR writes is still held to them, and these
-  two screens are BETR proposing in a way nothing else outside worries.js and starts.js is.
+  two screens are BETR proposing in a way nothing else outside worries.js is.
 */
 test('nothing on either guide screen names the habit, the body or anyone’s safety', () => {
   const guards = require('../lib/guards.js');
@@ -2174,7 +2211,7 @@ test('the sentence about starting small is one string, read by both screens', ()
   the other way, which is what shrinking is.
 */
 test('the worked shrink uses the three size names, biggest first', () => {
-  const names = starts.general.sizes.map((z) => z.name);
+  const names = general.sizes.map((z) => z.name);
   const shrink = en.s.guide.shrink.map((r) => r.name);
   assert.deepStrictEqual(shrink, names.slice().reverse(),
     'the shrink invented its own words for the dial, or read it the wrong way round');

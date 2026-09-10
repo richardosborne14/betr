@@ -1114,3 +1114,34 @@ rendered, and the walk that found B45 §5b's dial went down the worry road, wher
 The way it surfaced at all was reading `sizesFor()` next to the screen instead of next to its own
 tests. **When one function decides which of two screens a person gets, walk every road into it in
 one sitting** — the new test that pins this walks three and asserts they are the same screen.
+
+---
+
+## 2026-09-10 — Two content files describing the same thing is not duplication, it is a fork
+
+**B45 §5c.** `starts.js` and `worries.js` had described the same twelve acts since B30 — one in
+twelve items with an `if`, three `thens` and four plan lines, the other in seventeen worries with
+a label, a skeleton, three beliefs and three sizes. Nine of the twelve were the same act. It read
+like duplication, which is a tidiness problem. It was not. **It was a fork: two wordings, both
+shipped, each reached down a road a person cannot see, neither one named as the live one.**
+
+Three things followed from that and none of them looked like a content problem:
+
+- **A screen changed shape depending on which fork you landed on** — the B45 §5e bug, live for a
+  day, caused entirely by one fork having sizes and the other not.
+- **The reviewer was being asked to score both.** 58 rows in the sheet describing nine acts twice,
+  with no way to know which side of each pair was the live one, because nobody had decided.
+- **The founder's own mockup could not be built.** Its seven screens are about *Saying what I
+  actually think*, which existed only on the fork with no worry behind it — so the example the
+  spec is written on was unreachable from the road the spec describes.
+
+**What made the merge cheap in the end was §5b, done a day earlier for its own reasons.** Once
+every worry carried three sizes and the smallest was its own `test` word for word, there was one
+answer per worry to move, not two. **Do the thing that removes a choice before the thing that
+forces you to make it.**
+
+**And the merge paid a debt rather than adding a feature.** §5e had cost twelve roads their
+hand-written plan lines and left them on the generic three. Pointing the lookup at the worries
+gave all twelve a real dial back, and not one sentence was written to do it — the sentences were
+already there, on the other side of the fork. **When two files describe one thing, the fix is
+usually not new content; it is deciding which of the two you already had is the real one.**

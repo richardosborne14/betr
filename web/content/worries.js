@@ -305,8 +305,16 @@ var BETR_WORRIES = [
         expect: 'The afternoon will go, and tomorrow starts further behind.'
       },
       {
+        /*
+          B45 §5c, 2026-09-10, AND IT IS THE ONE OVERLAPPING PAIR WHERE THE START'S WORDING
+          WON. This said "not pulling my weight". starts.js #08 said "somebody will think I've
+          gone slack" for the same act, and that one had already been through the founder —
+          `S08-P3` in the sheet — while this one had not. It also carried a word-list hit:
+          "weight" is on the BODY list, so the moment the sweep in content.test.js widened to
+          cover every prediction, an idiom about workload read as a sentence about a body.
+        */
         belief: 'If I rest for {long} while there’s still stuff to do, then somebody will ' +
-          'think I’m not pulling my weight.',
+          'think I’ve gone slack.',
         expect: 'Somebody will make a comment about it, and it’ll stick.'
       }
     ],
@@ -428,6 +436,69 @@ var BETR_WORRIES = [
     test: 'Tell {person}, today, one specific thing you’re glad about them.',
     drop: 'Don’t turn it into a joke, and don’t move straight on to something else.',
     lane: 'social'
+  },
+
+  {
+    /*
+      B45 §5c, 2026-09-10, AND IT IS THE FOUNDER'S OWN, driving home behind a slow car on
+      2026-09-08: "If I don't overtake slow cars, I'll end up late for my appointments —
+      obviously not true on a ten-minute drive, and I'd reduce my belief pretty quickly."
+      It lived in starts.js as start #09 and had no worry at all, so the front door offered
+      it and the worry road had never heard of it. Written as the rule underneath rather
+      than as the car, so it is the same test for somebody who does not drive.
+
+      THE HOLE IS THE BUFFER AND NOT THE PLACE. "Leave for {thing}" made a sentence about
+      an errand; the thing being tested is the extra time, so that is what she sizes.
+
+      WEAKEST DOOR FIT OF THE TWENTY, AND IT IS A QUESTION FOR THE FOUNDER AND MISHA. It
+      sits behind `work` because the standard being protected is the same one — nothing
+      handed over until it cannot be faulted, nowhere arrived at without a margin. Nobody
+      has said that is where a person would look for it.
+    */
+    id: 'ontime',
+    label: 'Leaving later than I normally would',
+    belief: 'If I cut the extra time out, then something will go wrong.',
+    skeleton: {
+      if: 'leave {long} later than I normally would',
+      holes: { long: 'ten minutes' }
+    },
+    beliefs: [
+      {
+        belief: 'If I leave {long} later than I normally would, then I’ll be late and it’ll ' +
+          'look bad.',
+        expect: 'I’ll walk in after it started and everybody will clock it.'
+      },
+      {
+        belief: 'If I leave {long} later than I normally would, then people will think I ' +
+          'don’t take it seriously.',
+        expect: 'Somebody will make a remark about the time I got there.'
+      },
+      {
+        belief: 'If I leave {long} later than I normally would, then the rest of the day ' +
+          'will run behind.',
+        expect: 'One late start and everything after it slides.'
+      }
+    ],
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Leave {long} later than you normally would, once, and write down what time you actually arrived.',
+        drop: 'Don’t message ahead to say where you are.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Leave {long} later for something that actually matters to you.',
+        drop: 'Don’t message ahead, and don’t make the time back by hurrying.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Leave with nothing built in at all, and arrive when you arrive.',
+        drop: 'No spare time, no message ahead, and no apologising for the time you got there.'
+      }
+    ],
+    test: 'Leave {long} later than you normally would, once, and write down what time you actually arrived.',
+    drop: 'Don’t message ahead to say where you are.',
+    lane: 'perfectionism'
   },
 
   /* --------------------------------- waits on somebody else, or on the day itself */
@@ -979,8 +1050,218 @@ var BETR_WORRIES = [
     test: 'Decide before you go what time you’re leaving. At that time, say one sentence and go.',
     drop: 'Don’t apologise for going, and don’t promise to stay longer next time.',
     lane: 'social'
+  },
+  {
+    /*
+      B45 §5c, 2026-09-10. It was start #02 and had no worry, so the front door offered it
+      and the worry road did not. It is not `help`: that one is a favour somebody does for
+      you, and this one is the thing you want anyway and ask below.
+    */
+    id: 'want',
+    label: 'Asking for what I actually want',
+    belief: 'If I say what I actually want, then I’ll be asking too much.',
+    skeleton: {
+      if: 'ask {person} straight out for what I actually want',
+      holes: { person: 'somebody' }
+    },
+    beliefs: [
+      {
+        belief: 'If I ask {person} straight out for what I actually want, then {person} will ' +
+          'think I’m taking advantage.',
+        expect: 'They’ll say yes, and think less of me for having asked.'
+      },
+      {
+        belief: 'If I ask {person} straight out for what I actually want, then I’ll get a no ' +
+          'and feel stupid for asking.',
+        expect: 'A flat no, and I’ll wish I’d never brought it up.'
+      },
+      {
+        belief: 'If I ask {person} straight out for what I actually want, then it’ll change ' +
+          'how {person} sees me.',
+        expect: 'I’ll be filed as somebody who wants a lot.'
+      }
+    ],
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Ask {person} for one thing you actually want today, in one sentence.',
+        drop: 'Don’t ask for less than you want.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Ask {person} for the thing you’d normally settle below.',
+        drop: 'Don’t ask for less than you want, and don’t offer anything in return.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Ask {person} for the whole of what you want, and let them answer it.',
+        drop: 'Nothing scaled down, no “only if it’s no trouble”, and nothing offered back.'
+      }
+    ],
+    test: 'Ask {person} for one thing you actually want today, in one sentence.',
+    drop: 'Don’t ask for less than you want.',
+    lane: 'assertiveness'
+  },
+  {
+    /*
+      B45 §5c, 2026-09-10, AND IT IS THE MOCKUP'S OWN EXAMPLE. The founder's canvas builds
+      its seven screens on "Saying what I actually think", which existed only as start #07
+      and had no entry here at all — so the screen the canvas draws could not be reached
+      from the worry road. It is not `angry` (something they did) and not `right` (letting
+      theirs stand): it is having an opinion out loud.
+    */
+    id: 'think',
+    label: 'Saying what I actually think',
+    belief: 'If I say what I really think, then it costs me more than it’s worth.',
+    skeleton: {
+      if: 'tell {person} what I actually think',
+      holes: { person: 'somebody' }
+    },
+    beliefs: [
+      {
+        belief: 'If I tell {person} what I actually think, then it’ll turn into a row.',
+        expect: 'It’ll go up a level and we’ll both say more than we meant.'
+      },
+      {
+        belief: 'If I tell {person} what I actually think, then {person} will go quiet with me.',
+        expect: 'A short answer, and then nothing for a couple of days.'
+      },
+      {
+        belief: 'If I tell {person} what I actually think, then {person} will decide I’m hard ' +
+          'work.',
+        expect: 'I’ll be the difficult one from then on.'
+      }
+    ],
+    sizes: [
+      {
+        name: 'A small go',
+        do: 'Tell {person} one thing you think and would normally leave unsaid, in one sentence.',
+        drop: 'Don’t soften it with a joke.'
+      },
+      {
+        name: 'A bigger go',
+        do: 'Tell {person} where you actually disagree with them, out loud.',
+        drop: 'Don’t soften it with a joke, and don’t apologise for saying it.'
+      },
+      {
+        name: 'The whole thing',
+        do: 'Say the whole of what you think to {person}, and let it sit there.',
+        drop: 'No joke, no apology, and nothing taken back later in the day.'
+      }
+    ],
+    test: 'Tell {person} one thing you think and would normally leave unsaid, in one sentence.',
+    drop: 'Don’t soften it with a joke.',
+    lane: 'social'
   }
+
 ];
 
-if (typeof module === 'object' && module.exports) module.exports = BETR_WORRIES;
-else (self.Betr = self.Betr || {}).worries = BETR_WORRIES;
+/*
+  B45 §5c, 2026-09-10. WHAT IS LEFT OF starts.js, AND IT IS THE PART THAT WAS NEVER A WORRY.
+
+  Until today two files described the same twenty-one things. `starts.js` held twelve items —
+  an `if`, three `thens`, two `dos`, two `drops` — and nine of the twelve were the same act as
+  a worry above, written a second time, in a second shape, reviewed twice and free to drift.
+  The three that were not a worry now are: `want`, `think` and `ontime`.
+
+  So the items are gone and these two are what remains. Neither describes a thing a person
+  could pick; one is the fallback and one is an order.
+*/
+
+/*
+  THE GENERAL SET: what the second blank and the plan screen offer when the first blank holds
+  a sentence BETR did not write, which after the first week is most of the time.
+
+  It is short on purpose. Somebody who has typed their own situation does not need a list;
+  they need one nudge about the shape of a consequence. `sizes` is REQUIRED here — it is the
+  end of the fallback chain, and sizesFor() must never be able to hand back nothing.
+
+  Every line is BETR proposing something, so rule 4 applies to it in full: the version of rule
+  4 that did NOT loosen on 2026-09-08. Nothing here names the habit, food, weight, the body or
+  anyone's safety, and web/lib/content.js holds it to the same three word lists as a worry.
+*/
+var BETR_GENERAL = {
+  thens: [
+    'they’ll think less of me',
+    'they’ll go quiet with me',
+    'it’ll be held against me later'
+  ],
+  /*
+    B42, 2026-09-09. THE DIAL ON THE ROAD MOST PEOPLE ARE ON. These three replaced the two
+    loose `dos` and two loose `drops` the general set used to carry, and they are the same
+    sentences turned into a dial: a name, a whole step, and the leave-out that belongs to that
+    step. Small to big, in that order, and nothing here is numbered.
+  */
+  sizes: [
+    {
+      name: 'A small go',
+      do: 'Do it once today, in the smallest version that still counts.',
+      drop: 'Don’t explain yourself.'
+    },
+    {
+      name: 'A bigger go',
+      do: 'Do the version of it you would normally talk yourself out of.',
+      drop: 'Don’t line up a way out first.'
+    },
+    {
+      name: 'The whole thing',
+      do: 'Do the whole thing today, the way you would if you weren’t worried about it.',
+      drop: 'Don’t soften it, and don’t apologise for it afterwards.'
+    }
+  ]
+};
+
+/*
+  THE FRONT DOOR'S TWELVE, IN ORDER. Twelve ids and nothing else — no sentences of their own,
+  because that is what the two files were.
+
+  These are the suggestions under the first blank on the road a person reaches from the big
+  button. Tapping one puts that worry's skeleton, with its own default words in the holes,
+  into the box as plain text. It does NOT borrow the worry: the road decides which worry a
+  test belongs to and the words never do (B40, B45 §8.4), so nothing here touches a ladder.
+
+  WHAT A PERSON GETS THAT THEY DID NOT GET YESTERDAY. Until §5c the twelve starts each carried
+  two loose plan lines and no sizes, so tapping one of them landed on the generic three. Now
+  the words in the box match a worry word for word, and the lookup hands back that worry's own
+  three predictions and its own three sizes. Twelve roads stopped being generic; nothing was
+  written to make it happen.
+
+  IT IS TWELVE AND NOT TWENTY, AND THAT IS A MEASUREMENT RATHER THAN A TASTE. The row is
+  353–998px with twelve chips on a 390px phone. The founder's canvas draws three. Twenty would
+  be the wrong direction, and which twelve is the founder's and Misha's — this is the same
+  twelve starts.js shipped after B47's cull, in the same order, so nobody's list changed today.
+
+  THE ORDER IS FIXED AND IS THE SAME FOR EVERY PERSON FOR EVER (rules 2 and 3). Nothing here
+  is ranked, scored, recently-used or personalised, and content.test.js holds the list by hand
+  so a reordering shows up in a diff.
+*/
+var BETR_FRONT = [
+  'no',      /* was start #01, say no without giving a reason */
+  'want',    /* was #02, and had no worry until today */
+  'strug',   /* #03 */
+  'enough',  /* #04 */
+  'sit',     /* #05 */
+  'rest',    /* #06 */
+  'think',   /* #07, the mockup's own example, and had no worry until today */
+  'right',   /* #08, "don’t get the last word" */
+  'ontime',  /* #09, the founder's own, and had no worry until today */
+  'praise',  /* #10 */
+  'help',    /* #11 */
+  'early'    /* #12 */
+];
+
+/*
+  Three things out of one file, and in the browser they are three plain globals. Node gets the
+  list itself, because every caller wants the list; the other two hang off it rather than
+  wrapping it in an envelope, so nothing that already reads this file had to change.
+*/
+if (typeof module === 'object' && module.exports) {
+  module.exports = BETR_WORRIES;
+  module.exports.general = BETR_GENERAL;
+  module.exports.front = BETR_FRONT;
+} else {
+  self.Betr = self.Betr || {};
+  self.Betr.worries = BETR_WORRIES;
+  self.Betr.general = BETR_GENERAL;
+  self.Betr.front = BETR_FRONT;
+}

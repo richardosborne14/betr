@@ -86,7 +86,7 @@ var BETR_DOORS = {
       id: 'work',
       label: 'Never letting myself stop',
       under: 'There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either.',
-      worries: ['rest', 'enough', 'help', 'no']
+      worries: ['rest', 'enough', 'help', 'no', 'ontime']
     },
     {
       id: 'temper',
@@ -111,7 +111,7 @@ var BETR_DOORS = {
         in the line at all. Three sentences, three worries, same job: recognition.
       */
       under: 'Yes when you meant no. Nothing said when something’s annoyed you. Doing it all yourself rather than asking.',
-      worries: ['help', 'no', 'angry']
+      worries: ['help', 'no', 'angry', 'want', 'think']
     }
   ]
 };

@@ -52,8 +52,10 @@ never automatic (§6).
 - **Not a habit tracker, not a sobriety counter, not a journal.** TrybeUP already is those.
 - **Not adaptive.** It never scores, personalises, or picks for you. A fixed list you choose
   from is a chapter in a book; a system that chooses for you is a device (research §5.2).
-  *Unchanged by B28:* the suggestion chips under each blank are fixed content in
-  `web/content/starts.js`, in a fixed order, and BETR never picks one.
+  *Unchanged by B28:* the suggestion chips under each blank are fixed content in a fixed
+  order, and BETR never picks one. *Amended 2026-09-10 (B45 §5c):* they live in
+  `web/content/worries.js` — they ARE twelve of the ready-made worries, which is what they had
+  been describing a second time in their own words since B30.
 - **Not a chatbot.** Two prototypes went that way and both read as "an AI that wants your
   secrets". There is no conversation and nothing answers anybody. *Amended 2026-09-08 (B28,
   founder):* **free text is now the front door** rather than the last button — two blanks in

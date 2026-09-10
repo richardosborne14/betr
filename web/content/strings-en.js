@@ -235,8 +235,23 @@ var BETR_STRINGS_EN = {
       thenWord: ', then',
       ifLabel: 'If I — what would you do?',
       thenLabel: 'Then what — what are you sure will happen?',
-      ifPlaceholder: 'say no without giving a reason',
-      thenPlaceholder: 'they’ll think I’m being difficult',
+      /*
+        B45 §5c, 2026-09-10, AND THEY ARE THE FIRST SUGGESTION WORD FOR WORD. NOT MISHA'S YET.
+
+        A placeholder in a blank is an example of what goes in it, and somebody will type it
+        out rather than tap it — B34 D1 is the bug that came of that. Until today these two
+        were start #01 of a file that no longer exists, and after the merge they matched
+        nothing: typing the greyed-out words got the general three, while the chip directly
+        underneath them, saying almost the same thing, got the worry `no`'s own three. Same
+        words, two answers.
+
+        So both are now exactly what the first chip says and what the second blank will offer
+        after it, and loop.test.js fails the build if they drift apart again. They changed
+        because the content moved, not because anybody rewrote them, and they are in
+        docs/COPY.md for Misha with everything else.
+      */
+      ifPlaceholder: 'say no to somebody without giving a reason',
+      thenPlaceholder: 'somebody will think I’m selfish',
       ifChips: 'Or start from one of these:',
       thenChips: 'Or one of these:',
       /*

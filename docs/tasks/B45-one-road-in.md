@@ -1,9 +1,9 @@
 # B45: One road in — collapsing three ways of writing a test into one
 
-**Status:** **§6 and §5d shipped in B46. §5b SHIPPED 2026-09-09 — every worry has its own
-three sizes. §5e's core SHIPPED 2026-09-10 — the do screen has ONE shape on every road, and
-§2's "worst single fact" is gone (see §12). §5c (one content file) and the four screen-shape
-drifts are what is left.**
+**Status:** **§6 and §5d shipped in B46. §5b SHIPPED 2026-09-09. §5e's core SHIPPED
+2026-09-10 (§12). §5c SHIPPED 2026-09-10 — `starts.js` is gone, there is one content file,
+and `startFor()` went with it (§13). What is left is the four screen-shape drifts in §3, and
+§7a, which is the founder's.**
 **Status when it was written:** **SCOPED, not started. No longer blocked** — the founder supplied the current mockup
 on 2026-09-09 and it answers both questions the first draft of this file was waiting on.
 **Confidence:** 9/10 in the diagnosis — every number below was measured in a browser today.
@@ -421,3 +421,106 @@ The box's placeholder on arrival is **"Or put it in your own words."** — and i
 the three it is saying "or" about, on every road. The founder's canvas has *"Write what you'll
 do, or start from one of the three below."* in that box, which reads in the right order.
 **One string, Misha's and the founder's, and it would be a one-line change.**
+
+## 13. What §5c shipped, 2026-09-10 — one content file
+
+**`web/content/starts.js` no longer exists.** Twenty worries, one shape, one file. `startFor()`
+— the invisible lookup §9 asks for the head of — is gone with it, and §9's fourth bullet is met.
+
+### What was actually in the two files
+
+Twelve starts. **Nine were the same act as a worry already in `worries.js`**, written a second
+time, in a second shape, with its own three predictions and no sizes at all. Three were not a
+worry at all — and one of those three, *say what I actually think*, is the act the founder's
+canvas builds all seven of its screens on.
+
+It read like duplication. It was a fork: two wordings, both shipped, each reached down a road a
+person cannot see, neither named as the live one. That is [`learnings.md`](../learnings.md)'s
+entry for the day.
+
+### What changed
+
+| | before | after |
+| --- | --- | --- |
+| content files describing a worry | 2 | **1** |
+| worries | 17 | **20** — `want`, `think` and `ontime` had no worry and now do |
+| the front door's twelve suggestions | twelve sentences of their own | **twelve worry ids**, in the same order |
+| the second blank, after tapping one | that start's three `thens` | **that worry's three predictions** |
+| the plan screen, after tapping one | the generic three | **that worry's own three sizes** |
+| sentences BETR proposes, swept by the word lists | 102 | **269** |
+| rows the reviewer is being asked to score | 314 | **295** (58 duplicate start rows out, 39 new worry rows in) |
+
+- **`worries.js` also holds the two things that were never a worry.** `BETR_GENERAL` — the three
+  predictions and three sizes a sentence BETR did not write falls through to — and `BETR_FRONT`,
+  which twelve of the worries the first blank offers, in what order. Both are validated by rules
+  of their own (`validateGeneral`, `validateFront`).
+- **`matchFor()` replaced `startFor()`.** It matches the first blank against a worry's skeleton
+  with its holes at their own default words — the same sentence the chip printed. Word for word
+  or nothing, and **it does not borrow**: it hands back suggestions and never an id, so §8.4
+  holds and no ladder is touched by what somebody typed.
+- **A skeleton is required on a worry now**, the way `sizes` became required in §5b. It was
+  optional through B41 and B42, and that optionality WAS the second build screen. Three dead
+  `f.skeleton ? … : …` branches went with it.
+- **`why.js` gained three entries**, because an explanation may never outlive — or predate — the
+  worry it explains.
+- **The `yes` door is off `THIN_DOORS`.** It had been a dated exception at three since B47's cull;
+  `want` and `think` are the door's own content, not borrowed from another one, and it is five.
+- **The placeholders in both blanks are the first suggestion word for word.** They were start #01
+  of a file that no longer exists, and after the merge they matched nothing — so typing the greyed
+  words got the general three while the chip directly under them got `no`'s own. A new test holds
+  them together.
+
+### The one overlapping pair where the start's wording won
+
+`rest` prediction 3 said *"somebody will think I'm not pulling my weight"*. `S08-P3` said
+*"somebody will think I've gone slack"* for the same act and **had already been through the
+founder**; the worry's had not. It also carried a word-list hit — "weight" is on the `BODY` list —
+which only surfaced because the sweep in `content.test.js` widened from 102 lines to 269 and
+started reading predictions. An idiom about workload reading as a sentence about a body.
+
+Everywhere else the worry's wording survived, because it is the one with the holes, the `expect`
+and the three sizes. **The three orphans carry their start's predictions forward** — all nine,
+reworded to start from the new skeleton — so nothing the founder had already read was thrown away.
+
+### Walked, 390×844, all three roads
+
+1. **Tapped** BETR's first suggestion → *say no to somebody without giving a reason* → `no`'s own
+   three predictions → **`no`'s own three sizes**: *"Say no to somebody once today, about
+   something small."* Before today that road got *"Do it once today, in the smallest version that
+   still counts."*
+2. **Typed** a sentence BETR did not write → the general three, as it should.
+3. **Borrowed** `think` through the `yes` door, *my brother* in the hole → three predictions and
+   three sizes carrying her word, through to the ladder.
+
+### Measured, and it is one number the next session needs
+
+**The chip row grew.** Twelve chips were 353–998px (645 tall); they are now **382–1050px (669
+tall)**, because a worry's sentence is longer than a start's was — *say no to **somebody**
+without giving a reason*. **`What will you do?` is at 271 and unaffected**, because it sits above
+the row. But **difference 6 — moving that button below the suggestions, as the canvas draws it —
+is further out of reach than §3 measured it**, not closer. It waits on a cull of the twelve, or
+on the founder accepting the fold.
+
+### Three things this leaves open, and all three are somebody else's
+
+1. **`ontime` is behind `work` and it is the weakest door fit of the twenty.** "Never letting
+   myself stop" is about standards, and so is refusing to arrive without a margin — but nobody has
+   said that is where a person would look for it. **Founder's and Misha's.**
+2. **The standing-in word does double duty on the front door.** *If I say no to **somebody**
+   without giving a reason, then **somebody** will think I'm selfish.* It reads as one person and
+   it is meant to; on the worry road she has typed a name and it is unambiguous. **Misha's**, and
+   it is in `docs/COPY.md`.
+3. **The `yes` door's own line still names three worries and it has five.** It was already unread
+   by Misha after B47 rewrote it; it is now also out of date.
+
+### What it did not do
+
+**Difference 3 — a size's own second hole — is still not built, and §3 of the handoff is right
+that it is difference 5.** Nothing in the merge needed it and no size has one.
+
+**Confidence: 8/10.** 9 on the code — one file, one lookup, three dead branches gone, 259 tests
+pass and the loop was walked on all three roads in Chrome. **6 on the content**, and honestly so:
+three new worries are 39 unreviewed sentences that BETR proposes, written in one session by
+somebody who is not the reviewer. They are in `docs/suggestions-review.csv` with a flag on each,
+and `W-THINK-D3` and `W-ONTIME-D3` carry a direct question about whether the largest step is safe
+as written. **Nothing here should reach a person before the reviewer has read those 39 rows.**

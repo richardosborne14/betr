@@ -4,14 +4,14 @@
 rewritten from the source every time that command runs, so anything typed here is lost.
 Mark it up, send it back, and the change gets made in the file named next to each section.
 
-There are 4 front-screen examples, 12 suggestion starts, 17 to borrow from, 6 doors and 17 explanations in this build.
+There are 4 front-screen examples, 20 to borrow from — 12 of which the front door also offers — 6 doors and 20 explanations in this build.
 
 | Part | What it is | Which file |
 | --- | --- | --- |
 | [Frozen](#frozen) | Cannot be changed by anyone here | `strings-en.js` |
 | [The screens](#the-screens) | Every sentence of the interface | `strings-en.js` |
 | [The front-screen example](#the-front-screen-example) | The first thing anybody sees | `examples.js` |
-| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `starts.js` |
+| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `worries.js` |
 | [The list you can borrow from](#the-worry-list) | Six parts each | `worries.js` |
 | [The doors](#the-doors) | "What’s going on?" | `whats-going-on.js` |
 | [Why this one sticks](#why-this-one-sticks) | One explanation per worry | `why.js` |
@@ -894,11 +894,11 @@ keep it, and put it wherever the sentence needs it.
 
 **`build.ifPlaceholder`**
 
-> say no without giving a reason
+> say no to somebody without giving a reason
 
 **`build.thenPlaceholder`**
 
-> they’ll think I’m being difficult
+> somebody will think I’m selfish
 
 **`build.ifChips`**
 
@@ -1023,178 +1023,54 @@ what happened in this one.
 
 ## The suggestions under the blanks
 
-`web/content/starts.js`. The screen prints **If I** and **, then** either side of two gaps,
-and these are what a person can tap into them instead of typing. Fixed content in a fixed
-order; which set of predictions is offered depends on one thing only — whether the first
-gap holds one of these situations, word for word.
+`web/content/worries.js`. The screen prints **If I** and **, then** either side of two
+gaps, and these are what a person can tap into them instead of typing. Fixed content in a
+fixed order; which set of predictions is offered depends on one thing only — whether the
+first gap holds one of these situations, word for word.
+
+**They are twelve of the ready-made worries below, in this order.** Until 2026-09-10 they
+were a separate list with their own wording, and nine of the twelve said the same thing as
+a worry in different words. Reading one of these means reading that worry, further down.
+
+| | the words in the first gap | the worry it is |
+| --- | --- | --- |
+| 1 | If I say no to somebody without giving a reason… | Saying no without giving a reason |
+| 2 | If I ask somebody straight out for what I actually want… | Asking for what I actually want |
+| 3 | If I tell somebody one true thing I’m finding hard… | Telling someone I’m struggling |
+| 4 | If I hand over something at good enough… | Handing something over before it’s perfect |
+| 5 | If I sit with the restlessness for ten minutes… | Sitting still when I feel restless |
+| 6 | If I rest for two hours while there’s still stuff to do… | Resting when there’s stuff to do |
+| 7 | If I tell somebody what I actually think… | Saying what I actually think |
+| 8 | If I tell somebody they’re right and leave it there… | Letting someone else be right |
+| 9 | If I leave ten minutes later than I normally would… | Leaving later than I normally would |
+| 10 | If I say one specific good thing to somebody out loud… | Paying someone a compliment |
+| 11 | If I ask somebody for one small, specific favour… | Asking someone for help |
+| 12 | If I leave at the time I decided and say plainly that I’m going… | Leaving before everyone else does |
+
+The words in the middle column are the worry’s own sentence with its **standing-in word**
+in the gap — *somebody*, *something*, *ten minutes*. On this route nobody has typed a name
+yet, so the standing-in word is what shows.
+
+### The general set — shown when somebody has written their own situation
 
 An **if** and a **then** are lowercase, because they follow printed words and have to read
 as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.
 So is the **name** of a size, because it is a label on a button.
 
-**Two rows in each situation below are marked *(parked)*.** They were the two suggestions
-under *What will you do today?* until 2026-09-10, and every route through the app now shows
-the three sizes above instead. Nothing draws them. They are still printed here because nine
-of these twelve situations are the same act as a ready-made worry, and which of the two
-wordings survives is a decision with the reviewer that has not been made. **Nobody needs to
-read a parked line for tone.**
-
-### The general set — shown when somebody has written their own situation
-
 | | |
 | --- | --- |
 | **then** | they’ll think less of me · they’ll go quiet with me · it’ll be held against me later |
 
-**How big a go.** Three steps, smallest first. Tapping one fills both boxes. Every road
-that has no three of its own lands on these. Never more than three, never fewer, and never
-a number on one of them.
+**How big a go.** Three steps, smallest first. Tapping one fills both boxes. This set is
+what somebody lands on when they have written a situation of their own; a gap holding one
+of the twelve above gets that worry’s own three instead. Never more than three, never
+fewer, and never a number on one of them.
 
 | | how big | what you’d do | what you’d leave out |
 | --- | --- | --- | --- |
 | 1 | A small go | Do it once today, in the smallest version that still counts. | Don’t explain yourself. |
 | 2 | A bigger go | Do the version of it you would normally talk yourself out of. | Don’t line up a way out first. |
 | 3 | The whole thing | Do the whole thing today, the way you would if you weren’t worried about it. | Don’t soften it, and don’t apologise for it afterwards. |
-
-### 1. If I say no without giving a reason…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll think I’m being difficult |
-| **then** 2 | they’ll stop asking me |
-| **then** 3 | they’ll be off with me for days |
-| **do** 1 *(parked)* | Say no to one thing today, in one sentence. |
-| **do** 2 *(parked)* | Turn down one request without explaining why. |
-| **leave out** 1 *(parked)* | Don’t give a reason. |
-| **leave out** 2 *(parked)* | Don’t offer to make up for it another way. |
-
-### 2. If I ask for what I actually want…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll say no and I’ll feel stupid |
-| **then** 2 | they’ll think I’m taking advantage |
-| **then** 3 | it’ll change how they see me |
-| **do** 1 *(parked)* | Ask for one thing today, straight out. |
-| **do** 2 *(parked)* | Ask once, and don’t soften it. |
-| **leave out** 1 *(parked)* | Don’t say “only if it’s no trouble”. |
-| **leave out** 2 *(parked)* | Don’t ask for less than you want. |
-
-### 3. If I tell someone I’m struggling…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll change the subject |
-| **then** 2 | they’ll think less of me |
-| **then** 3 | they’ll start treating me carefully |
-| **do** 1 *(parked)* | Tell one person one true sentence about how this week has been. |
-| **leave out** 1 *(parked)* | Don’t follow it with “but I’m fine”. |
-| **leave out** 2 *(parked)* | Don’t make a joke of it. |
-
-### 4. If I hand something over before it’s perfect…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll spot everything wrong with it |
-| **then** 2 | they’ll think I’ve stopped caring |
-| **then** 3 | it’ll come straight back to me with a list |
-| **do** 1 *(parked)* | Leave one thing at good enough today and hand it over. |
-| **do** 2 *(parked)* | Stop at the time you planned, and send what you have. |
-| **leave out** 1 *(parked)* | No last read-through. |
-| **leave out** 2 *(parked)* | Don’t say what you’d have done with more time. |
-
-### 5. If I sit still with the restlessness…
-
-| | |
-| --- | --- |
-| **then** 1 | it’ll build until I have to do something about it |
-| **then** 2 | I’ll be no use for the rest of the day |
-| **then** 3 | it won’t pass on its own |
-| **do** 1 *(parked)* | Set ten minutes and sit with it. Write down the time it eased. |
-| **do** 2 *(parked)* | Stay where you are for one urge, and time it. |
-| **leave out** 1 *(parked)* | Don’t pick anything up. |
-| **leave out** 2 *(parked)* | Don’t get up to do a job. |
-
-### 6. If I rest while there’s still stuff to do…
-
-| | |
-| --- | --- |
-| **then** 1 | I’ll feel guilty the whole time |
-| **then** 2 | I won’t start again today |
-| **then** 3 | somebody will think I’ve gone slack |
-| **do** 1 *(parked)* | Take an hour off today and do something just for yourself. |
-| **do** 2 *(parked)* | Sit down for half an hour with nothing to show for it. |
-| **leave out** 1 *(parked)* | No “I’ll just quickly do this one thing” first. |
-| **leave out** 2 *(parked)* | Put the to-do list out of sight before you sit down. |
-
-### 7. If I say what I actually think…
-
-| | |
-| --- | --- |
-| **then** 1 | it’ll turn into a row |
-| **then** 2 | they’ll go quiet with me |
-| **then** 3 | they’ll decide I’m hard work |
-| **do** 1 *(parked)* | Say the thing you’d normally leave, once, in one sentence. |
-| **do** 2 *(parked)* | Disagree out loud with one person today. |
-| **leave out** 1 *(parked)* | Don’t soften it with a joke. |
-| **leave out** 2 *(parked)* | Don’t apologise for saying it. |
-
-### 8. If I don’t get the last word…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll think they’ve won |
-| **then** 2 | they won’t remember what I said |
-| **then** 3 | I’ll be going over it all night |
-| **do** 1 *(parked)* | Say your bit once, and stop. |
-| **leave out** 1 *(parked)* | Don’t send the follow-up message. |
-| **leave out** 2 *(parked)* | Don’t keep making new points. |
-
-### 9. If I don’t rush to be early…
-
-| | |
-| --- | --- |
-| **then** 1 | I’ll be late and it’ll look bad |
-| **then** 2 | they’ll think I don’t take it seriously |
-| **then** 3 | the whole day will run behind |
-| **do** 1 *(parked)* | Leave at the time it actually takes, once, and write down when you arrived. |
-| **do** 2 *(parked)* | Arrive on time rather than early, once. |
-| **leave out** 1 *(parked)* | Don’t leave a buffer. |
-| **leave out** 2 *(parked)* | Don’t message ahead to say where you are. |
-
-### 10. If I say something good about somebody…
-
-| | |
-| --- | --- |
-| **then** 1 | it’ll come out wrong |
-| **then** 2 | they’ll be embarrassed |
-| **then** 3 | they’ll think I want something |
-| **do** 1 *(parked)* | Tell one person one specific thing they did well. |
-| **leave out** 1 *(parked)* | Don’t follow it with a joke. |
-| **leave out** 2 *(parked)* | Don’t add “anyway”. |
-
-### 11. If I ask somebody for help…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll think I can’t cope |
-| **then** 2 | they’ll say yes and resent it |
-| **then** 3 | they’ll say no |
-| **do** 1 *(parked)* | Ask one person for one specific thing today. |
-| **do** 2 *(parked)* | Ask for help with something you could just about manage alone. |
-| **leave out** 1 *(parked)* | Don’t say “if you’ve got a minute”. |
-| **leave out** 2 *(parked)* | Don’t do half of it first. |
-
-### 12. If I leave early and say plainly that I’m going…
-
-| | |
-| --- | --- |
-| **then** 1 | they’ll take it as a snub |
-| **then** 2 | they’ll ask questions I don’t want to answer |
-| **then** 3 | I won’t get asked again |
-| **do** 1 *(parked)* | Leave one thing when you want to, and say plainly that you’re off. |
-| **do** 2 *(parked)* | Say goodbye once, and go. |
-| **leave out** 1 *(parked)* | Don’t invent a reason. |
-| **leave out** 2 *(parked)* | Don’t stay for one more of anything. |
 
 ---
 
@@ -1358,7 +1234,7 @@ The three a person chooses between, in the order they are shown:
 | --- | --- | --- |
 | 1 | If I rest for {long} while there’s still stuff to do, then I’ll feel guilty the whole time. | I’ll sit there thinking about the list and get nothing out of it. |
 | 2 | If I rest for {long} while there’s still stuff to do, then I won’t start again today. | The afternoon will go, and tomorrow starts further behind. |
-| 3 | If I rest for {long} while there’s still stuff to do, then somebody will think I’m not pulling my weight. | Somebody will make a comment about it, and it’ll stick. |
+| 3 | If I rest for {long} while there’s still stuff to do, then somebody will think I’ve gone slack. | Somebody will make a comment about it, and it’ll stick. |
 
 ### 5. Paying someone a compliment
 
@@ -1432,7 +1308,43 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} one specific thing I’m glad about them, then it’ll change how we are with each other. | It’ll be a bit stiff between us afterwards. |
 | 3 | If I tell {person} one specific thing I’m glad about them, then {person} will wonder what’s brought this on. | They’ll ask if I’m all right, and I’ll have to explain myself. |
 
-### 7. Saying no without giving a reason
+### 7. Leaving later than I normally would
+
+| | |
+| --- | --- |
+| **id** | `ontime` |
+| **lane** | perfectionism |
+| **label** — the button | Leaving later than I normally would |
+| **card sentence** — under the label on the list | If I cut the extra time out, then something will go wrong. |
+| **test** — the one thing, today | Leave {long} later than you normally would, once, and write down what time you actually arrived. |
+| **drop** — what you leave out | Don’t message ahead to say where you are. |
+
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I leave {long} later than I normally would |
+| **the gap `{long}`** — its word while it is empty | ten minutes |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Leave {long} later than you normally would, once, and write down what time you actually arrived. | Don’t message ahead to say where you are. |
+| 2 | A bigger go | Leave {long} later for something that actually matters to you. | Don’t message ahead, and don’t make the time back by hurrying. |
+| 3 | The whole thing | Leave with nothing built in at all, and arrive when you arrive. | No spare time, no message ahead, and no apologising for the time you got there. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I leave {long} later than I normally would, then I’ll be late and it’ll look bad. | I’ll walk in after it started and everybody will clock it. |
+| 2 | If I leave {long} later than I normally would, then people will think I don’t take it seriously. | Somebody will make a remark about the time I got there. |
+| 3 | If I leave {long} later than I normally would, then the rest of the day will run behind. | One late start and everything after it slides. |
+
+### 8. Saying no without giving a reason
 
 | | |
 | --- | --- |
@@ -1468,7 +1380,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say no to {person} without giving a reason, then {person} will stop asking me. | I’ll be left out of the next one, and nobody will say why. |
 | 3 | If I say no to {person} without giving a reason, then {person} will take it as rude. | They’ll take it personally, and it’ll sit there between us. |
 
-### 8. Asking someone for help
+### 9. Asking someone for help
 
 | | |
 | --- | --- |
@@ -1504,7 +1416,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I ask {person} for one small, specific favour, then I’ll be trusted with less. | Next time it’ll go to somebody else, without a word to me. |
 | 3 | If I ask {person} for one small, specific favour, then {person} will say yes and resent it. | They’ll help, and be a bit short with me for a while after. |
 
-### 9. Telling someone I’ve been feeling low
+### 10. Telling someone I’ve been feeling low
 
 | | |
 | --- | --- |
@@ -1540,7 +1452,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} I’ve been feeling low lately, then {person} will start worrying about me. | They’ll check up on me, and I’ll wish I’d never said it. |
 | 3 | If I tell {person} I’ve been feeling low lately, then it’s the thing {person} thinks of every time they see me. | I’ll be the one who isn’t doing well, and that’s what I’ll stay. |
 
-### 10. Telling someone I’m struggling
+### 11. Telling someone I’m struggling
 
 | | |
 | --- | --- |
@@ -1576,7 +1488,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} one true thing I’m finding hard, then {person} will wonder what else I can’t manage. | It’ll come up again the next time something needs doing. |
 | 3 | If I tell {person} one true thing I’m finding hard, then I’ll be the one everybody has to work around. | People will start being careful with me, and I’ll hate it. |
 
-### 11. Telling someone they’ve annoyed me
+### 12. Telling someone they’ve annoyed me
 
 | | |
 | --- | --- |
@@ -1612,7 +1524,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} one thing they’ve done that annoyed me, then {person} will say I’m making something out of nothing. | I’ll come out of it feeling like the unreasonable one. |
 | 3 | If I tell {person} one thing they’ve done that annoyed me, then things will be off between us for days. | It’ll be polite and cold, and I’ll be the one who has to fix it. |
 
-### 12. Letting someone else be right
+### 13. Letting someone else be right
 
 | | |
 | --- | --- |
@@ -1648,7 +1560,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I tell {person} they’re right and leave it there, then {person} will talk over me from then on. | Next time they won’t even wait for my answer. |
 | 3 | If I tell {person} they’re right and leave it there, then nobody will ask what I think again. | The conversation will move on, and I’ll stay out of it. |
 
-### 13. Letting someone finish without interrupting
+### 14. Letting someone finish without interrupting
 
 | | |
 | --- | --- |
@@ -1684,7 +1596,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I let {person} finish before I say my bit, then I’ll forget what I was going to say. | It’ll go out of my head and I’ll sit there with nothing. |
 | 3 | If I let {person} finish before I say my bit, then {person} will take the whole conversation. | I’ll come out of it having said nothing at all. |
 
-### 14. Getting through a conversation without a joke
+### 15. Getting through a conversation without a joke
 
 | | |
 | --- | --- |
@@ -1720,7 +1632,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say the plain thing to {person} where I’d normally reach for the joke, then it’ll get too serious and {person} will be uncomfortable. | There’ll be a silence, and I’ll be the one who made it. |
 | 3 | If I say the plain thing to {person} where I’d normally reach for the joke, then nobody will bother keeping it going. | It’ll be hard work, and they’ll leave earlier than they would have. |
 
-### 15. Apologising without explaining myself
+### 16. Apologising without explaining myself
 
 | | |
 | --- | --- |
@@ -1756,7 +1668,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I say sorry to {person} for one specific thing I did, then {person} will think it was worse than it was. | They’ll decide something’s wrong with me, on the strength of one bad day. |
 | 3 | If I say sorry to {person} for one specific thing I did, then I’ve taken the whole thing on myself. | Their part in it never gets mentioned again. |
 
-### 16. Turning up and not joining in
+### 17. Turning up and not joining in
 
 | | |
 | --- | --- |
@@ -1792,7 +1704,7 @@ The three a person chooses between, in the order they are shown:
 | 2 | If I turn up to {thing} and don’t join in, then I’ll spoil it for everybody else. | It’ll go a bit flat, and they’ll wish I hadn’t come. |
 | 3 | If I turn up to {thing} and don’t join in, then I won’t enjoy any of it. | I’ll be counting the minutes and wishing I’d stayed at home. |
 
-### 17. Leaving before everyone else does
+### 18. Leaving before everyone else does
 
 | | |
 | --- | --- |
@@ -1826,6 +1738,78 @@ The three a person chooses between, in the order they are shown:
 | 1 | If I leave at the time I decided and say plainly that I’m going, then people will think I’m boring and stop asking me. | Someone will try to talk me into staying, and I’ll feel like I’ve let them down. |
 | 2 | If I leave at the time I decided and say plainly that I’m going, then they’ll talk about me once I’ve gone. | There’ll be a comment about it, and I’ll hear it repeated later. |
 | 3 | If I leave at the time I decided and say plainly that I’m going, then I’ll have missed the part everyone remembers. | They’ll be laughing about something next week and I won’t have been there. |
+
+### 19. Asking for what I actually want
+
+| | |
+| --- | --- |
+| **id** | `want` |
+| **lane** | assertiveness |
+| **label** — the button | Asking for what I actually want |
+| **card sentence** — under the label on the list | If I say what I actually want, then I’ll be asking too much. |
+| **test** — the one thing, today | Ask {person} for one thing you actually want today, in one sentence. |
+| **drop** — what you leave out | Don’t ask for less than you want. |
+
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I ask {person} straight out for what I actually want |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Ask {person} for one thing you actually want today, in one sentence. | Don’t ask for less than you want. |
+| 2 | A bigger go | Ask {person} for the thing you’d normally settle below. | Don’t ask for less than you want, and don’t offer anything in return. |
+| 3 | The whole thing | Ask {person} for the whole of what you want, and let them answer it. | Nothing scaled down, no “only if it’s no trouble”, and nothing offered back. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I ask {person} straight out for what I actually want, then {person} will think I’m taking advantage. | They’ll say yes, and think less of me for having asked. |
+| 2 | If I ask {person} straight out for what I actually want, then I’ll get a no and feel stupid for asking. | A flat no, and I’ll wish I’d never brought it up. |
+| 3 | If I ask {person} straight out for what I actually want, then it’ll change how {person} sees me. | I’ll be filed as somebody who wants a lot. |
+
+### 20. Saying what I actually think
+
+| | |
+| --- | --- |
+| **id** | `think` |
+| **lane** | social |
+| **label** — the button | Saying what I actually think |
+| **card sentence** — under the label on the list | If I say what I really think, then it costs me more than it’s worth. |
+| **test** — the one thing, today | Tell {person} one thing you think and would normally leave unsaid, in one sentence. |
+| **drop** — what you leave out | Don’t soften it with a joke. |
+
+**This one has a blank in it.** On the screen BETR prints the words below and puts a small gap where the `{...}` is, for the person to write in. Whatever they write appears in all three sentences underneath, in the same breath. Leave it empty and the sentence still reads, using the fallback word.
+
+| | |
+| --- | --- |
+| **printed** | If I tell {person} what I actually think |
+| **the gap `{person}`** — its word while it is empty | somebody |
+
+**How big a go.** Three steps, smallest first, shown on the screen after the sentence.
+Tapping one fills both boxes. Three, always — never a fourth, never one that appears
+because the last one went well, and never a number on any of them.
+
+| | how big | what you’d do | what you’d leave out |
+| --- | --- | --- | --- |
+| 1 | A small go | Tell {person} one thing you think and would normally leave unsaid, in one sentence. | Don’t soften it with a joke. |
+| 2 | A bigger go | Tell {person} where you actually disagree with them, out loud. | Don’t soften it with a joke, and don’t apologise for saying it. |
+| 3 | The whole thing | Say the whole of what you think to {person}, and let it sit there. | No joke, no apology, and nothing taken back later in the day. |
+
+The three a person chooses between, in the order they are shown:
+
+| | If I ___, then ___ | braced for |
+| --- | --- | --- |
+| 1 | If I tell {person} what I actually think, then it’ll turn into a row. | It’ll go up a level and we’ll both say more than we meant. |
+| 2 | If I tell {person} what I actually think, then {person} will go quiet with me. | A short answer, and then nothing for a couple of days. |
+| 3 | If I tell {person} what I actually think, then {person} will decide I’m hard work. | I’ll be the difficult one from then on. |
 
 ---
 
@@ -1876,7 +1860,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **id** | `work` |
 | **label** | Never letting myself stop |
 | **under** | There’s always something left, so sitting down feels like getting away with something. Nothing you hand over is quite finished either. |
-| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Asking someone for help · Saying no without giving a reason |
+| **opens onto** | Resting when there’s stuff to do · Handing something over before it’s perfect · Asking someone for help · Saying no without giving a reason · Leaving later than I normally would |
 
 ### 4. Taking it out on the people closest to me
 
@@ -1903,7 +1887,7 @@ what frozen sentence 4 already says, at the one moment it is relevant.
 | **id** | `yes` |
 | **label** | Going along with things I don’t want to do |
 | **under** | Yes when you meant no. Nothing said when something’s annoyed you. Doing it all yourself rather than asking. |
-| **opens onto** | Asking someone for help · Saying no without giving a reason · Telling someone they’ve annoyed me |
+| **opens onto** | Asking someone for help · Saying no without giving a reason · Telling someone they’ve annoyed me · Asking for what I actually want · Saying what I actually think |
 
 ---
 
@@ -1977,6 +1961,16 @@ The closing line is the same under all twelve and lives with the interface, as `
 **why** — which safety behaviour keeps it from being tested
 
 > The joke is the way out, and it is a good one — turn it into a laugh and nothing was risked, so nothing can be lost. It also means what comes back is a response to the joke. Say the plain version, then stop talking, and whatever happens is a response to you.
+
+### Leaving later than I normally would — `ontime`
+
+**what** — what the worry is, underneath the situation
+
+> Extra time is not really about the journey. It is insurance against how it would look to walk in late — careless, not bothered, somebody who does not take it seriously. So the margin grows and the day gets built around it.
+
+**why** — which safety behaviour keeps it from being tested
+
+> And the margin is why it never settles. Arrive early enough and nothing goes wrong, so the buffer takes the credit and the question stays open. Leave later once, without a message ahead to soften it, and what you find out is what the time you actually arrived is worth.
 
 ### Saying no without giving a reason — `no`
 
@@ -2087,6 +2081,26 @@ The closing line is the same under all twelve and lives with the interface, as `
 **why** — which safety behaviour keeps it from being tested
 
 > A reason at the door, or a promise about next time, is what keeps that from being tested. Both work, both end the conversation, and both mean you go home knowing nothing. Decide the time first, say one sentence, and go.
+
+### Asking for what I actually want — `want`
+
+**what** — what the worry is, underneath the situation
+
+> This one is rarely about the thing you want. It is about what wanting it out loud seems to say — that you take up room, that you have got an opinion about your own share. So the ask comes out smaller than the want.
+
+**why** — which safety behaviour keeps it from being tested
+
+> Asking for less is what keeps it going. Ask below what you actually want and a yes tells you nothing, because nobody has been asked the real question yet. The small ask gets the credit for the smooth answer. Ask once, at full size, and you find out what they say to the thing you meant.
+
+### Saying what I actually think — `think`
+
+**what** — what the worry is, underneath the situation
+
+> The worry is not about the opinion. It is about what having one out loud costs you with somebody — a row, a cool few days, being filed as hard work. So the thought arrives with something wrapped round it.
+
+**why** — which safety behaviour keeps it from being tested
+
+> The wrapping is the part that keeps it untested. A joke on the end, or an apology in front, and whatever happens next is about the wrapping rather than the thing you said. Say it plainly once, leave it there, and the answer you get is to what you actually think.
 
 ---
 

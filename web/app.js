@@ -33,7 +33,8 @@
   var storeLib = Betr.store;
   var content = Betr.content;
   var WORRIES = Betr.worries;
-  var STARTS = Betr.starts;
+  var GENERAL = Betr.general;
+  var FRONT = Betr.front;
   var EXAMPLES = Betr.examples;
   var DOORS = Betr.doors;
   var PLACES = Betr.places;
@@ -491,8 +492,7 @@
       so `draft.ifPart` reads properly from the first paint even though nothing is typed in
       yet, and everything downstream can go on treating it as one string.
     */
-    draft.ifPart = f.skeleton ? content.fill(f.skeleton.if, {}, f.skeleton.holes)
-                              : splitBelief(f.belief)[0];
+    draft.ifPart = saidPlainly(f);
     /*
       B42, 2026-09-09, AND FINISHED IN B45 §5e: THE PLAN IS NEVER PRE-FILLED. The three sizes
       ARE the choice, and a box arriving with one of them already in it would be BETR having
@@ -1055,7 +1055,7 @@
   }
 
   /*
-    The start a typed first blank matches, or null. Word for word, ignoring case and the
+    The worry a typed first blank matches, or null. Word for word, ignoring case and the
     punctuation a person's keyboard might have added — and nothing cleverer than that, ever.
   */
   /* \u0027 is a straight apostrophe. Written as an escape so the sweep in i18n.test.js,
@@ -1065,28 +1065,59 @@
       .replace(/[^a-z0-9\u2019\u0027 ]+/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
-  function startFor(ifPart) {
+  /*
+    B45 §5c, 2026-09-10. IT USED TO LOOK IN THE OTHER FILE, AND THERE IS NO OTHER FILE.
+
+    `startFor()` matched the first blank against the twelve `if` lines in starts.js — twelve
+    sentences describing nine acts that were already worries here, in different words, with
+    their own predictions and no sizes at all. Now the lookup is against the worries
+    themselves, so a person who taps "say no to somebody without giving a reason" on the front
+    door gets the predictions and the three sizes that the worry road has always had for it.
+
+    IT IS STILL A LOOKUP AND NOT A JUDGEMENT (rules 2 and 3). Word for word or nothing: no
+    scoring, no ranking, no closest match, and nothing decided by what this person has typed
+    or done before. If a future session is tempted to add fuzzy matching, this is the line.
+
+    AND IT DOES NOT BORROW. Matching hands back suggestions and never an id, so nothing here
+    can attach a test to a worry's belief ladder. The road decides which worry a test belongs
+    to; the words never do (B40, B45 §8.4).
+
+    A worry is matched on its skeleton with every hole at its own default word, which is
+    exactly the sentence the chip printed.
+  */
+  function saidPlainly(f) {
+    return content.fill(f.skeleton.if, {}, f.skeleton.holes);
+  }
+
+  function matchFor(ifPart) {
     var want = flat(ifPart);
     if (!want) return null;
-    for (var i = 0; i < STARTS.items.length; i++) {
-      if (flat(STARTS.items[i].if) === want) return STARTS.items[i];
+    for (var i = 0; i < WORRIES.length; i++) {
+      if (flat(saidPlainly(WORRIES[i])) === want) return WORRIES[i];
     }
     return null;
   }
 
   /*
-    The second blank's three suggestions: the ones written for those exact words where a start
-    matches them, and the general three everywhere else.
+    The second blank's three suggestions: the matched worry's own three predictions where the
+    first blank holds one of our sentences, and the general three everywhere else.
 
-    B45 §5e, 2026-09-10. IT SERVED FOUR SETS AND IT SERVES ONE. `dos` and `drops` were the do
-    screen's other shape — two loose suggestions where the rest of the app shows three named
-    sizes — and that shape is gone (see sizesFor). The word-for-word lookup itself stays until
-    the two content files are one (§5c); what went with the shape is its power to decide WHICH
-    SCREEN a person gets.
+    B45 §5c, 2026-09-10, AND THIRTY-SIX SENTENCES WENT. A start carried three `thens` written
+    for its own words, and the worry it duplicated carried three `beliefs` written for the
+    same act. Two answers to one question, reviewed twice, free to drift apart on any day
+    either was edited. The worry's are the ones that survive, because they are the ones a
+    person meets on the worry road and the ones that carry an `expect` with them.
+
+    A prediction is stored as a whole "If I ___, then ___", and what goes under the second
+    blank is the half after ", then" — with the holes at their own default words, because on
+    this road there is no blank to have typed one into. See saidPlainly() above.
   */
   function thensFor(ifPart) {
-    var start = startFor(ifPart);
-    return (start && start.thens) || STARTS.general.thens || [];
+    var f = matchFor(ifPart);
+    if (!f) return GENERAL.thens || [];
+    return f.beliefs.map(function (b) {
+      return splitBelief(content.fill(b.belief, {}, f.skeleton.holes))[1];
+    });
   }
 
   /*
@@ -1097,10 +1128,12 @@
     them went. Three, always, in the same order, from the first screen to the fiftieth — see
     lib/content.js checkSizes for why that is a rule and not a habit.
 
-      the worry's own three   every worry has three (checkSizes, required since B45 §5b)
-      the start's own three   where one is written for those exact words (none are yet)
-      the general three       every other road — and `sizes` is REQUIRED on the general set,
-                              so this function cannot hand back nothing
+      the worry's own three   the worry road: every worry has three (required since §5b)
+      the matched worry's     the front door, where the blank holds one of our sentences word
+                              for word — the same three, with the holes at their own defaults
+      the general three       a sentence BETR did not write, which is the main road and is
+                              meant to be. `sizes` is REQUIRED on the general set, so this
+                              function cannot hand back nothing
 
     B45 §5e, 2026-09-10, AND IT IS THE FIX FOR THE WORST SINGLE FACT IN B45 §2.
 
@@ -1115,18 +1148,32 @@
     The same act — "say no without giving a reason" — had a dial on the worry road, where it
     is the worry `no`, and none on the front door, where it is start #01.
 
-    So a matched start with no sizes of its own falls through to the general three like every
-    other road, and the do screen has one shape from every direction. WHAT THAT COSTS IS REAL
-    AND IT IS NOT HIDDEN: those twelve starts each carry a hand-written pair about those exact
-    words, and until §5c merges them into the worries they duplicate, that road gets the
-    generic dial instead of its own sentence. One shape everywhere is worth more than a better
-    sentence on one road in twelve — a screen that changes shape for reasons a person cannot
-    see is not a screen anybody can learn.
+    So the do screen has one shape from every direction. What that cost on the day was real: a
+    matched start had no sizes of its own, so twelve roads fell through to the generic three.
+
+    B45 §5c, 2026-09-10, PAID IT BACK AND WROTE NOTHING. The lookup is against the worries
+    now, and every worry has had three sizes since §5b — so the twelve chips on the front door
+    hand back the same dial the worry road has always had for that act. Twelve roads stopped
+    being generic because two files became one, not because anybody wrote a sentence.
+
+    THE MIDDLE STEP FILLS ITS HOLES HERE, and it is the one thing this function does to a
+    sentence. On the worry road the holes are filled downstream by saidIn(), from what she has
+    typed. There is nothing typed on the front door — there is no blank to type it into — so a
+    matched worry's three are filled from their own default words before they leave, and
+    saidIn() then finds nothing left to do. A default is never marked as carried (fillParts),
+    so nothing on that screen claims she said a word she did not.
   */
   function sizesFor(f, ifPart) {
     if (f && f.sizes) return f.sizes;
-    var start = startFor(ifPart);
-    return (start && start.sizes) || STARTS.general.sizes;
+    var m = matchFor(ifPart);
+    if (!m) return GENERAL.sizes;
+    return m.sizes.map(function (z) {
+      return {
+        name: z.name,
+        do: content.fill(z.do, {}, m.skeleton.holes),
+        drop: content.fill(z.drop, {}, m.skeleton.holes)
+      };
+    });
   }
 
   /* The item being borrowed from, or null (B32). */
@@ -1439,7 +1486,11 @@
     /* B46. The same three, drawn with her own word marked wherever it landed. Screens 1 → 2 of
        the canvas: she fills one hole and it arrives in all three before she has read them. */
     var bMarks = f ? f.beliefs.map(function (b) { return saidHtml(b.belief); }) : [];
-    var ifChips = STARTS.items.map(function (it) { return it.if; });
+    /* B45 §5c. The front door's twelve, each printed as the worry's own skeleton with its
+       default words in the holes — the same sentence matchFor() will recognise if she taps
+       one. It fills the blank and nothing else: no worry is borrowed and no ladder is
+       touched (B40). */
+    var ifChips = FRONT.map(function (id) { return saidPlainly(content.byId(WORRIES, id)); });
     /*
       B34 D1. The second blank's suggestions are worked out ONCE, here, and the handlers below
       close over this same list — so a chip can only ever insert the words printed on it. They
@@ -1565,8 +1616,8 @@
     }
 
     /*
-      B34 D1, the other half. `startFor()` ran at paint and nowhere else, so a person who
-      TYPED a start's words was shown the general three while somebody who tapped the identical
+      B34 D1, the other half. The lookup ran at paint and nowhere else, so a person who
+      TYPED our words was shown the general three while somebody who tapped the identical
       chip was shown the three written for it — and one screen later the plan suggestions
       matched, because that screen repaints. One journey, two answers to the same lookup.
 
@@ -2234,7 +2285,7 @@
   function sizesOn(d) {
     var f = d && d.id ? content.byId(WORRIES, d.id) : null;
     if (f && f.sizes) return f.sizes;
-    return d && d.size ? (STARTS.general.sizes || null) : null;
+    return d && d.size ? (GENERAL.sizes || null) : null;
   }
 
   /*
@@ -2273,11 +2324,11 @@
   }
 
   /* The holes of the worry a record belongs to, so a size reads with her own words in it on
-     the way back. An own test and a worry with no skeleton both have none, and fill() then
-     hands the sentence back untouched. */
+     the way back. An own test has no worry and so has none, and fill() then hands the
+     sentence back untouched. Every worry has a skeleton since B45 §5c. */
   function holesOn(d) {
     var f = d && d.id ? content.byId(WORRIES, d.id) : null;
-    return f && f.skeleton ? f.skeleton.holes : {};
+    return f ? f.skeleton.holes : {};
   }
 
   function wireSizeAgain(c) {
@@ -2752,7 +2803,7 @@
     var f = d.id ? content.byId(WORRIES, d.id) : null;
     var mine = typeof d[which] === 'string' ? d[which] : '';
     if (!f) return mine;
-    var betr = f.skeleton ? content.fill(f[which], d.slots || {}, f.skeleton.holes) : f[which];
+    var betr = content.fill(f[which], d.slots || {}, f.skeleton.holes);
     return flat(mine) === flat(betr) ? betr : mine;
   }
   function testFor(d) { return planFor(d, 'test'); }

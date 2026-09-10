@@ -413,8 +413,10 @@ usually gets treated.
 
 1. The reviewer marks up §1, §2 and §3.
 2. B36 (the 125% overflow) is fixed first if §1 is adopted, because it adds chips to that screen.
-3. Whatever survives goes into `web/content/starts.js` in a task of its own, with
-   `content.test.js` run against it and the loop walked on a phone at both text sizes.
+3. Whatever survives goes into `web/content/worries.js` in a task of its own — `starts.js`
+   was merged into it on 2026-09-10 (B45 §5c), so a surviving line now becomes part of a
+   worry, or a worry of its own — with `content.test.js` run against it and the loop walked
+   on a phone at both text sizes.
 4. Nothing here reaches a person before all three.
 
 **Already checked twice, so nobody repeats it.** All 91 lines were run against the `HABIT`,

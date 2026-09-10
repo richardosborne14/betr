@@ -10,7 +10,9 @@
 
   Where a word actually lives:
     web/content/strings-en.js      every sentence of the interface
-    web/content/worries.js         the worry list — six parts each
+    web/content/worries.js         the worry list, and since 2026-09-10 the two things that
+                                   were never a worry: the general set, and which twelve of
+                                   them the front door offers
     web/content/whats-going-on.js  the "what's going on" doors
     web/content/why.js             "Why this one sticks", one entry per worry
     web/content/places.js          every link on the Help screen
@@ -28,7 +30,6 @@ const worries = require(path.join(ROOT, 'web/content/worries.js'));
 const doors = require(path.join(ROOT, 'web/content/whats-going-on.js'));
 const why = require(path.join(ROOT, 'web/content/why.js'));
 const places = require(path.join(ROOT, 'web/content/places.js'));
-const starts = require(path.join(ROOT, 'web/content/starts.js'));
 const examples = require(path.join(ROOT, 'web/content/examples.js'));
 
 /*
@@ -154,16 +155,16 @@ w('**Generated ' + stamp + ' by `node tools/copy-sheet.js`. Do not edit this fil
 w('rewritten from the source every time that command runs, so anything typed here is lost.');
 w('Mark it up, send it back, and the change gets made in the file named next to each section.');
 w();
-w('There are ' + examples.length + ' front-screen examples, ' + starts.items.length +
-  ' suggestion starts, ' + worries.length + ' to borrow from, ' + doors.items.length + ' doors and ' +
-  Object.keys(why).length + ' explanations in this build.');
+w('There are ' + examples.length + ' front-screen examples, ' + worries.length +
+  ' to borrow from — ' + worries.front.length + ' of which the front door also offers — ' +
+  doors.items.length + ' doors and ' + Object.keys(why).length + ' explanations in this build.');
 w();
 w('| Part | What it is | Which file |');
 w('| --- | --- | --- |');
 w('| [Frozen](#frozen) | Cannot be changed by anyone here | `strings-en.js` |');
 w('| [The screens](#the-screens) | Every sentence of the interface | `strings-en.js` |');
 w('| [The front-screen example](#the-front-screen-example) | The first thing anybody sees | `examples.js` |');
-w('| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `starts.js` |');
+w('| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `worries.js` |');
 w('| [The list you can borrow from](#the-worry-list) | Six parts each | `worries.js` |');
 w('| [The doors](#the-doors) | "What’s going on?" | `whats-going-on.js` |');
 w('| [Why this one sticks](#why-this-one-sticks) | One explanation per worry | `why.js` |');
@@ -261,60 +262,61 @@ w('<a id="the-suggestions"></a>');
 w();
 w('## The suggestions under the blanks');
 w();
-w('`web/content/starts.js`. The screen prints **If I** and **, then** either side of two gaps,');
-w('and these are what a person can tap into them instead of typing. Fixed content in a fixed');
-w('order; which set of predictions is offered depends on one thing only — whether the first');
-w('gap holds one of these situations, word for word.');
+w('`web/content/worries.js`. The screen prints **If I** and **, then** either side of two');
+w('gaps, and these are what a person can tap into them instead of typing. Fixed content in a');
+w('fixed order; which set of predictions is offered depends on one thing only — whether the');
+w('first gap holds one of these situations, word for word.');
+w();
+/*
+  B45 §5c, 2026-09-10. THIS SECTION USED TO BE A SECOND CONTENT FILE AND IS NOW A POINTER.
+
+  starts.js held twelve situations with their own predictions and their own plan lines, and
+  nine of them were the same act as a worry further down this document — so Misha was being
+  asked to read two wordings for one thing and nobody had said which was live. The sentences
+  are the worries' now. What is left here is which twelve, and in what order.
+*/
+w('**They are twelve of the ready-made worries below, in this order.** Until 2026-09-10 they');
+w('were a separate list with their own wording, and nine of the twelve said the same thing as');
+w('a worry in different words. Reading one of these means reading that worry, further down.');
+w();
+w('| | the words in the first gap | the worry it is |');
+w('| --- | --- | --- |');
+worries.front.forEach((id, i) => {
+  const f = worries.find((x) => x.id === id);
+  const said = f.skeleton.if.replace(/\{([a-z]+)\}/g, (_, h) => f.skeleton.holes[h]);
+  w('| ' + (i + 1) + ' | If I ' + said + '… | ' + f.label + ' |');
+});
+w();
+w('The words in the middle column are the worry’s own sentence with its **standing-in word**');
+w('in the gap — *somebody*, *something*, *ten minutes*. On this route nobody has typed a name');
+w('yet, so the standing-in word is what shows.');
+w();
+w('### The general set — shown when somebody has written their own situation');
 w();
 w('An **if** and a **then** are lowercase, because they follow printed words and have to read');
 w('as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.');
 w('So is the **name** of a size, because it is a label on a button.');
 w();
-/*
-  B45 §5e, 2026-09-10. Every start still carries a pair of loose `dos` and `drops` and NOTHING
-  DRAWS THEM. They are printed here anyway, marked, because this file is what Misha reads and a
-  line that vanished without being decided about is worse than a line marked parked — but they
-  are marked hard, because asking somebody to weigh the tone of a sentence nobody will see is
-  the one thing this file must never do.
-*/
-w('**Two rows in each situation below are marked *(parked)*.** They were the two suggestions');
-w('under *What will you do today?* until 2026-09-10, and every route through the app now shows');
-w('the three sizes above instead. Nothing draws them. They are still printed here because nine');
-w('of these twelve situations are the same act as a ready-made worry, and which of the two');
-w('wordings survives is a decision with the reviewer that has not been made. **Nobody needs to');
-w('read a parked line for tone.**');
-w();
-w('### The general set — shown when somebody has written their own situation');
-w();
 w('| | |');
 w('| --- | --- |');
-w('| **then** | ' + starts.general.thens.join(' · ') + ' |');
+w('| **then** | ' + worries.general.thens.join(' · ') + ' |');
 w();
 /*
   B42. The general set's two loose suggestions became three named sizes, and a person reading
   this file has to see them as a set of three rather than as six loose lines — the name, the
   step and the leave-out that belongs with it are one thing to change or leave alone.
 */
-w('**How big a go.** Three steps, smallest first. Tapping one fills both boxes. Every road');
-w('that has no three of its own lands on these. Never more than three, never fewer, and never');
-w('a number on one of them.');
+w('**How big a go.** Three steps, smallest first. Tapping one fills both boxes. This set is');
+w('what somebody lands on when they have written a situation of their own; a gap holding one');
+w('of the twelve above gets that worry’s own three instead. Never more than three, never');
+w('fewer, and never a number on one of them.');
 w();
 w('| | how big | what you’d do | what you’d leave out |');
 w('| --- | --- | --- | --- |');
-starts.general.sizes.forEach((z, j) => {
+worries.general.sizes.forEach((z, j) => {
   w('| ' + (j + 1) + ' | ' + z.name + ' | ' + z.do + ' | ' + z.drop + ' |');
 });
 w();
-starts.items.forEach((it, i) => {
-  w('### ' + (i + 1) + '. If I ' + it.if + '…');
-  w();
-  w('| | |');
-  w('| --- | --- |');
-  it.thens.forEach((line, j) => w('| **then** ' + (j + 1) + ' | ' + line + ' |'));
-  it.dos.forEach((line, j) => w('| **do** ' + (j + 1) + ' *(parked)* | ' + line + ' |'));
-  it.drops.forEach((line, j) => w('| **leave out** ' + (j + 1) + ' *(parked)* | ' + line + ' |'));
-  w();
-});
 
 w('---');
 w();

@@ -18,14 +18,15 @@ Everything below is for when you want to do it yourself at eleven at night.
 
 ## Where the words actually live
 
-Seven files, and every word in the app is in one of them. Nothing else in the repo contains a
-sentence a person reads.
+Six files, and every word in the app is in one of them. Nothing else in the repo contains a
+sentence a person reads. (It was seven until 2026-09-10, when the suggestions moved into the
+list of ready-made tests — they had been the same sentences written twice.)
 
 | If you want to change… | The file |
 | --- | --- |
 | **The finished test on the front screen** — the first thing anybody sees | `web/content/examples.js` |
-| **The suggestions under the blanks** on *Set up a test* — the situations and the predictions | `web/content/starts.js` |
-| **How big a go** — the three sizes under *What will you do today?* | `web/content/starts.js` (`general`), or `web/content/worries.js` for one worry's own |
+| **The suggestions under the blanks** on *Set up a test* — which twelve ready-made tests they are, and in what order | `web/content/worries.js` (`BETR_FRONT`, at the bottom) |
+| **How big a go** — the three sizes under *What will you do today?* | `web/content/worries.js`: each test carries its own three, and `BETR_GENERAL` at the bottom holds the ones used when somebody wrote their own situation |
 | One of the ready-made tests you can borrow: its name, its card sentence, its three "If I…, then…", the thing to try, the thing to leave out | `web/content/worries.js` |
 | The six doors on *What's going on?* | `web/content/whats-going-on.js` |
 | "Why this one sticks" — the two paragraphs behind each ready-made one | `web/content/why.js` |
@@ -69,35 +70,37 @@ result of yours, that caption is the thing that has to change to say so.
 
 ### Changing a suggestion chip
 
-`web/content/starts.js` is a list of situations, each with three predictions:
+**There is no separate list of suggestions any more.** Until 2026-09-10 there was, and nine of
+its twelve situations were the same act as one of the ready-made tests, written a second time in
+different words. Changing one of them meant deciding which of the two versions the app should
+say — and nobody ever had. So the twelve are now twelve of the ready-made tests, and the
+suggestion says what that test says.
+
+At the bottom of `web/content/worries.js` is the list of which twelve, and in what order:
 
 ```
-    {
-      if: 'say no without giving a reason',
-      thens: [ 'they’ll think I’m being difficult', … ],
-      dos: [ 'Say no to one thing today, in one sentence.', … ],
-      drops: [ 'Don’t give a reason.', … ]
-    },
+    var BETR_FRONT = [
+      'no',      /* was start #01, say no without giving a reason */
+      'want',    /* was #02, and had no worry until today */
+      …
+    ];
 ```
 
-One thing about the punctuation, and the build will stop you on it. **An `if` and a `then` are
-lowercase**, because the screen prints "If I" before one and ", then" before the other and they
-have to read as one sentence. `general` at the top is the set shown when somebody has written a
-situation we did not think of, which is most of the time.
+**To change the words on a chip, change that test's `skeleton` further up the same file** — the
+chip prints the test's own sentence with its standing-in word in the gap. **To change which
+twelve, or the order, change this list.** Every name in it has to be the `id` of a test in the
+file above; the build stops you if it is not, or if the same one is in there twice.
 
-**`dos` and `drops` are still in that file and nothing on any screen shows them.** They used to
-be the two suggestions under *What will you do today?*, and since 2026-09-10 every route through
-the app shows the **three sizes** instead — see the next section, which is the part to edit.
-They are being kept because nine of these twelve situations are the same act as one of the
-ready-made worries, and deciding which of the two wordings survives is a job with the reviewer
-that has not been done yet. **Changing a `dos` or a `drops` line today changes nothing anybody
-sees.**
+Twelve is not a target, but it is the number that fits: the row of chips already runs off the
+bottom of a phone screen at twelve, so a thirteenth is worth a conversation rather than a
+commit.
 
 ### Changing how big a go it is
 
 Under *What will you do today?* there are **three sizes**, smallest first. Tapping one fills in
-both the thing to do and the thing to leave out. `general` in `starts.js` carries the three used
-on most tests, and a worry in `worries.js` can carry its own:
+both the thing to do and the thing to leave out. **Every ready-made test in `worries.js` carries
+its own three**, and `BETR_GENERAL` at the bottom of the same file carries the three shown to
+somebody who wrote a situation of their own:
 
 ```
     sizes: [

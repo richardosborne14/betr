@@ -119,7 +119,13 @@ rules at once, and every one of them has failed in some other product.
   since B19 a label must be comprehensible on its own — no pronoun with nothing to point at,
   no open channel, and never the `drop` smuggled onto the button; since B20 every worry
   carries **exactly three** `beliefs`, each two fields and no third, each predicting something
-  different, and the loose `belief` on the card is never word for word one of them),
+  different, and the loose `belief` on the card is never word for word one of them; since
+  B45 §5b every worry carries three `sizes`, the smallest of which is its own `test` and
+  `drop` word for word; and since B45 §5c every worry carries a `skeleton`, and the file
+  also holds the two things that were never a worry — `BETR_GENERAL`, the set shown when
+  somebody wrote their own situation, and `BETR_FRONT`, which twelve of the worries the
+  front door offers under the first blank, in what order. **`starts.js` is gone**: it
+  described nine of those twelve a second time, in its own words),
   `whats-going-on.js`
   (B19: the way in, four to six worries a door, and every worry behind at least one)
   and, from B8, `places.js` — every link on the Help screen, and the only place a link may be

@@ -6,7 +6,6 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 
 const worries = require('../content/worries.js');
-const starts = require('../content/starts.js');
 const examples = require('../content/examples.js');
 const doors = require('../content/whats-going-on.js');
 const places = require('../content/places.js');
@@ -20,49 +19,94 @@ test('every worry has its six parts, a lane, and a conditional belief', () => {
 
 /* ------------------------------------------------- B30: the suggestions under the blanks */
 
+/*
+  B45 §5c, 2026-09-10. THERE WAS A SECOND CONTENT FILE HERE AND THERE IS NOT ANY MORE.
+
+  starts.js held twelve items — an `if`, three `thens`, two `dos`, two `drops` — and nine of
+  the twelve described an act that was already a worry, in different words, with its own
+  predictions and no sizes at all. Two answers to every question, reviewed twice, free to
+  drift apart on any day either file was edited.
+
+  What is left is the two things that were never a worry: the general set a sentence BETR did
+  not write falls through to, and the ORDER of the twelve suggestions under the first blank,
+  which is now a list of worry ids and nothing else. Everything a person reads through them is
+  validated as a worry, above.
+*/
 test('every suggestion under a blank reads as part of the sentence and is safe to propose', () => {
-  assert.deepStrictEqual(content.validateStarts(starts), []);
+  assert.deepStrictEqual(content.validateGeneral(worries.general), []);
+});
+
+test('the front door’s suggestions are worries that exist, each with a sentence to print', () => {
+  assert.deepStrictEqual(content.validateFront(worries.front, worries), []);
 });
 
 /*
-  A start has four fields and an optional three sizes, the way a place on Help has three and
-  an explanation has two. What is missing is the point: with nowhere to hang a lane, a
+  The general set is three predictions and three sizes, the way a place on Help is three
+  fields and a belief is two. What is missing is the point: with nowhere to hang a lane, a
   condition or a second version, which suggestions a person is offered can never be decided by
-  anything they entered. It is decided by whether the first blank matches a start word for
+  anything they entered. It is decided by whether the first blank matches a worry word for
   word, and if a future session adds fuzzy matching, that is the rule it would be breaking
   (research §5.2).
-
-  B42 changed the general set and nothing else: its two loose `dos` and two loose `drops`
-  became three named sizes, which is the dial on the road most people are on.
 */
 test('a suggestion can never be aimed at a person', () => {
-  const fields = new Set();
-  for (const it of starts.items) Object.keys(it).forEach((k) => fields.add(k));
-  assert.deepStrictEqual([...fields].sort(), ['dos', 'drops', 'if', 'thens']);
-  assert.deepStrictEqual(Object.keys(starts.general).sort(), ['sizes', 'thens']);
-  assert.ok(!/\blane\b|\bwhen\b|\bscore\b|\bif_?match/i.test(Object.keys(starts).join(' ')));
+  assert.deepStrictEqual(Object.keys(worries.general).sort(), ['sizes', 'thens']);
+  assert.ok(!/\blane\b|\bwhen\b|\bscore\b|\bif_?match/i.test(Object.keys(worries.general).join(' ')));
+  /* and the front-door list is ids, not sentences: there is nowhere in it to put a rule */
+  for (const id of worries.front) assert.strictEqual(typeof id, 'string');
+
+  const g = JSON.parse(JSON.stringify(worries.general));
+  g.lane = 'assertiveness';
+  assert.ok(content.validateGeneral(g).some((p) => /extra field/.test(p)));
+});
+
+/*
+  THE FRONT DOOR'S TWELVE, HELD BY HAND, so that a reordering or a quiet swap shows up in a
+  diff rather than as nothing. It is the same twelve starts.js shipped after B47's cull, in
+  the same order — nine of them are the worry the start duplicated, and `want`, `think` and
+  `ontime` are the three that had no worry until the merge and now do.
+
+  TWELVE AND NOT TWENTY, and that is a measurement rather than a taste: the row is 353–998px
+  with twelve chips on a 390px phone, and the founder's canvas draws three. Which twelve is
+  the founder's and Misha's. Move this list only when one of them says so, and say which.
+*/
+test('the front door offers the same twelve, in the same order', () => {
+  assert.deepStrictEqual(worries.front, [
+    'no', 'want', 'strug', 'enough', 'sit', 'rest',
+    'think', 'right', 'ontime', 'praise', 'help', 'early'
+  ]);
 });
 
 /*
   The chips are BETR proposing something, so rule 4 applies to them in full — the version of
-  rule 4 that did NOT loosen on 2026-09-08. validateStarts checks every line; this checks that
-  it is actually checking, because a word list that has stopped matching fails silently.
+  rule 4 that did NOT loosen on 2026-09-08. validateWorries and validateGeneral check every
+  line; this checks that they are actually checking, because a word list that has stopped
+  matching fails silently.
+
+  B45 §5c WIDENED IT, and the widening caught something. It used to sweep the twelve starts
+  and the general set. It now sweeps every sentence BETR proposes anywhere: each worry's
+  skeleton, its three predictions, the three things a person is braced for, its three sizes,
+  and the general set. The first run found "not pulling my weight" in `rest` — an idiom about
+  workload reading as a sentence about a body, because "weight" is on the BODY list. It was
+  reworded to the wording starts.js already had for the same act (see worries.js).
 */
 test('nothing BETR suggests names the habit, the body, or anyone’s safety', () => {
   const lines = [];
-  for (const it of starts.items.concat([starts.general])) {
-    for (const f of ['thens', 'dos', 'drops']) if (it[f]) lines.push(...it[f]);
-    /* B42's three, on the general set today and on any start that grows them tomorrow. */
-    for (const z of it.sizes || []) lines.push(z.do, z.drop);
-    if (it.if) lines.push(it.if);
+  for (const f of worries) {
+    lines.push(f.skeleton.if, f.test, f.drop);
+    for (const b of f.beliefs) lines.push(b.belief, b.expect);
+    for (const z of f.sizes) lines.push(z.do, z.drop);
   }
+  lines.push(...worries.general.thens);
+  for (const z of worries.general.sizes) lines.push(z.do, z.drop);
   /*
-    B47, 2026-09-09: this said 150 until the cull, when twenty-one starts became twelve and it
-    dropped to 102. The number is a canary, not a target — it is here so that a start quietly
-    losing its suggestions shows up as a failure rather than as nothing. Move it only when a
-    cull is the reason, and say which one.
+    B47, 2026-09-09: this said 150 until the cull, when twenty-one starts became twelve, and
+    it dropped to 102. B45 §5c, 2026-09-10: starts.js is gone and the sweep is over the
+    worries themselves, so the floor is 300 — twenty worries carrying thirteen lines each,
+    plus nine on the general set. The number is a canary, not a target: it is here so that
+    content quietly disappearing shows up as a failure rather than as nothing. Move it only
+    when a cull is the reason, and say which one.
   */
-  assert.ok(lines.length > 90, 'only ' + lines.length + ' suggestions: the file has shrunk');
+  assert.ok(lines.length > 300, 'only ' + lines.length + ' suggestions: the content has shrunk');
   for (const line of lines) {
     for (const [kind, list] of [['harm', guards.HARM], ['habit', guards.HABIT], ['body', guards.BODY]]) {
       assert.strictEqual(guards.hit(line, list), null, kind + ' word in "' + line + '"');
@@ -72,14 +116,29 @@ test('nothing BETR suggests names the habit, the body, or anyone’s safety', ()
   assert.strictEqual(guards.hit('Have one beer', guards.HABIT), 'beer');
 });
 
-/* Every start has to make a sentence a person would actually say out loud. */
-test('every start makes a whole sentence with the words the screen prints', () => {
+/*
+  Every suggestion under the first blank has to make a sentence a person would actually say
+  out loud, with the words the screen prints either side of it — and so does every prediction
+  offered under the second blank once that chip has been tapped.
+
+  On this road the holes are at their own default words, because there is no blank to have
+  typed one into. That is the sentence matchFor() will recognise if she taps it, so it is the
+  sentence checked here.
+*/
+test('every front-door suggestion makes a whole sentence with the words the screen prints', () => {
   const en = require('../content/strings-en.js').s;
-  for (const it of starts.items) {
-    for (const then of it.thens) {
-      const said = en.build.ifWord + ' ' + it.if + en.build.thenWord + ' ' + then + '.';
+  for (const id of worries.front) {
+    const f = content.byId(worries, id);
+    const ifHalf = content.fill(f.skeleton.if, {}, f.skeleton.holes);
+    assert.ok(!/[{}]/.test(ifHalf), 'a hole with no default word in: ' + ifHalf);
+    for (const b of f.beliefs) {
+      const whole = content.fill(b.belief, {}, f.skeleton.holes);
+      assert.ok(!/[{}]/.test(whole), 'a hole with no default word in: ' + whole);
+      const then = whole.match(/, then ([\s\S]*)\.$/);
+      assert.ok(then, 'a prediction that does not split into two halves: ' + whole);
+      const said = en.build.ifWord + ' ' + ifHalf + en.build.thenWord + ' ' + then[1] + '.';
+      assert.strictEqual(said, whole, 'the two halves do not reassemble into the sentence');
       assert.match(said, /^If I \S/, said);
-      assert.match(said, /, then \S/, said);
       assert.ok(said.split(' ').length >= 8, 'too short to be a prediction: ' + said);
       assert.ok(!/  /.test(said), 'a doubled space in: ' + said);
     }
@@ -420,10 +479,15 @@ const THIN_DOORS = {
   */
   phone: 2,
   /*
-    Lost `reply`. Founder's call, 2026-09-09: leave it at three and lead on `help` rather than
-    borrow two more from the habit door, because five was more to read than the door needed.
+    `yes` WAS HERE AND IS NOT ANY MORE. It lost `reply` in the cull and the founder's call on
+    2026-09-09 was to leave it at three rather than borrow two from the habit door. B45 §5c,
+    2026-09-10, gave it two that are not borrowed from anywhere: `want` and `think` had lived
+    in starts.js with no worry behind them, and "Going along with things I don't want to do"
+    is the door both of them describe. Five, from its own content, and off the list.
+
+    THE DOOR'S OWN LINE STILL NAMES THREE and Misha has not read it since B47 rewrote it. It
+    is one of the asks in docs/COPY.md.
   */
-  yes: 3
 };
 
 test('no door opens onto fewer than four worries, except the ones we have named', () => {
@@ -539,7 +603,7 @@ test('the door carrying the safety note is high enough for the note to be seen',
 */
 test('every word a person reads uses the typographic apostrophe, not the typewriter one', () => {
   const files = { 'strings-en.js': require('../content/strings-en.js'), 'worries.js': worries,
-                  'starts.js': starts, 'why.js': why, 'whats-going-on.js': doors,
+                  'why.js': why, 'whats-going-on.js': doors,
                   'examples.js': examples };
   const found = [];
   let swept = 0;
@@ -740,7 +804,7 @@ test('a size is never numbered, and its name is a label rather than a sentence f
   for (const f of shipped()) {
     for (const z of f.sizes || []) assert.ok(!/[0-9]/.test(z.name), 'numbered size: ' + z.name);
   }
-  for (const z of starts.general.sizes) assert.ok(!/[0-9]/.test(z.name), 'numbered size: ' + z.name);
+  for (const z of worries.general.sizes) assert.ok(!/[0-9]/.test(z.name), 'numbered size: ' + z.name);
 });
 
 /*
@@ -766,16 +830,15 @@ test('a size has nowhere to hang a condition, and both halves are BETR proposing
 });
 
 /*
-  The general set is where every road with no sizes of its own lands, so it must have three.
-  B42 replaced its two loose `dos` and two loose `drops` with them; the twenty-one starts kept
-  theirs, because a pair hand-written for that exact if-half is worth more to somebody who
-  tapped it than a generic small / bigger / whole.
+  The general set is where a sentence BETR did not write lands, so it must have three. B42
+  replaced its two loose `dos` and two loose `drops` with them; B45 §5c left it as the only
+  part of starts.js that was never a worry, and it is now the ONLY road that reaches these —
+  a first blank matching a worry word for word gets that worry's own three.
 */
 test('the general set carries the three sizes every other road falls through to', () => {
-  assert.strictEqual(starts.general.sizes.length, 3);
-  assert.ok(!('dos' in starts.general) && !('drops' in starts.general));
-  for (const it of starts.items) assert.ok(it.dos.length && it.drops.length);
-  for (const z of starts.general.sizes) {
+  assert.strictEqual(worries.general.sizes.length, 3);
+  assert.ok(!('dos' in worries.general) && !('drops' in worries.general));
+  for (const z of worries.general.sizes) {
     assert.match(z.name, /^[A-Z]/);
     assert.match(z.do, /^[A-Z\u201C]/);
     assert.match(z.drop, /^[A-Z\u201C]/);

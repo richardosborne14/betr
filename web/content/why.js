@@ -194,6 +194,39 @@ var BETR_WHY = {
     why: 'A reason at the door, or a promise about next time, is what keeps that from being tested. ' +
       'Both work, both end the conversation, and both mean you go home knowing nothing. Decide ' +
       'the time first, say one sentence, and go.'
+  },
+
+  /* B45 §5c, 2026-09-10. The three worries the merge created — they lived in starts.js with
+     no worry behind them, so there was no result screen for them to be read from. */
+
+  want: {
+    what: 'This one is rarely about the thing you want. It is about what wanting it out ' +
+      'loud seems to say — that you take up room, that you have got an opinion about your ' +
+      'own share. So the ask comes out smaller than the want.',
+    why: 'Asking for less is what keeps it going. Ask below what you actually want and a ' +
+      'yes tells you nothing, because nobody has been asked the real question yet. The ' +
+      'small ask gets the credit for the smooth answer. Ask once, at full size, and you ' +
+      'find out what they say to the thing you meant.'
+  },
+
+  think: {
+    what: 'The worry is not about the opinion. It is about what having one out loud costs ' +
+      'you with somebody — a row, a cool few days, being filed as hard work. So the thought ' +
+      'arrives with something wrapped round it.',
+    why: 'The wrapping is the part that keeps it untested. A joke on the end, or an apology ' +
+      'in front, and whatever happens next is about the wrapping rather than the thing you ' +
+      'said. Say it plainly once, leave it there, and the answer you get is to what you ' +
+      'actually think.'
+  },
+
+  ontime: {
+    what: 'Extra time is not really about the journey. It is insurance against how it would ' +
+      'look to walk in late — careless, not bothered, somebody who does not take it ' +
+      'seriously. So the margin grows and the day gets built around it.',
+    why: 'And the margin is why it never settles. Arrive early enough and nothing goes ' +
+      'wrong, so the buffer takes the credit and the question stays open. Leave later once, ' +
+      'without a message ahead to soften it, and what you find out is what the time you ' +
+      'actually arrived is worth.'
   }
 };
 
