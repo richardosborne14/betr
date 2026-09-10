@@ -1,6 +1,6 @@
 # B52: Uptime, the locks on the front door, and the only number we can honestly have
 
-**Status:** **§5c is BUILT — the tally, 2026-09-10, on the founder's instruction ("just to know
+**Status:** **§5c is BUILT AND LIVE — the tally, 2026-09-10, on the founder's instruction ("just to know
 how many people have viewed the page, no other data about it, just the pure number, even if
 it's bots"). §10 is what was built.** Everything else is still a pitch. All findings were
 checked on the live server and the live DNS on 2026-09-10; no number or setting is from memory.
@@ -537,20 +537,36 @@ nothing in it can change a count or delete a day.
    the train is invisible here, which is the correct behaviour and also means **the number is a
    floor, not a total**.
 
-### Still to do on the droplet — the one part that needs a person
+### Live, 2026-09-10 12:03 UTC
 
-The deploy account deliberately cannot restart its own container (B3), and `/var/log/betr` does
-not exist yet. Three commands, once:
+The founder gave the go-ahead and it was run:
 
 ```
 mkdir -p /var/log/betr && chown 101:121 /var/log/betr && chmod 750 /var/log/betr
 cd /opt/betr && docker compose up -d
 ```
 
-`101` is the `nginx` user *inside* the container, which is what opens the file; `121` is the
-`betr` group, which is how the read-only workflow above can see it. Until this is run the site
-is unaffected and the tally simply does not exist — the workflow says so in plain words rather
-than showing a zero.
+`101` is the `nginx` user *inside* the container, which is what opens the file. `121` is the
+`betr` group, which is how the read-only workflow can see it. On the host that shows as
+`drwxr-x--- systemd-resolve betr`, because host uid 101 happens to be `systemd-resolve` — it is
+the right uid and a confusing name, so it is written down here.
 
-**Confidence: 9/10.** Built, run in the real image, mutation-tested, and walked on the screen.
-The 1 is that it has not yet run on the droplet.
+**Checked immediately after, on the live address:**
+
+| Check | Result |
+| --- | --- |
+| The site still answers, headers unchanged | ✅ 200; CSP with `connect-src 'none'`, nosniff, no-referrer, no `Set-Cookie` |
+| The running container is on the new config | ✅ `betr_tally` present in the config nginx is actually using |
+| Three page opens | ✅ three marks |
+| Two requests for `app.js` | ✅ nothing written |
+| The file | ✅ `2026-09-10.log`, contents `1 1 1 1`, eight bytes |
+| nginx errors | ✅ none |
+| The deploy account can **read** the tally | ✅ |
+| The deploy account can **write** to it | ✅ refused — `Permission denied` |
+| The button on github.com | ✅ run `34474636403`, returned the day and the total |
+
+**The number is running and the founder can read it without a command.**
+
+**Confidence: 9/10.** Built, run in the real image, mutation-tested, walked on the screen, and
+now verified on the live address. The 1 is that nobody but us has opened the page yet, so the
+first real day's number is still ahead.

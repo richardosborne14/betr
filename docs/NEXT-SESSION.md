@@ -41,7 +41,7 @@ reviewer's three questions are unanswered and the founder chose to ship ahead of
 
 0. **[`B52`](tasks/B52-uptime-the-locks-and-the-one-number.md) — uptime, security, the one number. **§5c is BUILT**: the tally, on the founder's
    instruction, overruling the recommendation to wait. A `1` per page open, in a file named for the day; nothing in a line. Five lines of
-   nginx, mutation-tested; `help.airplane` changed in the same commit. **One droplet step is left and it needs a person** (§10, last block).
+   nginx, mutation-tested; `help.airplane` changed in the same commit; read from a button on github.com, never a command. **Live since 12:03 UTC that day** and verified on the real address (§10).
    The rest is still a pitch — **three TrybeUP dev ports open to the internet**, no firewall, no rate limit, no HSTS, no CAA, **no uptime
    monitoring at all**, eleven decisions in its §6. **Point any monitor at `/app.js`, never at the page**, or it counts itself.
 
