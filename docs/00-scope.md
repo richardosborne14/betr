@@ -86,7 +86,7 @@ stock list as the front door, which it stopped being on that day.
 | 5 | **Happened** | One text box. *Just what they said or did. No verdict.* | typing |
 | 6 | **Sure?** | The sentence, quoted, and the rung it is on now. Four buttons: still sure / a bit less / a lot less / not at all. Small, underneath: *more sure than before*. | 1 |
 | 7 | **Result** | Expectation struck through. What happened in marker. **The ladder for this belief**, started → now. Big number of tests done. *Do it again tomorrow* · *Different test*. | — |
-| 8 | **Your tests** | One card per belief tested: its ladder, what you wrote each time, *Test this again*. Nothing combined across cards. | 1 |
+| 8 | **Your tests** | One card per belief tested: its ladder, what you wrote each time, *Test this again*, and — since 2026-09-10 (B53) — *Archive*, which moves that card under an **Archived** heading at the bottom of the same screen. Nothing is deleted, the card is drawn whole, and one tap puts it back. Nothing combined across cards. | 1 |
 | — | **Borrow** (one tap aside) | The six doors and the stock list, reached from *Not sure?* Picking one opens screen 2 with the blanks filled. Everything editable. | 2 |
 
 **Why these choices hold (each is from the research):**
@@ -117,6 +117,17 @@ stock list as the front door, which it stopped being on that day.
   The product metric is completed tests, never days or streaks.
 - **No streak, no red day, no "you missed".** *Didn't get to it* answers "it's still here for
   tomorrow, smaller counts too."
+- **Nothing happens at the bottom rung, and archiving is what happens instead.** Founder, asked
+  2026-09-10: is there confetti when the belief reaches the lowest rung, and can somebody put a
+  worry away? The answer to the first is deliberately nothing — a reward at rung 1 makes the
+  ladder a target, and the re-rate stops being the person's honest answer the moment there is
+  something to win by tapping *not sure at all*. It would also be a verdict ("you were wrong to
+  worry"), which is the sentence BETR never says. The result screen at the bottom is the result
+  screen at the top, word for word. What was actually missing is the second thing: until that
+  day the app said *Do it again tomorrow* for ever, and the only way to remove one test was to
+  delete everything. So archiving is offered on **every** card at **any** time — not unlocked at
+  the floor, because a button that appears only once you have rated yourself low is the same
+  reward wearing a coat, and the founder's own case was a test somebody never wants to do.
 
 ## 4. Decisions carried over from the research (locked)
 

@@ -536,6 +536,34 @@ keep it, and put it wherever the sentence needs it.
 
 > Test this again
 
+**`mine.archive`**
+
+> Archive
+
+**`mine.unarchive`**
+
+> Unarchive
+
+**`mine.awayTitle`**
+
+> Archived
+
+**`mine.awayNote`**
+
+> Nothing here is deleted. Each one keeps everything you wrote and everything you rated, it is still in your export, and one tap puts it back on the list.
+
+**`mine.allAway`**
+
+> Everything you’ve got is archived, below.
+
+**`mine.archived`**
+
+> Archived. It’s at the bottom of this screen.
+
+**`mine.unarchived`**
+
+> Back on your list.
+
 **`mine.foot`**
 
 > Each one is its own. Nothing here is added up, and there is no target.

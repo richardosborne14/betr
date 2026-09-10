@@ -191,13 +191,29 @@
     save because isEmpty() still thought the record was empty. Both of these are in all three.
   */
   /*
+    `archived` is B53's, 2026-09-10, and it is a list of LADDER KEYS — the same strings
+    rate.keyOf() makes, "stock:<worry id>" or "own:<test id>" — and nothing else. A key in
+    here means that card sits under Archived on Your tests instead of in the list, and it
+    means nothing else at all: no result is deleted, no rung is moved, no waiting test is
+    dropped, and the export is the same file. Putting one away is a decision about a LIST,
+    not about a belief, which is why it is one array of keys off to the side rather than a
+    flag written onto every record of that worry.
+
+    Keys, not sentences — for the reason rule 5 gives: a person who fixes a typo has not
+    archived a different thing.
+
+    It needs no version bump, for the same reason `open` needed none: a state saved before
+    today simply has no `archived`, and normalise gives it an empty one. Nothing else reads
+    the field, so an old BETR handed a new file ignores it and draws the list it always drew.
+  */
+  /*
     `seen` is B31's, and it counts opens so the front screen's worked example is the NEXT one
     rather than a shuffle. It is the one stored field that isEmpty() deliberately ignores: a
     BETR that has never been used, and one that has just been wiped, must leave nothing at all
     behind, and which example comes next is not something anybody would miss.
   */
   function blank() {
-    return { v: VERSION, stage: 'start', cur: null, country: null, lang: null, open: [], done: [], seenInstall: false, seen: 0 };
+    return { v: VERSION, stage: 'start', cur: null, country: null, lang: null, open: [], done: [], archived: [], seenInstall: false, seen: 0 };
   }
 
   /* Anything we cannot vouch for is replaced, never repaired halfway. */
@@ -217,6 +233,16 @@
       s.done = dedupe(raw.done.filter(function (d) {
         return d && typeof d === 'object' && typeof d.o === 'string';
       }).map(withLevel).map(function (d) { return withId(d, d.when, doneCounts); }));
+    }
+    /* Strings only, no blanks, no duplicates. A key for a card that no longer exists is
+       simply a key nothing matches, and it costs nothing to carry. */
+    if (Array.isArray(raw.archived)) {
+      var away = {};
+      s.archived = raw.archived.filter(function (k) {
+        if (typeof k !== 'string' || !k || away[k]) return false;
+        away[k] = true;
+        return true;
+      });
     }
     if (typeof raw.country === 'string' && /^[A-Z]{2}$/.test(raw.country)) s.country = raw.country;
     if (typeof raw.lang === 'string' && /^[a-zA-Z-]{2,12}$/.test(raw.lang)) s.lang = raw.lang;
@@ -249,6 +275,7 @@
   function isEmpty(state) {
     if (!state) return true;
     return (!state.done || !state.done.length) && (!state.open || !state.open.length) &&
+      (!state.archived || !state.archived.length) &&
       !state.cur && state.seenInstall !== true && !state.country && !state.lang;
   }
 

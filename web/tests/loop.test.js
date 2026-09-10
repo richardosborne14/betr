@@ -2630,3 +2630,119 @@ test('the worked shrink uses the three size names, biggest first', () => {
   assert.deepStrictEqual(shrink, names.slice().reverse(),
     'the shrink invented its own words for the dial, or read it the wrong way round');
 });
+
+/*
+  ------------------------------------------------------------------------ archiving (B53)
+
+  Founder, 2026-09-10, two questions in one: does anything happen when the belief reaches the
+  bottom rung, and can somebody put a test away.
+
+  The first has a deliberate answer, and the test below is what keeps it: NOTHING happens at
+  rung 1. A reward at the floor makes the ladder a target and buys the one honest number in
+  the product (rules 5 and 6), so the result screen at the bottom is the result screen at the
+  top, word for word, and it must stay that way after somebody reads this file and thinks a
+  little confetti would be kind.
+
+  The second is archiving, and it is what the first question was really about: until today the
+  app said "Do it again tomorrow" for ever and there was no way to be finished with anything,
+  and the only way to remove one thing was to delete everything. It is offered on every card
+  at any time, not unlocked at the floor — a button that only appears once you have rated
+  yourself low is the same reward wearing a coat.
+*/
+const walkNo = (a, key) => {
+  a.tap('#pick').tap('[data-door="yes"]').tap('[data-id="no"]');
+  a.tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
+  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
+  if (typeof key === 'number') {
+    a.tap('#done').type('#o', 'She said fine.').tap('#next').tap('[data-key]', key);
+  }
+  return a;
+};
+
+test('the bottom rung is the same screen as every other rung', () => {
+  const part = walkNo(boot(), 2);     /* "A lot less sure" — three rungs, and part way */
+  const floor = walkNo(boot(), 3);    /* "Not sure at all" — straight to the bottom */
+
+  assert.strictEqual(JSON.parse(part.mem['betr.v1']).done[0].level, 7);
+  assert.strictEqual(JSON.parse(floor.mem['betr.v1']).done[0].level, 1);
+
+  /* Same buttons, in the same order: nothing is unlocked and nothing is taken away. */
+  const buttons = (a) => (a.html().match(/<button[^>]*>[^<]*</g) || [])
+    .map((s) => s.replace(/^[\s\S]*>/, ''));
+  assert.deepStrictEqual(buttons(floor), buttons(part),
+    'the bottom rung grew a button of its own');
+
+  /* And the same words. Only the numbers differ, which is the whole of what happened. */
+  const shape = (a) => a.text().replace(/[0-9]+/g, '#');
+  assert.strictEqual(shape(floor), shape(part),
+    'the bottom rung says something the other rungs do not');
+});
+
+test('a card can be archived and brought back, and archiving loses nothing', () => {
+  const a = walkNo(boot(), 1);
+  a.tap('#m-mine');
+  a.shows('data-away=').hides('data-back=').hidesText(en.s.mine.awayTitle);
+
+  a.tap('[data-away]');
+  a.showsText(en.s.mine.awayTitle).shows('class="card away"');
+  /* off the list means it stops offering the work */
+  a.hides('data-again=');
+  /* and it is still every bit of itself: the label, the sentence and the ladder */
+  a.showsText(labelOf('no'));
+  a.shows('class="ladder"');
+  assert.strictEqual(a.said(), en.s.mine.archived);
+
+  const saved = JSON.parse(a.mem['betr.v1']);
+  assert.deepStrictEqual(saved.archived, ['stock:no']);
+  assert.strictEqual(saved.done.length, 1, 'archiving took a result with it');
+  const out = JSON.parse(require('../lib/store.js').exportJSON(saved));
+  assert.strictEqual(out.results.length, 1, 'archiving took a result out of the export');
+
+  a.tap('[data-back]');
+  a.hidesText(en.s.mine.awayTitle).shows('data-again=');
+  assert.deepStrictEqual(JSON.parse(a.mem['betr.v1']).archived, []);
+  assert.strictEqual(a.said(), en.s.mine.unarchived);
+});
+
+/*
+  The founder's own case: a test somebody set up and does not want to do. Archived, it still
+  says what they promised themselves — nobody should wonder where it went — and it stops
+  asking, on Your tests and on the front screen both.
+*/
+test('an archived card stops asking, on both screens', () => {
+  const a = walkNo(boot());
+  a.tap('#m-mine').shows('data-did=').shows('data-notyet=');
+  a.tap('#back').shows('id="pickup"');          /* the front screen's on-the-go note */
+  a.tap('#m-mine');
+  a.tap('[data-away]');
+  a.showsText(en.s.mine.onTheGo).hides('data-did=').hides('data-notyet=');
+
+  a.tap('#back').hides('id="pickup"');
+
+  /* and one tap has it back, asking again */
+  a.tap('#m-mine').tap('[data-back]').shows('data-did=');
+  a.tap('#back').shows('id="pickup"');
+});
+
+test('picking an archived test up again brings its card back by itself', () => {
+  const a = walkNo(boot(), 1);
+  a.tap('#m-mine').tap('[data-away]');
+  assert.deepStrictEqual(JSON.parse(a.mem['betr.v1']).archived, ['stock:no']);
+
+  walkNo(a.tap('#back'), 1);
+  assert.deepStrictEqual(JSON.parse(a.mem['betr.v1']).archived, [],
+    'doing the test again left its card in the archive');
+  a.tap('#m-mine').hidesText(en.s.mine.awayTitle).shows('data-again=');
+});
+
+/*
+  Two counts on that screen, and both describe the list a person is looking at. An archived
+  card is in neither, and the one case the old line got wrong — results kept, none of them on
+  the list — has a line of its own rather than "Nothing recorded yet", which would be a lie.
+*/
+test('the two counts describe the list, not the archive', () => {
+  const a = walkNo(boot(), 1);
+  a.tap('#m-mine').showsText('1 test, done once');
+  a.tap('[data-away]');
+  a.hidesText('1 test, done once').showsText(en.s.mine.allAway);
+});

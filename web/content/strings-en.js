@@ -779,6 +779,24 @@ var BETR_STRINGS_EN = {
       did: 'Done it',
       notYet: 'Didn’t get to it',
       again: 'Test this again',
+      /*
+        B53, 2026-09-10. The founder's word, chosen over "Put this away" and "Done with this
+        one" on the day: "Archive". Two plain buttons and no question asked between them,
+        because neither one loses anything.
+
+        "Done" was the one to avoid: a card is archived because a person is finished with it,
+        which is not the same as the belief being finished, and a button that says done reads
+        as the app's verdict on the worry rather than the person's decision about a list.
+      */
+      archive: 'Archive',
+      unarchive: 'Unarchive',
+      awayTitle: 'Archived',
+      awayNote: 'Nothing here is deleted. Each one keeps everything you wrote and everything ' +
+        'you rated, it is still in your export, and one tap puts it back on the list.',
+      /* The one case the old summary got wrong: results exist, and none of them is on the list. */
+      allAway: 'Everything you’ve got is archived, below.',
+      archived: 'Archived. It’s at the bottom of this screen.',
+      unarchived: 'Back on your list.',
       foot: 'Each one is its own. Nothing here is added up, and there is no target.'
     },
 

@@ -1348,3 +1348,24 @@ The second half is worse, because no amount of fixing the first would have shown
 and nothing at the bottom of `app.js` runs again. Anything that is supposed to happen "on open"
 needs `visibilitychange` as well as a page load, and the harness needed an `api.reopen()` to
 tell the two apart. Test both, or you have tested the rarer one.
+
+## 2026-09-10 — `git checkout <file>` is a destroyer of uncommitted work, and mutation testing is where it bites
+
+Mutation testing is the right habit — change the code back, watch each new test fail, then write
+the commit message — and the obvious way to script it is *mutate, run, `git checkout` the file,
+mutate the next one*. **That restores the file to HEAD, not to what you had.** Halfway through a
+sweep of eight mutations, the whole of the session's work in `app.js` and `store.js` was gone,
+and the next six results were measured against a half-broken tree and meant nothing.
+
+**Copy the file to the scratchpad and copy it back.** `cp web/app.js $D/app.keep.js` … `cp
+$D/app.keep.js web/app.js`. Two lines, and it restores what you actually had.
+
+Two smaller things that made it worse and are worth knowing:
+
+- **A failed mutation is invisible unless the anchor is asserted.** The script asserted
+  `s.count(anchor) == 1`, which is what turned "the file is not what I think it is" into a loud
+  traceback instead of a silently skipped mutation and a green run read as proof.
+- **`# pass` counts alone do not tell you a sweep is sound.** The sweep printed a plausible
+  "fail 4" for four mutations in a row while the tree was broken. **Run the baseline again at
+  the end** — a restored tree that does not match the baseline is the only cheap signal that
+  the middle of the sweep was measuring anything.

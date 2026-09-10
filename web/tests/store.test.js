@@ -187,3 +187,32 @@ test('exporting nothing is still valid, readable JSON', () => {
   const out = JSON.parse(store.exportJSON(store.blank()));
   assert.deepStrictEqual(out.results, []);
 });
+
+/*
+  B53's one new field: a list of ladder keys, and nothing else in the record moves.
+
+  It carries no version bump, for the same reason `open` never needed one — a state written
+  before today simply has no `archived`, and normalise hands back an empty list. An older BETR
+  handed a newer file ignores the field and draws the list it always drew.
+*/
+test('archived is a list of keys, and anything else in it is dropped', () => {
+  assert.deepStrictEqual(store.blank().archived, []);
+  /* the state everybody's phone is holding today */
+  assert.deepStrictEqual(store.normalise({ done: [] }).archived, []);
+  assert.deepStrictEqual(store.normalise({ archived: 'stock:no' }).archived, []);
+  assert.deepStrictEqual(
+    store.normalise({ archived: ['stock:no', 'stock:no', '', 7, null, { k: 1 }, 'own:a1'] }).archived,
+    ['stock:no', 'own:a1'], 'a duplicate, a blank or a non-string reached the list');
+});
+
+/*
+  A phone holding nothing but an archive is not empty, and forgetting that is the exact bug
+  B17 shipped with `country` and B31 shipped with `seen`: save() removes the key for an empty
+  state, so a field isEmpty() does not know about is written and thrown away on the next save.
+*/
+test('a state with something archived is not an empty state', () => {
+  const s = store.blank();
+  s.archived.push('stock:no');
+  assert.strictEqual(store.isEmpty(s), false);
+  assert.strictEqual(store.isEmpty(store.blank()), true);
+});

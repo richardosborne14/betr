@@ -555,6 +555,54 @@
   }
 
   /*
+    ---------------------------------------------------------------------- archived (B53)
+
+    Founder, 2026-09-10, asked two things in one breath — does anything happen when the belief
+    reaches the bottom rung, and can somebody put a test away — and they are one question.
+
+    The answer to the first is deliberately NOTHING. A reward at the floor makes the ladder a
+    target, and the moment there is something to win at rung 1 the re-rate stops being the
+    person's honest answer and starts being the tap that gets the prize. That is rule 5's "no
+    target" and rule 6's no verdicts at once: confetti says "you were wrong to worry", which
+    is exactly the sentence BETR never says. So the result screen at rung 1 is the result
+    screen at rung 10, word for word, and loop.test.js holds it there.
+
+    The answer to the second is here, and it is what the first question was really about:
+    until today the app said "Do it again tomorrow" for ever and there was no way to be
+    finished with anything, and the only way to remove one thing was to delete everything.
+    Archiving is offered on EVERY card at ANY time, not unlocked at the floor — a button that
+    only appears once you have rated yourself low is the same reward wearing a coat, and the
+    founder's own case was a test somebody never wants to do rather than one they have worn
+    out.
+
+    An archived card is off the list, not gone. Its ladder, its results and any waiting test
+    are exactly where they were; one tap brings it back; the export is the same file. This
+    changes what is DRAWN and nothing else.
+  */
+  function isAway(key) { return !!key && (S.archived || []).indexOf(key) !== -1; }
+
+  function putAway(key) {
+    if (!key || isAway(key)) return;
+    if (!S.archived) S.archived = [];
+    S.archived.push(key);
+  }
+
+  /*
+    Starting or finishing a test on an archived belief brings its card back by itself. A
+    person doing the work on it is plainly not done with it, and making them unarchive first
+    would be a chore the app invented. Both callers save straight afterwards.
+  */
+  function bringBack(key) {
+    var i = key && S.archived ? S.archived.indexOf(key) : -1;
+    if (i !== -1) S.archived.splice(i, 1);
+  }
+
+  /* What is waiting and still on the list. An archived card asks nothing of anybody. */
+  function waitingLive() {
+    return S.open.filter(function (tst) { return !isAway(rate.keyOf(tst)); });
+  }
+
+  /*
     A test you have locked in is a promise you made to yourself, not a slot. With "New worry"
     one tap from everywhere, it would otherwise be overwritten without a word — so instead it
     waits for you, on Your worries, until you say what happened.
@@ -572,6 +620,7 @@
     if (!c || !c.locked) return;
     if (S.open.indexOf(c) !== -1) return;
     S.open.push(c);
+    bringBack(rate.keyOf(c));
     save();
   }
 
@@ -829,9 +878,10 @@
     worries — never a stacked list of everything you said you would do, and never a number.
   */
   function waitingBlock() {
-    if (!S.open.length) return '';
-    if (S.open.length === 1) {
-      return '<div class="note"><b>' + esc(t('waiting.onTheGo')) + '</b> ' + esc(S.open[0].test) +
+    var open = waitingLive();
+    if (!open.length) return '';
+    if (open.length === 1) {
+      return '<div class="note"><b>' + esc(t('waiting.onTheGo')) + '</b> ' + esc(open[0].test) +
         '<div class="row"><button class="ghost" id="pickup">' + esc(t('waiting.pickUp')) +
         '</button></div></div>';
     }
@@ -840,7 +890,8 @@
 
   function wireWaiting() {
     on('#pickup', function () {
-      if (S.open.length === 1) resume(S.open[0], 'locked');
+      var open = waitingLive();
+      if (open.length === 1) resume(open[0], 'locked');
       else go('mine');
     });
   }
@@ -2909,6 +2960,7 @@
           move: ch.key, level: rate.next(at, ch.key), rateLabel: t('rate.' + ch.key),
           when: new Date().toISOString()
         });
+        bringBack(rate.keyOf(c));
         S.cur = null;
         go('result');
       };
@@ -2972,7 +3024,6 @@
   function mine() {
     var groups = rate.series(S.done);
     if (!groups.length && !S.open.length) { go('doors'); return; }
-    var n = S.done.length;
 
     /*
       One card per belief. A test that is waiting sits on the card for its own belief, and a
@@ -2993,46 +3044,89 @@
       card.open.push(tst);
     });
 
+    /*
+      B53. The same cards, in the same order, split into the list and what has been put away.
+      The order inside each is untouched: archiving moves a card between two lists and does
+      not reorder either of them.
+    */
+    var live = cards.filter(function (c) { return !isAway(c.key); });
+    var away = cards.filter(function (c) { return isAway(c.key); });
+
+    /*
+      Both numbers describe the list a person is looking at, so an archived card is in
+      neither. Rule 5 is untouched — neither is a score, neither is a target, and nothing is
+      added up across cards that are not on the same list.
+    */
+    var kept = live.filter(function (c) { return c.g; }).length;
+    var n = live.reduce(function (sum, c) { return sum + (c.g ? c.g.tests : 0); }, 0);
+
+    /*
+      One card, drawn the same way in both lists — same title, same quoted sentence, same
+      ladder, because an archived test is the same test. What changes is what it asks of the
+      person: on the list it offers the work, and under Archived it offers one thing, which
+      is having it back. A waiting test is still shown there, in words, so nobody wonders
+      where the thing they promised themselves went; it simply stops asking.
+    */
+    var card = function (c, archived) {
+      /*
+        B30. A borrowed test has a label and its sentence underneath; one a person built
+        has no label, and its own sentence is the title. Never truncated, on either.
+      */
+      return '<div class="card' + (archived ? ' away' : '') + '">' +
+        '<h3 class="kicker' + (c.label ? '' : ' said-it') + '">' +
+          esc(titleOf(c)) + '</h3>' +
+        (c.label ? '<p class="belief wrote">“' + esc(c.belief) + '”</p>' : '') +
+        (c.g
+          ? ladder(c.g, { said: true })
+          : '<div class="ladder" role="group" aria-label="' +
+            esc(t('a11y.ladder', { belief: unstop(c.belief) })) + '">' +
+            rung(t('ladder.started'), rate.TOP, {}) + '</div>') +
+        c.open.map(function (tst) {
+          var i = S.open.indexOf(tst);
+          return '<div class="waiting">' +
+            '<p class="lbl">' + esc(t('mine.onTheGo')) + '</p>' +
+            '<p class="do wrote">' + esc(tst.test) + '</p>' +
+            (tst.missed && !archived ? '<p class="soft">' + esc(t('locked.missed')) + '</p>' : '') +
+            (archived ? '' :
+              '<div class="row">' +
+                '<button class="ghost" data-did="' + i + '">' + esc(t('mine.did')) + '</button>' +
+                '<button class="ghost" data-notyet="' + i + '">' + esc(t('mine.notYet')) + '</button>' +
+              '</div>') +
+          '</div>';
+        }).join('') +
+        (archived
+          ? '<button class="ghost" data-back="' + esc(c.key) + '">' +
+              esc(t('mine.unarchive')) + '</button>'
+          : (c.g ? '<button class="ghost" data-again="' + groups.indexOf(c.g) + '">' +
+              esc(t('mine.again')) + '</button>' : '') +
+            '<button class="ghost" data-away="' + esc(c.key) + '">' +
+              esc(t('mine.archive')) + '</button>' +
+            (c.g ? whyLink(c.g.id, 'data-why') : '')) +
+      '</div>';
+    };
+
     paint( backButton() +
       '<div class="stage">' +
         head('h2', t('mine.title')) +
         '<p class="sub">' + esc(n
           ? t('mine.summary', {
-              kept: I.plural('mine.kept', groups.length),
+              kept: I.plural('mine.kept', kept),
               runs: I.plural('mine.runs', n)
             })
-          : t('mine.nothing')) + '</p>' +
-        cards.map(function (c) {
-          /*
-            B30. A borrowed test has a label and its sentence underneath; one a person built
-            has no label, and its own sentence is the title. Never truncated, on either.
-          */
-          return '<div class="card">' +
-            '<h3 class="kicker' + (c.label ? '' : ' said-it') + '">' +
-              esc(titleOf(c)) + '</h3>' +
-            (c.label ? '<p class="belief wrote">“' + esc(c.belief) + '”</p>' : '') +
-            (c.g
-              ? ladder(c.g, { said: true })
-              : '<div class="ladder" role="group" aria-label="' +
-                esc(t('a11y.ladder', { belief: unstop(c.belief) })) + '">' +
-                rung(t('ladder.started'), rate.TOP, {}) + '</div>') +
-            c.open.map(function (tst) {
-              var i = S.open.indexOf(tst);
-              return '<div class="waiting">' +
-                '<p class="lbl">' + esc(t('mine.onTheGo')) + '</p>' +
-                '<p class="do wrote">' + esc(tst.test) + '</p>' +
-                (tst.missed ? '<p class="soft">' + esc(t('locked.missed')) + '</p>' : '') +
-                '<div class="row">' +
-                  '<button class="ghost" data-did="' + i + '">' + esc(t('mine.did')) + '</button>' +
-                  '<button class="ghost" data-notyet="' + i + '">' + esc(t('mine.notYet')) + '</button>' +
-                '</div>' +
-              '</div>';
-            }).join('') +
-            (c.g ? '<button class="ghost" data-again="' + groups.indexOf(c.g) + '">' +
-              esc(t('mine.again')) + '</button>' : '') +
-            (c.g ? whyLink(c.g.id, 'data-why') : '') +
-          '</div>';
-        }).join('') +
+          : t(live.length || !away.length ? 'mine.nothing' : 'mine.allAway')) + '</p>' +
+        live.map(function (c) { return card(c, false); }).join('') +
+        /*
+          Below everything, under its own heading, and it is not a heading focus ever lands
+          on: the screen a person came to is still Your tests. There is no count on it — a
+          number here would be the beginning of a tally of things you gave up on.
+        */
+        (away.length
+          ? '<div class="stowed">' +
+              '<h3 class="sect">' + esc(t('mine.awayTitle')) + '</h3>' +
+              '<p class="tiny">' + esc(t('mine.awayNote')) + '</p>' +
+              away.map(function (c) { return card(c, true); }).join('') +
+            '</div>'
+          : '') +
         '<p class="tiny">' + esc(t('mine.foot')) + '</p>' +
       '</div>');
 
@@ -3051,8 +3145,29 @@
         if (tst) { tst.missed = true; save(); say(t('locked.missed')); render(); }
       };
     });
+    /*
+      Both directions are one tap and neither asks a question, because neither one loses
+      anything: the whole card is still here either way, and the other tap is on the screen
+      the person is already looking at. Contrast "Delete it all", which is the only thing in
+      BETR that has to be confirmed, because it is the only thing that cannot be undone.
+    */
+    qa('[data-away]').forEach(function (b) {
+      b.onclick = function () {
+        putAway(b.getAttribute('data-away'));
+        save();
+        say(t('mine.archived'));
+        render();
+      };
+    });
+    qa('[data-back]').forEach(function (b) {
+      b.onclick = function () {
+        bringBack(b.getAttribute('data-back'));
+        save();
+        say(t('mine.unarchived'));
+        render();
+      };
+    });
   }
-
   /*
     ------------------------------------------------------------- why this one sticks
 

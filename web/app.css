@@ -618,6 +618,23 @@ textarea.line { min-height:64px; }
 .card .waiting .soft { font-size:.875rem; margin:8px 0 0; }
 .card .waiting .row { justify-content:flex-start; margin-top:12px; }
 .card .waiting .ghost { font-size:.9375rem; padding:9px 16px; border-color:currentColor; color:inherit; }
+/*
+  B53. Archived cards, under their own heading at the bottom of Your tests.
+
+  The card is drawn EXACTLY as it is on the list — same type, same ladder, same colours — and
+  the only difference is a dashed edge. Nothing is faded: the obvious way to say "put away" is
+  opacity, and every one of these has a person's own sentence and a ten-rung ladder in it, so
+  fading it trades contrast for a mood on the screen with the worst contrast in the app
+  already. Dashed reads as "off the list" at any size and costs nobody anything.
+*/
+.stowed { margin-top:38px; }
+.stowed .sect {
+  font-family:var(--display); font-weight:700; font-size:.8125rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); line-height:1.45; margin:0 0 6px;
+}
+.stowed .tiny { margin:0 auto 18px; max-width:560px; }
+.card.away { border-style:dashed; }
+.card.away .ghost { margin-top:16px; }
 
 /*
   Help. Its sections are h2 and its groups are h3 (B15) — before that the whole screen started
