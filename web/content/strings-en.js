@@ -627,7 +627,7 @@ var BETR_STRINGS_EN = {
     why: {
       link: 'Why this one sticks',
       title: 'Why \u201C{label}\u201D sticks',
-      foot: 'This is general \u2014 it is not about you, and BETR cannot see anything you have ' +
+      foot: 'This is general — it is not about you, and BETR cannot see anything you have ' +
         'written. If you want to understand it properly, that is what a CBT therapist is ' +
         'for, and Help has places to find one.'
     },
@@ -942,6 +942,44 @@ var BETR_STRINGS_EN = {
       whoTitle: 'Who made this',
       who: 'This is for doing it alone. The people who made it also make TrybeUP, where the ' +
         'same thing is done in small private groups. Only if and when you want that.',
+
+      /*
+        B54, 2026-09-12, the founder's call: the lineage was too quiet. Rule 9 has said since
+        2026-09-01 that TrybeUP is "never styled apart", and this block is styled apart — a
+        logo, the wordmark, and four sentences saying what TrybeUP is. The founder amended
+        their own rule knowingly and it is recorded in CLAUDE.md rule 9 and in B54.
+
+        THREE OF THESE FOUR SENTENCES ARE SAFEGUARDS, NOT COPY, and B8's conditions are why:
+
+          makerCost   says what it costs BEFORE a person taps, including the paywall. A person
+                      who meets an unexpected paid plan after signing up is the exact failure
+                      B8's third condition exists to prevent, and research §7.1 is why B6's
+                      bridge is still gated. `places.js` says the same thing in its own entry;
+                      both say it, and if TrybeUP's free tier changes THEY BOTH CHANGE.
+          makerAI     names the AI coach on purpose. BETR has no AI and says so; TrybeUP has
+                      one. Hidden ownership or a hidden feature discovered later is the
+                      betrayal this audience is braced for (research §4), so it is disclosed
+                      here, beside the boundary, rather than found out after an account.
+          makerApart  draws the line. It is the sentence that keeps a branded block from
+                      reading as "and this app is part of that one".
+
+        makerTag is TrybeUP's own headline, word for word, sitting under TrybeUP's own logo so
+        there is no question who is speaking. Rule 8 is about CBT providers' wording; this is
+        ours to use.
+      */
+      makerName: 'TrybeUP™',
+      makerTag: 'Tell us one problem. We’ll give you one thing to do a day.',
+      makerWhat: 'TrybeUP is a personal-change app. You describe what you most want to fix, ' +
+        'in your own words, and it turns that into one small daily step, tracked honestly. ' +
+        'Done, or rest — and rest never counts against you.',
+      makerAI: 'Habits, workouts, nutrition, an AI coach and a community are a tap away when ' +
+        'you want more of it.',
+      makerCost: 'Free to start. One-to-one chat is free, and the private groups need a paid plan.',
+      makerApart: 'It is an account on their servers, which is the opposite of BETR on ' +
+        'purpose. Nothing you write here goes there, and BETR still sends nothing to them or ' +
+        'to anybody else.',
+      makerLink: 'TrybeUP.com',
+      makerLinkWhat: 'their own description, in full. It opens in your browser and needs the internet.',
 
       codeTitle: 'The code',
       code: 'BETR is plain HTML, CSS and JavaScript with no libraries, small enough to read ' +

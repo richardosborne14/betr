@@ -26,6 +26,13 @@ Make a new worry (which should be available at all times), help."*
 | **Shape** | **Three along the bottom of every screen.** Always visible, one tap to anything. |
 | **Voice** | **"Your worries"**, not "My worries". The app talks to you in second person everywhere else, and one first-person label would be the only one. |
 | **TrybeUP** | **Listed in Help among the other places**, not as a promotion. Founder: *"so it's not an obvious Rickroll."* See the safeguards below — this is a partial amendment to CLAUDE.md rule 9 and it has conditions. |
+
+**Amended 2026-09-12 ([`B54`](B54-the-lineage-with-a-logo.md)), by the founder: there is now a
+branded block — logo, wordmark, a blurb — under *Who made this* on Help, which is the opposite
+of "not as a promotion" and was chosen knowingly. The conditions below did NOT go with it: the
+places entry itself is unchanged and still plain, and the three that keep a promotion honest —
+what it costs before the tap, we made it, no parameter on the link — are carried into the new
+block sentence for sentence and tested there.**
 | **A test on the go** | **It waits for you.** Starting a new worry never silently bins a test you locked in. |
 
 ## This amends two rules. Both amendments are recorded in CLAUDE.md

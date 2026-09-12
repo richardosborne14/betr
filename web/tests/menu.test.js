@@ -414,6 +414,87 @@ test('ours is on the Help list, never first, and says who made it and what it co
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');
 });
 
+/*
+  B54, 2026-09-12. The founder asked for the lineage to be obvious, so there is now a block
+  under "Who made this" with TrybeUP's logo and wordmark on it — styled apart, which rule 9
+  forbade until that day and which the founder amended knowingly.
+
+  What this test is actually guarding is the three sentences that came WITH it. A branded
+  block is a promotion, and B8's conditions are what keep a promotion honest: it says what it
+  costs before the tap (including the paywall), it names the AI coach rather than letting
+  somebody find it after signing up (research §4), and it draws the line between an account on
+  their servers and an app that sends nothing. Delete any one of those and this fails.
+*/
+test('the branded block says what TrybeUP costs, that it has an AI, and where BETR ends', () => {
+  const a = boot();
+  const h = a.tap('#m-help').html();
+
+  a.shows('TrybeUP\u2122').shows('Tell us one problem');
+  a.shows('personal-change app').shows('rest never counts against you');
+
+  /* the paywall, before the tap — the same admission as the places entry, in both places */
+  a.shows('Free to start').shows('the private groups need a paid plan');
+  /* the AI, disclosed here rather than discovered later. BETR has none and says so elsewhere */
+  a.shows('an AI coach');
+  /* and the line: their servers, not this phone */
+  a.shows('Nothing you write here goes there');
+  a.shows('sends nothing to them or to anybody else');
+
+  /* it is under "Who made this", below the places list and below the frozen nine */
+  assert.ok(h.indexOf('Who made this') < h.indexOf('Tell us one problem'), 'the block floated up');
+  assert.ok(h.indexOf('This is a self-help worksheet') < h.indexOf('Tell us one problem'),
+    'the block is above the nine sentences');
+  /* and it is still not a button, and still one plain <a> to the same allow-listed url */
+  assert.ok(!/<button[^>]*>[^<]*TrybeUP/.test(h), 'the block is a button');
+});
+
+/*
+  And the part that keeps the airplane-mode proof true. A logo is the first thing in any app
+  that gets hotlinked, and this one came off trybeup.com: if an <img> ever points at a host,
+  the strongest sentence BETR has becomes false on the one screen that makes the promise.
+
+  It cannot happen quietly — `img-src 'self' data:` is in index.html and in the header B3
+  serves, so a remote image is blocked and the logo simply does not appear — but a blocked
+  request is still a request attempted, and this says so in a diff instead.
+*/
+test('every image in the app is a file in the folder, and no font is ever fetched', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const WEB = path.join(__dirname, '..');
+
+  const a = boot();
+  let all = a.html();
+  all += a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
+  all += a.tap('[data-size]', 0).tap('#lock').html();
+  all += a.tap('#nothanks').tap('#done').html();
+  all += a.tap('#m-mine').html();
+  all += a.tap('#back').tap('#m-help').html();
+
+  const srcs = [...all.matchAll(/<img[^>]*\ssrc="([^"]+)"/g)].map((m) => m[1]);
+  assert.ok(srcs.length >= 1, 'no image found at all, so this test is checking nothing');
+  for (const src of srcs) {
+    assert.ok(!/^[a-z]+:/i.test(src) && src.indexOf('//') === -1,
+      src + ' is not a file in this folder');
+    assert.ok(fs.existsSync(path.join(WEB, src)), src + ' is not in web/');
+  }
+  /* the logo is the one we cropped, small enough that nobody is tempted to fetch it instead */
+  assert.ok(srcs.indexOf('trybeup-logo.png') !== -1, 'the TrybeUP logo is not drawn from a file');
+  assert.ok(fs.statSync(path.join(WEB, 'trybeup-logo.png')).size < 30000, 'the logo has grown');
+
+  /*
+    The wordmark is set in the system font at 600. TrybeUP's site uses Inter from Google
+    Fonts; index.html says font-src 'none', so it could not load, and a font file in the repo
+    is a dependency. Both roads are closed here.
+  */
+  const css = fs.readFileSync(path.join(WEB, 'app.css'), 'utf8');
+  assert.ok(css.indexOf('@font-face') === -1, 'a font has been added to the stylesheet');
+  assert.ok(css.indexOf('fonts.googleapis') === -1 && css.indexOf('@import') === -1,
+    'the stylesheet fetches something');
+  const html = fs.readFileSync(path.join(WEB, 'index.html'), 'utf8');
+  assert.match(html, /font-src 'none'/, 'the no-web-font line has gone from the policy');
+  assert.match(html, /img-src 'self' file: data:/, 'images are no longer held to this folder');
+});
+
 /* ------------------------------------------------------- B24: the promise on door one */
 
 /*

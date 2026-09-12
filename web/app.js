@@ -3544,6 +3544,43 @@
         '<h2>' + esc(t('help.whoTitle')) + '</h2>' +
         '<p>' + esc(t('help.who')) + '</p>' +
 
+        /*
+          B54, 2026-09-12, the founder's call: make the lineage obvious. Rule 9's "never
+          styled apart" is amended for this one block, by the person who wrote the rule, and
+          the rest of rule 9 is untouched — this is on HELP, and TrybeUP is still not on the
+          front screen, not in the loop, not in the result and not on the menu. The plain
+          entry in the places list above is unchanged and still comes second in its group.
+
+          THE LOGO IS A FILE IN THIS FOLDER (`web/trybeup-logo.png`, 6 KB), cropped from the
+          one on trybeup.com and committed here. It is not hotlinked and it never could be:
+          the policy in index.html and the header B3 serves are both `img-src 'self' data:`,
+          so an <img> pointing at trybeup.com would be blocked outright and the airplane-mode
+          proof would be a lie in the one place BETR promises it is not. Nothing on this
+          screen is fetched, including this.
+
+          THE WORDMARK IS TEXT, IN THE FONT THE REST OF THE APP USES. TrybeUP's site sets it
+          in Inter 600 from Google Fonts; `font-src 'none'` forbids a web font, and a font in
+          the repo is a dependency and 100 KB for one word. It is the system font at 600,
+          which is what the app is already made of.
+
+          The alt text is empty on purpose: the wordmark beside it says "TrybeUP™" in real
+          text, so a screen reader that also read the image would say the name twice.
+        */
+        '<div class="maker">' +
+          '<p class="maker-lock">' +
+            '<img src="trybeup-logo.png" alt="" width="125" height="144">' +
+            '<span>' + esc(t('help.makerName')) + '</span>' +
+          '</p>' +
+          '<p class="maker-tag">' + esc(t('help.makerTag')) + '</p>' +
+          '<p>' + esc(t('help.makerWhat')) + '</p>' +
+          '<p>' + esc(t('help.makerAI')) + '</p>' +
+          /* what it costs, before the tap (B8's third condition), and then the boundary */
+          '<p class="maker-cost">' + esc(t('help.makerCost')) + '</p>' +
+          '<p class="tiny">' + esc(t('help.makerApart')) + '</p>' +
+          '<p class="maker-go"><a href="https://trybeup.com" target="_blank" rel="noopener noreferrer">' +
+            esc(t('help.makerLink')) + '</a> — ' + esc(t('help.makerLinkWhat')) + '</p>' +
+        '</div>' +
+
         languageBlock() +
 
         '<h2>' + esc(t('help.codeTitle')) + '</h2>' +

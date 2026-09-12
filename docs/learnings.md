@@ -1369,3 +1369,29 @@ Two smaller things that made it worse and are worth knowing:
   "fail 4" for four mutations in a row while the tree was broken. **Run the baseline again at
   the end** — a restored tree that does not match the baseline is the only cheap signal that
   the middle of the sweep was measuring anything.
+
+## 2026-09-12 — an asset asked for by URL is an asset that has to be committed, and this machine cannot crop a PNG
+
+The founder asked for the TrybeUP logo "from `https://trybeup.com/assets/…png`" and the wordmark
+"in Inter 600 from Google". **Neither could be done the way it was asked, and not as a matter of
+taste: the app's own policy forbids both.** `index.html` and the header `deploy/nginx.conf`
+serves say `img-src 'self' data:` and `font-src 'none'`, so a remote image is **blocked and
+simply does not appear**, and a web font can never load at all. The compliant shape of "use
+their logo" is always **download it once, commit it, reference it by relative path** — and the
+compliant shape of "use their font" is the system font, or glyph outlines in an SVG.
+
+Worth knowing before reaching for it: **there is no image tooling on this machine.** No
+ImageMagick, no PIL. `sips` is there and **`sips --cropOffset` is ignored — every `sips -c` crop
+is centred**, which quietly returns the middle of the image while looking like it worked (it cut
+the top off the mark and left half the wordmark in). Two ways out: crop in CSS with
+`object-fit`/`object-position`, or **decode the PNG in node with `zlib` alone** — inflate,
+unfilter the scanlines, crop, box-average, re-deflate, re-CRC. That is ~120 lines, it is in the
+scratchpad as `png.js`, and it turned a 44 KB 402×620 logo into a 6.4 KB 125×144 mark. The
+screenshot path needs it too: **`walk.js shot` captures the WHOLE page** (`captureBeyondViewport:
+true`) — the Help screen is 17,000px tall, so the block under review is 3% of the image and
+unreadable until it is cropped out. Its captures are **RGB, not RGBA**, so a decoder written for
+the logo throws on them.
+
+And one small design note that is really an accessibility note: **size a logo in `em`, never px.**
+At 200% text a mark pinned to 42px is a stamp beside giant words; `height:2.7em` grew it to 84px
+with the sentence next to it.

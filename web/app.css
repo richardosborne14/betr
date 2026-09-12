@@ -670,6 +670,29 @@ textarea.line { min-height:64px; }
 .sheet .build { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.75rem; color:var(--ink-3); word-break:break-all; }
 
 /*
+  B54, 2026-09-12. The one block in BETR that wears somebody else's brand, under "Who made
+  this" on Help. Rule 9's "never styled apart" was amended for it by the founder; the plain
+  entry in the places list above is NOT this and keeps looking like its neighbours.
+
+  The mark is sized in `em`, not px, so it grows with a person's text-size setting like every
+  other thing on the screen — at 200% a logo pinned to 34px would be a stamp beside giant
+  words. `width:auto` keeps its own aspect ratio from the file, and the width/height
+  attributes in the markup mean the line does not jump when it paints.
+
+  The wordmark is 600, the weight TrybeUP's own site uses, in the system font the app is made
+  of. No font is fetched and none is in the repo (index.html: font-src 'none').
+*/
+.sheet .maker { border:2px solid var(--edge); border-radius:16px; padding:15px 17px; margin:10px 0 4px; background:var(--ground); }
+.sheet .maker-lock { display:flex; align-items:center; gap:11px; margin:0 0 9px; }
+.sheet .maker-lock img { height:2.7em; width:auto; flex:none; }
+.sheet .maker-lock span { font-family:var(--display); font-weight:600; font-size:1.25rem; letter-spacing:-.015em; line-height:1.1; }
+.sheet .maker-tag { font-family:var(--display); font-weight:600; color:var(--ink); margin:0 0 8px; }
+.sheet .maker p { margin:0 0 7px; }
+.sheet .maker .maker-cost { color:var(--ink-2); }
+.sheet .maker .tiny { margin-top:9px; margin-bottom:7px; }
+.sheet .maker .maker-go { margin:0; }
+
+/*
   B17. The crisis block sits at the top of Help and inside a self-harm refusal, so its parts
   have to read correctly in both: on the card, and on the coloured warning panel where the
   text is already the warning colour and a link must not fight it.

@@ -83,6 +83,20 @@ rules at once, and every one of them has failed in some other product.
    never a button, never styled apart; it says we made it and what it costs, right there in the
    entry; no deep link, no campaign parameter, no referral code, ever. Not on the front screen,
    not in the loop, not in the result, not on the menu.
+   **Amended 2026-09-12 (B54), by the founder, and it is the "never styled apart" half that
+   went:** under *Who made this* on Help there is now a **block with TrybeUP's logo, the
+   wordmark `TrybeUP™` and seven sentences saying what TrybeUP is**, ending in one plain link.
+   The founder's word was "more obvious". **The places entry is NOT that block and is
+   unchanged** — still plain, still second in its group. Everything else in rule 9 stands, and
+   is still tested: it is on **Help and nowhere else**, it is **not a button**, and there is no
+   parameter on the link. Three of the seven sentences are safeguards rather than copy and
+   `menu.test.js` fails the build if any goes: **what it costs including the paywall** (B8's
+   third condition), **that TrybeUP has an AI coach and BETR still has none**, and **that it is
+   an account on their servers and nothing written here goes there**. **The logo is
+   `web/trybeup-logo.png`, a file in this repo** — never hotlinked, because `img-src 'self'`
+   blocks it and rule 1 is why — and **the wordmark is the system font at 600, never Inter from
+   Google** (`font-src 'none'`, and "don't add a font"). **B6's gate is still shut**; a block of
+   prose is not the bridge.
 10. **The interface is one big button — with one exception, chosen on 2026-09-08.** One
     sentence per loop. A wizard, a slider or a chat has been rejected by the founder and does
     not come back. **Amended 2026-09-08 (B28/B29), by the person who made the rule:** the way

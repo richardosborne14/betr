@@ -33,6 +33,12 @@
     6. TrybeUP is in the last group under the conditions in B8: never first, never a button,
        never styled apart, it says we made it and what it costs right there, and it never
        carries a link parameter of any kind.
+       AMENDED 2026-09-12 (B54), and this file is the half that did NOT change. There is now a
+       branded block — logo, wordmark, a blurb — under "Who made this" on Help, and rule 9's
+       "never styled apart" was amended for it by the founder. THIS ENTRY IS NOT THAT BLOCK.
+       It stays a plain <li> that looks like Side by Side above it, and menu.test.js still
+       fails the build if it moves first or turns into a button. The paywall sentence is now
+       said in both places; if TrybeUP's free tier changes, BOTH change the same day.
 
   Prefer short, stable urls. Nothing here can check itself, a deep path rots first, and a dead
   link in a mental-health app is a real harm. Checking them is on the release checklist.
