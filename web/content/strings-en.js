@@ -82,6 +82,24 @@ var BETR_STRINGS_EN = {
     back: 'Back',
 
     /*
+      B55, 2026-09-12, the founder's call, and the reason they gave is worth writing down:
+      *"I'm trying to do as much promo for TrybeUP as possible, even if people just think BETR
+      is kind of cool looking but don't use it, at least they might click through."*
+
+      IT DOES NOT SAY TRYBEUP, AND THAT IS THE DECISION. Rule 9's last standing half is that
+      TrybeUP is not named on the front screen, in the loop, in the result or on the menu.
+      This is a question, in BETR's own voice, that lands on the block that answers it — so
+      the front screen carries the door to the lineage without carrying the brand. The
+      founder was offered "Made by TrybeUP" as the bigger step and it is theirs to take;
+      `menu.test.js` fails the build the day the word appears outside Help.
+
+      It is a question because that is what a person actually thinks about an app they have
+      just opened and are not sure about yet. A statement is an advert; a question is an
+      offer.
+    */
+    byline: 'Who made this?',
+
+    /*
       The corner chip, B35. It names the look you would GET by tapping it, not the one you are
       in — "Dark" means tap here for dark. The sun and the moon beside the words are
       decoration and are hidden from a screen reader, so the spelled-out label is the whole of

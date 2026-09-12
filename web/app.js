@@ -660,6 +660,48 @@
   function wireBack(target) { on('#back', function () { go(target); }); }
 
   /*
+    Help, landed on a heading rather than at the top of it. Help is four screenfuls long, so
+    anything that sends somebody there for one answer has to put that answer on the screen.
+
+    Two callers, and they were the same eight lines twice: door one's note ("Help has places
+    that are" — B24), and the byline on the front screen (B55). Both move INSIDE the app; no
+    link leaves it, so the rule that only Help carries links is untouched.
+
+    Focus AND a scroll, in that order, and neither does the other's job: the focus is what a
+    screen reader follows, the scroll is what an eye follows. focus() on its own scrolls the
+    least it can get away with, which put the heading at the bottom of the screen with what
+    was promised under the fold.
+  */
+  function goHelpTo(id) {
+    go('help');
+    var h = q('#' + id);
+    if (h && h.focus) { try { h.focus(); } catch (e) { /* older browser */ } }
+    if (h && h.scrollIntoView) { try { h.scrollIntoView(); } catch (e) { /* older browser */ } }
+  }
+
+  /*
+    B55, 2026-09-12, the founder's call: "who made this?" at the top of the screens a person
+    is browsing rather than working on, jumping to the block on Help that answers it.
+
+    WHERE IT IS AND IS NOT, and the "is not" half is rule 9's last standing half: the front
+    screen and Your tests, and NOT in the loop, NOT on the result, and NOT on a refusal. Two
+    reasons and they point the same way. A person who has just written a sentence about what
+    they are afraid of, or one who has just been handed a helpline number, is not somebody to
+    show a door to another product; and the person this is FOR — the one who thinks BETR
+    looks interesting and will never do a test — is on the front screen, which is where the
+    taps were always going to come from.
+
+    It is drawn by the two screens that carry it rather than by paint(), so a screen has to
+    ask for it. That is the difference between this and the theme chip, and it is deliberate:
+    the day somebody adds it to paint() it appears inside the loop, which is the thing rule 9
+    still forbids.
+  */
+  function byline() {
+    return ' <button class="byline" id="made">' + esc(t('byline')) + '</button>';
+  }
+  function wireByline() { on('#made', function () { goHelpTo('who-made'); }); }
+
+  /*
     B35, founder's ask: light or dark, "always floating somewhere easy to click". It is drawn
     by paint(), so it is on every screen without any screen having to remember it, and it is
     the mirror of the Back chip rather than a new kind of object.
@@ -980,7 +1022,8 @@
   function start() {
     paint(
       '<div class="stage">' +
-        '<div class="kicker">' + esc(t('brand')) + '</div>' +
+        /* The byline rides on the wordmark's line (B55), so the big button does not move. */
+        '<div class="kicker">' + esc(t('brand')) + byline() + '</div>' +
         head('h1', t('start.caption'), 'caption') +
         exampleCard() +
         /*
@@ -1009,6 +1052,7 @@
     /* The exit, one tap aside: their own sentence, from nothing, owned end to end (B45 §4). */
     on('#go', newTest);
     wireWaiting();
+    wireByline();
   }
 
   function doors() {
@@ -1047,26 +1091,7 @@
       untouched (menu.test.js checks that on every other screen).
     */
     qa('[data-note]').forEach(function (b) {
-      b.onclick = function () {
-        go('help');
-        /*
-          And land on the group, not at the top. Help is four screenfuls long, and a person
-          who has just been told "this isn't the right thing" should not have to scroll past
-          an essay about CBT to reach what the sentence promised them.
-
-          Focus, not a scroll: it moves the view for somebody looking and the reading point
-          for somebody listening, which a scroll on its own does not (see "heard, not seen").
-        */
-        var h = q('#group-substances');
-        if (h && h.focus) { try { h.focus(); } catch (e) { /* older browser */ } }
-        /*
-          focus() on its own scrolls the least it can get away with, which put the heading at
-          the bottom of the screen with two of the six places under the fold. This puts it at
-          the top. Both, in this order: the focus is what a screen reader follows, the scroll
-          is what an eye follows, and neither does the other's job.
-        */
-        if (h && h.scrollIntoView) { try { h.scrollIntoView(); } catch (e) { /* older browser */ } }
-      };
+      b.onclick = function () { goHelpTo('group-substances'); };
     });
     /* Nobody is in all six. The way out of the screen is the same one as inside a door. */
     on('#own', newTest);
@@ -3114,6 +3139,12 @@
               runs: I.plural('mine.runs', n)
             })
           : t(live.length || !away.length ? 'mine.nothing' : 'mine.allAway')) + '</p>' +
+        /*
+          B55. Under the summary rather than between the title and its own sentence, which
+          are a pair. The other screen that carries it is the front one; nothing in the loop
+          does, and the note on byline() says why.
+        */
+        '<p class="byline-row">' + byline() + '</p>' +
         live.map(function (c) { return card(c, false); }).join('') +
         /*
           Below everything, under its own heading, and it is not a heading focus ever lands
@@ -3132,6 +3163,7 @@
 
     wireBack('start');
     wireWhy('mine');
+    wireByline();
     qa('[data-again]').forEach(function (b) {
       b.onclick = function () { again(groups[Number(b.getAttribute('data-again'))].last, 'mine'); };
     });
@@ -3541,7 +3573,12 @@
             }).join('') + '</ul>';
         }).join('') +
 
-        '<h2>' + esc(t('help.whoTitle')) + '</h2>' +
+        /*
+          The one id on this screen besides the substances group, and it is there for the same
+          reason: something outside sends a person here for this answer (B55's byline), and
+          Help is long enough that arriving at the top is the same as not arriving.
+        */
+        '<h2 id="who-made" tabindex="-1">' + esc(t('help.whoTitle')) + '</h2>' +
         '<p>' + esc(t('help.who')) + '</p>' +
 
         /*

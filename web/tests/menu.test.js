@@ -415,6 +415,59 @@ test('ours is on the Help list, never first, and says who made it and what it co
 });
 
 /*
+  B55, 2026-09-12, the day after B54 and from the same founder message thread: *"I'm trying to
+  do as much promo for TrybeUP as possible … even if people just think BETR is kind of cool
+  looking but don't use it, at least they might click through."* So the front screen now has a
+  door to the lineage on it — and this test is the shape of that door, because the shape is the
+  whole of what keeps rule 9 standing.
+
+  TWO SCREENS CARRY IT AND THE LOOP DOES NOT. A person who has just written a sentence about
+  what they are afraid of is not somebody to show another product to, and a refusal screen with
+  a promotion on it would be indefensible. The taps this is for were always going to come from
+  the front screen anyway.
+
+  AND IT DOES NOT SAY TRYBEUP. Rule 9's last standing half is that the brand is not named
+  outside Help, and the label is a question in BETR's voice instead. "Made by TrybeUP" on the
+  front screen is the founder's to take; this test is what makes taking it deliberate.
+*/
+test('"Who made this?" is on the front screen and Your tests, and nowhere in the loop', () => {
+  const a = boot();
+  a.shows('Who made this?');
+  /* and it names nobody: the front screen is still clean of the brand (rule 9) */
+  assert.ok(a.html().toLowerCase().indexOf('trybeup') === -1, 'the front screen names TrybeUP');
+
+  /* every screen of the loop, door to result */
+  a.tap('#pick').hides('Who made this?');
+  a.tap('[data-door]', 0).hides('Who made this?');
+  a.tap('[data-id]', 0).tap('[data-b]', 0).hides('Who made this?');
+  a.tap('#next').hides('Who made this?');
+  a.tap('[data-size]', 0).tap('#lock').hides('Who made this?');
+  a.tap('#nothanks').tap('#done').hides('Who made this?');
+  a.type('#o', 'He said fair enough.').tap('#next').hides('Who made this?');
+  a.tap('[data-key]', 1).hides('Who made this?');
+
+  /* Your tests carries it. Help does not — a door is no use on the screen it opens onto */
+  a.tap('#m-mine').shows('Who made this?');
+  a.tap('#back').tap('#m-help').hides('Who made this?');
+});
+
+/*
+  And it has to LAND on the block, not at the top of a screen four screenfuls long. Help puts
+  the crisis lines first on purpose (B17), so a byline that scrolled nowhere would answer "who
+  made this?" with a suicide line — which is what `goHelpTo` and the id on the heading are for.
+*/
+test('the byline opens Help at the block that answers it', () => {
+  const a = boot();
+  const h = a.tap('#made').html();
+  a.shows('Who made this').shows('TrybeUP\u2122').shows('Tell us one problem');
+  /* the anchor the jump aims at, on the heading itself */
+  assert.match(h, /<h2 id="who-made" tabindex="-1">/, 'the heading the byline aims at has gone');
+  /* and the block is still below the frozen nine and the places list, unmoved by B55 */
+  assert.ok(h.indexOf('This is a self-help worksheet') < h.indexOf('Who made this'),
+    'the block moved above the nine sentences');
+});
+
+/*
   B54, 2026-09-12. The founder asked for the lineage to be obvious, so there is now a block
   under "Who made this" with TrybeUP's logo and wordmark on it — styled apart, which rule 9
   forbade until that day and which the founder amended knowingly.

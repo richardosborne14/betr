@@ -102,6 +102,28 @@ button:focus-visible, textarea:focus-visible { outline: 3px solid var(--btn); ou
   font-family: var(--display); font-weight:700; font-size:.8125rem; letter-spacing:.14em;
   text-transform:uppercase; color: var(--btn); margin:0 0 14px; line-height:1.45;
 }
+/*
+  B55, 2026-09-12. "Who made this?" — on the front screen it rides on the wordmark's own
+  line, which is why it costs the big button no height at all, and on Your tests it has a
+  line of its own under the summary.
+
+  It has to UNDO the kicker it sits inside: uppercase and .14em tracking are right for four
+  letters of wordmark and wrong for a question, and "WHO MADE THIS?" would shout the one
+  thing on the screen that is meant to be quiet. `--ink-3` on `--ground` is the same
+  under-the-fold grey as the promise line below it, and it is a question rather than a
+  statement on purpose (see the note on the string).
+
+  The dot is drawn here rather than written into a string, because it is furniture and not a
+  word — a translation should never have to carry it.
+*/
+.byline, .byline-row .byline {
+  background:none; border:0; padding:0;
+  font-family:var(--display); font-weight:600; font-size:.8125rem;
+  text-transform:none; letter-spacing:0; color:var(--ink-3);
+  text-decoration:underline; text-underline-offset:3px;
+}
+.kicker .byline::before { content:'·'; display:inline-block; padding:0 .45em 0 .2em; text-decoration:none; color:var(--ink-3); }
+.byline-row { margin:-6px 0 22px; }
 h1 { font-family:var(--display); font-weight:800; font-size:clamp(2.25rem,8vw,3.75rem); line-height:1.04; letter-spacing:-.025em; margin:0 0 16px; text-wrap:balance; }
 /*
   The front screen's heading (B31). It is four words and it is the most load-bearing string on

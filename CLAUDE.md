@@ -97,6 +97,16 @@ rules at once, and every one of them has failed in some other product.
    blocks it and rule 1 is why — and **the wordmark is the system font at 600, never Inter from
    Google** (`font-src 'none'`, and "don't add a font"). **B6's gate is still shut**; a block of
    prose is not the bridge.
+   **Amended again 2026-09-12 (B55), same founder, same day, and it is a door rather than a
+   mention:** the front screen and *Your tests* carry **`Who made this?`** — grey, underlined,
+   on the wordmark's own line — which opens Help at the block above. **It does not say TrybeUP,
+   and that is the point:** the brand is still not named on the front screen, in the loop, in
+   the result or on the menu, so the app carries the door to the lineage without carrying the
+   promotion. *Made by TrybeUP* there is the founder's to take and was offered; `menu.test.js`
+   fails the build the day the word appears outside Help. **It is NOT in the loop, NOT on the
+   result and NOT on a refusal** — a person who has just written what they are afraid of, or
+   been handed a helpline number, is not somebody to show another product to — and it is
+   deliberately **not drawn by `paint()`**, so it cannot reach those screens by one edit.
 10. **The interface is one big button — with one exception, chosen on 2026-09-08.** One
     sentence per loop. A wizard, a slider or a chat has been rejected by the founder and does
     not come back. **Amended 2026-09-08 (B28/B29), by the person who made the rule:** the way

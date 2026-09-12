@@ -1,6 +1,6 @@
 # Start here
 
-**Last refreshed:** 2026-09-12, 7th session — **the founder asked for the lineage to be obvious, so TrybeUP now has a logo, a wordmark and a blurb on Help. 294 tests pass.** Rewritten, never appended to. Cap: 120 lines.
+**Last refreshed:** 2026-09-12, 7th session — **the lineage is loud now: a logo and a blurb on Help (B54), and a door to it from the front screen (B55). 296 tests pass.** Rewritten, never appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
@@ -9,21 +9,23 @@ little blurb about what is trybeup that leads them to the trybeup.com landing pa
 headline, the *personal-change app* paragraph, and one plain link. **Rule 9's "never styled apart" is amended** — by the founder, in the ask — and the rest of rule 9 is
 untouched and still tested: Help only, not a button, no parameter on the link, **and the plain places entry above is unchanged**.
 
-**Two things in the ask could not be built, and the reason is the app's own policy, not taste.** `img-src 'self' data:` and `font-src 'none'`, in `index.html` and in the
-header B3 serves. So: **the logo is a file in the repo** — `web/trybeup-logo.png`, 6.4 KB, cropped off trybeup.com and committed, never hotlinked — and **the wordmark is
-the system font at 600, not Inter from Google**. A hotlinked logo would not even appear; it would just be a request attempted on the one screen that promises none. If the
-exact Inter letterforms are ever wanted, the only road is glyph outlines in an inline SVG (B54 §2).
+**Two things in that ask could not be built, and the reason is the app's own policy, not taste:** `img-src 'self' data:` and `font-src 'none'`, in `index.html` and in the header B3
+serves. **The logo is a file in the repo** — `web/trybeup-logo.png`, 6.4 KB, cropped off trybeup.com, never hotlinked (a hotlinked one would not appear at all, it would just be a
+request attempted on the one screen that promises none) — and **the wordmark is the system font at 600, not Inter from Google**. Exact Inter letterforms = glyph outlines in an SVG (B54 §2).
 
-**Three of the seven new sentences are safeguards, not copy**, carried over from B8's conditions and each held by a test: **what it costs including the paywall**, **that
-TrybeUP has an AI coach**, and **that it is an account on their servers and nothing written here goes there**. **B54 §5.3 is the founder's to confirm and it is live:** BETR
-says it has no AI two paragraphs above a sentence that says TrybeUP has one. The recommendation is to keep it — a feature found out after signing up is the betrayal
-research §4 is about — but it is one line to delete. **B6's gate is still shut**; a block of prose is not the bridge.
+**Then [`B55`](tasks/B55-a-door-to-who-made-it.md), same founder, same day, and the reason decides the design:** *"as much promo for TrybeUP as possible — even if people just think BETR is
+cool looking but don't use it, at least they might click through."* The front screen and *Your tests* carry **`BETR · Who made this?`**, grey and underlined **on the wordmark's own line, so
+the big button did not move** (*Find yours* still 564px), opening Help **landed on the block** via a new `goHelpTo(id)` that door one's note now shares. **It does not say TrybeUP, and that is
+the decision** (rule 9's last standing half). ***Made by TrybeUP* was offered and is the founder's.** **NOT in the loop, NOT on the result, NOT on a refusal, NOT in `paint()` — B55 §4.**
 
-**Before that: [`B53`](tasks/B53-the-bottom-rung-and-the-archive.md) — nothing happens at the bottom rung, on purpose, and Archive is what was actually missing.** A test
-compares a rung-1 result screen with a rung-7 one button for button, so the next person who thinks a little celebration would be kind has to argue with its §3. Archive is
-one array of ladder keys, **no version bump, nothing deleted, not in the export**. **Before that, [`B51`](tasks/B51-the-second-question.md) §5: the loop asks *"And what
-would that mean for you?"*** on the last screen before *Lock it in*, on every road, **Misha unread**, and **§13 item 1: the reviewer's three questions are unanswered and
-the founder shipped ahead of them.**
+**Three of B54's seven new sentences are safeguards, not copy**, from B8's conditions and each held by a test: **what it costs including the paywall**, **that TrybeUP has an AI coach**,
+**that it is an account on their servers**. **B54 §5.3 is the founder's to confirm and it is live:** BETR says it has no AI two paragraphs above a sentence saying TrybeUP has one — keep it,
+because a feature found out after signing up is the betrayal research §4 is about, but it is one line to delete. **B6's gate is still shut**; a block of prose is not the bridge.
+
+**Before that: [`B53`](tasks/B53-the-bottom-rung-and-the-archive.md) — nothing happens at the bottom rung, on purpose** (a test compares a rung-1 result screen with a rung-7 one button for
+button, so the next person who thinks a little celebration would be kind argues with its §3), **and Archive is what was actually missing** — one array of ladder keys, **no version bump,
+nothing deleted, not in the export**. **Before that, [`B51`](tasks/B51-the-second-question.md) §5: the loop asks *"And what would that mean for you?"*** before *Lock it in* on every road,
+**Misha unread**, and **§13 item 1: the reviewer's three questions are unanswered and the founder shipped ahead of them.**
 
 ## 2. The next action — the first is code, the rest are not
 1. **The other nineteen worries' size holes.** Sixty sentences, an hour, one question: *"are there already words standing in for something a
@@ -45,12 +47,12 @@ the founder shipped ahead of them.**
    The rest is still a pitch — **three TrybeUP dev ports open to the internet**, no firewall, no rate limit, no HSTS, no CAA, **no uptime
    monitoring at all**, eleven decisions in its §6. **Point any monitor at `/app.js`, never at the page**, or it counts itself.
 1. **The founder.** **(a) B54 §5.3 — the word *AI* in the new block**, and **§4 — the three numbered steps from the landing page were deliberately left
-   out.** **(b) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row; plus four renames and three questions
+   out. (a2) B55 §2 — whether the front screen's question should instead SAY *Made by TrybeUP*, and §6.4 — whether *Your tests* keeps the line at all.** **(b) `docs/redraft-sheet.md`** — read the Mine column, disagree on the row; plus four renames and three questions
    (`S10-D2`, `S15-P1`, `S18-D1`). **(c) B47 §6c.** **(d) `ontime` is the weakest fit of the twenty behind the `work` door.** **(e)
    `happened.placeholder`, above.** **(f) B53 §7.2 — *Test this again* and *Archive* are two ghost buttons of equal weight on a card.** Then: walk J4 and J5 on a phone, B36 items 6 and 9, five answers on *Why it's written like this*, rule
    10's third amendment (B37 §9a), which example leads the front screen **and whether four stays four** (`example-tests-bank.md` §4), **the
    purpose statement**, the **`HARM` false refusal**, **B25**.
-2. **Misha, in one ask.** `docs/COPY.md` is regenerated. **NEWEST: B54's seven** — `help.makerName`, `makerTag` (**TrybeUP's own headline, word for
+2. **Misha, in one ask.** `docs/COPY.md` is regenerated. **NEWEST: B55's `byline` (*Who made this?*) — three words, and the first three in BETR written to sell something. Then B54's seven** — `help.makerName`, `makerTag` (**TrybeUP's own headline, word for
    word**), `makerWhat`, `makerAI`, `makerCost`, `makerApart`, `makerLink`, `makerLinkWhat`; they are TrybeUP's copy on BETR's Help screen, so he is the
    reviewer who matters most. **Then B53's five** — `mine.archive` (*Archive*), `mine.unarchive`,
    `mine.awayTitle` (*Archived*), **`mine.awayNote`, the longest new sentence in the app**, and `mine.allAway`. **ALREADY LIVE AND UNREAD:
@@ -75,7 +77,7 @@ the founder shipped ahead of them.**
 
 | | |
 | --- | --- |
-| Repo · stack | `github.com/richardosborne14/betr`, private, `main`; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (294 pass); `node tools/copy-sheet.js` rewrites `docs/COPY.md` |
+| Repo · stack | `github.com/richardosborne14/betr`, private, `main`; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (296 pass); `node tools/copy-sheet.js` rewrites `docs/COPY.md` |
 | **Walk it for real** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · **`eval <js>`** · `stop`. Chrome stays alive between commands, 390×844 @3x. **Always `stop`.** Live at **`https://betr.trybeup.com`** — every push to `main` touching `web/**` publishes it; cert expires 2026-12-02 |
 | **The canvas** | the B45 spec, `claude.ai/code/artifact/77d1cadb-…`. **Read it with the Artifact tool** (`action: "read"`), then pull the artboards out of the `appifact-doc` script block — **the reply is 2.4MB of editor chrome; parse the saved file.** Overruled on difference 4 |
 | **The sheet** | `docs/suggestions-review.csv`, **558 rows with the header**, **CRLF and a BOM — keep both**. A `csv.reader` → `csv.writer(QUOTE_MINIMAL, lineterminator='\r\n')` round trip is byte-identical; **match a Status exactly** |
@@ -104,11 +106,9 @@ the founder shipped ahead of them.**
 - **A GREEN SUITE PROVES NOTHING ABOUT A SCREEN NOBODY READ.** (a) **A string wrong because content moved? check every string of its
   kind** — `grep -n "[Pp]laceholder" strings-en.js` against `worries.js`. (b) **Navigating by id tests nothing about what a person
   sees**: the front buttons were reversed for two days. **Assert class and arrow** (B50).
-- **`walk.js` CANNOT FIRE A FOCUS EVENT.** `el.focus()` from `eval` moves `activeElement` but **dispatches no `focus`**, so `onfocus` work
-  (**`refreshThens()`**) looks dead. **Call it:** `eval '…#then").onfocus()'`.
+- **`walk.js` CANNOT FIRE A FOCUS EVENT.** `el.focus()` from `eval` moves `activeElement` but **dispatches no `focus`**, so `onfocus` work (**`refreshThens()`**) looks dead. **Call it:** `eval '…#then").onfocus()'`.
 - **THERE IS ONE CONTENT FILE FOR A WORRY.** `worries.js` holds the twenty plus `BETR_GENERAL` and `BETR_FRONT`; **`starts.js` is deleted**. `skeleton`/`sizes` REQUIRED; **`test` and `drop` are read by nothing** — `sizes[0]` word for word (`checkSizes0`).
-- **A WALK NEEDS A SIZE TAP, ON EVERY ROAD.** On `no`'s **A small go** there is no `#do` box; the plan is `.plan-said` with
-  `#p-thing` in it. **`shows`/`hides` are SUBSTRING checks on the HTML** and **`walk.js tap` takes ONE selector**.
+- **A WALK NEEDS A SIZE TAP, ON EVERY ROAD.** On `no`'s **A small go** there is no `#do` box; the plan is `.plan-said` with `#p-thing` in it. **`shows`/`hides` are SUBSTRING checks on the HTML**; **`walk.js tap` takes ONE selector**.
 - **A rewrite can reach outside the content file** — `shrinkSaid` quotes `S01-P3`, `smallest` is read on two guide screens,
   **`build.ifPlaceholder` is load-bearing twice**. **Grep first.** Culled ids are retired (`phone` `reply` `check` `mist` `cut`);
   the door floor exists (`MIN_PER_DOOR = 4`); **two count canaries** (269 lines, 12 chips) move only for a cull.
