@@ -1,68 +1,62 @@
 # Start here
 
-**Last refreshed:** 2026-09-15, 9th session, second half — **the founder rejected the first simplification as "missing the mark", asked for a
-ground-up redesign with a clear value proposition, and answered the practical questions. A second canvas was drawn. Nothing in `web/` changed.
-296 tests pass. The repo is PUBLIC and MIT from today.** Rewritten, never appended to. Cap: 120 lines.
+**Last refreshed:** 2026-09-15, 9th session, third round — **the founder called the redesign "much better, nearly right", picked the terracotta
+look, and gave nine corrections; the canvas was redrawn to them. Nothing in `web/` changed. 296 tests pass. The repo is PUBLIC and MIT.**
+Rewritten, never appended to. Cap: 120 lines.
 
 ## 1. Where we are
 
-**The founder's brief for the redesign, 2026-09-15, in their words as near as matters:** *"Forget everything so far. A very clear value prop,
-tempting someone to get started with no friction or excuse. When I was sitting and thinking I actually got excited about writing a hope down in
-BETR. I want that for first-time users — the first thing they see, universally touching, heartwarming, inspires emotion and hope. And enough of
-the CBT research in there to help people progress cleverly."* The first canvas (*BETR, One Sentence*, `claude.ai/artifact/Qzjr2ZDLTCTKhPjmDb8jnx`)
-was simpler but had no value proposition; keep it only as the record of what was rejected.
+**The canvas: *BETR, Bet on a Hope* — `https://claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc`** (version 2). Read it with the Artifact tool and extract
+the artboards; do not redraw from memory. Nine screens. **This is the design to build**, pending §3 item 0.
 
-**The second canvas: *BETR, Bet on a Hope* — `https://claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc`.** Eleven artboards. Read it with the Artifact
-tool and extract the artboards; do not redraw from memory. What it proposes:
+**The founder's decisions this round, each one now on the canvas:**
+- **The look is the terracotta "Poster" one.** Orange ground, paper cards, serif for the person's words, sans for the app's. System fonts only.
+- **Type system: two voices, two fonts.** The person's words are ALWAYS the serif on a paper card (the prediction; what happened). The app's words
+  are ALWAYS the sans on the orange, one bold 24px question per screen. Small caps labels only to name a state. **The prediction is the paper
+  card at the top of every loop screen, same size, same place** — the founder's complaint was that it "hid in a small font at the top".
+- **The sentence is `If I ___, then ___.`** — no "I hope", no "I'm hoping" ("sounds American"; "simplicity is king"). One form for both directions.
+- **The button is `Lock it in`.** "Bet on it" is dead.
+- **After the test, the friend asks first:** `So… how did it go?` → **`Yeah!`** (bright, marker-yellow, a spark) / **`Sort of`** (plain paper) /
+  **`Not really`** (quieter) → THEN `What happened?` with the chosen tag beside it → `Keep it`. It asks how it went, not whether you were right,
+  so it serves a hope and a worry alike and carries no verdict.
+- **No "It held" screen. No tally. No "Held 3 of 4"** ("smartarsed"). After `Keep it` you land on the results: the prediction, then every result
+  in the person's own words with its tag and a day label. People put the puzzle together themselves.
+- **`Same again tomorrow`, then a quiet `Done with this one`** for one-shot predictions — puts it away, does not delete. Alternatives offered:
+  "Put this one away", "That's that one done".
+- **`New prediction`, not "A new hope"** (Star Wars). The founder floated **"prediction" as the one word for hopes and worries**; the canvas
+  uses it in the chrome (*Your predictions*, *New prediction*) and offers two fronts: **`Write down a hope.`** (warm) and **`What do you think
+  will happen?`** (takes a worry as easily). Founder's pick.
+- The optional "worry underneath" line from version 1 is **gone** — with "prediction" for both, a worry is just another prediction.
+- The fixed progression (same again → raise it → without the safety net) is **off the results screen**; it can live in *How it works*.
 
-- **Value proposition, one line, on the front:** *Write down a hope. Find out if it's true.* The front IS the writing page: one worked example
-  (somebody's hope and what happened, held 3 of 3), then *If I ___, I'm hoping ___.* and **Bet on it**. Nothing to tap before you can write.
-- **The hope is the front door; the fear is still in the method.** Screen 2 has an optional one-line *The worry that's been stopping you*,
-  skipped in one tap. Both are locked before the test (Padesky's two beliefs, research/10 §2.3). On the first result the worry is struck
-  through and what happened is in marker.
-- **After the test:** *What happened?* (one box) → *Did it go how you hoped?* **Pretty much / Partly / Not really** → the result.
-- **The number is the tally** (founder's call: "tally alone"): *Held 3 of 4*. **The 1–10 ladder is gone.** Under it, **the evidence log**:
-  every *what happened* in the person's own words, newest first, days as labels not a calendar. Research §11.6 and Padesky's positive data log.
-- **"Progress cleverly" = fixed next steps, printed by count, written by the person:** after 1 hold → *Same bet tomorrow, the second time is
-  where it starts to stick*; after 2–3 → *Raise the bet — same hope, one size bigger, you write it*; after 3+ → *Try it without your safety net*
-  (the A/B run, research §2.4, d = 2.49). The app never chooses; it prints the next sentence of the method.
-- **How it works:** three fresh sentences (research/12 §2: explaining it is the intervention). The frozen eight and the crisis block stay on Help.
-- **Look:** *Paper* — warm off-white, one terracotta accent, a system serif (Georgia / Iowan Old Style) for the person's words, sans for the
-  chrome. Still system fonts only (rule 1). Two low-fi alternates beside it: *Night* (navy and gold) and *Poster* (a terracotta flood, nothing but
-  the sentence). **The founder has not picked a look.**
-- **Chrome:** no three-word bar; three grey links at the foot — *Your hopes · How it works · Help*.
+**Decided earlier today:** tally alone → now no tally at all; **repo public and MIT** (done); **the founder reads the French**; **Misha is no longer
+a co-decider**; **the DNS record is the founder's:** `betr.digitalbricks.io` → `49.12.102.195`, `A` record.
 
-**Decided today, by the founder:** tally alone; **repo public and MIT** (done — `LICENSE` added, `gh repo edit --visibility public`); **the
-founder reads the French**; **Misha is no longer a co-decider** (CLAUDE.md updated). **The DNS record is theirs to add:** `betr.digitalbricks.io`
-→ **`49.12.102.195`**, an `A` record; they asked for the IP and have it.
-
-**Facts that carry over from the first half (see git history of this file for the long form):** translation is already built (`lib/i18n.js`,
-auto-detects the phone's language, per-key English fallback; French is a strings file plus a human check plus helplines read off provider sites);
-the Hetzner box is `ssh nexus` (Caddy, `/srv/<name>/site`, `/etc/caddy/conf.d/*.caddy`, 33 GB and 3 GB free; every write confirmed first);
-the TrybeUP footprint is ~60 lines across `places.js`, `app.js`, `strings-en.js`, `menu.test.js`, `loop.test.js`, `i18n.test.js`, `deploy.yml`,
-plus `web/trybeup-logo.png`, CLAUDE.md rule 9 and the droplet section, scope §1's "commercially" paragraph, B6/B7.
+**Facts that carry over:** translation is already built (`lib/i18n.js`, auto-detects the phone's language, per-key English fallback); the Hetzner
+box is `ssh nexus` (Caddy, `/srv/<name>/site`, `/etc/caddy/conf.d/*.caddy`; every write confirmed first); the TrybeUP footprint is ~60 lines
+across `places.js`, `app.js`, `strings-en.js`, `menu.test.js`, `loop.test.js`, `i18n.test.js`, `deploy.yml`, plus `web/trybeup-logo.png`,
+CLAUDE.md rule 9 and the droplet section, scope §1's "commercially" paragraph, B6/B7.
 
 ## 2. The next action
 
-1. **Wait for the founder's read of the second canvas** (§3 item 0). If it lands: **open task `B56 — the redesign`** and build it as a NEW
-   `web/` rather than editing the old one screen by screen; the old loop is the reference for the guards, store, export, Help, crisis block and
-   i18n, all of which survive unchanged. Content files: `hopes.js` (the worked examples, each direction), the twenty stock sentences rewritten
-   as hopes with their worry underneath (**reviewer before ship**), `strings-en.js` rewritten small. Tests: rule 3 (conditional, "I am" reframed),
-   the harm stop on both boxes, the tally never totalled across hopes, no streak, no "you missed", the banned phrases, BETR all caps.
-2. **`B57 — the move`** can start before the redesign lands, because it is independent: Caddy file, deploy user, `deploy.yml` secrets and path,
-   strip TrybeUP, *Who made this* → the open-source line and the repo link. Keep `betr.trybeup.com` up until the new address is checked.
+1. **Wait for the founder's read of version 2** (§3 item 0). On a yes: **open `B56 — the redesign`** and build it as a NEW `web/` beside the old
+   one, not screen-by-screen edits. Survives unchanged from the old loop: the guards (harm stop on both blanks, "I am" reframed), `store.js`,
+   export and delete, Help with the frozen sentences and the crisis block, `where.js`, `i18n.js`. New: `strings-en.js` rewritten small (the app
+   now says about thirty things), a results record of `{tag, text, day}` per prediction, an "away" flag for *Done with this one*. Tests to
+   keep: rule 3, the harm stop, no streak, no "you missed", no total across predictions, the banned phrases, BETR all caps, nothing lowercase
+   on a button.
+2. **`B57 — the move`** is independent and can start now: Caddy file, deploy user, `deploy.yml` secrets and path, strip TrybeUP, *Who made this*
+   → the open-source line and the repo link. Keep `betr.trybeup.com` up until the new address is checked.
 3. **French** after the redesign's strings settle, never before.
 
 ## 3. Waiting on people, not on code
 
-0. **The founder, on *Bet on a Hope*:** **(a)** does the front hit "touching, heartwarming, no excuse" — if not, what is missing; **(b)** which
-   look: Paper, Night or Poster; **(c)** the worked example on the front — the dad one, or one of theirs; **(d)** *Bet on it* as the action word,
-   given scope Q1 (the word "bet" and people whose habit is gambling) — this design leans on it harder; **(e)** the optional worry line on
-   screen 2, keep or cut; **(f)** the fixed progression (same again → raise it → without the safety net) — right, or too much.
-1. **The paid CBT reviewer:** hopes through the loop, the twenty hope/worry pairs, the fixed progression's wording, *How it works*.
-2. **A public-repo check the founder should make:** `docs/research/08-participant-voice-recovery.md` quotes public Reddit posts from recovery
-   forums with their URLs. They were public and are linked, but the repo is public now too; deleting the file later does not remove it from
-   history. Founder's call whether it stays.
+0. **The founder, on version 2:** **(a)** which front — *Write down a hope.* or *What do you think will happen?*; **(b)** "prediction" as the word,
+   yes or something else; **(c)** the type system — is the prediction now findable on every screen; **(d)** `Done with this one` or one of the
+   other two wordings; **(e)** whether the next-step sentences (raise it, safety net) go in *How it works* or nowhere.
+1. **The paid CBT reviewer:** hopes and worries through the same three-tag loop; the wording of *How it works*.
+2. **A public-repo check the founder should make:** `docs/research/08-participant-voice-recovery.md` quotes public Reddit recovery-forum posts with
+   their URLs. Founder's call whether it stays; deleting later does not remove it from history.
 
 ## 4. Environment facts
 
@@ -72,7 +66,7 @@ plus `web/trybeup-logo.png`, CLAUDE.md rule 9 and the droplet section, scope §1
 | **Walk it** | **`node tools/walk.js start`**, then `open` · `dump` · `tap` · `type` · `shot <file>` · `eval <js>` · `stop`. 390×844 @3x. **Always `stop`** |
 | **Live today** | `https://betr.trybeup.com`, TrybeUP droplet (`ssh le-jibe`, container `betr-web`). Every push to `main` touching `web/**` publishes it |
 | **The new box** | **`ssh nexus`** (49.12.102.195). Caddy config in `/etc/caddy/conf.d/`, sites under `/srv/<name>/site`. **Read freely; every write confirmed** |
-| **The canvases** | Redesign: `claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc`. Rejected simplification: `claude.ai/artifact/Qzjr2ZDLTCTKhPjmDb8jnx` |
+| **The canvases** | Redesign v2: `claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc`. Rejected simplification: `claude.ai/artifact/Qzjr2ZDLTCTKhPjmDb8jnx` |
 
 ## 5. Gotchas, live
 
