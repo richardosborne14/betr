@@ -16,7 +16,8 @@ Read automatically at the start of every session. Follow it without exception.
 or edit a file; do it. The one exception they asked for, 2026-09-04: **`docs/changing-the-words.md`**
 tells them how to change any sentence in the app themselves on github.com, and how the tests
 stop them publishing something that breaks a rule. Keep it true when the content files move. When a decision is theirs, lay out the options simply and let them
-choose. Misha is the co-decider on anything about the audience, the list, or the tone.
+choose. **Misha is no longer a co-decider** (founder, 2026-09-15): the founder decides the
+audience, the list and the tone alone. Where an older file says "Misha's call", read "founder's call".
 
 ## The rules that never bend
 
@@ -193,8 +194,8 @@ under 120 lines, and make its "next action" the thing you would genuinely do nex
 
 ## The TrybeUP dev droplet (for B3 and B6 only)
 
-Betr's dev host is the TrybeUP dev droplet. SSH alias **`le-jibe`** (root@134.209.228.44, key
-`~/.ssh/id_ed25519`). Read-only commands run freely. **Every write** to nginx, `/var/www/`,
+Betr's dev host is the TrybeUP dev droplet. SSH alias **`le-jibe`** (root; the address and key are
+in `~/.ssh/config`, not here — this repo is public from 2026-09-15). Read-only commands run freely. **Every write** to nginx, `/var/www/`,
 or anything under `/opt/` is confirmed with the founder first, every time. The TrybeUP dev
 site at `dev.trybeup.com` must keep working after any change; check it. The TrybeUP repo is
 `trybeup/trybeup-prod`; its `CLAUDE.md` governs anything done there.

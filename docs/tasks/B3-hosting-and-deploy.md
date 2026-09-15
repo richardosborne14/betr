@@ -136,7 +136,7 @@ never ships `web/tests/`. **96 tests, all green.**
 
 ## What is still open
 
-- **The DNS record.** `betr.trybeup.com` needs an `A` record → `134.209.228.44`. TrybeUP's names
+- **The DNS record.** `betr.trybeup.com` needs an `A` record → the droplet's address (in `~/.ssh/config`). TrybeUP's names
   are at GoDaddy, so only the founder can add it. Until it exists the certificate cannot be
   issued and the address does not answer. Everything else is built, running and verified.
 - **Q1 (the name) is untouched by this.** `betr.trybeup.com` is a borrowed address on TrybeUP's
