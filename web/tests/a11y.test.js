@@ -1,314 +1,149 @@
 /*
-  B15: what BETR does for somebody who cannot see it.
+  B15, carried into B56: what BETR does for somebody who cannot see it.
 
-  The audit in docs/tasks/B15-words-out-of-the-code.md ranked these, and the order here is
-  that order. The first one is the difference between awkward and unusable:
-
-    1. tapping the big button used to do nothing at all, out loud. #app's markup was replaced,
-       focus was never moved, and the focus ring was left on a button that no longer existed.
-       Now focus lands on the new screen's heading, so a screen reader reads it
-    2. the ladder was a picture. Ten circles say nothing; now one sentence says the rung, out
-       of ten, and which way it moved — and, per CLAUDE.md rule 5, no total and no average
-    3. <html lang> and dir follow the language, or every assistive technology mispronounces
-       every word on the screen
-    4. the accessible name of the menu says BETR, not "Betr" (rule 7)
+    1. tapping a button used to do nothing at all, out loud: #app's markup was replaced and
+       focus was left on a button that no longer existed. Focus lands on the new screen's
+       heading, so a screen reader reads it — on every one of the redesign's screens
+    2. what a sighted person sees without being told — a button drawn at 45%, an empty box —
+       is said into the live region, because a screen reader cannot see 45%
+    3. <html lang> and dir follow the language
+    4. the spark on Yeah! is decoration and says nothing; the three answers are buttons that
+       say their words
 
   This is a fake DOM and it cannot see layout, contrast or what a real screen reader does with
-  any of it. It catches the things that would silently stop working. The real check is one
-  pass on a real phone by somebody who uses VoiceOver or TalkBack every day, and that is
-  written down as a release condition in the B15 task file, not as a test.
+  any of it. The real check is one pass on a real phone by somebody who uses VoiceOver or
+  TalkBack every day, written down as a release condition in B15, not as a test.
 */
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { boot } = require('./harness.js');
+const s = require('../content/strings-en.js').s;
 
-const en = require('../content/strings-en.js');
-const content = require('../lib/content.js');
-const worries = require('../content/worries.js');
-const doors = require('../content/whats-going-on.js');
-
-/*
-  The borrow road as far as a plan being in the box, which is where five screens start.
-
-  B45 §5b, 2026-09-09: the last tap is what puts it there. Every worry carries three sizes
-  now, so nothing is pre-filled and Lock it in has nothing to lock until one is chosen — which
-  is what the two worries that had sizes already did, and is now the whole road.
-*/
-const borrowed = (a) => a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0)
-  .tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
-const done = (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
-  .type('#o', 'He said fair enough.').tap('#next').tap('[data-key]', 1);
+const IF = 'say no to my sister without a reason';
+const THEN = 'she’ll take it as rude';
+const locked = (a) => a.type('#if', IF).type('#then', THEN).tap('#lock');
 
 /* Every screen there is, and the taps that get to it from a fresh start. */
 const SCREENS = {
-  start: (a) => a,
-  doors: (a) => a.tap('#pick'),
-  pick: (a) => a.tap('#pick').tap('[data-door]', 0),
-  /* B30: the way in, and the two halves of it */
-  build: (a) => a.tap('#m-new'),
-  'build-do': (a) => a.tap('#m-new')
-    .type('#if', 'say no without giving a reason')
-    .type('#then', 'they’ll think I’m being difficult').tap('#next'),
-  /* B32: the same two screens, opened from the borrow list with the blanks filled */
-  borrow: (a) => a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0),
-  /*
-    The loop, from the borrow road. `borrowed` is that road as far as Lock it in; `plan` is
-    NOT on it any more — since B30 the build screen goes straight to locked, and the plan
-    screen is what a REPEAT lands on, which is the one moment adjusting the expectation is
-    worth a screen of its own.
-  */
-  locked: (a) => borrowed(a).tap('#lock'),
-  happened: (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done'),
-  sure: (a) => borrowed(a).tap('#lock').tap('#nothanks').tap('#done')
-    .type('#o', 'He said fair enough.').tap('#next'),
-  result: (a) => done(a),
-  plan: (a) => done(a).tap('#again'),
-  mine: (a) => done(a).tap('#m-mine'),
-  why: (a) => done(a).tap('[data-why]'),
-  /* B44's two. Both are read, neither is written on, so focus lands on the heading. */
-  smaller: (a) => a.tap('#m-new')
-    .type('#if', 'say no without giving a reason')
-    .type('#then', 'they’ll think I’m being difficult').tap('#next').tap('#smaller'),
-  written: (a) => a.tap('#m-new').tap('#written'),
-  help: (a) => a.tap('#m-help'),
-  where: (a) => a.tap('#m-help').tap('#where')
+  front: (a) => a,
+  on: (a) => locked(a),
+  go: (a) => locked(a).tap('#done'),
+  happened: (a) => locked(a).tap('#done').tap('[data-tag="sort"]'),
+  log: (a) => locked(a).tap('#done').tap('[data-tag="sort"]').type('#x', 'She said fine.').tap('#keep'),
+  mine: (a) => SCREENS.log(a).tap('#f-mine'),
+  why: (a) => a.tap('#f-why'),
+  help: (a) => a.tap('#f-help'),
+  where: (a) => a.tap('#f-help').tap('#where')
 };
-
-/* ------------------------------------------------- focus, on every screen there is */
 
 test('every screen has one heading, and focus lands on it when the screen changes', () => {
   for (const name of Object.keys(SCREENS)) {
     const a = SCREENS[name](boot());
     const tops = a.html().match(/id="top"/g) || [];
     assert.strictEqual(tops.length, 1, name + ' has ' + tops.length + ' headings to land on');
-    assert.match(a.html(), /<h[123][^>]*id="top" tabindex="-1"/,
-      name + '’s landing point is not a heading that can take focus');
-    /* the two screens that are a box to type in take the box instead, and name it — below */
-    /*
-      B32: the borrow road arrives with the first blank already filled, so focus goes to the
-      second — the one thing only the person can say (B20).
-    */
-    /*
-      B46. Every worry has a printed verb now, so the borrow road lands on the FIRST EMPTY HOLE
-      — the first thing there is to do — and only falls back to the second blank where the
-      skeleton has no holes at all. Derived rather than hard-coded, so it keeps meaning
-      something when the content changes.
-    */
-    const firstBehindDoor = content.byId(worries, doors.items[0].worries[0]);
-    const holeNames = Object.keys((firstBehindDoor.skeleton || { holes: {} }).holes);
-    const wanted = {
-      build: 'if',
-      borrow: holeNames.length ? 'h-' + holeNames[0] : 'then',
-      'build-do': 'do',
-      happened: 'o'
-    }[name] || 'top';
-    assert.strictEqual(a.focusedId(), wanted, 'focus did not move on the way to ' + name);
+    assert.match(a.html(), /<h[123][^>]*id="top" tabindex="-1"/, name + '’s landing point is not a heading');
+    assert.strictEqual(a.focusedId(), 'top', 'focus did not move on the way to ' + name);
   }
 });
 
-/*
-  The two screens that are a box to type in take focus off the heading on purpose — and pay
-  for it by naming the box with the heading, so a screen reader still reads the question.
-*/
-test('a screen that grabs a box instead of the heading still says what the box is for', () => {
-  const a = boot().tap('#m-new');
-  /*
-    B30. The build screen is two gaps in a sentence, so focus goes to the first gap and the
-    heading cannot name it — there are two of them. Each blank carries its own name instead,
-    and those names have to work read alone, out of order, with no sentence around them.
-  */
-  assert.strictEqual(a.focusedId(), 'if');
-  assert.match(a.html(), /<input[^>]*aria-label="If I[^"]*"[^>]*id="if"|<input[^>]*id="if"[^>]*aria-label="[^"]+"/);
-  const blanks = [...a.html().matchAll(/<input[^>]*>/g)].map((m) => m[0]);
-  assert.strictEqual(blanks.length, 2, 'the sentence does not have two blanks in it');
-  for (const b of blanks) assert.match(b, /aria-label="[^"]{8,}"/, 'an unnamed blank: ' + b);
-
-  a.type('#if', 'say no without giving a reason');
-  a.type('#then', 'they’ll think I’m being difficult').tap('#next');
-  assert.strictEqual(a.focusedId(), 'do');
-  assert.match(a.html(), /<textarea id="do"[^>]*aria-labelledby="top"/);
-  a.type('#do', 'Say no to one thing today.').tap('#lock').tap('#nothanks').tap('#done');
-  assert.strictEqual(a.focusedId(), 'o');
-  assert.match(a.html(), /<textarea id="o"[^>]*aria-labelledby="top"/);
-});
-
-test('focus moves again on the way back out of a screen, from every door', () => {
-  /* "New test" opens the build screen, which takes the first blank rather than the heading. */
-  const lands = { '#m-mine': 'top', '#m-new': 'if', '#m-help': 'top' };
-  for (const door of Object.keys(lands)) {
-    const a = SCREENS.result(boot());
-    a.tap(door);
-    assert.strictEqual(a.focusedId(), lands[door], door + ' left focus behind');
-  }
-});
-
-/* ------------------------------------------------- what is said out loud */
-
-test('a refusal is read out, because the heading has not changed', () => {
-  /*
-    B29 and B30. The refusals a person can still meet are the empty blank and the one hard
-    stop, and both land on a screen whose heading has not changed — so neither is announced
-    by the focus move, and both have to be read into the live region by hand.
-  */
-  const a = boot().tap('#m-new');
-  a.tap('#next');
-  assert.strictEqual(a.said(), en.s.refusal.emptyIf);
-
-  a.type('#if', 'tell them how I really feel');
-  a.type('#then', 'they’ll know I want to kill myself').tap('#next');
-  assert.strictEqual(a.said(), en.s.refusal.harm);
-
-  /* And on the second half, where it is a plan rather than a prediction. */
-  const b = boot().tap('#m-new');
-  b.type('#if', 'say no without giving a reason');
-  b.type('#then', 'they’ll think I’m being difficult').tap('#next');
-  b.type('#do', 'See how long I can go without wanting to hurt myself').tap('#lock');
-  assert.strictEqual(b.said(), en.s.refusal.harm);
-
-  /* And a blank that is empty on the borrow road, where the first one arrives filled in. */
-  const c = boot().tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0);
-  c.tap('#next');
-  assert.strictEqual(c.said(), en.s.refusal.emptyBelief);
-});
-
-test('the result screen is read as a sentence, because a shape is not readable', () => {
-  const a = SCREENS.result(boot());
-  const said = a.said();
-  assert.ok(said.indexOf('He said fair enough.') !== -1, 'what happened was not read out');
-  assert.ok(/9 out of 10/.test(said), 'the rung was not read out: ' + said);
-  for (const never of ['total', 'average', 'score', 'streak']) {
-    assert.ok(said.toLowerCase().indexOf(never) === -1, 'the result was read out as a "' + never + '"');
-  }
-});
-
-test('a note that appears in place is read out, and costs nothing either way', () => {
-  const a = SCREENS.locked(boot());
-  a.tap('#miss');
-  assert.strictEqual(a.said(), en.s.locked.missed);
-  a.hides('streak');
-});
-
-test('the live region is empty on an ordinary screen change, so nothing is said twice', () => {
-  const a = boot();
-  a.tap('#pick');
-  assert.strictEqual(a.said(), '', 'the heading was announced as well as focused');
-});
-
-/* ------------------------------------------------- the ladder, out loud */
-
-test('a rung says the rung, out of ten, and which way it moved — and no total', () => {
-  const a = boot();
-  const loop = (said, key) => {
-    a.tap('#lock');
-    if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
-    a.tap('#done').type('#o', said).tap('#next').tap('[data-key]', key);
-  };
-  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0);
-  loop('He said fair enough.', 1);          /* 10 -> 9 */
-  a.tap('#again');
-  loop('Nobody minded.', 2);                 /* 9 -> 6 */
-
-  const h = a.html();
-  assert.ok(h.indexOf('9 out of 10. Down one rung.') !== -1, 'a one-rung fall was not said: ' + h);
-  assert.ok(h.indexOf('6 out of 10. Down 3 rungs.') !== -1, 'a three-rung fall was not said');
-  assert.ok(h.indexOf('Started: 10 out of 10.') !== -1, 'where it started was not said');
-
-  /* the picture is hidden from a screen reader, because ten circles say nothing */
-  assert.match(h, /<span class="dots" aria-hidden="true">/);
-  assert.match(h, /<span class="num" aria-hidden="true">/);
-
-  /* the belief it belongs to, once, on the ladder as a whole — never on every rung */
-  const labels = h.match(/role="group" aria-label="[^"]*"/g) || [];
-  assert.ok(labels.length >= 1, 'the ladder has no name at all');
-  for (const l of labels) {
-    assert.ok(/out of ten|Ten is completely sure/.test(l) || l.indexOf('How sure') !== -1, l);
-    for (const never of ['total', 'average', 'target', 'compared']) {
-      assert.ok(l.toLowerCase().indexOf(never) === -1, 'the ladder is named as a "' + never + '"');
+test('focus moves again from every word on the foot, from every screen', () => {
+  for (const name of Object.keys(SCREENS)) {
+    for (const door of ['#f-mine', '#f-why', '#f-help']) {
+      const a = SCREENS[name](boot());
+      a.tap(door);
+      assert.strictEqual(a.focusedId(), 'top', door + ' left focus behind on ' + name);
     }
   }
 });
 
-test('a bad day is said as a rise, not as a failure', () => {
+test('Lock it in says it is not ready in a way a screen reader hears', () => {
   const a = boot();
-  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock').tap('#nothanks').tap('#done');
-  a.type('#o', 'He went quiet.').tap('#next').tap('[data-key]', 2);       /* 10 -> 7 */
-  a.tap('#again').tap('#lock').tap('#done').type('#o', 'He brought it up again.').tap('#next');
-  a.tap('[data-key]', 4);                                                 /* 7 -> 8 */
-  const h = a.html();
-  assert.ok(h.indexOf('8 out of 10. Up one rung.') !== -1, 'a rise was not said plainly: ' + h);
-  for (const never of ['failed', 'missed', 'streak', 'wrong', 'worse']) {
-    assert.ok(h.toLowerCase().indexOf(never) === -1, 'a bad day was called "' + never + '"');
+  assert.match(a.html(), /id="lock" aria-disabled="true"/);
+  a.tap('#lock');
+  assert.strictEqual(a.said(), s.refusal.emptyIf);
+  assert.strictEqual(a.focusedId(), 'if');
+  /* a repaint with both blanks written draws it ready */
+  const b = boot();
+  b.type('#if', 'hurt myself').type('#then', THEN).tap('#lock');
+  assert.match(b.html(), /id="lock" aria-disabled="false"/);
+});
+
+test('a refusal is read out, because the heading has not changed', () => {
+  const a = boot();
+  a.type('#if', IF).type('#then', 'they’ll know I want to kill myself').tap('#lock');
+  assert.strictEqual(a.said(), s.refusal.harm);
+  assert.strictEqual(a.focusedId(), 'top');
+});
+
+test('an empty What happened? box is read out, and the box is where focus goes', () => {
+  const a = SCREENS.happened(boot()).tap('#keep');
+  assert.strictEqual(a.said(), s.happened.empty);
+  assert.strictEqual(a.focusedId(), 'x');
+});
+
+test('the live region is empty on an ordinary screen change, so nothing is said twice', () => {
+  for (const name of ['on', 'go', 'happened', 'log', 'mine', 'why', 'help']) {
+    assert.strictEqual(SCREENS[name](boot()).said(), '', name + ' announced its heading as well as focusing it');
   }
 });
 
-/* ------------------------------------------------- the language on the page itself */
+test('the three answers are buttons that say their words, and the spark says nothing', () => {
+  const h = SCREENS.go(boot()).html();
+  for (const tag of ['yeah', 'sort', 'not']) {
+    const m = h.match(new RegExp('<button class="pill ' + tag + '" data-tag="' + tag + '">([\\s\\S]*?)</button>'));
+    assert.ok(m, tag + ' is not a button');
+    assert.strictEqual(m[1].replace(/<svg[\s\S]*?<\/svg>/g, '').trim(), s.go[tag]);
+  }
+  assert.match(h, /<svg class="spark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">/);
+});
+
+test('every blank and every box a person types into has a name', () => {
+  let h = SCREENS.front(boot()).html();
+  h += SCREENS.happened(boot()).html();
+  h += boot().tap('#f-help').tap('#export').html();
+  const boxes = [...h.matchAll(/<(?:textarea|input|span[^>]*role="textbox")([^>]*)>/g)].map((m) => m[0]);
+  assert.ok(boxes.length >= 4, 'only found ' + boxes.length + ' boxes to check');
+  for (const box of boxes) assert.match(box, /aria-label(ledby)?="[^"]{3,}"/, 'an unnamed box: ' + box);
+  /* the two blanks are named well enough to be read alone, out of the sentence */
+  assert.ok(h.indexOf('aria-label="' + s.front.ifLabel + '"') !== -1);
+  assert.ok(h.indexOf('aria-label="' + s.front.thenLabel + '"') !== -1);
+  assert.notStrictEqual(s.front.ifLabel, s.front.thenLabel);
+});
+
+test('the results are a named list, and the prediction is the heading of its own screen', () => {
+  const h = SCREENS.log(boot()).html();
+  assert.match(h, /<h2 class="paper small said" id="top" tabindex="-1">If I say no to my sister/);
+  assert.ok(h.indexOf('<ol class="paper small results" aria-label="' + s.log.list + '">') !== -1);
+  assert.match(h, /<li class="entry">/);
+});
 
 test('lang and dir follow the language, and survive a reload', () => {
   const a = boot();
   assert.strictEqual(a.lang(), 'en');
   assert.strictEqual(a.dir(), 'ltr');
-
-  /* a browser asking for something we do not have gets English, and says so honestly */
-  const b = boot(null, { languages: ['de-DE', 'de'] });
-  assert.strictEqual(b.lang(), 'en');
-
-  /* a stored choice is read back on the next open, exactly as the country is */
-  const c = boot({ 'betr.v1': JSON.stringify({ stage: 'start', lang: 'en', done: [] }) });
+  assert.strictEqual(boot(null, { languages: ['de-DE', 'de'] }).lang(), 'en');
+  const c = boot({ 'betr.v2': JSON.stringify({ stage: 'front', lang: 'en', predictions: [] }) });
   assert.strictEqual(c.lang(), 'en');
-  c.shows(en.s.start.caption);
+  c.showsText(s.front.title);
 });
 
-/* ------------------------------------------------- names, and things with no name */
-
-test('the one accessible name in the app says BETR, and the arrows say nothing', () => {
-  const a = boot();
-  let h = a.html();
-  h += a.tap('#pick').html();
-  h += a.tap('[data-door]', 0).html();
-  h += a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
-  h += a.tap('#m-help').html();
-
-  assert.match(h, /<nav class="menu" aria-label="BETR">/);
-  assert.ok(!/aria-label="Betr"/.test(h), 'the menu is named with the old mixed-case wordmark');
-
-  /* every arrow and tick is decoration and is hidden; nothing else in the app is */
+test('the foot is named BETR, and the arrows and ticks say nothing', () => {
+  let h = boot().html();
+  h += boot().tap('#f-help').html();
+  h += boot().tap('#f-help').tap('#where').html();
+  assert.match(h, /<nav class="foot" aria-label="BETR">/);
+  assert.ok(!/aria-label="Betr"/.test(h));
   for (const m of h.matchAll(/<span([^>]*)>([←→✓])</g)) {
     assert.ok(m[1].indexOf('aria-hidden="true"') !== -1, 'a bare "' + m[2] + '" is read aloud');
   }
 });
 
-test('every box a person types into has a name', () => {
-  const a = boot();
-  let h = SCREENS['build-do'](boot()).html();
-  /* B39: the leave-out box is behind its folded row now, so it has to be opened to be checked. */
-  h += SCREENS['build-do'](boot()).tap('#dropopen').html();
-  h += SCREENS.borrow(boot()).html();
-  h += SCREENS.happened(boot()).html();
-  /* B51: the expectation box on the repeat screen, which is the only thing go('plan') is
-     reached for. It is a box from the first paint now, so there is no edit button to tap. */
-  const r = boot();
-  r.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next');
-  r.type('#do', 'Put it in a drawer from eight.').tap('#lock').tap('#nothanks').tap('#done');
-  r.type('#o', 'Nothing happened.').tap('#next').tap('[data-key]', 1);
-  h += r.tap('#again').html();
-  h += boot().tap('#m-help').tap('#export').html();
-
-  h += SCREENS.build(boot()).html();
-  /* B30 added two <input> blanks, which are boxes a person types into like any other. */
-  const boxes = [...h.matchAll(/<(?:textarea|input)([^>]*)>/g)].map((m) => m[1]);
-  assert.ok(boxes.length >= 6, 'only found ' + boxes.length + ' boxes to check');
-  for (const box of boxes) {
-    assert.ok(/aria-label(ledby)?="/.test(box), 'an unnamed box: <textarea' + box + '>');
-  }
-});
-
 test('the heading order on Help starts at the top and does not skip', () => {
-  const h = boot().tap('#m-help').html();
+  const h = boot().tap('#f-help').html();
   const levels = [...h.matchAll(/<h([123])[ >]/g)].map((m) => Number(m[1]));
   assert.ok(levels.length > 6, 'only found ' + levels.length + ' headings on Help');
   assert.strictEqual(levels[0], 2, 'Help does not start at its own top level');
   for (let i = 1; i < levels.length; i++) {
-    assert.ok(levels[i] <= levels[i - 1] + 1,
-      'the heading order jumps from h' + levels[i - 1] + ' to h' + levels[i]);
+    assert.ok(levels[i] <= levels[i - 1] + 1, 'the heading order jumps from h' + levels[i - 1] + ' to h' + levels[i]);
   }
 });

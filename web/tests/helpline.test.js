@@ -30,7 +30,7 @@ const EVERY_NUMBER = Object.keys(HELPLINES.countries).reduce(
 
 /* Open Help and hand back just the crisis block, which runs to the "how we work it out" note. */
 function crisisBlock(a) {
-  const h = a.tap('#m-help').html();
+  const h = a.tap('#f-help').html();
   const from = h.indexOf('If you are in danger or in crisis');
   const to = h.indexOf('How we work out the country', from);
   assert.ok(from !== -1 && to > from, 'the crisis block is not at the top of Help');
@@ -85,9 +85,7 @@ test('a country with no checked line shows no phone number at all', () => {
 
 test('a self-harm refusal in a country with no checked line also shows no number', () => {
   const a = boot(null, { timeZone: 'Africa/Lagos' });
-  a.tap('#m-new');
-  a.type('#if', 'ask for help').type('#then', 'people will think less of me').tap('#next');
-  a.type('#do', 'Find out how long I can go without wanting to hurt myself').tap('#lock');
+  a.type('#if', 'ask for help').type('#then', 'I’ll want to hurt myself').tap('#lock');
   a.shows('can’t help with that one');
   a.shows('call your local emergency number');
   a.shows('Nigeria');
@@ -172,7 +170,7 @@ test('the country list is every country, alphabetical, and nothing else varies b
   const ke = boot(null, { timeZone: 'Africa/Nairobi' });
   assert.strictEqual(uk.html(), ke.html(), 'the front screen is different in a different country');
   const strip = (s) => s.slice(s.indexOf('How we work out the country'));
-  assert.strictEqual(strip(uk.tap('#m-help').html()), strip(ke.tap('#m-help').html()),
+  assert.strictEqual(strip(uk.tap('#f-help').html()), strip(ke.tap('#f-help').html()),
     'something other than the helpline varies by country');
 });
 
@@ -232,7 +230,7 @@ function before(date, days) {
 
 test('working out where somebody is fetches nothing and stores nothing but their choice', () => {
   const a = boot(null, { timeZone: 'Europe/London' });
-  a.tap('#m-help');
+  a.tap('#f-help');
 
   /* nothing about a country is written down until the person picks one themselves */
   const stored = () => Object.keys(a.mem).map((k) => a.mem[k]).join(' ');

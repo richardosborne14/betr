@@ -4,13 +4,11 @@ Read automatically at the start of every session. Follow it without exception.
 
 ## Read this before anything below (2026-09-15)
 
-**The app is being rebuilt to [`docs/tasks/B56-the-redesign.md`](docs/tasks/B56-the-redesign.md), locked in by the founder on 2026-09-15,
-and moved off TrybeUP by [`B57`](docs/tasks/B57-the-move-to-digitalbricks.md).** Until both ship, this file describes the OLD app, and
-wherever a rule below describes a screen, a word or a piece of content, **B56 §2 and §3 win.** In particular: the word is **prediction**
-(not test, not worry); the front is one sentence, `If I ___, then ___.`, and `Lock it in`; there is **no stock list, no doors, no sizes, no
-ladder, no tally**; the three-word bar is gone; the look is terracotta and paper. Rule 9 (TrybeUP) ends with B57. Rules 1, 2, 3's core
-(conditional only; the harm stop), 5's core (no streaks, no scores), 6, 7 and 8 stand exactly as written. **Misha is no longer a co-decider.**
-The repo is **public and MIT**: no server address, key or person's name goes into any file from now on.
+**The app is rebuilt to [`docs/tasks/B56-the-redesign.md`](docs/tasks/B56-the-redesign.md), on the branch `redesign`, NOT YET MERGED**
+— a push to `main` touching `web/**` publishes to the live address, so it merges only once the founder has seen it on a phone. Rules 3, 4,
+5 and 10 below are rewritten to it (2026-09-15). The word is **prediction**; the front is `If I ___, then ___.` and `Lock it in`; there is
+**no stock list, no doors, no sizes, no ladder, no tally, no number**; the look is terracotta and paper. **B57** moves it off TrybeUP and ends
+rule 9. **Misha is no longer a co-decider.** The repo is **public and MIT**: no server address, key or person's name goes into any file.
 
 ## Read these first, in this order
 
@@ -40,43 +38,33 @@ rules at once, and every one of them has failed in some other product.
    Apple's *Data Not Collected* label and the airplane-mode proof.
 2. **No AI.** Not for suggestions, not for wording, not for anything. Fixed content the person
    chooses from is a chapter in a book. A system that chooses for them is a medical device.
-3. **Conditional beliefs only, and the word is *test*.** Every item is "If I ___, then ___".
-   "I am ___" is reframed, never accepted. **Amended 2026-09-08 (B29), founder's call:** the
-   word for one of these, everywhere a person can see it, is **test** — not "worry" (it was
-   worry until that day; "nobody has to say they have worries to set up a test"), not "fear"
-   (founder, 2026-09-02: it sounds scary), not "thought", not "belief" on a button. A person
-   writes both halves themselves or taps a suggestion into either; the suggestions are fixed
-   content and BETR never chooses one for them, which is still the device line. **The rename
-   is of the OBJECT, not of the English word**: "worry" stays where it means the feeling
-   rather than the thing — frozen sentence 3, `why.js`, an outside page's own description.
-   `loop.test.js` fails the build if a button or a heading says it. **Amended 2026-09-03
-   (B20), and it survives as the borrow list:** a stock item carries **three** predictions and
-   the person picks which is theirs. One per item had to guess which consequence they feared,
-   and test users said the guess "sort of matches my worry but not really" — a prediction that
-   is only nearly yours cannot be disconfirmed, so the loop runs and moves nothing.
-4. **BETR never proposes the habit itself.** No test BETR writes involves the drink, the
-   screen, the substance, food restriction, body sensations, checking rituals, or anyone's
-   safety. `web/lib/content.js` holds every stock `test` and `drop` to the three word lists in
-   `guards.js`, and `content.test.js` walks the list through it.
-   **Amended 2026-09-08 (B29), founder's call, and this one is a loosening.** It used to be
-   structural — there was no free-text test field — and free text is the front door now. In
-   the founder's words: *"free ourselves up a little bit from the constraints"*; few people
-   will use it, and a disclaimer can say that if it is dangerous it needs a doctor. So the
-   **habit and body word lists stop refusing a person's own test.** They are still there and
-   still hold BETR's own content. **The one hard stop stays, on both boxes: a sentence about
-   ending it, or hurting anyone** — the founder's own example of what must still be refused is
-   "If I kill myself everyone will be better off". The line about everything else is drawn
-   once, by frozen sentence 6 on Help, and nowhere else in the app.
-5. **No streaks, no red days, no "you missed", no cap on rest.** The metric is completed
-   tests. "Didn't get to it" keeps the test for tomorrow. The one other number is the belief
-   ladder: 1-10, per belief, moved by the person's own re-rate. It is never a score of the
-   person, never totalled or averaged across worries, and never carries a target.
-   **A test is one belief (founder, 2026-09-04).** A stock item offers three predictions and
-   **all of them share that item's one ladder** — including a sentence the person wrote
-   themselves for it. `rate.keyOf()` keys a ladder by **id**, never by the sentence, and that
-   is a decision, not an oversight: keying by the sentence would make a person look like they
-   had lost their history the moment they fixed a typo or came back and picked a different
-   one of the three.
+3. **Conditional predictions only, and the word is *prediction*.** *Rewritten 2026-09-15 for
+   B56, founder's call.* Every one is "If I ___, then ___." — the front screen prints "If I"
+   and ", then" and the person writes both blanks themselves. The word a person reads, for a
+   hope and a worry alike, is **prediction**: not test (B29's word, 2026-09-08 to 2026-09-15),
+   not worry, not hope, not bet. "Worry" stays where it means the feeling — frozen sentence 3,
+   *How it works*. `loop.test.js` fails the build if a button or a heading says test or worry.
+   **The one hard stop is unchanged, on both blanks:** a sentence about ending it or hurting
+   anyone is refused, with the crisis block for the country the person is in. B20's three
+   predictions per worry and the borrow list went with the stock list (B56 §2 item 12). **Known
+   gap:** "I am ___" has no road to a reframe on this screen, because every sentence made there
+   is already a conditional (B56 §10).
+4. **BETR proposes nothing.** *Rewritten 2026-09-15 for B56.* There is no stock content: no
+   list, no suggestions, no examples, no sizes. BETR cannot propose the habit because it
+   proposes nothing at all, and the habit and body word lists are gone from `guards.js` with
+   the content they held. A person's own words are theirs (B29's loosening stands); the line
+   about the rest is drawn once, by frozen sentence 6 on Help. **The one hard stop stays, on
+   both blanks** — the founder's own example of what must still be refused is "If I kill
+   myself everyone will be better off". **If stock content ever comes back, the old rule 4
+   comes back with it.**
+5. **No streaks, no red days, no "you missed", no cap on rest — and no number.** *Rewritten
+   2026-09-15 for B56, founder: "they'll be able to put the puzzle together themselves".* No
+   tally, no count of predictions or results, no ladder, no score, anywhere in the loop or on
+   *Your predictions*; a day label (TUE) is a label, not a number. *Not today* keeps a
+   prediction locked in and records nothing. *Done with this one* puts it away and deletes
+   nothing; only *Delete everything* deletes. A prediction's id is random and never the
+   sentence, for the reason `rate.keyOf()` gave: fixing a typo must not look like losing your
+   history. `loop.test.js` fails the build on a digit.
 6. **No verdicts.** Never "irrational". Outcomes are observations. A bad outcome is data and
    the re-rate is optional.
 7. **The wording is fixed.** The eight sentences and the crisis lines in scope §10 / research
@@ -118,30 +106,17 @@ rules at once, and every one of them has failed in some other product.
    result and NOT on a refusal** — a person who has just written what they are afraid of, or
    been handed a helpline number, is not somebody to show another product to — and it is
    deliberately **not drawn by `paint()`**, so it cannot reach those screens by one edit.
-10. **The interface is one big button — with one exception, chosen on 2026-09-08.** One
-    sentence per loop. A wizard, a slider or a chat has been rejected by the founder and does
-    not come back. **Amended 2026-09-08 (B28/B29), by the person who made the rule:** the way
-    in is **one sentence with two blanks** — *If I ___, then ___* — with suggestions under
-    each, then what you'll do and what you'll leave out, then *Lock it in*. **That is a form,
-    and the founder chose it knowingly.** The front screen shows one finished test before
-    anybody is asked about anything of their own. Everything below still holds.
-    **Amended 2026-09-03 (B8):** there is now a permanent row of three at the bottom
-    of every screen — *Your worries · New worry · Help*. The founder overruled their own
-    no-tab-bar rule knowingly. It stays three plain words: no icons, no selected state, no
-    badges, no counts, no fourth item. It is three doors, not a place you live in.
-    **Amended again 2026-09-03 (B19), and this one cost a tap:** the big button leads to
-    *What's going on?*, and the worries sit behind a door. The founder accepted the extra
-    screen after watching two people fail to choose from the flat list. With it: **a worry's
-    `belief` — its "If I ___, then ___" — is drawn under its label wherever a person picks
-    one.** That sentence is the only part of a worry that explains itself, and it used to be
-    invisible until the re-rate. A pick list without it is the bug, not the tidy version.
-    **Amended once more 2026-09-03 (B20), and it cost the second tap — accepted by the founder
-    on 2026-09-04, "one extra tap is fine":** picking a worry opens *which of these three is
-    it?* before the test. Still one screen, one question, a list of plain buttons — not a form
-    and not a wizard. Six taps to a locked-in test is the shape now; do not "restore" four. And from B20 **the worry's label and the
-    exact sentence being tested sit at the top of every screen from that choice to the
-    result**, in the same words in the same place. A screen inside the loop that does not say
-    which worry it belongs to is the bug.
+10. **One question per screen, and B56 §3 is the shape.** *Replaced 2026-09-15 by the founder's
+    redesign; the history of B8–B20's doors, lists and taps is in git and in those task files.*
+    The front is *What do you think will happen?* over *If I ___, then ___.* and *Lock it in* —
+    no door, no list, no example card. Then *Locked in* → *Did it go how you expected?*
+    (*Yeah!* / *Sort of* / *Not really*) → *What happened?* → the results, newest first →
+    *Same again tomorrow* or *Done with this one*. **Two voices:** the person's words in a serif
+    on paper, the app's in the sans on terracotta. **Three grey words at the foot of every
+    screen** — *Your predictions · How it works · Help* — plain, no icons, no selected state, no
+    count, never a fourth. **The prediction is on screen, in the same words, on every screen from
+    Locked in to the results;** a loop screen that does not say which prediction it belongs to is
+    the bug. A wizard, a slider or a chat is still rejected and does not come back.
 
 ## How the repo works
 
@@ -150,22 +125,12 @@ rules at once, and every one of them has failed in some other product.
   `package.json` dependencies. Tests run with `node --test` from the repo root (not
   `node --test web/tests/`; Node 22 rejects a directory there). Keep it readable by a
   stranger in an evening; that is part of the trust story.
-- **Content lives in `web/content/`**, not in code: `worries.js` (B1, B19 and B20 own it, and
-  since B19 a label must be comprehensible on its own — no pronoun with nothing to point at,
-  no open channel, and never the `drop` smuggled onto the button; since B20 every worry
-  carries **exactly three** `beliefs`, each two fields and no third, each predicting something
-  different, and the loose `belief` on the card is never word for word one of them; since
-  B45 §5b every worry carries three `sizes`, the smallest of which is its own `test` and
-  `drop` word for word; and since B45 §5c every worry carries a `skeleton`, and the file
-  also holds the two things that were never a worry — `BETR_GENERAL`, the set shown when
-  somebody wrote their own situation, and `BETR_FRONT`, which twelve of the worries the
-  front door offers under the first blank, in what order. **`starts.js` is gone**: it
-  described nine of those twelve a second time, in its own words),
-  `whats-going-on.js`
-  (B19: the way in, four to six worries a door, and every worry behind at least one)
-  and, from B8, `places.js` — every link on the Help screen, and the only place a link may be
-  added. From B17 there are two more: `zones.js`, which is **generated from the IANA time zone
-  database and never hand-edited**, and `helplines.js`. They are `.js` files and not `.json`
+- **Content lives in `web/content/`**, not in code. Since B56 there is no stock content at all:
+  `strings-en.js` is every word the app says (the frozen block in it is verbatim and frozen),
+  `places.js` is every link on the Help screen and the only place a link may be added, and from
+  B17 `zones.js`, which is **generated from the IANA time zone database and never hand-edited**,
+  and `helplines.js`. The old `worries.js`, `whats-going-on.js`, `examples.js` and `why.js` are
+  gone (B56 §4). They are `.js` files and not `.json`
   because a browser will not fetch JSON from a page opened off the filesystem, and the founder
   opens `web/index.html` directly. Still plain data, no logic. A link is plain `https`, with no
   query string, no campaign parameter and no shortener, ever; nothing is fetched at runtime to

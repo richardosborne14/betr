@@ -1,0 +1,89 @@
+{
+  "v": 5,
+  "stage": "mine",
+  "cur": null,
+  "country": null,
+  "lang": null,
+  "open": [
+    {
+      "rid": "86e4178ba7676a7eb381e90ac31f4330",
+      "source": "own",
+      "id": "0c26bc6f5407a1f4c1a4fdb45d863f3d",
+      "label": null,
+      "ifPart": "ask my brother to help me move",
+      "thenPart": "he’ll say he’s busy",
+      "belief": "If I ask my brother to help me move, then he’ll say he’s busy.",
+      "x": "He’ll say he’s busy.",
+      "test": "Text him and ask, in one line.",
+      "drop": "",
+      "prediction": null,
+      "slots": null,
+      "size": null,
+      "from": "build-do",
+      "locked": "2026-09-15T21:14:48.033Z",
+      "missed": false
+    }
+  ],
+  "done": [
+    {
+      "rid": "21acc16f756a8863380d0c0badcaade6",
+      "id": "feed",
+      "source": "stock",
+      "label": "A day without checking social media",
+      "belief": "If I go a day without opening the apps I scroll, then I’ll be the only one who hasn’t heard something.",
+      "x": "Someone will mention it and it’ll be obvious I’m out of the loop.",
+      "test": "Go a day without opening the apps you scroll. At the end, write down what you actually missed.",
+      "drop": "No opening one “just to see if anyone’s messaged me”.",
+      "o": "He said fair enough and got his own coffee.",
+      "prediction": 0,
+      "slots": null,
+      "size": "A small go",
+      "move": "lot",
+      "level": 7,
+      "rateLabel": "A lot less sure",
+      "when": "2026-09-15T21:14:48.023Z"
+    },
+    {
+      "rid": "ef48622d84f8d4ba08d90daf879aabd0",
+      "id": "feed",
+      "source": "stock",
+      "label": "A day without checking social media",
+      "belief": "If I go a day without opening the apps I scroll, then I’ll be the only one who hasn’t heard something.",
+      "x": "Someone will mention it and it’ll be obvious I’m out of the loop.",
+      "test": "Go a day without opening the apps you scroll. At the end, write down what you actually missed.",
+      "drop": "No opening one “just to see if anyone’s messaged me”.",
+      "o": "She sighed.\n\nThen she said it was fine, and it was.",
+      "prediction": 0,
+      "slots": null,
+      "size": "A small go",
+      "move": "still",
+      "level": 7,
+      "rateLabel": "Still sure",
+      "when": "2026-09-15T21:14:48.025Z"
+    },
+    {
+      "rid": "01f86227111c6ae0afd096c7ee31d89e",
+      "id": "sit",
+      "source": "stock",
+      "label": "Sitting still when I feel restless",
+      "belief": "If I sit with the restlessness for ten minutes, then I’ll be no use for the rest of the day.",
+      "x": "I’ll write the day off and get nothing done.",
+      "test": "Sit with the restlessness for ten minutes at the moment you’d normally get up and do something about it.",
+      "drop": "Don’t reach for your phone, don’t get up to a task, and don’t start something else instead.",
+      "o": "Nobody noticed at all.",
+      "prediction": 1,
+      "slots": null,
+      "size": "A bigger go",
+      "move": "more",
+      "level": 10,
+      "rateLabel": "More sure than before",
+      "when": "2026-09-15T21:14:48.030Z"
+    }
+  ],
+  "archived": [
+    "stock:sit"
+  ],
+  "seenInstall": true,
+  "seen": 1,
+  "filter": null
+}

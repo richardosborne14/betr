@@ -8,14 +8,12 @@
   writer: editing COPY.md changes nothing in the app. The point of generating it rather than
   keeping a hand-written copy deck is that a hand-written one is wrong within a week.
 
-  Where a word actually lives:
+  Where a word actually lives, since the redesign (B56, 2026-09-15):
     web/content/strings-en.js      every sentence of the interface
-    web/content/worries.js         the worry list, and since 2026-09-10 the two things that
-                                   were never a worry: the general set, and which twelve of
-                                   them the front door offers
-    web/content/whats-going-on.js  the "what's going on" doors
-    web/content/why.js             "Why this one sticks", one entry per worry
     web/content/places.js          every link on the Help screen
+
+  The stock list, the doors, the examples and "Why this one sticks" went with the old app, and
+  so did their sections here.
 
   Some of it cannot be changed by anybody in this repo: the purpose statement and the nine
   sentences are verbatim from docs/research/10-cbt-gateway-approach.md §10 (CLAUDE.md rule 7).
@@ -26,11 +24,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const strings = require(path.join(ROOT, 'web/content/strings-en.js')).s;
-const worries = require(path.join(ROOT, 'web/content/worries.js'));
-const doors = require(path.join(ROOT, 'web/content/whats-going-on.js'));
-const why = require(path.join(ROOT, 'web/content/why.js'));
 const places = require(path.join(ROOT, 'web/content/places.js'));
-const examples = require(path.join(ROOT, 'web/content/examples.js'));
 
 /*
   The order a person meets the screens, with the name the founder would use for each. Any key
@@ -39,77 +33,61 @@ const examples = require(path.join(ROOT, 'web/content/examples.js'));
 */
 const SCREENS = [
   ['brand', 'The wordmark', 'BETR, all caps, everywhere a person reads it (rule 7).'],
-  ['back', 'The back button', ''],
-  ['nav', 'The three words at the bottom of every screen',
-    'Three plain words, no icons, no counts, never a fourth (rule 10).'],
-  ['start', 'Screen 1 — the front screen', 'The first thing anybody sees.'],
-  ['waiting', 'Screen 1 — a test already on the go', 'Only drawn if something is unfinished.'],
-  ['doors', 'Screen 2 — "What’s going on?"',
-    'Since B19 this is the way in, not a side door. The wording around the list; the list ' +
-    'itself is further down, under THE DOORS.'],
-  ['pick', 'Screen 3 — "Which one?"',
-    'The wording around the worry list. The worries themselves are under THE WORRY LIST.'],
-  ['own', 'Screen 3a — writing your own worry', 'Three screens, one box each.'],
-  ['refusal', 'Screen 3a — when BETR says no',
-    'What a person is told when their own test involves the habit, the body, or anyone’s safety.'],
-  ['belief', 'Screen 3b — "Which of these is it?"',
-    'B20. The screen between the list and the test, where a person says which prediction under ' +
-    'the worry is theirs. The three themselves are under THE WORRY LIST; these are the words ' +
-    'around them.'],
-  ['plan', 'Screen 4 — the test', 'What you do today, and what you leave out.'],
-  ['locked', 'Screen 5 — locked in', ''],
-  ['happened', 'Screen 6 — what happened', ''],
-  ['sure', 'Screen 7 — are you still sure', ''],
-  ['rate', 'Screen 7 — the five words', 'The only answers. There is no slider.'],
-  ['result', 'Screen 8 — the result', 'The screen the whole thing is for.'],
-  ['ladder', 'Screen 8 — the ladder labels', 'One belief’s grip, 1–10. Never a total (rule 5).'],
-  ['ordinal', 'Screen 8 — 1st, 2nd, 3rd', ''],
-  ['why', 'Screen 9 — "Why this one sticks"',
-    'The wording around it. The twelve explanations are under WHY THIS ONE STICKS.'],
-  ['guide', 'Screen 9b — the two guide screens',
-    'B44. "Too big? Make it smaller" and "Why it’s written like this". Reached ONLY by a link ' +
-    'somebody taps — never triggered by anything anybody types or does. Fixed content: ' +
-    'everybody reads exactly these words, forever.'],
-  ['mine', 'Screen 10 — Your worries', ''],
-  ['install', 'Screen 11 — add to home screen', ''],
-  ['crisis', 'Screen 12 — the crisis block',
-    'Appears at the top of Help and under a refusal about self-harm. No phone number is ever ' +
-    'written here — numbers live in helplines.js with the page and the day somebody read them.'],
-  ['where', 'Screen 12 — where are you', 'Changes which helpline number shows, and nothing else.'],
-  ['help', 'Screen 13 — Help', ''],
-  ['io', 'Screen 13 — export and delete', ''],
+  ['foot', 'The three grey words at the foot of every screen',
+    'Plain words, no icons, no counts, never a fourth. `label` is what a screen reader calls ' +
+    'the row; it is never shown.'],
+  ['front', 'Screen 1 — the front: What do you think will happen?',
+    'The first thing anybody sees, and also where New prediction goes. The sentence a person ' +
+    'locks in is built from four of these pieces — `ifWords`, the first blank, `thenWords`, the ' +
+    'second blank, and `stop` — so changing them changes how every new prediction reads. ' +
+    '`noteLocked` replaces `note` once both blanks have words in them.'],
+  ['on', 'Screen 3 — locked in: Go and find out.',
+    'The prediction sits above these words. `kicker` is shown in capitals. Not today records ' +
+    'nothing and says nothing about missing it (rule 5).'],
+  ['go', 'Screen 4 — Did it go how you expected?',
+    'The three answers. They also label every result afterwards, in capitals, on the results ' +
+    'and on Your predictions — change one here and the label changes everywhere.'],
+  ['happened', 'Screen 5 — What happened?',
+    'One box, and it cannot be skipped. `empty` is read out, not shown, if Keep it is tapped ' +
+    'with nothing written.'],
+  ['log', 'Screen 6 — your results',
+    'The prediction, then every result in the person’s own words, newest first. No number ' +
+    'anywhere. `list` is what a screen reader calls the list.'],
+  ['mine', 'Screen 7 — Your predictions',
+    'One card per prediction. `locked` is the label on one waiting to be done, in capitals. ' +
+    'Export and Delete on this screen use the words under “Export and delete” below.'],
+  ['why', 'Screen 8 — How it works', 'Reached from the foot. Fresh wording (rule 8).'],
+  ['refusal', 'When BETR says no',
+    'On the front screen only `harm` is ever shown, with the crisis block under it; the two ' +
+    '`empty…` lines are read out rather than shown. The rest can still be returned by the ' +
+    'safety check but nothing in the app draws them.'],
+  ['nudge', 'A line nothing draws', 'Kept because the safety check can still return it.'],
+  ['install', 'Add to home screen',
+    'A small card on Your predictions, once there is something there to lose.'],
+  ['crisis', 'The crisis block',
+    'At the top of Help and under a refusal about self-harm. No phone number is ever written ' +
+    'here — numbers live in helplines.js with the page and the day somebody read them.'],
+  ['where', 'Where are you?', 'Changes which helpline number shows, and nothing else.'],
+  ['help', 'Help', 'Unchanged in substance by the redesign. *Who made this* is rewritten by B57.'],
+  ['io', 'Export and delete', 'On Your predictions and on Help.'],
   ['a11y', 'Said out loud, never shown',
-    'What a screen reader reads where the screen alone would not say it.']
+    'What a screen reader reads where the screen alone would not say it.'],
+  ['back', 'The back button', 'On Help and on Where are you?']
 ];
 
 const out = [];
 function w(line) { out.push(line === undefined ? '' : line); }
 
 /* A value is a sentence, a list of sentences, or a plural form. Print all three the same way. */
-function value(v, indent, ctx) {
+function value(v, indent) {
   const pad = indent || '';
   if (typeof v === 'string') return [pad + '> ' + v.replace(/\n/g, ' ')];
   if (Array.isArray(v)) {
     const lines = [];
     v.forEach((item, i) => {
-      /*
-        B44. A list entry can be a row of named fields rather than a bare sentence — the dials
-        and the worked shrink on "Make it smaller" are `{ name, line }`, the five answers on
-        "Why it's written like this" are `{ q, a }`. Printed as-is they came out as
-        "[object Object]", which is a sheet Misha cannot read and cannot correct.
-      */
+      /* A list entry can be a row of named fields rather than a bare sentence. */
       const said = (item && typeof item === 'object')
-        /*
-          `same` names another key in the same block instead of carrying its own words — the
-          fifth answer on "Why it's written like this" IS `guide.smallest`, said once and read
-          twice. Printing the key name would put "smallest" in front of Misha where a sentence
-          belongs, so it is resolved here and marked as shared.
-        */
-        ? Object.keys(item).map((k) => (
-            k === 'same'
-              ? ((ctx && ctx[item[k]]) || item[k]) + ' *(the same sentence as `' + item[k] + '`)*'
-              : item[k]
-          )).join(' — ')
+        ? Object.keys(item).map((k) => item[k]).join(' — ')
         : item;
       lines.push(pad + '> **' + (i + 1) + '.** ' + said);
       if (i < v.length - 1) lines.push(pad + '>');
@@ -128,7 +106,7 @@ function block(obj, prefix) {
     if (isLeaf(v)) {
       w('**`' + key + '`**');
       w();
-      value(v, '', obj).forEach(w);
+      value(v, '').forEach(w);
       w();
     } else if (v && typeof v === 'object') {
       /* A plural: one/two/few/other. Printed as one entry, because it is one sentence. */
@@ -145,9 +123,18 @@ function block(obj, prefix) {
   });
 }
 
+/* How many separate pieces of wording there are, so the document can say so. */
+function countLeaves(node) {
+  if (isLeaf(node)) return 1;
+  if (node && typeof node === 'object') return Object.keys(node).reduce((n, k) => n + countLeaves(node[k]), 0);
+  return 0;
+}
+
 /* ---------------------------------------------------------------- the document */
 
 const stamp = new Date().toISOString().slice(0, 10);
+const pieces = Object.keys(strings).filter((k) => k !== 'frozen').reduce((n, k) => n + countLeaves(strings[k]), 0);
+const links = places.reading.length + places.groups.reduce((n, g) => n + g.items.length, 0);
 
 w('# BETR — every word, in one place');
 w();
@@ -155,19 +142,13 @@ w('**Generated ' + stamp + ' by `node tools/copy-sheet.js`. Do not edit this fil
 w('rewritten from the source every time that command runs, so anything typed here is lost.');
 w('Mark it up, send it back, and the change gets made in the file named next to each section.');
 w();
-w('There are ' + examples.length + ' front-screen examples, ' + worries.length +
-  ' to borrow from — ' + worries.front.length + ' of which the front door also offers — ' +
-  doors.items.length + ' doors and ' + Object.keys(why).length + ' explanations in this build.');
+w('This build has ' + pieces + ' pieces of wording on the screens and ' + links +
+  ' links on Help, as well as the frozen block.');
 w();
 w('| Part | What it is | Which file |');
 w('| --- | --- | --- |');
 w('| [Frozen](#frozen) | Cannot be changed by anyone here | `strings-en.js` |');
-w('| [The screens](#the-screens) | Every sentence of the interface | `strings-en.js` |');
-w('| [The front-screen example](#the-front-screen-example) | The first thing anybody sees | `examples.js` |');
-w('| [The suggestions](#the-suggestions) | What you can tap into the two blanks | `worries.js` |');
-w('| [The list you can borrow from](#the-worry-list) | Six parts each | `worries.js` |');
-w('| [The doors](#the-doors) | "What’s going on?" | `whats-going-on.js` |');
-w('| [Why this one sticks](#why-this-one-sticks) | One explanation per worry | `why.js` |');
+w('| [The screens](#the-screens) | Every sentence of the interface, in the order a person meets it | `strings-en.js` |');
 w('| [Places on Help](#places-on-help) | Every link in BETR | `places.js` |');
 w();
 w('---');
@@ -200,6 +181,9 @@ w();
 w('Everything below is in `web/content/strings-en.js` and can be changed. The name in');
 w('`code` is where it lives in that file. A word in `{braces}` is filled in by the app —');
 w('keep it, and put it wherever the sentence needs it.');
+w();
+w('Screen 2 of the design is the front screen with words in the blanks, so it has no');
+w('section of its own: its one change is `front.noteLocked`.');
 w();
 
 const covered = {};
@@ -237,241 +221,13 @@ if (missed.length) {
 
 w('---');
 w();
-w('<a id="the-front-screen-example"></a>');
-w();
-w('## The finished test on the front screen');
-w();
-w('`web/content/examples.js`. The first thing anybody sees, and the only words in BETR read');
-w('before a person has agreed to anything. One is shown per open, in this order.');
-w();
-w('It is an EXAMPLE and it is captioned as one — "What one test looks like", above the card.');
-w('Shown as a real person’s result it would be a testimonial, and a testimonial reads as a');
-w('claim. Nobody is named, nobody else’s number appears, and the ladder moves because that is');
-w('what happened in this one.');
-w();
-w('| | You expected | What actually happened | Ladder |');
-w('| --- | --- | --- | --- |');
-examples.forEach((ex, i) => {
-  w('| ' + (i + 1) + ' | ' + ex.prediction + ' | ' + ex.happened + ' | ' + ex.from + ' → ' + ex.to + ' |');
-});
-w();
-
-w('---');
-w();
-w('<a id="the-suggestions"></a>');
-w();
-w('## The suggestions under the blanks');
-w();
-w('`web/content/worries.js`. The screen prints **If I** and **, then** either side of two');
-w('gaps, and these are what a person can tap into them instead of typing. Fixed content in a');
-w('fixed order; which set of predictions is offered depends on one thing only — whether the');
-w('first gap holds one of these situations, word for word.');
-w();
-/*
-  B45 §5c, 2026-09-10. THIS SECTION USED TO BE A SECOND CONTENT FILE AND IS NOW A POINTER.
-
-  starts.js held twelve situations with their own predictions and their own plan lines, and
-  nine of them were the same act as a worry further down this document — so Misha was being
-  asked to read two wordings for one thing and nobody had said which was live. The sentences
-  are the worries' now. What is left here is which twelve, and in what order.
-*/
-w('**They are twelve of the ready-made worries below, in this order.** Until 2026-09-10 they');
-w('were a separate list with their own wording, and nine of the twelve said the same thing as');
-w('a worry in different words. Reading one of these means reading that worry, further down.');
-w();
-w('| | the words in the first gap | the worry it is |');
-w('| --- | --- | --- |');
-worries.front.forEach((id, i) => {
-  const f = worries.find((x) => x.id === id);
-  const said = f.skeleton.if.replace(/\{([a-z]+)\}/g, (_, h) => f.skeleton.holes[h]);
-  w('| ' + (i + 1) + ' | If I ' + said + '… | ' + f.label + ' |');
-});
-w();
-w('The words in the middle column are the worry’s own sentence with its **standing-in word**');
-w('in the gap — *somebody*, *something*, *ten minutes*. On this route nobody has typed a name');
-w('yet, so the standing-in word is what shows.');
-w();
-w('### The general set — shown when somebody has written their own situation');
-w();
-w('An **if** and a **then** are lowercase, because they follow printed words and have to read');
-w('as one sentence. A **do** and a **leave out** are whole sentences and start with a capital.');
-w('So is the **name** of a size, because it is a label on a button.');
-w();
-w('| | |');
-w('| --- | --- |');
-w('| **then** | ' + worries.general.thens.join(' · ') + ' |');
-w();
-/*
-  B42. The general set's two loose suggestions became three named sizes, and a person reading
-  this file has to see them as a set of three rather than as six loose lines — the name, the
-  step and the leave-out that belongs with it are one thing to change or leave alone.
-*/
-w('**How big a go.** Three steps, smallest first. Tapping one fills both boxes. This set is');
-w('what somebody lands on when they have written a situation of their own; a gap holding one');
-w('of the twelve above gets that worry’s own three instead. Never more than three, never');
-w('fewer, and never a number on one of them.');
-w();
-w('| | how big | what you’d do | what you’d leave out |');
-w('| --- | --- | --- | --- |');
-worries.general.sizes.forEach((z, j) => {
-  w('| ' + (j + 1) + ' | ' + z.name + ' | ' + z.do + ' | ' + z.drop + ' |');
-});
-w();
-
-w('---');
-w();
-w('<a id="the-worry-list"></a>');
-w();
-w('## The list you can borrow from');
-w();
-w('`web/content/worries.js`. Since 2026-09-08 this is not the way in — it is one tap aside,');
-w('behind *Not sure? Try one of these* — and picking one opens the build screen with the');
-w('sentence half written and everything editable. The **id** never changes once anybody has');
-w('used it, because a stored result points at it. No **test** and no **drop** may touch the');
-w('habit itself; the build fails if one does.');
-w();
-w('**Read the three under each one together.** The **card sentence** is loose on purpose: it');
-w('is read on a list of four to six, to work out which of these this is. The **three** are the');
-w('chips on the next screen, one of which is yours — so each has to predict a different thing,');
-w('and each has to be something that could turn out to be wrong. Every one of them starts');
-w('**If I** and has a **, then** in it, because that is what the build screen prints.');
-w('**Braced for** is the same prediction in the voice of somebody expecting it, and it is what');
-w('BETR writes into "What you expect" when somebody keeps that sentence word for word.');
-w();
-worries.forEach((f, i) => {
-  w('### ' + (i + 1) + '. ' + f.label);
-  w();
-  w('| | |');
-  w('| --- | --- |');
-  w('| **id** | `' + f.id + '` |');
-  w('| **lane** | ' + f.lane + ' |');
-  w('| **label** — the button | ' + f.label + ' |');
-  w('| **card sentence** — under the label on the list | ' + f.belief + ' |');
-  w('| **test** — the one thing, today | ' + f.test + ' |');
-  w('| **drop** — what you leave out | ' + f.drop + ' |');
-  w();
-  /*
-    B41. A worry may have a skeleton, and a person reading this file has to be told what the
-    `{person}` in the three sentences below actually is — otherwise it looks like a bug in the
-    app rather than a blank in the sentence. Only the worries that have one print this.
-  */
-  if (f.skeleton) {
-    w('**This one has a blank in it.** On the screen BETR prints the words below and puts a ' +
-      'small gap where the `{...}` is, for the person to write in. Whatever they write appears ' +
-      'in all three sentences underneath, in the same breath. Leave it empty and the sentence ' +
-      'still reads, using the fallback word.');
-    w();
-    w('| | |');
-    w('| --- | --- |');
-    w('| **printed** | If I ' + f.skeleton.if + ' |');
-    Object.keys(f.skeleton.holes).forEach((name) => {
-      w('| **the gap `{' + name + '}`** — its word while it is empty | ' + f.skeleton.holes[name] + ' |');
-    });
-    w();
-  }
-  /*
-    B42. The three sizes, where a worry has them. Printed before the three predictions because
-    that is the order somebody changing the words would want them: how big a go is one dial,
-    which prediction is yours is another, and they are separate things.
-  */
-  if (f.sizes) {
-    w('**How big a go.** Three steps, smallest first, shown on the screen after the sentence.');
-    w('Tapping one fills both boxes. Three, always — never a fourth, never one that appears');
-    w('because the last one went well, and never a number on any of them.');
-    w();
-    w('| | how big | what you’d do | what you’d leave out |');
-    w('| --- | --- | --- | --- |');
-    f.sizes.forEach((z, j) => {
-      w('| ' + (j + 1) + ' | ' + z.name + ' | ' + z.do + ' | ' + z.drop + ' |');
-    });
-    w();
-  }
-  w('The three a person chooses between, in the order they are shown:');
-  w();
-  w('| | If I ___, then ___ | braced for |');
-  w('| --- | --- | --- |');
-  f.beliefs.forEach((b, j) => {
-    w('| ' + (j + 1) + ' | ' + b.belief + ' | ' + b.expect + ' |');
-  });
-  w();
-});
-
-w('---');
-w();
-w('<a id="the-doors"></a>');
-w();
-w('## The doors — "What’s going on?"');
-w();
-w('`web/content/whats-going-on.js`. Reached from *Not sure? Try one of these* on the front');
-w('screen; a door opens onto four to six things to borrow. It is the one screen in BETR that');
-w('names a behaviour rather than a prediction. Every label is what a person would say about');
-w('themselves, in the first person, and never a diagnosis. Nothing here is ever tested: a door');
-w('only points.');
-w();
-w('One door carries a **note** — a safety line, shown under that door and no other. It says');
-w('what frozen sentence 4 already says, at the one moment it is relevant.');
-w();
-w('**`intro`**');
-w();
-value(doors.intro).forEach(w);
-w();
-w('**`foot`**');
-w();
-value(doors.foot).forEach(w);
-w();
-doors.items.forEach((d, i) => {
-  w('### ' + (i + 1) + '. ' + d.label);
-  w();
-  w('| | |');
-  w('| --- | --- |');
-  w('| **id** | `' + d.id + '` |');
-  w('| **label** | ' + d.label + ' |');
-  w('| **under** | ' + d.under + ' |');
-  if (d.note) w('| **note** — the safety line | ' + d.note + ' |');
-  w('| **opens onto** | ' + d.worries.map((id) => {
-    const f = worries.filter((x) => x.id === id)[0];
-    return f ? f.label : '**missing: ' + id + '**';
-  }).join(' · ') + ' |');
-  w();
-});
-
-w('---');
-w();
-w('<a id="why-this-one-sticks"></a>');
-w();
-w('## Why this one sticks');
-w();
-w('`web/content/why.js`. Offered after somebody has a result of their own, never before. Two');
-w('paragraphs per worry and no third field: everybody who taps a worry reads exactly the same');
-w('words, forever. It never says how a test will turn out, never says anything about the');
-w('reader, and never claims to fix anything.');
-w();
-w('The closing line is the same under all twelve and lives with the interface, as `why.foot`.');
-w();
-worries.forEach((f) => {
-  const e = why[f.id];
-  w('### ' + f.label + ' — `' + f.id + '`');
-  w();
-  if (!e) { w('**No explanation. The build fails on this.**'); w(); return; }
-  w('**what** — what the worry is, underneath the situation');
-  w();
-  value(e.what).forEach(w);
-  w();
-  w('**why** — which safety behaviour keeps it from being tested');
-  w();
-  value(e.why).forEach(w);
-  w();
-});
-
-w('---');
-w();
 w('<a id="places-on-help"></a>');
 w();
 w('## Places on Help');
 w();
 w('`web/content/places.js`. Every link in BETR, and the only place a link may be added. Plain');
-w('`https`, no tracking of any kind, and nothing is ever fetched to support one. Signed off by');
-w('Misha: **' + (places.signedOff ? 'yes' : 'not yet') + '**.');
+w('`https`, no tracking of any kind, and nothing is ever fetched to support one. Signed off:');
+w('**' + (places.signedOff ? 'yes' : 'not yet') + '**.');
 w();
 w('**`intro`**');
 w();
@@ -486,7 +242,7 @@ w();
 places.groups.forEach((g) => {
   w('### ' + g.title);
   w();
-  /* B24: a group may carry one line of its own, above its list. One does. */
+  /* A group may carry one line of its own, above its list. */
   if (g.note) { w(g.note); w(); }
   w('| Name | What we say about it | Link |');
   w('| --- | --- | --- |');
@@ -501,13 +257,14 @@ w();
 w('- **Crisis phone numbers** (`web/content/helplines.js`). Every one was read off the');
 w('  provider’s own website on the day recorded next to it. A number is never a wording');
 w('  decision, and never written from memory. The words *around* a number are under');
-w('  "the crisis block" above.');
+w('  "The crisis block" above.');
 w('- **Time zones** (`web/content/zones.js`), which are generated and hold no words.');
+w('- **What a person writes.** Their prediction and what happened are theirs, stay on their');
+w('  phone, and are never in the app’s files.');
 w('- **Anything in a second language.** English is the only one built. A translation copies');
 w('  `strings-en.js`, keeps every key, and the nine sentences are approved once by a named');
 w('  person and then frozen the same way.');
 w();
 
 fs.writeFileSync(path.join(ROOT, 'docs/COPY.md'), out.join('\n').replace(/\n{3,}/g, '\n\n') + '\n');
-console.log('docs/COPY.md — ' + out.length + ' lines, ' + worries.length + ' worries, ' +
-  doors.items.length + ' doors, ' + Object.keys(why).length + ' explanations');
+console.log('docs/COPY.md — ' + out.length + ' lines, ' + pieces + ' pieces of wording, ' + links + ' links');

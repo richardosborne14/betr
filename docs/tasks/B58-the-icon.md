@@ -5,6 +5,7 @@ colour plus something clear that represents hope or testing or a checklist or so
 **Confidence:** —
 **Date opened:** 2026-09-15
 **Depends on:** B56's look (the terracotta and the paper are decided; the icon uses only those two and the marker yellow).
+**Already done, 2026-09-15 (B56, branch `redesign`):** `theme_color` and `background_color` in the manifest and `<meta name="theme-color">` are `#C4532E`. The icons are not.
 **Where:** `web/icon-192.png`, `web/icon-512.png`, `web/manifest.webmanifest`, `web/index.html` (the `apple-touch-icon` and `theme-color` lines),
 and `web/icon.svg` as the source, committed.
 

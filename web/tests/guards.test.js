@@ -84,24 +84,6 @@ test('a belief naming anyone\u2019s safety is refused here, not one screen later
   }
 });
 
-/*
-  B29, 2026-09-08, and it is a founder's decision written down as a test rather than as a
-  comment. HABIT and BODY used to refuse a TEST; rule 4 was structural because free text sat
-  at the end of a side path. Free text is the front door now, the founder loosened the rest
-  in the same note ("free ourselves up a little bit from the constraints"), and the line a
-  person reads about it is frozen sentence 6 on Help rather than a wall inside the app.
-
-  So both boxes take it. If somebody restores the wall by accident, this fails; restoring it
-  on purpose needs the founder in writing, the way the loosening did.
-*/
-test('the habit goes through on both boxes now, and the lists still exist', () => {
-  for (const s of ['If I stop drinking at the wedding, then they will ask me why',
-                   'If they see me turn down a pint they will think I have a problem',
-                   'If I say no to the casino night, then I will be left out']) {
-    assert.strictEqual(guards.checkBelief(s).ok, true, s);
-    assert.strictEqual(guards.checkTest(s).ok, true, 'a test naming the habit is no longer refused: ' + s);
-  }
-});
 
 /*
   The narrow exemption that came with the loosening. "I'm going to get fired if I ask" is a
@@ -114,39 +96,7 @@ test('a conditional is never read as a verdict, and a bare one still is', () => 
   assert.strictEqual(guards.checkBelief('I’m the one they’ll blame if the thing fails').ok, true);
 });
 
-/*
-  The other side of the same loosening. A person's own test naming the habit, or food and
-  weight, is taken — and taken silently, with no note and no nudge, because the founder's
-  decision was that the app stops arguing about these and Help says the line once.
-*/
-test('a person\u2019s own test naming the habit or the body is simply taken', () => {
-  for (const s of ['Have one beer and see what happens', 'Skip my evening joint',
-                   'Put a bet on and stop', 'Watch porn once and see',
-                   'Skip lunch and count calories']) {
-    const r = guards.checkTest(s);
-    assert.strictEqual(r.ok, true, 'a person\u2019s own test was refused: ' + s);
-    assert.ok(!r.soft, 'a person\u2019s own test was argued with: ' + s);
-  }
-  /* Both refusals are unreachable now and their words stay, so every language keeps the key. */
-  assert.match(words('refusal.habit'), /involves the thing itself/);
-  assert.match(words('refusal.body'), /food, weight/);
-});
 
-/*
-  And the half that did NOT change, which is the more important half to keep. BETR may never
-  PROPOSE one of these: content.js holds the twenty-one stock tests and drop lines to the
-  same three lists, which is the whole reason the lists survive the loosening. If the lists
-  are ever deleted as "dead code", BETR's own content stops being checked and nothing says so.
-*/
-test('the word lists survive, because BETR\u2019s own content is still held to them', () => {
-  assert.ok(guards.HABIT.length > 20 && guards.BODY.length > 10, 'the word lists have been deleted');
-  assert.strictEqual(guards.hit('Have one beer and see what happens', guards.HABIT), 'beer');
-  assert.strictEqual(guards.hit('Skip lunch and count calories', guards.BODY), 'calories');
-  assert.strictEqual(guards.hit('Ask for the fastest option', guards.BODY), null);
-  /* content.js is where they are applied; content.test.js walks the actual list through it. */
-  const src = require('node:fs').readFileSync(require.resolve('../lib/content.js'), 'utf8');
-  assert.match(src, /guards\.hit\(/, 'content.js no longer checks BETR\u2019s own tests at all');
-});
 
 /*
   B17 moved the numbers out of here. A refusal has to be answerable with the line for the
@@ -157,6 +107,26 @@ test('the word lists survive, because BETR\u2019s own content is still held to t
   This test is the guard against them creeping back: a number in this file is a number shown
   to everybody on earth, which is the bug B17 existed to fix.
 */
+/*
+  B56, 2026-09-15. The habit and body lists are gone with the stock content they held BETR to.
+  Nothing a person writes about drink, food or their body is refused, and there is no second
+  list for anything to be wired back into. The one hard stop is anyone's safety, on both blanks.
+*/
+test('the one hard stop is the only list there is', () => {
+  assert.strictEqual(guards.HABIT, undefined, 'the habit list is back');
+  assert.strictEqual(guards.BODY, undefined, 'the body list is back');
+  assert.ok(guards.HARM.indexOf('kill myself') !== -1);
+  for (const s of ['stop drinking at the wedding', 'skip lunch and count calories', 'put a bet on and stop']) {
+    assert.strictEqual(guards.checkPart(s, 'if').ok, true, 'a person\u2019s own words were refused: ' + s);
+  }
+  const r = guards.checkPart('I kill myself', 'if');
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.kind, 'harm');
+  /* An empty blank names which blank, and nothing else. */
+  assert.strictEqual(guards.checkPart('  ', 'if').reason, 'refusal.emptyIf');
+  assert.strictEqual(guards.checkPart('', 'then').reason, 'refusal.emptyBelief');
+});
+
 test('a refusal about safety says why, and carries no phone number of its own', () => {
   const r = guards.checkTest('See how long I can go without wanting to hurt myself');
   assert.strictEqual(r.kind, 'harm');

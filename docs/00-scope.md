@@ -1,10 +1,9 @@
 # Betr — scope for the gateway product
 
-> **Superseded in part, 2026-09-15.** The founder locked in a ground-up redesign — [`tasks/B56-the-redesign.md`](tasks/B56-the-redesign.md) —
-> and a move off TrybeUP — [`tasks/B57-the-move-to-digitalbricks.md`](tasks/B57-the-move-to-digitalbricks.md). Where §1, §3, §5 or §6 below
-> describe the way in, the stock list, the ladder or the bridge, **B56 and B57 are the scope now**; this file is rewritten when they ship.
-> What still stands unchanged: §2 (what it is not), §4, §7, §8, the frozen sentences in §10, and the open questions in §9 that are not about
-> TrybeUP. BETR is no longer anybody's gateway product; it is free, open source (MIT) and its own thing.
+> **Rewritten in part, 2026-09-15.** §1 and §3 describe the redesign in [`tasks/B56-the-redesign.md`](tasks/B56-the-redesign.md), built on the
+> branch `redesign`. The move off TrybeUP — [`tasks/B57-the-move-to-digitalbricks.md`](tasks/B57-the-move-to-digitalbricks.md) — has not
+> shipped, so §6 still describes the bridge and B57 wins over it. §5 (the stock list) is history: B56 took the list out of the app.
+> What still stands unchanged: §2 (what it is not), §4, §7, §8, the frozen sentences in §10.
 
 **Written 2026-09-01.** After the founder and Misha judged men's-group outreach a dead end, and
 after four prototypes in one afternoon. This is the scope for the product the fourth one
@@ -24,33 +23,31 @@ answer. Nothing in §9 is a build blocker for a prototype; several are blockers 
 
 ## 1. What it is, in one paragraph
 
-*Rewritten 2026-09-08 (B28–B33). What changed is the way in; the loop underneath is the one
-this paragraph described on the day it was written.*
+*Rewritten 2026-09-15 for B56, the redesign the founder locked in that day. The loop underneath —
+predict, do it, write down what happened, read it back — is the one this paragraph has always
+described; everything that tried to do the therapist's job on the screen is gone.*
 
-A free thing on your phone. It opens on one finished test — somebody's prediction, struck
-through, what actually happened next to it, and the ladder that moved. Then one big button:
-*Find yours.* You pick the situation that is yours off a short list, and it hands you one
-sentence with two gaps in it — *If I ___, then ___* — already half written, to type over or tap
-a suggestion into. You say what you'll do about it today and what you'll leave out, and tap
-*Lock it in.* You go and do it. You come back, type one sentence about what happened, and tap
-one of four words for how sure you still are. It shows you your prediction with a line through
-it, what actually happened underneath, and that belief coming down a ten-rung ladder test by
-test — and offers the same test again tomorrow. If none of the list is yours, *Write my own*
-hands you the same sentence with both gaps empty. No account. No server. No AI. Nothing leaves
-the phone.
+A free thing on your phone. It opens on one question — *What do you think will happen?* — and one
+sentence with two blanks in it: *If I ___, then ___.* You write both halves yourself, a hope or a
+worry, and tap *Lock it in.* You go and find out. You come back and tap *Done it*, and it asks the
+way a friend would: *Did it go how you expected?* — *Yeah!*, *Sort of* or *Not really*. Then *What
+happened?*, in your own words, and *Keep it.* It shows you the prediction, and underneath it every
+result you have kept, newest first, each with its answer and the day. *Same again tomorrow* locks
+the same one in again; *Done with this one* puts it away. No list to pick from, no ladder, no
+tally, no number of any kind. No account. No server. No AI. Nothing leaves the phone.
+
+**The word is *prediction*,** for a hope and a worry alike (founder, 2026-09-15).
 
 **The purpose statement in §10 and in the app still describes the old way in** ("you pick a
 worry about how people will react"). It is frozen (rule 7) and identical in five places, so
-changing it is the founder's call — `docs/tasks/B29-the-rules-and-the-word.md` has a candidate.
+changing it is the founder's call — B56 §9c has the candidate.
 
-**What it is, clinically:** the CBT behavioural experiment, and only that, run against
-conditional assumptions in the social-anxiety, assertiveness and perfectionism lanes. The
-record sheet is filled in underneath; the person never sees it as a sheet.
+**What it is, clinically:** the CBT behavioural experiment, and only that: a prediction written
+down before the thing is done, the thing done, what happened written the same day, read back
+later (research/10 §2.3, §11.6; research/12 §2 — *How it works* is the explaining).
 
-**What it is, commercially:** the top of the funnel for TrybeUP, reaching the people who will
-never join a group or email a gatekeeper: those hiding a private shame who might try something
-that looks this simple and this private. The bridge to TrybeUP is deliberate, visible, and
-never automatic (§6).
+**What it is not, any more:** anybody's gateway product. From 2026-09-15 BETR is free, open source
+(MIT) and its own thing; B57 moves it off TrybeUP and ends the bridge.
 
 ## 2. What it is not
 
@@ -79,61 +76,36 @@ never automatic (§6).
 
 ## 3. The interface, as decided today
 
-**Rewritten 2026-09-08 (B28, the founder's decisions; built in B29–B33).** The way in changed
-and the loop did not. What follows is the shape as built; the table it replaces described the
-stock list as the front door, which it stopped being on that day.
+**Rewritten 2026-09-15 (B56, the founder's decisions; the canvas *BETR, Bet on a Hope* is the
+drawing).** Two voices: the person's words in a serif on paper cards, the app's in the sans on
+terracotta, one question per screen. Under every screen, three grey words: *Your predictions ·
+How it works · Help.*
 
-| # | Screen | What's on it | Taps |
-| --- | --- | --- | --- |
-| 1 | **Start** | One finished test, shown not described: the prediction, struck through, what actually happened in marker, the ladder from ten to a lower rung. Then *Find yours* (big, to the doors) and *Write my own* (ghost, to the build screen), and the trust line. **They swapped places on 2026-09-10 (B50)**: the ready-made road is the road, and writing your own is the exit — which is what B45 §4's one journey had said since 2026-09-09. | 1 |
-| 2 | **Build** | *If I ___, then ___* as one sentence, each blank an input, suggestion chips under the active one. One big button *What will you do?* | typing or 2 taps |
-| 3 | **Build · what you'll do** | The sentence in the quiet strip. *What will you do today?* (box, chips), then *And leave out* as ONE ROW showing what it currently says, which opens into a box with chips when tapped — optional, and the row shows the words rather than hiding them (B39, 2026-09-09). Then *Lock it in*. | typing |
-| 4 | **Locked** | *Go and do it.* The test repeated. One big button *Done it. Here's what happened.* Small: *Didn't get to it*. | 1 |
-| 5 | **Happened** | One text box. *Just what they said or did. No verdict.* | typing |
-| 6 | **Sure?** | The sentence, quoted, and the rung it is on now. Four buttons: still sure / a bit less / a lot less / not at all. Small, underneath: *more sure than before*. | 1 |
-| 7 | **Result** | Expectation struck through. What happened in marker. **The ladder for this belief**, started → now. Big number of tests done. *Do it again tomorrow* · *Different test*. | — |
-| 8 | **Your tests** | One card per belief tested: its ladder, what you wrote each time, *Test this again*, and — since 2026-09-10 (B53) — *Archive*, which moves that card under an **Archived** heading at the bottom of the same screen. Nothing is deleted, the card is drawn whole, and one tap puts it back. Nothing combined across cards. | 1 |
-| — | **Borrow** (one tap aside) | The six doors and the stock list, reached from *Not sure?* Picking one opens screen 2 with the blanks filled. Everything editable. | 2 |
+| # | Screen | What's on it |
+| --- | --- | --- |
+| 1 | **Front** | *What do you think will happen?* *If I ___, then ___.* on paper. *Lock it in* (drawn at 45% until both blanks have words). *Then go and find out. Nothing leaves your phone.* The harm stop runs on both blanks. |
+| 2 | **Written** | The same screen with words in it; the line under the button becomes *That keeps it as you wrote it, so what happens can’t rewrite it.* |
+| 3 | **Locked in** | LOCKED IN. The prediction. *Go and find out.* *Done it*. Grey: *Not today. Keep it for tomorrow.* — nothing recorded. |
+| 4 | **Did it go how you expected?** | The prediction. *Yeah!* (marker yellow, a spark), *Sort of*, *Not really* (quieter). |
+| 5 | **What happened?** | The answer as a small tag beside the question. One box, not skippable. *Keep it*. |
+| 6 | **Your results** | The prediction, then every result, newest first: tag, day label, the person’s words. *Same again tomorrow*. Grey: *Done with this one* (or *Bring it back*). No number. |
+| 7 | **Your predictions** | One card each: the sentence and its tags oldest to newest, LOCKED IN if waiting. *New prediction*. *Put away* at the bottom. *Export everything · Delete everything*. No count. |
+| 8 | **How it works** | Three short paragraphs and *Write one*. |
+| — | **Help** | Unchanged in substance: the crisis lines first, what it costs and what leaves the phone, the nine sentences, other places, who made this, the code. |
 
-**Why these choices hold (each is from the research):**
+**Why these choices hold:**
 
-- **Pre-written expectation.** The prediction must be locked before the test and shown
-  beside the outcome afterwards. Pre-writing it removes the one step people stall on, and
-  *change it* keeps it theirs.
-- **The safety behaviour in bold.** Clark and Wells: without dropping it, the person learns the
-  crutch saved them, not that the worry was wrong. It is the sentence that makes the test count.
-- **"No verdict" on the outcome box.** Observations, not judgements; never "irrational".
-- **Four words instead of a 0–100 slider, moving a 1–10 ladder.** The 0–100 scale was the
-  single most "learn this first" element of every earlier prototype, so the tap stays four
-  words. *Amended 2026-09-02:* the words are relative ("a bit less sure"), so each one now
-  moves the belief along a ten-rung ladder from where it already was, instead of writing a
-  fixed number. Everything starts at 10, and nothing goes below 1. *Amended 2026-09-08 (B31):*
-  the front screen **shows** a ladder starting at ten, on the worked example, instead of saying
-  so in a sentence. `loop.test.js` holds the ten to the card. Founder's own CBT used 1–10 and watching it fall is what kept them going.
-  Research §11.6: "show the new belief's evidence growing" is the mechanism and the ad.
-- **A fifth, quiet option: *more sure than before*.** A test can go badly and leave someone
-  more convinced. A ladder that can only fall is a nicer story than the person's week. It is
-  available and deliberately not prominent, in the place *didn't get to it* sits.
-- **The word is *test*.** Founder, 2026-09-08: nobody has to say they have worries to set up a
-  test. It was *worry* from 2026-09-02 (never *fear* — founder: fear sounds scary), and
-  "worry" stays only where it means the feeling: frozen sentence 3 ("manage everyday worry"),
-  the two paragraphs of "Why this one sticks", an outside page's own description of itself.
-- **"Do it again tomorrow" as the primary action.** Mindable found the number of completed
-  experiments predicted improvement; CCI says one run "might convince yourself it was luck".
-  The product metric is completed tests, never days or streaks.
-- **No streak, no red day, no "you missed".** *Didn't get to it* answers "it's still here for
-  tomorrow, smaller counts too."
-- **Nothing happens at the bottom rung, and archiving is what happens instead.** Founder, asked
-  2026-09-10: is there confetti when the belief reaches the lowest rung, and can somebody put a
-  worry away? The answer to the first is deliberately nothing — a reward at rung 1 makes the
-  ladder a target, and the re-rate stops being the person's honest answer the moment there is
-  something to win by tapping *not sure at all*. It would also be a verdict ("you were wrong to
-  worry"), which is the sentence BETR never says. The result screen at the bottom is the result
-  screen at the top, word for word. What was actually missing is the second thing: until that
-  day the app said *Do it again tomorrow* for ever, and the only way to remove one test was to
-  delete everything. So archiving is offered on **every** card at **any** time — not unlocked at
-  the floor, because a button that appears only once you have rated yourself low is the same
-  reward wearing a coat, and the founder's own case was a test somebody never wants to do.
+- **The prediction is locked before, and read back after.** That is the experiment (research/10
+  §2.3). Nothing on the loop screens edits it.
+- **The question comes before the words.** The founder: "like a friend being 'SOOOO, how did it
+  go??'". It is a question about the person’s own prediction, never a verdict on them.
+- **No number.** Round one kept a tally; round three took it off as "smartarsed — they’ll be able
+  to put the puzzle together themselves". The results in the person’s own words are the evidence.
+- **Same again tomorrow, and a quiet way to be done.** Completed runs are what help (Mindable; CCI:
+  one run "might convince yourself it was luck"), and many predictions are one-shots.
+- **No streak, no red day, no "you missed".** *Not today* keeps it locked in and records nothing.
+- **Known wrinkle, for the reviewer:** a worry that came true is answered *Yeah!*, and that pill is
+  a party (B56 §9b). Watch two real people do it before changing anything.
 
 ## 4. Decisions carried over from the research (locked)
 

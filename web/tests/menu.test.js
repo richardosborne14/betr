@@ -1,300 +1,125 @@
 /*
-  B8: the three doors, the tests that wait for you, and Help.
+  The foot (B56) and Help (B8 onwards).
 
   What these are guarding, in order of how easily it could be undone by accident:
 
-    - the menu is three plain words on every screen, and stays three. A count, a badge or a
-      fourth item is the thing the founder's rule 10 was protecting against
-    - a test you locked in is never binned by the next thing you tap, and there is no cap on
-      how many are waiting, and nothing anywhere counts them
-    - Help opens with the crisis lines above everything else in the markup
+    - the foot is three plain words on every screen, and stays three. A count, a badge or a
+      fourth item is what the old bottom bar's rule protected against, and it still does
+    - Help opens with the crisis lines above everything else in the markup, then what it
+      costs and what leaves the phone
     - every link is plain https with nothing attached, and every one of them is in the
       allow-list below, so adding a link is a deliberate act that shows up in a diff
+    - outside Help there are no links at all, except the crisis numbers under a refusal
+    - TrybeUP is on Help and nowhere else (rule 9, until B57 ends it)
 */
 const { test } = require('node:test');
 const assert = require('node:assert');
+const fs = require('node:fs');
+const path = require('node:path');
 const { boot } = require('./harness.js');
-const worries = require('../content/worries.js');
-const allDoors = require('../content/whats-going-on.js');
-const content = require('../lib/content.js');
 const places = require('../content/places.js');
-const en = require('../content/strings-en.js');
-/* B19: a walk goes through a door, so "the first worry" is the first one behind one. */
-const firstBehind = () => content.byId(worries, allDoors.items[0].worries[0]);
-/*
-  B45 §5b, 2026-09-09: a worry's `test` may carry holes now — the small go is that sentence
-  word for word, and it is about the thing she typed. What a SCREEN shows is never the raw
-  line, it is that line with the holes at their own default.
-*/
-const said = (f, text) => content.fill(text, {}, (f.skeleton || { holes: {} }).holes);
+const s = require('../content/strings-en.js').s;
 
-/*
-  Lock a stock worry in and walk away from it, leaving it waiting.
+const IF = 'say no to my sister without a reason';
+const THEN = 'she’ll take it as rude';
+const locked = (a) => a.type('#if', IF).type('#then', THEN).tap('#lock');
 
-  B47, 2026-09-09: `door` used to be hard-coded to the first one, and the cull took that door
-  down to two worries, so a walk that wanted four fell off the end of the list. Which door a
-  menu test walks through was never the point of the menu tests — pass one that is big enough.
-*/
-function lockOne(a, item, door) {
-  if (a.html().indexOf('id="go"') !== -1) a.tap('#pick');   /* already past the front screen, or not */
-  /* B30: "New test" opens the build screen, so the borrow road starts from the front screen. */
-  if (a.html().indexOf('id="if"') !== -1) a.tap('#back').tap('#pick');
-  if (a.html().indexOf('data-door=') !== -1) a.tap('[data-door]', door || 0);
-  a.tap('[data-id]', item).tap('[data-b]', 0).tap('#next').tap('[data-size]', 0).tap('#lock');
-  if (a.html().indexOf('id="nothanks"') !== -1) a.tap('#nothanks');
-  return a;
+const SCREENS = {
+  front: (a) => a,
+  on: (a) => locked(a),
+  go: (a) => locked(a).tap('#done'),
+  happened: (a) => locked(a).tap('#done').tap('[data-tag="yeah"]'),
+  log: (a) => locked(a).tap('#done').tap('[data-tag="yeah"]').type('#x', 'She said fine.').tap('#keep'),
+  mine: (a) => SCREENS.log(a).tap('#f-mine'),
+  why: (a) => a.tap('#f-why'),
+  help: (a) => a.tap('#f-help'),
+  where: (a) => a.tap('#f-help').tap('#where')
+};
+
+/* Every screen outside Help, in one string. */
+function outsideHelp() {
+  return ['front', 'on', 'go', 'happened', 'log', 'mine', 'why'].map((n) => SCREENS[n](boot()).html()).join('\n');
 }
 
-/* ------------------------------------------------------- the three doors */
+/* ------------------------------------------------------------------ the foot */
 
-test('the menu is on every screen, and it is exactly three plain words', () => {
-  const a = boot();
-  const stops = [
-    () => a.tap('#pick'),                       /* what's going on */
-    () => a.tap('[data-door]', 0),            /* pick */
-    () => a.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'),              /* plan */
-    () => a.tap('[data-size]', 0),            /* a size picked, which is what fills the boxes */
-    () => a.tap('#lock'),                     /* locked */
-    () => a.tap('#nothanks').tap('#done'),    /* happened */
-    () => a.type('#o', 'He said fair enough.').tap('#next'),  /* sure */
-    () => a.tap('[data-key]', 1),             /* result */
-    () => a.tap('#m-mine'),                   /* your worries */
-    () => a.tap('#m-help'),                   /* help */
-    () => a.tap('#back').tap('#m-new')        /* back to what's going on */
-  ];
-  const check = () => {
-    const items = a.html().match(/<nav class="menu"[^>]*>(.*?)<\/nav>/);
-    assert.ok(items, 'no menu on screen: ' + a.html().slice(0, 120));
-    const labels = [...items[1].matchAll(/<button[^>]*>([^<]+)</g)].map((m) => m[1]);
-    assert.deepStrictEqual(labels, ['Your tests', 'New test', 'Help']);
-  };
-  check();
-  for (const step of stops) { step(); check(); }
-});
-
-test('every door on the menu works from every screen', () => {
-  const from = [
-    (a) => a,                                                     /* the start screen */
-    (a) => a.tap('#pick'),                                          /* what's going on */
-    (a) => a.tap('#pick').tap('[data-door]', 0),                    /* pick */
-    (a) => a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next'),  /* plan */
-    (a) => lockOne(a, 0),                                         /* locked */
-    (a) => lockOne(a, 0).tap('#done'),                            /* happened */
-    (a) => a.tap('#m-new')                                        /* the build screen */
-  ];
-  for (const at of from) {
-    /* B30: "New test" opens a new test, not the doors. The doors are one tap aside now. */
-    at(boot()).tap('#m-new').shows(en.s.build.title);
-    at(boot()).tap('#m-help').shows('If you are in danger or in crisis');
-    /* nothing recorded and nothing waiting lands on the pick list, never on a dead end */
-    const mine = at(boot()).tap('#m-mine').html();
-    assert.ok(mine.indexOf('Your tests') !== -1 || mine.indexOf('What’s going on?') !== -1, mine.slice(0, 120));
+test('the foot is on every screen, and it is exactly three plain words', () => {
+  for (const name of Object.keys(SCREENS)) {
+    const h = SCREENS[name](boot()).html();
+    const feet = [...h.matchAll(/<nav class="foot" aria-label="BETR">([\s\S]*?)<\/nav>/g)];
+    assert.strictEqual(feet.length, 1, name + ' has ' + feet.length + ' feet');
+    const buttons = [...feet[0][1].matchAll(/<button([^>]*)>([\s\S]*?)<\/button>/g)];
+    assert.deepStrictEqual(buttons.map((b) => b[2]), [s.foot.mine, s.foot.why, s.foot.help], name);
+    for (const b of buttons) {
+      assert.match(b[1], /^ id="f-[a-z]+"$/, name + ': a foot word has grown a class, a state or a badge: ' + b[1]);
+    }
+    assert.ok(!/\d|<img|<svg/.test(feet[0][1]), name + ': the foot has a number or an icon on it');
   }
 });
 
-/* ------------------------------------------------------- tests that wait for you */
-
-test('starting a new test keeps the one you locked in, and it is waiting afterwards', () => {
-  const a = boot();
-  lockOne(a, 0).shows(en.s.locked.title);
-  a.tap('#m-new').shows(en.s.build.title);
-
-  /* on the front screen, as one line with a way back in — not a list and not a number */
-  a.tap('#back').shows('On the go').shows(said(firstBehind(), firstBehind().test));
-  a.hides('1 waiting').hides('overdue');
-
-  /* and on Your tests, on its own card, with both ways out of it */
-  a.tap('#m-mine').shows('Your tests').shows('On the go').shows('Done it');
-  a.tap('[data-did]', 0).shows('What happened?');
-  a.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1);
-  a.shows('>1<').shows('>9<');
-});
-
-test('there is no cap on how many are on the go, and nothing counts them', () => {
-  const a = boot();
-  /* Four distinct worries, so through a door that has four (B47). */
-  lockOne(a, 0, 3).tap('#m-new');
-  lockOne(a, 1, 3).tap('#m-new');
-  lockOne(a, 2, 3).tap('#m-new');
-  lockOne(a, 3, 3).tap('#m-new');
-  a.tap('#back');                       /* the front screen, with four waiting */
-  a.shows('Tests you’ve got on the go');
-  const front = a.html();
-  for (const shame of ['overdue', 'waiting for', 'you missed', 'streak', 'behind']) {
-    assert.ok(front.toLowerCase().indexOf(shame.toLowerCase()) === -1, 'front screen says "' + shame + '"');
+test('every word on the foot works from every screen', () => {
+  for (const name of Object.keys(SCREENS)) {
+    const mine = SCREENS[name](boot()).tap('#f-mine');
+    mine.shows('id="new"');
+    /* the link's words and the screen's title are the same words, so test what only the screen has */
+    const why = SCREENS[name](boot()).tap('#f-why');
+    why.shows('id="write"').showsText(s.why.method);
+    const help = SCREENS[name](boot()).tap('#f-help');
+    help.showsText(s.crisis.title).shows('id="where"');
   }
-  /*
-    And the count itself is nowhere on it. This used to look for the bare string "4 ", which
-    stopped working on 2026-09-08: the front screen now carries a worked example whose ladder
-    legitimately says "Down 4 rungs" (B31). So it checks the LINE about what is on the go,
-    which is the one that would grow a tally, rather than the whole screen.
-  */
-  const line = front.slice(front.indexOf('Tests you’ve got on the go') - 200,
-                           front.indexOf('Tests you’ve got on the go') + 60);
-  assert.ok(!/\d/.test(line.replace(/<[^>]*>/g, '')), 'the line about what is on the go counts them: ' + line);
-  /* they are all still there, and the menu still says nothing about how many */
-  const mine = a.tap('#pickup').html();
-  assert.strictEqual((mine.match(/data-did=/g) || []).length, 4);
-  assert.ok(mine.indexOf('>4<') === -1, 'Your tests counted the waiting tests');
 });
 
-test('a test that is waiting survives a reload, and "didn’t get to it" costs it nothing', () => {
-  const a = boot();
-  lockOne(a, 0).tap('#m-new');
-  a.tap('#back').shows('On the go');
-
-  const again = boot(a.mem);            /* the same phone, opened again tomorrow */
-  again.shows('On the go').shows(said(firstBehind(), firstBehind().test));
-  again.tap('#m-mine').tap('[data-notyet]', 0).shows('still here for tomorrow');
-  again.shows('On the go');
-  /* not bare "missed": a worry's own test may ask you to write down what you missed. */
-  again.hides('you missed').hides('missed a').hides('streak').hides('failed');
+test('a prediction that is locked in is still locked in after leaving through the foot', () => {
+  const a = locked(boot()).tap('#f-help').tap('#f-why').tap('#f-mine');
+  a.showsText(s.mine.locked);
+  a.tap('[data-p]').showsText(s.on.kicker);
 });
 
-test('an unfinished test that was never locked in is simply let go', () => {
-  const a = boot();
-  a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').shows(en.s.build.lock);
-  a.tap('#m-new').tap('#back');
-  a.hides('On the go');
-});
-
-test('export carries the tests that are waiting as well as the results', () => {
-  const a = boot();
-  lockOne(a, 0).tap('#m-new');
-  a.tap('#m-help').tap('#export');
-  const dump = JSON.parse(a.valueOf('#dump'));
-  assert.strictEqual(dump.waiting.length, 1);
-  assert.strictEqual(dump.waiting[0].worry, firstBehind().label);
-  assert.ok(dump.waiting[0].lockedIn);
-});
-
-/* ------------------------------------------------------- help */
+/* ------------------------------------------------------------------ help */
 
 test('Help opens with the crisis lines, above everything else in the markup', () => {
-  const a = boot();
-  a.tap('#m-help');
+  const a = boot().tap('#f-help');
   const h = a.html();
-  const crisis = h.indexOf('If you are in danger or in crisis');
+  const crisis = h.indexOf(s.crisis.title);
   assert.ok(crisis !== -1, 'no crisis block on Help');
-  for (const later of ['What CBT is', 'What this is', 'Other places', 'Who made this', 'The code']) {
-    assert.ok(crisis < h.indexOf(later), '"' + later + '" is above the crisis lines');
+  for (const later of [s.help.proofTitle, s.help.cbtTitle, s.help.whatThisTitle, s.help.placesTitle, s.help.whoTitle, s.help.codeTitle]) {
+    assert.ok(h.indexOf(later) !== -1 && crisis < h.indexOf(later), '"' + later + '" is above the crisis lines');
   }
-  /* sentence 7, verbatim, and all three ways out of it */
-  a.shows('call your local emergency number');
-  a.shows('988').shows('116 123').shows('findahelpline.com');
+  a.shows('call your local emergency number').shows('988').shows('116 123').shows('findahelpline.com');
 });
 
-/*
-  B26, 2026-09-04. The order of the first two blocks, and it is the whole task.
-
-  The crisis block is first because B17 put it there for the person who cannot scroll and gets
-  one chance. The proof is second because the person checking for a catch is a different person
-  and used to get the same screen: the counters were 2,607px down, three and a half screens,
-  behind the CBT explainer and the nine sentences.
-
-  Both halves of this fail the build. Moving the crisis block off the top has the standing of
-  rule 1 and needs the founder in writing; moving the proof back down undoes B26 by accident,
-  which is exactly how the front screen lost its ladder line the day before.
-*/
-test('Help answers the person checking for a catch on the first screen, under the crisis lines', () => {
-  const a = boot();
-  a.tap('#m-help');
-  const h = a.html();
-  const at = (s) => {
-    const i = h.indexOf(s);
-    assert.ok(i !== -1, 'not on Help: ' + s);
-    return i;
-  };
-  const crisis = at('If you are in danger or in crisis');
-  const proof = at('Don’t take our word for it');
-  assert.ok(crisis < proof, 'the crisis lines are no longer first');
-  for (const later of ['Choosing one that is safe', 'What CBT is', 'What this is',
-    'This is a self-help worksheet', 'Other places', 'Who made this', 'The code']) {
-    assert.ok(proof < at(later), '"' + later + '" is above the proof block');
+test('Help answers the person checking for a catch straight after the crisis lines', () => {
+  const h = boot().tap('#f-help').text();
+  const at = (x) => { const i = h.indexOf(x); assert.ok(i !== -1, 'not on Help: ' + x); return i; };
+  const proof = at(s.help.proofTitle);
+  assert.ok(at(s.crisis.title) < proof);
+  const safe = at(s.help.safeTitle);
+  assert.ok(proof < safe && safe < at(s.help.cbtTitle), 'the safe-experiments line has moved');
+  for (const part of [s.help.free, s.help.proofSent, s.help.proofAccounts, 'Turn on airplane mode', s.io.export, s.io.wipe]) {
+    assert.ok(at(part) < safe, '"' + part + '" fell below the safe-experiments line');
   }
-
-  /*
-    B33, 2026-09-08. Frozen sentence 6 is third now, and the reason is rule 4 loosening on the
-    same day: the habit and body word lists stopped refusing a person's own test, so this
-    sentence is the only place the line is drawn at all. It was fourth, inside a numbered list
-    of nine, which was the right place for a rule the app also enforced.
-
-    Both halves of this fail the build. It may not climb above the crisis block or the proof —
-    those are for the person who gets one chance at the screen — and it may not slide back
-    below the CBT explainer, which is where it was when it was one of nine and no more.
-  */
-  const safe = at('Choosing one that is safe');
-  assert.ok(proof < safe, 'the safe-experiments line has climbed above the proof block');
-  assert.ok(safe < at('What CBT is'),
-    'the safe-experiments line is below the CBT explainer again. Since 2026-09-08 it is the ' +
-    'only place BETR draws the line at all (rule 4 as amended)');
-  /* the counters and both ways out are inside that block, not stranded below the fold */
-  for (const part of ['sent to us, ever', 'accounts', 'Turn on airplane mode']) {
-    assert.ok(at(part) < at('What CBT is'), '"' + part + '" fell below the CBT explainer');
-  }
+  /* B56: no number anywhere that counts what a person did — the results counter is gone */
+  assert.ok(!('proofResults' in s.help), 'the count of results is back in the strings');
 });
 
-/*
-  B26, founder 2026-09-04. Help is where somebody goes to find the catch, and until this day
-  BETR never said anywhere what it costs. §08: paywall complaints carry a −1.89 star penalty
-  and outnumber AI complaints 34 to 1, so the unanswered question is not a small one.
-
-  This test only checks the sentence is there and is read before the CBT explainer. IF BETR
-  EVER GAINS A THING TO BUY, THE SENTENCE COMES OUT — no test can notice that for you.
-*/
-test('Help says in plain words what BETR costs, before anything else it explains', () => {
-  const a = boot();
-  a.tap('#m-help');
-  a.shows('BETR is free');
-  a.shows('nothing to buy');
-  const h = a.html();
-  assert.ok(h.indexOf('BETR is free') < h.indexOf('What CBT is'),
-    'the price is below the CBT explainer again');
-  /* it speaks for BETR; TrybeUP's paid plan is still stated in TrybeUP's own entry (rule 9) */
-  assert.ok(h.indexOf('the private groups need a paid plan') > h.indexOf('BETR is free'),
-    'TrybeUP\'s paywall admission has moved or gone');
-});
-
-/*
-  And it is the SAME sentence, not a second copy of it: app.js draws the array element that
-  the numbered list below draws. A copy would drift the first time somebody edited one of them,
-  and this is a frozen sentence (rule 7) said in two places on one screen.
-*/
 test('the safe-experiments line said twice on Help is one sentence, word for word', () => {
-  const en = require('../content/strings-en.js');
-  const six = en.s.frozen.sentences[5];
-  assert.match(six, /^Choose experiments that are safe and legal\./, 'sentence 6 has moved');
-
-  const h = boot().tap('#m-help').html().replace(/<[^>]*>/g, '');
-  const both = h.split(six).length - 1;
-  assert.strictEqual(both, 2, 'sentence 6 is on Help ' + both + ' times, and it should be twice');
-
-  /* the app has no copy of it, in any file: it draws frozen.sentences[5] */
-  const src = require('node:fs').readFileSync(require.resolve('../app.js'), 'utf8');
-  assert.ok(src.indexOf('Choose experiments') === -1, 'app.js has its own copy of sentence 6');
+  const h = boot().tap('#f-help').text();
+  const six = s.frozen.sentences[5];
+  assert.strictEqual(h.split(six).length - 1, 2, 'sentence 6 is not on Help exactly twice');
 });
 
-test('Help carries the nine sentences and the one clear thing to read about CBT', () => {
-  const a = boot();
-  a.tap('#m-help');
-  a.shows('not a medical device').shows('It does not diagnose, treat, cure or prevent any condition');
-  a.shows('made by the people behind TrybeUP');
-  a.shows('behavioural experiment');
-  a.shows('CBT is a talking therapy');
-  a.shows('if you can see one, please do');
-  a.shows('Turn on airplane mode');
-  a.shows('Dev build — not published');
-  /* the primer is above the small print, which is what "the thing to read" means */
+test('Help carries the purpose, the nine sentences, and the one clear thing to read about CBT', () => {
+  const a = boot().tap('#f-help');
+  a.showsText(s.frozen.purpose);
+  for (const line of s.frozen.sentences) a.showsText(line);
+  a.showsText('CBT is a talking therapy').showsText(s.help.free).showsText(s.help.devBuild);
   const h = a.html();
-  assert.ok(h.indexOf('What CBT is') < h.indexOf('This is a self-help worksheet'));
+  assert.ok(h.indexOf(s.help.cbtTitle) < h.indexOf('This is a self-help worksheet'));
 });
 
 /*
   The allow-list. Every link a person can tap in BETR is here, and nowhere else. Adding one
   means editing this list, which means it shows up in a diff and gets read by somebody.
-
-  Misha signs the list itself off before release (B8). This test is about the shape of a
-  link, not about whether the right places are on it.
 */
 const ALLOWED = [
   'https://findahelpline.com',
@@ -318,14 +143,7 @@ const ALLOWED = [
   'https://trybeup.com'
 ];
 
-/*
-  The tappable crisis numbers. These are the only links allowed outside Help, because the
-  refusal a person meets after typing a test about hurting themselves carries them too.
-
-  Since B17 the numbers are not written here: they are every line in content/helplines.js,
-  which is the file that carries a source URL and the date a person read it there. Adding a
-  country still shows up in a diff, and it shows up in the file where it can be checked.
-*/
+/* The tappable crisis numbers: every line in content/helplines.js, which carries a source and a day. */
 const HELPLINES = require('../content/helplines.js');
 const DIALLABLE = ['https://findahelpline.com'].concat(
   Object.keys(HELPLINES.countries).reduce((all, code) =>
@@ -333,8 +151,7 @@ const DIALLABLE = ['https://findahelpline.com'].concat(
 );
 
 test('every link is plain https or tel, has nothing attached, and is on the allow-list', () => {
-  const a = boot();
-  const links = [...a.tap('#m-help').html().matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+  const links = [...boot().tap('#f-help').html().matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
   assert.ok(links.length >= 12, 'only found ' + links.length + ' links');
   for (const url of links) {
     if (url.startsWith('tel:')) {
@@ -346,29 +163,13 @@ test('every link is plain https or tel, has nothing attached, and is on the allo
     assert.ok(url.indexOf('?') === -1 && url.indexOf('#') === -1, url + ' carries a parameter');
     assert.ok(ALLOWED.indexOf(url) !== -1, url + ' is not on the allow-list in menu.test.js');
   }
-  /* everywhere else in the app: nothing but the crisis numbers */
-  const b = boot();
-  let rest = b.html();
-  rest += b.tap('#pick').html();
-  rest += b.tap('[data-door]', 0).html();
-  rest += b.tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
-  rest += b.tap('[data-size]', 0).html();
-  rest += b.tap('#lock').html();
-  rest += b.tap('#nothanks').tap('#done').html();
-  for (const m of rest.matchAll(/href="([^"]+)"/g)) {
-    assert.ok(DIALLABLE.indexOf(m[1]) !== -1, m[1] + ' turned up outside Help');
-  }
+  /* everywhere else in the app: no link at all */
+  const rest = outsideHelp();
+  assert.ok(rest.indexOf('href=') === -1, 'a link turned up outside Help: ' + (rest.match(/href="[^"]+"/) || [])[0]);
 });
 
-/*
-  Sentence 7 is frozen (research §10) and names the US and UK lines inside itself. B17 took
-  it off the top of Help and put the live crisis block there instead — but the sentence is
-  still in the list of nine, still word for word, still with its numbers tappable. The tags
-  are stripped back off and compared character for character.
-*/
 test('sentence 7 is still word for word, and its numbers still dial', () => {
-  const a = boot();
-  const h = a.tap('#m-help').html();
+  const h = boot().tap('#f-help').html();
   const list = h.slice(h.indexOf('<ol>'), h.indexOf('</ol>'));
   const items = [...list.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
   assert.strictEqual(items.length, 9, 'there are not nine sentences');
@@ -382,225 +183,75 @@ test('sentence 7 is still word for word, and its numbers still dial', () => {
   assert.ok(items[6].indexOf('href="https://findahelpline.com"') !== -1, 'findahelpline.com is not a link');
 });
 
-test('a refusal about self-harm carries a number that dials, for the right country', () => {
+test('a refusal about self-harm carries a number that dials, for the right country, and nothing else', () => {
   const a = boot(null, { timeZone: 'Europe/London' });
-  a.tap('#m-new');
-  a.type('#if', 'say no').type('#then', 'people will think I am selfish').tap('#next');
-  a.type('#do', 'Cut myself where nobody will see it').tap('#lock');
-  a.shows('href="tel:116123"').shows('Samaritans');
-  a.shows('call your local emergency number');
+  a.type('#if', 'cut myself where nobody will see it').type('#then', 'I’ll feel better').tap('#lock');
+  a.shows('href="tel:116123"').shows('Samaritans').shows('call your local emergency number');
   a.hides('href="tel:988"');
+  for (const m of a.html().matchAll(/href="([^"]+)"/g)) {
+    assert.ok(DIALLABLE.indexOf(m[1]) !== -1, m[1] + ' is on a refusal');
+  }
 });
 
-test('ours is on the Help list, never first, and says who made it and what it costs', () => {
-  const a = boot();
-  const h = a.tap('#m-help').html();
-  const ours = h.indexOf('trybeup.com');
-  assert.ok(ours !== -1, 'ours is not listed at all');
+/* ------------------------------------------------------------------ rule 9, until B57 */
 
-  /* one plain entry among the others: never first in its group, never a button */
+test('TrybeUP is on Help and nowhere else, never first, never a button, and the byline is gone', () => {
+  const a = boot().tap('#f-help');
+  const h = a.html();
+  assert.ok(h.indexOf('trybeup.com') !== -1, 'ours is not listed at all');
   const group = h.slice(h.indexOf('Doing it with other people'));
   assert.ok(group.indexOf('sidebyside.mind.org.uk') < group.indexOf('trybeup.com'), 'ours is first');
   assert.ok(!/<button[^>]*>[^<]*TrybeUP/.test(h), 'ours is a button');
+  a.showsText('Made by us').showsText('One-to-one chat is free').showsText('need a paid plan');
 
-  a.shows('Made by us').shows('One-to-one chat is free').shows('need a paid plan');
-  /* and it is not on the front screen, in the loop, in the result, or on the menu */
-  const b = boot();
-  let rest = b.html();
-  rest += b.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
-  rest += b.tap('[data-size]', 0).html();
-  rest += b.tap('#lock').tap('#nothanks').tap('#done').html();
-  rest += b.type('#o', 'He said fine.').tap('#next').tap('[data-key]', 1).html();
+  const rest = outsideHelp() + SCREENS.where(boot()).html();
   assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');
+  /* B55's "Who made this?" door went with the redesign (B56 §4) */
+  assert.ok(rest.indexOf('id="made"') === -1 && !('byline' in s), 'the byline is back');
 });
 
-/*
-  B55, 2026-09-12, the day after B54 and from the same founder message thread: *"I'm trying to
-  do as much promo for TrybeUP as possible … even if people just think BETR is kind of cool
-  looking but don't use it, at least they might click through."* So the front screen now has a
-  door to the lineage on it — and this test is the shape of that door, because the shape is the
-  whole of what keeps rule 9 standing.
-
-  TWO SCREENS CARRY IT AND THE LOOP DOES NOT. A person who has just written a sentence about
-  what they are afraid of is not somebody to show another product to, and a refusal screen with
-  a promotion on it would be indefensible. The taps this is for were always going to come from
-  the front screen anyway.
-
-  AND IT DOES NOT SAY TRYBEUP. Rule 9's last standing half is that the brand is not named
-  outside Help, and the label is a question in BETR's voice instead. "Made by TrybeUP" on the
-  front screen is the founder's to take; this test is what makes taking it deliberate.
-*/
-test('"Who made this?" is on the front screen and Your tests, and nowhere in the loop', () => {
-  const a = boot();
-  a.shows('Who made this?');
-  /* and it names nobody: the front screen is still clean of the brand (rule 9) */
-  assert.ok(a.html().toLowerCase().indexOf('trybeup') === -1, 'the front screen names TrybeUP');
-
-  /* every screen of the loop, door to result */
-  a.tap('#pick').hides('Who made this?');
-  a.tap('[data-door]', 0).hides('Who made this?');
-  a.tap('[data-id]', 0).tap('[data-b]', 0).hides('Who made this?');
-  a.tap('#next').hides('Who made this?');
-  a.tap('[data-size]', 0).tap('#lock').hides('Who made this?');
-  a.tap('#nothanks').tap('#done').hides('Who made this?');
-  a.type('#o', 'He said fair enough.').tap('#next').hides('Who made this?');
-  a.tap('[data-key]', 1).hides('Who made this?');
-
-  /* Your tests carries it. Help does not — a door is no use on the screen it opens onto */
-  a.tap('#m-mine').shows('Who made this?');
-  a.tap('#back').tap('#m-help').hides('Who made this?');
-});
-
-/*
-  And it has to LAND on the block, not at the top of a screen four screenfuls long. Help puts
-  the crisis lines first on purpose (B17), so a byline that scrolled nowhere would answer "who
-  made this?" with a suicide line — which is what `goHelpTo` and the id on the heading are for.
-*/
-test('the byline opens Help at the block that answers it', () => {
-  const a = boot();
-  const h = a.tap('#made').html();
-  a.shows('Who made this').shows('TrybeUP\u2122').shows('Tell us one problem');
-  /* the anchor the jump aims at, on the heading itself */
-  assert.match(h, /<h2 id="who-made" tabindex="-1">/, 'the heading the byline aims at has gone');
-  /* and the block is still below the frozen nine and the places list, unmoved by B55 */
-  assert.ok(h.indexOf('This is a self-help worksheet') < h.indexOf('Who made this'),
-    'the block moved above the nine sentences');
-});
-
-/*
-  B54, 2026-09-12. The founder asked for the lineage to be obvious, so there is now a block
-  under "Who made this" with TrybeUP's logo and wordmark on it — styled apart, which rule 9
-  forbade until that day and which the founder amended knowingly.
-
-  What this test is actually guarding is the three sentences that came WITH it. A branded
-  block is a promotion, and B8's conditions are what keep a promotion honest: it says what it
-  costs before the tap (including the paywall), it names the AI coach rather than letting
-  somebody find it after signing up (research §4), and it draws the line between an account on
-  their servers and an app that sends nothing. Delete any one of those and this fails.
-*/
 test('the branded block says what TrybeUP costs, that it has an AI, and where BETR ends', () => {
-  const a = boot();
-  const h = a.tap('#m-help').html();
-
-  a.shows('TrybeUP\u2122').shows('Tell us one problem');
-  a.shows('personal-change app').shows('rest never counts against you');
-
-  /* the paywall, before the tap — the same admission as the places entry, in both places */
-  a.shows('Free to start').shows('the private groups need a paid plan');
-  /* the AI, disclosed here rather than discovered later. BETR has none and says so elsewhere */
-  a.shows('an AI coach');
-  /* and the line: their servers, not this phone */
-  a.shows('Nothing you write here goes there');
-  a.shows('sends nothing to them or to anybody else');
-
-  /* it is under "Who made this", below the places list and below the frozen nine */
-  assert.ok(h.indexOf('Who made this') < h.indexOf('Tell us one problem'), 'the block floated up');
-  assert.ok(h.indexOf('This is a self-help worksheet') < h.indexOf('Tell us one problem'),
-    'the block is above the nine sentences');
-  /* and it is still not a button, and still one plain <a> to the same allow-listed url */
-  assert.ok(!/<button[^>]*>[^<]*TrybeUP/.test(h), 'the block is a button');
+  const h = boot().tap('#f-help').text();
+  const block = h.slice(h.indexOf(s.help.whoTitle));
+  for (const part of [s.help.makerCost, s.help.makerAI, s.help.makerApart]) {
+    assert.ok(block.indexOf(part) !== -1, 'the TrybeUP block has lost: ' + part);
+  }
+  assert.match(s.help.makerCost, /paid plan/);
+  assert.match(s.help.makerAI, /AI coach/);
+  assert.match(s.help.makerApart, /Nothing you write here goes there/);
 });
 
-/*
-  And the part that keeps the airplane-mode proof true. A logo is the first thing in any app
-  that gets hotlinked, and this one came off trybeup.com: if an <img> ever points at a host,
-  the strongest sentence BETR has becomes false on the one screen that makes the promise.
-
-  It cannot happen quietly — `img-src 'self' data:` is in index.html and in the header B3
-  serves, so a remote image is blocked and the logo simply does not appear — but a blocked
-  request is still a request attempted, and this says so in a diff instead.
-*/
 test('every image in the app is a file in the folder, and no font is ever fetched', () => {
-  const fs = require('node:fs');
-  const path = require('node:path');
   const WEB = path.join(__dirname, '..');
-
-  const a = boot();
-  let all = a.html();
-  all += a.tap('#pick').tap('[data-door]', 0).tap('[data-id]', 0).tap('[data-b]', 0).tap('#next').html();
-  all += a.tap('[data-size]', 0).tap('#lock').html();
-  all += a.tap('#nothanks').tap('#done').html();
-  all += a.tap('#m-mine').html();
-  all += a.tap('#back').tap('#m-help').html();
-
+  const all = outsideHelp() + boot().tap('#f-help').html();
   const srcs = [...all.matchAll(/<img[^>]*\ssrc="([^"]+)"/g)].map((m) => m[1]);
   assert.ok(srcs.length >= 1, 'no image found at all, so this test is checking nothing');
   for (const src of srcs) {
-    assert.ok(!/^[a-z]+:/i.test(src) && src.indexOf('//') === -1,
-      src + ' is not a file in this folder');
+    assert.ok(!/^[a-z]+:/i.test(src) && src.indexOf('//') === -1, src + ' is not a file in this folder');
     assert.ok(fs.existsSync(path.join(WEB, src)), src + ' is not in web/');
   }
-  /* the logo is the one we cropped, small enough that nobody is tempted to fetch it instead */
-  assert.ok(srcs.indexOf('trybeup-logo.png') !== -1, 'the TrybeUP logo is not drawn from a file');
-  assert.ok(fs.statSync(path.join(WEB, 'trybeup-logo.png')).size < 30000, 'the logo has grown');
-
-  /*
-    The wordmark is set in the system font at 600. TrybeUP's site uses Inter from Google
-    Fonts; index.html says font-src 'none', so it could not load, and a font file in the repo
-    is a dependency. Both roads are closed here.
-  */
   const css = fs.readFileSync(path.join(WEB, 'app.css'), 'utf8');
   assert.ok(css.indexOf('@font-face') === -1, 'a font has been added to the stylesheet');
-  assert.ok(css.indexOf('fonts.googleapis') === -1 && css.indexOf('@import') === -1,
-    'the stylesheet fetches something');
+  assert.ok(css.indexOf('fonts.googleapis') === -1 && css.indexOf('@import') === -1, 'the stylesheet fetches something');
   const html = fs.readFileSync(path.join(WEB, 'index.html'), 'utf8');
   assert.match(html, /font-src 'none'/, 'the no-web-font line has gone from the policy');
   assert.match(html, /img-src 'self' file: data:/, 'images are no longer held to this folder');
-});
-
-/* ------------------------------------------------------- B24: the promise on door one */
-
-/*
-  Door one has said since B19: "If you're dependent on alcohol or drugs, this isn't the right
-  thing. Help has places that are." For a day it was not true — places.js had no such service
-  on it at all, and the one sentence in BETR that deliberately sends somebody away sent them
-  to CBT worksheets and therapist registers.
-
-  This test is why it cannot come apart silently again. It is deliberately written the way
-  round it is: the promise is what is checked FOR, so deleting the group without deleting the
-  sentence fails the build, and deleting the sentence too is the only way to make it pass —
-  which is a decision somebody has to make on purpose, in a diff.
-*/
-test('if door one still promises places for alcohol and drugs, Help has them', () => {
-  const promises = allDoors.items.filter((d) => d.note)
-    .map((d) => d.note).join(' ');
-  if (!/alcohol|drug/i.test(promises)) return;   /* the promise is gone; nothing left to keep */
-
-  const group = places.groups.find((g) => /drink|drug|alcohol/i.test(g.title));
-  assert.ok(group, 'door one promises Help has places for alcohol and drugs; places.js has no such group');
-  assert.ok(group.items.length >= 3, 'only ' + group.items.length + ' places behind that promise');
-
-  /* and they are actually drawn, not merely present in the file */
-  const h = boot().tap('#m-help').html();
-  for (const place of group.items) {
-    assert.ok(h.indexOf(place.url) !== -1, place.name + ' is in places.js but not on the Help screen');
-  }
-  /* the group says which countries it covers, the way helplines.js does */
-  assert.ok(typeof group.note === 'string' && /UK|United States/.test(group.note),
-    'the group does not say where its places actually work');
-  assert.ok(h.indexOf(group.note) !== -1, 'that line is not drawn');
+  assert.match(html, /connect-src 'none'/, 'the page is allowed to make a request');
 });
 
 /*
-  Naming a screen is not the same as opening it. The note goes to Help when it is tapped —
-  inside the app, not as a link, so the rule that only Help carries links is untouched.
+  B24's group, which no longer has a door promising it (the doors went with B56) and stays
+  because frozen sentence 4 still sends somebody away who is dependent on alcohol or drugs,
+  and somebody sent away should be sent somewhere.
 */
-test('tapping door one\'s note opens Help, and lands on the places it promised', () => {
-  const a = boot().tap('#pick');
-  a.shows('data-note=');
-  a.tap('[data-note]');
-  a.shows(places.groups[0].items[0].url);
-
-  /*
-    Not the top of Help. Help is four screenfuls long and this person was told, one tap ago,
-    that BETR is not the right thing for them. Focus is the assertion because it is what
-    carries somebody listening as well as somebody looking.
-  */
-  assert.strictEqual(a.focusedId(), 'group-substances',
-    'the note opened Help but left them at the top of it');
-
-  /* it moved inside the app: the note itself is not a link out */
-  const doors = boot().tap('#pick').html();
-  const note = doors.slice(doors.indexOf('doornote'), doors.indexOf('doornote') + 400);
-  assert.ok(note.indexOf('href=') === -1, 'the note is a link out, not a move inside the app');
+test('Help has the places for drinking and drugs, first, and says where they work', () => {
+  const group = places.groups[0];
+  assert.strictEqual(group.id, 'substances');
+  assert.ok(group.items.length >= 3);
+  const a = boot().tap('#f-help');
+  const h = a.html();
+  for (const place of group.items) assert.ok(h.indexOf(place.url) !== -1, place.name + ' is not drawn');
+  assert.ok(typeof group.note === 'string' && /UK|United States/.test(group.note));
+  a.showsText(group.note);
+  assert.ok(h.indexOf('id="group-substances"') < h.indexOf(places.groups[1].items[0].url), 'the group is not first');
 });

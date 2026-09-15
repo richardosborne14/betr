@@ -1,32 +1,31 @@
 /*
-  The two guards on a person's own entry (scope §5.4, B0 Q3).
+  The guard on what a person writes (scope §5.4, B0 Q3).
 
-  Custom entries are in v1 by the founder's call, which puts free text back in front of the
-  test. These are what make that safe:
+  ONE HARD STOP, AND IT IS THE ONLY ONE (founder, 2026-09-08, B28/B29; unchanged by B56). A
+  sentence about ending it, or hurting anyone, is refused on both blanks of the front screen,
+  and app.js puts the crisis block for the person's own country underneath. The founder's own
+  example of what must still be refused: "If I kill myself everyone will be better off".
 
-    checkBelief  refuses an empty box, a sentence naming anyone's safety, and a verdict
-                 ("I am a bad person"), and nothing else: the shape rules ask once and let
-                 the person's own words through.
-    checkTest    refuses an empty box and a plan naming anyone's safety. Nothing else.
+  Everything else a person writes is theirs. The line about the rest is drawn once, by frozen
+  sentence 6 on Help, and nowhere else in the app.
 
-  ONE HARD STOP, AND IT IS THE ONLY ONE (founder, 2026-09-08, B28/B29). Until that day a test
-  naming the habit, or food, weight or a body sensation, was refused outright; rule 4 was
-  structural because free text sat at the end of a side path. The founder moved free text to
-  the front door and loosened the rest in the same breath — "free ourselves up a little bit
-  from the constraints", few people will use it, and a disclaimer can say that if it is
-  dangerous it needs a doctor. So HABIT and BODY no longer refuse anything a person writes.
-  They are still exported, and still hold BETR's OWN content to the old line: no stock test
-  and no stock drop may name the habit (web/lib/content.js, web/tests/content.test.js).
+  B56, 2026-09-15: THE HABIT AND BODY LISTS ARE GONE. They survived B29 for one reason — BETR's
+  own stock tests were held to them, so BETR could never propose the habit (old rule 4). The
+  redesign has no stock content at all, so there is nothing of BETR's left to hold, and a list
+  kept "just in case" is a list somebody wires back into a refusal by accident.
 
-  What stays is HARM, on both boxes, and it stays because the founder said so in the same
-  note: "If I kill myself everyone will be better off" must still be refused. The line a
-  person reads about the rest is frozen sentence 6 on Help — choose experiments that are safe
-  and legal, never one that involves the habit, self-harm, restricting food, or putting
-  yourself or anyone else at risk.
+    checkPart    ONE BLANK of the front screen: refuses an empty blank and anyone's safety.
+                 This is the only check the app calls.
+    checkTest    the same two stops for a sentence with no blank around it.
+    checkBelief  the old free-text sentence: empty, harm, a bare verdict ("I am a bad person"),
+                 and a shape nudge. Nothing in the app reaches it — the front screen prints
+                 "If I" and ", then", so every sentence made there is a conditional — and it is
+                 kept because it is cheap, guards.test.js proves each branch, and the day a
+                 sentence arrives by another road is not the day to find the check was deleted.
 
-  Since B15 a refusal carries a `reason` that is a KEY, not a sentence: the words live in
-  web/content/strings-en.js so they can be translated. The lists, the matching and the
-  decision all still live here, and this file says nothing a person reads.
+  A refusal carries a `reason` that is a KEY, not a sentence (B15): the words live in
+  web/content/strings-en.js so they can be translated, and no phone number can ever creep into
+  this file (B17 took two out of it).
 */
 (function (root, factory) {
   var api = factory();
@@ -34,52 +33,13 @@
   else (root.Betr = root.Betr || {}).guards = api;
 })(typeof self !== 'undefined' ? self : this, function () {
 
-  /*
-    The thing you're trying to change. Since B29 this list no longer refuses a person's own
-    test — it holds BETR's own stock content, which may never propose one (CLAUDE.md rule 4
-    as amended 2026-09-08). `hit` is exported so content.js can check the list without
-    checkTest having to refuse on it.
-  */
-  var HABIT = [
-    'drink', 'drinks', 'drinking', 'drunk', 'booze', 'boozing', 'alcohol', 'alcoholic',
-    'beer', 'beers', 'wine', 'lager', 'cider', 'pint', 'pints', 'vodka', 'gin', 'rum',
-    'whisky', 'whiskey', 'tequila', 'shots', 'hangover',
-    'porn', 'pornography', 'wank', 'wanking', 'masturbate', 'masturbating', 'onlyfans',
-    'smoke', 'smoking', 'cigarette', 'cigarettes', 'vape', 'vaping', 'nicotine',
-    'weed', 'cannabis', 'joint', 'spliff', 'stoned', 'hash',
-    'bet', 'bets', 'betting', 'gamble', 'gambling', 'casino', 'slots', 'roulette', 'poker',
-    'coke', 'cocaine', 'heroin', 'meth', 'ketamine', 'mdma', 'pills', 'opioid', 'opioids',
-    'benzo', 'benzos', 'valium', 'xanax'
-  ];
-
-  /* Food, weight and body sensations. Kept, and no longer a refusal — see the header. */
-  var BODY = [
-    'starve', 'starving', 'fasting', 'purge', 'purging', 'binge', 'bingeing', 'binging',
-    'calories', 'calorie', 'weigh', 'weighing', 'weight', 'diet', 'dieting',
-    'heart rate', 'pulse', 'dizzy', 'palpitations', 'panic attack', 'hyperventilate'
-  ];
-
   /* Anyone's safety. Refused outright, with the crisis lines. */
   var HARM = [
     'suicide', 'suicidal', 'kill myself', 'end it', 'self harm', 'self-harm',
     'harm myself', 'hurt myself', 'cut myself', 'overdose', 'od'
   ];
 
-  /*
-    What a refusal says is NOT in this file any more (B15). This maps each refusal to a key
-    in web/content/strings-en.js, and app.js looks the words up in the person's language.
-
-    Two things follow from that, and both are the point:
-      - the reasons can be translated without touching a line of the guard's logic
-      - no phone number can ever creep back in here. It did once: this file used to end the
-        self-harm refusal with 988 and 116 123, so somebody in Lagos who had just typed the
-        worst sentence of their week was handed two numbers that do not ring there. B17 took
-        them out; the app puts the crisis block underneath, with the line for the country
-        they are actually in. web/tests/guards.test.js fails the build if a digit comes back.
-  */
   var REASON = {
-    habit: 'refusal.habit',
-    body: 'refusal.body',
     harm: 'refusal.harm',
     verdict: 'refusal.verdict',
     notConditional: 'refusal.notConditional',
@@ -89,18 +49,10 @@
     emptyIf: 'refusal.emptyIf'
   };
 
-  /*
-    What a nudge says. Same rule as REASON: a key, never a sentence, so it can be translated,
-    and so no phone number can ever appear in this file.
-
-    `notConditional` and `noConsequence` above are still keys a translator has to fill, and
-    nothing reaches them any more: they were the two refusals that became this one nudge, and
-    they are kept because a language file that dropped a key would fail i18n.test.js on the
-    day somebody puts the wall back. Neither is shown.
-  */
+  /* A nudge is a key too. Nothing in the app draws it (B32); see checkBelief. */
   var NUDGE = { shape: 'nudge.shape' };
 
-  /* Word-boundary match, so "Betr" never trips "bet" and "fastest" never trips "fasting". */
+  /* Word-boundary match, so "Betr" never trips anything and "method" never trips "od". */
   function hit(text, words) {
     var t = ' ' + String(text || '').toLowerCase().replace(/[’']/g, '\'').replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
     for (var i = 0; i < words.length; i++) {
@@ -110,39 +62,8 @@
   }
 
   /*
-    A test, a drop line, or anything else the person writes that describes what they will do.
-    Returns { ok: true } or { ok: false, kind, word, reason }.
-  */
-  function checkTest(text) {
-    var s = String(text || '').trim();
-    if (!s) return { ok: false, kind: 'empty', word: null, reason: REASON.emptyTest };
-
-    var w = hit(s, HARM);
-    if (w) return { ok: false, kind: 'harm', word: w, reason: REASON.harm };
-
-    /*
-      HABIT and BODY used to refuse here and stopped on 2026-09-08 (B29). The lists are still
-      above, still exported, and still the rule BETR's own content is held to. A person's own
-      test goes through.
-    */
-    return { ok: true };
-  }
-
-  /*
-    ONE BLANK of the sentence on the build screen (B30, 2026-09-08).
-
-    The shape rules that used to live in checkBelief are structural here: the screen prints
-    "If I" and ", then" and a person fills the gaps, so a sentence that is not conditional
-    cannot be made. `notConditional`, `noConsequence` and the shape nudge are all unreachable
-    from this road, and `verdict` is too — "I am a bad person" typed into the first blank
-    comes out as "If I am a bad person, then …", which is a conditional and always was
-    exempt. checkBelief keeps all of them anyway: it is cheap, guards.test.js proves each
-    still fires on a bare sentence, and the day somebody pastes one in is not the day to find
-    out the check was deleted.
-
-    So this refuses two things and no more: an empty blank, and anyone's safety. `part` is
-    'if' or 'then' and decides ONE thing — which empty line is read out. It changes nothing
-    else, and it must not grow into a second set of rules for the second blank.
+    One blank of "If I ___, then ___." `part` is 'if' or 'then' and decides ONE thing — which
+    empty line is read out. It must not grow into a second set of rules for the second blank.
   */
   function checkPart(text, part) {
     var s = String(text || '').trim();
@@ -155,39 +76,25 @@
     return { ok: true };
   }
 
+  /* A sentence with no blank around it. Empty, and anyone's safety. Nothing else. */
+  function checkTest(text) {
+    var s = String(text || '').trim();
+    if (!s) return { ok: false, kind: 'empty', word: null, reason: REASON.emptyTest };
+    var w = hit(s, HARM);
+    if (w) return { ok: false, kind: 'harm', word: w, reason: REASON.harm };
+    return { ok: true };
+  }
+
   /*
-    A belief.
+    The old free-text belief (loosened 2026-09-04, founder's call, after a test user was
+    refused over a missing "then"). The shape rules are a nudge, not a refusal. Three stops
+    stay hard, and none of them is a grammar preference:
 
-    LOOSENED 2026-09-04, founder's call, and the reason is a person. A test user typed
-    "if I eat gluten, it won't go well" and was refused for a missing "then". The grammar was
-    never the point: that sentence is a clear prediction, a reader understands it instantly,
-    and the wall taught him nothing and cost him the session.
-
-    So the shape rules are a NUDGE now, not a refusal. The app asks once, shows the shape that
-    works, and the person's own words go through on the next tap. Four things went with it:
-    "if" may sit anywhere in the sentence rather than only at the front, no comma is required,
-    no "then" is required, and the six-word floor is a five-word one.
-
-    Three stops stay hard, and none of them is a grammar preference:
-
-      empty    there is nothing to test.
-      harm     ADDED 2026-09-04, founder's call, and it is the one wall that went back up.
-               checkTest has always refused a plan naming suicide or self-harm; this box
-               did not, so somebody who wrote "if I tell them how I really feel, then
-               they'll know I want to kill myself" was answered with "What will you do?"
-               and only stopped once they had typed a plan for it. One screen late, at the
-               worst possible moment. Same words as the test refusal, and app.js puts the
-               crisis lines for their country underneath it.
-      verdict  "I am a bad person" is a CORE belief. Research §2.1 is explicit that a tool with
-               no therapist must not go near one: Padesky's client looks at contrary evidence
-               and says "yes, and I am still bad". Reframed, never accepted. CLAUDE.md rule 3.
-               A sentence with "if" in it is a conditional and is exempt, because
-               "I'm going to get fired if I ask" used to be refused as a verdict and it is a
-               textbook prediction.
-
-    HABIT and BODY never screened a belief and, since B29, no longer screen a test either.
-    "If I stop drinking at the wedding, then they'll ask why" is exactly the worry door one
-    exists to hold, and screening for those lists would refuse the people BETR is most for.
+      empty    there is nothing to test
+      harm     the one wall, on this box as on every other
+      verdict  "I am a bad person" is a CORE belief, and research §2.1 is explicit that a tool
+               with no therapist must not go near one. A sentence with "if" in it is a
+               conditional and is exempt: "I'm going to get fired if I ask" is a prediction.
 
     Returns { ok: false, kind, reason }  cannot go on
          or { ok: true }                 reads as a prediction
@@ -206,7 +113,6 @@
       return { ok: false, kind: 'verdict', reason: REASON.verdict };
     }
 
-    /* Both halves of a prediction, roughly: the "if", and enough words to carry a consequence. */
     if (!conditional || s.split(' ').length < 5) {
       return { ok: true, soft: NUDGE.shape, kind: 'shape' };
     }
@@ -214,10 +120,7 @@
     return { ok: true };
   }
 
-  /*
-    The consequence half of a belief, used as the pre-written expectation for a custom entry
-    so the person never has to type it twice. Falls back to the whole belief.
-  */
+  /* The consequence half of a belief. Falls back to the whole belief. */
   function expectationFrom(belief) {
     var s = String(belief || '').trim().replace(/\s+/g, ' ');
     var m = s.match(/^if\b[^,]*,\s*(.+)$/i) || s.match(/^if\b.*?\bthen\b\s*(.+)$/i);
@@ -228,19 +131,13 @@
   }
 
   return {
-    HABIT: HABIT,
-    BODY: BODY,
     HARM: HARM,
     REASON: REASON,
     NUDGE: NUDGE,
-    /*
-      Exported since B29 so that BETR's own content can be held to the habit rule without
-      checkTest refusing a person's own words for it (web/lib/content.js).
-    */
     hit: hit,
+    checkPart: checkPart,
     checkTest: checkTest,
     checkBelief: checkBelief,
-    checkPart: checkPart,
     expectationFrom: expectationFrom
   };
 });

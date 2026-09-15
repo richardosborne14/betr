@@ -1,5 +1,5 @@
 /*
-  Everything Betr remembers, and the only place it is written.
+  Everything BETR remembers, and the only place it is written.
 
   Rules this file exists to keep:
     - one versioned key, so a future shape can migrate instead of vomiting
@@ -17,83 +17,45 @@
   else (root.Betr = root.Betr || {}).store = api;
 })(typeof self !== 'undefined' ? self : this, function () {
 
-  var KEY = 'betr.v1';
-
   /*
-    2 added `level`, the rung a belief sits on after that test (rate.js). Version 1 stored
-    `rate`, one of 80/55/30/10, which could not show movement. An old record is carried over
-    onto the nearest rung rather than dropped, so nobody loses a result to the change.
+    B56, 2026-09-15: one prediction, locked in, and your own results read back.
 
-    3 gave every result and every waiting test an id of its own, `rid`, and every result the
-    word that was tapped, `move`, next to the rung it landed on (B9). Neither changes a
-    single thing a person sees. What they change is what the record can survive: two devices
-    each adding results without knowing about the other, and then the two histories being put
-    together — by whatever sync eventually is, or by two exported files being joined by hand.
+      betr.v2  { v: 6, stage, at, country, lang, seenInstall,
+                 predictions: [ { id, sentence, made, locked, away,
+                                  results: [ { tag, text, day, was? } ] } ] }
 
-    Before this, a result carried the WORRY's id, shared by every test of that worry, so
-    there was no way to tell "the same result, seen twice" from "two results that happen to
-    look alike". And it carried the rung it landed on but not the word that took it there, so
-    interleaving two histories left two rungs each claiming to be the latest and no way to
-    work out what the person actually did. `move` makes the ladder the taps replayed in time
-    order, which comes out the same however the results arrive.
+    B56 §5 calls this `betr.v5` and the thing before it `betr.v4`. Neither name was ever on a
+    phone: every BETR from B1 to B55 wrote ONE key, `betr.v1`, and bumped the `v` INSIDE the
+    record, up to 5. So the new shape gets the second key there has ever been, `betr.v2`, and
+    the record's own `v` carries on counting from 5, so an exported file from either era says
+    which one it is.
 
-    An old record loses nothing: `level` is still written, it is still the fallback for any
-    ladder where a single result predates `move`, and normalise() gives an old record an id
-    derived from itself, so the same file normalised twice gets the same ids.
+    `id`       random, made once, never the sentence — fixing a typo must not look like losing
+               your history (the reason rate.keyOf() gave, and it still holds)
+    `sentence` the whole "If I ___, then ___." as it was locked in. Never edited afterwards
+    `made`     the day it was first locked in. A day, not a clock time: YYYY-MM-DD, local
+    `locked`   the day it was locked in and not yet done, or null. Lock it in and Same again
+               tomorrow set it; Keep it clears it; Not today leaves it exactly as it was.
+               B56 §5 left this field out, and the screens cannot be drawn without it: "locked
+               in and untested" is a state a prediction with three results can be in
+    `away`     Done with this one. It moves the card under Put away and changes nothing else
+    `tag`      'yeah', 'sort' or 'not' — the answer to "Did it go how you expected?" — or null
+               for a result carried over from the old app, which never asked that question
+    `text`     what happened, in their own words, exactly as typed
+    `day`      the day it was kept, or null if the old record never said
+    `was`      only on a carried-over result: the old app's own fields for it, kept so that
+               nothing a person wrote is lost to the redesign
   */
-  /*
-    4 is B30's, 2026-09-08, and it is a version bump with NO DATA MIGRATION — which is worth
-    saying out loud, because the usual reason to bump is that something has to be converted.
-
-    What changed is the shape of a NEW record. A test a person builds now carries `ifPart` and
-    `thenPart` (the two halves of the sentence they typed) beside the joined `belief`, and it
-    carries an `id` of its own for the first time. Before this, an own test had `id: null` and
-    rate.keyOf() grouped its ladder by the sentence itself — so correcting a typo in the
-    sentence started a new ladder and the old one looked lost. On a side path that was a
-    wrinkle; as the main road it is a bug, so an own test gets a stable id at the moment it is
-    built and keeps it.
-
-    Nothing older needs converting, and that is by design rather than by luck: an own record
-    made before today still has `id: null`, and rate.keyOf() still falls back to the sentence
-    for exactly those. Their ladders draw the same rungs they drew yesterday, forever. The
-    number is here so an exported file says which shape it is, and so the next change has
-    something to migrate FROM.
-  */
-  /*
-    5 is B40's, 2026-09-09, and it is the SECOND version bump in a row with NO DATA MIGRATION.
-
-    What changed is what a record is allowed to know about itself. Until today, whether a test
-    was one of BETR's or one of the person's own was decided by comparing their words to the
-    stock sentence, letter for letter (app.js sameAsStock). Under the templates B41 builds, a
-    filled-in sentence differs from its skeleton EVERY TIME, by design — so every templated run
-    would have been a stranger to itself, every one would have started at the top of the ladder,
-    and the one number in the product would silently never have moved. So the road decides now,
-    not the words: while the person is on a stock item's road, the record keeps that item's id.
-
-    Three fields ride along with it, and NONE OF THEM KEYS ANYTHING — rate.keyOf() still groups
-    a ladder by the worry's id alone, because a worry's three predictions share one ladder
-    (CLAUDE.md rule 5). They are for redrawing, for "Test this again" coming back with the
-    person's own words in it, and for an export that says what was actually done:
-
-      prediction  which of the item's three it started from, by index, or null
-      slots       what the person typed into a skeleton's holes, name -> words (B41 fills it)
-      size        which of the three sizes the test was done at (B42 fills it)
-
-    Nothing older needs converting, again by design rather than by luck: a v4 record has none of
-    these, every one of them reads as absent, and its ladder draws the rungs it drew yesterday.
-    The number is here so an exported file says which shape it is.
-  */
-  var VERSION = 5;
-  var OLD_RATES = { 80: 8, 55: 6, 30: 3, 10: 1 };
+  var KEY = 'betr.v2';
+  var OLD_KEY = 'betr.v1';
+  var VERSION = 6;
+  var TAGS = ['yeah', 'sort', 'not'];
+  var DAY = /^\d{4}-\d{2}-\d{2}$/;
 
   /*
-    An id for one result, or for one test locked in and waiting. Random, made once, never
-    shown to anybody and never sent anywhere — there is nowhere to send it (rule 1). It says
-    only "this record and that record are the same record", which is the whole of what a
-    merge needs and no more than that.
-
-    crypto.randomUUID is in every browser Betr supports. The fallback is there because it
-    costs four lines and because the app must not depend on it being there.
+    An id for one prediction. Random, made once, never shown to anybody and never sent
+    anywhere — there is nowhere to send it (rule 1). crypto.randomUUID is in every browser
+    BETR supports; the fallback costs four lines and means the app does not depend on it.
   */
   function rid() {
     if (typeof crypto !== 'undefined' && crypto && typeof crypto.randomUUID === 'function') {
@@ -107,10 +69,9 @@
   }
 
   /*
-    An id for a record made before there were ids, worked out from the record itself so that
-    normalising the same file twice, on two devices or on two days, gets the same answer.
-    FNV-1a twice over, for sixteen hex characters: no dependency, and nothing here is a
-    secret, so a fast little hash is the right tool.
+    An id worked out from the thing itself, for a prediction carried over from the old record,
+    so that migrating the same phone twice — say the first write failed — gets the same ids.
+    FNV-1a twice over, for sixteen hex characters. Nothing here is a secret.
   */
   function fnv(s, h) {
     for (var i = 0; i < s.length; i++) {
@@ -123,171 +84,191 @@
     return fnv(seed, 0x811c9dc5) + fnv(seed, 0x9dc5811c);
   }
 
-  /*
-    What makes one old record different from another: when it was made, and which worry it
-    belongs to. The worry is spelled out here rather than borrowed from rate.keyOf(), because
-    this file has no business knowing how the ladder groups things and rate.js has no business
-    knowing how a record is stored.
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
 
-    `n` counts records that come out identical on both counts — two taps in the same
-    millisecond on the same worry, which the app cannot produce but a joined file could. They
-    get different ids, because dropping one of two real results would be worse than carrying
-    a duplicate.
-  */
-  function withId(d, stamp, counts) {
-    if (typeof d.rid === 'string' && d.rid) return d;
-    var seed = (stamp || '') + '|' + (d.source || '') + '|' + (d.id || '') + '|' + (d.belief || '');
-    var slot = '#' + seed;
-    counts[slot] = (counts[slot] || 0) + 1;
-    d.rid = stableId(seed + '|' + counts[slot]);
-    return d;
+  /* The local day a moment fell on, as YYYY-MM-DD. Never a clock time: nothing needs one. */
+  function dayOf(when) {
+    var d = typeof when === 'string' || typeof when === 'number' ? new Date(when) : when;
+    if (!d || typeof d.getTime !== 'function' || d.getTime() !== d.getTime()) return null;
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
   }
 
-  /*
-    The same record twice is one record. This is the only thing in v1 that a join needs and
-    cannot do for itself, and it is two lines, so it lives here: concatenate two exports'
-    results into one `done` and loading the file settles it.
+  function today() { return dayOf(new Date()); }
 
-    Records made before v3 are the exception, and honestly so: their ids are derived from
-    what they contain, so a file joined to itself gives the second copy a different `n` and
-    both are kept. There is no identity in an old record to recover. That is why B9 exists.
-  */
-  function dedupe(list) {
-    var seen = {};
-    var out = [];
-    for (var i = 0; i < list.length; i++) {
-      var slot = '#' + list[i].rid;
-      if (seen[slot]) continue;
-      seen[slot] = true;
-      out.push(list[i]);
-    }
+  function blank() {
+    return { v: VERSION, stage: 'front', at: null, predictions: [], country: null, lang: null, seenInstall: false };
+  }
+
+  function isRecord(x) { return !!x && typeof x === 'object' && !Array.isArray(x); }
+
+  /* Anything we cannot vouch for is dropped, never repaired halfway. */
+  function cleanResult(r) {
+    if (!isRecord(r) || typeof r.text !== 'string' || !r.text.trim()) return null;
+    var out = {
+      tag: TAGS.indexOf(r.tag) !== -1 ? r.tag : null,
+      text: r.text,
+      day: typeof r.day === 'string' && DAY.test(r.day) ? r.day : null
+    };
+    if (isRecord(r.was)) out.was = r.was;
     return out;
   }
 
-  /*
-    `open` is every test that has been locked in and not yet finished. It was added by B8,
-    when the bottom row put a new test one tap away from every screen: before that, starting
-    another one silently overwrote whatever you had promised yourself you would do today.
-
-    There is no cap on how many are in here, on purpose (B8; research §3.1 and §3.3 — the
-    risk in self-help is stopping, not doing too much). Nothing counts them, and nothing here
-    is ever ordered by how long it has been waiting.
-
-    It needs no version bump: a state saved before B8 simply has no `open`, and normalise
-    gives it an empty one.
-
-    `country` is the one B17 added, and it is the only thing BETR has ever stored about where
-    a person is. Two letters, chosen by them off a list, used for one thing: which helpline
-    number is on the crisis block. Null means we are guessing from the phone's time zone,
-    which is read fresh every time it is needed and never written down. It is not sent
-    anywhere — there is nowhere to send it — and it changes nothing else in the app.
-
-    `lang` is B15's, and it is a different question from `country` on purpose (lib/i18n.js
-    and lib/where.js never touch each other). Null means "whatever the browser asks for".
-    Every language is already in the page, so choosing one fetches nothing.
-
-    A NEW FIELD GOES IN THREE PLACES, not one: blank(), normalise() and isEmpty(). B17 put
-    `country` in the first two, and a person's chosen country was thrown away on the next
-    save because isEmpty() still thought the record was empty. Both of these are in all three.
-  */
-  /*
-    `archived` is B53's, 2026-09-10, and it is a list of LADDER KEYS — the same strings
-    rate.keyOf() makes, "stock:<worry id>" or "own:<test id>" — and nothing else. A key in
-    here means that card sits under Archived on Your tests instead of in the list, and it
-    means nothing else at all: no result is deleted, no rung is moved, no waiting test is
-    dropped, and the export is the same file. Putting one away is a decision about a LIST,
-    not about a belief, which is why it is one array of keys off to the side rather than a
-    flag written onto every record of that worry.
-
-    Keys, not sentences — for the reason rule 5 gives: a person who fixes a typo has not
-    archived a different thing.
-
-    It needs no version bump, for the same reason `open` needed none: a state saved before
-    today simply has no `archived`, and normalise gives it an empty one. Nothing else reads
-    the field, so an old BETR handed a new file ignores it and draws the list it always drew.
-  */
-  /*
-    `seen` is B31's, and it counts opens so the front screen's worked example is the NEXT one
-    rather than a shuffle. It is the one stored field that isEmpty() deliberately ignores: a
-    BETR that has never been used, and one that has just been wiped, must leave nothing at all
-    behind, and which example comes next is not something anybody would miss.
-  */
-  function blank() {
-    return { v: VERSION, stage: 'start', cur: null, country: null, lang: null, open: [], done: [], archived: [], seenInstall: false, seen: 0 };
+  function cleanPrediction(p) {
+    if (!isRecord(p) || typeof p.id !== 'string' || !p.id) return null;
+    if (typeof p.sentence !== 'string' || !p.sentence.trim()) return null;
+    return {
+      id: p.id,
+      sentence: p.sentence,
+      made: typeof p.made === 'string' && DAY.test(p.made) ? p.made : null,
+      locked: typeof p.locked === 'string' && DAY.test(p.locked) ? p.locked : null,
+      away: p.away === true,
+      results: Array.isArray(p.results) ? p.results.map(cleanResult).filter(Boolean) : []
+    };
   }
 
-  /* Anything we cannot vouch for is replaced, never repaired halfway. */
   function normalise(raw) {
-    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return blank();
+    if (!isRecord(raw)) return blank();
     var s = blank();
     if (typeof raw.stage === 'string') s.stage = raw.stage;
-    if (raw.cur && typeof raw.cur === 'object' && !Array.isArray(raw.cur)) s.cur = raw.cur;
-    if (Array.isArray(raw.open)) {
-      var openCounts = {};
-      s.open = dedupe(raw.open.filter(function (t) {
-        return t && typeof t === 'object' && !Array.isArray(t) && typeof t.test === 'string' && t.locked;
-      }).map(function (t) { return withId(t, t.locked, openCounts); }));
-    }
-    if (Array.isArray(raw.done)) {
-      var doneCounts = {};
-      s.done = dedupe(raw.done.filter(function (d) {
-        return d && typeof d === 'object' && typeof d.o === 'string';
-      }).map(withLevel).map(function (d) { return withId(d, d.when, doneCounts); }));
-    }
-    /* Strings only, no blanks, no duplicates. A key for a card that no longer exists is
-       simply a key nothing matches, and it costs nothing to carry. */
-    if (Array.isArray(raw.archived)) {
-      var away = {};
-      s.archived = raw.archived.filter(function (k) {
-        if (typeof k !== 'string' || !k || away[k]) return false;
-        away[k] = true;
-        return true;
+    if (typeof raw.at === 'string' && raw.at) s.at = raw.at;
+    if (Array.isArray(raw.predictions)) {
+      var seen = {};
+      raw.predictions.forEach(function (p) {
+        var clean = cleanPrediction(p);
+        if (!clean || seen['#' + clean.id]) return;
+        seen['#' + clean.id] = true;
+        s.predictions.push(clean);
       });
     }
     if (typeof raw.country === 'string' && /^[A-Z]{2}$/.test(raw.country)) s.country = raw.country;
     if (typeof raw.lang === 'string' && /^[a-zA-Z-]{2,12}$/.test(raw.lang)) s.lang = raw.lang;
     s.seenInstall = raw.seenInstall === true;
-    if (typeof raw.seen === 'number' && raw.seen === raw.seen && raw.seen >= 0) {
-      s.seen = Math.floor(raw.seen);
-    }
     return s;
   }
 
   /*
-    A rung between 1 and 10, from this record, from the version before it, or the top.
+    The old record, from B1 to B55: `done` (results), `open` (tests locked in and waiting) and
+    `archived` (ladder keys), all under `betr.v1`. B56 §5 says how it comes across.
 
-    Still written, still read. `move` is the better answer (B9) but it can only be the answer
-    where every result in a ladder has one, and a phone that has been used since before v3
-    has ladders where some do and some do not. Those draw from `level`, exactly as they did
-    the day before the change. Nobody loses a result to a version bump; that is the whole
-    point of there being a version.
+    ONE PREDICTION PER SENTENCE. Every old result and every waiting test carries the sentence
+    it tested, `belief`, and that becomes the prediction. A stock worry offered three sentences
+    and shared one ladder between them (old rule 5), so a person who tested two of its three
+    gets two predictions here — which is what they actually wrote down, and the ladder that
+    joined them is gone.
+
+    WHAT HAPPENED IS KEPT WORD FOR WORD, and nothing else a person wrote is thrown away either:
+    what they expected, what they did and what they left out ride along in `was`, with the
+    words they tapped when they re-rated, so the export still has all of it.
+
+    THE TAG IS NULL, AND THAT IS A DECISION, NOT A GAP. B56 §5 proposed reading a tag off the
+    old re-rate — "a lot less sure" as Yeah!, and so on — and marked it as a guess. It is the
+    wrong way round for the question the new app asks. "Did it go how you expected?" about "If
+    I say no, then they'll think I'm selfish" is answered Yeah! when they DID think it; the old
+    "a lot less sure" meant they did not. And turning it round does not rescue it: the re-rate
+    was how sure a person still felt, not what happened, and the fixture phone below has "Still
+    sure" beside "He said fair enough and got his own coffee". Any tag here would be BETR
+    deciding how somebody's day went, and printing it in capitals beside their own words. So an
+    old result shows its day and its words, and no tag; `was.move` is kept, so if the founder
+    wants a mapping later it can be applied without anyone having lost anything.
+
+    `archived` held ladder keys ("stock:<worry id>", "own:<id or sentence>"). A prediction whose
+    records carry one of those keys comes across put away.
+
+    Nothing carries over that was a draft (`cur`), the example counter (`seen`) or where the
+    old app had got to (`stage`): a person opening the new app starts on the front screen.
   */
-  function withLevel(d) {
-    var n = d.level;
-    if (typeof n !== 'number' || n !== n) n = OLD_RATES[d.rate];
-    if (typeof n !== 'number') n = 10;
-    n = Math.round(n);
-    d.level = n < 1 ? 1 : (n > 10 ? 10 : n);
-    return d;
+  function fromOld(raw) {
+    var s = blank();
+    if (!isRecord(raw)) return s;
+    var archived = Array.isArray(raw.archived) ? raw.archived : [];
+    var bySentence = {};
+
+    function ladderKey(d) {
+      return d.source === 'own' ? 'own:' + (d.id || d.belief || '') : 'stock:' + (d.id || d.label || '');
+    }
+
+    function predictionFor(d) {
+      var words = typeof d.belief === 'string' ? d.belief.replace(/\s+/g, ' ').trim() : '';
+      if (!words) return null;
+      var p = bySentence['#' + words];
+      if (!p) {
+        p = bySentence['#' + words] = {
+          id: stableId('prediction|' + words), sentence: words, made: null, locked: null, away: false, results: []
+        };
+        s.predictions.push(p);
+      }
+      if (archived.indexOf(ladderKey(d)) !== -1) p.away = true;
+      return p;
+    }
+
+    function earliest(p, day) { if (day && (!p.made || day < p.made)) p.made = day; }
+
+    /* Oldest first by the clock, array position as the tie-break (B9). */
+    var done = (Array.isArray(raw.done) ? raw.done : [])
+      .map(function (d, i) { return { d: d, i: i, t: isRecord(d) ? Date.parse(d.when) : NaN }; })
+      .filter(function (e) { return isRecord(e.d) && typeof e.d.o === 'string' && e.d.o.trim(); })
+      .sort(function (a, b) {
+        var x = a.t === a.t ? a.t : Infinity;
+        var y = b.t === b.t ? b.t : Infinity;
+        return x === y ? a.i - b.i : x - y;
+      });
+
+    done.forEach(function (e) {
+      var d = e.d;
+      var p = predictionFor(d);
+      if (!p) return;
+      var day = dayOf(d.when);
+      var was = {};
+      if (typeof d.x === 'string' && d.x) was.expected = d.x;
+      if (typeof d.test === 'string' && d.test) was.did = d.test;
+      if (typeof d.drop === 'string' && d.drop) was.leftOut = d.drop;
+      if (typeof d.rateLabel === 'string' && d.rateLabel) was.stillSure = d.rateLabel;
+      if (typeof d.move === 'string' && d.move) was.move = d.move;
+      var r = { tag: null, text: d.o, day: day };
+      if (Object.keys(was).length) r.was = was;
+      p.results.push(r);
+      earliest(p, day);
+    });
+
+    (Array.isArray(raw.open) ? raw.open : []).forEach(function (w) {
+      if (!isRecord(w) || !w.locked) return;
+      var p = predictionFor(w);
+      if (!p) return;
+      var day = dayOf(w.locked);
+      p.locked = day || today();
+      earliest(p, day);
+    });
+
+    s.predictions.forEach(function (p) { if (!p.made) p.made = p.locked; });
+    s.country = raw.country;
+    s.lang = raw.lang;
+    s.seenInstall = raw.seenInstall;
+    return normalise(s);
   }
 
-  /* Nothing a person would miss: no results, no test in flight, nothing they have dismissed. */
+  /* Nothing a person would miss: no prediction, and nothing they chose or dismissed. */
   function isEmpty(state) {
     if (!state) return true;
-    return (!state.done || !state.done.length) && (!state.open || !state.open.length) &&
-      (!state.archived || !state.archived.length) &&
-      !state.cur && state.seenInstall !== true && !state.country && !state.lang;
+    return (!state.predictions || !state.predictions.length) &&
+      state.seenInstall !== true && !state.country && !state.lang;
   }
 
   function create(storage) {
     return {
       key: KEY,
 
+      /*
+        The new key if there is one. If there is not, the old one, carried across. Rubbish
+        under the new key is a blank app — it is never "rescued" from the old key, because the
+        old key only survives until the first successful write under the new one.
+      */
       load: function () {
         try {
           var raw = storage.getItem(KEY);
-          if (!raw) return blank();
-          return normalise(JSON.parse(raw));
+          if (raw) return normalise(JSON.parse(raw));
+          var old = storage.getItem(OLD_KEY);
+          if (old) return fromOld(JSON.parse(old));
+          return blank();
         } catch (e) {
           return blank();
         }
@@ -296,18 +277,20 @@
       /*
         Returns true if it actually persisted, so the app can tell the person if it didn't.
 
-        A state with nothing in it removes the key rather than writing an empty record. So a
-        Betr that has never been used, and a Betr that has just been wiped, leave nothing at
-        all behind — which is what "delete everything" ought to mean, and what someone poking
-        around in their browser storage after tapping it should find.
+        A state with nothing in it removes the key rather than writing an empty record, so a
+        BETR that has never been used and one that has just been wiped leave nothing behind.
+        The old key goes the moment the new one is safely written, and not a moment before:
+        if the write throws, the old record is still there to be carried across next time.
       */
       save: function (state) {
         try {
           if (isEmpty(state)) {
             storage.removeItem(KEY);
+            storage.removeItem(OLD_KEY);
             return true;
           }
           storage.setItem(KEY, JSON.stringify(state));
+          storage.removeItem(OLD_KEY);
           return true;
         } catch (e) {
           return false;
@@ -317,6 +300,7 @@
       clear: function () {
         try {
           storage.removeItem(KEY);
+          storage.removeItem(OLD_KEY);
           return true;
         } catch (e) {
           return false;
@@ -328,10 +312,10 @@
   /*
     What leaves the phone only when the person taps export, and only to where they send it.
     Kept boring on purpose: a person who opens this file should understand it at a glance.
+    A prediction that is put away is in here exactly like any other (B56 §3 screen 6).
 
-    The one sentence in it is handed in by the caller (B15), because it is a sentence a person
-    reads and every one of those lives in web/content/strings-en.js. Left out, the file simply
-    has no note in it; nothing else changes.
+    The one sentence in it is handed in by the caller (B15), because every sentence a person
+    reads lives in web/content/strings-en.js.
   */
   function exportJSON(state, note) {
     var s = state || blank();
@@ -342,56 +326,17 @@
       note: note || undefined,
       /* Null unless they picked one themselves. A guess from the time zone is never stored. */
       country: s.country || null,
-      waiting: (s.open || []).map(function (t) {
+      predictions: (s.predictions || []).map(function (p) {
         return {
-          id: t.rid || null,
-          lockedIn: t.locked || null,
-          /*
-            The name of the thing, as a person would recognise it. A borrowed test has a label;
-            one they built has no label and its own sentence is its name (B30). Never the id —
-            an own id is a random string and means nothing to whoever opens this file.
-          */
-          worry: t.label || t.belief || null,
-          belief: t.belief || null,
-          expected: t.x || null,
-          test: t.test || null,
-          leftOut: t.drop || null,
-          /*
-            B40's three. `prediction` is 1, 2 or 3 as a person would count them rather than
-            the index the app holds — this file is meant to be read by whoever opens it, and
-            nobody outside a program counts from nought. All three are left out entirely
-            where there is nothing to say, so a free-text test's entry looks exactly as it
-            did before today.
-          */
-          prediction: typeof t.prediction === 'number' ? t.prediction + 1 : undefined,
-          filledIn: t.slots && Object.keys(t.slots).length ? t.slots : undefined,
-          size: t.size || undefined
-        };
-      }),
-      results: (s.done || []).map(function (d) {
-        return {
-          /*
-            The id and the tapped word are here so that two of these files can be JOINED and
-            not merely read: without the id there is no telling one result from another that
-            looks like it, and without the word there is no working out what the person did
-            when two devices' rungs disagree. `stillSure` stays, because it is the sentence
-            they actually tapped and this file is meant to be readable by whoever opens it.
-          */
-          id: d.rid || null,
-          when: d.when || null,
-          worry: d.label || d.belief || null,
-          belief: d.belief || null,
-          expected: d.x || null,
-          test: d.test || null,
-          leftOut: d.drop || null,
-          happened: d.o || null,
-          stillSure: d.rateLabel || null,
-          stillSureKey: d.move || null,
-          sureOutOfTen: typeof d.level === 'number' ? d.level : null,
-          /* B40's three, as above: counted from one, and absent where there is nothing. */
-          prediction: typeof d.prediction === 'number' ? d.prediction + 1 : undefined,
-          filledIn: d.slots && Object.keys(d.slots).length ? d.slots : undefined,
-          size: d.size || undefined
+          id: p.id,
+          prediction: p.sentence,
+          made: p.made || null,
+          lockedIn: p.locked || undefined,
+          putAway: p.away || undefined,
+          /* Oldest first, the order they happened in. */
+          results: p.results.map(function (r) {
+            return { day: r.day, howItWent: r.tag, happened: r.text, before: r.was };
+          })
         };
       })
     }, null, 2);
@@ -399,12 +344,16 @@
 
   return {
     KEY: KEY,
+    OLD_KEY: OLD_KEY,
     VERSION: VERSION,
+    TAGS: TAGS,
     blank: blank,
     isEmpty: isEmpty,
     normalise: normalise,
-    withLevel: withLevel,
+    fromOld: fromOld,
     rid: rid,
+    dayOf: dayOf,
+    today: today,
     create: create,
     exportJSON: exportJSON
   };

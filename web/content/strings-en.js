@@ -1,11 +1,15 @@
 /*
-  Every word a person can read in BETR, in English (B15, 2026-09-03).
+  Every word a person can read in BETR, in English (B15, 2026-09-03; rewritten for B56, 2026-09-15).
 
-  Before this file, roughly a hundred and fifty sentences lived as string literals inside
-  app.js, guards.js and rate.js. That made a second language a rewrite rather than a
-  translation, and it made it impossible to check in one place what the app actually says.
-  Now app.js contains no sentence a person reads; web/tests/i18n.test.js fails the build if
-  one comes back.
+  Before B15, roughly a hundred and fifty sentences lived as string literals inside app.js.
+  That made a second language a rewrite rather than a translation, and it made it impossible
+  to check in one place what the app actually says. Now app.js contains no sentence a person
+  reads; web/tests/i18n.test.js fails the build if one comes back.
+
+  B56 made this file about a third of the size it was. The stock list, the doors, the sizes,
+  the ladder, the tally and every word around them are gone from the app, and so are their
+  strings. What is left is the eight screens of the redesign, and — carried over byte for byte
+  — the frozen sentences, the crisis block, the country list, Help, export and delete.
 
   How to add a language (B16, and it is mostly not a coding job):
     1. copy this file to strings-<code>.js, keep every key, translate the values
@@ -14,9 +18,9 @@
     3. add one <script> line to index.html and one to tests/harness.js. Nothing else changes.
   A missing key falls back to English on its own, so a half-finished language still works.
 
-  Why this is a .js file and not strings-en.json: the same reason as worries.js — the founder
-  opens web/index.html straight off the filesystem, and a browser will not fetch JSON (or load
-  an ES module) from a file:// page. It is still plain data. No logic, ever.
+  Why this is a .js file and not strings-en.json: the founder opens web/index.html straight off
+  the filesystem, and a browser will not fetch JSON (or load an ES module) from a file:// page.
+  It is still plain data. No logic, ever.
 
   THE RULES THAT TRAVEL WITH THIS FILE
 
@@ -26,18 +30,16 @@
     language they are approved once, by a named person, in B16, and then frozen the same way.
   - The phrases that never appear, in any language: "digital CBT", "treats", "reduces
     symptoms", "for people with [diagnosis]", "tracks your anxiety", "improve your mental
-    health", "irrational", "streak". The last of those is in the sweep because a translator
-    with good intentions is exactly who would reintroduce it.
+    health", "irrational", "streak".
   - The wordmark is BETR, all caps, everywhere. Nothing a person taps is all-lowercase.
+  - The word for the thing a person writes is PREDICTION (B56 §2, founder, 2026-09-15) — for a
+    hope and a worry alike. Not test, not worry, not hope, not bet.
   - No crisis phone number is written in this file. Numbers live in content/helplines.js with
     the page they were read on and the day somebody read it there, and the country decides
-    them — not the language. A Spanish speaker in Mexico shown a US number has been harmed by
-    us. The words around a number are here; the number never is.
+    them — not the language. The words around a number are here; the number never is.
 
-  A value with `one` / `other` (or `two` / `few`) is a plural: the app picks the form with
-  Intl.PluralRules, which is built into every browser and knows the rules for every language.
-  `{n}`, `{country}`, `{belief}` and the rest are filled in by the app; keep them, and move
-  them wherever the sentence needs them to be.
+  `{country}` and the rest are filled in by the app; keep them, and move them wherever the
+  sentence needs them to be.
 */
 var BETR_STRINGS_EN = {
   lang: 'en',
@@ -82,740 +84,134 @@ var BETR_STRINGS_EN = {
     back: 'Back',
 
     /*
-      B55, 2026-09-12, the founder's call, and the reason they gave is worth writing down:
-      *"I'm trying to do as much promo for TrybeUP as possible, even if people just think BETR
-      is kind of cool looking but don't use it, at least they might click through."*
-
-      IT DOES NOT SAY TRYBEUP, AND THAT IS THE DECISION. Rule 9's last standing half is that
-      TrybeUP is not named on the front screen, in the loop, in the result or on the menu.
-      This is a question, in BETR's own voice, that lands on the block that answers it — so
-      the front screen carries the door to the lineage without carrying the brand. The
-      founder was offered "Made by TrybeUP" as the bigger step and it is theirs to take;
-      `menu.test.js` fails the build the day the word appears outside Help.
-
-      It is a question because that is what a person actually thinks about an app they have
-      just opened and are not sure about yet. A statement is an advert; a question is an
-      offer.
+      Three grey words at the foot of every screen (B56 §2 item 13). They replaced the row of
+      three at the bottom (B8), and the rule that row lived under still holds: plain words, no
+      icons, no selected state, no badge, no count, and never a fourth.
     */
-    byline: 'Who made this?',
-
-    /*
-      The corner chip, B35. It names the look you would GET by tapping it, not the one you are
-      in — "Dark" means tap here for dark. The sun and the moon beside the words are
-      decoration and are hidden from a screen reader, so the spelled-out label is the whole of
-      what it says out loud.
-    */
-    look: {
-      dark: 'Dark',
-      light: 'Light',
-      toDark: 'Switch to dark colours',
-      toLight: 'Switch to light colours'
-    },
-
-    /* Three doors, on every screen. Not a tab bar (CLAUDE.md rule 10): never a fourth. */
-    nav: {
+    foot: {
       label: 'BETR',
-      mine: 'Your tests',
-      new: 'New test',
+      mine: 'Your predictions',
+      why: 'How it works',
       help: 'Help'
     },
 
-    /* ------------------------------------------------------------------ the front screen */
-
-    start: {
-      /*
-        B31, 2026-09-08. THE FRONT SCREEN STOPPED DESCRIBING BETR AND STARTED SHOWING IT.
-
-        What went, and it went on purpose: "You've played it out a hundred times." with its
-        sub-line, and B25's "every test starts at ten out of ten". All three were the screen
-        explaining the loop in words to somebody who had never seen one. The card underneath
-        this caption does all three jobs at once — it shows the rehearsal, it shows the test,
-        and its ladder starts at ten where a person can see it. B25's problem (a first result
-        of 10 → 9 landing on a person with nothing to read it against) is answered by the
-        picture rather than by a sentence, and `loop.test.js` now holds the ten to the card.
-
-        `caption` is the most load-bearing string on the screen and it is four words long. It
-        is what makes the card a page in a book rather than a testimonial — the MHRA reads a
-        testimonial as an implied claim (research §5.2) — and it is the heading the screen is
-        announced by. If the founder ever chooses to show a real result of their own, this is
-        the line that changes, to say whose.
-      */
-      caption: 'What one test looks like',
-      /*
-        THE TWO BUTTONS SWAPPED PLACES ON 2026-09-10 (B50), the founder's call, and the words
-        went with them. `borrow` is the big one now and `go` is the ghost underneath it.
-
-        The key names are left alone on purpose: `go` is still the road that starts from
-        nothing and `borrow` is still the one that starts from BETR's list. What changed is
-        which of them a person meets first, and B45 §4 had already said which that should be.
-
-        `go` was "Pick a worry", then "Start a test", then "What’s yours?" — the question, asked
-        because the card above it had just shown somebody else's. It is "Write my own" now,
-        because it is no longer the question the screen is asking; it is the way out of the
-        question. **NOT MISHA'S YET**, either of them.
-      */
-      go: 'Write my own',
-      /*
-        The big button, and it opens *What’s going on?*. It kept the possessive the old big
-        button had — a person is looking for the one that is theirs, and the six doors are
-        where that search starts. What it lost is "Not sure?", which named the person rather
-        than the thing and only made sense while this was the smaller of the two.
-      */
-      borrow: 'Find yours',
-      /* The trust line, with the human half first. §9.2: airplane mode is the proof. */
-      promise: 'Nobody sees this but you. No account, no AI, nothing leaves your phone.',
-      noStorage: 'This browser won’t let BETR remember anything — a private window usually ' +
-        'does that. The loop still works; nothing will be here tomorrow.'
-    },
+    /* ------------------------------------------------------------------ 1 · the front */
 
     /*
-      B38, 2026-09-09. THE WORKED EXAMPLE HAS ITS OWN LABELS NOW, AND THAT IS A VOICE
-      DECISION, NOT A TIDY-UP.
-
-      The card on the front screen borrowed `result.*` for its labels, and with two of them
-      — "You expected" and "What actually happened" — that read fine. B38 adds a third beat,
-      what they actually did, and the moment there are three the card says YOU, then THEY,
-      then nothing. B36 §12a: either the card is something you are SHOWN or something you
-      are INVITED INTO; two voices in one card is not an option.
-
-      This takes the SHOWN option, which is the one the mockup the founder saw takes. The
-      card is somebody else's finished test, captioned "What one test looks like", and it
-      reads as one all the way down. `result.*` is untouched, because on a person's own
-      result screen "You expected" is exactly right.
-
-      MISHA OWNS WHICH WAY ROUND THIS GOES. Flipping it back is these three strings and the
-      a11y one under them; no code moves either way.
+      The front screen is the writing page (B56 §2 item 2, founder: "Go with 1b"). The sentence
+      a person locks in is four pieces joined — ifWords, the first blank, thenWords, the second
+      blank, and stop if they did not end it themselves. So a translation that moves the
+      blanks around is a job for app.js, not only for this file: say so in B16.
     */
-    example: {
-      expected: 'They expected',
-      /*
-        The beat the whole of B38 exists for. Short label, because what has to be read is the
-        line under it — one sentence, and small enough that a person thinks "I could do that".
-      */
-      did: 'What they did',
-      ladderLabel: 'How sure they were it goes badly'
-    },
-
-    /* What is on the go. Never a tally, never an age, never a count (B8). */
-    waiting: {
-      onTheGo: 'On the go.',
-      pickUp: 'Pick it up',
-      many: 'Tests you’ve got on the go'
-    },
-
-    /* ------------------------------------------------------------------ the second door */
-
-    /*
-      B32, 2026-09-08. The doors and the list behind them stopped being the way in and became
-      things to BORROW, one tap aside from the front screen. `sub` is the line that says so,
-      and `own` no longer reads as a failure to find a match — a person's own words are the
-      front door now, and this is the side road, not the other way round.
-    */
-    doors: {
-      title: 'What’s going on?',
-      /*
-        `sub` was here for a day. It said what `whats-going-on.js`'s own intro now says, and
-        two lines above the safety note cost the note 58px of the margin B23 bought it. One
-        line, in the file the founder edits.
-      */
-      own: 'None of these — I’ll write my own',
-      foot: 'None of these is a diagnosis, and BETR never decides which one you are.'
-    },
-
-    /* ------------------------------------------------------------------ picking a worry */
-
-    pick: {
-      title: 'Which one?',
-      sub: 'Tap the one that’s closest. You can change every word of it.',
-      own: 'Something else',
-      notHere: 'Nothing here tests the thing itself, only what you expect to happen without ' +
-        'it. That’s the part that gets tested.'
-    },
-
-    /*
-      THE `belief` BLOCK WENT ON 2026-09-08 (B32). It was the words around B20's screen —
-      which of these three is it, and what you would be braced for under each. That screen is
-      the build screen now and the three are a row of suggestion chips on it, so nothing reads
-      these keys any more. B20's finding is untouched: a prediction that is only nearly yours
-      cannot be disconfirmed by anything that happens, so the person still says which of the
-      three is theirs — in one tap, on the screen where the sentence is being written.
-    */
-
-    /* ------------------------------------------------- the build screen (B30) */
-
-    /*
-      The way in, since 2026-09-08. One sentence with two blanks, then what you'll do.
-
-      `ifWord` and `thenWord` are PRINTED, either side of the first blank, and they are also
-      what the stored sentence is assembled from — one source of truth, so a translation can
-      never end up with a screen that says one thing and a record that says another. Keep the
-      comma inside `thenWord`; a language that does not want one takes it out and both the
-      screen and the record follow.
-
-      The blanks are not labelled on screen, because the sentence labels them by being a
-      sentence. `ifLabel` and `thenLabel` are what a screen reader says instead, and they have
-      to work read alone, out of order, with no sentence around them.
-
-      The chips are suggestions and nothing more. They are in content/starts.js, in a fixed
-      order, and which set is under the second blank depends on one thing: whether the first
-      blank holds, word for word, one of the starts. That is a lookup, not a judgement.
-    */
-    build: {
-      title: 'Set up a test',
-      sub: 'One sentence: the thing you’d do, and what you’re sure would happen.',
-      ifWord: 'If I',
-      thenWord: ', then',
-      ifLabel: 'If I — what would you do?',
-      thenLabel: 'Then what — what are you sure will happen?',
-      /*
-        B45 §5c, 2026-09-10, AND THEY ARE THE FIRST SUGGESTION WORD FOR WORD. NOT MISHA'S YET.
-
-        A placeholder in a blank is an example of what goes in it, and somebody will type it
-        out rather than tap it — B34 D1 is the bug that came of that. Until today these two
-        were start #01 of a file that no longer exists, and after the merge they matched
-        nothing: typing the greyed-out words got the general three, while the chip directly
-        underneath them, saying almost the same thing, got the worry `no`'s own three. Same
-        words, two answers.
-
-        So both are now exactly what the first chip says and what the second blank will offer
-        after it, and loop.test.js fails the build if they drift apart again. They changed
-        because the content moved, not because anybody rewrote them, and they are in
-        docs/COPY.md for Misha with everything else.
-
-        B48, 2026-09-10, AND THERE IS ONLY ONE OF THEM LEFT. `thenPlaceholder` is deleted.
-
-        A frozen second half could only ever be right beside a frozen first half, and the
-        first half stops being frozen the moment anybody taps a chip or opens a worry — on
-        every road but one it went on saying "somebody will think I'm selfish" under a
-        sentence about something else entirely. It is worked out from the content now
-        (app.js thenHint), from THIS blank's first suggestion, which is what the sentence
-        below was already promising it was.
-
-        So this one stays and its partner goes, and the promise in changing-the-words.md holds:
-        every string in this file is a string somebody can see. Edit this line and the second
-        blank's example follows it, because the second blank's example is derived from it.
-      */
-      ifPlaceholder: 'say no to somebody without giving a reason',
-      ifChips: 'Or start from one of these:',
-      thenChips: 'Or one of these:',
-      /*
-        B32. The same screen, opened from the borrow list with the sentence half filled in.
-        The heading changes because the job has: you are not starting from nothing, you are
-        turning somebody else's words into yours, and "Set up a test" would hide that.
-      */
-      borrowTitle: 'Make it yours',
-      borrowSub: 'Change any of it. It only counts if it’s the one that would sting.',
-      /*
-        B20's three, now a row of suggestions instead of a screen of their own. Each of them
-        is a whole sentence and fills both blanks, so the line says so.
-      */
-      borrowChips: 'Three ways people usually put this. Tap one to fill it in:',
-      /*
-        B40, 2026-09-09. THE WAY OUT OF A WORRY'S ROAD, and the only one there is.
-
-        Until today a person left by editing: change a word of a borrowed sentence and the test
-        became theirs, with a ladder of its own. That rule cannot survive B41's skeletons, where
-        the sentence arrives with holes and filling them changes the words every single time. So
-        the road is what decides now, and leaving it has to be something a person does on
-        purpose rather than something that happens to them while they type.
-
-        One plain link, under the suggestions, on the borrowed road only. Not a mode, not a
-        toggle, nothing to discover. It says what it does and it costs the 10% one tap (B37 §3).
-      */
-      /*
-        B41, 2026-09-09. What a screen reader says at one of the small blanks inside a printed
-        sentence. The sentence itself is read on the way past, so this only has to say what the
-        blank is FOR — and the honest answer is "the word BETR put there, in your words". The
-        default word is handed in, because it is the one thing that differs hole to hole and it
-        is content rather than code.
-      */
-      holeLabel: 'Your own word instead of “{word}”',
-      own: 'Write the whole thing myself',
-      next: 'What will you do?',
-      /* The second half. The sentence is above it, in the quiet strip, unchanged. */
-      doTitle: 'What will you do today?',
-      /*
-        B45 §5e, 2026-09-10. THREE STRINGS LEFT HERE, and they were the other do screen.
-
-        `doSub` ("One small thing, your pick."), `doPlaceholder` ("Say no to one thing today,
-        in one sentence.") and `doChips` ("Or one of these:") belonged to the shape of this
-        screen that had two loose suggestions on it instead of three named sizes. That shape is
-        gone from every road, so nothing draws them and nobody is asked to read them.
-
-        `doSub` is the one worth knowing about: the founder's current mockup DOES put a line
-        under this heading — "One thing, today. Pick the size." — and B42 took ours off the
-        size road as a measurement, 47px on a screen that was already over. If it comes back it
-        comes back as a new sentence with a fresh measurement, not as this one restored.
-      */
-      /*
-        B42. What the box says while the three sizes are under it — which is now every road.
-        The placeholder it replaced was a worked example, and over three named steps a worked
-        example reads as a fourth one, or worse as a plan already in the box. This one asks for
-        the thing the three cannot give her, and says plainly that they are optional.
-
-        B49, 2026-09-10, THE FOUNDER'S CALL, AND IT IS THE ORDER THAT WAS WRONG. It said
-        "Or put it in your own words." — and it sits ABOVE the three it is saying "or" about,
-        so the sentence answered a question the screen had not asked yet. It now names the box
-        first and points down at the three second, which is the order a person reads them in,
-        and its partner on the leave-out box says the same thing in the same shape.
-
-        NOT MISHA'S YET — this line and dropPlaceholder are two drafts chosen off a pair of
-        options, and they are in docs/COPY.md with the rest of his list.
-
-        ONE SEAM, KNOWN AND ACCEPTED: B30's one-row-at-a-time rule hides the three while the
-        person is working in the leave-out box, so an untouched plan box can say "below" with
-        nothing below it. The row comes back the moment the box is tapped, which is the moment
-        anybody would act on the sentence.
-      */
-      doOwnPlaceholder: 'Write what you’ll do, or start from one of the three below.',
-      /*
-        B42, 2026-09-09. THE DIAL, and every word of this line is doing a job.
-
-        "How big" is the founder's small / medium / big said in the way a person would say it.
-        "Any of them counts" is the half that has to be there: the smallest is not a warm-up
-        for the real one, and a person who picks it twice has done two tests. There is no
-        number in it, nothing is called a level, and nothing says which one to pick — see
-        app.js sizeRow() for the four things that are deliberately absent from this row.
-      */
-      sizeChips: 'How big a go? Any of them counts:',
-      /*
-        The mark on the repeat screen, on the one that was done last time. It says what
-        happened, not what to do: same again is a real answer, because doing something once
-        and getting away with it is easy to put down to luck.
-      */
-      sizeLast: 'Last time',
-      /* The folded row's label, once one of the three is in the box. Same shape as the
-         leave-out's: what this half is, what it currently says, and the way back in. */
-      sizeLabel: 'How big a go',
-      /*
-        What the folded row says on a repeat of a test that was never done at one of the three
-        — one from before B42, or one whose plan the person wrote themselves. The three are
-        still one tap away and nothing is missing; this only has to name what is in the plan.
-      */
-      sizeOther: 'Your own',
-      /* The way back to the three, on both screens that fold them: the row on the build screen
-         and the line inside the plan card on a repeat. One word doing one job in both places. */
-      sizeChange: 'Change',
-      dropLabel: 'And leave out',
-      /*
-        B39, 2026-09-09, the founder's call. THE LEAVE-OUT HALF IS ONE ROW UNTIL IT IS TOUCHED.
-
-        Measured: the label, its line, the box and its suggestion row cost about 176px, and on
-        the free-text road — the front door since B32 — that was most of the reason *Lock it in*
-        started BELOW THE FOLD AT 100%, not at 125%. Collapsed to one row it costs about 60.
-
-        The row SHOWS the words rather than hiding them, and that is the whole design. On the
-        borrowed road what is in that box is BETR's, put there by BETR, and a plain link saying
-        "add something to leave out" would let somebody lock in a sentence of ours they never
-        read. So: the label, what it currently says, and the way to change it.
-      */
-      dropChange: 'Change',
-      dropAdd: 'Add one',
-      /*
-        Optional, and it says so in its own line rather than in a note underneath — the note
-        was a separate line of small print and it pushed "Lock it in" below the fold.
-      */
-      dropSub: 'Optional. It’s what counts.',
-      /*
-        B49, 2026-09-10, AND IT IS B48's FAULT ONE BOX LATER.
-
-        This said "Don’t give a reason." — which is the worry `no`'s own leave-out, word for
-        word, printed in this box on all twenty worries and on the free-text road. On the other
-        nineteen it was a leave-out for an act nobody on the screen was doing, greyed out
-        directly above three that were right, and B34 D1 is what comes of that: people type the
-        greyed words out instead of tapping the ones underneath.
-
-        B48 fixed the same thing in the second blank by DERIVING it. This box is not that box:
-        it is a textarea sitting on three whole sentences, which is the shape B42 already ruled
-        on for the plan box above — over three named suggestions a worked example reads as a
-        fourth one. So this one matches the plan box instead: name the box, point down at the
-        three. The founder chose the pair together on 2026-09-10.
-
-        loop.test.js holds it to two things: no worry's own sentence may be printed here, and
-        the two boxes on this screen say it in the same shape.
-      */
-      dropPlaceholder: 'Write what you’ll leave out, or start from one of the three below.',
-      dropChips: 'Or one of these:',
+    front: {
+      title: 'What do you think will happen?',
+      ifWords: 'If I',
+      thenWords: ', then',
+      stop: '.',
+      /* What a screen reader calls each blank. Each one has to make sense read on its own. */
+      ifLabel: 'If I… — what you’ll do',
+      thenLabel: '…then — what you think will happen',
       lock: 'Lock it in',
-      /*
-        B27 item 2, moved here by B30. This was `own.belief.only` and it sat under the blank
-        box, because on 2026-09-04 a test user wrote a true thing about his own body into that
-        box and nothing in fifteen screens had told him which ones BETR is for. That box is
-        gone; THIS is the screen a person writes one on now, so the line moved with the job.
-        It is under the sentence rather than above it, for the reason it always was: a rule
-        read before you have written anything is a rule about somebody else.
-
-        Widened on 2026-09-08 (B28 §3). It used to open "Not the weather, and not your body",
-        which was a checkability hint working as a wall — the founder's own two examples, one
-        about time and one about a feeling, both failed it. What is left is the half that
-        excludes a settled fact, plus the risk line the founder asked for on the same day.
-      */
-      only: 'Only the ones you’ve never actually found out about. If it could put you or anyone else at risk, that one needs a person, not this.'
+      note: 'Then go and find out. Nothing leaves your phone.',
+      /* Once both blanks have words in them (research/10 §2.3: the prediction is locked BEFORE). */
+      noteLocked: 'That keeps it as you wrote it, so what happens can’t rewrite it.'
     },
 
-    /*
-      THE `own` BLOCK WENT WITH IT. It was the three one-box screens and the nudge: "What do
-      you think will happen?", "What will you do?", "What will you leave out?", and "Keep mine
-      as it is". All of it is `build.*` above now, on two screens instead of five, and
-      `own.belief.only` became `build.only` in B30 — it is the one line that had a job left,
-      and it is on the screen a person actually writes one on.
-    */
+    /* ------------------------------------------------------------------ 3 · locked in */
+
+    on: {
+      kicker: 'Locked in',
+      ask: 'Go and find out.',
+      done: 'Done it',
+      /* Rule 5: nothing is recorded, nothing is lost, and nothing says you missed it. */
+      notToday: 'Not today. Keep it for tomorrow.'
+    },
+
+    /* ------------------------------------------------------------------ 4 · how did it go */
 
     /*
-      The refusals. lib/guards.js decides, this file says it — so the guard has no words in
-      it and no phone number in it, which is what B17 fixed and what must not come back.
-      A refusal explains, because refusing quietly teaches nothing.
+      Founder, 2026-09-15: "like a friend being 'SOOOO, how did it go??'". The question comes
+      first and the words come second. It is a question about the person's own prediction, not
+      a verdict on them, and it must not become one in translation.
+
+      The three words also label every result afterwards, in capitals, on the results and on
+      Your predictions — so a change here changes the tag everywhere, which is the point.
+    */
+    go: {
+      ask: 'Did it go how you expected?',
+      yeah: 'Yeah!',
+      sort: 'Sort of',
+      not: 'Not really'
+    },
+
+    /* ------------------------------------------------------------------ 5 · what happened */
+
+    happened: {
+      ask: 'What happened?',
+      keep: 'Keep it',
+      /* Read out if Keep it is tapped with nothing written. The words are the point (B56 §3). */
+      empty: 'Write down what happened first, in your own words.'
+    },
+
+    /* ------------------------------------------------------------------ 6 · your results */
+
+    log: {
+      /* What a screen reader calls the list. Never shown. */
+      list: 'What happened, newest first',
+      again: 'Same again tomorrow',
+      /* Puts it away. Nothing is deleted, and the export still has it. */
+      done: 'Done with this one',
+      back: 'Bring it back'
+    },
+
+    /* ------------------------------------------------------------------ 7 · your predictions */
+
+    mine: {
+      title: 'Your predictions',
+      new: 'New prediction',
+      away: 'Put away',
+      locked: 'Locked in'
+    },
+
+    /* ------------------------------------------------------------------ 8 · how it works */
+
+    /*
+      Research/12 §2: explaining it is the intervention. Fresh wording (rule 8). If the founder
+      wants the fixed next steps (same again, raise it, without the safety net) they go here as
+      one more paragraph and nowhere else — B56 §9a.
+    */
+    why: {
+      title: 'How it works',
+      guess: 'A hope you’ve never tested is a guess. So is a worry. You can carry either for ' +
+        'years and never find out.',
+      method: 'Write it down first, go and do it, then write down what happened. Do that a few ' +
+        'times and read it back. That’s the whole method, and it’s one piece of a well-studied ' +
+        'talking therapy — the piece you can do alone.',
+      help: 'If you’re in a bad place right now, this isn’t the thing. Help has real people.',
+      write: 'Write one'
+    },
+
+    /* ------------------------------------------------------------------ when BETR says no */
+
+    /*
+      One hard stop, on both blanks: a sentence about ending it, or hurting anyone. The rest of
+      the keys are what lib/guards.js can still return; the front screen only ever shows harm,
+      and reads out the two empty-blank lines rather than drawing them.
     */
     refusal: {
-      habit: 'That test involves the thing itself. Those aren’t tests — what you expect to ' +
-        'happen without it is. Try one about what people will think, or about what happens ' +
-        'when you go without it.',
-      body: 'BETR doesn’t do tests about food, weight or what your body is doing. Those need ' +
-        'a person, not this.',
       harm: 'BETR can’t help with that one, and it would be wrong to pretend otherwise.',
       verdict: 'That’s a verdict, not a prediction. What do you think would happen because of it?',
       notConditional: 'Start it with “If I…”. It has to be something that could turn out to be wrong.',
       noConsequence: 'Say what you think happens next: “If I ___, then ___”.',
       emptyTest: 'Write the one thing you’ll do today.',
       emptyBelief: 'Write what you think will happen.',
-      /*
-        B30. The first blank has its own empty line, because "write what you think will
-        happen" is the answer to the second one and reads as nonsense under the first.
-      */
-      emptyIf: 'Say what you’d do differently. It goes after “If I”.'
+      emptyIf: 'Write what you’ll do. It goes after “If I”.'
     },
 
-    /*
-      Not a refusal. Founder's call, 2026-09-04, after a test user typed "if I eat gluten, it
-      won't go well" and hit a wall over a missing "then". The grammar was never the point —
-      that sentence is a clear prediction and any reader understands it instantly. So the shape
-      rules ask once, show the shape that works, and let the person's own words through on the
-      next tap. lib/guards.js decides when to ask; this says it.
-    */
+    /* guards.checkBelief can still return this; nothing in the app draws it (B32). */
     nudge: {
       shape: 'These work best as “If I ___, then ___”. Like: If I ask for Friday off, then my ' +
         'boss will think I’m slacking. Or keep yours as it is.'
-    },
-
-    /* ------------------------------------------------------------------ the loop */
-
-    plan: {
-      today: 'Today',
-      /* {drop} is the person's own words, in bold. Keep it where the sentence needs it. */
-      line: '{drop} That’s the bit that makes it count.',
-      /*
-        B51, 2026-09-10, THE FOUNDER'S PICK OF FOUR, AND MISHA HAS NOT READ IT.
-
-        It was a LABEL — "What you expect" — over prose the app had already written, and the
-        two roads filled that prose differently: a stock sentence kept word for word carried
-        B20's hand-written expectation, and everything else carried
-        `guards.expectationFrom`, which strips the "If I …, then" and hands the tail back.
-        On the founder's own sentence that came out as "People will say it's rubbish" — their
-        own words, under a label that reads like a question. They nodded at it and tapped on,
-        and said afterwards they had not said the whole truth about how it would FEEL.
-
-        A label can be answered by what is already under it. A QUESTION CANNOT, and only the
-        cost answers this one: "people will say it's rubbish" is not a thing that would mean
-        something for you, it is the thing that happens. That is the whole fix, and it needs
-        no detection and no judgement about whether an answer was good enough — which is the
-        device line, cleanly (rule 2). See B51 §4.
-
-        The other three drafted: "If that happens, what happens to you?" · "What are you
-        braced for?" (worries.js's own phrase for the field) · "If they do, what's the bit
-        you're dreading?" — the last breaks on a worry with nobody in it.
-
-        NEVER "was it really that bad?" and never an argument with a true prediction. Both
-        are verdicts and rule 6 refuses them; B51 §6 is why.
-      */
-      expectLabel: 'And what would that mean for you?',
-      /*
-        B38, 2026-09-09. Was "I’ll do it today". BETR never asks anybody to be brave; it asks
-        them to find something out. A dare needs permission from somebody with authority, which
-        BETR has not got and cannot fake. A question needs none — nobody needs authorisation to
-        go and find out what happens. That is the one structural advantage a behavioural-
-        experiment app has over an exposure app, and the loop was not using it
-        (research/12 §9.1; B36 §7, item 7).
-      */
-      lock: 'I’ll find out today',
-      lockNote: 'That locks in what you expect, so later you can’t talk yourself out of what ' +
-        'actually happened.',
-      /*
-        B42. The three sizes again, on the way back into something already tested. "Same
-        again" leads on purpose: it is a real answer and the screen should not read as though
-        the point were to work up to something.
-      */
-      sizeChips: 'Same again, or a different size:'
-    },
-
-    /*
-      Two states, one screen. The second one is B27 item 1, 2026-09-04: a test user tapped
-      "Didn’t get to it", got the right sentence, and read it under a heading that still said
-      LOCKED IN · GO AND DO IT. He asked whether it had done anything. Rule 5 was honoured in
-      the words and undercut by the screen — and the last thing somebody sees as they close
-      the app is what they take away, so it cannot be an instruction they have just declined.
-      The `rest` three are what the same screen says once the test is put down for today.
-    */
-    locked: {
-      kicker: 'Locked in',
-      /* B38: was "Go and do it." See plan.lock above for why every dare in the loop is a
-         question now. This is the last screen somebody reads before they go out and do it. */
-      title: 'Go and find out.',
-      /*
-        B38, 2026-09-09, and it is the whole of B36 §10a. The therapist's safety net is not
-        their authority — it is that a bad outcome has already been thought about and is not
-        a disaster. A person with no therapist can still have that, and it is one sentence
-        said at the moment it matters. It is rule 6 (no verdicts) out loud, on the screen
-        where somebody is about to risk something.
-      */
-      net: 'Bring back whatever happens. A bad one counts the same as a good one.',
-      missed: 'No problem. It’s still here for tomorrow. Smaller counts, too.',
-      done: 'Done it. Here’s what happened',
-      miss: 'Didn’t get to it',
-      restKicker: 'Set aside',
-      restTitle: 'Nothing lost.',
-      restDone: 'Actually, I did it'
-    },
-
-    happened: {
-      title: 'What happened?',
-      sub: 'Just what they said or did. No verdict.',
-      placeholder: 'He said “fair enough” and got his own coffee.',
-      next: 'Next'
-    },
-
-    /*
-      The re-rate. Five words, no slider. "More sure than before" has to be here — a test can
-      go badly and leave someone more convinced — and it has to be quiet, because it is not
-      the point. lib/rate.js holds how far each one moves the belief; these are the words.
-    */
-    sure: {
-      title: 'Still think that’s what happens?'
-    },
-    rate: {
-      still: 'Still sure',
-      bit: 'A bit less sure',
-      lot: 'A lot less sure',
-      none: 'Not sure at all',
-      more: 'More sure than before'
-    },
-
-    result: {
-      expected: 'You expected',
-      happened: 'What actually happened',
-      ladderLabel: 'How sure you are it goes badly',
-      moved: 'Down {n} since you started.',
-      count: {
-        one: 'One test done. The second one is where it starts to stick.',
-        other: '{n} tests done. Same test, different day, keeps working.'
-      },
-      again: 'Do it again tomorrow',
-      other: 'Different test'
-    },
-
-    /*
-      The ladder. One belief's grip, 1–10, never a total and never averaged across worries
-      (CLAUDE.md rule 5). That rule applies to what a screen reader says as much as to what
-      is on the screen: see a11y below.
-    */
-    ladder: {
-      started: 'Started',
-      now: 'Now',
-      lastTime: 'Last time',
-      earlier: { one: '{n} earlier test', other: '{n} earlier tests' }
-    },
-
-    /* "1st", "2nd", "3rd", "4th". Intl.PluralRules picks the form for the language. */
-    ordinal: { one: '{n}st', two: '{n}nd', few: '{n}rd', other: '{n}th' },
-
-    /* ------------------------------------------------------------------ your worries */
-
-    /* ------------------------------------------------------------------ why this sticks */
-
-    /*
-      B18. The screen behind "Why this one sticks", offered only once a person has a result
-      of their own — their evidence first, the explanation second. The twelve explanations
-      are in content/why.js; these are the words around them.
-
-      `foot` is the frozen one. It says three things and they are all load-bearing: the text
-      is general (so it is a book, not a device), BETR cannot see anything, and a therapist is
-      the real version of this. It is identical under all twelve, written once and translated
-      once, and it points at Help rather than carrying a link of its own — every link in BETR
-      lives in content/places.js and nowhere else (rule 1).
-    */
-    why: {
-      link: 'Why this one sticks',
-      title: 'Why \u201C{label}\u201D sticks',
-      foot: 'This is general — it is not about you, and BETR cannot see anything you have ' +
-        'written. If you want to understand it properly, that is what a CBT therapist is ' +
-        'for, and Help has places to find one.'
-    },
-
-    /* ------------------------------------------------------------------ the two guide screens */
-
-    /*
-      B44, 2026-09-09. Two screens that teach, reached by a plain link and by nothing else.
-
-      NEITHER OF THEM EVER APPEARS ON ITS OWN. Not after a pause, not after a refusal, not
-      because of a word somebody typed, not on the third time round. That is the regulatory
-      line and not a preference (research §6): a screen that arrives BECAUSE of what a
-      person wrote is BETR deciding something about them, and the whole of rule 2 goes with it.
-      A link they choose to tap is a chapter in a book.
-
-      They were B36 items 2 and 3, where the first one was a rescue: somebody reached "What
-      will you do today?", pictured the biggest possible version, and left. B42 does most of
-      that job on the screen itself now — three named sizes with her own words in them — so
-      these two stopped being the rescue and became the teaching, which is a better job for
-      them. The three sizes turn one dial; `dials` below names the ones they do not turn.
-
-      Every word here is ours (rule 8). CCI's stepladder module is the METHOD, and the method
-      is not protected expression; its sentences are, and not one of them is here.
-
-      NOTHING ON THESE TWO SCREENS MAY NAME THE HABIT, food, weight, the body or anybody's
-      safety. This is BETR proposing, and the 2026-09-08 loosening was about a person's own
-      words only — it did not move one inch of what BETR writes. loop.test.js walks every
-      string in this block through the same three word lists worries.js is held to.
-    */
-    guide: {
-
-      /*
-        SAID ONCE, IN ONE PLACE, AND READ IN TWO (B36 item 3's own instruction). It is the rule
-        the whole of "Make it smaller" is built on, and it is also the fifth answer on "Why
-        it’s written like this" — two screens a person may well reach in either order, and
-        one sentence, so they can never drift apart by a word.
-      */
-      smallest: 'The one to start with is the smallest version that could still turn out ' +
-        'wrong. Smaller than that and nothing can surprise you, and being surprised is the ' +
-        'only part that does anything.',
-
-      /* ---------------------------------------------------- 1 · Too big? Make it smaller */
-
-      smallerLink: 'Too big? Make it smaller',
-      smallerTitle: 'Too big? Make it smaller',
-      /*
-        THE FIRST LINE IS THE WHOLE SCREEN. Somebody who taps this has just thought "I can’t
-        actually do that", and what they need told first is that the thought is the test — not
-        a sign they picked the wrong one, and not something to be talked out of. Every line
-        after it is mechanical.
-      */
-      smallerOpen: 'If you just thought “I can’t actually do that” — that is the sentence ' +
-        'at the top, said out loud. It is the thing being tested. It is not a sign you have ' +
-        'picked the wrong one.',
-      /*
-        Five dials, and the point of listing them is that THREE SIZES ONLY TURN THE SECOND ONE.
-        A person holding B42’s row has one control; this says there are five, and that shrinking
-        is turning one of them rather than doing a watered-down version of the thing.
-      */
-      dialsLabel: 'You don’t water it down. You turn one of these:',
-      dials: [
-        { name: 'Who it’s with.', line: 'Somebody it would matter less with.' },
-        { name: 'How big a thing it is.', line: 'The smallest true version of it.' },
-        { name: 'How long it goes on.', line: 'One sentence, and then on to something else.' },
-        { name: 'When and where.', line: 'A moment you pick, not one that catches you.' },
-        { name: 'How many people are there.', line: 'One person rather than a room.' }
-      ],
-      /*
-        The half that keeps a small one from reading as a lesser one. Rule 5: there is no
-        target, nothing is a warm-up, and a person who picks the smallest twice has done two
-        tests. "That is what tomorrow is for" is the same answer the result screen gives.
-      */
-      smallerCounts: 'A smaller one still counts. Doing something once and getting away with ' +
-        'it is easy to put down to luck — that is what tomorrow is for.',
-      /*
-        THE WORKED SHRINK, AND IT IS READ BIG TO SMALL ON PURPOSE. B42’s row is drawn small to
-        big, because that is the order a person chooses in; this is the same three names read
-        the other way, because shrinking is what the screen is teaching. Same three words in
-        both places, so the control it teaches is the control she is already holding.
-
-        It is an example and it says so, in the same words the front screen’s example uses,
-        and it names nobody. Fixed: everybody who opens this screen reads these three lines,
-        forever, whatever they typed.
-      */
-      shrinkLabel: 'One, shrunk. It is an example, and it is not about you.',
-      shrinkSaid: 'If I say no to somebody without giving a reason, then they’ll be off with ' +
-        'me for days.',
-      shrink: [
-        { name: 'The whole thing', line: 'Say no to the next big thing anybody asks, and say ' +
-          'nothing after it.' },
-        { name: 'A bigger go', line: 'Say no to something you would usually take on, and ' +
-          'don’t offer anything instead.' },
-        { name: 'A small go', line: 'Say no to one small thing today, in one sentence, and ' +
-          'don’t give a reason.' }
-      ],
-      shrinkFoot: 'Only the last one has to happen today. The other two are still there ' +
-        'tomorrow.',
-
-      /* ------------------------------------------------ 2 · Why it’s written like this */
-
-      writtenLink: 'Why it’s written like this',
-      writtenTitle: 'Why it’s written like this',
-      /*
-        Five questions in the order a person meets them, and it is also THE FIX FOR why.js
-        BEING UNREACHABLE TO SOMEBODY WHO WROTE THEIR OWN: that file is keyed to a stock worry
-        id and only appears after a result, so a person on the free-text road never sees a word
-        of it. This one is keyed to nothing, so everybody can reach it, before they have written
-        anything and forever after.
-
-        The founder is owed an answer on whether five is one too many for a screen met that
-        early (B36 item 3). It is a link and not a wall, and a link nobody taps costs nothing.
-      */
-      written: [
-        { q: 'Why “If I”',
-          a: 'Because it has to be something you would do, on a day. “I am …” has no day in ' +
-             'it — nothing either happened or did not, so there is nothing to find out. “If ' +
-             'I …” gives you a Tuesday, and an answer by Tuesday night.' },
-        { q: 'Why it needs a “then”',
-          a: 'Because somebody standing there would have to be able to see it happen. “Then ' +
-             'I’ll feel awful” cannot be settled by anything; you will feel however you feel. ' +
-             '“Then she won’t talk to me for the day” can.' },
-        { q: 'Why you write it down first',
-          a: 'So that afterwards you cannot quietly move it. Everybody moves it. Written down ' +
-             'first, it either happened or it did not.' },
-        { q: 'Why you leave something out',
-          a: 'The bit you always do — the reason, the joke, the “but I’m fine” — is the bit ' +
-             'that gets the credit when it goes fine. Leave it out once, and whatever happens ' +
-             'is about the thing itself.' },
-        /* No `a`. `same` names the key its answer comes from, so the sentence lives in
-           exactly one place and both screens read the same words — see `smallest`. */
-        { q: 'Why you start small', same: 'smallest' }
-      ]
-    },
-
-    mine: {
-      title: 'Your tests',
-      /*
-        B29, 2026-09-08. Two counts on one screen and they mean different things: how many
-        tests a person keeps, and how many times they have run them. Written as "{n} tests
-        across {n} worries" the two words collided the moment "worry" became "test", so the
-        second count is said as times rather than as a noun. Rule 5 is untouched: neither
-        number is a score of anybody, and neither is added up across cards.
-      */
-      summary: '{kept}, {runs}. Tap one to do it again.',
-      kept: { one: '{n} test', other: '{n} tests' },
-      runs: { one: 'done once', other: 'done {n} times' },
-      nothing: 'What you’ve got on the go. Nothing recorded yet.',
-      onTheGo: 'On the go',
-      did: 'Done it',
-      notYet: 'Didn’t get to it',
-      again: 'Test this again',
-      /*
-        B53, 2026-09-10. The founder's word, chosen over "Put this away" and "Done with this
-        one" on the day: "Archive". Two plain buttons and no question asked between them,
-        because neither one loses anything.
-
-        "Done" was the one to avoid: a card is archived because a person is finished with it,
-        which is not the same as the belief being finished, and a button that says done reads
-        as the app's verdict on the worry rather than the person's decision about a list.
-      */
-      archive: 'Archive',
-      unarchive: 'Unarchive',
-      awayTitle: 'Archived',
-      awayNote: 'Nothing here is deleted. Each one keeps everything you wrote and everything ' +
-        'you rated, it is still in your export, and one tap puts it back on the list.',
-      /* The one case the old summary got wrong: results exist, and none of them is on the list. */
-      allAway: 'Everything you’ve got is archived, below.',
-      archived: 'Archived. It’s at the bottom of this screen.',
-      unarchived: 'Back on your list.',
-      foot: 'Each one is its own. Nothing here is added up, and there is no target.'
     },
 
     /* ------------------------------------------------------------------ install */
@@ -950,7 +346,6 @@ var BETR_STRINGS_EN = {
         'keep two counts — how many times the page was opened each day, and how many of ' +
         'those were not robots — and nothing else. Nothing about you is written down: not ' +
         'your address, not your browser, not even the time of day.',
-      proofResults: 'results on this phone',
       proofAccounts: 'accounts',
       proofSent: 'sent to us, ever',
       zeroBytes: '0 B',
@@ -1031,34 +426,7 @@ var BETR_STRINGS_EN = {
 
     /* ------------------------------------------------------------------ said, not shown */
 
-    /*
-      What a screen reader reads and a sighted person never sees.
-
-      Rule 5 applies here exactly as it applies to the screen: a rung is one belief's grip,
-      out of ten, next to the day it was tested. There is no total here, no average across
-      worries, no trend and no target — and if one is ever added to the screen it must not be
-      added here either.
-    */
     a11y: {
-      ladder: 'How sure you are that: “{belief}”. Ten is completely sure, one is not sure at all.',
-      ladderPlain: 'How sure you are it goes badly. Ten is completely sure, one is not sure at all.',
-      /* The same group on the front screen's worked example, in that card's voice (B38). */
-      ladderPlainExample: 'How sure they were it goes badly. Ten is completely sure, one is not sure at all.',
-      rung: '{when}: {level} out of 10.',
-      /* B42. Which size that test was done at, read out after the rung it moved to. A fact
-         about the test; there is nothing here that compares one row with another. */
-      rungSize: 'Done at: {size}.',
-      down: { one: 'Down one rung.', other: 'Down {n} rungs.' },
-      up: { one: 'Up one rung.', other: 'Up {n} rungs.' },
-      same: 'No change.',
-      /*
-        The result screen is the product, so it gets a sentence rather than a shape. There is
-        no full stop after {expected} or {happened}: the app puts one there if the person's
-        own sentence did not already end in one, so it never reads out "coffee.. How sure".
-      */
-      result: 'You expected: {expected} What actually happened: {happened} How sure you ' +
-        'are it goes badly: {level} out of 10.',
-      dropped: 'Left out: {drop}.',
       countryChanged: 'Helpline numbers now shown for {country}.'
     }
   }

@@ -22,10 +22,8 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const WEB = path.join(__dirname, '..');
-const FILES = ['lib/theme.js', 'lib/guards.js', 'lib/rate.js', 'lib/store.js', 'lib/content.js', 'lib/where.js',
-               'lib/i18n.js', 'content/strings-en.js',
-               'content/worries.js', 'content/why.js', 'content/whats-going-on.js', 'content/places.js',
-               'content/examples.js',
+const FILES = ['lib/theme.js', 'lib/guards.js', 'lib/store.js', 'lib/where.js',
+               'lib/i18n.js', 'content/strings-en.js', 'content/places.js',
                'content/zones.js', 'content/helplines.js', 'app.js'];
 
 
@@ -85,6 +83,14 @@ function parse(html) {
     const id = (m[0].match(/ id="([^"]+)"/) || [])[1];
     const val = (m[0].match(/ value="([^"]*)"/) || [])[1];
     if (id && kids['#' + id] && val !== undefined) kids['#' + id].value = unesc(val);
+  }
+  /*
+    B56. The front screen's two blanks are contenteditable spans inside the printed sentence,
+    and the app reads what is in them as textContent. Kept across a repaint for the same reason
+    as a box: a refusal that emptied the blanks would look like BETR throwing the sentence away.
+  */
+  for (const m of html.matchAll(/<span[^>]*id="([^"]+)"[^>]*contenteditable[^>]*>([\s\S]*?)<\/span>/g)) {
+    if (kids['#' + m[1]]) kids['#' + m[1]].textContent = kids['#' + m[1]].value = unesc(m[2]);
   }
   for (const m of html.matchAll(/data-([a-z]+)="([^"]+)"/g)) {
     const el = makeEl();
@@ -151,7 +157,13 @@ function boot(seed, env) {
       timeZone: null to be a phone whose browser will not say.
     */
     Intl: {
-      DateTimeFormat: () => ({ resolvedOptions: () => ({ timeZone }) }),
+      /* B56: the results screen labels a day with the browser's own weekday names, so format()
+         is the real one. Only the time zone is stubbed. */
+      DateTimeFormat: function (locale, opts) {
+        /* A function, not an arrow: the app calls it with `new`, and an arrow cannot be. */
+        const real = new Intl.DateTimeFormat(locale, opts);
+        return { format: (d) => real.format(d), resolvedOptions: () => ({ timeZone }) };
+      },
       DisplayNames: Intl.DisplayNames,
       /* Real plural rules: lib/i18n.js picks "1 test" / "3 tests" and "1st" / "2nd" with them. */
       PluralRules: Intl.PluralRules
@@ -169,16 +181,10 @@ function boot(seed, env) {
       addEventListener: (type, fn) => { (listeners[type] = listeners[type] || []).push(fn); }
     },
     /*
-      Seeded, so a run is repeatable. The app reaches for Math.random in two places and both
-      need to be predictable here: which worked example a phone with nothing stored opens on,
-      and rid()'s fallback — the sandbox has no `crypto`, so every record's id comes from this.
-      A fixed number would give every record the SAME id and dedupe would eat them, so it is a
-      sequence rather than a constant. It starts low, so a fresh phone opens on the first
-      example and every test written before today still knows which card it is looking at.
-
-      env.randomSeed is a DIFFERENT PHONE, not a different run: two people installing BETR on
-      the same day do not share a random sequence, and the whole point of the change is that
-      they do not open on the same card.
+      Seeded, so a run is repeatable. The app reaches for Math.random in one place since B56,
+      and it needs to be predictable here: rid()'s fallback — the sandbox has no `crypto`, so every record's id comes from this.
+      A fixed number would give every prediction the SAME id and the store would keep only one
+      of them, so it is a sequence rather than a constant. env.randomSeed is a different phone.
     */
     Math: Object.assign(Object.create(Math), { random: prng('randomSeed' in env ? env.randomSeed : 1) }),
     Date, JSON, String, Array, Object, RegExp, Error
@@ -212,7 +218,8 @@ function boot(seed, env) {
       el.onclick();
       return api;
     },
-    type(sel, text) { find(root, sel).value = text; return api; },
+    /* A box keeps its words in value; a blank in the sentence keeps them in textContent. */
+    type(sel, text) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); el.value = text; el.textContent = text; return api; },
     /* What a screen reader was told, and where the keyboard is (B15). */
     said() { return live.textContent; },
     focusedId() { return focused ? focused._id : null; },

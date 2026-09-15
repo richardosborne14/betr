@@ -265,7 +265,9 @@ async function type(sel, text) {
     const el = document.querySelector(${JSON.stringify(sel)});
     if (!el) return false;
     el.focus();
-    el.value = ${JSON.stringify(text)};
+    /* B56: the front screen's blanks are contenteditable, and hold their words as text. */
+    if (el.isContentEditable) el.textContent = ${JSON.stringify(text)};
+    else el.value = ${JSON.stringify(text)};
     el.dispatchEvent(new Event('input', { bubbles: true }));
     return true;
   })()`);

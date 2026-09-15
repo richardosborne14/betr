@@ -23,7 +23,7 @@ const path = require('node:path');
 const { boot } = require('./harness.js');
 const i18n = require('../lib/i18n.js');
 const guards = require('../lib/guards.js');
-const rate = require('../lib/rate.js');
+const store = require('../lib/store.js');
 const en = require('../content/strings-en.js');
 
 const WEB = path.join(__dirname, '..');
@@ -75,8 +75,8 @@ test('no sentence a person can read is left in app.js', () => {
     'these belong in web/content/strings-en.js, not in app.js');
 });
 
-test('the guard and the ladder say nothing either — they decide, the string file speaks', () => {
-  for (const file of ['lib/rate.js', 'lib/store.js', 'lib/where.js', 'lib/i18n.js']) {
+test('the guard and the store say nothing either — they decide, the string file speaks', () => {
+  for (const file of ['lib/store.js', 'lib/where.js', 'lib/i18n.js']) {
     const left = literalsIn(file).filter((l) => PROSE.test(stripMarkup(l)));
     assert.deepStrictEqual(left, [], file + ' has words a person reads in it');
   }
@@ -93,39 +93,34 @@ test('every key app.js asks for is in the string file', () => {
   const asked = new Set();
   for (const m of src.matchAll(/\b(?:t|I\.plural|I\.list)\('([a-zA-Z0-9.]+)'/g)) asked.add(m[1]);
 
-  assert.ok(asked.size > 60, 'only found ' + asked.size + ' keys: the sweep has stopped working');
+  assert.ok(asked.size > 50, 'only found ' + asked.size + ' keys: the sweep has stopped working');
   for (const key of asked) {
-    /* 'rate.' is a prefix the app finishes at the last moment; those are checked below. */
+    /* 'go.' is a prefix the app finishes at the last moment (a result's tag); checked below. */
     if (key.slice(-1) === '.') continue;
     assert.ok(at(en.s, key) != null, 'app.js asks for "' + key + '", which is not in strings-en.js');
   }
 
   /* the ones built at the last moment, which the sweep above cannot see */
-  for (const c of rate.CHOICES) assert.ok(typeof en.s.rate[c.key] === 'string', 'no word for ' + c.key);
+  for (const tag of store.TAGS) assert.ok(typeof en.s.go[tag] === 'string', 'no word for the ' + tag + ' tag');
   for (const k of Object.keys(guards.REASON)) {
     assert.ok(typeof at(en.s, guards.REASON[k]) === 'string', 'no words for the ' + k + ' refusal');
   }
-  assert.ok(typeof en.s.ordinal.other === 'string');
 });
 
 test('a person never reads a key, and never reads an unfilled placeholder', () => {
   const a = boot();
-  let seen = a.html();
-  a.tap('#pick'); seen += a.html();                                    /* the doors */
-  a.tap('[data-door]', 0); seen += a.html();                        /* the worries behind one */
-  a.tap('#own'); seen += a.html();                                   /* the build screen */
-  a.tap('#next'); seen += a.html();                                  /* an empty-blank refusal */
-  a.type('#if', 'say no').type('#then', 'they will mind').tap('#next'); seen += a.html();
-  a.tap('#back').tap('#back').tap('#pick').tap('[data-door]', 0); seen += a.html();
-  a.tap('[data-id]', 0); seen += a.html();                           /* borrowing one */
-  a.tap('[data-b]', 0).tap('#next'); seen += a.html();
-  a.tap('[data-size]', 0); seen += a.html();
-  a.tap('#lock'); seen += a.html();
-  a.tap('#nothanks').tap('#done'); seen += a.html();
-  a.type('#o', 'He said fair enough.').tap('#next'); seen += a.html();
-  a.tap('[data-key]', 1); seen += a.html();
-  a.tap('#m-mine'); seen += a.html();
-  a.tap('#m-help'); seen += a.html();
+  let seen = a.html();                                                  /* the front */
+  a.tap('#lock'); seen += a.html();                                     /* an empty sentence */
+  a.type('#if', 'tell them').type('#then', 'I’ll hurt myself').tap('#lock'); seen += a.html();
+  a.type('#if', 'tell my best friend').type('#then', 'it’ll bring us closer').tap('#lock'); seen += a.html();
+  a.tap('#done'); seen += a.html();
+  a.tap('[data-tag="yeah"]'); seen += a.html();
+  a.type('#x', 'She hugged me.').tap('#keep'); seen += a.html();
+  a.tap('#away'); seen += a.html();
+  a.tap('[data-p]'); seen += a.html();
+  a.tap('#f-why'); seen += a.html();
+  a.tap('#f-help'); seen += a.html();
+  a.tap('#export'); seen += a.html();
   a.tap('#where'); seen += a.html();
 
   /* text between tags, which is the only part a person actually reads */
@@ -144,12 +139,12 @@ test('a person never reads a key, and never reads an unfilled placeholder', () =
 /* ------------------------------------------------- the module itself */
 
 test('a language falls back to English one key at a time, not one file at a time', () => {
-  const half = { lang: 'xx', dir: 'ltr', name: 'Halfish', s: { start: { caption: 'Halfish caption' } } };
+  const half = { lang: 'xx', dir: 'ltr', name: 'Halfish', s: { front: { title: 'Halfish title' } } };
   const I = i18n.create({ en: en, xx: half }, { chosen: 'xx' });
 
-  assert.strictEqual(I.t('start.caption'), 'Halfish caption', 'the translated key was not used');
-  assert.strictEqual(I.t('start.promise'), en.s.start.promise, 'a missing key did not fall back to English');
-  assert.ok(I.gapKeys().indexOf('start.promise') !== -1, 'the gap was not recorded for the translator');
+  assert.strictEqual(I.t('front.title'), 'Halfish title', 'the translated key was not used');
+  assert.strictEqual(I.t('front.note'), en.s.front.note, 'a missing key did not fall back to English');
+  assert.ok(I.gapKeys().indexOf('front.note') !== -1, 'the gap was not recorded for the translator');
   assert.deepStrictEqual(I.unknownKeys(), [], 'a key that exists was called unknown');
 });
 
@@ -170,12 +165,14 @@ test('the language is the person’s choice, then the browser’s, then English'
 });
 
 test('plurals and ordinals come from the browser, not from a table we wrote', () => {
-  const I = i18n.create({ en: en });
-  assert.strictEqual(I.plural('mine.kept', 1), '1 test');
-  assert.strictEqual(I.plural('mine.kept', 4), '4 tests');
-  /* B29: the second count on Your tests is said as times, so the two nouns cannot collide. */
-  assert.strictEqual(I.plural('mine.runs', 1), 'done once');
-  assert.strictEqual(I.plural('mine.runs', 2), 'done 2 times');
+  /* B56 took every number off the screens, so the app asks for no plural; the module still
+     knows how, for the day a translation needs one, and is tested on a file of its own. */
+  const I = i18n.create({ en: { lang: 'en', dir: 'ltr', name: 'English', s: {
+    kept: { one: '{n} thing', other: '{n} things' },
+    ordinal: { one: '{n}st', two: '{n}nd', few: '{n}rd', other: '{n}th' }
+  } } });
+  assert.strictEqual(I.plural('kept', 1), '1 thing');
+  assert.strictEqual(I.plural('kept', 4), '4 things');
   assert.deepStrictEqual([1, 2, 3, 4, 11, 21].map((n) => I.ordinal(n)),
     ['1st', '2nd', '3rd', '4th', '11th', '21st']);
 });
@@ -241,7 +238,7 @@ test('the wordmark is BETR everywhere a person reads it', () => {
 test('choosing a language never changes which helpline a person is shown', () => {
   /* Spanish-speaking, in Texas: the time zone decides, exactly as it did before B15. */
   const a = boot(null, { timeZone: 'America/Chicago', languages: ['es-ES', 'es'] });
-  const h = a.tap('#m-help').html();
+  const h = a.tap('#f-help').html();
   assert.ok(h.indexOf('In the United States') !== -1, 'a Spanish speaker in Texas was sent abroad');
   assert.ok(h.indexOf('href="tel:988"') !== -1);
 
@@ -252,7 +249,7 @@ test('choosing a language never changes which helpline a person is shown', () =>
   const strip = (s) => s.slice(0, s.indexOf('If you are in danger or in crisis'));
   const uk = boot(null, { timeZone: 'Europe/London' });
   const ke = boot(null, { timeZone: 'Africa/Nairobi' });
-  assert.strictEqual(strip(uk.tap('#m-help').html()), strip(ke.tap('#m-help').html()));
+  assert.strictEqual(strip(uk.tap('#f-help').html()), strip(ke.tap('#f-help').html()));
 });
 
 test('nothing is ever fetched to work out a language', () => {

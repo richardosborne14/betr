@@ -1,11 +1,11 @@
 # B56: The redesign — one prediction, locked in, and your own results read back
 
-**Status:** Not started. Locked in by the founder 2026-09-15 ("the rest of it looks great, let's lock it in").
-**Confidence:** —
+**Status:** Built on the branch `redesign`, 2026-09-15 (10th session). **Not merged** — a merge to `main` publishes it to the live address, and it has not been walked on a real phone. Locked in by the founder 2026-09-15 ("the rest of it looks great, let's lock it in").
+**Confidence:** 8/10 for what is built and tested; the real-phone walk (iPhone Safari, the contenteditable blanks, the keyboard) is the missing two points.
 **Date opened:** 2026-09-15
 **Depends on:** nothing. B57 (the move) is independent and can run alongside.
 **Where:** `web/` — a rebuild, not an edit. `docs/00-scope.md` and `CLAUDE.md` are rewritten when this ships.
-**The design:** the canvas *BETR, Bet on a Hope*, `https://claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc`, version 3. **Read it with the
+**The design:** the canvas *BETR, Bet on a Hope*, `https://claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc` (read and extracted on 2026-09-15). **Read it with the
 Artifact tool and extract the artboards. Do not draw from memory.** Eight screens; every one of them is in §3.
 
 ## 1. Why, in the founder's words
@@ -194,11 +194,47 @@ directly", and it lasts exactly as long as this task.
   actually happened in your own words.*
 - **9d.** Whether the old prototype in `prototype/` stays in the public repo.
 
+## 10. What was built, 2026-09-15
+
+**On the branch `redesign`.** 124 tests pass (`node --test`, from 296 — the stock-content, ladder and merge suites went with what they tested).
+
+- **`web/app.js`** rewritten: the eight screens of §3, Help and the country list carried over, foot of three grey words. 951 lines, from 3,760.
+- **`web/content/strings-en.js`** rewritten to §6 — 444 lines from 1,076. The frozen block, crisis, where, Help, io and install blocks were cut out of the old file **byte for byte by a script**, not retyped. Key names differ from §6's draft where a name was a JS keyword or said nothing: `front.ifWords`/`thenWords`, `why.guess`/`method`/`help`/`write`.
+- **`web/app.css`** rewritten to the type system; colours are tokens at the top. **`lib/store.js`** rewritten (§5, with the corrections below). **`lib/guards.js`**: HABIT and BODY removed.
+- **Deleted:** `worries.js`, `whats-going-on.js`, `examples.js`, `why.js`, `lib/content.js`, `lib/rate.js`, and `content.test.js`, `rate.test.js`, `merge.test.js` (its old-phone checks moved into `store.test.js`).
+- **Tests:** `loop.test.js`, `a11y.test.js`, `menu.test.js`, `store.test.js` rewritten; `i18n`, `guards`, `helpline`, `hash` trimmed. **New fixture `tests/fixtures/v5-phone.json`**: the last record the old app wrote, produced by the old app's own code (`make-v5-phone.js` says how).
+- `index.html` and the manifest: `theme-color` and `background_color` are the terracotta (B58's icons are still to do). `tools/walk.js` types into a contenteditable.
+- **Walked** J1 end to end in `tools/walk.js` at 390×844, plus the refusal and Help, at 100% and the front at 200%. **Not walked on a real phone. J2 and J3 not walked.**
+
+### Decisions made while building (mine, each reversible, each for the founder to overrule)
+
+1. **The key is `betr.v2`, not `betr.v5`.** §5 was wrong about what is on phones: the old app wrote one key, `betr.v1`, and bumped `v` inside it to 5. The new record carries `v: 6`. The old key is removed only after the new one is written successfully.
+2. **A `locked` field**, which §5 left out and the screens need: a prediction with results can be locked in again.
+3. **An old result gets NO tag.** §5's mapping (`lot` → Yeah!) is backwards for "Did it go how you expected?" — a worry that did *not* come true was "a lot less sure", and would have been printed YEAH! beside it. Turning it round does not rescue it: the re-rate measured how sure a person still felt, not what happened (the v2 fixture has "Still sure" beside "He said fair enough"). So old results show their words and their day, and the old tapped word, what they expected, did and left out are all kept in `was` and in the export. A mapping can be applied later without anyone losing anything.
+4. **One prediction per sentence** on migration; a waiting test comes across locked in; an archived ladder comes across put away.
+5. **Day labels:** the weekday within the last week (TUE, as drawn), then "12 Sep", then with the year after ~300 days. Five results all labelled SAT was a puzzle.
+6. **Filled blanks flow inline** in the sentence; empty ones are the fixed-width lines the canvas draws. Built as the canvas's inline-blocks first, a long answer stranded "If I" on its own line.
+7. **Focus lands on the headline, not the first blank** — a keyboard jumping up would cover the first thing anybody sees.
+8. **The home-screen note** (Safari wipes storage after ~7 days) is on *Your predictions* once there is something to lose, and nowhere in the loop.
+9. **Help:** on a paper sheet (long reading on the orange is hard); the count of "results on this phone" removed (no number); the old guide link removed; a Back link at the top. TrybeUP's block and `help.airplane`'s "two counts" sentence **left as they are for B57**. The theme chip is gone (there is no dark look); `theme.js` stays.
+10. **The foot is on the loop screens too**, as drawn. Leaving the loop loses nothing but an unkept *What happened?* box.
+
+### Gaps and questions, found while building
+
+- **(a) Contrast — the founder's.** As drawn: paper text on the orange is 4.25:1, the pink explanation line (`#F2B9A4`) 2.65:1. Small text needs 4.5:1. Built exactly as locked; one token each to change. A deeper ground (`#B34A27`) takes paper to 5.0:1; the pink would need to be near-paper to pass.
+- **(b) Frozen sentence 2** still ends "and rate the belief again". There is no re-rate. It is frozen (rule 7) — the founder's call, with 9c.
+- **(c) "I am" has no road to the reframe** (§2 and §7 say it runs as today). It did not run on the old build screen either: every sentence made between "If I" and ", then" is a conditional. `checkBelief` still refuses a bare verdict and is tested. For the CBT reviewer.
+- **(d)** At 200% text *Lock it in* wraps onto two lines inside its button. Readable; not pretty.
+- **(f) The harm stop only knows harm to yourself.** `guards.HARM` is suicide, kill myself, hurt myself, self-harm, overdose and the like; a sentence about hurting somebody else goes through, though rule 3 says "hurting anyone". Unchanged by B56 — the list is as it was. For the founder and the reviewer before words are added.
+- **(g) Only sentence 7 is pinned word for word by a test**; the other eight and the purpose statement are drawn from `strings-en.js` and checked for key phrases. Unchanged by B56. A test that pins all nine against research §10 is cheap and worth adding.
+- **(e)** `docs/suggestions-review.csv` and `prototype/` are untouched (9d).
+
 ## Done when
 
-- [ ] Eight screens built to the canvas, walked on a phone at 100% and 200% text, light and dark
-- [ ] `node --test` green with the rewritten suites; the old content files and their tests deleted, not skipped
-- [ ] v4 records migrate; export and delete work; airplane-mode proof still holds (open, wifi off, everything works)
-- [ ] `docs/00-scope.md` §1 and §3 rewritten to this; `CLAUDE.md` rules 3, 4, 5, 10 rewritten to §2 of this file; `docs/changing-the-words.md` true
-- [ ] `docs/journeys.md` replaced by the new J1–J3; `docs/NEXT-SESSION.md` rewritten
-- [ ] Confidence ≥ 8/10 recorded here
+- [ ] Eight screens built to the canvas, walked on a phone at 100% and 200% text, light and dark — **built; walked in the headless phone only**
+- [x] `node --test` green with the rewritten suites; the old content files and their tests deleted, not skipped
+- [x] v4 records migrate (two real fixtures); export and delete work — airplane-mode proof: no request code added, CSP unchanged, **not re-checked on a device**
+- [x] `docs/00-scope.md` §1 and §3 rewritten; `CLAUDE.md` rules 3, 4, 5, 10 rewritten; `docs/changing-the-words.md` rewritten
+- [x] `docs/journeys.md` replaced by the new J1–J3; `docs/NEXT-SESSION.md` rewritten
+- [x] Confidence recorded here (8/10)
+- [ ] **Merged to `main`** — after the founder has seen it on a phone

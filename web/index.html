@@ -40,7 +40,7 @@
 
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="BETR helps you test unhelpful beliefs in everyday life. You pick a worry about how people will react, it gives you one small thing to try today, and you record what actually happened.">
-<meta name="theme-color" content="#1F3FE8">
+<meta name="theme-color" content="#C4532E">
 <meta name="color-scheme" content="light dark">
 
 <!--
@@ -86,7 +86,7 @@
 </noscript>
 
 <!--
-  Order matters: content.js reads guards.js, and app.js reads all of them. The two files
+  Order matters: app.js reads all of them, so it is last. The two files
   under content/ that B17 added are plain data — zones.js says which country a time zone is
   in, helplines.js says which number that country's own provider publishes — and lib/where.js
   is handed both by app.js. None of them fetches anything; that is the whole point.
@@ -97,16 +97,10 @@
 -->
 <!-- theme.js is already loaded, in the head; it has to be, and the comment there says why. -->
 <script src="lib/guards.js"></script>
-<script src="lib/rate.js"></script>
 <script src="lib/store.js"></script>
-<script src="lib/content.js"></script>
 <script src="lib/where.js"></script>
 <script src="lib/i18n.js"></script>
 <script src="content/strings-en.js"></script>
-<script src="content/worries.js"></script>
-<script src="content/examples.js"></script>
-<script src="content/why.js"></script>
-<script src="content/whats-going-on.js"></script>
 <script src="content/places.js"></script>
 <script src="content/zones.js"></script>
 <script src="content/helplines.js"></script>
