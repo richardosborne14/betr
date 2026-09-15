@@ -1,6 +1,10 @@
 # B16: Shipping a language — the repeatable process, and which ones
 
 **Status:** Not started. Written 2026-09-03. **Repeatable: once per language, forever.**
+**First language: French, the founder's ask of 2026-09-15 ("asap"). The founder reads and signs off the French themselves.** It starts only
+after B56's strings settle — the app will say about thirty things instead of two hundred and fifty, and translating the old ones is work done
+twice. The stock list is gone with B56, so item 2 below (`worries-<code>.js`) no longer applies. Item 4 still does, in full: the lines for
+France, Belgium, Switzerland and Québec are read off each provider's own site on the day, by a person, or the country shows none.
 **Confidence:** —
 **Date opened:** 2026-09-03
 **Depends on:** **B17** (the country layer — no language ships before it) and B15. Also B1 —

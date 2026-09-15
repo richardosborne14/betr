@@ -2,6 +2,16 @@
 
 Read automatically at the start of every session. Follow it without exception.
 
+## Read this before anything below (2026-09-15)
+
+**The app is being rebuilt to [`docs/tasks/B56-the-redesign.md`](docs/tasks/B56-the-redesign.md), locked in by the founder on 2026-09-15,
+and moved off TrybeUP by [`B57`](docs/tasks/B57-the-move-to-digitalbricks.md).** Until both ship, this file describes the OLD app, and
+wherever a rule below describes a screen, a word or a piece of content, **B56 §2 and §3 win.** In particular: the word is **prediction**
+(not test, not worry); the front is one sentence, `If I ___, then ___.`, and `Lock it in`; there is **no stock list, no doors, no sizes, no
+ladder, no tally**; the three-word bar is gone; the look is terracotta and paper. Rule 9 (TrybeUP) ends with B57. Rules 1, 2, 3's core
+(conditional only; the harm stop), 5's core (no streaks, no scores), 6, 7 and 8 stand exactly as written. **Misha is no longer a co-decider.**
+The repo is **public and MIT**: no server address, key or person's name goes into any file from now on.
+
 ## Read these first, in this order
 
 1. **`docs/NEXT-SESSION.md`** — where we are, the next action, live traps. Rewritten every session.

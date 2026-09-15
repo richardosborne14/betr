@@ -1,5 +1,11 @@
 # Betr — scope for the gateway product
 
+> **Superseded in part, 2026-09-15.** The founder locked in a ground-up redesign — [`tasks/B56-the-redesign.md`](tasks/B56-the-redesign.md) —
+> and a move off TrybeUP — [`tasks/B57-the-move-to-digitalbricks.md`](tasks/B57-the-move-to-digitalbricks.md). Where §1, §3, §5 or §6 below
+> describe the way in, the stock list, the ladder or the bridge, **B56 and B57 are the scope now**; this file is rewritten when they ship.
+> What still stands unchanged: §2 (what it is not), §4, §7, §8, the frozen sentences in §10, and the open questions in §9 that are not about
+> TrybeUP. BETR is no longer anybody's gateway product; it is free, open source (MIT) and its own thing.
+
 **Written 2026-09-01.** After the founder and Misha judged men's-group outreach a dead end, and
 after four prototypes in one afternoon. This is the scope for the product the fourth one
 became. **The name is Betr** (read "better"): you bet on what will happen, and it makes you
