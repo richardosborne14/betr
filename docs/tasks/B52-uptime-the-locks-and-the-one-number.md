@@ -662,3 +662,60 @@ screen at 390×844 at normal size and at 200% text: renders, no sideways scroll.
 
 **Confidence: 9/10.** The 1 is the honest limit of user-agent filtering, which is stated on the
 number itself every time it is read rather than hidden in this file.
+
+## 12. The second count never ran — found 2026-09-15
+
+**Status: fixed in the repo; NOT fixed on the server, waiting on the founder's yes.**
+
+The founder ran the tally, saw **1,144 opens and 0 "not robots"**, and asked whether the opens
+from inside Instagram's and TikTok's own browsers could be told apart from bot farms. **The 0 was
+not a measurement.** §11's config reached `/opt/betr/nginx.conf` on 2026-09-10 and the running
+server has never read it: `docker exec betr-web grep -c nobots /etc/nginx/nginx.conf` → `0`, the
+host file → `1`. There is no `.nobots.log` for any day. The mechanism is in `docs/learnings.md`,
+2026-09-15 — rsync replaced the file, the single-file bind mount kept the old one, `up -d` is a
+no-op, and the deploy check hashed the host's copy. **§11's "Checked … in the real image" was true
+of the image on the laptop; §10's "verified on the live address" was of the first count only.**
+The first count is fine: `a18fde8` landed before the container started at 12:03 UTC.
+
+### What that means for the question as asked
+
+- **Nothing was classed as a robot**, and **the in-app browsers would not have been.** Real user
+  agents for Instagram (iOS and Android), TikTok (both) and Facebook were run through the three
+  regexes: all "not robots". LinkedIn's in-app browser matches `linkedin` and is a robot.
+- **The 1,144 already counted cannot be sorted, by anyone.** Each is a `1`. That is §5c working.
+- **The shape still says something.** ~288 a day is one open every five minutes: 297, 303, 295,
+  286 on the full days, 164 from 12:03 on the first, 98 by 07:38 on the 15th. Nothing on the
+  droplet polls (no cron, no timer, no container), so it is outside, and it started no later than
+  the tally did. **Take it off and about 55 opens in five days remain — people and robots
+  together, the founder and Misha included.** An inference from a rhythm, not a measurement.
+- **The number of people who tapped is Instagram's and TikTok's**, in their own insights (§7).
+
+### Changed in the repo
+
+1. **`views.yml`** — a missing `.nobots.log` is *not counted*, never `0`. Days before the first
+   such file ever existed are *not counted*; days after it with no file really are 0 (nginx only
+   creates the file on the first non-robot open). If the second count has never written a line,
+   the heading says so and gives the command. Simulated on today's numbers and on a future week.
+   Plus one bullet: ~288 a day is the rhythm of a machine.
+2. **`deploy.yml`** — `rsync --inplace` for the server config, so a future edit is the same file
+   the container holds; the notice now says **`docker compose up -d --force-recreate`** and how to
+   check what the running server actually reads; the step no longer claims to check the running
+   server, because it cannot.
+
+### Waiting on the founder
+
+1. **Recreate BETR's container** — `cd /opt/betr && docker compose up -d --force-recreate` on the
+   droplet. About a second of downtime. A write under `/opt/`, so it is confirmed first.
+2. **What checks the page every five minutes?** UptimeRobot's free plan is five minutes. If it is
+   ours, point it at `/app.js` (§10's rule). Once (1) is done it will name itself and fall into
+   the robot column, which is the confirmation.
+3. **TrybeUP's port-80 block logs plain-`http://betr.trybeup.com` requests** — address, browser,
+   time; four lines by the 15th, one of them GPTBot. It is the redirect block shared with
+   trybeup.com and has no `access_log off`; the 443 block for BETR does. **Help says "Nothing about
+   you is written down."** One line in `trybeup/trybeup-prod`, a write to TrybeUP's nginx.
+4. **Offered, not built:** a third file counting opens from inside Instagram, TikTok and Facebook,
+   by the same read-compare-discard of the user agent. It would answer the founder's question
+   from here on; it changes the Help sentence a third time and adds a word list to §11's allow-list.
+
+**Confidence: 9/10** on the diagnosis (the running file was read, not inferred). The five-minute
+machine is a 6/10 until (1) and (2) are done.

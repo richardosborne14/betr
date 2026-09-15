@@ -1395,3 +1395,39 @@ the logo throws on them.
 And one small design note that is really an accessibility note: **size a logo in `em`, never px.**
 At 200% text a mark pinned to 42px is a stamp beside giant words; `height:2.7em` grew it to 84px
 with the sentence next to it.
+
+## 2026-09-15 — a config on disk is not a config running, and a missing file printed as 0 reads as a finding
+
+The founder read the tally as **"1,144 opens, all robots"** and was about to conclude that nobody
+who came from Instagram had used the app. **Nothing had been classed as a robot.** B52 §11's
+second count had been on the droplet since 2026-09-10 and had **never run for a single request**,
+and the workflow printed its missing file as `0`. Four links, each harmless on its own:
+
+1. **rsync replaces a file; it does not rewrite it.** It writes a temp file and renames it over
+   the old one, so `/opt/betr/nginx.conf` became a new inode (1293467).
+2. **A Docker bind mount of a single FILE pins the inode it saw at start.** `betr-web` went on
+   reading 1293454 — the old config — for ever, whatever the path on the host now held.
+3. **`docker compose up -d` recreates nothing when `docker-compose.yml` is unchanged**, so the
+   one command the deploy notice gave would have done nothing even if somebody ran it. The fix is
+   `docker compose up -d --force-recreate`.
+4. **The deploy's "running server is using the config" check hashed the file on the host**, not
+   what the container reads, so it went green. And **`views.yml` defaulted a missing
+   `.nobots.log` to `0`**, which turned "not measured" into "measured: nobody".
+
+**Check the thing that runs, not the thing on disk:** `docker exec betr-web grep -c nobots
+/etc/nginx/nginx.conf` said `0` while the host file said `1`. **Never print an absence as a
+zero** — say *not counted*. Deploy now uses `rsync --inplace`, which keeps the inode.
+
+Two facts found on the way, worth not re-deriving:
+
+- **Instagram's, TikTok's and Facebook's in-app browsers are NOT on the robot list** — tested
+  against their real user agents (`Instagram 339…`, `musical_ly_…`/`BytedanceWebview`, `FBAN/FBIOS`):
+  all count as "not robots". **LinkedIn's in-app browser IS classed as a robot** (`linkedin`), and
+  so would Pinterest's and Twitter's be. "People in the IG browser count as robots" is false.
+- **About 288 opens a day is one every five minutes, and that is what the page gets.** 297, 303,
+  295 and 286 on the four full days; 164 from 12:03 on the first; 98 by 07:38 on the 15th. Nothing
+  on the droplet polls it (no cron, no timer), so it is outside. Take the rhythm off and roughly
+  **55 opens in five days** are left for everything else — people and robots together.
+- **TrybeUP's front nginx logs plain-`http://betr.trybeup.com` requests** — address, browser, time —
+  in its port-80 redirect block, which is shared with trybeup.com and has no `access_log off`.
+  Four lines by 2026-09-15. The 443 block for BETR is correctly silent.

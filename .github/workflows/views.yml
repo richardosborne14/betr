@@ -45,7 +45,7 @@ jobs:
               b=$(basename "$f" .log)
               case "$b" in *.nobots) continue;; esac
               n=$(wc -l < "$f" | tr -d " ")
-              h=0
+              h=-
               [ -e "/var/log/betr/$b.nobots.log" ] && h=$(wc -l < "/var/log/betr/$b.nobots.log" | tr -d " ")
               printf "%s %s %s\n" "$b" "$n" "$h"
             done')
@@ -71,22 +71,53 @@ jobs:
             exit 0
           fi
 
+          # A missing .nobots.log is NOT a zero. nginx only creates the file on the first open
+          # that did not say it was a robot, so a day with no file means one of two things:
+          # nobody but robots came, or the second count was not running at all. It was the
+          # second, for five days (docs/learnings.md, 2026-09-15), and this workflow printed
+          # "0" — which read as "1,144 robots". So: days before the first .nobots.log that ever
+          # existed were NOT COUNTED; days after it with no file really are 0.
+          first=$(printf '%s\n' "$raw" | sort | awk '$3!="-" {print $1; exit}')
+          if [ -n "$first" ]; then
+            raw=$(printf '%s\n' "$raw" | awk -v f="$first" '$3=="-" && $1>=f {$3=0} {print}')
+          fi
+
           total=$(printf '%s\n' "$raw" | awk '{s+=$2} END {print s+0}')
-          human=$(printf '%s\n' "$raw" | awk '{s+=$3} END {print s+0}')
+          human=$(printf '%s\n' "$raw" | awk '$3!="-" {s+=$3} END {print s+0}')
           days=$(printf '%s\n' "$raw" | wc -l | tr -d ' ')
+          split=$(printf '%s\n' "$raw" | awk '$3!="-"' | wc -l | tr -d ' ')
           today=$(date -u +%Y-%m-%d)
           todays=$(printf '%s\n' "$raw" | awk -v d="$today" '$1==d {print $3}')
+          [ "$todays" = "-" ] && todays="not counted"
 
           {
-            echo "## $human, once the robots are taken out"
+            if [ -z "$first" ]; then
+              echo "## $total opens, and the robot count is not running"
+              echo
+              echo "**$total** opens in total across $days day(s). **None of them has been sorted into robots or not.** That is not zero robots and not zero people: the second count has never written a single line, so there is no robot number at all yet."
+              echo
+              echo '> **Why:** the server is still running its config from before the robot count existed.'
+              echo '> Somebody has to run this once on the droplet: `cd /opt/betr && docker compose up -d --force-recreate`.'
+              echo '> Plain `docker compose up -d` is not enough — it sees nothing changed and leaves the old server running.'
+            else
+              echo "## $human, once the robots are taken out"
+              echo
+              echo "**$total** opens in total across $days day(s); **$human** of them did not say they were a robot."
+              if [ "$split" -lt "$days" ]; then
+                echo "Days before $first say *not counted*: the robot count was not running yet, and the $human is from $first on only."
+              fi
+            fi
             echo
-            echo "**$total** opens in total across $days day(s); **$human** of them did not say they were a robot."
             echo "Today so far: **${todays:-0}**."
             echo
             echo '| Day | Not robots | Every open |'
             echo '| --- | ---: | ---: |'
             printf '%s\n' "$raw" | sort -r | head -60 | while read -r d n h; do
-              echo "| $d | **$h** | $n |"
+              if [ "$h" = "-" ]; then
+                echo "| $d | not counted | $n |"
+              else
+                echo "| $d | **$h** | $n |"
+              fi
             done
             echo
             echo '### What these numbers are, and are not'
@@ -97,6 +128,7 @@ jobs:
             echo '- The middle column is the honest one to watch after a post. The gap between the columns is Meta and the crawlers fetching your link for a preview.'
             echo '- A returning visitor counts again; somebody using it offline, after installing it, does not count at all, so this is a floor rather than a total.'
             echo '- Anything that asks for the page counts, **including us**. Point an uptime monitor at `/app.js`, never at the page.'
+            echo '- **About 288 a day is one open every five minutes, around the clock.** That is the rhythm of a machine checking the page, not of people. Since the count began, "every open" has sat near 290 on every full day.'
             echo '- Neither number can tell anybody — us included — who, how many people, whether anyone came back, or whether they got past the first screen.'
           } >> "$GITHUB_STEP_SUMMARY"
 

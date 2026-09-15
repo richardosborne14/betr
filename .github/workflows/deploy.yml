@@ -79,17 +79,23 @@ jobs:
       # The deploy user cannot restart containers — deliberately. It owns /var/www/betr and
       # /opt/betr and has no other power on that machine at all: not the docker group, not a
       # sudo rule, no reach into TrybeUP's containers, config, web roots or data. So this
-      # copies the config up and then checks whether the running server is actually using it.
-      # If it is not, the run goes red with the one command that fixes it. Drift that would
-      # otherwise be silent — the repo saying one thing and the live server doing another,
-      # which is the whole trust story — becomes a failed build instead.
+      # copies the config up and checks that it ARRIVED. It cannot check that the running
+      # server is using it — that needs the docker group, which is the power the deploy user
+      # deliberately lacks — and for five days in September it was not: the file was on disk
+      # and the container was still reading the copy from before (docs/learnings.md,
+      # 2026-09-15).
+      #
+      # --inplace is the half of that which is ours to fix. The container mounts nginx.conf as
+      # a single FILE, and plain rsync writes a new file and renames it over the old one, so
+      # the container goes on holding the old one for ever. Written in place, it is the same
+      # file. nginx still only reads it when it starts, so a person still restarts it.
       - name: Publish the server config
         run: |
-          rsync -avz \
+          rsync -avz --inplace \
             deploy/nginx.conf deploy/docker-compose.yml \
             ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }}:/opt/betr/
 
-      - name: The running server is using the config in this repo
+      - name: The server has the config in this repo
         run: |
           live=$(ssh ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }} \
                    'sha256sum /opt/betr/nginx.conf | cut -d" " -f1')
@@ -99,7 +105,7 @@ jobs:
             echo "::error::deploy/nginx.conf did not arrive on the server"; exit 1
           fi
           echo "deploy/nginx.conf is on the server ($mine), site returned $running"
-          echo "::notice::If deploy/nginx.conf changed in this commit, a person still has to run this once on the droplet: cd /opt/betr && docker compose up -d"
+          echo "::notice::If deploy/nginx.conf changed in this commit, a person still has to run this once on the droplet: cd /opt/betr && docker compose up -d --force-recreate — plain 'up -d' sees nothing changed and does nothing. Then check: docker exec betr-web nginx -T | grep <a line you added>"
 
       # Everything the "what this is" screen and scope §7 promise, checked from outside, on
       # the real address, over TLS — the way a suspicious person would check it.
