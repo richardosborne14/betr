@@ -37,8 +37,8 @@ const esc = (x) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, 
 
 test('the front screen is the headline, one sentence with two blanks, and Lock it in — and nothing else', () => {
   const a = boot();
-  a.showsText(s.front.title).showsText(s.front.ifWords).showsText(s.front.thenWords)
-    .showsText(s.front.lock).showsText(s.front.note);
+  a.showsText(s.front.title).showsText(s.front.sub).showsText(s.front.ifWords)
+    .showsText(s.front.thenWords).showsText(s.front.lock).showsText(s.front.note);
   const h = a.html();
   assert.match(h, /<span class="blank" id="if" contenteditable="true"/);
   assert.match(h, /<span class="blank" id="then" contenteditable="true"/);
@@ -71,7 +71,8 @@ test('empty blanks do not lock, and a screen reader is told which one is empty',
 
 test('Lock it in joins the two blanks into one sentence and locks it', () => {
   const a = lock(boot());
-  a.showsText(s.on.kicker).showsText(SENTENCE).showsText(s.on.ask).showsText(s.on.done);
+  a.showsText(s.on.kicker).showsText(SENTENCE).showsText(s.on.ask).showsText(s.on.sub)
+    .showsText(s.on.done);
   const [p] = stored(a).predictions;
   assert.strictEqual(p.sentence, SENTENCE);
   assert.match(p.made, /^\d{4}-\d{2}-\d{2}$/);

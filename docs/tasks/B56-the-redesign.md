@@ -229,6 +229,24 @@ directly", and it lasts exactly as long as this task.
 - **(g) Only sentence 7 is pinned word for word by a test**; the other eight and the purpose statement are drawn from `strings-en.js` and checked for key phrases. Unchanged by B56. A test that pins all nine against research §10 is cheap and worth adding.
 - **(e)** `docs/suggestions-review.csv` and `prototype/` are untouched (9d).
 
+## 11. Two subtitles, 2026-09-16 — the founder, after seeing it
+
+The founder's words: *"just two little 'if this is the first time they need more help' parts"*. Both are subtitles under a heading that was
+right but silent, and neither proposes anything (rule 4): no subject, no example, nothing to pick from.
+
+- **`front.sub`** — *Right now, later today, some time in your life — whenever.* Under the headline. The headline is tempting and cryptic, and
+  the question it leaves a person holding is "in what context?". The answer is deliberately wide: **the prediction is not owed to today**,
+  which is also the sentence that lets a hope in.
+- **`on.sub`** — *We'll keep it here, in your own words. Come back and say what happened.* Under *Go and find out.* on **Locked in**. Two
+  things a first-timer does not know: that the prediction is kept, in their words, and that coming back is the part that makes it worth
+  anything. Rule 5: coming back is an invitation, **never a debt** — nothing here says you owe it, and *Not today* still records nothing.
+
+One new CSS class, `.sub`, sized like `.say` and pulled up out of the column gap so it reads as part of its heading rather than as the next
+thing. `loop.test.js` now asserts both are on their screen, so neither can go quietly. Walked in `tools/walk.js` at 390×844 and at 200% text.
+
+**It inherits gap (a):** `.sub` is `var(--soft)`, the pink at 2.65:1, like `front.note` above it. These two lines are aimed at the person
+needing the most help, so if any wording is worth the contrast fix, it is these — one token, still the founder's call.
+
 ## Done when
 
 - [ ] Eight screens built to the canvas, walked on a phone at 100% and 200% text, light and dark — **built; walked in the headless phone only**

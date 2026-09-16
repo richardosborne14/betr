@@ -1,7 +1,10 @@
 # Start here
 
-**Last refreshed:** 2026-09-15, 10th session, end — **B56 is BUILT on the branch `redesign` and pushed. Not merged. 124 tests pass.** A merge
+**Last refreshed:** 2026-09-16, 11th session, end — **B56 is BUILT on the branch `redesign` and pushed. Not merged. 124 tests pass.** A merge
 to `main` publishes to the live address, and nobody has looked at it on a real phone yet. Rewritten, never appended to. Cap: 120 lines.
+
+**This session was one small thing:** the founder saw the redesign, called it great, and asked for **two subtitles** — the two places a
+first-timer is left guessing. Both built, both tested, both on `redesign` (B56 §11). Nothing else moved; §2's next action is unchanged.
 
 ## 1. Where we are
 
@@ -18,10 +21,16 @@ and seven gaps. The three that matter most:
   tokens at the top of `app.css`. The founder's call.
 - **Frozen sentence 2 ends "and rate the belief again"** — there is no re-rate any more. Frozen; the founder's call, with B56 §9c.
 
-Also today: `CLAUDE.md` rules 3, 4, 5 and 10 rewritten to B56, and its opening note; `docs/00-scope.md` §1 and §3; `docs/journeys.md` is the
+**The two subtitles, 2026-09-16 (B56 §11), the founder's words and the founder's reason — "if this is the first time they need more help":**
+- Front, under the headline: *Right now, later today, some time in your life — whenever.* It answers the question the headline leaves
+  open — "in what context?" — and answers it wide, on purpose: the prediction is not owed to today.
+- **Locked in**, under *Go and find out.*: *We'll keep it here, in your own words. Come back and say what happened.*
+- One CSS class, `.sub`; `loop.test.js` asserts both. Neither proposes anything (rule 4) and neither asks for anything back (rule 5).
+
+On 2026-09-15: `CLAUDE.md` rules 3, 4, 5 and 10 rewritten to B56, and its opening note; `docs/00-scope.md` §1 and §3; `docs/journeys.md` is the
 new J1–J3; `docs/changing-the-words.md` and `tools/copy-sheet.js` (→ `docs/COPY.md`) rewritten for the new strings; learnings has four new
-entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (390×844), and the front at 200%. **Not walked:** a real
-phone, J2, J3.
+entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (390×844), and the front and Locked in at 100% and 200%.
+**Not walked:** a real phone, J2, J3.
 
 ## 2. The next action
 
@@ -36,7 +45,8 @@ phone, J2, J3.
 
 ## 3. Waiting on people, not on code
 
-0. **The founder:** **(a)** contrast — keep the canvas colours, or deepen the ground (`#B34A27` gives paper 5.0:1); **(b)** frozen sentence 2's
+0. **The founder:** **(a)** contrast — keep the canvas colours, or deepen the ground (`#B34A27` gives paper 5.0:1); **the two new
+   subtitles are the pink at 2.65:1, and they are the lines aimed at whoever needs the most help, so ask this one first**; **(b)** frozen sentence 2's
    "rate the belief again", and B56 §9c's purpose statement — both frozen, both now describe an app that is gone; **(c)** migrated results —
    no tag (built) or a mapping; **(d)** B58 icon; **(e)** B57 §4a, the name on *Who made this*; **(f)** B57 §4c, no count of opens;
    **(g)** the DNS record; **(h)** B56 §9a, next-step sentences in *How it works* or nowhere.

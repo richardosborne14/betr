@@ -105,6 +105,13 @@ var BETR_STRINGS_EN = {
     */
     front: {
       title: 'What do you think will happen?',
+      /*
+        Founder, 2026-09-16: the headline is tempting and cryptic, and the first question it
+        leaves a person holding is "in what context?". This answers it and answers it wide —
+        the prediction is not owed to today, and nothing here decides when. It is a subtitle,
+        never a prompt: it offers no subject, no example and nothing to pick from (rule 4).
+      */
+      sub: 'Right now, later today, some time in your life — whenever.',
       ifWords: 'If I',
       thenWords: ', then',
       stop: '.',
@@ -122,6 +129,13 @@ var BETR_STRINGS_EN = {
     on: {
       kicker: 'Locked in',
       ask: 'Go and find out.',
+      /*
+        Founder, 2026-09-16: the screen is right but it needs the nudge under it. Two things a
+        person does not yet know on their first time here — that the prediction is kept for
+        them, in the words they wrote, and that coming back to say what happened is the part
+        that makes it worth anything. Rule 5: coming back is an invitation, never a debt.
+      */
+      sub: 'We’ll keep it here, in your own words. Come back and say what happened.',
       done: 'Done it',
       /* Rule 5: nothing is recorded, nothing is lost, and nothing says you missed it. */
       notToday: 'Not today. Keep it for tomorrow.'

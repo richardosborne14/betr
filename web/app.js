@@ -272,6 +272,7 @@
     var ready = !!(draft.ifPart.trim() && draft.thenPart.trim());
     paint(
       head('h1', 'headline', t('front.title')) +
+      '<p class="sub">' + esc(t('front.sub')) + '</p>' +
       '<p class="paper sentence">' +
         '<span class="fixed">' + esc(t('front.ifWords')) + '</span> ' +
         blank('if', draft.ifPart, t('front.ifLabel')) +
@@ -404,6 +405,7 @@
       '<p class="label">' + esc(t('on.kicker')) + '</p>' +
       said(p) +
       head('h2', 'ask', t('on.ask')) +
+      '<p class="sub">' + esc(t('on.sub')) + '</p>' +
       '<button class="big" id="done">' + esc(t('on.done')) + '</button>' +
       '<button class="link" id="nottoday">' + esc(t('on.notToday')) + '</button>'
     );
