@@ -39,9 +39,16 @@
   - `tu` throughout, the founder's call, 2026-09-16. Not `vous`. Changing it changes every
     screen and it is a tone decision, not a grammar one.
   - The wordmark is BETR, all caps. Nothing a person taps is all-lowercase.
-  - The word for the thing a person writes is « prédiction » — for a hope and a worry alike.
-    It leans slightly more towards fortune-telling than the English does; that is a live
-    question for the founder and it is written down in B16.
+  - THE WORD FOR THE THING A PERSON WRITES IS « PARI » (founder, 2026-09-16) — for a hope and a
+    worry alike. Not « prédiction », which read technical and a little like fortune-telling.
+    CLAUDE.md rule 3 says "not bet" IN ENGLISH, because of the gambling echo there; the founder
+    decided that echo is weaker in French, where « je te parie que… » is how people talk. It is
+    recorded under rule 3, so a later session does not "correct" it back.
+  - « PARI » IS MASCULINE, and French agrees. Every « le », « celui-ci », « écrit » and « Rangés »
+    below agrees with it. Change the word and read every line of this file for agreement.
+  - The act is « s’engager » and the state is « engagé » (founder, 2026-09-16): the button says
+    « Je m’engage » and a locked-in pari is tagged ENGAGÉ. The thing is a pari; what you do with
+    it is commit.
   - No crisis phone number is ever written in this file, in any language. Numbers live in
     content/helplines.js with the page they were read on and the day somebody read it there,
     and THE COUNTRY decides them, never the language: a French speaker in Texas gets 988.
@@ -65,7 +72,7 @@ var BETR_STRINGS_FR = {
 
     foot: {
       label: 'BETR',
-      mine: 'Tes prédictions',
+      mine: 'Tes paris',
       why: 'Comment ça marche',
       help: 'Aide'
     },
@@ -110,31 +117,31 @@ var BETR_STRINGS_FR = {
       ifLabel: 'Si je… — ce que tu vas faire',
       thenLabel: '…alors — ce que tu penses qu’il va se passer',
       /*
-        "Lock it in" is the load-bearing word on this screen: the prediction is locked BEFORE
-        you find out, which is the whole method. « Je la verrouille » is literal and a little
-        technical. For the founder, with « Je m’engage » and « C’est noté » as the other two.
+        "Lock it in" is the load-bearing word on this screen: the pari is locked BEFORE you find
+        out, which is the whole method. « Je m’engage », the founder's choice, 2026-09-16, over
+        « Je la verrouille » (literal, and sounded like a device). It says what locking in really
+        means — committing — and it has no object, so it never needs to agree with anything.
       */
-      lock: 'Je la verrouille',
+      lock: 'Je m’engage',
       note: 'Ensuite, va voir ce que ça donne. Rien ne quitte ton téléphone.',
-      noteLocked: 'Elle reste telle que tu l’as écrite : ce qui arrivera ne pourra pas la réécrire.'
+      noteLocked: 'Il reste tel que tu l’as écrit : ce qui arrivera ne pourra pas le réécrire.'
     },
 
     /* ------------------------------------------------------------------ 3 · locked in */
 
     on: {
       /* Drawn in capitals by the stylesheet, so it is written normally here. */
-      kicker: 'Verrouillé',
+      kicker: 'Engagé',
       ask: 'Va voir ce que ça donne.',
       /*
         The founder's own wording, 2026-09-16, and the English was changed to match it rather
-        than the other way round. « écrite », not « écrit »: the participle agrees with the
-        « la » in front of it, and « la » is la prédiction. IF THE WORD FOR A PREDICTION
-        CHANGES AND THE NEW ONE IS MASCULINE, THIS LINE AND FIVE OTHERS CHANGE WITH IT.
+        than the other way round. « le » and « écrit » agree with le pari: the participle agrees
+        with the object in front of it. It was « la » and « écrite » while the word was prédiction.
       */
-      sub: 'On la garde ici comme tu l’as écrite. Reviens dire dans tes propres mots ce qui ' +
+      sub: 'On le garde ici comme tu l’as écrit. Reviens dire dans tes propres mots ce qui ' +
         's’est passé.',
       done: 'C’est fait',
-      notToday: 'Pas aujourd’hui. Garde-la pour demain.'
+      notToday: 'Pas aujourd’hui. Garde-le pour demain.'
     },
 
     /* ------------------------------------------------------------------ 4 · how did it go */
@@ -169,17 +176,19 @@ var BETR_STRINGS_FR = {
     log: {
       list: 'Ce qui s’est passé, le plus récent en premier',
       again: 'Je recommence demain',
-      done: 'J’en ai fini avec celle-ci',
-      back: 'La reprendre'
+      done: 'J’en ai fini avec celui-ci',
+      back: 'Le reprendre'
     },
 
     /* ------------------------------------------------------------------ 7 · your predictions */
 
     mine: {
-      title: 'Tes prédictions',
-      new: 'Nouvelle prédiction',
-      away: 'Rangées',
-      locked: 'Verrouillée'
+      title: 'Tes paris',
+      new: 'Nouveau pari',
+      /* A heading over several put-away paris, so masculine PLURAL. */
+      away: 'Rangés',
+      /* A tag on one card, so masculine singular, and the same word as the Locked in label. */
+      locked: 'Engagé'
     },
 
     /* ------------------------------------------------------------------ 8 · how it works */
@@ -208,7 +217,7 @@ var BETR_STRINGS_FR = {
     */
     refusal: {
       harm: 'BETR ne peut pas t’aider avec celle-là, et ce serait malhonnête de faire semblant.',
-      verdict: 'C’est un jugement, pas une prédiction. Qu’est-ce qui se passerait, d’après ' +
+      verdict: 'C’est un jugement, pas un pari. Qu’est-ce qui se passerait, d’après ' +
         'toi, à cause de ça ?',
       notConditional: 'Commence par « Si je… ». Il faut que ça puisse se révéler faux.',
       noConsequence: 'Dis ce qui se passe ensuite, d’après toi : « Si je ___, alors ___ ».',
@@ -220,7 +229,7 @@ var BETR_STRINGS_FR = {
     nudge: {
       shape: 'Ça marche mieux sous la forme « Si je ___, alors ___ ». Par exemple : Si je ' +
         'demande mon vendredi, alors mon patron va penser que je me la coule douce. Ou garde ' +
-        'la tienne telle quelle.'
+        'le tien tel quel.'
     },
 
     /* ------------------------------------------------------------------ install */
@@ -244,7 +253,7 @@ var BETR_STRINGS_FR = {
       copied: 'Copié',
       share: 'L’envoyer quelque part',
       deleteAsk: 'Tout supprimer sur ce téléphone ? Il n’y a de copie nulle part ailleurs, ' +
-        'et nous ne pourrons pas te la récupérer.',
+        'et nous ne pourrons rien récupérer pour toi.',
       deleteYes: 'Oui, tout supprimer',
       deleteNo: 'Je garde tout',
       exportNote: 'Tout ce que BETR a enregistré sur cet appareil. Il n’y a de copie nulle ' +

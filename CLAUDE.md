@@ -49,6 +49,13 @@ rules at once, and every one of them has failed in some other product.
    predictions per worry and the borrow list went with the stock list (B56 §2 item 12). **Known
    gap:** "I am ___" has no road to a reframe on this screen, because every sentence made there
    is already a conditional (B56 §10).
+   **In French the word is *pari*, and that is deliberate** (founder, 2026-09-16, B16 §10d): the
+   "not bet" above is about the gambling echo in English, and the founder judged it weaker in
+   French, where « je te parie que… » is everyday speech. The act is « Je m’engage » and the
+   state ENGAGÉ. **Do not "correct" the French back to *prédiction* on the strength of this
+   rule.** *Pari* is masculine and French agrees, so changing it means reading all of
+   `strings-fr.js` for agreement. **And the hard stop works in every language at once** — one
+   list in `guards.js`, never keyed to the interface language (B16 §10a).
 4. **BETR proposes nothing.** *Rewritten 2026-09-15 for B56.* There is no stock content: no
    list, no suggestions, no examples, no sizes. BETR cannot propose the habit because it
    proposes nothing at all, and the habit and body word lists are gone from `guards.js` with

@@ -6,7 +6,8 @@ to `main` publishes to the live address, and nobody has looked at it on a real p
 **Three things happened.** The founder asked for **two subtitles** (B56 §11), then asked to see **French** — so B16 started: the loop is
 translated, France's and Switzerland's crisis numbers are read and shipped, and **walking it in French found that the one hard stop did not
 exist in French at all** (fixed). Then they reviewed the French: **the elision is built** (« Si je » → « Si j’ » as you type), four
-wordings changed, and **two decisions are waiting on them** (§3 item 0a). 130 tests pass. Read §1a before anything else.
+wordings changed, and the word is now **« pari »** with **« Je m’engage » / ENGAGÉ** — a knowing exception to rule 3's "not bet",
+recorded under rule 3. 130 tests pass. Read §1a before anything else.
 
 ## 1a. READ THIS FIRST — the hard stop was broken outside English
 
@@ -59,11 +60,9 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 
 ## 2. The next action
 
-0. **The founder is choosing two French words (§3 item 0a). When they answer, apply BOTH with their agreement:** French agrees, so the
-   word for a prediction drags `on.sub`, `front.noteLocked`, `on.notToday`, `log.done`, `log.back` and `mine.locked` with it if the new one
-   is masculine — and the lock button moves with `mine.locked` and the LOCKED IN label as one family. Then translate `frozen`, `crisis`,
-   `where` and `help` — **and the country names, which live in `helplines.js` in English**, or the crisis screen reads "les numéros de the
-   United Kingdom". Both move together.
+0. **French next: translate `frozen`, `crisis`, `where` and `help`** — **and the country names, which live in `helplines.js` in English**,
+   or the crisis screen reads "les numéros de the United Kingdom". Both move together. **« Pari » is masculine:** read every new line for
+   agreement. One small open question for the founder: `front.title` (B16 §10d).
 1. **Get the founder to look at it on a phone, then merge — ENGLISH ONLY.** They open `web/index.html` from `redesign`, or screenshots.
    Watch: typing into the two blanks on iPhone Safari (`contenteditable`, flowing inside the sentence — the one piece headless Chrome
    cannot vouch for), the Return key, Paste. Then J1–J3 on a real phone, wifi off after load, then merge and push — **that publishes**.
@@ -73,9 +72,7 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 
 ## 3. Waiting on people, not on code
 
-0. **The founder.** **(0a) TWO FRENCH WORDS, ASKED 2026-09-16, NOT YET ANSWERED** — the word for a prediction (« prédiction » reads
-   technical, and whatever replaces it changes six other lines through gender agreement) and the lock button, where they raised
-   « Engagements », which makes « Je m’engage » its family. B16 §10d has both. **(a)** contrast — canvas colours or a deeper ground
+0. **The founder.** **(0a)** the French title — « qu’est-ce qui va se passer » (built) or their « que va-t-il se passer ». **(a)** contrast — canvas colours or a deeper ground
    (`#B34A27` gives paper 5.0:1); **the two subtitles are the pink at 2.65:1 and are aimed at whoever needs the most help, so ask this
    first**; **(b)** frozen sentence 2's "rate the belief again" and B56 §9c's purpose statement, both frozen, both describing an app that is
    gone; **(c)** migrated results — no tag (built) or a mapping; **(d)** B58 icon; **(e)** B57 §4a, the name on *Who made this*;
@@ -114,8 +111,7 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
   they keep passing. Before any new language, hunt every list the code MATCHES against, not every string a person reads. (learnings, 2026-09-16)
 - **`\u0300` IS THREE DIGITS IN A ROW**, and `guards.test.js` bans those in `guards.js` because a phone number must never live there. Use
   `\p{Mn}` and similar named escapes in that file.
-- **FRENCH AGREES AND ENGLISH DOES NOT.** Change the French noun for a prediction and six other lines change with it. Any French wording
-  change gets read for agreement before it is committed. (B16 §10d)
+- **FRENCH AGREES AND ENGLISH DOES NOT.** « Pari » is masculine; ten French lines agree with it. Read any French change for agreement.
 - **Walk the app in a language by tapping Help → the language button** (`[data-lang="fr"]`), then `#where` → `[data-cc="FR"]` for the
   country. The walker always starts in English on `Europe/London`.
 - **No ImageMagick, no PIL.** SVG → PNG is `qlmanage -t -s 512 -o <dir> file.svg`; crop is `sips -c`.

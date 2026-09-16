@@ -235,15 +235,23 @@ block. That screenshot is the argument for doing the crisis wording next.
   passait » would ask how it used to go).
 - **« Tout à fait ! »** replaces « Ouais ! », which read too young.
 
-**Still open, and both are the founder's:**
+**Answered the same day, and built:**
 
-- **The word for a prediction.** « prédiction » reads technical and slightly fortune-telling. **Whatever replaces it drags six other lines
-  with it, because French agrees:** `on.sub` (« comme tu l’as écrite »), `front.noteLocked` (« Elle reste telle que… »), `on.notToday`
-  (« Garde-la »), `log.done` (« celle-ci »), `log.back` (« La reprendre ») and `mine.locked` (« Verrouillée ») are all feminine
-  because *prédiction* is. A masculine word changes every one of them.
-- **The word on the lock button**, and with it `mine.locked` and the label above a locked prediction. The founder raised « Engagements »
-  for the list, which makes « Je m’engage » the matching button — that is a family, not a single word, and it is the strongest of the
-  options for exactly that reason.
+- **The word is « pari »**, over « prédiction » (technical, a little like fortune-telling), « ce que tu avais prévu » and
+  « hypothèse ». **This departs from CLAUDE.md rule 3's "not bet" knowingly:** that ban is about the gambling echo in English,
+  and the founder judged it weaker in French, where « je te parie que… » is everyday speech. **Recorded under rule 3** so a later
+  session does not correct it back.
+- **The act is « s’engager »** — the button is « Je m’engage » and a locked-in pari is tagged ENGAGÉ, on the Locked in screen and
+  on its card. The founder raised it from seeing « Verrouillée » on the list. **The two answers met on one line:** the engager option
+  offered « Tes engagements » as the list heading, and the pari option offered « Tes paris ». The noun won the list and the foot, the
+  verb won the button and the state — the thing is a pari, what you do with it is commit. If the founder wanted « Tes engagements »,
+  it is `foot.mine` and `mine.title` and nothing else.
+- **« Pari » is masculine, so every agreement flipped:** `on.sub` (« On le garde… écrit »), `front.noteLocked` (« Il reste tel… »),
+  `on.notToday` (« Garde-le »), `log.done` (« celui-ci »), `log.back` (« Le reprendre »), `mine.away` (« Rangés », plural),
+  `mine.new` (« Nouveau pari »), `refusal.verdict` (« pas un pari »), `nudge.shape` (« le tien tel quel »). And `io.deleteAsk` lost
+  a « te la récupérer » that never had a clear antecedent in any gender: now « nous ne pourrons rien récupérer pour toi ».
+- **Still for the founder:** the title. They wrote « à ton avis, que va-t-il se passer ? » while explaining how a Francophone talks;
+  what is built is « À ton avis, qu’est-ce qui va se passer ? », which is the more spoken of the two. One line, `front.title`.
 
 **Superseded:**
 
@@ -264,6 +272,6 @@ block. That screenshot is the argument for doing the crisis wording next.
 - [ ] **The founder reads and signs off the French**, which is what B16 says and has not happened
 - [ ] **The CBT reviewer on the French harm words**
 - [x] **The elision, decided and built** — « Si j’ » in front of a vowel, with the aspirated-h list in the content file
-- [ ] The word for a prediction, and the lock button / « Engagements » family — both with the agreement they drag behind them
+- [x] **The word (« pari ») and the act (« Je m’engage », ENGAGÉ)**, every agreement flipped to masculine, walked in French
 - [ ] `docs/COPY.md` is English only; a French sheet to mark up needs `tools/copy-sheet.js` reworked
 - [ ] Jurisdiction look before any non-English store listing (§3 above) — untouched
