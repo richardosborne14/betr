@@ -74,7 +74,7 @@ var BETR_STRINGS_EN = {
         'Choose experiments that are safe and legal. Never design one that involves the habit you’re trying to change, self-harm, restricting food, or putting yourself or anyone else at risk.',
         'If you are in danger or in crisis, call your local emergency number. In the US, call or text 988. In the UK and Ireland, call Samaritans free on 116 123. Elsewhere, findahelpline.com lists free helplines in over 175 countries.',
         'Everything you write stays on this device. There is no account, no server, and nothing is sent to us or anyone else. If you delete the app without exporting, your entries are gone.',
-        'This was made by the people behind TrybeUP, not by a clinician or a health service. Nothing in it is medical advice, and using it does not create a therapist–client relationship.'
+        'This was made by Digital Bricks, not by a clinician or a health service. Nothing in it is medical advice, and using it does not create a therapist–client relationship.'
       ]
     },
 
@@ -347,8 +347,7 @@ var BETR_STRINGS_EN = {
         for the price before he would type a word into the app, and found four thousand pixels
         of correct writing that never once answered him (`docs/journeys-observed.md` finding 6).
 
-        It names BETR and it does not speak for TrybeUP, whose paid plan is stated plainly in
-        TrybeUP's own entry further down the same screen. If BETR ever gains a thing to buy,
+        It names BETR. If BETR ever gains a thing to buy,
         THIS SENTENCE COMES OUT THE SAME DAY. It is the one line here that could become a lie
         by something happening elsewhere, and menu.test.js only checks that it is present.
       */
@@ -359,13 +358,13 @@ var BETR_STRINGS_EN = {
         could exclude robots, so a second count was added and this changed again. The
         sentence and the server setting move together or one of them is a lie.
 
-        What the server keeps is two files of "1"s, named for the day: every open, and every
-        open that did not say it was a robot. No address — BETR is not even told one — no
+        What the server keeps (deploy/betr.caddy since B57) is two files, people.log and
+        robots.log, with one line per open holding the day and nothing else. No address, no
         referrer, no clock time. The user agent is READ to tell the two counts apart and is
         never written anywhere, which is why this says "written down" rather than "seen".
 
         "not even the time of day" is exact and was chosen over "not the time": the DAY is
-        recorded, in the name of the file. The time of day is not recorded at all.
+        recorded, on the line. The time of day is not recorded at all.
 
         `tests/deploy.test.js` holds the server to an allow-list of what it may read at all,
         and this sentence is why those tests exist.
@@ -385,46 +384,15 @@ var BETR_STRINGS_EN = {
       placesTitle: 'Other places, none of them run by us',
 
       whoTitle: 'Who made this',
-      who: 'This is for doing it alone. The people who made it also make TrybeUP, where the ' +
-        'same thing is done in small private groups. Only if and when you want that.',
-
       /*
-        B54, 2026-09-12, the founder's call: the lineage was too quiet. Rule 9 has said since
-        2026-09-01 that TrybeUP is "never styled apart", and this block is styled apart — a
-        logo, the wordmark, and four sentences saying what TrybeUP is. The founder amended
-        their own rule knowingly and it is recorded in CLAUDE.md rule 9 and in B54.
-
-        THREE OF THESE FOUR SENTENCES ARE SAFEGUARDS, NOT COPY, and B8's conditions are why:
-
-          makerCost   says what it costs BEFORE a person taps, including the paywall. A person
-                      who meets an unexpected paid plan after signing up is the exact failure
-                      B8's third condition exists to prevent, and research §7.1 is why B6's
-                      bridge is still gated. `places.js` says the same thing in its own entry;
-                      both say it, and if TrybeUP's free tier changes THEY BOTH CHANGE.
-          makerAI     names the AI coach on purpose. BETR has no AI and says so; TrybeUP has
-                      one. Hidden ownership or a hidden feature discovered later is the
-                      betrayal this audience is braced for (research §4), so it is disclosed
-                      here, beside the boundary, rather than found out after an account.
-          makerApart  draws the line. It is the sentence that keeps a branded block from
-                      reading as "and this app is part of that one".
-
-        makerTag is TrybeUP's own headline, word for word, sitting under TrybeUP's own logo so
-        there is no question who is speaking. Rule 8 is about CBT providers' wording; this is
-        ours to use.
+        B57, founder 2026-09-16: no other product is named in BETR, and the name here is Digital Bricks.
+        Plain, no logo, no link to a company. The one link is to the code, because the code is
+        the proof of everything above it. {link} is where the app puts it.
       */
-      makerName: 'TrybeUP™',
-      makerTag: 'Tell us one problem. We’ll give you one thing to do a day.',
-      makerWhat: 'TrybeUP is a personal-change app. You describe what you most want to fix, ' +
-        'in your own words, and it turns that into one small daily step, tracked honestly. ' +
-        'Done, or rest — and rest never counts against you.',
-      makerAI: 'Habits, workouts, nutrition, an AI coach and a community are a tap away when ' +
-        'you want more of it.',
-      makerCost: 'Free to start. One-to-one chat is free, and the private groups need a paid plan.',
-      makerApart: 'It is an account on their servers, which is the opposite of BETR on ' +
-        'purpose. Nothing you write here goes there, and BETR still sends nothing to them or ' +
-        'to anybody else.',
-      makerLink: 'TrybeUP.com',
-      makerLinkWhat: 'their own description, in full. It opens in your browser and needs the internet.',
+      who: 'BETR is free and open source. It was made by Digital Bricks.',
+      whoCode: 'Every line of it is at {link}, and anyone can read it and see that nothing in ' +
+        'it sends anything anywhere.',
+      madeBy: 'Made by Digital Bricks.',
 
       codeTitle: 'The code',
       code: 'BETR is plain HTML, CSS and JavaScript with no libraries, small enough to read ' +

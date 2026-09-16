@@ -4,7 +4,7 @@
 rewritten from the source every time that command runs, so anything typed here is lost.
 Mark it up, send it back, and the change gets made in the file named next to each section.
 
-This build has 113 pieces of wording on the screens and 17 links on Help, as well as the frozen block.
+This build has 107 pieces of wording on the screens and 16 links on Help, as well as the frozen block.
 
 | Part | What it is | Which file |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ taken with the research open, not a wording pass.
 >
 > **8.** Everything you write stays on this device. There is no account, no server, and nothing is sent to us or anyone else. If you delete the app without exporting, your entries are gone.
 >
-> **9.** This was made by the people behind TrybeUP, not by a clinician or a health service. Nothing in it is medical advice, and using it does not create a therapist–client relationship.
+> **9.** This was made by Digital Bricks, not by a clinician or a health service. Nothing in it is medical advice, and using it does not create a therapist–client relationship.
 
 ---
 
@@ -480,39 +480,15 @@ section of its own: its one change is `front.noteLocked`.
 
 **`help.who`**
 
-> This is for doing it alone. The people who made it also make TrybeUP, where the same thing is done in small private groups. Only if and when you want that.
+> BETR is free and open source. It was made by Digital Bricks.
 
-**`help.makerName`**
+**`help.whoCode`**
 
-> TrybeUP™
+> Every line of it is at {link}, and anyone can read it and see that nothing in it sends anything anywhere.
 
-**`help.makerTag`**
+**`help.madeBy`**
 
-> Tell us one problem. We’ll give you one thing to do a day.
-
-**`help.makerWhat`**
-
-> TrybeUP is a personal-change app. You describe what you most want to fix, in your own words, and it turns that into one small daily step, tracked honestly. Done, or rest — and rest never counts against you.
-
-**`help.makerAI`**
-
-> Habits, workouts, nutrition, an AI coach and a community are a tap away when you want more of it.
-
-**`help.makerCost`**
-
-> Free to start. One-to-one chat is free, and the private groups need a paid plan.
-
-**`help.makerApart`**
-
-> It is an account on their servers, which is the opposite of BETR on purpose. Nothing you write here goes there, and BETR still sends nothing to them or to anybody else.
-
-**`help.makerLink`**
-
-> TrybeUP.com
-
-**`help.makerLinkWhat`**
-
-> their own description, in full. It opens in your browser and needs the internet.
+> Made by Digital Bricks.
 
 **`help.codeTitle`**
 
@@ -646,7 +622,6 @@ These are the UK, and one for the United States. We haven’t checked anywhere e
 | Name | What we say about it | Link |
 | --- | --- | --- |
 | Side by Side | Mind’s online community. Free, moderated, and you don’t have to say who you are. | `https://sidebyside.mind.org.uk` |
-| TrybeUP | Made by us — the same people who made BETR. It’s an account with people in it, doing this in small groups. One-to-one chat is free; the private groups need a paid plan. | `https://trybeup.com` |
 
 ---
 

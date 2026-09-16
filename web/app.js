@@ -842,7 +842,7 @@
       4. what CBT is, and which bit of it this is
       5. what this is: the purpose statement and the nine sentences, word for word
       6. other places, none of them run by us
-      7. who made this (B57 rewrites it), the language, and the code
+      7. who made this and where the code is (B57), the language, and this build
 
     B56 took two things off it: the count of results on this phone (no number, anywhere) and the
     link to the old guide screen, which is gone. Nothing on this screen is fetched.
@@ -857,6 +857,9 @@
     var mine = I.code !== 'en' && entry[I.code];
     return (mine && typeof mine[field] === 'string') ? mine[field] : entry[field];
   }
+
+  /* Where every line of BETR can be read. A plain https link, allow-listed in menu.test.js. */
+  var CODE_URL = 'https://github.com/richardosborne14/betr';
 
   function help() {
     var build = document.querySelector('meta[name="betr-build"]');
@@ -913,31 +916,21 @@
         }).join('') +
 
         /*
-          B54 and rule 9, carried over as they stand until B57 ships: the block is on HELP and
-          nowhere else, the logo is a file in this folder (img-src 'self'), and the wordmark is
-          the system font. B57 §4a is the founder's answer to what replaces it.
+          B57, founder 2026-09-16: who made it, and where to read every line of it. No logo, no
+          company link. The code is the one link, because it is the proof of this whole screen.
         */
         '<h2 id="who-made" tabindex="-1">' + esc(t('help.whoTitle')) + '</h2>' +
         '<p>' + esc(t('help.who')) + '</p>' +
-        '<div class="maker">' +
-          '<p class="maker-lock">' +
-            '<img src="trybeup-logo.png" alt="" width="125" height="144">' +
-            '<span>' + esc(t('help.makerName')) + '</span>' +
-          '</p>' +
-          '<p class="maker-tag">' + esc(t('help.makerTag')) + '</p>' +
-          '<p>' + esc(t('help.makerWhat')) + '</p>' +
-          '<p>' + esc(t('help.makerAI')) + '</p>' +
-          '<p class="maker-cost">' + esc(t('help.makerCost')) + '</p>' +
-          '<p class="tiny">' + esc(t('help.makerApart')) + '</p>' +
-          '<p class="maker-go"><a href="https://trybeup.com" target="_blank" rel="noopener noreferrer">' +
-            esc(t('help.makerLink')) + '</a> — ' + esc(t('help.makerLinkWhat')) + '</p>' +
-        '</div>' +
+        '<p>' + t('help.whoCode').split('{link}').map(esc).join(
+          '<a href="' + CODE_URL + '" target="_blank" rel="noopener noreferrer">' +
+          esc(CODE_URL.replace('https://', '')) + '</a>') + '</p>' +
 
         languageBlock() +
 
         '<h2>' + esc(t('help.codeTitle')) + '</h2>' +
         '<p>' + esc(t('help.code')) + '</p>' +
         '<p class="build">' + (hash === 'dev' ? esc(t('help.devBuild')) : esc(hash)) + '</p>' +
+        '<p class="tiny">' + esc(t('help.madeBy')) + '</p>' +
 
       '</div>', 'long');
 

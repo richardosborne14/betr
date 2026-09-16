@@ -23,10 +23,7 @@
              Sentence 7 is the one place in this file with phone numbers in it, exactly as in
              English, and app.js makes them tappable by matching "988", "116 123" and
              "findahelpline.com" — so those three must stay written exactly like that.
-    help.maker*   rule 9's three safeguards — the cost including the paid plan, the AI coach,
-             and that nothing written here goes there — are in French too, and menu.test.js now
-             fails the build if the French loses any of them.
-    help.makerTag TrybeUP's own headline, translated. It is their line, not ours.
+    help.who*     B57, 2026-09-16: Digital Bricks, the code, and nothing about any other product.
 
   The links' descriptions on Help live in content/places.js, each with its French beside it.
 
@@ -90,7 +87,7 @@ var BETR_STRINGS_FR = {
         'Choisis des expériences sûres et légales. N’en conçois jamais une qui touche à l’habitude que tu essaies de changer, à l’automutilation, au fait de te priver de nourriture, ou qui te mette en danger, toi ou quelqu’un d’autre.',
         'Si tu es en danger ou en crise, appelle le numéro d’urgence local. Aux États-Unis, appelle ou envoie un SMS au 988. Au Royaume-Uni et en Irlande, appelle gratuitement les Samaritans au 116 123. Ailleurs, findahelpline.com répertorie des lignes d’écoute gratuites dans plus de 175 pays.',
         'Tout ce que tu écris reste sur cet appareil. Il n’y a pas de compte, pas de serveur, et rien n’est envoyé, ni à nous ni à personne. Si tu supprimes l’application sans exporter, tes entrées sont perdues.',
-        'Elle a été faite par les personnes derrière TrybeUP, pas par un clinicien ni par un service de santé. Rien ici n’est un avis médical, et l’utiliser ne crée pas de relation entre un thérapeute et son patient.'
+        'Elle a été faite par Digital Bricks, pas par un clinicien ni par un service de santé. Rien ici n’est un avis médical, et l’utiliser ne crée pas de relation entre un thérapeute et son patient.'
       ]
     },
 
@@ -362,8 +359,8 @@ var BETR_STRINGS_FR = {
       /*
         A trust sentence, translated exactly: two counts of opens a day, nothing about the
         person. « adresse IP » and not « adresse », which in French reads as where you live.
-        « ni même l’heure » is exact for the same reason the English is: the DAY is recorded, in
-        a file name, and the time is not. Change it only with the server setting.
+        « ni même l’heure » is exact for the same reason the English is: the DAY is recorded, on
+        the line, and the time is not. Change it only with the server setting.
       */
       airplane: 'Active le mode avion. Tout marche encore, parce que rien ici n’a jamais eu besoin ' +
         'd’internet. Le chargement de cette page est la seule chose qu’un serveur voit jamais. On tient ' +
@@ -378,30 +375,11 @@ var BETR_STRINGS_FR = {
       placesTitle: 'D’autres endroits, dont aucun n’est géré par nous',
 
       whoTitle: 'Qui a fait ça',
-      who: 'BETR, c’est pour le faire de ton côté. Les personnes qui l’ont fait font aussi TrybeUP, où ' +
-        'la même chose se fait en petits groupes privés. Seulement si et quand tu en as envie.',
-
-      /*
-        Rule 9's block. The three safeguards are in French too, and menu.test.js checks the
-        French for each: the paid plan (« payant »), the AI coach (« coach IA »), and that
-        nothing written here goes there. If TrybeUP's free tier changes, the English, this, and
-        both TrybeUP entries in places.js change the same day.
-      */
-      /* Names, the same in every language, written here so French has no gap at all. */
-      makerName: 'TrybeUP™',
-      makerLink: 'TrybeUP.com',
-      makerTag: 'Dis-nous un problème. On te donne une chose à faire par jour.',
-      makerWhat: 'TrybeUP est une application de changement personnel. Tu décris ce que tu veux le ' +
-        'plus changer, avec tes propres mots, et elle en fait une petite étape par jour, suivie ' +
-        'honnêtement. Fait, ou repos — et le repos ne compte jamais contre toi.',
-      makerAI: 'Habitudes, entraînements, nutrition, un coach IA et une communauté sont à portée de ' +
-        'doigt quand tu en veux plus.',
-      makerCost: 'Gratuit pour commencer. Le chat en tête-à-tête est gratuit, et les groupes privés ' +
-        'demandent un abonnement payant.',
-      makerApart: 'C’est un compte sur leurs serveurs, soit l’inverse de BETR, volontairement. Rien de ' +
-        'ce que tu écris ici n’y va, et BETR n’envoie toujours rien, ni à eux ni à personne.',
-      makerLinkWhat: 'leur propre description, en entier. Ça s’ouvre dans ton navigateur et il faut ' +
-        'internet.',
+      /* B57. « BETR » is masculine here as everywhere else in this file. */
+      who: 'BETR est gratuit et open source. Il a été fait par Digital Bricks.',
+      whoCode: 'Tout le code est sur {link}, et n’importe qui peut le lire et vérifier que rien ' +
+        'dedans n’envoie quoi que ce soit, nulle part.',
+      madeBy: 'Fait par Digital Bricks.',
 
       codeTitle: 'Le code',
       code: 'BETR, c’est du HTML, du CSS et du JavaScript tout simples, sans bibliothèque, assez ' +

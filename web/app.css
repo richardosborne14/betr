@@ -277,10 +277,4 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .sheet textarea { display: block; width: 100%; font-size: .75rem; min-height: 9.375rem; margin-block-start: .625rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .sheet .build { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .75rem; color: var(--day); word-break: break-all; }
 .sheet .warn { border: 2px solid var(--not-tag); margin-block-start: .5rem; }
-.sheet .maker { border: 2px solid var(--not-tag); border-radius: 16px; padding: .9375rem 1.0625rem; margin: .625rem 0 .25rem; }
-.sheet .maker-lock { display: flex; align-items: center; gap: .6875rem; margin: 0 0 .5625rem; }
-.sheet .maker-lock img { height: 2.7em; width: auto; flex: none; }
-.sheet .maker-lock span { font-weight: 600; font-size: 1.25rem; letter-spacing: -.015em; line-height: 1.1; }
-.sheet .maker-tag { font-weight: 600; margin: 0 0 .5rem; }
-.sheet .maker-cost { font-weight: 600; }
 .sheet .countries .plain { font-size: 1rem; color: var(--ink); text-decoration: none; padding: .375rem 0; }

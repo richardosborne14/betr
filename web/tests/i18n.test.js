@@ -223,7 +223,7 @@ test('the frozen sentences are frozen, in every language', () => {
   /* English is the canonical one, and menu.test.js pins sentence 7 word for word on screen. */
   assert.match(en.s.frozen.sentences[0], /not a medical device/);
   assert.match(en.s.frozen.sentences[6], /^If you are in danger or in crisis, call your local emergency number\./);
-  assert.match(en.s.frozen.sentences[8], /made by the people behind TrybeUP/);
+  assert.match(en.s.frozen.sentences[8], /^This was made by Digital Bricks, not by a clinician/);
 });
 
 test('none of the phrases that are never used appears in any language', () => {

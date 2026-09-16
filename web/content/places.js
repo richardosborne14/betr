@@ -30,15 +30,9 @@
        spend it, and SMART Recovery is the closest thing to what BETR itself does. If this is
        ever reversed, drop that one item; the NHS pages beside it already name AA, Al-Anon and
        SMART Recovery themselves, so nothing is lost but a tap.
-    6. TrybeUP is in the last group under the conditions in B8: never first, never a button,
-       never styled apart, it says we made it and what it costs right there, and it never
-       carries a link parameter of any kind.
-       AMENDED 2026-09-12 (B54), and this file is the half that did NOT change. There is now a
-       branded block — logo, wordmark, a blurb — under "Who made this" on Help, and rule 9's
-       "never styled apart" was amended for it by the founder. THIS ENTRY IS NOT THAT BLOCK.
-       It stays a plain <li> that looks like Side by Side above it, and menu.test.js still
-       fails the build if it moves first or turns into a button. The paywall sentence is now
-       said in both places; if TrybeUP's free tier changes, BOTH change the same day.
+    6. Nothing on this list is ours. Until B57 (2026-09-16) the last entry was our own; it
+       came out with every other mention of it, and the heading "none of them run by us" is
+       now simply true. A place of ours does not come back here.
 
   French, since 2026-09-16 (B16). Each piece of text has its French in an `fr` beside it — the
   intro, a group's title and note, an item's name where it is a description rather than a
@@ -247,19 +241,6 @@ var BETR_PLACES = {
           url: 'https://sidebyside.mind.org.uk',
           what: 'Mind’s online community. Free, moderated, and you don’t have to say who you are.',
           fr: { what: 'La communauté en ligne de Mind. Gratuite, modérée, et tu n’as pas à dire qui tu es.' }
-        },
-        {
-          name: 'TrybeUP',
-          url: 'https://trybeup.com',
-          what: 'Made by us — the same people who made BETR. It’s an account with people in it, ' +
-            'doing this in small groups. One-to-one chat is free; the private groups need a paid plan.',
-          /* Rule 9 and B8's third condition, in French: it says we made it and what it costs,
-             paid plan included. menu.test.js checks the French for « payant ». */
-          fr: {
-            what: 'Fait par nous — les mêmes personnes qui ont fait BETR. C’est un compte avec des gens ' +
-              'dedans, qui font ça en petits groupes. Le chat en tête-à-tête est gratuit ; les groupes ' +
-              'privés demandent un abonnement payant.'
-          }
         }
       ]
     }

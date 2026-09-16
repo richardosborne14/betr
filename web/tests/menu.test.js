@@ -10,7 +10,7 @@
     - every link is plain https with nothing attached, and every one of them is in the
       allow-list below, so adding a link is a deliberate act that shows up in a diff
     - outside Help there are no links at all, except the crisis numbers under a refusal
-    - TrybeUP is on Help and nowhere else (rule 9, until B57 ends it)
+    - who made it is Digital Bricks, said plainly on Help, and no other product is named (B57)
 */
 const { test } = require('node:test');
 const assert = require('node:assert');
@@ -140,7 +140,7 @@ const ALLOWED = [
   'https://www.findcbt.org',
   'https://eabct.eu',
   'https://sidebyside.mind.org.uk',
-  'https://trybeup.com'
+  'https://github.com/richardosborne14/betr'
 ];
 
 /* The tappable crisis numbers: every line in content/helplines.js, which carries a source and a day. */
@@ -193,39 +193,51 @@ test('a refusal about self-harm carries a number that dials, for the right count
   }
 });
 
-/* ------------------------------------------------------------------ rule 9, until B57 */
+/* ------------------------------------------------------------------ who made it (B57) */
 
-test('TrybeUP is on Help and nowhere else, never first, never a button, and the byline is gone', () => {
-  const a = boot().tap('#f-help');
-  const h = a.html();
-  assert.ok(h.indexOf('trybeup.com') !== -1, 'ours is not listed at all');
-  const group = h.slice(h.indexOf('Doing it with other people'));
-  assert.ok(group.indexOf('sidebyside.mind.org.uk') < group.indexOf('trybeup.com'), 'ours is first');
-  assert.ok(!/<button[^>]*>[^<]*TrybeUP/.test(h), 'ours is a button');
-  a.showsText('Made by us').showsText('One-to-one chat is free').showsText('need a paid plan');
+/*
+  Founder, 2026-09-15: "remove any references to [the old brand] and make it a purely OSS, free to use,
+  no strings type app". The name is built from two halves so that `grep -rni` over the repo
+  for it prints nothing, which is how B57 checks it is gone.
+*/
+const OLD_BRAND = new RegExp('tryb' + 'eup', 'i');
 
-  const rest = outsideHelp() + SCREENS.where(boot()).html();
-  assert.ok(rest.toLowerCase().indexOf('trybeup') === -1, 'TrybeUP is outside Help');
-  /* B55's "Who made this?" door went with the redesign (B56 §4) */
-  assert.ok(rest.indexOf('id="made"') === -1 && !('byline' in s), 'the byline is back');
+test('no other product is named anywhere in the app, in any file, in any language', () => {
+  const WEB = path.join(__dirname, '..');
+  const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? (e.name === 'tests' ? [] : walk(path.join(dir, e.name))) : [path.join(dir, e.name)]);
+  for (const file of walk(WEB)) {
+    assert.ok(!OLD_BRAND.test(file), path.relative(WEB, file) + ' is named for it');
+    if (/\.(js|html|css|webmanifest|svg)$/.test(file)) {
+      assert.ok(!OLD_BRAND.test(fs.readFileSync(file, 'utf8')), path.relative(WEB, file) + ' names it');
+    }
+  }
+  for (const a of [boot().tap('#f-help'), frHelp()]) {
+    assert.ok(!OLD_BRAND.test(a.html()), 'Help names it');
+  }
+  assert.ok(!OLD_BRAND.test(outsideHelp() + SCREENS.where(boot()).html()), 'a screen names it');
 });
 
-test('the branded block says what TrybeUP costs, that it has an AI, and where BETR ends', () => {
-  const h = boot().tap('#f-help').text();
-  const block = h.slice(h.indexOf(s.help.whoTitle));
-  for (const part of [s.help.makerCost, s.help.makerAI, s.help.makerApart]) {
-    assert.ok(block.indexOf(part) !== -1, 'the TrybeUP block has lost: ' + part);
-  }
-  assert.match(s.help.makerCost, /paid plan/);
-  assert.match(s.help.makerAI, /AI coach/);
-  assert.match(s.help.makerApart, /Nothing you write here goes there/);
+test('Who made this says Digital Bricks, free and open source, and links the code plainly', () => {
+  const a = boot().tap('#f-help');
+  a.showsText(s.help.who).showsText(s.help.madeBy);
+  assert.match(s.help.who, /free and open source/);
+  assert.match(s.help.who, /Digital Bricks/);
+  const h = a.html();
+  const who = h.slice(h.indexOf('id="who-made"'));
+  assert.ok(who.indexOf('<a href="https://github.com/richardosborne14/betr" target="_blank" rel="noopener noreferrer">github.com/richardosborne14/betr</a>') !== -1,
+    'the link to the code is not there, or is not plain');
+  assert.ok(a.text().indexOf('{link}') === -1, 'the placeholder is showing');
+  assert.ok(!/<img/.test(who), 'there is a logo again');
+  /* the only company named is ours, and only on Help */
+  assert.ok(outsideHelp().indexOf('Digital Bricks') === -1, 'the maker is named outside Help');
 });
 
 test('every image in the app is a file in the folder, and no font is ever fetched', () => {
   const WEB = path.join(__dirname, '..');
   const all = outsideHelp() + boot().tap('#f-help').html();
   const srcs = [...all.matchAll(/<img[^>]*\ssrc="([^"]+)"/g)].map((m) => m[1]);
-  assert.ok(srcs.length >= 1, 'no image found at all, so this test is checking nothing');
+  /* Since B57 there is no image at all (the logo went); the loop holds any that come back. */
   for (const src of srcs) {
     assert.ok(!/^[a-z]+:/i.test(src) && src.indexOf('//') === -1, src + ' is not a file in this folder');
     assert.ok(fs.existsSync(path.join(WEB, src)), src + ' is not in web/');
@@ -265,30 +277,20 @@ test('Help has the places for drinking and drugs, first, and says where they wor
 const fr = require('../content/strings-fr.js').s;
 const frHelp = () => boot(null, { languages: ['fr-FR', 'fr'] }).tap('#f-help');
 
-test('in French, TrybeUP\u2019s block still says what it costs, that it has an AI, and where BETR ends', () => {
+test('in French, Who made this says Digital Bricks and links the code', () => {
   const a = frHelp();
-  const h = a.html();
-  const block = h.slice(h.indexOf(fr.help.whoTitle));
-  for (const part of [fr.help.makerCost, fr.help.makerAI, fr.help.makerApart]) {
-    assert.ok(block.indexOf(part) !== -1, 'a rule 9 safeguard is missing from the French block: ' + part);
-  }
-  assert.match(fr.help.makerCost, /payant/, 'the French lost the paid plan');
-  assert.match(fr.help.makerAI, /coach IA/, 'the French lost the AI coach');
-  assert.match(fr.help.makerApart, /Rien de ce que tu \u00e9cris ici n\u2019y va/, 'the French lost where BETR ends');
-  /* and TrybeUP is still not named anywhere but Help, in French either */
-  const front = boot(null, { languages: ['fr'] }).html();
-  assert.ok(front.indexOf('TrybeUP') === -1, 'TrybeUP is named on the French front screen');
+  a.showsText(fr.help.who).showsText(fr.help.madeBy);
+  assert.match(fr.help.who, /Digital Bricks/);
+  assert.match(fr.help.who, /gratuit/);
+  assert.ok(a.html().indexOf('>github.com/richardosborne14/betr</a>') !== -1, 'the French lost the code link');
+  assert.ok(a.text().indexOf('{link}') === -1);
 });
 
-test('in French, the places are French, TrybeUP\u2019s entry says it is paid, and a translation never carries a link', () => {
+test('in French, the places are French, and a translation never carries a link', () => {
   const h = frHelp().html();
   assert.ok(h.indexOf(places.fr.intro) !== -1, 'the places intro is not in French');
   assert.ok(h.indexOf(places.groups[0].fr.title) !== -1 && h.indexOf(places.groups[0].fr.note) !== -1);
   assert.ok(h.indexOf(places.groups[0].title) === -1, 'an English group title is on the French Help');
-
-  const trybeup = places.groups[places.groups.length - 1].items.find((i) => i.name === 'TrybeUP');
-  assert.match(trybeup.fr.what, /payant/, 'the French TrybeUP entry does not say it is paid');
-  assert.ok(h.indexOf(trybeup.fr.what) !== -1);
 
   /* `fr` holds the same text fields in French and nothing else: never a url, never a fourth thing */
   const allowed = ['intro', 'title', 'note', 'name', 'what'];
