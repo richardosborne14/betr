@@ -1,6 +1,7 @@
 # B7: Distribution and the ad — a reply, not a post
 
-**Status:** Not started
+**Status:** **Closed — will not do** (2026-09-16, B57). The founder moved BETR off TrybeUP: free, open source, a product of nobody's funnel. What follows is history.  
+_Was:_ Not started
 **Confidence:** —
 **Date opened:** 2026-09-01
 **Depends on:** B3 (a URL that works), B0 Q10 (Misha's read on the ad).

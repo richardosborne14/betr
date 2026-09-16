@@ -1,6 +1,7 @@
 # B6: The bridge to TrybeUP — gated, late, and a copy not a move
 
-**Status:** Blocked. **Do not build until the gate below is open.**
+**Status:** **Closed — will not do** (2026-09-16, B57). The founder moved BETR off TrybeUP: free, open source, a product of nobody's funnel. What follows is history.  
+_Was:_ Blocked. **Do not build until the gate below is open.**
 **Confidence:** —
 **Date opened:** 2026-09-01
 **Depends on:** B0 Q4; and the gate.

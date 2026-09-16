@@ -1,6 +1,6 @@
 # B58: The icon — the new colour, and something that says hope or testing
 
-**Status:** Not started. Founder, 2026-09-15: *"We need a new PWA logo, the existing one is a weird blue thing with lines, now we need the new
+**Status:** Waiting on the founder's pick (asked 2026-09-16; they asked for the canvas link again). Founder, 2026-09-15: *"We need a new PWA logo, the existing one is a weird blue thing with lines, now we need the new
 colour plus something clear that represents hope or testing or a checklist or something."*
 **Confidence:** —
 **Date opened:** 2026-09-15

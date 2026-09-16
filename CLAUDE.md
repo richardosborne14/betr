@@ -7,8 +7,8 @@ Read automatically at the start of every session. Follow it without exception.
 **The app is rebuilt to [`docs/tasks/B56-the-redesign.md`](docs/tasks/B56-the-redesign.md), on the branch `redesign`, NOT YET MERGED**
 — a push to `main` touching `web/**` publishes to the live address, so it merges only once the founder has seen it on a phone. Rules 3, 4,
 5 and 10 below are rewritten to it (2026-09-15). The word is **prediction**; the front is `If I ___, then ___.` and `Lock it in`; there is
-**no stock list, no doors, no sizes, no ladder, no tally, no number**; the look is terracotta and paper. **B57** moves it off TrybeUP and ends
-rule 9. **Misha is no longer a co-decider.** The repo is **public and MIT**: no server address, key or person's name goes into any file.
+**no stock list, no doors, no sizes, no ladder, no tally, no number**; the look is terracotta and paper. **B57** moved it off TrybeUP
+(2026-09-16): **`https://betr.digitalbricks.io`** serves `redesign` for the founder's phone check, and rule 9 is rewritten. **Misha is no longer a co-decider.** The repo is **public and MIT**: no server address, key or person's name goes into any file.
 
 ## Read these first, in this order
 
@@ -88,36 +88,15 @@ rules at once, and every one of them has failed in some other product.
    written exactly so, because that is how `callable()` makes them tap.
 8. **Every phrase is written fresh.** No wording from CCI, Getselfhelp, Therapist Aid,
    Psychology Tools or the Beck Institute; all restrict reuse.
-9. **Visible lineage.** "Made by the people behind TrybeUP" stays in the small print. TrybeUP
-   is not mentioned anywhere else until B6's gate is open — **except, from 2026-09-03, as one
-   plain entry among the other places on the Help screen** (founder's call, B8). Never first,
-   never a button, never styled apart; it says we made it and what it costs, right there in the
-   entry; no deep link, no campaign parameter, no referral code, ever. Not on the front screen,
-   not in the loop, not in the result, not on the menu.
-   **Amended 2026-09-12 (B54), by the founder, and it is the "never styled apart" half that
-   went:** under *Who made this* on Help there is now a **block with TrybeUP's logo, the
-   wordmark `TrybeUP™` and seven sentences saying what TrybeUP is**, ending in one plain link.
-   The founder's word was "more obvious". **The places entry is NOT that block and is
-   unchanged** — still plain, still second in its group. Everything else in rule 9 stands, and
-   is still tested: it is on **Help and nowhere else**, it is **not a button**, and there is no
-   parameter on the link. Three of the seven sentences are safeguards rather than copy and
-   `menu.test.js` fails the build if any goes: **what it costs including the paywall** (B8's
-   third condition), **that TrybeUP has an AI coach and BETR still has none**, and **that it is
-   an account on their servers and nothing written here goes there**. **The logo is
-   `web/trybeup-logo.png`, a file in this repo** — never hotlinked, because `img-src 'self'`
-   blocks it and rule 1 is why — and **the wordmark is the system font at 600, never Inter from
-   Google** (`font-src 'none'`, and "don't add a font"). **B6's gate is still shut**; a block of
-   prose is not the bridge.
-   **Amended again 2026-09-12 (B55), same founder, same day, and it is a door rather than a
-   mention:** the front screen and *Your tests* carry **`Who made this?`** — grey, underlined,
-   on the wordmark's own line — which opens Help at the block above. **It does not say TrybeUP,
-   and that is the point:** the brand is still not named on the front screen, in the loop, in
-   the result or on the menu, so the app carries the door to the lineage without carrying the
-   promotion. *Made by TrybeUP* there is the founder's to take and was offered; `menu.test.js`
-   fails the build the day the word appears outside Help. **It is NOT in the loop, NOT on the
-   result and NOT on a refusal** — a person who has just written what they are afraid of, or
-   been handed a helpline number, is not somebody to show another product to — and it is
-   deliberately **not drawn by `paint()`**, so it cannot reach those screens by one edit.
+9. **Who made it, plainly, and no other product.** *Rewritten 2026-09-16 for B57, founder:*
+   *"remove any references to TrybeUP and make it a purely OSS, free to use, no strings type
+   app".* BETR is free, open source (MIT) and a product of nobody's funnel. Help's *Who made
+   this* says **free and open source, made by Digital Bricks**, links the code at
+   `github.com/richardosborne14/betr` as a plain link, and the foot of Help says *Made by
+   Digital Bricks.* Frozen sentence 9 says the same. No logo, no company link, not named
+   outside Help. **No other product is named anywhere in `web/`** — `menu.test.js` fails the
+   build if the old brand comes back in any file or on any screen. The history of B6, B8, B54
+   and B55 is in git and in those task files; B6 and B7 are closed, will not do.
 10. **One question per screen, and B56 §3 is the shape.** *Replaced 2026-09-15 by the founder's
     redesign; the history of B8–B20's doors, lists and taps is in git and in those task files.*
     The front is *What do you think will happen?* over *If I ___, then ___.* and *Lock it in* —
@@ -180,18 +159,23 @@ under 120 lines, and make its "next action" the thing you would genuinely do nex
 - [ ] **`docs/NEXT-SESSION.md` rewritten**, not appended to, under 120 lines
 - [ ] Commit with a clear one-sentence message and push `main`
 - [ ] **Tell the founder how to see it.** Until B3: open `web/index.html` in a browser, or the
-      prototype. Since B3: **`https://betr.trybeup.com`**, wifi off after load — every push to
-      `main` touching `web/**` publishes it. (This file said `betr.dev.trybeup.com` until
-      2026-09-04. That address does not resolve and never did.) After B5: a TestFlight build,
-      which is a new App Store release each time.
+      prototype. Since B57: **`https://betr.digitalbricks.io`**, wifi off after load — once
+      `redesign` is merged, every push to `main` touching `web/**` publishes it there. (Until
+      then `main` still publishes the OLD app to `betr.trybeup.com`.) After B5: a TestFlight
+      build, which is a new App Store release each time.
 
-## The TrybeUP dev droplet (for B3 and B6 only)
+## The Digital Bricks box (since B57)
 
-Betr's dev host is the TrybeUP dev droplet. SSH alias **`le-jibe`** (root; the address and key are
-in `~/.ssh/config`, not here — this repo is public from 2026-09-15). Read-only commands run freely. **Every write** to nginx, `/var/www/`,
-or anything under `/opt/` is confirmed with the founder first, every time. The TrybeUP dev
-site at `dev.trybeup.com` must keep working after any change; check it. The TrybeUP repo is
-`trybeup/trybeup-prod`; its `CLAUDE.md` governs anything done there.
+SSH alias **`nexus`** (root; the address and key are in `~/.ssh/config`, not here — this repo is
+public). Read-only commands run freely. **Every write** — to `/etc/caddy/`, `/srv/`, `/var/log/betr`,
+a user, a GitHub secret — is confirmed with the founder first, every time. Other sites live on this
+box (`/etc/caddy/conf.d/`); **check every one still answers after any Caddy reload.** BETR's config
+is `deploy/betr.caddy`, copied by a person with root; the workflow's `betr-deploy` login owns
+`/srv/betr/site` and nothing else, and checks the running file matches the repo.
+
+**The old TrybeUP droplet (`le-jibe`)** still serves the old app at `betr.trybeup.com` until the
+founder's switch-off (B57 §2 step 9). Same rule: every write confirmed. `trybeup/trybeup-prod` and
+its own `CLAUDE.md` govern TrybeUP's side of it. Delete this paragraph the day it is switched off.
 
 ## What not to do
 
@@ -199,5 +183,5 @@ site at `dev.trybeup.com` must keep working after any change; check it. The Tryb
 - Don't add a questionnaire, a score, a streak, or a recommendation.
 - Don't write a test that involves the habit — that rule is about **BETR's own content** and
   did not loosen on 2026-09-08. A person's own test is theirs. Don't accept "I am" as a belief.
-- Don't mention TrybeUP outside the small print. Don't build the bridge before its gate opens.
+- Don't name another product in the app, and don't link a company. The code is the one link.
 - Don't say "improve your mental health", anywhere, ever.

@@ -116,20 +116,21 @@ That is it. There is no separate publish step: a change on `main` publishes itse
 
 **On `main`**, about thirty seconds of machinery, in this order:
 
-1. **Every test runs.** 124 of them.
+1. **Every test runs.**
 2. If they all pass, the files are copied to the server.
 3. The published page is then checked **from outside**, over the real address: that it loads,
    that it sets no cookie, that it is allowed to make no outbound request of any kind, and
    that the build number printed on the Help screen matches the files that were actually sent.
-4. It checks TrybeUP is still up, because BETR sits on the same machine.
 
-Then it is live at **https://betr.trybeup.com**. Hard-refresh on your phone if you still see
-the old words.
+Once the redesign is merged, it is live at **https://betr.digitalbricks.io**. Hard-refresh on
+your phone if you still see the old words.
 
-**Until the redesign is merged, that address still shows the OLD app**, because it publishes
-from `main` and the new app is on `redesign`. A change to the new words is saved on `redesign`
-straight away, but **it only reaches betr.trybeup.com once the redesign is merged**. Nothing is
-published from a branch.
+**Right now (2026-09-16) there are two addresses, for a short while.** The OLD app is still at
+betr.trybeup.com, published from `main`. The NEW app, from `redesign`, is at
+**https://betr.digitalbricks.io** so you can look at it on your phone — it was put there by hand
+and does not update by itself when you change a word on `redesign`; ask for it to be published
+again. When you are happy with it, the redesign is merged, `main` publishes to
+betr.digitalbricks.io from then on, and the old address is switched off.
 
 You can watch it happen: on GitHub, the **Actions** tab. A green tick means it published; a
 red cross means it did not, and nothing changed on the live site.

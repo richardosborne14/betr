@@ -1,8 +1,8 @@
 # Betr — scope for the gateway product
 
 > **Rewritten in part, 2026-09-15.** §1 and §3 describe the redesign in [`tasks/B56-the-redesign.md`](tasks/B56-the-redesign.md), built on the
-> branch `redesign`. The move off TrybeUP — [`tasks/B57-the-move-to-digitalbricks.md`](tasks/B57-the-move-to-digitalbricks.md) — has not
-> shipped, so §6 still describes the bridge and B57 wins over it. §5 (the stock list) is history: B56 took the list out of the app.
+> branch `redesign`. The move off TrybeUP — [`tasks/B57-the-move-to-digitalbricks.md`](tasks/B57-the-move-to-digitalbricks.md) — is
+> built (2026-09-16): §6 is now one sentence, and §4 item 7 and Q5a are amended for it. §5 (the stock list) is history: B56 took the list out of the app.
 > What still stands unchanged: §2 (what it is not), §4, §7, §8, the frozen sentences in §10.
 
 **Written 2026-09-01.** After the founder and Misha judged men's-group outreach a dead end, and
@@ -47,7 +47,7 @@ down before the thing is done, the thing done, what happened written the same da
 later (research/10 §2.3, §11.6; research/12 §2 — *How it works* is the explaining).
 
 **What it is not, any more:** anybody's gateway product. From 2026-09-15 BETR is free, open source
-(MIT) and its own thing; B57 moves it off TrybeUP and ends the bridge.
+(MIT) and its own thing; B57 moved it off TrybeUP and ended the bridge (2026-09-16).
 
 ## 2. What it is not
 
@@ -121,8 +121,9 @@ How it works · Help.*
 6. **Home-screen install and one-tap export from day one; native wrap early.** iPhone Safari
    evicts a web page's storage after seven days without use. A person who loses three tests
    has been harmed by the privacy design.
-7. **Visible lineage.** "Made by the people behind TrybeUP" in the small print from the first
-   build. Hidden ownership discovered later is the exact betrayal this audience is braced for.
+7. **Visible lineage.** Who made it is in the small print from the first build. Hidden ownership
+   discovered later is the exact betrayal this audience is braced for. *Since B57 (2026-09-16):*
+   *Made by Digital Bricks*, and frozen sentence 9 says the same.
 8. **Every worksheet phrase written fresh.** No CCI, Getselfhelp, Therapist Aid, Psychology
    Tools or Beck Institute wording (all restrict reuse).
 9. **The phrase "improve your mental health" never appears.** It sits inside the Illinois
@@ -247,36 +248,11 @@ Proposal: **not in v1.** Ship the fixed list, learn what people pick by asking t
 add *Something else* as v1.1 with both guards. If custom is in v1, it goes at the bottom of the
 list as *Something else*, never as the first screen.
 
-## 6. How it relates to TrybeUP — Q4
+## 6. What it relates to — Q4, closed
 
-The honest framing: Betr is a private, offline, no-account thing, and TrybeUP is a cloud
-account with a community. The moment a person crosses from one to the other, the privacy
-promise changes. That crossing must be explicit, optional and late.
-
-**Decided:** lineage visible from day one (§4 item 7). The bridge sentence exists only behind
-*what this is*: *This is for doing it alone. The people who made it also make TrybeUP, where
-the same thing is done in small private groups. Only if and when you want that.*
-
-**Q4a. When, if ever, does Betr mention TrybeUP unprompted?** Options: never (only in the
-small print); after a person's fifth completed test, once, dismissible; on the results screen
-as a permanent small link. Recommendation: once, after five, with the exact words *When you
-want to do this with people who don't know you*, and never again if dismissed.
-
-**Q4b. What moves across?** The export is a JSON file. TrybeUP could import it into a
-"work on" habit with the history intact. Whether a person even wants their worries in a cloud
-account is not obvious; the research says what they want from a group is anonymity. Proposal:
-the import exists, is one tap from the export screen, and is described as *copy* not *move*.
-Betr keeps working after.
-
-**Q4c. The prerequisite.** Research file 08 §7.1: TrybeUP's private groups are paywalled and
-stranger DMs are free, "precisely backwards", and this is unchanged on production. Sending a
-privacy-first person into a paywall after onboarding is the sequencing offence the reviews
-punish hardest. **Recommendation: the bridge is not built until the free tier of TrybeUP is
-fixed.** Betr can ship before that; the bridge cannot.
-
-**Q4d. One brand or two?** Betr as a sub-brand ("Betr, by TrybeUP") or a sibling ("made by
-the people behind TrybeUP"). Sibling is safer for trust and for the regulatory purpose
-statement, which must not inherit TrybeUP's marketing copy (`Landing.tsx` still fronts the AI).
+*Replaced 2026-09-16 by B57, founder's direction.* **BETR is free, open source (MIT) and a product of
+nobody's funnel.** The bridge to TrybeUP (B6) and the distribution plan built on it (B7) are closed —
+will not do. The old section is in git.
 
 ## 7. Trust: "how do I know this isn't feeding Amazon ads?" — Q5
 
@@ -304,9 +280,11 @@ server, and nothing is sent to us or anyone else.* That sentence must be literal
 crash reporter would make it the BetterHelp shape in miniature.
 
 **Q5a. Hosting the web version. *Answered: B3, then amended by B52 on 2026-09-10.*** Our own
-nginx, on our own droplet, serving a folder. **The server keeps exactly one thing, by the
-founder's decision: a count of page opens** — a "1" per open, in a file named for the day, with
-no address, no browser, no referrer and no clock time anywhere in it. Bots are counted, because
+server serving a folder: nginx on the TrybeUP droplet until B57, **Caddy on the Digital Bricks box
+since 2026-09-16** (`deploy/betr.caddy`). **The server keeps exactly one thing, by the
+founder's decision: a count of page opens** — one line per open holding the day and nothing else
+(`{"ts":"2026-09-16"}` since B57), with no address, no browser, no referrer and no clock time
+anywhere in it; since B52 in two files, opens that did and did not say they were robots. Bots are counted, because
 not counting a bot would mean reading who is asking. *What this is* says so in those words:
 *Loading this page is the only thing any server ever sees. We keep a count of how many times it
 was opened each day, and nothing else — no address, no browser, nothing that could ever be
@@ -353,11 +331,11 @@ domain, no cookie, no dependency. The TrybeUP repo keeps a one-file pointer at
 | Q1 | **The name, Betr.** Needs a trademark and domain search (betr.app, getbetr.com). And a Misha read on one thing: "bet" lands differently for someone whose habit is gambling, and the prototype's habit-word guard currently blocks the word "bet" in tests. Decide whether the pun is used in copy ("Bet it goes badly?") or only in the name. | Release — **the address half is answered, 2026-09-10: `betr.trybeup.com` IS production, founder's call. The trademark and the name are not.** |
 | Q2 | **The stock list.** *Answered 2026-09-02:* both doors (worries first, plus "start from what's going on"); twelve visible plus *Something else*; order as §5.1; "Not drinking at a social thing" stays, with its test reworded to contain no habit word. Who writes and reviews is unchanged and still open. The six surface-problem labels need Misha's sign-off before release. | Build — cleared |
 | Q3 | **Custom entries.** *Answered 2026-09-02:* in v1, as the last button, three screens of one box each, with both guards. **Superseded 2026-09-08 by B28:** a person's own words are the front door, not the last button; one build screen replaces the three; the habit and body guards stop refusing and the harm guard stays on both boxes. | Build — cleared |
-| Q4 | **The TrybeUP bridge**: when it's mentioned, what moves across, whether the free tier is fixed first, one brand or two. | Release of the bridge only |
+| Q4 | **The TrybeUP bridge.** *Closed 2026-09-16 (B57):* no bridge; BETR names no other product. | — |
 | Q5 | **Trust**: hosting and logs, web and store or store only, data controller. | Release |
 | Q6 | **Own-cloud backup** offered or not. | v1.1 |
 | Q7 | **How we learn anything with zero telemetry.** Options: nothing but store download counts; a *tell us* link that opens an email the person writes; asking in the communities. An opt-in "I did a test" ping breaks the promise and is off the table. | Strategy |
-| Q8 | **Which repo.** Decided: its own, `richardosborne14/betr`, private for now. | — |
+| Q8 | **Which repo.** Decided: its own, `richardosborne14/betr`, public and MIT since 2026-09-15. | — |
 | Q9 | **Age gate.** Unguided self-help trials exclude under-18s; the stores will ask. 18+? | Release |
 | Q10 | **The ad.** The results screen is the ad: expectation struck through, what happened in marker. Whose results? Richard's from his twenties, written as they'd appear. Needs Misha's read on tone. | Marketing |
 

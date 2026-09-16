@@ -1,25 +1,24 @@
 # Start here
 
-**Last refreshed:** 2026-09-16, 11th session, end. **Branch `redesign`, pushed, not merged. 137 tests pass** (`node --test`, read
-2026-09-16 08:51 UTC at `6894326`, 0 French keys missing). A merge to `main` publishes to the live address. Rewritten, never appended to.
+**Last refreshed:** 2026-09-16, 12th session, end. **Branch `redesign`, pushed, not merged. 137 tests pass** (`node --test`).
+**`redesign` is now LIVE at `https://betr.digitalbricks.io`** for the founder's phone check (published by hand:
+`gh workflow run deploy.yml --ref redesign`). `main` still publishes the OLD app to `betr.trybeup.com`. Rewritten, never appended to.
 
-**This session:** the founder asked for two subtitles (B56 §11), then French (B16 §10a–g). Both are written. **B16 is not finished:
-French is complete in words and not shippable** — what is left is people, not code (§3).
+**This session: B57 built, B58 waiting.** The founder answered B57 §4: **Digital Bricks** on *Who made this*; **keep a daily count**
+(so the tally moved to Caddy, and Help's "two counts" sentence stays true); **switch the old address off straight away** once the new one
+is checked, no redirect; **the redesign goes to the new address first**. B58: they asked for the canvas link again — no icon picked.
+Full record: [`B57`](tasks/B57-the-move-to-digitalbricks.md) §5.
 
-**Done vs. merely written.** *Tested and walked in headless Chrome (`tools/walk.js`, 390×844):* the subtitles; the whole French loop,
-elision, crisis block (France, Belgium, UK, Kenya), country list, picker, all of Help, export and delete; the French hard stop firing.
-*Never observed:* **anything on a real phone** (the `contenteditable` blanks and the invisible `<select>` over `EN ▾` on iOS Safari are the
-two riskiest), **any of the French read by a native speaker**, J2 and J3.
+**Done vs. merely written.** *Observed from outside:* the new address over HTTP/2 with every header, the hash, the manifest type, the
+tally lines holding only the day, both workflows green, the other four sites on the box still 200. *Walked in headless Chrome:* the new
+*Who made this* in EN and FR. *Never observed:* **anything on a real phone**, any French read by a native speaker.
 
 **Settled this session, and where the plan of record was wrong:**
-- **B16's plan left `frozen`, `crisis` and `help` in English** pending sign-off. The founder asked for all of it; it is all French now, and
-  the frozen block is a faithful DRAFT (rule 7 says so), not a rewrite.
-- **The plan assumed the hard stop was language-neutral. It was English-only and could not match an accent** — §1a. Fixed.
-- **Rule 3's "not bet" does not bind French:** the word is « pari », the act « Je m’engage » / ENGAGÉ (recorded under rule 3).
-- **B15's "picker in Help only" is overturned:** `EN ▾` / `FR ▾` top right of every screen, no flag (recorded under rule 10).
-- **15 is not a helpline** and stays out of `helplines.js`; France is 3114. **Country names come from the browser in the reader's
-  language**, bare after a colon in French, never with an article.
-- The English Locked-in subtitle was changed to match the founder's French, not the other way round.
+- **B57 §2 assumed no count.** The founder wants one: `deploy/betr.caddy` writes `{"ts":"YYYY-MM-DD"}` per page open to `people.log` /
+  `robots.log` and nothing else; `tests/deploy.test.js` holds it. `views.yml` reads it.
+- **Secrets are new names (`BETR_DEPLOY_*`)**, not the old ones overwritten, so `main`'s old pipeline keeps working until the merge.
+- **Frozen sentence 9 changed** in both languages: "made by Digital Bricks" (the founder's name choice; the French is still draft).
+- CLAUDE.md rule 9 is **rewritten, not deleted**, so rule 10 keeps its number. B6 and B7 closed, will not do.
 
 ## 1a. READ THIS FIRST — the hard stop was broken outside English
 
@@ -46,23 +45,24 @@ Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `t
 
 ## 2. The next action
 
-0. **French is written; what is left is people:** the founder signs off the frozen French and says if TrybeUP's headline reads right;
-   French-speaking places for Help need reading on their own sites (B16 §10g). **« Pari » is masculine:** grep every French string for
-   feminine forms after any change. Open for the founder: `front.title`, and `crisis.howWeKnow` overclaiming (§10f), in both languages.
-1. **Get the founder to look at it on a phone, then merge — ENGLISH ONLY.** They open `web/index.html` from `redesign`, or screenshots.
-   Watch: typing into the two blanks on iPhone Safari (`contenteditable`, flowing inside the sentence — the one piece headless Chrome
-   cannot vouch for), the Return key, Paste. Then J1–J3 on a real phone, wifi off after load, then merge and push — **that publishes**.
-2. **Ask the founder §3 (a–c)** in one go, plainly, with the numbers.
-3. **B57 steps 6–8** (strip TrybeUP, *Who made this*, `README.md`) can go on `redesign` before the merge once the founder answers B57 §4a;
-   Help's TrybeUP block and the "two counts" sentence were left as they are for B57. Then **B58** icons.
+1. **The founder looks at `https://betr.digitalbricks.io` on their phone** — typing into the two blanks on iPhone Safari
+   (`contenteditable`), Return, Paste, the invisible `<select>` under `EN ▾`, then J1–J3 with wifi off after load. Any word change on
+   `redesign` needs `gh workflow run deploy.yml --ref redesign` to reach that address.
+2. **B58: the founder picks A–D** on the canvas's *Icon* artboard. Then `web/icon.svg`, the PNGs, manifest `any maskable` (B58 §2–3).
+3. **Merge `redesign` to `main` — ENGLISH ONLY is shippable** (French is not, §1a) — once the founder says. From then `main` publishes to
+   the new address. **Resolve deploy files to `redesign`'s versions** (`main` still has nginx.conf / compose).
+4. **Switch off the old address (B57 §2 step 9, no redirect),** each write confirmed: `betr.trybeup.com`'s block in `trybeup/trybeup-prod`
+   (under its own CLAUDE.md), the droplet's container, `/var/www/betr`, `/opt/betr`, its deploy user, the secrets `BETR_SERVER_*` and
+   `BETR_SSH_PRIVATE_KEY`. Ask whether the droplet's old tally is worth keeping before deleting it. Then delete CLAUDE.md's droplet
+   paragraph and the "two addresses" note in `changing-the-words.md`.
+5. **French is written; what is left is people:** the founder signs off the frozen French (now including sentence 9's new wording).
 
 ## 3. Waiting on people, not on code
 
 0. **The founder.** **(0a)** the French title — « qu’est-ce qui va se passer » (built) or their « que va-t-il se passer ». **(a)** contrast — canvas colours or a deeper ground
    (`#B34A27` gives paper 5.0:1); **the two subtitles are the pink at 2.65:1 and are aimed at whoever needs the most help, so ask this
    first**; **(b)** frozen sentence 2's "rate the belief again" and B56 §9c's purpose statement, both frozen, both describing an app that is
-   gone; **(c)** migrated results — no tag (built) or a mapping; **(d)** B58 icon; **(e)** B57 §4a, the name on *Who made this*;
-   **(f)** B57 §4c, no count of opens; **(g)** the DNS record; **(h)** B56 §9a, next-step sentences in *How it works* or nowhere.
+   gone; **(c)** migrated results — no tag (built) or a mapping; **(d)** B58 icon; **(h)** B56 §9a, next-step sentences in *How it works* or nowhere.
 1. **The paid CBT reviewer:** **the French harm words in `guards.js`, unreviewed (B16 §10a)**; `Yeah!`-on-a-worry (B56 §9b); "I am" has no
    road to a reframe (B56 §10 gap c); the harm list only knows harm to yourself (gap f); *How it works*.
 2. **A public-repo check:** `research/08-participant-voice-recovery.md` quotes public Reddit recovery posts with URLs. Founder's call.
@@ -74,8 +74,8 @@ Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `t
 | Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (137 pass on `redesign`) |
 | **Branches** | **`redesign`** = the new app, pushed, publishes nothing. **`main`** = the OLD app, and every push touching `web/**` publishes it |
 | **Walk it** | `node tools/walk.js start`, then `open` · `dump` · `tap` · `type` · `shot <file>` · `eval <js>` · `stop`. 390×844 @3x. **Always `stop`** |
-| **Live today** | `https://betr.trybeup.com` — the OLD app, TrybeUP droplet (`ssh le-jibe`) |
-| **The new box** | **`ssh nexus`**. Caddy config in `/etc/caddy/conf.d/`, sites under `/srv/<name>/site`. **Read freely; every write confirmed** |
+| **Live today** | **`https://betr.digitalbricks.io`** = `redesign` (box `ssh nexus`, `deploy/betr.caddy`, `/srv/betr/site`, tally `/var/log/betr`). `https://betr.trybeup.com` = OLD app, droplet `ssh le-jibe`, until switch-off |
+| **Box rules** | **Read freely; every write confirmed.** Four other sites on `nexus` — curl all after any Caddy reload |
 | **The canvas** · fixture | `claude.ai/artifact/RcR4SB27nUiW5P6PPJJBDc` — eight screens + icons. `tests/fixtures/v5-phone.json` is the old app's own output (`make-v5-phone.js`, `git worktree add … 141de4f`) |
 
 ## 5. Gotchas, live
@@ -86,7 +86,8 @@ Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `t
 - **The i18n sweep reads every `'…'` in app.js.** A class list on its own (`'paper small'`) reads as English — keep attributes inside a tag
   literal or use `markup()`. **A `'` inside a regex starts a fake string — write `\u0027`** (hit again 2026-09-16, in `ifLead`).
 - **The blanks are `contenteditable` and read as `textContent`.** The harness's `type()` sets both `value` and `textContent`.
-- **A CONFIG ON DISK IS NOT A CONFIG RUNNING.** `nexus`: `caddy validate` then `systemctl reload caddy`. **An asset asked for by URL must be
+- **A CONFIG ON DISK IS NOT A CONFIG RUNNING.** `nexus`: `caddy validate` then `systemctl reload caddy`. **`caddy validate` as root
+  CREATES new log files owned by root** and the reload then fails — `chown caddy` them first (learnings 2026-09-16). **An asset asked for by URL must be
   committed** (`img-src 'self' data:`, `font-src 'none'`), and **`git checkout <file>` restores HEAD** — `cp` to the scratchpad and back.
 - **AN ABSENCE ASSERTION DIES SILENTLY WHEN THE STRING DOES.** The no-number test checks the day label is there before stripping it.
 - **Every word a person reads is in `content/strings-en.js` / `-fr.js`.** Use `’` and `“ ”` — a plain `'` also ENDS the string. Generated:

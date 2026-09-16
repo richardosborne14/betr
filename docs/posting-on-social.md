@@ -74,12 +74,12 @@ sentence before there are posts carrying it, not after.
 - No "mental health", no "anxiety", no condition names — rule 7 bans "for people with
   [diagnosis]" and a bio is the most listing-like thing on the account.
 - No "join our community", no "DM me", no "link in bio 👇".
-- No mention of TrybeUP beyond the lineage line. Rule 9.
+- No other product named. BETR is nobody's funnel (B57, 2026-09-16).
 - No follower count games, no "1k and I'll post X".
 
-**Do keep the lineage visible.** "Made by the people behind TrybeUP" in the pinned post. If
-people work out later that BETR funnels to TrybeUP, having said it up front is the entire
-difference between honest and sneaky. Research 08 is full of people who felt sold to.
+**Do keep the lineage visible.** "Made by Digital Bricks. Free and open source." in the pinned
+post (B57, 2026-09-16). Who made a thing, said up front, is the entire difference between honest
+and sneaky. Research 08 is full of people who felt sold to.
 
 ---
 
@@ -303,7 +303,7 @@ are visible, all three are read as desperation, and this product's only asset is
 - ❌ Never post a real person's test.
 - ❌ Never quote the research corpus verbatim.
 - ❌ Never a "before / after" mental-health framing.
-- ❌ Never mention TrybeUP outside the lineage line.
+- ❌ Never mention TrybeUP. BETR names no other product (B57, 2026-09-16).
 - ❌ Never the word "AI", except to say there isn't any.
 - ❌ Never a streak, a score, or a "day 30" — rule 5 applies to the marketing as much as the app.
 

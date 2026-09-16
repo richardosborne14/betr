@@ -1,9 +1,9 @@
 # B57: The move — `betr.digitalbricks.io`, no TrybeUP, plainly free and open source
 
-**Status:** Not started. Founder's direction 2026-09-15: *"move BETR from TrybeUP to my Digital Bricks domain, betr.digitalbricks.io, on our
+**Status:** **Built, not switched over** (2026-09-16). The site serves `redesign` at `https://betr.digitalbricks.io` for the founder's phone check; the old address still serves the old app until they say. See §5. Founder's direction 2026-09-15: *"move BETR from TrybeUP to my Digital Bricks domain, betr.digitalbricks.io, on our
 nexus-1 VM in Hetzner. Remove any references to TrybeUP and make it a purely OSS, free to use, no strings type app, no recommendations other
 than the CBT stuff."* The repo went public under MIT the same day (`LICENSE`).
-**Confidence:** —
+**Confidence:** 8/10 for what is built (server, pipeline, strip — all observed working from outside); the switch-over is not done.
 **Date opened:** 2026-09-15
 **Depends on:** **the DNS record, the founder's** (§2 step 1). Independent of B56; the two can run side by side, and this one can ship the OLD
 app to the new address first if it is ready first — the address does not care which app it serves.
@@ -89,6 +89,39 @@ app to the new address first if it is ready first — the address does not care 
 - **4a.** The name on *Who made this*: *Digital Bricks*, the founder's name, or nothing but "free and open source".
 - **4b.** How long `betr.trybeup.com` redirects before it is switched off.
 - **4c.** Whether any count of opens is wanted at all. Recommendation: none. It costs a log, and the sentence on Help is simpler without it.
+
+## 5. What was built, 2026-09-16
+
+**The founder's answers (§4):** 4a **Digital Bricks**. 4c **keep a daily count** — against the recommendation, so the tally moved rather
+than went, and step 5's sentence did NOT change: Help's "two counts" sentence is still exactly true. 4b **switch the old address off
+straight away** once the new one is checked — no redirect. B58's icon: the founder asked for the canvas link again; not picked yet.
+And **the redesign goes to the new address first**, for the phone check, before any merge.
+
+**Built and observed:**
+- DNS already resolved (step 1 done by the founder before the session).
+- On `nexus`, each write confirmed: user `betr-deploy` (no sudo, key-only, cannot write `/etc/caddy`), `/srv/betr/site`,
+  `/var/log/betr` (`caddy:betr-deploy`, 2750), `/etc/caddy/conf.d/betr.caddy` = `deploy/betr.caddy`. Validated, reloaded; the other
+  four sites answered 200 before and after.
+- **The tally, differently from §2 step 3:** §2's snippet had no `log`. With a count wanted, Caddy writes `people.log` and
+  `robots.log`, one `{"ts":"YYYY-MM-DD"}` per open of the page, every other field deleted before disk. Proven locally with the release
+  binary first, then read back on the box. Learnings has the three traps.
+- The headers match the old nginx (CSP served as a header too, not just the meta tag as §2 assumed), plus HSTS and no `Server`.
+- **Secrets are NEW names** — `BETR_DEPLOY_HOST/USER/KEY` — not the old ones overwritten as §2 step 4 said, so `main` keeps publishing
+  the old app to the old address until the merge. Delete `BETR_SERVER_*` and `BETR_SSH_PRIVATE_KEY` on switch-off.
+- `deploy.yml` and `views.yml` point at the box; `deploy.yml` checks the running Caddy file is the repo's. `nginx.conf` and
+  `docker-compose.yml` deleted on `redesign` (still on `main`, where the old pipeline needs them until the merge).
+- **Published `redesign` by `gh workflow run deploy.yml --ref redesign`** — every step green, headers and hash checked from outside;
+  `views.yml` run the same way read the tally.
+- **TrybeUP stripped** from `web/`: places entry, Help block, logo file, strings in both languages, **frozen sentence 9 in both
+  languages** ("made by Digital Bricks" — the founder's name choice applied to a frozen sentence; the French is still draft per rule 7).
+  New *Who made this*: §7's wording, with the code link, and *Made by Digital Bricks.* at the foot. `menu.test.js` fails the build if the
+  name reappears in any file or screen. `grep -rni trybeup web tools .github` prints nothing.
+- CLAUDE.md rule 9 rewritten (not deleted, so rule 10's number holds), the droplet section replaced by the box, scope §1/§4.7/§6/Q4/Q5a,
+  B6/B7 closed, README rewritten, `changing-the-words.md` and `posting-on-social.md` updated.
+
+**Not done:** J1 on a real phone, wifi off; the merge; step 9's switch-off — the droplet's container, `/var/www/betr`, `/opt/betr`, its
+deploy user, the `betr.trybeup.com` block in `trybeup/trybeup-prod`, and the old secrets, each confirmed. The founder chose no redirect.
+Old tally history on the droplet is not copied; ask before deleting `/var/log/betr` there.
 
 ## Done when
 

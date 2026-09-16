@@ -1471,3 +1471,20 @@ matches against — not every string the person reads.
 **Second, smaller trap from the same hour:** the fix wanted `/[\u0300-\u036f]/` and `guards.test.js` failed with "a phone number is back in
 guards.js" — that test bans three digits in a row in that file, and `0300` is three digits in a row. `\p{Mn}` does the same job with no
 digits. The test was right and the escape was the problem.
+
+## Caddy: three ways a tally config lies while looking right (2026-09-16, B57)
+
+Moving the page-open tally from nginx to Caddy took about an hour, almost all of it on these:
+
+1. **`caddy validate`, run as root, OPENS the log files it validates** — so it creates them, owned by root. The reload that follows then
+   fails with `permission denied` on a file Caddy's own user cannot write, while the directory permissions look perfect. The running server
+   is untouched (a failed reload keeps the old config), which is why nothing else broke. After a validate that adds a log file: `chown
+   caddy` the new files before `systemctl reload caddy`.
+2. **`log_name` directives get reordered by the Caddyfile adapter** (matched before unmatched), and **the adapter picks one named log as
+   `default_logger_name`** for everything unrouted. "Everyone is people, robots are moved" written as two plain `log_name` lines sent every
+   request to robots. Wrap them in `route { }`, which keeps order as written, and check with `caddy adapt | jq '.apps.http.servers'`.
+3. **What Caddy writes can be cut to the day alone:** `format filter` deleting `request bytes_read user_id duration size status
+   resp_headers`, wrapped JSON with `time_format "2006-01-02"` and `message_key/level_key/name_key ""`. Each line is `{"ts":"2026-09-16"}`.
+   `tests/deploy.test.js` holds that list exactly — a field dropped from it comes straight back into the file.
+
+Test Caddy configs locally first: the release binary for macOS runs from the scratchpad with `admin off` and `auto_https off`, no install.
