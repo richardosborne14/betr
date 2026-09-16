@@ -98,8 +98,8 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 ## 5. Gotchas, live
 
 - **A `\u0027` TYPED INTO AN EDIT OR WRITE TOOL CALL ARRIVES AS A PLAIN APOSTROPHE.** Tool parameters are JSON. Write escapes from a script. (learnings, 2026-09-15)
-- **CHROME KEEPS THE OLD CSS/JS BETWEEN `open`s.** After editing anything under `web/`, `stop` and `start` the walker.
-- **zsh does not split `$w`.** Use a shell function: `w() { node tools/walk.js "$@"; }`.
+- **CHROME KEEPS THE OLD CSS/JS BETWEEN `open`s** — after editing under `web/`, `stop` and `start` the walker. **zsh does not split `$w`:**
+  use `w() { node tools/walk.js "$@"; }`.
 - **The i18n sweep reads every `'…'` in app.js.** A class list on its own (`'paper small'`) reads as English — keep attributes inside a tag
   literal or use `markup()`. **A `'` inside a regex starts a fake string — write `\u0027`** (hit again 2026-09-16, in `ifLead`).
 - **The blanks are `contenteditable` and read as `textContent`.** The harness's `type()` sets both `value` and `textContent`.
