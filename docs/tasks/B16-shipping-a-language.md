@@ -6,7 +6,7 @@ bottom for what was done, what is deliberately missing and the safety hole it fo
 after B56's strings settle — the app will say about thirty things instead of two hundred and fifty, and translating the old ones is work done
 twice. The stock list is gone with B56, so item 2 below (`worries-<code>.js`) no longer applies. Item 4 still does, in full: the lines for
 France, Belgium, Switzerland and Québec are read off each provider's own site on the day, by a person, or the country shows none.
-**Confidence:** —
+**Confidence:** **7/10, 2026-09-16, and B16 stays open.** 9/10 that what is built works as described: 137 tests, every French screen walked in headless Chrome. It is 7 and not 8 for three reasons nobody in a session can close: no native speaker has read the French, the French harm words are unreviewed, and nothing has been seen on a real phone. The founder closed the session here, not the task.
 **Date opened:** 2026-09-03
 **Depends on:** **B17** (the country layer — no language ships before it) and B15. Also B1 —
 translating placeholder words is work done twice.

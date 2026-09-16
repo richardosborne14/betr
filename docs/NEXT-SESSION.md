@@ -1,14 +1,25 @@
 # Start here
 
-**Last refreshed:** 2026-09-16, 11th session, end — **B56 is BUILT on the branch `redesign` and pushed. Not merged. 124 tests pass.** A merge
-to `main` publishes to the live address, and nobody has looked at it on a real phone yet. Rewritten, never appended to. Cap: 120 lines.
+**Last refreshed:** 2026-09-16, 11th session, end. **Branch `redesign`, pushed, not merged. 137 tests pass** (`node --test`, read
+2026-09-16 08:51 UTC at `6894326`, 0 French keys missing). A merge to `main` publishes to the live address. Rewritten, never appended to.
 
-**Three things happened.** The founder asked for **two subtitles** (B56 §11), then asked to see **French** — so B16 started: the loop is
-translated, France's and Switzerland's crisis numbers are read and shipped, and **walking it in French found that the one hard stop did not
-exist in French at all** (fixed). Then they reviewed the French: **the elision is built** (« Si je » → « Si j’ » as you type), four
-wordings changed, and the word is now **« pari »** with **« Je m’engage » / ENGAGÉ** — a knowing exception to rule 3's "not bet",
-recorded under rule 3. **Then the crisis block went French, a picker went top right** (§10f), **and then all of Help** (§10g). 137 tests pass.
-Read §1a before anything else.
+**This session:** the founder asked for two subtitles (B56 §11), then French (B16 §10a–g). Both are written. **B16 is not finished:
+French is complete in words and not shippable** — what is left is people, not code (§3).
+
+**Done vs. merely written.** *Tested and walked in headless Chrome (`tools/walk.js`, 390×844):* the subtitles; the whole French loop,
+elision, crisis block (France, Belgium, UK, Kenya), country list, picker, all of Help, export and delete; the French hard stop firing.
+*Never observed:* **anything on a real phone** (the `contenteditable` blanks and the invisible `<select>` over `EN ▾` on iOS Safari are the
+two riskiest), **any of the French read by a native speaker**, J2 and J3.
+
+**Settled this session, and where the plan of record was wrong:**
+- **B16's plan left `frozen`, `crisis` and `help` in English** pending sign-off. The founder asked for all of it; it is all French now, and
+  the frozen block is a faithful DRAFT (rule 7 says so), not a rewrite.
+- **The plan assumed the hard stop was language-neutral. It was English-only and could not match an accent** — §1a. Fixed.
+- **Rule 3's "not bet" does not bind French:** the word is « pari », the act « Je m’engage » / ENGAGÉ (recorded under rule 3).
+- **B15's "picker in Help only" is overturned:** `EN ▾` / `FR ▾` top right of every screen, no flag (recorded under rule 10).
+- **15 is not a helpline** and stays out of `helplines.js`; France is 3114. **Country names come from the browser in the reader's
+  language**, bare after a colon in French, never with an article.
+- The English Locked-in subtitle was changed to match the founder's French, not the other way round.
 
 ## 1a. READ THIS FIRST — the hard stop was broken outside English
 
@@ -24,40 +35,14 @@ on `redesign`, which publishes nothing. **Do not merge French to `main`.**
 
 ## 1. Where we are
 
-**The redesign exists.** `web/` on `redesign` is the eight screens of [`B56`](tasks/B56-the-redesign.md) §3: *What do you think will happen?*
-→ `If I ___, then ___.` → `Lock it in` → `LOCKED IN · Go and find out.` → `Done it` → *Did it go how you expected?* (`Yeah!` / `Sort of` /
-`Not really`) → *What happened?* → `Keep it` → the results, newest first → `Same again tomorrow` / `Done with this one`. *Your predictions*,
-*How it works*, Help. No number anywhere in the loop or the list. app.js is 951 lines (was 3,760); strings-en.js 444 (was 1,076).
+**The redesign exists.** `web/` on `redesign` is the eight screens of [`B56`](tasks/B56-the-redesign.md) §3, and **Read B56 §10 before
+touching it** — ten decisions made while building and seven gaps: old records migrate with NO tag (`betr.v2`); contrast is under 4.5:1
+(paper 4.25:1, the pink line 2.65:1, tokens top of `app.css`); frozen sentence 2 still says "rate the belief again".
 
-**Read B56 §10 before touching anything** — what was built, **ten decisions made while building** (each the founder's to overrule), seven
-gaps. The three that matter most: **old records migrate with NO tag on old results** (§5's mapping was backwards for the new question; every
-word is kept in `was` and the export; the key is `betr.v2`); **contrast is under 4.5:1** as the canvas draws it (paper 4.25:1, the pink line
-2.65:1, tokens at the top of `app.css`); **frozen sentence 2 still ends "and rate the belief again"** and there is no re-rate (frozen, so
-the founder's call, with B56 §9c).
-
-**The two subtitles (B56 §11)**, for "if this is the first time they need more help": the front says when a prediction can be about, and
-**Locked in** says it is kept and asks them back. One CSS class, `.sub`, both asserted. Neither proposes anything (rule 4) nor asks for
-anything back (rule 5).
-
-**French (B16 §10), `tu` throughout:** `content/strings-fr.js`, ~45 pieces of wording, one more `<script>` line in `index.html` and one in
-`tests/harness.js`; the Help language picker draws itself now there are two. `i18n.test.js` lists the 60 missing keys every run and
-`FROZEN_STILL_IN_ENGLISH` names French, so a missing frozen block is a decision, not an oversight.
-
-**The elision, built (B16 §10d):** « Si je » → « Si j’ » before a vowel as the person types, **no French in `app.js`** —
-`front.ifWordsElided` (**empty in English, empty means never**) and `front.noElision`, the aspirated-h list, because there is no rule:
-"j’hésite" but "je hurle". **`harness.js` now fires `oninput` from `type()`** — it never did, so nothing the app does mid-word was testable.
-
-**Four wordings changed on their review:** the Locked in subtitle is their own sentence **and the ENGLISH changed to match it**; « Ça s’est
-passé comme tu l’avais imaginé ? »; « Tout à fait ! » for « Ouais ! »; `copy-sheet.js` leaves two machinery keys out of `docs/COPY.md`.
-
-**Crisis numbers, read off the providers' own sites (B16 §10b):** **France 3114**, free, 24h/24 (in `notShipped` since 2026-09-03 only
-because both pages refused to be read that day — the rule working). **Switzerland 143**, `free` deliberately null: the page does not say.
-**Belgium** re-read, unchanged; **Québec** already covered by CA's 9-8-8. **15 is deliberately NOT in the file** — the French state
-separates emergency numbers (15, 112) from listening lines (3114), exactly as BETR's crisis block does.
-
-On 2026-09-15: `CLAUDE.md` rules 3, 4, 5, 10 and its opening note rewritten to B56; `docs/00-scope.md` §1 and §3; `docs/journeys.md` is the
-new J1–J3; `changing-the-words.md` and `copy-sheet.js` rewritten. **Walked** in `tools/walk.js` (390×844): J1 end to end, a refusal, Help,
-the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3.**
+**French is [B16](tasks/B16-shipping-a-language.md) §10a–g — read it before touching French.** `content/strings-fr.js` (`tu`); the elision
+(`front.ifWordsElided` + the aspirated-h list `front.noElision`, no French in `app.js`); `places.js` carries each link's French under `fr`;
+`where.js` names countries per language; crisis numbers read on their own sites (**France 3114**, **Switzerland 143** `free` null,
+Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `type()` and has `pick()`.
 
 ## 2. The next action
 
@@ -86,7 +71,7 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 
 | | |
 | --- | --- |
-| Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (134 pass on `redesign`) |
+| Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (137 pass on `redesign`) |
 | **Branches** | **`redesign`** = the new app, pushed, publishes nothing. **`main`** = the OLD app, and every push touching `web/**` publishes it |
 | **Walk it** | `node tools/walk.js start`, then `open` · `dump` · `tap` · `type` · `shot <file>` · `eval <js>` · `stop`. 390×844 @3x. **Always `stop`** |
 | **Live today** | `https://betr.trybeup.com` — the OLD app, TrybeUP droplet (`ssh le-jibe`) |
