@@ -33,22 +33,20 @@ word is kept in `was` and the export; the key is `betr.v2`); **contrast is under
 2.65:1, tokens at the top of `app.css`); **frozen sentence 2 still ends "and rate the belief again"** and there is no re-rate (frozen, so
 the founder's call, with B56 §9c).
 
-**The two subtitles (B56 §11)**, for "if this is the first time they need more help": the front says when a prediction can be about
-(*Right now, later today, some time in your life — whenever*), and **Locked in** says it is kept and asks them back. One CSS class, `.sub`;
-`loop.test.js` asserts both. Neither proposes anything (rule 4) and neither asks for anything back (rule 5).
+**The two subtitles (B56 §11)**, for "if this is the first time they need more help": the front says when a prediction can be about, and
+**Locked in** says it is kept and asks them back. One CSS class, `.sub`, both asserted. Neither proposes anything (rule 4) nor asks for
+anything back (rule 5).
 
-**French, 2026-09-16 (B16 §10), `tu` throughout:** `web/content/strings-fr.js`, about forty-five pieces of wording, loaded by one more
-`<script>` line in `index.html` and one in `tests/harness.js`. The language picker in Help draws itself now there are two. `i18n.test.js`
-lists the 60 missing keys every run and `FROZEN_STILL_IN_ENGLISH` names French, so a missing frozen block is a decision, not an oversight.
+**French (B16 §10), `tu` throughout:** `content/strings-fr.js`, ~45 pieces of wording, one more `<script>` line in `index.html` and one in
+`tests/harness.js`; the Help language picker draws itself now there are two. `i18n.test.js` lists the 60 missing keys every run and
+`FROZEN_STILL_IN_ENGLISH` names French, so a missing frozen block is a decision, not an oversight.
 
-**The elision, built (B16 §10d):** « Si je » → « Si j’ » in front of a vowel, as the person types, with **no French in `app.js`** —
-`front.ifWordsElided` (**empty in English, and empty means never**) and `front.noElision`, the aspirated-h list, because there is no rule:
-"j’hésite" but "je hurle". Stems are cut not to swallow a mute-h word (`hume` not `hum`, `honn` not `hon`). **`harness.js` now fires
-`oninput` from `type()`** — it never did, so nothing the app does mid-word was reachable from a test at all.
+**The elision, built (B16 §10d):** « Si je » → « Si j’ » before a vowel as the person types, **no French in `app.js`** —
+`front.ifWordsElided` (**empty in English, empty means never**) and `front.noElision`, the aspirated-h list, because there is no rule:
+"j’hésite" but "je hurle". **`harness.js` now fires `oninput` from `type()`** — it never did, so nothing the app does mid-word was testable.
 
-**Four wordings changed on the founder's review:** the Locked in subtitle is their own sentence **and the ENGLISH changed to match it**
-("…just as you wrote it. Come back and say what happened, in your own words."); « Ça s’est passé comme tu l’avais imaginé ? »;
-« Tout à fait ! » for « Ouais ! »; and `copy-sheet.js` leaves the two machinery keys out of `docs/COPY.md`.
+**Four wordings changed on their review:** the Locked in subtitle is their own sentence **and the ENGLISH changed to match it**; « Ça s’est
+passé comme tu l’avais imaginé ? »; « Tout à fait ! » for « Ouais ! »; `copy-sheet.js` leaves two machinery keys out of `docs/COPY.md`.
 
 **Crisis numbers, read off the providers' own sites (B16 §10b):** **France 3114**, free, 24h/24 (in `notShipped` since 2026-09-03 only
 because both pages refused to be read that day — the rule working). **Switzerland 143**, `free` deliberately null: the page does not say.
@@ -69,7 +67,7 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 1. **Get the founder to look at it on a phone, then merge — ENGLISH ONLY.** They open `web/index.html` from `redesign`, or screenshots.
    Watch: typing into the two blanks on iPhone Safari (`contenteditable`, flowing inside the sentence — the one piece headless Chrome
    cannot vouch for), the Return key, Paste. Then J1–J3 on a real phone, wifi off after load, then merge and push — **that publishes**.
-2. **Ask the founder the three questions in §3 (a–c)** in one go, plainly, with the numbers.
+2. **Ask the founder §3 (a–c)** in one go, plainly, with the numbers.
 3. **B57 steps 6–8** (strip TrybeUP, *Who made this*, `README.md`) can go on `redesign` before the merge once the founder answers B57 §4a;
    Help's TrybeUP block and the "two counts" sentence were left as they are for B57. Then **B58** icons.
 
@@ -107,7 +105,7 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 - **The blanks are `contenteditable` and read as `textContent`.** The harness's `type()` sets both `value` and `textContent`.
 - **A CONFIG ON DISK IS NOT A CONFIG RUNNING.** `nexus`: `caddy validate` then `systemctl reload caddy`. **An asset asked for by URL must be
   committed** (`img-src 'self' data:`, `font-src 'none'`), and **`git checkout <file>` restores HEAD** — `cp` to the scratchpad and back.
-- **AN ABSENCE ASSERTION DIES SILENTLY WHEN THE STRING DOES.** The no-number test checks the day label exists before stripping it; keep that.
+- **AN ABSENCE ASSERTION DIES SILENTLY WHEN THE STRING DOES.** The no-number test checks the day label is there before stripping it.
 - **Every word a person reads is in `content/strings-en.js` / `-fr.js`.** Use `’` and `“ ”` — a plain `'` also ENDS the string. Generated:
   `zones.js`, `docs/COPY.md`. **A crisis number is read off the provider's site on the day, or the country shows none.**
 - **The auto-mode classifier refuses `sed` on CLAUDE.md.** Edit it with the Edit tool, in the open.
