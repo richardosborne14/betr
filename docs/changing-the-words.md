@@ -130,7 +130,7 @@ betr.trybeup.com, published from `main`. The NEW app, from `redesign`, is at
 **https://betr.digitalbricks.io** so you can look at it on your phone — it was put there by hand
 and does not update by itself when you change a word on `redesign`; ask for it to be published
 again. When you are happy with it, the redesign is merged, `main` publishes to
-betr.digitalbricks.io from then on, and the old address is switched off.
+betr.digitalbricks.io from then on, and the old address sends people to the new one for six months.
 
 You can watch it happen: on GitHub, the **Actions** tab. A green tick means it published; a
 red cross means it did not, and nothing changed on the live site.

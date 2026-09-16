@@ -84,7 +84,7 @@ app to the new address first if it is ready first — the address does not care 
 - The build hash still stamps `index.html`, and `web/tests/` is still excluded from the copy.
 - The certificate is Caddy's own (Let's Encrypt, renewed by Caddy); there is no expiry to remember.
 
-## 4. Open, for the founder
+## 4. Open, for the founder (answered 2026-09-16, §5)
 
 - **4a.** The name on *Who made this*: *Digital Bricks*, the founder's name, or nothing but "free and open source".
 - **4b.** How long `betr.trybeup.com` redirects before it is switched off.
@@ -93,8 +93,8 @@ app to the new address first if it is ready first — the address does not care 
 ## 5. What was built, 2026-09-16
 
 **The founder's answers (§4):** 4a **Digital Bricks**. 4c **keep a daily count** — against the recommendation, so the tally moved rather
-than went, and step 5's sentence did NOT change: Help's "two counts" sentence is still exactly true. 4b **switch the old address off
-straight away** once the new one is checked — no redirect. B58's icon: the founder asked for the canvas link again; not picked yet.
+than went, and step 5's sentence did NOT change: Help's "two counts" sentence is still exactly true. 4b **a 301 redirect for six months**
+(founder 2026-09-16, changing an earlier "switch it off straight away") — until **2027-03-16**, then off. B58's icon: the founder asked for the canvas link again; not picked yet.
 And **the redesign goes to the new address first**, for the phone check, before any merge.
 
 **Built and observed:**
@@ -120,8 +120,8 @@ And **the redesign goes to the new address first**, for the phone check, before 
   B6/B7 closed, README rewritten, `changing-the-words.md` and `posting-on-social.md` updated.
 
 **Not done:** J1 on a real phone, wifi off; the merge; step 9's switch-off — the droplet's container, `/var/www/betr`, `/opt/betr`, its
-deploy user, the `betr.trybeup.com` block in `trybeup/trybeup-prod`, and the old secrets, each confirmed. The founder chose no redirect.
-Old tally history on the droplet is not copied; ask before deleting `/var/log/betr` there.
+deploy user, the `betr.trybeup.com` block in `trybeup/trybeup-prod`, and the old secrets, each confirmed. The founder chose a 301 for six months, to 2027-03-16:
+the redirect goes in first, the droplet's container and files can go the same day, and the nginx block stays until then. Old tally history on the droplet is not copied; ask before deleting `/var/log/betr` there.
 
 ## Done when
 

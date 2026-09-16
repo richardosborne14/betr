@@ -1,13 +1,15 @@
 # Start here
 
-**Last refreshed:** 2026-09-16, 12th session, end. **Branch `redesign`, pushed, not merged. 137 tests pass** (`node --test`).
+**Last refreshed:** 2026-09-16, 12th session, end. **Branch `redesign`, pushed, not merged. 139 tests pass** (`node --test`).
 **`redesign` is now LIVE at `https://betr.digitalbricks.io`** for the founder's phone check (published by hand:
 `gh workflow run deploy.yml --ref redesign`). `main` still publishes the OLD app to `betr.trybeup.com`. Rewritten, never appended to.
 
-**This session: B57 built, B58 waiting.** The founder answered B57 §4: **Digital Bricks** on *Who made this*; **keep a daily count**
-(so the tally moved to Caddy, and Help's "two counts" sentence stays true); **switch the old address off straight away** once the new one
-is checked, no redirect; **the redesign goes to the new address first**. B58: they asked for the canvas link again — no icon picked.
-Full record: [`B57`](tasks/B57-the-move-to-digitalbricks.md) §5.
+**This session: B57 built, B58 built, a narrow-phone fix.** The founder answered B57 §4: **Digital Bricks** on *Who made this*; **keep a
+daily count** (so the tally moved to Caddy, and Help's "two counts" sentence stays true); **a 301 from `betr.trybeup.com` for six months,
+to 2027-03-16** (they first said switch off, then changed it); **the redesign goes to the new address first**; **merge after their phone
+check**. B58: **C, the sunrise**, squarer and bigger — built ([`B58`](tasks/B58-the-icon.md) §4). Then the founder's screenshots showed the
+front sentence breaking below 390px: blanks now size from the card (`cqi`) and carry their punctuation (`.glue`); walked at 320–430 EN/FR.
+`BETR_WIDTH=320 node tools/walk.js …` walks a narrow phone. Full record: [`B57`](tasks/B57-the-move-to-digitalbricks.md) §5.
 
 **Done vs. merely written.** *Observed from outside:* the new address over HTTP/2 with every header, the hash, the manifest type, the
 tally lines holding only the day, both workflows green, the other four sites on the box still 200. *Walked in headless Chrome:* the new
@@ -48,13 +50,13 @@ Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `t
 1. **The founder looks at `https://betr.digitalbricks.io` on their phone** — typing into the two blanks on iPhone Safari
    (`contenteditable`), Return, Paste, the invisible `<select>` under `EN ▾`, then J1–J3 with wifi off after load. Any word change on
    `redesign` needs `gh workflow run deploy.yml --ref redesign` to reach that address.
-2. **B58: the founder picks A–D** on the canvas's *Icon* artboard. Then `web/icon.svg`, the PNGs, manifest `any maskable` (B58 §2–3).
+2. **B58: install to a home screen** on an iPhone and an Android phone and look at the sunrise (the one thing left in B58).
 3. **Merge `redesign` to `main` — ENGLISH ONLY is shippable** (French is not, §1a) — once the founder says. From then `main` publishes to
    the new address. **Resolve deploy files to `redesign`'s versions** (`main` still has nginx.conf / compose).
-4. **Switch off the old address (B57 §2 step 9, no redirect),** each write confirmed: `betr.trybeup.com`'s block in `trybeup/trybeup-prod`
-   (under its own CLAUDE.md), the droplet's container, `/var/www/betr`, `/opt/betr`, its deploy user, the secrets `BETR_SERVER_*` and
-   `BETR_SSH_PRIVATE_KEY`. Ask whether the droplet's old tally is worth keeping before deleting it. Then delete CLAUDE.md's droplet
-   paragraph and the "two addresses" note in `changing-the-words.md`.
+4. **Redirect the old address (B57 §2 step 9): a 301 to `https://betr.digitalbricks.io` until 2027-03-16,** in `trybeup/trybeup-prod`
+   under its own CLAUDE.md; each write confirmed. Once it redirects, remove the droplet's container, `/var/www/betr`, `/opt/betr`, its deploy user, the secrets `BETR_SERVER_*` and
+   `BETR_SSH_PRIVATE_KEY`. Ask whether the droplet's old tally is worth keeping before deleting it. **On 2027-03-16** take the redirect
+   out; then delete CLAUDE.md's droplet paragraph and the "two addresses" note in `changing-the-words.md`.
 5. **French is written; what is left is people:** the founder signs off the frozen French (now including sentence 9's new wording).
 
 ## 3. Waiting on people, not on code

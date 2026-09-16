@@ -1,6 +1,7 @@
 # B58: The icon — the new colour, and something that says hope or testing
 
-**Status:** Waiting on the founder's pick (asked 2026-09-16; they asked for the canvas link again). Founder, 2026-09-15: *"We need a new PWA logo, the existing one is a weird blue thing with lines, now we need the new
+**Status:** Built, not yet seen installed (2026-09-16). **The founder picked C, the sunrise**, "a bit less rounded corners
+cartoonish and a tiny bit bigger inside the square container". See §4. Founder, 2026-09-15: *"We need a new PWA logo, the existing one is a weird blue thing with lines, now we need the new
 colour plus something clear that represents hope or testing or a checklist or something."*
 **Confidence:** —
 **Date opened:** 2026-09-15
@@ -43,6 +44,17 @@ There is no ImageMagick and no PIL here (learnings 2026-09-12). Two ways that ex
 2. Or `tools/walk.js`: a one-line HTML page that draws the SVG at 512×512, then `shot`. It captures the whole page, so the page must be exactly
    512×512 with no margin.
 Then `sips -Z 192 icon-512.png --out icon-192.png` for the small one, and a 180px copy for `apple-touch-icon` if the 192 looks soft.
+
+## 4. What was built, 2026-09-16
+
+- **C, redrawn:** the same half-sun, horizon and three rays, but square ends instead of round caps, rays longer and thinner
+  (6 not 8), the sun radius 27 not 22 and the horizon 84 wide not 72, all centred in the tile. Compared side by side with the canvas
+  original at 220px and 60px before choosing (two rounds; a five-ray version was drawn and not used — the founder picked three).
+- `web/icon.svg` (full size, for `any` and iOS) and `web/icon-maskable.svg` (the same drawing at 78%, every point inside the 80%
+  circle), both under 400 bytes. PNGs from `qlmanage`, then `sips`: `icon-512`, `icon-192`, `icon-maskable-512`, and
+  `apple-touch-icon.png` at 180. Every pixel opaque (iOS paints transparency black) — checked by decoding the PNGs.
+- Manifest: two `any`, one `maskable`. `index.html`'s `apple-touch-icon` points at the 180. `loop.test.js` checks the files exist.
+- **Not done:** installed to a real iPhone and Android home screen and looked at.
 
 ## Done when
 

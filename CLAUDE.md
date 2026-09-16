@@ -174,8 +174,8 @@ is `deploy/betr.caddy`, copied by a person with root; the workflow's `betr-deplo
 `/srv/betr/site` and nothing else, and checks the running file matches the repo.
 
 **The old TrybeUP droplet (`le-jibe`)** still serves the old app at `betr.trybeup.com` until the
-founder's switch-off (B57 §2 step 9). Same rule: every write confirmed. `trybeup/trybeup-prod` and
-its own `CLAUDE.md` govern TrybeUP's side of it. Delete this paragraph the day it is switched off.
+merge; then a 301 to the new address until 2027-03-16 (founder, B57 §2 step 9). Same rule: every write confirmed. `trybeup/trybeup-prod` and
+its own `CLAUDE.md` govern TrybeUP's side of it. Delete this paragraph the day the redirect comes out.
 
 ## What not to do
 
