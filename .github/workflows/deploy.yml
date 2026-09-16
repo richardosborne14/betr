@@ -1,11 +1,11 @@
-name: Publish BETR to betr.trybeup.com
+name: Publish BETR to betr.digitalbricks.io
 
-# B3. Every push to main that changes what a person would load publishes it.
+# B3, moved to the Digital Bricks box in B57. Every push to main that changes what a person
+# would load publishes it.
 #
 # There is nothing to build: web/ is the site, exactly as it sits in the repo. The only
 # thing that happens between the checkout and the copy is the build hash being stamped into
-# index.html, so the number printed on the "what this is" screen is the number of the files
-# actually served.
+# index.html, so the number printed on Help is the number of the files actually served.
 #
 # The tests are a hard gate. They are not a formality here: loop.test.js fails the build if
 # the wordmark stops being BETR or if anything a person taps goes all-lowercase, and
@@ -27,6 +27,9 @@ on:
 concurrency:
   group: betr-publish
   cancel-in-progress: false
+
+env:
+  SITE: https://betr.digitalbricks.io
 
 jobs:
   publish:
@@ -58,61 +61,46 @@ jobs:
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.BETR_SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.BETR_DEPLOY_KEY }}
 
       - name: Add server to known hosts
-        run: ssh-keyscan -H ${{ secrets.BETR_SERVER_HOST }} >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H ${{ secrets.BETR_DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
       # web/tests/ is deliberately not part of the hash, so serving it would make the
       # published number impossible to check by anyone who hashed the folder they were given.
+      #
+      # The account this logs in as owns /srv/betr/site and nothing else: no sudo, no write to
+      # the Caddy config, no reach into any other site on the box. It can publish the app; it
+      # cannot change how the app is served.
       - name: Publish the site
         run: |
-          rsync -avz --delete \
+          rsync -rlvz --delete --chmod=D755,F644 \
             --exclude='tests/' \
             --exclude='.DS_Store' \
             web/ \
-            ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }}:/var/www/betr/
+            ${{ secrets.BETR_DEPLOY_USER }}@${{ secrets.BETR_DEPLOY_HOST }}:/srv/betr/site/
 
-      # The server's own config lives in this repo too, so how BETR is served is readable by
-      # the same person who reads the app, and the repo is the source of truth for it.
-      #
-      # The deploy user cannot restart containers — deliberately. It owns /var/www/betr and
-      # /opt/betr and has no other power on that machine at all: not the docker group, not a
-      # sudo rule, no reach into TrybeUP's containers, config, web roots or data. So this
-      # copies the config up and checks that it ARRIVED. It cannot check that the running
-      # server is using it — that needs the docker group, which is the power the deploy user
-      # deliberately lacks — and for five days in September it was not: the file was on disk
-      # and the container was still reading the copy from before (docs/learnings.md,
-      # 2026-09-15).
-      #
-      # --inplace is the half of that which is ours to fix. The container mounts nginx.conf as
-      # a single FILE, and plain rsync writes a new file and renames it over the old one, so
-      # the container goes on holding the old one for ever. Written in place, it is the same
-      # file. nginx still only reads it when it starts, so a person still restarts it.
-      - name: Publish the server config
+      # How BETR is served lives in this repo as deploy/betr.caddy, and a person with root
+      # copies it to the box. This checks the copy running there is this file. A config on
+      # disk is not a config running, and a config in the repo is not a config on disk
+      # (docs/learnings.md): if this fails, somebody changed one and not the other.
+      - name: The server is running the config in this repo
         run: |
-          rsync -avz --inplace \
-            deploy/nginx.conf deploy/docker-compose.yml \
-            ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }}:/opt/betr/
-
-      - name: The server has the config in this repo
-        run: |
-          live=$(ssh ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }} \
-                   'sha256sum /opt/betr/nginx.conf | cut -d" " -f1')
-          mine=$(sha256sum deploy/nginx.conf | cut -d' ' -f1)
-          running=$(curl -sS --max-time 20 -o /dev/null -w '%{http_code}' https://betr.trybeup.com/)
+          live=$(ssh ${{ secrets.BETR_DEPLOY_USER }}@${{ secrets.BETR_DEPLOY_HOST }} \
+                   'sha256sum /etc/caddy/conf.d/betr.caddy | cut -d" " -f1')
+          mine=$(sha256sum deploy/betr.caddy | cut -d' ' -f1)
           if [ "$live" != "$mine" ]; then
-            echo "::error::deploy/nginx.conf did not arrive on the server"; exit 1
+            echo "::error::/etc/caddy/conf.d/betr.caddy on the box is not deploy/betr.caddy. The site files were published; the server config was not, and only a person with root can copy it (then: caddy validate --config /etc/caddy/Caddyfile && systemctl reload caddy)."
+            exit 1
           fi
-          echo "deploy/nginx.conf is on the server ($mine), site returned $running"
-          echo "::notice::If deploy/nginx.conf changed in this commit, a person still has to run this once on the droplet: cd /opt/betr && docker compose up -d --force-recreate — plain 'up -d' sees nothing changed and does nothing. Then check: docker exec betr-web nginx -T | grep <a line you added>"
+          echo "deploy/betr.caddy is the config on the box ($mine)"
 
-      # Everything the "what this is" screen and scope §7 promise, checked from outside, on
-      # the real address, over TLS — the way a suspicious person would check it.
+      # Everything Help and scope §7 promise, checked from outside, on the real address, over
+      # TLS — the way a suspicious person would check it.
       - name: Check what the server actually says
         run: |
           set -e
-          headers=$(curl -sSI --max-time 20 https://betr.trybeup.com/)
+          headers=$(curl -sSI --max-time 20 "$SITE/")
           echo "$headers"
 
           fail=0
@@ -123,19 +111,24 @@ jobs:
               echo "::error::$2 — missing"; fail=1
             fi
           }
-          # Not "^HTTP/2 200": TrybeUP's nginx terminates TLS for this address and enables
-          # http2 on no host, so BETR is served over HTTP/1.1. The protocol version was never
-          # the thing being checked — that the address answers 200 is (2026-09-03).
           check "^HTTP/[0-9.]* 200"                 "the page loads"
           check "connect-src 'none'"                "CSP blocks every outbound request"
           check "font-src 'none'"                   "CSP blocks every web font"
           check "x-content-type-options: nosniff"   "nosniff"
           check "referrer-policy: no-referrer"      "no referrer"
+          check "strict-transport-security"         "HTTPS only"
+          check "cache-control: no-cache"           "the page is revalidated"
 
           if printf '%s' "$headers" | grep -qi "^set-cookie"; then
             echo "::error::the server set a cookie — it must never set one"; fail=1
           else
             echo "  ok   no cookie is set"
+          fi
+
+          if printf '%s' "$headers" | grep -qi "^server:"; then
+            echo "::error::the server names itself"; fail=1
+          else
+            echo "  ok   the server does not name itself"
           fi
 
           if printf '%s' "$headers" | grep -qi "unsafe-inline"; then
@@ -144,7 +137,7 @@ jobs:
             echo "  ok   no 'unsafe-inline'"
           fi
 
-          served=$(curl -sS --max-time 20 https://betr.trybeup.com/ \
+          served=$(curl -sS --max-time 20 "$SITE/" \
             | grep -o 'name="betr-build" content="[^"]*"' | sed 's/.*content="//;s/"//')
           if [ "$served" = "${{ steps.hash.outputs.hash }}" ]; then
             echo "  ok   the page prints the hash of the files it served"
@@ -154,7 +147,7 @@ jobs:
 
           # The manifest has to arrive as a manifest or "Add to Home Screen" quietly stops
           # working, and on an iPhone that is the only thing keeping a person's entries.
-          ctype=$(curl -sSI --max-time 20 https://betr.trybeup.com/manifest.webmanifest \
+          ctype=$(curl -sSI --max-time 20 "$SITE/manifest.webmanifest" \
             | grep -i '^content-type' | tr -d '\r')
           case "$ctype" in
             *manifest+json*) echo "  ok   the manifest is served as a manifest" ;;
@@ -163,13 +156,5 @@ jobs:
 
           exit $fail
 
-      - name: TrybeUP is still up
-        run: |
-          for host in trybeup.com dev.trybeup.com; do
-            code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 20 "https://$host/")
-            echo "$host -> $code"
-            [ "$code" = "200" ] || { echo "::error::$host returned $code"; exit 1; }
-          done
-
       - name: Say where to look
-        run: echo "Published → https://betr.trybeup.com (build ${{ steps.hash.outputs.hash }})"
+        run: echo "Published → $SITE (build ${{ steps.hash.outputs.hash }})"

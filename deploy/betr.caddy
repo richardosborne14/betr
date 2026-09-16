@@ -1,0 +1,107 @@
+# BETR's web server (B57). This file is the whole of it.
+#
+# It lives on the Digital Bricks box as /etc/caddy/conf.d/betr.caddy, imported by the main
+# Caddyfile, and it is copied there by a person with root — never by the publish workflow.
+# The account GitHub logs in as owns /srv/betr/site and nothing else, so the thing that
+# publishes the app cannot change how the app is served. The workflow checks that the file
+# running there is byte-for-byte this one.
+#
+# BETR is a folder of static files. Caddy hands over a file, adds the headers that keep the
+# promise printed on Help, gets its own certificate, and does nothing else.
+
+# ── The tally (B52, carried over in B57), and it is the whole of what we count ──────────────
+# The founder asked for one number: how many times the page is opened each day, and how many
+# of those did not say they were robots. What Caddy writes for one open is this, and only this:
+#
+#     {"ts":"2026-09-16"}
+#
+# The day, no hour, no minute. Every other field Caddy would normally write — the address,
+# the browser, the page, the referrer, the headers, the duration — is deleted below before
+# anything reaches the disk. tests/deploy.test.js holds that list, so a field cannot come back
+# quietly.
+#
+# Only the page itself counts (log_skip below): not app.js, not the stylesheet, not an icon.
+# One open is one line. The robots go to their own file, decided by what the thing calls
+# itself and nothing else; the user agent is read, compared to the fixed list, and never
+# written. A robot that lies about what it is lands in people.log, and most of them lie, so
+# that file is a floor on robots, not a truth about people. Both are opens, not people.
+(betr_tally) {
+	output file /var/log/betr/{args[0]}.log {
+		roll_disabled
+		mode 0640
+	}
+	format filter {
+		wrap json {
+			time_format "2006-01-02"
+			message_key ""
+			level_key ""
+			name_key ""
+		}
+		fields {
+			request delete
+			bytes_read delete
+			user_id delete
+			duration delete
+			size delete
+			status delete
+			resp_headers delete
+		}
+	}
+}
+
+betr.digitalbricks.io {
+	root * /srv/betr/site
+	encode zstd gzip
+
+	# Only the page is counted.
+	@notpage not path / /index.html
+	log_skip @notpage
+
+	# Everyone is people unless they say they are a robot. A request with no user agent at all
+	# is not a browser. The list is fixed, here, and never fetched from anywhere. The link
+	# preview fetchers matter most: Meta fetches every link shared on Instagram and WhatsApp.
+	# `route` keeps these two in this order; outside one, Caddy would reorder them.
+	@robot expression `{header.User-Agent}.matches('(?i)(^$|bot|crawl|spider|slurp|scrape|curl|wget|python-requests|libwww|okhttp|java/|go-http|headless|phantomjs|puppeteer|playwright|lighthouse|facebookexternalhit|meta-externalagent|whatsapp|telegram|slack|discord|twitter|linkedin|embedly|pinterest|quora|applebot|bingpreview|monitor|uptime|pingdom|statuscake|gtmetrix|semrush|ahrefs|mj12|dotbot|petal|bytespider|gpt|claude|ccbot|perplexity|amazon|yandex|baidu|duckduck|archive)')`
+	route {
+		log_name people
+		log_name @robot robots
+	}
+	log people {
+		import betr_tally people
+	}
+	log robots {
+		import betr_tally robots
+	}
+
+	# ── The headers that make "nothing leaves the phone" checkable ──────────────────────────
+	# The CSP is the meta tag in index.html served as a real header, minus the file: entries,
+	# which exist only so the page works opened straight off disk. connect-src 'none' blocks
+	# fetch, XHR, WebSocket and sendBeacon outright; font-src 'none' blocks every web font.
+	header {
+		Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; manifest-src 'self'; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()"
+		Cross-Origin-Opener-Policy same-origin
+		Cross-Origin-Resource-Policy same-origin
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+
+		# No filename carries a content hash (app.js is always app.js), so a browser holding
+		# yesterday's app.js against today's index.html would run a build nobody published, and
+		# the hash on Help would be a lie. The whole site is ~100 KB; revalidating is cheap.
+		Cache-Control "no-cache"
+	}
+
+	# Without this the manifest can arrive as the wrong type, the browser refuses it, and "Add
+	# to Home Screen" quietly stops working — on an iPhone, the only thing keeping a person's
+	# entries past seven days.
+	header /manifest.webmanifest Content-Type application/manifest+json
+
+	# Nothing is hidden, but a dotfile is never something a person asked for.
+	@dotfile path */.*
+	respond @dotfile 404
+
+	# Every URL is a file or it is a 404. No fallback to index.html.
+	file_server
+}

@@ -1,18 +1,20 @@
 name: How many times the page has been opened
 
-# B52. The founder asked for one number and this is where it is read.
+# B52, moved to the Digital Bricks box in B57. The founder asked for one number and this is
+# where it is read.
 #
 # There is nothing to install and nothing to log into: open this repo on github.com, the
 # Actions tab, this workflow, "Run workflow". The numbers appear in the run's summary a few
 # seconds later. It is a button, not a command.
 #
-# What it reads is a folder of files on the droplet: 2026-09-10.log is every open that day,
-# 2026-09-10.nobots.log is the ones that did not say they were a robot. Each holds a row of
-# "1"s and nothing else, so there is nothing here that could be about a person: no address —
-# BETR is never told one — no browser, no referrer, no clock time. See deploy/nginx.conf, and
+# What it reads is two files on the box: /var/log/betr/people.log, every open that did not
+# say it was a robot, and robots.log, the ones that did. Every line in both is the day and
+# nothing else — {"ts":"2026-09-16"} — so there is nothing here that could be about a person:
+# no address, no browser, no referrer, no clock time. See deploy/betr.caddy, and
 # tests/deploy.test.js, which holds that server to an allow-list of what it may read at all.
 #
-# It only reads. Nothing here can change the count or delete a day.
+# It only reads. Nothing here can change the count or delete a day. Days counted by the old
+# server, before the move, are not in these files.
 
 on:
   workflow_dispatch: {}
@@ -27,27 +29,23 @@ jobs:
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.BETR_SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.BETR_DEPLOY_KEY }}
 
       - name: Add server to known hosts
-        run: ssh-keyscan -H ${{ secrets.BETR_SERVER_HOST }} >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H ${{ secrets.BETR_DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Count the marks
+      - name: Count the lines
         run: |
           set -e
 
-          # Two lines per day: the date, every open, and the opens that did not say they
-          # were robots. Both files hold nothing but "1"s.
-          raw=$(ssh ${{ secrets.BETR_SERVER_USER }}@${{ secrets.BETR_SERVER_HOST }} '
-            if [ ! -d /var/log/betr ]; then echo "NODIR"; exit 0; fi
-            for f in /var/log/betr/*.log; do
-              [ -e "$f" ] || continue
-              b=$(basename "$f" .log)
-              case "$b" in *.nobots) continue;; esac
-              n=$(wc -l < "$f" | tr -d " ")
-              h=-
-              [ -e "/var/log/betr/$b.nobots.log" ] && h=$(wc -l < "/var/log/betr/$b.nobots.log" | tr -d " ")
-              printf "%s %s %s\n" "$b" "$n" "$h"
+          # One row per day: the date, the opens that did not say they were robots, the ones
+          # that did. A file that does not exist yet is a file nobody has written to yet —
+          # Caddy creates each on its first line — and says so rather than printing 0.
+          raw=$(ssh ${{ secrets.BETR_DEPLOY_USER }}@${{ secrets.BETR_DEPLOY_HOST }} '
+            for f in people robots; do
+              [ -r "/var/log/betr/$f.log" ] || { echo "MISSING $f"; continue; }
+              grep -o "[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}" "/var/log/betr/$f.log" | sort | uniq -c \
+                | awk -v f="$f" "{print f, \$2, \$1}"
             done')
 
           {
@@ -55,82 +53,46 @@ jobs:
             echo
           } >> "$GITHUB_STEP_SUMMARY"
 
-          if [ "$raw" = "NODIR" ]; then
-            {
-              echo "**The tally folder does not exist on the server yet.**"
-              echo
-              echo 'That means the server is still running the config from before B52. Somebody'
-              echo 'has to run `cd /opt/betr && docker compose up -d` on the droplet once — the'
-              echo 'deploy account deliberately cannot restart its own container.'
-            } >> "$GITHUB_STEP_SUMMARY"
+          if printf '%s\n' "$raw" | grep -q '^MISSING people' && printf '%s\n' "$raw" | grep -q '^MISSING robots'; then
+            echo 'Nobody and nothing has opened the page on this server yet. Nothing has been lost — the files appear on the first open.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
 
-          if [ -z "$raw" ]; then
-            echo 'The tally is running and nobody has opened the page yet. Nothing has been lost — a day with no opens has no file.' >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
+          table=$(printf '%s\n' "$raw" | awk '
+            $1=="people" {p[$2]=$3; d[$2]=1}
+            $1=="robots" {r[$2]=$3; d[$2]=1}
+            END { for (k in d) print k, p[k]+0, p[k]+r[k] }' | sort -r)
 
-          # A missing .nobots.log is NOT a zero. nginx only creates the file on the first open
-          # that did not say it was a robot, so a day with no file means one of two things:
-          # nobody but robots came, or the second count was not running at all. It was the
-          # second, for five days (docs/learnings.md, 2026-09-15), and this workflow printed
-          # "0" — which read as "1,144 robots". So: days before the first .nobots.log that ever
-          # existed were NOT COUNTED; days after it with no file really are 0.
-          first=$(printf '%s\n' "$raw" | sort | awk '$3!="-" {print $1; exit}')
-          if [ -n "$first" ]; then
-            raw=$(printf '%s\n' "$raw" | awk -v f="$first" '$3=="-" && $1>=f {$3=0} {print}')
-          fi
-
-          total=$(printf '%s\n' "$raw" | awk '{s+=$2} END {print s+0}')
-          human=$(printf '%s\n' "$raw" | awk '$3!="-" {s+=$3} END {print s+0}')
-          days=$(printf '%s\n' "$raw" | wc -l | tr -d ' ')
-          split=$(printf '%s\n' "$raw" | awk '$3!="-"' | wc -l | tr -d ' ')
+          human=$(printf '%s\n' "$table" | awk '{s+=$2} END {print s+0}')
+          total=$(printf '%s\n' "$table" | awk '{s+=$3} END {print s+0}')
+          days=$(printf '%s\n' "$table" | grep -c .)
           today=$(date -u +%Y-%m-%d)
-          todays=$(printf '%s\n' "$raw" | awk -v d="$today" '$1==d {print $3}')
-          [ "$todays" = "-" ] && todays="not counted"
+          todays=$(printf '%s\n' "$table" | awk -v d="$today" '$1==d {print $2}')
 
           {
-            if [ -z "$first" ]; then
-              echo "## $total opens, and the robot count is not running"
-              echo
-              echo "**$total** opens in total across $days day(s). **None of them has been sorted into robots or not.** That is not zero robots and not zero people: the second count has never written a single line, so there is no robot number at all yet."
-              echo
-              echo '> **Why:** the server is still running its config from before the robot count existed.'
-              echo '> Somebody has to run this once on the droplet: `cd /opt/betr && docker compose up -d --force-recreate`.'
-              echo '> Plain `docker compose up -d` is not enough — it sees nothing changed and leaves the old server running.'
-            else
-              echo "## $human, once the robots are taken out"
-              echo
-              echo "**$total** opens in total across $days day(s); **$human** of them did not say they were a robot."
-              if [ "$split" -lt "$days" ]; then
-                echo "Days before $first say *not counted*: the robot count was not running yet, and the $human is from $first on only."
-              fi
-            fi
+            echo "## $human, once the robots are taken out"
             echo
-            echo "Today so far: **${todays:-0}**."
+            echo "**$total** opens in total across $days day(s); **$human** of them did not say they were a robot."
+            echo
+            echo "Today so far (UTC): **${todays:-0}**."
             echo
             echo '| Day | Not robots | Every open |'
             echo '| --- | ---: | ---: |'
-            printf '%s\n' "$raw" | sort -r | head -60 | while read -r d n h; do
-              if [ "$h" = "-" ]; then
-                echo "| $d | not counted | $n |"
-              else
-                echo "| $d | **$h** | $n |"
-              fi
+            printf '%s\n' "$table" | head -60 | while read -r d h n; do
+              echo "| $d | **$h** | $n |"
             done
             echo
             echo '### What these numbers are, and are not'
             echo
             echo '- Both count **opens of the page**, not people. One person opening it five times is five in both.'
             echo '- **"Not robots" means "did not say it was a robot."** A scraper that lies about what it is lands in that column, and most of them lie. It is a floor, not a truth.'
-            echo '- Nothing is decided by anybody'"'"'s address. BETR is never told one — see deploy/nginx.conf.'
+            echo '- Nothing is decided by anybody'"'"'s address. The server does not read one — see deploy/betr.caddy.'
             echo '- The middle column is the honest one to watch after a post. The gap between the columns is Meta and the crawlers fetching your link for a preview.'
             echo '- A returning visitor counts again; somebody using it offline, after installing it, does not count at all, so this is a floor rather than a total.'
             echo '- Anything that asks for the page counts, **including us**. Point an uptime monitor at `/app.js`, never at the page.'
-            echo '- **About 288 a day is one open every five minutes, around the clock.** That is the rhythm of a machine checking the page, not of people. Since the count began, "every open" has sat near 290 on every full day.'
+            echo '- The days are UTC days. Days before the move to betr.digitalbricks.io were counted by the old server and are not here.'
             echo '- Neither number can tell anybody — us included — who, how many people, whether anyone came back, or whether they got past the first screen.'
           } >> "$GITHUB_STEP_SUMMARY"
 
-          printf '%s\n' "$raw" | sort -r
+          printf '%s\n' "$table"
           echo "TOTAL $total  NOT-ROBOTS $human"
