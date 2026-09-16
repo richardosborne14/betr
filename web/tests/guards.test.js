@@ -86,6 +86,40 @@ test('a belief naming anyone\u2019s safety is refused here, not one screen later
 
 
 /*
+  B16, 2026-09-16. The one hard stop is not an English feature.
+
+  This test exists because the French app was walked and the founder's own example, typed in
+  French, WAS LOCKED IN: HARM held eleven English phrases and `hit()` turned every accented
+  letter into a space. Both are fixed in lib/guards.js. The first case below is that exact
+  sentence, and it is pinned here so the day somebody adds a language they find this test
+  rather than find out later.
+
+  The second half matters just as much: ordinary French must still go through. A stop that
+  refuses everything is not a stop, it is a broken app that nobody can use.
+*/
+test('the hard stop is not in English: the founder\u2019s own example is refused in French too', () => {
+  for (const s of ['me tue', 'me tuer', 'me suicider', 'en finir', 'me faire du mal', 'me blesser']) {
+    const r = guards.checkPart(s);
+    assert.strictEqual(r.ok, false, 'went through in French: ' + s);
+    assert.strictEqual(r.kind, 'harm', s);
+    assert.strictEqual(r.reason, 'refusal.harm', s);
+  }
+  /* The whole sentence, as a person would write it into the two blanks. */
+  assert.strictEqual(guards.checkPart('me tue').ok, false);
+  assert.strictEqual(guards.checkPart('tout le monde ira mieux').ok, true, 'the second blank is not the stop');
+  assert.strictEqual(guards.checkTest('Si je me tue, alors tout le monde ira mieux.').kind, 'harm');
+});
+
+test('an accent never hides a word from the hard stop, and ordinary French still goes through', () => {
+  /* Before the NFD fold, the strip to a-z turned an accent into a space and split the word. */
+  assert.strictEqual(guards.checkPart('me suicider').ok, false);
+  for (const s of ['demande mon vendredi \u00e0 mon patron', 'parle \u00e0 ma s\u0153ur de ce qui me p\u00e8se',
+                   'appelle mon p\u00e8re', 'r\u00e9ponds non \u00e0 la r\u00e9union', 'ose dire ce que je pense']) {
+    assert.strictEqual(guards.checkPart(s).ok, true, 'ordinary French was refused: ' + s);
+  }
+});
+
+/*
   The narrow exemption that came with the loosening. "I'm going to get fired if I ask" is a
   textbook prediction and used to be refused as a verdict on its first two words. A sentence
   with "if" in it is a conditional; a bare one is still a core belief and still refused.

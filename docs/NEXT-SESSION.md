@@ -3,8 +3,22 @@
 **Last refreshed:** 2026-09-16, 11th session, end — **B56 is BUILT on the branch `redesign` and pushed. Not merged. 124 tests pass.** A merge
 to `main` publishes to the live address, and nobody has looked at it on a real phone yet. Rewritten, never appended to. Cap: 120 lines.
 
-**This session was one small thing:** the founder saw the redesign, called it great, and asked for **two subtitles** — the two places a
-first-timer is left guessing. Both built, both tested, both on `redesign` (B56 §11). Nothing else moved; §2's next action is unchanged.
+**Two things happened.** The founder asked for **two subtitles** (B56 §11, built and tested), then asked to see **French** — so B16 started:
+the loop is translated, France's and Switzerland's crisis numbers are read and shipped, and **walking it in French found that the one hard
+stop did not exist in French at all.** Fixed. 126 tests pass. Read §1a before anything else.
+
+## 1a. READ THIS FIRST — the hard stop was broken outside English
+
+The founder's own example of what must always be refused, typed into the French app — « Si je me tue, alors tout le monde ira mieux » —
+**was accepted and locked in.** `guards.HARM` was eleven English phrases, and `hit()` turned every accented letter into a space before
+matching, so no accented word could ever have matched in any language. Both fixed in `web/lib/guards.js`: **one list for every language,
+never indexed by the interface language**, accents folded with `\p{Mn}`. `guards.test.js` pins the founder's sentence in French and pins
+ordinary French going through. **The French harm words are unreviewed and are for the CBT reviewer** — B16 §10a, and `docs/learnings.md`
+has the general version, which is not about French.
+
+**French is NOT shippable.** `frozen`, `crisis`, `where` and `help` are deliberately untranslated and fall back to English, so a French
+reader gets the loop in French and Help and the crisis block in English — worst on a refusal, which is a French sentence followed by an
+English crisis block. It is on `redesign`, which publishes nothing. **Do not merge French to `main`.**
 
 ## 1. Where we are
 
@@ -27,6 +41,17 @@ and seven gaps. The three that matter most:
 - **Locked in**, under *Go and find out.*: *We'll keep it here, in your own words. Come back and say what happened.*
 - One CSS class, `.sub`; `loop.test.js` asserts both. Neither proposes anything (rule 4) and neither asks for anything back (rule 5).
 
+**French, 2026-09-16 (B16 §10), first pass, `tu` throughout — the founder's call:** `web/content/strings-fr.js`, about forty-five pieces of
+wording, loaded by one more `<script>` line in `index.html` and one in `tests/harness.js`. The language picker in Help draws itself now that
+there are two. `i18n.test.js` lists the 60 missing keys on every run and `FROZEN_STILL_IN_ENGLISH` names French, so a missing frozen block is
+a decision, not an oversight. **The only thing French needs from CODE:** « Si je » does not elide — *si j'appelle*, not *si je appelle* — and
+no string can fix it; B16 §10d has the two ways out and it is the founder's choice.
+
+**Crisis numbers, read off the providers' own sites on 2026-09-16 (B16 §10b):** **France 3114** free 24h/24 (it was in `notShipped` since
+2026-09-03 because both pages refused to be read that day — the rule working). **Switzerland 143** La Main Tendue, `free` deliberately null
+because the page does not say. **Belgium** re-read, unchanged. **Québec** already covered by CA's 9-8-8. **15 is deliberately not in the
+file:** the French state separates emergency numbers (15, 112) from listening lines (3114), exactly as BETR's crisis block does.
+
 On 2026-09-15: `CLAUDE.md` rules 3, 4, 5 and 10 rewritten to B56, and its opening note; `docs/00-scope.md` §1 and §3; `docs/journeys.md` is the
 new J1–J3; `docs/changing-the-words.md` and `tools/copy-sheet.js` (→ `docs/COPY.md`) rewritten for the new strings; learnings has four new
 entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (390×844), and the front and Locked in at 100% and 200%.
@@ -34,7 +59,10 @@ entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (3
 
 ## 2. The next action
 
-1. **Get the founder to look at it on a phone, then merge.** They can open `web/index.html` from the repo while it is on the `redesign`
+0. **Ask the founder the French questions in B16 §10d** — the elision (the one code decision), « Je la verrouille » for *Lock it in*, and
+   whether « prédiction » is the word. Then translate `frozen`, `crisis`, `where` and `help` — **and the country names, which live in
+   `helplines.js` in English**, or the crisis screen reads "les numéros de the United Kingdom". Both move together.
+1. **Get the founder to look at it on a phone, then merge — ENGLISH ONLY.** They can open `web/index.html` from the repo while it is on the `redesign`
    branch, or be walked through screenshots. What to watch: typing into the two blanks on iPhone Safari (they are `contenteditable`, flowing
    inside the sentence — the one piece of this that a headless Chrome cannot vouch for), the keyboard's Return key, and Paste.
    Then walk J1–J3 on a real phone, wifi off after load. Then `git checkout main && git merge redesign` and push — **that publishes**.
@@ -50,7 +78,7 @@ entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (3
    "rate the belief again", and B56 §9c's purpose statement — both frozen, both now describe an app that is gone; **(c)** migrated results —
    no tag (built) or a mapping; **(d)** B58 icon; **(e)** B57 §4a, the name on *Who made this*; **(f)** B57 §4c, no count of opens;
    **(g)** the DNS record; **(h)** B56 §9a, next-step sentences in *How it works* or nowhere.
-1. **The paid CBT reviewer:** the `Yeah!`-on-a-worry wrinkle (B56 §9b); "I am" has no road to a reframe on the front screen (B56 §10 gap c); the harm list only knows harm to yourself (gap f);
+1. **The paid CBT reviewer:** **the French harm words in `guards.js`, which are unreviewed (B16 §10a)**; the `Yeah!`-on-a-worry wrinkle (B56 §9b); "I am" has no road to a reframe on the front screen (B56 §10 gap c); the harm list only knows harm to yourself (gap f);
    *How it works*.
 2. **A public-repo check:** `docs/research/08-participant-voice-recovery.md` quotes public Reddit recovery-forum posts with URLs. Founder's call.
 
@@ -58,7 +86,7 @@ entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (3
 
 | | |
 | --- | --- |
-| Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (124 pass on `redesign`) |
+| Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (126 pass on `redesign`) |
 | **Branches** | **`redesign`** = the new app, pushed, publishes nothing. **`main`** = the OLD app, and every push touching `web/**` publishes it |
 | **Walk it** | `node tools/walk.js start`, then `open` · `dump` · `tap` · `type` · `shot <file>` · `eval <js>` · `stop`. 390×844 @3x. **Always `stop`** |
 | **Live today** | `https://betr.trybeup.com` — the OLD app, TrybeUP droplet (`ssh le-jibe`) |
@@ -82,4 +110,10 @@ entries. **Walked:** J1 end to end plus a refusal and Help in `tools/walk.js` (3
 - **A crisis number is read off the provider's site on the day, or the country shows none.** This does not loosen for French.
 - **The auto-mode classifier refuses `sed` on CLAUDE.md.** Edit it with the Edit tool, in the open.
 - **The repo is public.** No address, key, or person's name goes into a doc.
+- **A RULE WRITTEN AS A WORD LIST ONLY WORKS IN THE LANGUAGE IT WAS WRITTEN IN**, and the tests guarding it are in that language too, so
+  they keep passing. Before any new language, hunt every list the code MATCHES against, not every string a person reads. (learnings, 2026-09-16)
+- **`\u0300` IS THREE DIGITS IN A ROW**, and `guards.test.js` bans those in `guards.js` because a phone number must never live there. Use
+  `\p{Mn}` and similar named escapes in that file.
+- **Walk the app in a language by tapping Help → the language button** (`[data-lang="fr"]`), then `#where` → `[data-cc="FR"]` for the
+  country. The walker always starts in English on `Europe/London`.
 - **No ImageMagick, no PIL.** SVG → PNG is `qlmanage -t -s 512 -o <dir> file.svg`; crop is `sips -c`.

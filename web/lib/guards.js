@@ -33,10 +33,38 @@
   else (root.Betr = root.Betr || {}).guards = api;
 })(typeof self !== 'undefined' ? self : this, function () {
 
-  /* Anyone's safety. Refused outright, with the crisis lines. */
+  /*
+    Anyone's safety. Refused outright, with the crisis lines.
+
+    ONE LIST FOR EVERY LANGUAGE, ON PURPOSE, and it is not indexed by the language the app is
+    set to. A French speaker whose phone is in English writes French into the blanks, and a
+    stop that only knew the interface language would let that straight through. Matching every
+    language every time is strictly safer and it costs nothing. So: never split this per
+    language, and never pass the language in.
+
+    B16, 2026-09-16, and this is how the hole was found: the French app was walked, the
+    founder's own example was typed into it in French — "Si je me tue, alors tout le monde ira
+    mieux" — AND IT WAS LOCKED IN. The list was eleven English phrases, so the one hard stop
+    in the whole product silently did not exist in French.
+
+    THE FRENCH WORDS BELOW ARE MINE AND HAVE NOT BEEN REVIEWED. They mirror the English ones
+    phrase for phrase. Two of them can fire on a sentence that meant nothing of the kind —
+    "en finir" ("en finir avec ce projet") and "me tue" ("si je me tue à lui expliquer") — the
+    same trade the English "end it" already makes. A stop that fires when it should not shows
+    somebody a helpline they did not need; a stop that stays quiet is the harm this exists to
+    prevent. That is the right way round, and it is still for the CBT reviewer to confirm.
+
+    It is also, deliberately, still short. B56 gap (f) stands in both languages: this knows
+    harm to YOURSELF, and a sentence about hurting somebody else goes through, though rule 3
+    says "hurting anyone".
+  */
   var HARM = [
+    /* English */
     'suicide', 'suicidal', 'kill myself', 'end it', 'self harm', 'self-harm',
-    'harm myself', 'hurt myself', 'cut myself', 'overdose', 'od'
+    'harm myself', 'hurt myself', 'cut myself', 'overdose', 'od',
+    /* French (B16). 'suicide' and 'overdose' are the same word and are not repeated. */
+    'suicidaire', 'me suicider', 'me tuer', 'me tue', 'en finir', 'en finis',
+    'automutilation', 'me mutiler', 'me faire du mal', 'me blesser', 'me couper'
   ];
 
   var REASON = {
@@ -52,9 +80,23 @@
   /* A nudge is a key too. Nothing in the app draws it (B32); see checkBelief. */
   var NUDGE = { shape: 'nudge.shape' };
 
-  /* Word-boundary match, so "Betr" never trips anything and "method" never trips "od". */
+  /*
+    Word-boundary match, so "Betr" never trips anything and "method" never trips "od".
+
+    Accents are folded before the strip (B16): the strip keeps only a-z, so without the fold
+    an accented letter became a SPACE and split the word around it. Any language with accents
+    would have had a harm list that could never match — quietly, with no test failing.
+
+    NFD splits é into e plus a combining mark, and \p{Mn} is every combining mark there is, so
+    this works for a language nobody has thought of yet. It is written that way rather than as
+    a numeric range for a good reason: guards.test.js fails the build on three digits in a row
+    in this file, because a phone number must never live here (B17), and a \u escape looks
+    exactly like one. Keep it digit-free.
+  */
   function hit(text, words) {
-    var t = ' ' + String(text || '').toLowerCase().replace(/[’']/g, '\'').replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
+    var t = ' ' + String(text || '').toLowerCase()
+      .normalize('NFD').replace(/\p{Mn}/gu, '')
+      .replace(/[’']/g, '\'').replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
     for (var i = 0; i < words.length; i++) {
       if (t.indexOf(' ' + words[i] + ' ') !== -1) return words[i];
     }

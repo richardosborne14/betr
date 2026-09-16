@@ -124,9 +124,50 @@ var BETR_HELPLINES = {
         name: 'Centre de Prévention du Suicide',
         number: '0800 32 123', tel: 'tel:080032123', text: false, free: null, allHours: null,
         note: 'in French',
-        source: 'https://www.preventionsuicide.be', checked: '2026-09-03'
+        source: 'https://www.preventionsuicide.be', checked: '2026-09-16'
       }
     ] },
+
+    /*
+      B16, 2026-09-16. France was in `notShipped` from 2026-09-03 because 3114.fr and the
+      government page both refused to be read that day. Both were read on 2026-09-16.
+
+        the number   3114, on https://3114.fr — "Appelez le 3114"
+        the hours    "Nous sommes là pour vous répondre, 24h/24, 7j/7", on every page of the site
+        the cost     "Partout en France, l'appel et les services de la ligne 3114 sont
+                     gratuits", on https://3114.fr/confidentialite-et-gratuite/
+        who runs it  "Le 3114 est piloté par le Ministère en charge de la santé"
+        where        "en métropole et outre-mer", 18 centres, calls routed to the nearest
+
+      NOT 15. The French state's own page separates numbers to CALL IN AN EMERGENCY (15 SAMU,
+      17, 18, 112, 114) from numbers to TALK TO SOMEBODY (3114 and the rest), and BETR's
+      crisis block does the same: the first line already says to call the local emergency
+      number, and this list is the second thing. 15 is the right number for a medical
+      emergency and it is not a listening line, so it does not belong in this file.
+      Source for that split: https://www.service-public.gouv.fr/particuliers/actualites/A15841
+    */
+    FR: { country: 'France', lines: [{
+      /* Its own site calls it "le 3114, numéro national de prévention du suicide". `name: '3114'`
+         made the screen read "Call 3114 — 3114", so the name is the words and not the digits. */
+      name: 'Numéro national de prévention du suicide',
+      number: '3114', tel: 'tel:3114', text: false, free: true, allHours: true,
+      source: 'https://3114.fr/confidentialite-et-gratuite/', checked: '2026-09-16'
+    }] },
+
+    /*
+      B16, 2026-09-16, added with France because Switzerland is the other country where a
+      French speaker is likely to be reading this.
+
+      `free` is null and stays null: 143.ch says "De jour comme de nuit, personnel, anonyme
+      et confidentiel" but says NOTHING about the call being free, and Swiss short codes are
+      not always free. The convention in this file is that null means the page did not say,
+      and then neither do we. Do not fill this in from anywhere but the provider's own page.
+    */
+    CH: { country: 'Switzerland', lines: [{
+      name: 'La Main Tendue',
+      number: '143', tel: 'tel:143', text: false, free: null, allHours: true,
+      source: 'https://www.143.ch/fr/', checked: '2026-09-16'
+    }] },
 
     ES: { country: 'Spain', lines: [{
       name: 'Línea 024',
@@ -152,16 +193,16 @@ var BETR_HELPLINES = {
     Read but not shipped on 2026-09-03, and why. Kept so the next person does not spend the
     afternoon finding out the same thing.
 
-      FR  3114 is France's national line. 3114.fr and the government's page both refused to
-          be read that day. It is almost certainly right and it is still not in the list,
-          because "almost certainly" is not the standard this file holds.
+      FR  read and shipped on 2026-09-16 (B16). It is above. On 2026-09-03 both 3114.fr and
+          the government's page refused to be read, and it was left out rather than typed
+          from memory — which is the rule working, not the rule failing.
       IN  telemanas.mohfw.gov.in served a certificate that would not verify.
       SG  sos.org.sg returned 503, mindline.sg returned 403.
       KE  no national provider page could be reached at all.
       NG, PH, MY, PL, SE, PT, JP, MX  not attempted. Real countries, real people, no excuse
           other than time. These are the next entries somebody should add.
   */
-  notShipped: ['FR', 'IN', 'SG', 'KE']
+  notShipped: ['IN', 'SG', 'KE']
 };
 
 if (typeof module === 'object' && module.exports) module.exports = BETR_HELPLINES;

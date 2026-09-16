@@ -27,9 +27,19 @@ the files they lived in.
 | **Every sentence in the app** — the question on the front screen, the sentence with two blanks, every button, *How it works*, Help, the crisis wording, what a screen reader says | `web/content/strings-en.js` |
 | The links on Help | `web/content/places.js` |
 | A crisis phone number | `web/content/helplines.js` — **never typed from memory**; see rule 3 at the bottom |
+| **The same sentence in French** | `web/content/strings-fr.js` — same names, French words (added 2026-09-16) |
 
 `docs/COPY.md` shows each sentence with its name in that file — `front.title`, `go.yeah` — so
 you can go from the thing you crossed out to the line it lives on without hunting.
+
+**About French, since 2026-09-16.** There are now two word files and they work the same way:
+the name on the left of each line is identical, only the words differ. Two things to know.
+**A sentence French has not got yet simply shows the English one** — nothing breaks, nothing
+goes blank, and that is on purpose while the translation is unfinished, so you will see English
+on Help and on the crisis screen even with the app set to French. And **changing an English
+sentence does not change the French one**: if you reword `front.title` in `strings-en.js`, the
+French `front.title` keeps saying what it said. Change both, or ask and it gets done. `docs/COPY.md`
+is still English only.
 
 Two files are **never** hand-edited: `web/content/zones.js` (generated from the world's time
 zone list) and `docs/COPY.md` itself (generated from the others — editing it changes nothing in

@@ -1,6 +1,7 @@
 # B16: Shipping a language — the repeatable process, and which ones
 
-**Status:** Not started. Written 2026-09-03. **Repeatable: once per language, forever.**
+**Status:** **French started 2026-09-16 — the loop is translated, the numbers are read, and it is NOT SHIPPABLE.** See §10 at the
+bottom for what was done, what is deliberately missing and the safety hole it found. Written 2026-09-03. **Repeatable: once per language, forever.**
 **First language: French, the founder's ask of 2026-09-15 ("asap"). The founder reads and signs off the French themselves.** It starts only
 after B56's strings settle — the app will say about thirty things instead of two hundred and fifty, and translating the old ones is work done
 twice. The stock list is gone with B56, so item 2 below (`worries-<code>.js`) no longer applies. Item 4 still does, in full: the lines for
@@ -153,3 +154,85 @@ Nothing here is optional, and the list is the same every time:
 
 Per language: everything in "What each language ships with", and the confidence score for that
 language recorded in this file under its own heading.
+
+---
+
+## 10. French, first pass — 2026-09-16
+
+The founder asked to see the French. This is what exists now, on the branch `redesign`, which publishes nothing.
+
+### 10a. The safety hole this found, which is the most important thing on this page
+
+**The one hard stop did not exist in French.** The founder's own example of what must always be refused, typed into the French app
+— *« Si je me tue, alors tout le monde ira mieux »* — **was accepted and locked in.** Two causes, both in `web/lib/guards.js`:
+
+1. `HARM` was eleven **English** phrases. Nothing in it matched French.
+2. `hit()` stripped everything outside `a-z` **after** lowercasing, so an accented letter became a **space** and split the word around it.
+   Any language with accents would have had a harm list that could never match, silently, with no test failing.
+
+Both are fixed. The list is now **one list for every language, never indexed by the interface language** — a French speaker whose phone is
+in English types French into the blanks, so matching every language every time is the only safe shape. Accents are folded with `\p{Mn}`
+(written without a numeric range on purpose: `guards.test.js` fails the build on three digits in a row in that file, and a `\u` escape
+looks exactly like a phone number). `guards.test.js` pins the founder's sentence in French and pins five ordinary French sentences going
+through, so a stop that refuses everything fails the build too.
+
+**The French words in that list are mine and have not been reviewed.** They mirror the English phrase for phrase. Two can fire on a
+sentence that meant nothing of the kind — *en finir* ("en finir avec ce projet") and *me tue* ("si je me tue à lui expliquer") — the same
+trade the English *end it* already makes, and the right way round. **For the CBT reviewer, with B56 gap (f)**, which stands in both
+languages: this knows harm to yourself, not harm to somebody else.
+
+### 10b. The numbers, read off the providers' own sites on 2026-09-16
+
+| | |
+| --- | --- |
+| **France** | **3114**, free, 24h/24 7j/7. Number and hours on `https://3114.fr`; the cost sentence — *"Partout en France, l'appel et les services de la ligne 3114 sont gratuits"* — on `https://3114.fr/confidentialite-et-gratuite/`. Run by the Ministère en charge de la santé, métropole and outre-mer. It was in `notShipped` from 2026-09-03 because both pages refused to be read that day; that was the rule working, not failing |
+| **Switzerland** | **143**, La Main Tendue, `https://www.143.ch/fr/`. `allHours` true — *"De jour comme de nuit"*. **`free` is null and stays null:** the page does not say the call is free, and Swiss short codes are not always free. Null means the page did not say, and then neither do we |
+| **Belgium** | unchanged, **0800 32 123**, Centre de Prévention du Suicide, re-read the same day; `checked` bumped |
+| **Québec** | already covered by the existing **CA** entry (9-8-8), which answers in French |
+
+**15 is deliberately NOT in `helplines.js`.** The French state's own page separates numbers to **call in an emergency** (15 SAMU, 17, 18,
+112, 114) from numbers to **talk to somebody** (3114 and the rest), and BETR's crisis block already does exactly that: its first line says
+to call the local emergency number, and this list is the second thing. 15 is the right number for a medical emergency and is not a
+listening line. Source for the split: `https://www.service-public.gouv.fr/particuliers/actualites/A15841`.
+
+**Open, and worth a decision:** BETR's first crisis line never names the emergency number, in any country. In France that is 15 or 112.
+Naming it per country is a small change to `helplines.js` and the crisis wording, and B17 deliberately did not do it.
+
+### 10c. What is translated, and what is deliberately not
+
+`web/content/strings-fr.js`, **`tu` throughout** (the founder's call). The loop, the foot, *Tes prédictions*, *Comment ça marche*, the
+refusals, install, export and delete — about forty-five pieces of wording.
+
+**Missing on purpose, falling back to English key by key:** `frozen` (approved once by a named person, then frozen — not mine to draft),
+`crisis` and `where` (read by somebody in trouble, and the country NAMES come from `helplines.js`, which is English, so translating the
+wording alone produces "les numéros de the United Kingdom" — both move together or neither does), `help` (the whole screen, including
+rule 9's three safeguard sentences that `menu.test.js` pins).
+
+`i18n.test.js` prints the 60 missing keys on every run, and `FROZEN_STILL_IN_ENGLISH` names French explicitly so a language with no frozen
+block is a decision somebody made rather than something nobody noticed. The test still fails the build on a **half-written** frozen block.
+
+**So a French reader today gets the loop in French and Help and the crisis block in English.** That is visible on screen and it is the
+reason this is not shippable. The worst case is the refusal screen: a French sentence saying BETR can't help, and then an English crisis
+block. That screenshot is the argument for doing the crisis wording next.
+
+### 10d. Wording decisions for the founder
+
+- **`front.ifWords` is « Si je » and French elides** — *si j'appelle*, not *si je appelle*. The app prints `ifWords` then what the person
+  typed, so a blank starting with a vowel reads wrong. **No string can fix this.** Two ways out: a `front.ifWordsElided` key the app picks
+  when the blank starts with a vowel, or an `ifWords` of « Si » with the person writing "je" themselves. **This is the only code French needs.**
+- **« Je la verrouille » for *Lock it in*** — literal, slightly technical, and the load-bearing word on the front screen. Alternatives
+  offered: « Je m'engage », « C'est noté ».
+- **« prédiction »** leans a little more towards fortune-telling than the English *prediction* does. Rule 3's word, so the founder's.
+- `why.method` says *"le morceau que tu peux faire de ton côté"* rather than *"seul"*, which would have to pick a gender.
+
+### 10e. Done / not done
+
+- [x] The loop translated, `tu`, walked end to end in `tools/walk.js` at 390×844 with the app set to French
+- [x] France and Switzerland read off the providers' own sites and added; Belgium re-read; France out of `notShipped`
+- [x] The hard stop fixed and pinned in both languages; 126 tests pass
+- [ ] **`frozen`, `crisis`, `where` and `help` translated** — and the country names, which live in `helplines.js`
+- [ ] **The founder reads and signs off the French**, which is what B16 says and has not happened
+- [ ] **The CBT reviewer on the French harm words**
+- [ ] The elision decision, then the code for it
+- [ ] `docs/COPY.md` is English only; a French sheet to mark up needs `tools/copy-sheet.js` reworked
+- [ ] Jurisdiction look before any non-English store listing (§3 above) — untouched

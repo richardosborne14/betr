@@ -25,11 +25,22 @@ const i18n = require('../lib/i18n.js');
 const guards = require('../lib/guards.js');
 const store = require('../lib/store.js');
 const en = require('../content/strings-en.js');
+const fr = require('../content/strings-fr.js');
 
 const WEB = path.join(__dirname, '..');
 
 /* Every language file in the build. B16 adds one line here and the whole file starts testing it. */
-const LOCALES = { en: en };
+const LOCALES = { en: en, fr: fr };
+
+/*
+  A language may deliberately have NO frozen block, and French does (B16, 2026-09-16). The
+  frozen sentences and the purpose statement are approved once, by a named person, and then
+  frozen; until that has happened a French reader falls back to the English ones, which is
+  what lib/i18n.js does key by key. Naming the language here is how that stays a decision
+  somebody made rather than something nobody noticed: the test below still fails on a
+  half-written or stubbed frozen block, which is the thing worth catching.
+*/
+const FROZEN_STILL_IN_ENGLISH = ['fr'];
 
 const at = (tree, key) => key.split('.').reduce((node, part) => (node == null ? node : node[part]), tree);
 
@@ -202,6 +213,8 @@ test('every language has every key, or falls back visibly', () => {
 test('the frozen sentences are frozen, in every language', () => {
   for (const code of Object.keys(LOCALES)) {
     const s = LOCALES[code].s.frozen;
+    if (s === undefined && FROZEN_STILL_IN_ENGLISH.indexOf(code) !== -1) continue;
+    assert.ok(s, code + ' has no frozen block and is not listed as still reading the English one');
     assert.strictEqual(s.sentences.length, 9, code + ' does not have nine sentences');
     for (const line of s.sentences) assert.ok(line.trim().length > 40, code + ' has a stub sentence');
     assert.ok(s.purpose.trim().length > 100, code + ' has no purpose statement');
