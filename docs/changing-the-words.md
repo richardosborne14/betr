@@ -36,7 +36,8 @@ you can go from the thing you crossed out to the line it lives on without huntin
 the name on the left of each line is identical, only the words differ. To see the app in French,
 tap the grey **EN ▾** at the top right of any screen and choose *Français*; it remembers. Two
 things to know. **A sentence French has not got yet simply shows the English one** — nothing
-breaks, nothing goes blank — so Help is still mostly English even with the app in French. And
+breaks, nothing goes blank — though since 2026-09-16 French has every sentence. The links on Help keep their
+French right beside the English in `places.js`, under `fr`. And
 **changing an English sentence does not change the French one**: reword `front.title` in
 `strings-en.js` and the French `front.title` keeps saying what it said. Change both, or ask and it
 gets done. **French agrees and English does not:** the French word for a prediction is *pari*,

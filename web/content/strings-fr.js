@@ -7,27 +7,28 @@
   founder reads and approves the French themselves. Until they have, this file is something
   to read and argue with, not something to ship.
 
-  ── WHAT IS DELIBERATELY MISSING ───────────────────────────────────────────────────────
+  ── WHAT NEEDS A SIGNATURE BEFORE IT SHIPS ────────────────────────────────────────
 
-  Two blocks are NOT here, and their absence is the point. A missing key falls back to
-  English one key at a time (lib/i18n.js), so a French reader sees them in English:
+  Since 2026-09-16 every block is here, the whole of Help included, at the founder's ask.
+  Three parts are DRAFTS OF THINGS THAT ARE NORMALLY FROZEN OR PINNED, and the founder — the
+  named person who approves this language (B16) — signs them off before a French build ships:
 
-    frozen   the purpose statement and the nine sentences. They are frozen (CLAUDE.md rule 7)
-             and a translation of them is approved ONCE, by a named person, and then frozen
-             the same way. A draft translation of a "not a medical device" sentence is not a
-             small thing to get wrong, and it is not mine to write. Frozen sentence 7 is the
-             crisis sentence on Help; it stays English with the other eight.
-    help     the whole Help screen: what CBT is, the airplane-mode proof, TrybeUP's block,
-             what it costs. Rule 9's three safeguard sentences live there and menu.test.js
-             pins them; they get their own pass. Only `langTitle` and `langNote` are here,
-             because the language picker says them.
+    frozen   the purpose statement and the nine sentences. In English they are verbatim from
+             the research and never reworded (CLAUDE.md rule 7). These are a faithful
+             translation, NOT a rewrite: sentence 2 still says "rate the belief again" and the
+             purpose still says "pick a worry", because the English does, and fixing those is
+             B56 §9c's decision in both languages at once. Once signed off, these are frozen in
+             French the same way. « dispositif médical » is the EU's legal term, on purpose,
+             and B16 §3 asks for a jurisdiction look before any French store listing.
+             Sentence 7 is the one place in this file with phone numbers in it, exactly as in
+             English, and app.js makes them tappable by matching "988", "116 123" and
+             "findahelpline.com" — so those three must stay written exactly like that.
+    help.maker*   rule 9's three safeguards — the cost including the paid plan, the AI coach,
+             and that nothing written here goes there — are in French too, and menu.test.js now
+             fails the build if the French loses any of them.
+    help.makerTag TrybeUP's own headline, translated. It is their line, not ours.
 
-  The crisis block and the country list ARE here since 2026-09-16, the founder's ask, with
-  the country names coming from the browser in French rather than from helplines.js.
-
-  So a French reader gets the loop, the crisis block and the country list in French, and the
-  rest of Help in English. Still a half-translated app, still visible on the screen, still
-  fine on the `redesign` branch and not on the live address.
+  The links' descriptions on Help live in content/places.js, each with its French beside it.
 
   ── ELISION, BUILT 2026-09-16 ─────────────────────────────────────
 
@@ -50,7 +51,8 @@
   - The act is « s’engager » and the state is « engagé » (founder, 2026-09-16): the button says
     « Je m’engage » and a locked-in pari is tagged ENGAGÉ. The thing is a pari; what you do with
     it is commit.
-  - No crisis phone number is ever written in this file, in any language. Numbers live in
+  - No crisis phone number is ever written in this file, EXCEPT inside frozen sentence 7, as in
+    English. Numbers live in
     content/helplines.js with the page they were read on and the day somebody read it there,
     and THE COUNTRY decides them, never the language: a French speaker in Texas gets 988.
   - The phrases that never appear, in any language, including in translation: "digital CBT",
@@ -65,6 +67,32 @@ var BETR_STRINGS_FR = {
   name: 'Français',
 
   s: {
+
+    /* ------------------------------------------------------------------ frozen, in draft */
+
+    /*
+      A FAITHFUL TRANSLATION OF THE ENGLISH, NOT A REWRITE, awaiting the founder's sign-off
+      (2026-09-16). See the header. `tu`, like the rest of the app. Where the English says "it"
+      and French would have to pick a gender, sentence 1 names it a « fiche » and the rest say
+      « elle »; sentences 5 and 6 are written to need no gender for the reader at all.
+    */
+    frozen: {
+      purpose: 'BETR t’aide à mettre à l’épreuve, dans la vie de tous les jours, des croyances qui ne ' +
+        't’aident pas. Tu choisis une inquiétude sur la façon dont les gens vont réagir, BETR te ' +
+        'propose une petite chose à essayer aujourd’hui, et tu notes ce qui s’est réellement passé.',
+
+      sentences: [
+        'Ceci est une fiche d’exercices d’auto-assistance, pas une thérapie, et ce n’est pas un dispositif médical. Elle ne diagnostique, ne traite, ne guérit et ne prévient aucune maladie ni aucun trouble.',
+        'Elle utilise une technique de la thérapie cognitivo-comportementale (TCC), l’expérience comportementale : écrire une croyance, prédire ce qui va se passer, essayer, noter ce qui s’est réellement passé, et évaluer à nouveau la croyance.',
+        'Elle peut t’aider à gérer les inquiétudes du quotidien et les croyances qui ne t’aident pas. Elle ne les fera pas disparaître, et elle ne remplace pas un travail avec un thérapeute TCC qualifié. Si tu peux en voir un, fais-le.',
+        'Elle n’est pas pour toi en ce moment si tu as des pensées suicidaires ou d’automutilation, si on t’a dit que tu avais une psychose ou un trouble bipolaire, si tu as un trouble du comportement alimentaire, un TSPT ou un TOC, ou en cas de dépendance à l’alcool ou aux drogues. Tout cela demande une personne, pas une application.',
+        'Si tu es déjà en thérapie, suis ce que prévoit ta thérapie. N’utilise ceci qu’avec l’accord de la personne qui t’accompagne.',
+        'Choisis des expériences sûres et légales. N’en conçois jamais une qui touche à l’habitude que tu essaies de changer, à l’automutilation, au fait de te priver de nourriture, ou qui te mette en danger, toi ou quelqu’un d’autre.',
+        'Si tu es en danger ou en crise, appelle le numéro d’urgence local. Aux États-Unis, appelle ou envoie un SMS au 988. Au Royaume-Uni et en Irlande, appelle gratuitement les Samaritans au 116 123. Ailleurs, findahelpline.com répertorie des lignes d’écoute gratuites dans plus de 175 pays.',
+        'Tout ce que tu écris reste sur cet appareil. Il n’y a pas de compte, pas de serveur, et rien n’est envoyé, ni à nous ni à personne. Si tu supprimes l’application sans exporter, tes entrées sont perdues.',
+        'Elle a été faite par les personnes derrière TrybeUP, pas par un clinicien ni par un service de santé. Rien ici n’est un avis médical, et l’utiliser ne crée pas de relation entre un thérapeute et son patient.'
+      ]
+    },
 
     /* ------------------------------------------------------------------ everywhere */
 
@@ -303,9 +331,83 @@ var BETR_STRINGS_FR = {
       chosen: 'Choisi'
     },
 
-    /* ------------------------------------------------------------------ help: the language only */
+    /* ------------------------------------------------------------------ help */
 
     help: {
+      safeTitle: 'En choisir un sans danger',
+      cbtTitle: 'Ce qu’est la TCC, et la partie qu’on en garde ici',
+      primer: [
+        'La TCC est une thérapie par la parole. Son idée la plus simple, c’est celle-ci : ce que tu ' +
+          't’attends à voir arriver décide de ce que tu fais, et éviter la chose protège ton attente. ' +
+          'Tu ne découvres jamais que tu avais tort, alors tu n’en doutes jamais.',
+        'L’expérience comportementale est la partie de la TCC qui va vérifier. Tu écris ce que tu ' +
+          'penses qu’il va se passer, en une phrase en deux moitiés — si je fais ceci, alors cela va ' +
+          'arriver. Tu fais la petite chose. Puis tu écris ce qui s’est réellement passé — pas ce que ça ' +
+          'voulait dire, juste ce qui a été dit ou fait. Les croyances bougent quand les preuves sont ' +
+          'les tiennes et que tu les as rassemblées toi-même.',
+        'BETR, c’est cette partie-là, et rien d’autre. BETR ne te demande pas comment s’est passée ta ' +
+          'semaine, ne te note pas, ne décide rien à ton sujet, et ne peut rien voir de tout ça. Un ' +
+          'thérapeute fait bien plus que ça, et si tu peux en voir un, fais-le. Ceci, c’est le morceau ' +
+          'que tu peux faire de ton côté, aujourd’hui, en une minute environ.'
+      ],
+      /* Set in bold inside the second paragraph, so it must appear there exactly like this. */
+      experiment: 'expérience comportementale',
+      readingIntro: 'Écrit par nous. Si tu veux l’entendre de gens qui ne sont pas nous :',
+
+      whatThisTitle: 'Ce que c’est',
+
+      proofTitle: 'Ne nous crois pas sur parole',
+      /* The English's rule holds in French: if BETR ever has a thing to buy, THIS COMES OUT THE SAME DAY. */
+      free: 'BETR est gratuit. Pas de pub, pas d’abonnement, rien à acheter et rien à débloquer.',
+      /*
+        A trust sentence, translated exactly: two counts of opens a day, nothing about the
+        person. « adresse IP » and not « adresse », which in French reads as where you live.
+        « ni même l’heure » is exact for the same reason the English is: the DAY is recorded, in
+        a file name, and the time is not. Change it only with the server setting.
+      */
+      airplane: 'Active le mode avion. Tout marche encore, parce que rien ici n’a jamais eu besoin ' +
+        'd’internet. Le chargement de cette page est la seule chose qu’un serveur voit jamais. On tient ' +
+        'deux comptes — combien de fois la page a été ouverte chaque jour, et combien de ces fois-là ' +
+        'n’étaient pas des robots — et rien d’autre. Rien sur toi n’est noté : ni ton adresse IP, ni ' +
+        'ton navigateur, ni même l’heure.',
+      proofAccounts: 'comptes',
+      proofSent: 'envoyés chez nous, en tout',
+      /* o for octet: French does not say bytes. */
+      zeroBytes: '0 o',
+
+      placesTitle: 'D’autres endroits, dont aucun n’est géré par nous',
+
+      whoTitle: 'Qui a fait ça',
+      who: 'BETR, c’est pour le faire de ton côté. Les personnes qui l’ont fait font aussi TrybeUP, où ' +
+        'la même chose se fait en petits groupes privés. Seulement si et quand tu en as envie.',
+
+      /*
+        Rule 9's block. The three safeguards are in French too, and menu.test.js checks the
+        French for each: the paid plan (« payant »), the AI coach (« coach IA »), and that
+        nothing written here goes there. If TrybeUP's free tier changes, the English, this, and
+        both TrybeUP entries in places.js change the same day.
+      */
+      /* Names, the same in every language, written here so French has no gap at all. */
+      makerName: 'TrybeUP™',
+      makerLink: 'TrybeUP.com',
+      makerTag: 'Dis-nous un problème. On te donne une chose à faire par jour.',
+      makerWhat: 'TrybeUP est une application de changement personnel. Tu décris ce que tu veux le ' +
+        'plus changer, avec tes propres mots, et elle en fait une petite étape par jour, suivie ' +
+        'honnêtement. Fait, ou repos — et le repos ne compte jamais contre toi.',
+      makerAI: 'Habitudes, entraînements, nutrition, un coach IA et une communauté sont à portée de ' +
+        'doigt quand tu en veux plus.',
+      makerCost: 'Gratuit pour commencer. Le chat en tête-à-tête est gratuit, et les groupes privés ' +
+        'demandent un abonnement payant.',
+      makerApart: 'C’est un compte sur leurs serveurs, soit l’inverse de BETR, volontairement. Rien de ' +
+        'ce que tu écris ici n’y va, et BETR n’envoie toujours rien, ni à eux ni à personne.',
+      makerLinkWhat: 'leur propre description, en entier. Ça s’ouvre dans ton navigateur et il faut ' +
+        'internet.',
+
+      codeTitle: 'Le code',
+      code: 'BETR, c’est du HTML, du CSS et du JavaScript tout simples, sans bibliothèque, assez ' +
+        'petit pour être lu en une soirée. Cette version :',
+      devBuild: 'Version de développement — non publiée',
+
       /* What a screen reader calls the picker at the top right, and the heading in Help. */
       langTitle: 'Langue',
       langNote: 'Toutes les langues de BETR sont déjà sur ce téléphone. En choisir une ne ' +

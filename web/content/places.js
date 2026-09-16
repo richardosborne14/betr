@@ -40,6 +40,16 @@
        fails the build if it moves first or turns into a button. The paywall sentence is now
        said in both places; if TrybeUP's free tier changes, BOTH change the same day.
 
+  French, since 2026-09-16 (B16). Each piece of text has its French in an `fr` beside it — the
+  intro, a group's title and note, an item's name where it is a description rather than a
+  proper name, and every item's `what`. Proper names (Mind, WithYou, Side by Side) stay as their
+  owners write them and have no French name. `fr` is not a fourth field in rule 3's sense: it
+  carries the SAME three fields in another language, nothing else, and menu.test.js fails the
+  build if it ever carries a url or anything that is not text. A language with no `fr`-style
+  entry shows the English. Nearly every place here is English-speaking and in the UK or US, and
+  the French says so; places in French would be real work, read on the provider's own site on
+  the day, the same discipline as the English.
+
   Prefer short, stable urls. Nothing here can check itself, a deep path rots first, and a dead
   link in a mental-health app is a real harm. Checking them is on the release checklist.
 */
@@ -48,6 +58,11 @@ var BETR_PLACES = {
 
   intro: 'None of these is run by us. They open in your browser and need the internet. ' +
     'BETR doesn’t check them, doesn’t know whether you tapped one, and gets nothing if you do.',
+  fr: {
+    intro: 'Aucun de ces endroits n’est géré par nous, et presque tous sont en anglais. Ils ' +
+      's’ouvrent dans ton navigateur et il faut internet. BETR ne les vérifie pas, ne sait pas si tu ' +
+      'en as touché un, et ne gagne rien si tu le fais.'
+  },
 
   /*
     The two links under the CBT explainer at the top of Help. Founder, 2026-09-03: there
@@ -58,12 +73,20 @@ var BETR_PLACES = {
     {
       name: 'NHS: cognitive behavioural therapy',
       url: 'https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments/talking-therapies-and-counselling/cognitive-behavioural-therapy-cbt',
-      what: 'What CBT is, what a course of it involves, and how to get it on the NHS.'
+      what: 'What CBT is, what a course of it involves, and how to get it on the NHS.',
+      fr: {
+        name: 'NHS : la thérapie cognitivo-comportementale',
+        what: 'Ce qu’est la TCC, ce qu’implique un suivi, et comment y accéder via le NHS. Royaume-Uni, en anglais.'
+      }
     },
     {
       name: 'BABCP: what is CBT?',
       url: 'https://www.babcp.com/About/What-is-CBT',
-      what: 'The same thing from the UK body that accredits CBT therapists.'
+      what: 'The same thing from the UK body that accredits CBT therapists.',
+      fr: {
+        name: 'BABCP : qu’est-ce que la TCC ?',
+        what: 'La même chose, par l’organisme britannique qui accrédite les thérapeutes TCC. En anglais.'
+      }
     }
   ],
 
@@ -117,97 +140,126 @@ var BETR_PLACES = {
       */
       note: 'These are the UK, and one for the United States. We haven’t checked anywhere ' +
         'else, and a wrong door is worse than no door.',
+      fr: {
+        title: 'Si c’est l’alcool ou la drogue',
+        note: 'Ce sont des services au Royaume-Uni, plus un aux États-Unis, et ils sont en anglais. ' +
+          'On n’a vérifié nulle part ailleurs, et une mauvaise porte est pire que pas de porte.'
+      },
       items: [
         {
           name: 'NHS: alcohol support',
           url: 'https://www.nhs.uk/live-well/alcohol-advice/alcohol-support',
-          what: 'Where the NHS says to start with drinking, and the services and groups it points you to. UK.'
+          what: 'Where the NHS says to start with drinking, and the services and groups it points you to. UK.',
+          fr: { name: 'NHS : aide pour l’alcool', what: 'Là où le NHS dit de commencer quand il s’agit d’alcool, et les services et groupes vers lesquels il oriente. Royaume-Uni.' }
         },
         {
           name: 'NHS: drug addiction, getting help',
           url: 'https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help',
-          what: 'What treatment for drugs actually involves, and how to get it. UK.'
+          what: 'What treatment for drugs actually involves, and how to get it. UK.',
+          fr: { name: 'NHS : addiction aux drogues, trouver de l’aide', what: 'Ce qu’implique vraiment un traitement pour les drogues, et comment y accéder. Royaume-Uni.' }
         },
         {
           name: 'WithYou',
           url: 'https://www.wearewithyou.org.uk',
-          what: 'Free and confidential. An online chat open seven days a week, and a search for services near you. England and Scotland.'
+          what: 'Free and confidential. An online chat open seven days a week, and a search for services near you. England and Scotland.',
+          fr: { what: 'Gratuit et confidentiel. Un chat en ligne ouvert sept jours sur sept, et une recherche de services près de chez toi. Angleterre et Écosse.' }
         },
         {
           name: 'Talk to Frank',
           url: 'https://www.talktofrank.com',
-          what: 'Straight information about drugs, and a search for local services. Free. UK.'
+          what: 'Straight information about drugs, and a search for local services. Free. UK.',
+          fr: { what: 'Des infos franches sur les drogues, et une recherche de services locaux. Gratuit. Royaume-Uni.' }
         },
         {
           name: 'UK SMART Recovery',
           url: 'https://smartrecovery.org.uk',
-          what: 'A charity running free meetings, in person and online, built on the same ideas CBT is. UK.'
+          what: 'A charity running free meetings, in person and online, built on the same ideas CBT is. UK.',
+          fr: { what: 'Une association qui organise des réunions gratuites, en personne et en ligne, fondées sur les mêmes idées que la TCC. Royaume-Uni.' }
         },
         {
           name: 'FindTreatment.gov',
           url: 'https://findtreatment.gov',
-          what: 'The US government’s search for licensed treatment, for alcohol and for drugs. Confidential and anonymous. United States.'
+          what: 'The US government’s search for licensed treatment, for alcohol and for drugs. Confidential and anonymous. United States.',
+          fr: { what: 'La recherche du gouvernement américain pour trouver un traitement agréé, pour l’alcool et pour les drogues. Confidentiel et anonyme. États-Unis.' }
         }
       ]
     },
     {
       title: 'Free CBT worksheets and reading',
+      fr: { title: 'Fiches et lectures TCC gratuites' },
       items: [
         {
           name: 'Centre for Clinical Interventions',
           url: 'https://www.cci.health.wa.gov.au',
-          what: 'A public health service in Western Australia. Free workbooks, written for people to use on their own.'
+          what: 'A public health service in Western Australia. Free workbooks, written for people to use on their own.',
+          fr: { what: 'Un service public de santé en Australie-Occidentale. Des cahiers d’exercices gratuits, écrits pour qu’on s’en serve de son côté.' }
         },
         {
           name: 'Getselfhelp',
           url: 'https://www.getselfhelp.co.uk',
-          what: 'Free CBT worksheets and sheets to print, put together by a therapist in the UK.'
+          what: 'Free CBT worksheets and sheets to print, put together by a therapist in the UK.',
+          fr: { what: 'Des fiches d’exercices TCC gratuites à imprimer, rassemblées par un thérapeute au Royaume-Uni.' }
         },
         {
           name: 'NHS Every Mind Matters',
           url: 'https://www.nhs.uk/every-mind-matters',
-          what: 'The NHS’s own advice on sleep, worry and low mood. Free, and no account.'
+          what: 'The NHS’s own advice on sleep, worry and low mood. Free, and no account.',
+          fr: { what: 'Les conseils du NHS lui-même sur le sommeil, l’inquiétude et le moral en berne. Gratuit, et sans compte.' }
         },
         {
           name: 'Mind',
           url: 'https://www.mind.org.uk/information-support',
-          what: 'A UK charity. Plain explanations of what things are and what help exists.'
+          what: 'A UK charity. Plain explanations of what things are and what help exists.',
+          fr: { what: 'Une association britannique. Des explications simples sur ce que sont les choses et sur l’aide qui existe.' }
         }
       ]
     },
     {
       title: 'Finding a real therapist',
+      fr: { title: 'Trouver un vrai thérapeute' },
       items: [
         {
           name: 'BABCP',
           url: 'https://www.babcp.com',
-          what: 'The UK register of accredited CBT therapists. Being on it means somebody checked.'
+          what: 'The UK register of accredited CBT therapists. Being on it means somebody checked.',
+          fr: { what: 'Le registre britannique des thérapeutes TCC accrédités. Y figurer veut dire que quelqu’un a vérifié.' }
         },
         {
           name: 'Find a CBT Therapist',
           url: 'https://www.findcbt.org',
-          what: 'The US directory, run by the Association for Behavioral and Cognitive Therapies.'
+          what: 'The US directory, run by the Association for Behavioral and Cognitive Therapies.',
+          fr: { what: 'L’annuaire américain, tenu par l’Association for Behavioral and Cognitive Therapies.' }
         },
         {
           name: 'EABCT',
           url: 'https://eabct.eu',
-          what: 'Member associations across Europe. Each country’s association keeps its own register.'
+          what: 'Member associations across Europe. Each country’s association keeps its own register.',
+          fr: { what: 'Les associations membres dans toute l’Europe, dont la France. Chaque association nationale tient son propre registre.' }
         }
       ]
     },
     {
       title: 'Doing it with other people',
+      fr: { title: 'Le faire avec d’autres personnes' },
       items: [
         {
           name: 'Side by Side',
           url: 'https://sidebyside.mind.org.uk',
-          what: 'Mind’s online community. Free, moderated, and you don’t have to say who you are.'
+          what: 'Mind’s online community. Free, moderated, and you don’t have to say who you are.',
+          fr: { what: 'La communauté en ligne de Mind. Gratuite, modérée, et tu n’as pas à dire qui tu es.' }
         },
         {
           name: 'TrybeUP',
           url: 'https://trybeup.com',
           what: 'Made by us — the same people who made BETR. It’s an account with people in it, ' +
-            'doing this in small groups. One-to-one chat is free; the private groups need a paid plan.'
+            'doing this in small groups. One-to-one chat is free; the private groups need a paid plan.',
+          /* Rule 9 and B8's third condition, in French: it says we made it and what it costs,
+             paid plan included. menu.test.js checks the French for « payant ». */
+          fr: {
+            what: 'Fait par nous — les mêmes personnes qui ont fait BETR. C’est un compte avec des gens ' +
+              'dedans, qui font ça en petits groupes. Le chat en tête-à-tête est gratuit ; les groupes ' +
+              'privés demandent un abonnement payant.'
+          }
         }
       ]
     }

@@ -40,7 +40,8 @@ const LOCALES = { en: en, fr: fr };
   somebody made rather than something nobody noticed: the test below still fails on a
   half-written or stubbed frozen block, which is the thing worth catching.
 */
-const FROZEN_STILL_IN_ENGLISH = ['fr'];
+/* French left this list on 2026-09-16, with its frozen block in draft for the founder's sign-off (B16 §10g). */
+const FROZEN_STILL_IN_ENGLISH = [];
 
 const at = (tree, key) => key.split('.').reduce((node, part) => (node == null ? node : node[part]), tree);
 

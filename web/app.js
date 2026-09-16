@@ -847,6 +847,17 @@
     B56 took two things off it: the count of results on this phone (no number, anywhere) and the
     link to the old guide screen, which is gone. Nothing on this screen is fetched.
   */
+  /*
+    A place's text in the language being read (B16). places.js keeps each language's words
+    beside the English — `fr: { what: … }` — and a field the language has not got falls back to
+    the English one, a field at a time, the way strings do. Never a url: the link is the same
+    for everybody, in every language.
+  */
+  function placeText(entry, field) {
+    var mine = I.code !== 'en' && entry[I.code];
+    return (mine && typeof mine[field] === 'string') ? mine[field] : entry[field];
+  }
+
   function help() {
     var build = document.querySelector('meta[name="betr-build"]');
     var hash = build ? build.getAttribute('content') : 'dev';
@@ -881,7 +892,7 @@
           '<p>' + esc(t('help.readingIntro')) + '</p>' +
           '<ul class="places">' + PLACES.reading.map(function (r) {
             return '<li><a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' +
-              esc(r.name) + '</a> — ' + esc(r.what) + '</li>';
+              esc(placeText(r, 'name')) + '</a> — ' + esc(placeText(r, 'what')) + '</li>';
           }).join('') + '</ul>' +
         '</div>' +
 
@@ -890,14 +901,14 @@
         '<ol>' + sentences().map(function (s) { return '<li>' + callable(s) + '</li>'; }).join('') + '</ol>' +
 
         '<h2>' + esc(t('help.placesTitle')) + '</h2>' +
-        '<p>' + esc(PLACES.intro) + '</p>' +
+        '<p>' + esc(placeText(PLACES, 'intro')) + '</p>' +
         PLACES.groups.map(function (grp) {
           return '<h3' + (grp.id ? ' id="group-' + esc(grp.id) + '" tabindex="-1"' : '') +
-            '>' + esc(grp.title) + '</h3>' +
-            (grp.note ? '<p class="tiny">' + esc(grp.note) + '</p>' : '') +
+            '>' + esc(placeText(grp, 'title')) + '</h3>' +
+            (grp.note ? '<p class="tiny">' + esc(placeText(grp, 'note')) + '</p>' : '') +
             '<ul class="places">' + grp.items.map(function (place) {
               return '<li><a href="' + esc(place.url) + '" target="_blank" rel="noopener noreferrer">' +
-                esc(place.name) + '</a> — ' + esc(place.what) + '</li>';
+                esc(placeText(place, 'name')) + '</a> — ' + esc(placeText(place, 'what')) + '</li>';
             }).join('') + '</ul>';
         }).join('') +
 

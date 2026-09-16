@@ -255,3 +255,62 @@ test('Help has the places for drinking and drugs, first, and says where they wor
   a.showsText(group.note);
   assert.ok(h.indexOf('id="group-substances"') < h.indexOf(places.groups[1].items[0].url), 'the group is not first');
 });
+
+/* ------------------------------------------------------------------ Help in French (B16) */
+
+/*
+  2026-09-16: the whole of Help went into French. Every test above reads the English, so none of
+  them would notice a French Help that quietly dropped a safeguard. These do.
+*/
+const fr = require('../content/strings-fr.js').s;
+const frHelp = () => boot(null, { languages: ['fr-FR', 'fr'] }).tap('#f-help');
+
+test('in French, TrybeUP\u2019s block still says what it costs, that it has an AI, and where BETR ends', () => {
+  const a = frHelp();
+  const h = a.html();
+  const block = h.slice(h.indexOf(fr.help.whoTitle));
+  for (const part of [fr.help.makerCost, fr.help.makerAI, fr.help.makerApart]) {
+    assert.ok(block.indexOf(part) !== -1, 'a rule 9 safeguard is missing from the French block: ' + part);
+  }
+  assert.match(fr.help.makerCost, /payant/, 'the French lost the paid plan');
+  assert.match(fr.help.makerAI, /coach IA/, 'the French lost the AI coach');
+  assert.match(fr.help.makerApart, /Rien de ce que tu \u00e9cris ici n\u2019y va/, 'the French lost where BETR ends');
+  /* and TrybeUP is still not named anywhere but Help, in French either */
+  const front = boot(null, { languages: ['fr'] }).html();
+  assert.ok(front.indexOf('TrybeUP') === -1, 'TrybeUP is named on the French front screen');
+});
+
+test('in French, the places are French, TrybeUP\u2019s entry says it is paid, and a translation never carries a link', () => {
+  const h = frHelp().html();
+  assert.ok(h.indexOf(places.fr.intro) !== -1, 'the places intro is not in French');
+  assert.ok(h.indexOf(places.groups[0].fr.title) !== -1 && h.indexOf(places.groups[0].fr.note) !== -1);
+  assert.ok(h.indexOf(places.groups[0].title) === -1, 'an English group title is on the French Help');
+
+  const trybeup = places.groups[places.groups.length - 1].items.find((i) => i.name === 'TrybeUP');
+  assert.match(trybeup.fr.what, /payant/, 'the French TrybeUP entry does not say it is paid');
+  assert.ok(h.indexOf(trybeup.fr.what) !== -1);
+
+  /* `fr` holds the same text fields in French and nothing else: never a url, never a fourth thing */
+  const allowed = ['intro', 'title', 'note', 'name', 'what'];
+  const entries = [places].concat(places.reading, places.groups, ...places.groups.map((g) => g.items));
+  for (const e of entries) {
+    if (!e.fr) continue;
+    for (const k of Object.keys(e.fr)) {
+      assert.ok(allowed.indexOf(k) !== -1, 'a French place carries "' + k + '", which is not text');
+      assert.ok(typeof e.fr[k] === 'string' && !/https?:/.test(e.fr[k]), 'a French place carries a link');
+    }
+  }
+});
+
+test('in French, the nine sentences are there, and sentence 7\u2019s numbers still dial', () => {
+  const h = frHelp().html();
+  assert.strictEqual(fr.frozen.sentences.length, 9);
+  for (const line of fr.frozen.sentences) {
+    const plain = h.replace(/<a [^>]*>([^<]*)<\/a>/g, '$1');
+    assert.ok(plain.indexOf(line) !== -1, 'a French sentence is not on Help: ' + line.slice(0, 50));
+  }
+  assert.match(fr.frozen.sentences[0], /dispositif m\u00e9dical/, 'sentence 1 lost the words the regulator reads');
+  assert.match(fr.frozen.sentences[7], /rien n\u2019est envoy\u00e9, ni \u00e0 nous ni \u00e0 personne/, 'sentence 8 lost rule 1');
+  assert.ok(h.indexOf('<a href="tel:988">988</a>') !== -1 && h.indexOf('<a href="tel:116123">116 123</a>') !== -1,
+    'a number in French sentence 7 does not dial');
+});

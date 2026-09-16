@@ -269,7 +269,9 @@ block. That screenshot is the argument for doing the crisis wording next.
 - [x] France and Switzerland read off the providers' own sites and added; Belgium re-read; France out of `notShipped`
 - [x] The hard stop fixed and pinned in both languages; 126 tests pass
 - [x] **`crisis`, `where` and the country names in French** (10f), with a language picker top right
-- [ ] **`frozen` and the rest of `help` translated**
+- [x] **`frozen` (in draft) and the rest of `help` translated**, and every place on Help (10g)
+- [ ] **The founder signs off the French frozen sentences**, and says whether TrybeUP's headline reads right in French
+- [ ] French-speaking places on Help (Drogues Info Service, Alcool Info Service, AFTCC), each read on its own site
 - [ ] **The founder reads and signs off the French**, which is what B16 says and has not happened
 - [ ] **The CBT reviewer on the French harm words**
 - [x] **The elision, decided and built** — « Si j’ » in front of a vowel, with the aspirated-h list in the content file
@@ -311,3 +313,25 @@ is no time zone. Nothing leaves the phone either way, but the sentence overclaim
 
 **Cosmetic, not fixed:** in French, the EMPTY front sentence wraps as « Si je ____, / alors ____ / . », the full stop alone on a third line,
 because « alors » is longer than "then". It goes away as soon as anything is typed.
+
+### 10g. The rest of Help in French — 2026-09-16, the founder's ask
+
+**French now has no gaps at all:** `i18n.test.js` lists zero missing keys. The whole Help screen, export and delete, and every link description.
+
+- **`help.*`**, all of it: the proof section (« adresse IP » rather than « adresse », which reads as where you live; « 0 o » for octets),
+  what CBT is (« TCC », « expérience comportementale » — the bolded phrase), who made it, TrybeUP's block, the code.
+- **Rule 9's three safeguards are in French and pinned:** « abonnement payant », « coach IA », « Rien de ce que tu écris ici n’y va ».
+  `menu.test.js` fails the build if the French loses any of them, and on TrybeUP being named on the French front screen.
+- **`help.makerTag` is TrybeUP's own headline, translated** — « Dis-nous un problème. On te donne une chose à faire par jour. » That is
+  their line, and the founder should say whether TrybeUP says it that way in French.
+- **The frozen block, translated faithfully and in DRAFT** until the founder signs it off (CLAUDE.md rule 7 now says so). Not a rewrite: the
+  purpose still says « Tu choisis une inquiétude… BETR te propose une petite chose » and sentence 2 still says « évaluer à nouveau la
+  croyance », because the English does — B56 §9c fixes both languages or neither. « dispositif médical » is the EU legal term; the
+  jurisdiction look in §3 still comes before any French listing. Sentences 5 and 6 are written to need no gender for the reader.
+  Sentence 7 names the US and UK numbers, exactly as the English does; the live crisis block above it gives France's.
+- **`places.js` carries French beside the English** — `fr: { what }` on each item, `fr: { title, note }` on a group, `fr: { intro }` at the
+  top. Proper names are not translated. `placeText()` in `app.js` falls back to English a field at a time. A test holds `fr` to text
+  fields only, never a url. **Nearly every place is English-speaking and in the UK or US, and the French now says so** (« presque tous
+  sont en anglais »). **French-speaking places** — Drogues Info Service, Alcool Info Service, the AFTCC therapist register — would be the
+  real fix and are NOT added: each must be read on the provider's own site on the day, like every other entry.
+- Walked end to end in French in `tools/walk.js`, including export and delete. 137 tests pass.

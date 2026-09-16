@@ -81,6 +81,11 @@ rules at once, and every one of them has failed in some other product.
    **The wordmark is BETR, all caps, everywhere a person reads it** — app, title, manifest,
    export, listings, posts. And **nothing a person taps is all-lowercase** (founder, 2026-09-03:
    "very modern but not cool"). `loop.test.js` fails the build on either.
+   **In French** (2026-09-16, B16 §10g) the purpose and the nine sentences are a **faithful
+   translation in draft**, not a rewrite, until the founder signs them off; then they are frozen
+   in French the same way. Fix the stale ones ("pick a worry", "rate the belief again") in both
+   languages at once or neither. Sentence 7's "988", "116 123" and "findahelpline.com" must stay
+   written exactly so, because that is how `callable()` makes them tap.
 8. **Every phrase is written fresh.** No wording from CCI, Getselfhelp, Therapist Aid,
    Psychology Tools or the Beck Institute; all restrict reuse.
 9. **Visible lineage.** "Made by the people behind TrybeUP" stays in the small print. TrybeUP

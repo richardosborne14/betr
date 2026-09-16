@@ -7,7 +7,7 @@ to `main` publishes to the live address, and nobody has looked at it on a real p
 translated, France's and Switzerland's crisis numbers are read and shipped, and **walking it in French found that the one hard stop did not
 exist in French at all** (fixed). Then they reviewed the French: **the elision is built** (« Si je » → « Si j’ » as you type), four
 wordings changed, and the word is now **« pari »** with **« Je m’engage » / ENGAGÉ** — a knowing exception to rule 3's "not bet",
-recorded under rule 3. **Then the crisis block went French and a language picker went top right** (B16 §10f). 134 tests pass.
+recorded under rule 3. **Then the crisis block went French, a picker went top right** (§10f), **and then all of Help** (§10g). 137 tests pass.
 Read §1a before anything else.
 
 ## 1a. READ THIS FIRST — the hard stop was broken outside English
@@ -18,9 +18,9 @@ ever have matched in any language. Both fixed: **one list for every language, ne
 `\p{Mn}`, the sentence pinned in `guards.test.js` alongside ordinary French going through. **The French harm words are unreviewed — for the
 CBT reviewer** (B16 §10a; `docs/learnings.md` has the general version, which is not about French).
 
-**French is NOT shippable.** `frozen` and most of `help` are still English — so Help is mostly English in French, and frozen sentence 7
-(the crisis sentence on Help) is English. The loop, the crisis block and the country list are French. It is on `redesign`, which
-publishes nothing. **Do not merge French to `main`.**
+**French is complete and NOT shippable.** Every sentence is French, but the nine frozen sentences and the purpose are a faithful DRAFT
+awaiting the founder's sign-off (rule 7), the French harm words await the CBT reviewer, and B16 §3's jurisdiction look is undone. It is
+on `redesign`, which publishes nothing. **Do not merge French to `main`.**
 
 ## 1. Where we are
 
@@ -61,9 +61,9 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 
 ## 2. The next action
 
-0. **French next: the rest of `help`**, then `frozen` once a named person approves it. **« Pari » is masculine:** grep every French string
-   for feminine forms after any change. Picker top right is built (rule 10). Open for the founder: `front.title`, and `crisis.howWeKnow`
-   overclaiming (B16 §10f) — a trust sentence, in both languages.
+0. **French is written; what is left is people:** the founder signs off the frozen French and says if TrybeUP's headline reads right;
+   French-speaking places for Help need reading on their own sites (B16 §10g). **« Pari » is masculine:** grep every French string for
+   feminine forms after any change. Open for the founder: `front.title`, and `crisis.howWeKnow` overclaiming (§10f), in both languages.
 1. **Get the founder to look at it on a phone, then merge — ENGLISH ONLY.** They open `web/index.html` from `redesign`, or screenshots.
    Watch: typing into the two blanks on iPhone Safari (`contenteditable`, flowing inside the sentence — the one piece headless Chrome
    cannot vouch for), the Return key, Paste. Then J1–J3 on a real phone, wifi off after load, then merge and push — **that publishes**.
