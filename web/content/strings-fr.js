@@ -9,24 +9,25 @@
 
   ── WHAT IS DELIBERATELY MISSING ───────────────────────────────────────────────────────
 
-  Three blocks are NOT here, and their absence is the point. A missing key falls back to
+  Two blocks are NOT here, and their absence is the point. A missing key falls back to
   English one key at a time (lib/i18n.js), so a French reader sees them in English:
 
     frozen   the purpose statement and the nine sentences. They are frozen (CLAUDE.md rule 7)
              and a translation of them is approved ONCE, by a named person, and then frozen
              the same way. A draft translation of a "not a medical device" sentence is not a
-             small thing to get wrong, and it is not mine to write.
-    crisis   the words around a helpline number, and the country list. Read by somebody in
-             trouble. The founder signs these off separately, and the country NAMES come from
-             content/helplines.js, which is English — so translating the wording alone would
-             produce "les numéros de the United Kingdom". Both move together or neither does.
+             small thing to get wrong, and it is not mine to write. Frozen sentence 7 is the
+             crisis sentence on Help; it stays English with the other eight.
     help     the whole Help screen: what CBT is, the airplane-mode proof, TrybeUP's block,
              what it costs. Rule 9's three safeguard sentences live there and menu.test.js
-             pins them; they get their own pass, not this one.
+             pins them; they get their own pass. Only `langTitle` and `langNote` are here,
+             because the language picker says them.
 
-  So today a French reader gets: the loop in French, Help and the crisis block in English.
-  That is a HALF-TRANSLATED APP and it is visible on the screen. It is fine on the `redesign`
-  branch, which publishes nothing. It is not fine on the live address.
+  The crisis block and the country list ARE here since 2026-09-16, the founder's ask, with
+  the country names coming from the browser in French rather than from helplines.js.
+
+  So a French reader gets the loop, the crisis block and the country list in French, and the
+  rest of Help in English. Still a half-translated app, still visible on the screen, still
+  fine on the `redesign` branch and not on the live address.
 
   ── ELISION, BUILT 2026-09-16 ─────────────────────────────────────
 
@@ -203,7 +204,7 @@ var BETR_STRINGS_FR = {
         'thérapie par la parole très étudiée — le morceau que tu peux faire de ton côté.',
       help: 'Si ça va vraiment mal en ce moment, ce n’est pas ce qu’il te faut. La page Aide ' +
         'donne de vraies personnes.',
-      write: 'En écrire une'
+      write: 'En écrire un'
     },
 
     /* ------------------------------------------------------------------ when BETR says no */
@@ -216,7 +217,7 @@ var BETR_STRINGS_FR = {
       does not go anywhere near the live address on its own.
     */
     refusal: {
-      harm: 'BETR ne peut pas t’aider avec celle-là, et ce serait malhonnête de faire semblant.',
+      harm: 'BETR ne peut pas t’aider avec celui-là, et ce serait malhonnête de faire semblant.',
       verdict: 'C’est un jugement, pas un pari. Qu’est-ce qui se passerait, d’après ' +
         'toi, à cause de ça ?',
       notConditional: 'Commence par « Si je… ». Il faut que ça puisse se révéler faux.',
@@ -242,6 +243,79 @@ var BETR_STRINGS_FR = {
       notNow: 'Pas maintenant',
       how: 'Partager → Sur l’écran d’accueil.',
       gotIt: 'C’est compris'
+    },
+
+    /* ------------------------------------------------------------------ the crisis block */
+
+    /*
+      B16, 2026-09-16, the founder's ask. Read by somebody in trouble, so plain before pretty,
+      and `tu` like everything else: switching to `vous` at the worst moment would read as the
+      app stepping back from the person.
+
+      NO NUMBER IS IN HERE, in any language. The number comes from helplines.js and the country
+      decides it. These are only the words around it.
+
+      « {country} : » and never « En {country} ». French puts a different word in front of every
+      country — en France, au Canada, aux États-Unis, aux Pays-Bas — and a template cannot
+      know which. A bare name after a colon is always right, for all 250, including the ones
+      nobody has thought about. The same trick is used in `unchecked`, `where.guessing` and
+      `a11y.countryChanged`. Do not "improve" any of them back into a preposition.
+
+      A line reads: « France : Appelle le 3114 — Numéro national de prévention du suicide.
+      Gratuit, 24 h/24. »
+    */
+    crisis: {
+      title: 'Si tu es en danger ou en crise',
+      emergency: 'Si tu es en danger en ce moment, appelle le numéro d’urgence local.',
+      in: '{country} :',
+      /* The number follows straight after: « Appelle le 116 123 », « …un SMS au 988 ». */
+      call: 'Appelle le',
+      callOrText: 'Appelle ou envoie un SMS au',
+      free: 'Gratuit',
+      allHours: '24 h/24',
+      /* The browser names the language in French and in lower case: « en néerlandais ». */
+      inLanguage: 'en {language}',
+      unchecked: 'Ton pays, d’après ce téléphone : {country}. Personne n’a vérifié de numéro ' +
+        'd’écoute pour ce pays, alors on ne va pas t’en montrer un venu d’ailleurs en espérant ' +
+        'que ça marche.',
+      noCountry: 'On n’arrive pas à savoir dans quel pays tu es, et on préfère ne te montrer aucun ' +
+        'numéro plutôt que le mauvais.',
+      notWhereYouAre: 'Ce n’est pas ton pays ?',
+      sayWhere: 'Indique où tu es',
+      directory: '{link} répertorie des lignes d’écoute gratuites dans plus de 175 pays, et ' +
+        'trouve ton pays tout seul. C’est la seule chose sur cet écran qui a besoin d’internet.',
+      howWeKnow: 'Comment on devine le pays : le fuseau horaire de ton téléphone, lu sur cet ' +
+        'appareil au moment où cet écran s’affiche. Il n’est ni enregistré ni envoyé, et c’est ' +
+        'la seule chose ici qui ait un rapport avec l’endroit où tu es. BETR ne demande jamais ' +
+        'ta position à ton téléphone, et ne le fera jamais.'
+    },
+
+    /* The country list. Its country names come from the browser, in French, in French order. */
+    where: {
+      title: 'Où es-tu ?',
+      sub: 'Seulement pour que le bon numéro d’écoute soit à l’écran quand ça compte. Ça reste ' +
+        'sur ce téléphone, comme tout le reste, et ça n’a nulle part où aller.',
+      unset: 'Revenir à ce que dit mon fuseau horaire',
+      guessing: 'Pour l’instant, on devine d’après le fuseau horaire de ton téléphone, qui ' +
+        'indique : {country}.',
+      guessingUnknown: 'Pour l’instant, on devine d’après le fuseau horaire de ton téléphone, et il ' +
+        'n’a rien indiqué.',
+      chosen: 'Choisi'
+    },
+
+    /* ------------------------------------------------------------------ help: the language only */
+
+    help: {
+      /* What a screen reader calls the picker at the top right, and the heading in Help. */
+      langTitle: 'Langue',
+      langNote: 'Toutes les langues de BETR sont déjà sur ce téléphone. En choisir une ne ' +
+        'télécharge rien.'
+    },
+
+    /* ------------------------------------------------------------------ said, not shown */
+
+    a11y: {
+      countryChanged: 'Numéros d’écoute maintenant affichés pour : {country}.'
     },
 
     /* ------------------------------------------------------------------ export and delete */

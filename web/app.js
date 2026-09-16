@@ -170,10 +170,11 @@
   /* The one thing every screen goes through. Setting app.innerHTML anywhere else loses the foot. */
   function paint(html, kind) {
     app.innerHTML = '<div class="screen' + (kind ? ' ' + kind : '') + '">' +
-      '<p class="wordmark">' + esc(t('brand')) + '</p>' +
+      '<div class="top"><p class="wordmark">' + esc(t('brand')) + '</p>' + languagePick() + '</div>' +
       '<main class="main">' + html + '</main>' +
       foot() +
     '</div>';
+    wireLanguagePick();
     focus(q('#top'));
     announce(toSay || '');
     toSay = null;
@@ -688,10 +689,27 @@
     var after = [];
     if (l.free) after.push(t('crisis.free'));
     if (l.allHours) after.push(t('crisis.allHours'));
-    if (l.note) after.push(l.note);
+    if (l.language) after.push(t('crisis.inLanguage', { language: languageName(l.language) }));
+    /* It starts a sentence, so it starts with a capital: a line whose only detail is its
+       language used to read "…du Suicide. in French." in English, and in French too. */
+    var tail = after.join(', ');
+    tail = tail.charAt(0).toUpperCase() + tail.slice(1);
     return esc(l.text ? t('crisis.callOrText') : t('crisis.call')) + ' ' +
       '<a href="' + esc(l.tel) + '">' + esc(l.number) + '</a> — ' + esc(l.name) +
-      (after.length ? '. ' + esc(after.join(', ')) : '') + '.';
+      (after.length ? '. ' + esc(tail) : '') + '.';
+  }
+
+  /*
+    "Dutch" to somebody reading English, « néerlandais » to somebody reading French: the browser's
+    own name for a language, in the language the person reads (B16). The code itself if the
+    browser has no list, which is ugly and still true.
+  */
+  function languageName(code) {
+    try {
+      var n = new Intl.DisplayNames([I.code], { type: 'language' }).of(code);
+      if (n && n !== code) return n;
+    } catch (e) { /* no DisplayNames: the code stands */ }
+    return code;
   }
 
   function crisisBlock() {
@@ -700,12 +718,12 @@
     var html = '<p>' + esc(t('crisis.emergency')) + '</p>';
 
     if (lines.length === 1) {
-      html += '<p>' + esc(t('crisis.in', { country: W.inWords(code) })) + ' ' + lineWords(lines[0]) + '</p>';
+      html += '<p>' + esc(t('crisis.in', { country: W.inWords(code, I.code) })) + ' ' + lineWords(lines[0]) + '</p>';
     } else if (lines.length) {
-      html += '<p>' + esc(t('crisis.in', { country: W.inWords(code) })) + '</p><ul class="places">' +
+      html += '<p>' + esc(t('crisis.in', { country: W.inWords(code, I.code) })) + '</p><ul class="places">' +
         lines.map(function (l) { return '<li>' + lineWords(l) + '</li>'; }).join('') + '</ul>';
     } else if (code) {
-      html += '<p>' + tHtml('crisis.unchecked', { country: '<b>' + esc(W.nameFor(code)) + '</b>' }) + '</p>';
+      html += '<p>' + tHtml('crisis.unchecked', { country: '<b>' + esc(W.nameFor(code, I.code)) + '</b>' }) + '</p>';
     } else {
       html += '<p>' + esc(t('crisis.noCountry')) + '</p>';
     }
@@ -738,9 +756,9 @@
         (chosen
           ? '<p><button class="plain" id="unset">' + esc(t('where.unset')) + '</button></p>'
           : '<p>' + esc(code
-              ? t('where.guessing', { country: W.nameFor(code) })
+              ? t('where.guessing', { country: W.nameFor(code, I.code) })
               : t('where.guessingUnknown')) + '</p>') +
-        '<ul class="places countries">' + W.list().map(function (c) {
+        '<ul class="places countries">' + W.list(I.code).map(function (c) {
           return '<li><button class="plain" data-cc="' + esc(c.code) + '">' + esc(c.name) +
             (c.code === chosen
               ? ' <span aria-hidden="true">✓</span><span class="sr">' + esc(t('where.chosen')) + '</span>'
@@ -753,7 +771,7 @@
       b.onclick = function () {
         S.country = b.getAttribute('data-cc');
         save();
-        say(t('a11y.countryChanged', { country: W.nameFor(S.country) }));
+        say(t('a11y.countryChanged', { country: W.nameFor(S.country, I.code) }));
         go(whereBack);
       };
     });
@@ -919,9 +937,40 @@
   }
 
   /*
-    The language switch: one line in Help and nothing else. While English is the only language
-    in the build there is nothing to choose between, so this draws nothing at all.
+    The language switch, in two places since 2026-09-16.
+
+    TOP RIGHT OF EVERY SCREEN, the founder's call: a small grey two-letter code — EN, FR — on
+    the wordmark's line. Until then it was one line in Help and nothing else (B15), and "never a
+    picker on the front screen" was written down as a rule; the founder moved it, and CLAUDE.md
+    rule 10 records that. It is deliberately quiet: no flag (a flag is a country, and language
+    is never country — B17), no border, no box, and on every screen including a refusal,
+    because somebody who cannot read the crisis block is exactly who needs to switch it.
+
+    It is a real <select>, laid invisibly over the two letters. The letters are what a person
+    sees; the select is what a finger, a keyboard and a screen reader actually use, and on a
+    phone it opens the phone's own picker. The options carry each language's name in itself —
+    Français, not French — so a person can find their own.
+
+    AND IN HELP, which stays, because it carries the sentence that matters: every language is
+    already on the phone and choosing one fetches nothing.
+
+    While there is only one language, neither is drawn.
   */
+  function languagePick() {
+    var all = I.locales();
+    if (all.length < 2) return '';
+    return '<div class="lang"><span class="lang-code" aria-hidden="true">' + esc(I.code.toUpperCase()) + '</span>' +
+      '<select id="lang" aria-label="' + esc(t('help.langTitle')) + '">' + all.map(function (l) {
+        return '<option value="' + esc(l.code) + '" lang="' + esc(l.code) + '"' +
+          (l.code === I.code ? ' selected' : '') + '>' + esc(l.name) + '</option>';
+      }).join('') + '</select></div>';
+  }
+
+  function wireLanguagePick() {
+    var el = q('#lang');
+    if (el) el.onchange = function () { setLanguage(el.value); };
+  }
+
   function languageBlock() {
     var all = I.locales();
     if (all.length < 2) return '';
@@ -938,14 +987,17 @@
 
   function wireLanguage() {
     qa('[data-lang]').forEach(function (b) {
-      b.onclick = function () {
-        S.lang = b.getAttribute('data-lang');
-        save();
-        I = Betr.i18n.create(Betr.strings, { chosen: S.lang, prefer: myLanguages() });
-        applyLanguage();
-        render();
-      };
+      b.onclick = function () { setLanguage(b.getAttribute('data-lang')); };
     });
+  }
+
+  /* One road for both switches. Remembered on the phone, like everything else, and nowhere else. */
+  function setLanguage(code) {
+    S.lang = code;
+    save();
+    I = Betr.i18n.create(Betr.strings, { chosen: S.lang, prefer: myLanguages() });
+    applyLanguage();
+    render();
   }
 
   /* ---------------------------------------------------------------- export and delete */

@@ -124,6 +124,12 @@ rules at once, and every one of them has failed in some other product.
     count, never a fourth. **The prediction is on screen, in the same words, on every screen from
     Locked in to the results;** a loop screen that does not say which prediction it belongs to is
     the bug. A wizard, a slider or a chat is still rejected and does not come back.
+    **The language picker is top right of every screen** (founder, 2026-09-16, B16): two grey
+    letters, `EN ▾` / `FR ▾`, on the wordmark's row, over a real `<select>`. B15 had said "one
+    line in Help, never a picker on the front screen"; the founder moved it. It is not a foot
+    word and does not count as a fourth. **No flag, ever** — a flag is a country, and language is
+    never country (B17). It stays on a refusal, because somebody who cannot read the crisis block
+    is exactly who needs it. Still never a first-run question.
 
 ## How the repo works
 

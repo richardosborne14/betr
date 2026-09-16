@@ -78,10 +78,38 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: flex; flex-direction: column;
   padding-block: env(safe-area-inset-top) env(safe-area-inset-bottom);
 }
+/* The wordmark's row. Since 2026-09-16 it also carries the language, on the far side. */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1.625rem 1.625rem 0;
+}
 .wordmark {
-  margin: 0; padding: 1.625rem 1.625rem 0;
+  margin: 0;
   font-weight: 800; font-size: .8125rem; letter-spacing: .18em; text-transform: uppercase;
 }
+
+/*
+  The language (B16, founder's call): two grey letters and a small arrow, set like the
+  LOCKED IN label so it reads as part of the frame rather than as a control asking for
+  attention. The real <select> lies over it, invisible, and is the thing that is tapped: it
+  opens the phone's own picker and a screen reader reads it as what it is.
+
+  The box is 44px each way, the smallest thing a thumb hits reliably, and the negative margins
+  give that back so the row is no taller than the wordmark alone. The select's font is 16px
+  even though nobody sees it: under 16px, iOS zooms the whole page in when it is tapped.
+*/
+.lang {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  min-inline-size: 2.75rem; min-block-size: 2.75rem;
+  margin-block: -1rem; margin-inline-end: -.75rem;
+}
+.lang-code { color: var(--soft); font-weight: 700; font-size: .75rem; letter-spacing: .16em; }
+.lang-code::after { content: "\25BE"; letter-spacing: 0; margin-inline-start: .125rem; }
+.lang select {
+  position: absolute; inset: 0; inline-size: 100%; block-size: 100%;
+  opacity: 0; cursor: pointer; font-size: 1rem; border: 0; appearance: none;
+}
+.lang:focus-within .lang-code { outline: 3px solid var(--on-ground); outline-offset: 4px; border-radius: 2px; }
 .main {
   flex: 1; width: 100%; max-width: 34rem; margin-inline: auto;
   padding: 1.25rem 1.625rem;

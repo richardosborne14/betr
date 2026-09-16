@@ -241,6 +241,15 @@ function boot(seed, env) {
     dir() { return html.getAttribute('dir'); },
     /* B35: light or dark, as written onto <html> by lib/theme.js. */
     look() { return html.getAttribute('data-theme'); },
+    /* Choose from a <select>, the way a phone does: the value changes, then onchange fires (B16). */
+    pick(sel, value) {
+      const el = find(root, sel);
+      assert.ok(el, 'no such select: ' + sel);
+      assert.ok(typeof el.onchange === 'function', sel + ' has nothing listening to it');
+      el.value = value;
+      el.onchange();
+      return api;
+    },
     /* Read a box back. The export lands in a textarea's value, not in the markup. */
     valueOf(sel) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); return el.value; },
     /*

@@ -89,25 +89,33 @@
     }
 
     /*
-      The country's name. For the countries with a line it is written by hand in
-      helplines.js, article and all, so "In the United Kingdom" reads like English. For
-      everywhere else the browser's own list is used, which is why nothing is shipped for it.
-      If the browser has no list, the two-letter code is shown, which is ugly and honest.
+      The country's name, in the language the person is reading (B16, 2026-09-16 — until then
+      it was always English).
+
+      For the countries with a line, English is written by hand in helplines.js, article and
+      all, so "In the United Kingdom" reads like English. That hand-written name IS ENGLISH and
+      only English uses it. Every other language, and every country without a line, gets the
+      browser's own name for it, which is why nothing is shipped for 250 countries in any
+      language. If the browser has no list, the two-letter code is shown: ugly and honest.
+
+      French does not get an article here on purpose. « en France », « au Canada », « aux
+      États-Unis » all differ, so the French sentences are written to take a bare name after a
+      colon — « France : » — and never need one. See strings-fr.js, crisis.
     */
-    var displayNames = null;
-    function browserNames() {
-      if (displayNames !== null) return displayNames;
+    var displayNames = {};
+    function browserNames(lang) {
+      if (displayNames[lang] !== undefined) return displayNames[lang];
       try {
-        displayNames = new Intl.DisplayNames(['en'], { type: 'region' });
+        displayNames[lang] = new Intl.DisplayNames([lang], { type: 'region' });
       } catch (e) {
-        displayNames = false;
+        displayNames[lang] = false;
       }
-      return displayNames;
+      return displayNames[lang];
     }
 
-    function nameFor(code) {
+    function nameFor(code, lang) {
       if (!known(code)) return '';
-      var dn = browserNames();
+      var dn = browserNames(lang || 'en');
       if (dn) {
         try {
           var n = dn.of(code);
@@ -117,18 +125,22 @@
       return code;
     }
 
-    /* "the United Kingdom" — only ever right for a country that has a line. */
-    function inWords(code) {
+    /* "the United Kingdom" — only ever right in English, and only for a country that has a line. */
+    function inWords(code, lang) {
       var entry = lines[code];
-      return (entry && entry.country) || nameFor(code);
+      if ((lang || 'en') === 'en' && entry && entry.country) return entry.country;
+      return nameFor(code, lang);
     }
 
-    /* Every country, alphabetically by the name a person reads. The picker's whole content. */
-    function list() {
+    /*
+      Every country, alphabetically by the name a person reads, in their language. The picker's
+      whole content. localeCompare and not <, because < sorts « États-Unis » after Zimbabwe.
+    */
+    function list(lang) {
       return codes.map(function (code) {
-        return { code: code, name: nameFor(code) };
+        return { code: code, name: nameFor(code, lang) };
       }).sort(function (a, b) {
-        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+        return a.name.localeCompare(b.name, lang || 'en');
       });
     }
 

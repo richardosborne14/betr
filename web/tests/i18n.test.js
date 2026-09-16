@@ -246,6 +246,48 @@ test('the wordmark is BETR everywhere a person reads it', () => {
   }
 });
 
+/* ------------------------------------------------- the picker at the top right (B16) */
+
+/*
+  Founder, 2026-09-16: a discreet language picker at the top right of every screen. Until then
+  B15 had it in Help and nowhere else. These hold what makes it discreet and what makes it safe.
+*/
+test('the language picker is on every screen, top right, and outside the one question', () => {
+  const a = boot();
+  const front = a.html();
+  const top = front.slice(front.indexOf('<div class="top">'), front.indexOf('<main'));
+  assert.ok(top.indexOf('<p class="wordmark">BETR</p>') !== -1, 'the wordmark left its row');
+  assert.ok(top.indexOf('<select id="lang"') !== -1, 'no picker on the wordmark row');
+  assert.ok(top.indexOf('aria-label="' + en.s.help.langTitle + '"') !== -1, 'the picker has no name a screen reader can say');
+  assert.ok(top.indexOf('>EN<') !== -1, 'the picker does not show which language this is');
+  /* each language by its own name, so a person can find theirs */
+  assert.ok(top.indexOf('<option value="fr" lang="fr">Fran\u00e7ais</option>') !== -1);
+  assert.ok(top.indexOf('<option value="en" lang="en" selected>English</option>') !== -1);
+  /* no flag: a flag is a country, and language is never country (B17) */
+  assert.ok(!/[\u{1F1E6}-\u{1F1FF}]/u.test(top), 'a flag is on the picker');
+
+  /* on a refusal too, where somebody who cannot read the crisis block needs it most */
+  a.type('#if', 'tell them').type('#then', 'I\u2019ll kill myself').tap('#lock');
+  assert.ok(a.html().indexOf('<select id="lang"') !== -1, 'no picker on the refusal');
+});
+
+test('picking French turns the screen French at once, remembers it, and loses nothing', () => {
+  const a = boot();
+  a.type('#if', 'ask for Friday off').type('#then', 'my boss will think I\u2019m slacking').tap('#lock');
+  a.showsText(en.s.on.ask);
+
+  a.pick('#lang', 'fr');
+  assert.strictEqual(a.lang(), 'fr', '<html lang> did not change');
+  a.showsText(fr.s.on.ask).showsText(fr.s.foot.mine);
+  /* the prediction is the person's words and is not translated, or lost */
+  a.showsText('If I ask for Friday off, then my boss will think I\u2019m slacking.');
+  assert.ok(a.html().indexOf('>FR<') !== -1);
+  assert.strictEqual(JSON.parse(a.mem['betr.v2']).lang, 'fr', 'the choice was not remembered');
+
+  a.pick('#lang', 'en');
+  a.showsText(en.s.on.ask);
+});
+
 /* ------------------------------------------------- language is not country */
 
 test('choosing a language never changes which helpline a person is shown', () => {

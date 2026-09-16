@@ -268,10 +268,46 @@ block. That screenshot is the argument for doing the crisis wording next.
 - [x] The loop translated, `tu`, walked end to end in `tools/walk.js` at 390×844 with the app set to French
 - [x] France and Switzerland read off the providers' own sites and added; Belgium re-read; France out of `notShipped`
 - [x] The hard stop fixed and pinned in both languages; 126 tests pass
-- [ ] **`frozen`, `crisis`, `where` and `help` translated** — and the country names, which live in `helplines.js`
+- [x] **`crisis`, `where` and the country names in French** (10f), with a language picker top right
+- [ ] **`frozen` and the rest of `help` translated**
 - [ ] **The founder reads and signs off the French**, which is what B16 says and has not happened
 - [ ] **The CBT reviewer on the French harm words**
 - [x] **The elision, decided and built** — « Si j’ » in front of a vowel, with the aspirated-h list in the content file
 - [x] **The word (« pari ») and the act (« Je m’engage », ENGAGÉ)**, every agreement flipped to masculine, walked in French
 - [ ] `docs/COPY.md` is English only; a French sheet to mark up needs `tools/copy-sheet.js` reworked
 - [ ] Jurisdiction look before any non-English store listing (§3 above) — untouched
+
+### 10f. The crisis block in French, and a picker top right — 2026-09-16, later the same day
+
+**The founder's asks:** "Can I force it to show me the French version?", "a language dropdown discreetly at the top right", and "do the
+crisis stuff in French".
+
+- **The picker.** Two grey letters, `EN ▾` / `FR ▾`, on the wordmark's row of every screen, over an invisible real `<select>` — so a finger
+  gets the phone's own picker and a screen reader hears *Langue, Français*. 44×44 tap target, 16px select font so iOS does not zoom. No flag
+  (a flag is a country, B17). **On a refusal too**, because somebody who cannot read the crisis block needs it most. B15 had written "never
+  a picker on the front screen"; **CLAUDE.md rule 10 now records the founder's change.** The Help block stays, for its sentence that
+  choosing a language fetches nothing. One `setLanguage()` serves both.
+- **The crisis block, the country list and `a11y.countryChanged` are French.** `tu`, like everything else.
+- **Country names come from the browser, in the reader's language.** `where.js` `nameFor`, `inWords` and `list` take a language. The
+  hand-written "the United Kingdom" in `helplines.js` is English and only English uses it; French gets *Royaume-Uni* from `Intl.DisplayNames`.
+- **No article, on purpose.** French puts a different word before every country — *en France, au Canada, aux États-Unis* — and a template
+  cannot know which. So every French sentence takes a bare name after a colon: « France : Appelle le 3114 — … ». Right for all 250.
+- **`note: 'in Dutch'` in `helplines.js` became `language: 'nl'`**, named by the browser in the reader's language: "in Dutch" /
+  « en néerlandais ». It had printed "in French" to a French reader.
+- **Two old bugs found on the way and fixed, both visible in English too:** the country list sorted by code unit, so "Åland Islands" sat after
+  Zimbabwe (now `localeCompare`); and a line whose only detail was its language read "…du Suicide. in French." with a lowercase letter
+  after the full stop (now capitalised).
+- **Two missed agreements from the *pari* change**, caught walking the refusal: « celle-là » in `refusal.harm` and « En écrire une » on
+  *Comment ça marche*. Both masculine now. **Lesson: grep for every feminine form, not only the ones you expect.**
+- Tests: `helpline.test.js` checks the French block (France/3114, Royaume-Uni, Belgium's two languages, Kenya with no number, no English left)
+  and French alphabetical order; `i18n.test.js` checks the picker (top row, name, no flag, on a refusal, switches and remembers, keeps the
+  person's own words). `harness.js` has `pick()`. 134 pass.
+
+**Found and NOT changed — for the founder, because it is a trust sentence:** `crisis.howWeKnow` says the phone's time zone is "the only thing
+here that has anything to do with where you are". `where.guess()` falls back to the browser's language region (`en-KE` → Kenya) when there
+is no time zone. Nothing leaves the phone either way, but the sentence overclaims in that one case, in English and now in French.
+
+**Still English:** the rest of Help, and the nine frozen sentences including sentence 7, the crisis sentence on Help.
+
+**Cosmetic, not fixed:** in French, the EMPTY front sentence wraps as « Si je ____, / alors ____ / . », the full stop alone on a third line,
+because « alors » is longer than "then". It goes away as soon as anything is typed.

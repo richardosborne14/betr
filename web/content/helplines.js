@@ -39,7 +39,10 @@
     free      true only if the provider's own page says the call costs nothing. null means
               the page does not say, and then we say nothing either
     allHours  true only if the page says round the clock. null means it does not say
-    note      shown after the line. Used where one country needs two lines
+    language  the language the line answers in, as a code ('nl', 'fr'), where one country needs
+              two lines. The app asks the browser for its name in the person's own language —
+              "in Dutch", « en néerlandais ». It was an English `note` until B16 (2026-09-16),
+              which printed "in French" to somebody reading French
     source    the page it was read on
     checked   the day a person read it
 
@@ -117,13 +120,13 @@ var BETR_HELPLINES = {
       {
         name: 'Zelfmoordlijn 1813',
         number: '1813', tel: 'tel:1813', text: false, free: true, allHours: true,
-        note: 'in Dutch',
+        language: 'nl',
         source: 'https://www.zelfmoord1813.be', checked: '2026-09-03'
       },
       {
         name: 'Centre de Prévention du Suicide',
         number: '0800 32 123', tel: 'tel:080032123', text: false, free: null, allHours: null,
-        note: 'in French',
+        language: 'fr',
         source: 'https://www.preventionsuicide.be', checked: '2026-09-16'
       }
     ] },

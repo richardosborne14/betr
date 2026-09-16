@@ -108,7 +108,46 @@ test('a country that answers in two languages gets both its lines', () => {
   const block = crisisBlock(boot(null, { timeZone: 'Europe/Brussels' }));
   assert.ok(block.indexOf('href="tel:1813"') !== -1);
   assert.ok(block.indexOf('href="tel:080032123"') !== -1);
-  assert.ok(block.indexOf('in Dutch') !== -1 && block.indexOf('in French') !== -1);
+  assert.ok(block.indexOf('in Dutch') !== -1, 'the Dutch line does not say so');
+  /* its only detail, so it starts the sentence and takes the capital */
+  assert.ok(block.indexOf('Centre de Prévention du Suicide. In French.') !== -1, 'the French line does not say so');
+});
+
+/* ------------------------------------------------------- the crisis block in French (B16) */
+
+const frBlock = (tz) => {
+  const a = boot(null, { timeZone: tz, languages: ['fr-FR', 'fr'] });
+  const h = a.tap('#f-help').html();
+  return h.slice(h.indexOf('Si tu es en danger ou en crise'), h.indexOf('Comment on devine le pays'));
+};
+
+test('in French, the crisis block is French, and the number is still the country\u2019s', () => {
+  const block = frBlock('Europe/Paris');
+  assert.ok(block.length > 100, 'no French crisis block on Help');
+  assert.ok(block.indexOf('France : Appelle le <a href="tel:3114">3114</a>') !== -1, 'France is not called France, or 3114 does not dial');
+  assert.ok(block.indexOf('Gratuit, 24 h/24.') !== -1);
+  /* The words changed; the numbers did not. Nothing English is left in the block. */
+  for (const english of ['Call', 'Free', '24 hours', 'In France', 'Not where you are']) {
+    assert.ok(block.indexOf(english) === -1, 'English left in the French crisis block: ' + english);
+  }
+});
+
+test('in French, a country is named by the browser, in French, with no article to get wrong', () => {
+  /* "the United Kingdom" is English and lives in helplines.js; French must never print it */
+  const uk = frBlock('Europe/London');
+  assert.ok(uk.indexOf('Royaume-Uni :') !== -1, 'the UK is not called Royaume-Uni');
+  assert.ok(uk.indexOf('the United Kingdom') === -1, 'an English country name reached French');
+  assert.ok(uk.indexOf('href="tel:116123"') !== -1);
+
+  /* Belgium's two lines, each naming its language in French */
+  const be = frBlock('Europe/Brussels');
+  assert.ok(be.indexOf('en néerlandais') !== -1, 'the Dutch line is not « en néerlandais »');
+  assert.ok(be.indexOf('En français.') !== -1, 'the French line is not « En français »');
+
+  /* a country with no checked line: still no number, and the name is French */
+  const ke = frBlock('Africa/Nairobi');
+  assert.ok(ke.indexOf('tel:') === -1, 'a number appeared for Kenya in French');
+  assert.ok(ke.indexOf('<b>Kenya</b>') !== -1 && ke.indexOf('Personne n’a vérifié') !== -1);
 });
 
 /* ------------------------------------------------------- language is not country, ever */
@@ -162,8 +201,16 @@ test('the country list is every country, alphabetical, and nothing else varies b
   const list = where.list();
   assert.ok(list.length > 200, 'only ' + list.length + ' countries to choose from');
   const names = list.map((c) => c.name);
-  assert.deepStrictEqual(names, names.slice().sort(), 'the list is not alphabetical');
+  /* Alphabetical as a person reads it, not by code unit: until B16 "Åland Islands" sat after
+     Zimbabwe, and in French « États-Unis » would have too. */
+  assert.deepStrictEqual(names, names.slice().sort((a, b) => a.localeCompare(b, 'en')), 'the list is not alphabetical');
   assert.ok(names.indexOf('Kenya') !== -1 && names.indexOf('Nigeria') !== -1);
+
+  /* in French, French names, in French order */
+  const fr = where.list('fr').map((c) => c.name);
+  assert.deepStrictEqual(fr, fr.slice().sort((a, b) => a.localeCompare(b, 'fr')));
+  assert.ok(fr.indexOf('États-Unis') !== -1 && fr.indexOf('Royaume-Uni') !== -1, 'the French list is not in French');
+  assert.ok(fr.indexOf('États-Unis') < fr.indexOf('Zimbabwe'), 'an accented name was sorted after Z');
 
   /* the picker changes the helpline and not one other thing a person reads */
   const uk = boot(null, { timeZone: 'Europe/London' });

@@ -33,12 +33,14 @@ the files they lived in.
 you can go from the thing you crossed out to the line it lives on without hunting.
 
 **About French, since 2026-09-16.** There are now two word files and they work the same way:
-the name on the left of each line is identical, only the words differ. Two things to know.
-**A sentence French has not got yet simply shows the English one** — nothing breaks, nothing
-goes blank, and that is on purpose while the translation is unfinished, so you will see English
-on Help and on the crisis screen even with the app set to French. And **changing an English
-sentence does not change the French one**: if you reword `front.title` in `strings-en.js`, the
-French `front.title` keeps saying what it said. Change both, or ask and it gets done. `docs/COPY.md`
+the name on the left of each line is identical, only the words differ. To see the app in French,
+tap the grey **EN ▾** at the top right of any screen and choose *Français*; it remembers. Two
+things to know. **A sentence French has not got yet simply shows the English one** — nothing
+breaks, nothing goes blank — so Help is still mostly English even with the app in French. And
+**changing an English sentence does not change the French one**: reword `front.title` in
+`strings-en.js` and the French `front.title` keeps saying what it said. Change both, or ask and it
+gets done. **French agrees and English does not:** the French word for a prediction is *pari*,
+which is masculine, so a French sentence about one says *le*, *celui-ci*, *écrit*. `docs/COPY.md`
 is still English only.
 
 Two files are **never** hand-edited: `web/content/zones.js` (generated from the world's time

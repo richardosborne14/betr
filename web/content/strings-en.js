@@ -271,6 +271,9 @@ var BETR_STRINGS_EN = {
       callOrText: 'Call or text',
       free: 'Free',
       allHours: '24 hours',
+      /* After a line, where a country has one per language: "in Dutch". The browser names the
+         language, in the language being read, so French gets « en néerlandais » (B16). */
+      inLanguage: 'in {language}',
       unchecked: 'Your country here is {country}. Nobody has checked a helpline number for ' +
         'it, so we are not going to show you one from somewhere else and hope.',
       noCountry: 'We can’t tell which country you’re in, and we would rather show you no ' +
@@ -429,9 +432,10 @@ var BETR_STRINGS_EN = {
       devBuild: 'Dev build — not published',
 
       /*
-        The language switch (B15). One line in Help, never a picker on the front screen and
-        never a first-run question (CLAUDE.md rule 10). It is not drawn at all while English
-        is the only language there is, which is why nobody sees these two lines yet.
+        The language switch (B15). One line in Help, and since 2026-09-16 also two grey letters
+        at the top right of every screen, the founder's call (CLAUDE.md rule 10). `langTitle` is
+        what a screen reader calls that picker. Never a first-run question. Neither is drawn
+        while there is only one language.
       */
       langTitle: 'Language',
       langNote: 'Every language BETR has is already on this device. Choosing one fetches nothing.'

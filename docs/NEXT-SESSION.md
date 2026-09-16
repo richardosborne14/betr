@@ -7,7 +7,8 @@ to `main` publishes to the live address, and nobody has looked at it on a real p
 translated, France's and Switzerland's crisis numbers are read and shipped, and **walking it in French found that the one hard stop did not
 exist in French at all** (fixed). Then they reviewed the French: **the elision is built** (« Si je » → « Si j’ » as you type), four
 wordings changed, and the word is now **« pari »** with **« Je m’engage » / ENGAGÉ** — a knowing exception to rule 3's "not bet",
-recorded under rule 3. 130 tests pass. Read §1a before anything else.
+recorded under rule 3. **Then the crisis block went French and a language picker went top right** (B16 §10f). 134 tests pass.
+Read §1a before anything else.
 
 ## 1a. READ THIS FIRST — the hard stop was broken outside English
 
@@ -17,9 +18,9 @@ ever have matched in any language. Both fixed: **one list for every language, ne
 `\p{Mn}`, the sentence pinned in `guards.test.js` alongside ordinary French going through. **The French harm words are unreviewed — for the
 CBT reviewer** (B16 §10a; `docs/learnings.md` has the general version, which is not about French).
 
-**French is NOT shippable.** `frozen`, `crisis`, `where` and `help` are deliberately untranslated and fall back to English, so a French
-reader gets the loop in French and Help and the crisis block in English — worst on a refusal, a French sentence followed by an English
-crisis block. It is on `redesign`, which publishes nothing. **Do not merge French to `main`.**
+**French is NOT shippable.** `frozen` and most of `help` are still English — so Help is mostly English in French, and frozen sentence 7
+(the crisis sentence on Help) is English. The loop, the crisis block and the country list are French. It is on `redesign`, which
+publishes nothing. **Do not merge French to `main`.**
 
 ## 1. Where we are
 
@@ -60,9 +61,9 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 
 ## 2. The next action
 
-0. **French next: translate `frozen`, `crisis`, `where` and `help`** — **and the country names, which live in `helplines.js` in English**,
-   or the crisis screen reads "les numéros de the United Kingdom". Both move together. **« Pari » is masculine:** read every new line for
-   agreement. One small open question for the founder: `front.title` (B16 §10d).
+0. **French next: the rest of `help`**, then `frozen` once a named person approves it. **« Pari » is masculine:** grep every French string
+   for feminine forms after any change. Picker top right is built (rule 10). Open for the founder: `front.title`, and `crisis.howWeKnow`
+   overclaiming (B16 §10f) — a trust sentence, in both languages.
 1. **Get the founder to look at it on a phone, then merge — ENGLISH ONLY.** They open `web/index.html` from `redesign`, or screenshots.
    Watch: typing into the two blanks on iPhone Safari (`contenteditable`, flowing inside the sentence — the one piece headless Chrome
    cannot vouch for), the Return key, Paste. Then J1–J3 on a real phone, wifi off after load, then merge and push — **that publishes**.
@@ -85,7 +86,7 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 
 | | |
 | --- | --- |
-| Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (130 pass on `redesign`) |
+| Repo · stack | `github.com/richardosborne14/betr`, public, MIT; plain HTML/CSS/JS in `web/`; **`node --test` from the repo root** (134 pass on `redesign`) |
 | **Branches** | **`redesign`** = the new app, pushed, publishes nothing. **`main`** = the OLD app, and every push touching `web/**` publishes it |
 | **Walk it** | `node tools/walk.js start`, then `open` · `dump` · `tap` · `type` · `shot <file>` · `eval <js>` · `stop`. 390×844 @3x. **Always `stop`** |
 | **Live today** | `https://betr.trybeup.com` — the OLD app, TrybeUP droplet (`ssh le-jibe`) |
@@ -112,6 +113,6 @@ the front at 200%, and the whole French loop. **Not walked: a real phone, J2, J3
 - **`\u0300` IS THREE DIGITS IN A ROW**, and `guards.test.js` bans those in `guards.js` because a phone number must never live there. Use
   `\p{Mn}` and similar named escapes in that file.
 - **FRENCH AGREES AND ENGLISH DOES NOT.** « Pari » is masculine; ten French lines agree with it. Read any French change for agreement.
-- **Walk the app in a language by tapping Help → the language button** (`[data-lang="fr"]`), then `#where` → `[data-cc="FR"]` for the
-  country. The walker always starts in English on `Europe/London`.
+- **Walk in French:** `eval "var s=document.querySelector('#lang');s.value='fr';s.dispatchEvent(new Event('change'))"`, or Help →
+  `[data-lang="fr"]`. Country: `#where` → `[data-cc="FR"]`. The walker starts in English on `Europe/London`. Tests: `a.pick('#lang','fr')`.
 - **No ImageMagick, no PIL.** SVG → PNG is `qlmanage -t -s 512 -o <dir> file.svg`; crop is `sips -c`.

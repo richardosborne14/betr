@@ -4,7 +4,7 @@
 rewritten from the source every time that command runs, so anything typed here is lost.
 Mark it up, send it back, and the change gets made in the file named next to each section.
 
-This build has 112 pieces of wording on the screens and 17 links on Help, as well as the frozen block.
+This build has 113 pieces of wording on the screens and 17 links on Help, as well as the frozen block.
 
 | Part | What it is | Which file |
 | --- | --- | --- |
@@ -357,6 +357,10 @@ section of its own: its one change is `front.noteLocked`.
 **`crisis.allHours`**
 
 > 24 hours
+
+**`crisis.inLanguage`**
+
+> in {language}
 
 **`crisis.unchecked`**
 
