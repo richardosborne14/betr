@@ -218,8 +218,22 @@ function boot(seed, env) {
       el.onclick();
       return api;
     },
-    /* A box keeps its words in value; a blank in the sentence keeps them in textContent. */
-    type(sel, text) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); el.value = text; el.textContent = text; return api; },
+    /*
+      A box keeps its words in value; a blank in the sentence keeps them in textContent.
+
+      It also FIRES oninput, which it did not until 2026-09-16 (B16). Everything the app does
+      while somebody is mid-word rather than on a tap — the button coming up from 45%, the
+      line under it changing, « Si je » turning into « Si j’ » — hangs off that handler, and
+      until this fired none of it was reachable from a test at all.
+    */
+    type(sel, text) {
+      const el = find(root, sel);
+      assert.ok(el, 'no such box: ' + sel);
+      el.value = text;
+      el.textContent = text;
+      if (typeof el.oninput === 'function') el.oninput();
+      return api;
+    },
     /* What a screen reader was told, and where the keyboard is (B15). */
     said() { return live.textContent; },
     focusedId() { return focused ? focused._id : null; },
@@ -229,6 +243,12 @@ function boot(seed, env) {
     look() { return html.getAttribute('data-theme'); },
     /* Read a box back. The export lands in a textarea's value, not in the markup. */
     valueOf(sel) { const el = find(root, sel); assert.ok(el, 'no such box: ' + sel); return el.value; },
+    /*
+      The text of one element, spaces and all. B16 needs it because the difference between
+      « Si je » and « Si j’ » is partly a TRAILING SPACE, and html() cannot be trusted to
+      show that — the elided form joins with an apostrophe and no space at all.
+    */
+    textOf(sel) { const el = find(root, sel); assert.ok(el, 'no such element: ' + sel); return el.textContent; },
     shows(s) { assert.ok(api.html().indexOf(s) !== -1, 'not on screen: ' + s + '\non: ' + api.html().slice(0, 300)); return api; },
     hides(s) { assert.ok(api.html().indexOf(s) === -1, 'still on screen: ' + s); return api; },
     /*

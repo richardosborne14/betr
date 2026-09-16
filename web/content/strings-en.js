@@ -113,6 +113,19 @@ var BETR_STRINGS_EN = {
       */
       sub: 'Right now, later today, some time in your life — whenever.',
       ifWords: 'If I',
+      /*
+        The second form of `ifWords`, for a language whose pronoun changes shape in front of
+        a vowel. English has no such form, so this is EMPTY, and empty means "never do it" —
+        app.js only reaches for it when there are words in it. French fills it with « Si j’ ».
+
+        `noElision` is the exception to the exception, and it is a list rather than a rule
+        because no rule exists: French elides before a mute h ("j’hésite") and refuses before
+        an aspirated one ("je hurle"), and which is which has to be learnt word by word. Space
+        separated, matched against the START of what the person typed, accents already folded.
+        Empty in English, and empty means the whole list is empty.
+      */
+      ifWordsElided: '',
+      noElision: '',
       thenWords: ', then',
       stop: '.',
       /* What a screen reader calls each blank. Each one has to make sense read on its own. */
@@ -135,7 +148,9 @@ var BETR_STRINGS_EN = {
         them, in the words they wrote, and that coming back to say what happened is the part
         that makes it worth anything. Rule 5: coming back is an invitation, never a debt.
       */
-      sub: 'We’ll keep it here, in your own words. Come back and say what happened.',
+      /* Reworded 2026-09-16 with the French, the founder's call: the old one put "in your own
+         words" on the KEEPING, where it did not mean much, rather than on the saying. */
+      sub: 'We’ll keep it here just as you wrote it. Come back and say what happened, in your own words.',
       done: 'Done it',
       /* Rule 5: nothing is recorded, nothing is lost, and nothing says you missed it. */
       notToday: 'Not today. Keep it for tomorrow.'

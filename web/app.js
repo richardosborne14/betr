@@ -274,7 +274,9 @@
       head('h1', 'headline', t('front.title')) +
       '<p class="sub">' + esc(t('front.sub')) + '</p>' +
       '<p class="paper sentence">' +
-        '<span class="fixed">' + esc(t('front.ifWords')) + '</span> ' +
+        /* The space is INSIDE the span, because the elided form has none and refreshLead()
+           swaps the whole thing in one go as somebody types. */
+        '<span class="fixed" id="ifwords">' + esc(leadNow()) + '</span>' +
         blank('if', draft.ifPart, t('front.ifLabel')) +
         '<span class="fixed">' + esc(t('front.thenWords')) + '</span> ' +
         blank('then', draft.thenPart, t('front.thenLabel')) +
@@ -318,6 +320,22 @@
     var note = q('#note');
     if (btn) btn.setAttribute('aria-disabled', ready ? 'false' : 'true');
     if (note) note.textContent = ready ? t('front.noteLocked') : t('front.note');
+    refreshLead();
+  }
+
+  /*
+    « Si je » ↔ « Si j’ » as the first blank is typed into (B16). One textContent on a span
+    the caret is not in, so it changes under somebody mid-word without moving them — which is
+    the same reason refreshLock() exists instead of a repaint.
+  */
+  function leadNow() {
+    var lead = ifLead(flat(draft.ifPart));
+    return lead.words + lead.glue;
+  }
+
+  function refreshLead() {
+    var el = q('#ifwords');
+    if (el) el.textContent = leadNow();
   }
 
   function wireBlank(el, which) {
@@ -344,6 +362,44 @@
     };
   }
 
+  /*
+    The words that open the sentence, and the glue between them and what the person wrote.
+
+    English has one form, "If I", and the only thing that ever varied was the space: somebody
+    who types "’m late" gets "If I’m late" and not "If I ’m late". French has TWO forms,
+    « Si je » and « Si j’ », because the pronoun elides in front of a vowel, and only the app
+    can choose between them because only the app knows what was typed (B16, 2026-09-16).
+
+    No French lives in here. The second form and the list of words that refuse it are both in
+    the language's own file; a language with no second form never reaches this at all, which
+    is why English is untouched by any of it.
+  */
+  function ifLead(first) {
+    var plain = t('front.ifWords');
+    /* "’m late" takes no space and no elision: they wrote the pronoun themselves. */
+    if (/^[’\u0027]/.test(first)) return { words: plain, glue: '' };
+    var elided = t('front.ifWordsElided');
+    if (elided && elides(first)) return { words: elided, glue: '' };
+    return { words: plain, glue: ' ' };
+  }
+
+  /*
+    A vowel, or an h that is not on the language's list of the ones that refuse. Accents are
+    folded first, so écoute and harcèle are read as ecoute and harcele — without that, an
+    accented first letter would never match and the whole thing would quietly never fire.
+    `y` is deliberately not a vowel here: it opens a word as a consonant does.
+  */
+  function elides(first) {
+    var w = String(first || '').toLowerCase().normalize('NFD').replace(/\p{Mn}/gu, '');
+    if (!/^[aeiouh]/.test(w)) return false;
+    if (w.charAt(0) !== 'h') return true;
+    var refuse = t('front.noElision').split(' ');
+    for (var i = 0; i < refuse.length; i++) {
+      if (refuse[i] && w.indexOf(refuse[i]) === 0) return false;
+    }
+    return true;
+  }
+
   /* "If I" + what they wrote + ", then" + what they wrote, and a full stop if they left it off. */
   function sentenceOf(a, b) {
     var first = flat(a)
@@ -351,8 +407,8 @@
       .replace(/[\s.,;:]+$/, '');
     var second = flat(b).replace(/^then\b[\s,]*/i, '');
     if (!/[.!?…]$/.test(second)) second += t('front.stop');
-    var glue = /^[’\u0027]/.test(first) ? '' : ' ';   /* "If I" + "’m late" is "If I’m late" */
-    return t('front.ifWords') + glue + first + t('front.thenWords') + ' ' + second;
+    var lead = ifLead(first);
+    return lead.words + lead.glue + first + t('front.thenWords') + ' ' + second;
   }
 
   function flat(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }

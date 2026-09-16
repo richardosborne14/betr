@@ -99,10 +99,25 @@ function value(v, indent) {
 
 function isLeaf(v) { return typeof v === 'string' || Array.isArray(v); }
 
+/*
+  Keys that are machinery rather than wording, left out of this document (B16, 2026-09-16).
+
+  Both are empty in English and both would print as a heading with nothing under it, which
+  reads like a sentence somebody deleted. They are not sentences: `ifWordsElided` is the
+  second shape a pronoun takes in front of a vowel (« Si j’ » in French; English has none)
+  and `noElision` is the list of words that refuse it. A language that needs them sets them in
+  its own file, and nobody marks them up on a printout.
+
+  Anything added here still has to be a decision: this document exists so that no sentence can
+  go missing from it, so leaving something out is the one thing to be careful about.
+*/
+const MACHINERY = ['front.ifWordsElided', 'front.noElision'];
+
 function block(obj, prefix) {
   Object.keys(obj).forEach((k) => {
     const v = obj[k];
     const key = prefix ? prefix + '.' + k : k;
+    if (MACHINERY.indexOf(key) !== -1) return;
     if (isLeaf(v)) {
       w('**`' + key + '`**');
       w();
@@ -124,16 +139,19 @@ function block(obj, prefix) {
 }
 
 /* How many separate pieces of wording there are, so the document can say so. */
-function countLeaves(node) {
+function countLeaves(node, prefix) {
+  if (MACHINERY.indexOf(prefix) !== -1) return 0;
   if (isLeaf(node)) return 1;
-  if (node && typeof node === 'object') return Object.keys(node).reduce((n, k) => n + countLeaves(node[k]), 0);
+  if (node && typeof node === 'object') {
+    return Object.keys(node).reduce((n, k) => n + countLeaves(node[k], prefix ? prefix + '.' + k : k), 0);
+  }
   return 0;
 }
 
 /* ---------------------------------------------------------------- the document */
 
 const stamp = new Date().toISOString().slice(0, 10);
-const pieces = Object.keys(strings).filter((k) => k !== 'frozen').reduce((n, k) => n + countLeaves(strings[k]), 0);
+const pieces = Object.keys(strings).filter((k) => k !== 'frozen').reduce((n, k) => n + countLeaves(strings[k], k), 0);
 const links = places.reading.length + places.groups.reduce((n, g) => n + g.items.length, 0);
 
 w('# BETR — every word, in one place');

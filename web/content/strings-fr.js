@@ -28,13 +28,11 @@
   That is a HALF-TRANSLATED APP and it is visible on the screen. It is fine on the `redesign`
   branch, which publishes nothing. It is not fine on the live address.
 
-  ── THE ONE THING THAT NEEDS CODE, NOT WORDS ───────────────────────────────────────────
+  ── ELISION, BUILT 2026-09-16 ─────────────────────────────────────
 
-  `front.ifWords` is « Si je », and French elides: "si j’appelle", not "si je appelle". The
-  app prints ifWords and then whatever the person typed, so a blank that starts with a vowel
-  reads wrong. Nothing here can fix it — see B16 and docs/NEXT-SESSION.md. The two ways out
-  are a `front.ifWordsElided` key the app picks when the blank starts with a vowel, or an
-  ifWords of « Si » with the person writing "je" themselves. The founder chooses.
+  « Si je » becomes « Si j’ » in front of a vowel, and the app does it as the person types.
+  `ifWordsElided` and `noElision` below are how, and both live here rather than in app.js
+  because which words elide is a fact about French, not about BETR.
 
   ── THE RULES THAT TRAVEL WITH THIS FILE ───────────────────────────────────────────────
 
@@ -77,8 +75,36 @@ var BETR_STRINGS_FR = {
     front: {
       title: 'À ton avis, qu’est-ce qui va se passer ?',
       sub: 'Tout de suite, plus tard dans la journée, un jour dans ta vie — quand tu veux.',
-      /* See the header: « Si je » does not elide, and only app.js can fix that. */
       ifWords: 'Si je',
+      /*
+        Built 2026-09-16, the founder's call. « Si je » becomes « Si j’ » in front of a vowel
+        — "si j’appelle", never "si je appelle" — and only the app can choose, because only the
+        app knows what was typed. There is no space after it: the apostrophe is the join.
+      */
+      ifWordsElided: 'Si j’',
+      /*
+        THE EXCEPTION, AND IT IS A LIST BECAUSE THERE IS NO RULE. French elides in front of a
+        MUTE h ("j’hésite", "j’habite") and refuses in front of an ASPIRATED one ("je hurle",
+        "je hais"), and nothing about the spelling tells you which — it is learnt word by word,
+        and dictionaries mark it. So: a word starting with h elides UNLESS it starts with one
+        of these. Accents are folded before the match, so « harcèle » is matched by "harcel".
+
+        These are the verbs somebody might actually write after « Si je », not the whole
+        dictionary. Each stem is cut short enough to catch every conjugation and long enough
+        NOT to catch a mute-h word that starts the same way — that is the whole difficulty of
+        the list, and it is why some entries look oddly long:
+
+          hume   and not "hum", which would swallow "humilie" — mute, so "j’humilie"
+          honn   and not "hon",  which would swallow "honore"  — mute, so "j’honore"
+          heriss and not "her",  which would swallow "hérite"  — mute, so "j’hérite"
+          hale   and not "hal",  which would swallow "hallucine" — mute, so "j’hallucine"
+          hue / hurl and never "hu", for the same reason as "hume"
+
+        Getting one wrong costs an apostrophe, not a person's safety. Add to it freely.
+      */
+      noElision: 'hach hachur hais hait hale halet hanch handicap hant happ harangu harass ' +
+        'harcel harnach harp harpon hasard hat hauss hav hel henni heriss hers heurt ' +
+        'hierarch hiss hoch hongr honn hoquet hott houspill houss hue hulul hume hurl',
       thenWords: ', alors',
       stop: '.',
       ifLabel: 'Si je… — ce que tu vas faire',
@@ -99,7 +125,14 @@ var BETR_STRINGS_FR = {
       /* Drawn in capitals by the stylesheet, so it is written normally here. */
       kicker: 'Verrouillé',
       ask: 'Va voir ce que ça donne.',
-      sub: 'On la garde ici, dans tes mots à toi. Reviens dire ce qui s’est passé.',
+      /*
+        The founder's own wording, 2026-09-16, and the English was changed to match it rather
+        than the other way round. « écrite », not « écrit »: the participle agrees with the
+        « la » in front of it, and « la » is la prédiction. IF THE WORD FOR A PREDICTION
+        CHANGES AND THE NEW ONE IS MASCULINE, THIS LINE AND FIVE OTHERS CHANGE WITH IT.
+      */
+      sub: 'On la garde ici comme tu l’as écrite. Reviens dire dans tes propres mots ce qui ' +
+        's’est passé.',
       done: 'C’est fait',
       notToday: 'Pas aujourd’hui. Garde-la pour demain.'
     },
@@ -112,8 +145,13 @@ var BETR_STRINGS_FR = {
       These three words also label every result afterwards, in capitals.
     */
     go: {
-      ask: 'Ça s’est passé comme tu pensais ?',
-      yeah: 'Ouais !',
+      /* The founder's wording, 2026-09-16, in the passé composé: it happened once and it is
+         over, so « ça s’est passé » rather than « ça se passait », which asks how it used to
+         go. « l’avais imaginé » is warmer than « pensais » and keeps it a question about the
+         prediction rather than about the person. */
+      ask: 'Ça s’est passé comme tu l’avais imaginé ?',
+      /* « Ouais » read too young (founder, 2026-09-16). */
+      yeah: 'Tout à fait !',
       sort: 'À peu près',
       not: 'Pas vraiment'
     },

@@ -1,6 +1,6 @@
 # B16: Shipping a language — the repeatable process, and which ones
 
-**Status:** **French started 2026-09-16 — the loop is translated, the numbers are read, and it is NOT SHIPPABLE.** See §10 at the
+**Status:** **French started 2026-09-16 — the loop is translated, the numbers are read, the elision is built, and it is NOT SHIPPABLE.** See §10 at the
 bottom for what was done, what is deliberately missing and the safety hole it found. Written 2026-09-03. **Repeatable: once per language, forever.**
 **First language: French, the founder's ask of 2026-09-15 ("asap"). The founder reads and signs off the French themselves.** It starts only
 after B56's strings settle — the app will say about thirty things instead of two hundred and fifty, and translating the old ones is work done
@@ -217,6 +217,36 @@ block. That screenshot is the argument for doing the crisis wording next.
 
 ### 10d. Wording decisions for the founder
 
+**Answered 2026-09-16, and built:**
+
+- **The elision is built.** « Si je » becomes « Si j’ » in front of a vowel, as the person types. Two new keys in the content file and
+  none of it in `app.js`: `front.ifWordsElided` (« Si j’ »; **empty in English, and empty means never**) and `front.noElision`, the list
+  of aspirated-h words that refuse it. **There is no rule for the h** — French elides before a mute h ("j’hésite") and refuses before an
+  aspirated one ("je hurle"), and which is which is learnt word by word, so it is a list. Each stem is cut long enough not to swallow a
+  mute-h word that starts the same way: `hume` not `hum` (which would catch "humilie"), `honn` not `hon` ("honore"), `heriss` not `her`
+  ("hérite"), `hale` not `hal` ("hallucine"). Accents are folded first, so « harcèle » is caught by `harcel` and « écoute » elides.
+  Four tests in `loop.test.js`, in French, plus one proving English is untouched.
+- **`harness.js` now fires `oninput`** from `type()`. It did not before, so nothing the app does *while somebody is mid-word* — the button
+  coming up from 45%, the line under it changing, the elision — was reachable from a test at all. That is a gap that existed since B56.
+- **The Locked in subtitle is the founder's own wording, and the ENGLISH was changed to match it**, not the other way round: *"We'll keep it
+  here just as you wrote it. Come back and say what happened, in your own words."* The old one put "in your own words" on the keeping, where
+  it did not mean much, rather than on the saying.
+- **« Ça s’est passé comme tu l’avais imaginé ? »** for *Did it go how you expected?* — the founder's, in the passé composé (« ça se
+  passait » would ask how it used to go).
+- **« Tout à fait ! »** replaces « Ouais ! », which read too young.
+
+**Still open, and both are the founder's:**
+
+- **The word for a prediction.** « prédiction » reads technical and slightly fortune-telling. **Whatever replaces it drags six other lines
+  with it, because French agrees:** `on.sub` (« comme tu l’as écrite »), `front.noteLocked` (« Elle reste telle que… »), `on.notToday`
+  (« Garde-la »), `log.done` (« celle-ci »), `log.back` (« La reprendre ») and `mine.locked` (« Verrouillée ») are all feminine
+  because *prédiction* is. A masculine word changes every one of them.
+- **The word on the lock button**, and with it `mine.locked` and the label above a locked prediction. The founder raised « Engagements »
+  for the list, which makes « Je m’engage » the matching button — that is a family, not a single word, and it is the strongest of the
+  options for exactly that reason.
+
+**Superseded:**
+
 - **`front.ifWords` is « Si je » and French elides** — *si j'appelle*, not *si je appelle*. The app prints `ifWords` then what the person
   typed, so a blank starting with a vowel reads wrong. **No string can fix this.** Two ways out: a `front.ifWordsElided` key the app picks
   when the blank starts with a vowel, or an `ifWords` of « Si » with the person writing "je" themselves. **This is the only code French needs.**
@@ -233,6 +263,7 @@ block. That screenshot is the argument for doing the crisis wording next.
 - [ ] **`frozen`, `crisis`, `where` and `help` translated** — and the country names, which live in `helplines.js`
 - [ ] **The founder reads and signs off the French**, which is what B16 says and has not happened
 - [ ] **The CBT reviewer on the French harm words**
-- [ ] The elision decision, then the code for it
+- [x] **The elision, decided and built** — « Si j’ » in front of a vowel, with the aspirated-h list in the content file
+- [ ] The word for a prediction, and the lock button / « Engagements » family — both with the agreement they drag behind them
 - [ ] `docs/COPY.md` is English only; a French sheet to mark up needs `tools/copy-sheet.js` reworked
 - [ ] Jurisdiction look before any non-English store listing (§3 above) — untouched

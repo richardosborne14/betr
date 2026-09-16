@@ -148,7 +148,7 @@ section of its own: its one change is `front.noteLocked`.
 
 **`on.sub`**
 
-> We’ll keep it here, in your own words. Come back and say what happened.
+> We’ll keep it here just as you wrote it. Come back and say what happened, in your own words.
 
 **`on.done`**
 

@@ -247,6 +247,72 @@ test('Your predictions: one card each, its tags oldest to newest, and a locked o
   a.showsText(s.front.title);
 });
 
+/* ------------------------------------------------------------------ elision (B16) */
+
+/*
+  « Si je » becomes « Si j’ » in front of a vowel, and the app has to do it because only the
+  app knows what was typed. Built 2026-09-16 on the founder's call.
+
+  These run in FRENCH, which is the first test in this file that does. English is checked at
+  the bottom to be completely untouched by it, because a language with no second form must
+  never reach the elision at all.
+*/
+const fr = require('../content/strings-fr.js').s;
+const inFrench = () => boot(null, { languages: ['fr-FR', 'fr'] });
+
+test('« Si je » becomes « Si j’ » in front of a vowel, as the person types', () => {
+  const a = inFrench();
+  a.showsText(fr.front.title).shows('>' + esc(fr.front.ifWords));
+
+  /* a consonant leaves it alone, and keeps the space */
+  a.type('#if', 'demande mon vendredi');
+  assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWords + ' ');
+
+  /* a vowel elides, and the apostrophe IS the join: no space after it */
+  a.type('#if', 'appelle mon père');
+  assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWordsElided);
+
+  /* and back again, because somebody rewrites the first word all the time */
+  a.type('#if', 'parle à ma sœur');
+  assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWords + ' ');
+});
+
+test('an accent is still a vowel, and the sentence that gets stored says the same thing', () => {
+  const a = inFrench();
+  a.type('#if', 'écoute jusqu’au bout').type('#then', 'ça ira mieux').tap('#lock');
+  const [p] = stored(a).predictions;
+  assert.strictEqual(p.sentence, 'Si j’écoute jusqu’au bout, alors ça ira mieux.');
+  a.showsText(p.sentence);
+});
+
+test('a mute h elides and an aspirated h does not — the list, not a rule', () => {
+  const a = inFrench();
+  /* h muet: "j’hésite", "j’habite" */
+  a.type('#if', 'hésite avant de répondre');
+  assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWordsElided, 'a mute h did not elide');
+  a.type('#if', 'habite encore chez mes parents');
+  assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWordsElided);
+  /* h aspiré: "je hurle", "je hais", and harcèle which is only matched once accents are folded */
+  for (const word of ['hurle', 'hais', 'harcèle']) {
+    a.type('#if', word + ' quelqu’un');
+    assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWords + ' ', 'an aspirated h elided: ' + word);
+  }
+  /* the stems are cut so a mute-h word starting the same way is NOT caught */
+  a.type('#if', 'honore ma parole');
+  assert.strictEqual(a.textOf('#ifwords'), fr.front.ifWordsElided, '"honore" was caught by "honn"');
+});
+
+test('English never elides, because English has no second form', () => {
+  const a = boot();
+  assert.strictEqual(s.front.ifWordsElided, '', 'English grew a second form');
+  for (const first of ['ask for Friday off', 'own up to it', 'hesitate', 'hurl the thing']) {
+    a.type('#if', first);
+    assert.strictEqual(a.textOf('#ifwords'), s.front.ifWords + ' ', 'English changed on: ' + first);
+  }
+  a.type('#if', 'ask her').type('#then', 'she will say no').tap('#lock');
+  assert.strictEqual(stored(a).predictions[0].sentence, 'If I ask her, then she will say no.');
+});
+
 /* ------------------------------------------------------------------ the rules */
 
 /*
