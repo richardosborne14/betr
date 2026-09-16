@@ -453,3 +453,34 @@ test('a phone from the old app opens on the front, with its history waiting on Y
   a.tap('#f-help');
   assert.ok('betr.v2' in a.mem && !('betr.v1' in a.mem), 'the old record was not moved across on the first save');
 });
+
+/*
+  2026-09-16, founder's screenshots at 338 and 324: below 390 the comma and the full stop
+  wrapped onto lines of their own. Each blank is now glued to the punctuation after it. Layout
+  itself cannot be tested here; this holds the markup that makes it hold.
+*/
+test('each blank carries its punctuation with it, so a narrow phone cannot split them', () => {
+  for (const opts of [undefined, { languages: ['fr'] }]) {
+    const h = boot(null, opts).html();
+    assert.match(h, /<span class="glue"><span class="blank" id="if"[^>]*><\/span><span class="fixed">,<\/span><\/span>/,
+      'the comma is not glued to the first blank');
+    assert.match(h, /<span class="glue"><span class="blank" id="then"[^>]*><\/span><span class="fixed">\.<\/span><\/span>/,
+      'the full stop is not glued to the second blank');
+  }
+});
+
+/* B58, 2026-09-16: the sunrise. Every icon the manifest or the page names is a file here, one is
+   for Android's masks, and the drawing they come from is committed and small. */
+test('the icons exist, one is maskable, and their source is in the repo', () => {
+  const WEB = path.join(__dirname, '..');
+  const manifest = JSON.parse(fs.readFileSync(path.join(WEB, 'manifest.webmanifest'), 'utf8'));
+  for (const icon of manifest.icons) assert.ok(fs.existsSync(path.join(WEB, icon.src)), icon.src + ' is missing');
+  assert.ok(manifest.icons.some((i) => i.purpose === 'maskable'), 'no maskable icon: Android will shrink the sunrise into a white square');
+  const page = fs.readFileSync(path.join(WEB, 'index.html'), 'utf8');
+  for (const m of page.matchAll(/rel="(?:icon|apple-touch-icon)" href="([^"]+)"/g)) {
+    assert.ok(fs.existsSync(path.join(WEB, m[1])), m[1] + ' is missing');
+  }
+  for (const svg of ['icon.svg', 'icon-maskable.svg']) {
+    assert.ok(fs.statSync(path.join(WEB, svg)).size < 2048, svg + ' is over 2 KB');
+  }
+});

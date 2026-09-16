@@ -182,8 +182,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
   white-space: pre-wrap; caret-color: var(--ground); outline: none;
 }
 .blank:empty { display: inline-block; vertical-align: bottom; min-width: 6.875rem; min-height: 1.2em; max-width: 100%; line-height: 1.15; }
-#if.blank:empty { min-width: min(11.875rem, 100%); }
-#then.blank:empty { min-width: min(14.375rem, 100%); }
+/*
+  How long an empty blank is. It was a fixed width drawn for a 390px phone, and below that it
+  would not fit beside "If I" or "then", so the words and the punctuation broke onto lines of
+  their own (founder, 2026-09-16, at 338 and 324). Now each blank is at most its old width and
+  otherwise the card's width less room for the words beside it: "If I" and ",", or "then" and
+  "." — measured in em so French's « Si je » and « alors » fit too. The first line of each pair
+  is the fallback for a browser without container units (iOS before 16).
+*/
+.sentence { container-type: inline-size; }
+.glue { white-space: nowrap; }
+#if.blank:empty { min-width: min(11.875rem, 100%); min-width: min(11.875rem, max(4rem, calc(100cqi - 3em))); }
+#then.blank:empty { min-width: min(14.375rem, 100%); min-width: min(14.375rem, max(4rem, calc(100cqi - 3.5em))); }
 .blank:focus { background: rgba(196, 83, 46, .08); border-start-start-radius: 4px; border-start-end-radius: 4px; }
 
 .box { display: block; width: 100%; min-height: 9.375rem; border: 0; resize: vertical; }

@@ -271,6 +271,7 @@
   */
   function front() {
     var ready = !!(draft.ifPart.trim() && draft.thenPart.trim());
+    var thenWords = splitPunct(t('front.thenWords'));
     paint(
       head('h1', 'headline', t('front.title')) +
       '<p class="sub">' + esc(t('front.sub')) + '</p>' +
@@ -278,10 +279,13 @@
         /* The space is INSIDE the span, because the elided form has none and refreshLead()
            swaps the whole thing in one go as somebody types. */
         '<span class="fixed" id="ifwords">' + esc(leadNow()) + '</span>' +
-        blank('if', draft.ifPart, t('front.ifLabel')) +
-        '<span class="fixed">' + esc(t('front.thenWords')) + '</span> ' +
-        blank('then', draft.thenPart, t('front.thenLabel')) +
-        '<span class="fixed">' + esc(t('front.stop')) + '</span>' +
+        /* Each blank is glued to the punctuation after it, so on a narrow phone a comma or a
+           full stop never wraps onto a line of its own (founder's screenshots, 2026-09-16). */
+        '<span class="glue">' + blank('if', draft.ifPart, t('front.ifLabel')) +
+          '<span class="fixed">' + esc(thenWords.punct) + '</span></span>' +
+        '<span class="fixed">' + esc(thenWords.rest) + '</span> ' +
+        '<span class="glue">' + blank('then', draft.thenPart, t('front.thenLabel')) +
+          '<span class="fixed">' + esc(t('front.stop')) + '</span></span>' +
       '</p>' +
       warnBlock() +
       markup('<button class="big" id="lock" aria-disabled="{off}">{words}</button>',
@@ -291,6 +295,13 @@
     wireBlank(q('#if'), 'if');
     wireBlank(q('#then'), 'then');
     on('#lock', lockIn);
+  }
+
+  /* ", then" → the "," that belongs to the blank before it, and " then". Any language. */
+  function splitPunct(words) {
+    var m = /^[,;:.!?\u2026\u060c]+/.exec(words);
+    var punct = m ? m[0] : '';
+    return { punct: punct, rest: words.slice(punct.length) };
   }
 
   function blank(id, value, label) {

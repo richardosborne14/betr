@@ -37,7 +37,8 @@ const WEB = path.join(ROOT, 'web');
 const STATE = path.join(ROOT, '.walk.json');
 
 /* A phone, not a small desktop. iPhone 14-ish: the width the founder tests on. */
-const PHONE = { width: 390, height: 844, deviceScaleFactor: 3, mobile: true };
+/* BETR_WIDTH=320 walks the smallest phones still sold (added 2026-09-16, when 320 looked bad). */
+const PHONE = { width: Number(process.env.BETR_WIDTH) || 390, height: 844, deviceScaleFactor: 3, mobile: true };
 const TZ = 'Europe/London';
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
