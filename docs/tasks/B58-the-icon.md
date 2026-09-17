@@ -54,6 +54,9 @@ Then `sips -Z 192 icon-512.png --out icon-192.png` for the small one, and a 180p
   circle), both under 400 bytes. PNGs from `qlmanage`, then `sips`: `icon-512`, `icon-192`, `icon-maskable-512`, and
   `apple-touch-icon.png` at 180. Every pixel opaque (iOS paints transparency black) — checked by decoding the PNGs.
 - Manifest: two `any`, one `maskable`. `index.html`'s `apple-touch-icon` points at the 180. `loop.test.js` checks the files exist.
+- **2026-09-17, founder: the sun is pure white** (`#FFFFFF`), not the paper `#FFF6EE`, in both SVGs. The dome now runs 2 units down
+  into the horizon bar (`V70H23Z`) so no antialiased hairline shows where they meet. PNGs re-exported with `rsvg-convert`
+  (`/opt/homebrew/bin`, sharper than `qlmanage`, exact sizes, no `sips` step); all four still opaque RGB.
 - **Not done:** installed to a real iPhone and Android home screen and looked at.
 
 ## Done when

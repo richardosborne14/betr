@@ -1,6 +1,6 @@
 # Start here
 
-**Last refreshed:** 2026-09-16, 12th session, end. **Branch `redesign`, pushed, not merged. 139 tests pass** (`node --test`).
+**Last refreshed:** 2026-09-17, 13th session (short: the icon's sun made pure white, founder's ask, republished). **Branch `redesign`, pushed, not merged. 139 tests pass** (`node --test`).
 **`redesign` is now LIVE at `https://betr.digitalbricks.io`** for the founder's phone check (published by hand:
 `gh workflow run deploy.yml --ref redesign`). `main` still publishes the OLD app to `betr.trybeup.com`. Rewritten, never appended to.
 
@@ -64,7 +64,7 @@ Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `t
 0. **The founder.** **(0a)** the French title — « qu’est-ce qui va se passer » (built) or their « que va-t-il se passer ». **(a)** contrast — canvas colours or a deeper ground
    (`#B34A27` gives paper 5.0:1); **the two subtitles are the pink at 2.65:1 and are aimed at whoever needs the most help, so ask this
    first**; **(b)** frozen sentence 2's "rate the belief again" and B56 §9c's purpose statement, both frozen, both describing an app that is
-   gone; **(c)** migrated results — no tag (built) or a mapping; **(d)** B58 icon; **(h)** B56 §9a, next-step sentences in *How it works* or nowhere.
+   gone; **(c)** migrated results — no tag (built) or a mapping; **(d)** B58 icon (sun made white 2026-09-17); **(h)** B56 §9a, next-step sentences in *How it works* or nowhere.
 1. **The paid CBT reviewer:** **the French harm words in `guards.js`, unreviewed (B16 §10a)**; `Yeah!`-on-a-worry (B56 §9b); "I am" has no
    road to a reframe (B56 §10 gap c); the harm list only knows harm to yourself (gap f); *How it works*.
 2. **A public-repo check:** `research/08-participant-voice-recovery.md` quotes public Reddit recovery posts with URLs. Founder's call.
@@ -103,4 +103,4 @@ Belgium re-read, Québec = CA's 9-8-8). `harness.js` now fires `oninput` from `t
 - **FRENCH AGREES AND ENGLISH DOES NOT.** « Pari » is masculine; ten French lines agree with it. Read any French change for agreement.
 - **Walk in French:** `eval "var s=document.querySelector('#lang');s.value='fr';s.dispatchEvent(new Event('change'))"`, or Help →
   `[data-lang="fr"]`. Country: `#where` → `[data-cc="FR"]`. The walker starts in English on `Europe/London`. Tests: `a.pick('#lang','fr')`.
-- **No ImageMagick, no PIL.** SVG → PNG is `qlmanage -t -s 512 -o <dir> file.svg`; crop is `sips -c`.
+- **No ImageMagick, no PIL.** SVG → PNG is `rsvg-convert -w 512 -h 512 file.svg -o out.png` (exact size); crop is `sips -c`.
